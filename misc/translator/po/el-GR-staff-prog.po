@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-11-18 06:49-0300\n"
+"POT-Creation-Date: 2021-12-16 00:18-0300\n"
 "PO-Revision-Date: 2021-10-19 08:13+0000\n"
 "Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -507,14 +507,16 @@ msgstr ""
 #. %11$s:  ELSIF ( prefs.Item_Checkout ) 
 #. %12$s:  ELSIF ( prefs.Ill_ready ) 
 #. %13$s:  ELSIF ( prefs.Ill_unavailable ) 
-#. %14$s:  ELSE 
-#. %15$s:  END 
+#. %14$s:  ELSIF ( prefs.Auto_Renewals ) 
+#. %15$s:  ELSIF ( prefs.Hold_Reminder ) 
+#. %16$s:  ELSE 
+#. %17$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:585
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s %s %s %s %s %sItem due %sAdvance notice %sHold filled %sItem check-in "
 "%sItem checkout %sInterlibrary loan ready %sInterlibrary loan unavailable "
-"%sUnknown %s: "
+"%sAuto renewal %sHold reminder %sUnknown %s: "
 msgstr ""
 "%s %s %s %s %s %s %sΗμερομηνία επιστροφής τεκμηρίου %sΣημείωμα ειδοποίησης "
 "%sΟλοκλήρωση κράτησης %sΕπιστροφή τεκμηρίου %sΔανεισμός τεκμηρίου "
@@ -878,7 +880,7 @@ msgstr "%s %s %s %s Δεν βρέθηκαν πρότυπα σημειώματο�
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:602
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:604
 #, c-format
 msgid "%s %s %s %s None %s "
 msgstr "%s %s %s %s Κανένα %s "
@@ -2621,7 +2623,7 @@ msgstr ""
 #. %4$s:  CASE 'forever' 
 #. %5$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:476
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:645
 #, c-format
 msgid "%s %s Default %s Never %s Forever %s "
 msgstr "%s %s Προεπιλεγμένα %s Ποτέ %s Πάντα %s "
@@ -3452,7 +3454,7 @@ msgstr "%s %s Απεσύρθη (%s),"
 #. %4$s:  CASE 'inherit' 
 #. %5$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:634
 #, c-format
 msgid "%s %s Yes %s No %s Inherit %s "
 msgstr "%s %s Ναι %s Όχι %s Κληρονόμησε %s "
@@ -3600,7 +3602,7 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:281
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:621
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:623
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/debit_types.tt:190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:546
 #, fuzzy, c-format
@@ -4091,21 +4093,26 @@ msgstr "%s %sΔιαδανεισμός%s "
 #. %2$s:  IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) 
 #. %3$s:  borrowernumber | html 
 #. %4$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) 
-#. %5$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) 
-#. %6$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) 
-#. %7$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) 
-#. %8$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) 
-#. %9$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#. %12$s:  END 
+#. %5$s:  ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) 
+#. %6$s:  matches.0 | html 
+#. %7$s:  borrowernumber | html 
+#. %8$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) 
+#. %9$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) 
+#. %10$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) 
+#. %11$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) 
+#. %12$s:  ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) 
+#. %13$s:  ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) 
+#. %14$s:  ELSE 
+#. %15$s:  END 
+#. %16$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:94
 #, c-format
 msgid ""
 "%s %sInvalid borrowernumber %s %sUnable to find an email address for this "
-"borrower %sMissing from email address %sMissing SMS number %sMessage is "
-"duplicate %sNo notes from SMS driver %sUnhandled email failure, check the "
-"logs for further details %sError occurred while sending email. %s %s "
+"borrower %sInvalid %s email address found %s %sMissing from email address "
+"%sMissing SMS number %sMessage is duplicate %sNo notes from SMS driver "
+"%sUnhandled email failure, check the logs for further details %sUnknown "
+"error %sError occurred while sending email. %s %s "
 msgstr ""
 
 #. %1$s:  nnoverdue | html 
@@ -7269,7 +7276,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:408
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:410
 #, c-format
 msgid "%s This ordernumber does not exist. %s "
 msgstr "%s Αυτός ο αριθμός παραγγελίας δεν υπάρχει. %s "
@@ -7464,7 +7471,7 @@ msgstr "%s Ναι "
 #. %1$s:  IF category.exclude_from_local_holds_priority 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:655
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:92
@@ -7882,7 +7889,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/cataloging_additem.inc:3
 msgid "%s mandatory fields empty (highlighted)"
@@ -9519,7 +9526,7 @@ msgid "%sNo%sYes%s"
 msgstr "%sΌχι%sΝαι%s"
 
 #. %1$s:  ELSE 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:601
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:603
 #, c-format
 msgid "%sNone"
 msgstr "%sΚανένα"
@@ -9940,7 +9947,7 @@ msgstr "%st - Άμεση γονική οντότητα"
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -9949,7 +9956,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
 "Radoslav Kolev"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:854
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:855
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -9958,7 +9965,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:861
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:862
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -9967,64 +9974,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ukrainian) Victor Titarchuk and Serhij Dubyk"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Εβραϊκά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:860
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:861
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:849
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:850
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Περσικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Κινεζικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Χίντι)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:823
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Ιαπωνικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:851
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:849
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:858
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:859
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Ταϋλανικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -10033,12 +10040,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:844
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Κορεατικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:835
 #, fuzzy, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -10048,7 +10055,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
 "Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Τσεχικά)"
@@ -10464,7 +10471,7 @@ msgstr ""
 "(Το προκαθορισμένο είναι %s μέρες πριν έως σήμερα. Ορίστε άλλο εύρος "
 "ημερομηνιών όπως χρειάζεται.)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Ινδονησιακά)"
@@ -10753,13 +10760,13 @@ msgid "(start date of the 1st subscription) "
 msgstr "(ημερομηνία έναρξης της 1ης συνδρομής) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:381
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:383
 #, fuzzy, c-format
 msgid "(tax exclusive)"
 msgstr "(αποκλειστικό) "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:371
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:379
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:380
 #, fuzzy, c-format
 msgid "(tax inclusive)"
 msgstr "(περιλαμβάνει) "
@@ -10908,7 +10915,7 @@ msgstr ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, USA (Koha 3.0 Zebra ενσωμάτωση)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), and many more "
@@ -10918,7 +10925,7 @@ msgstr ", Pascale Nalon (ENSMP), and many more "
 msgid ", Please transfer this item. "
 msgstr ", Παρακαλώ να μεταφερθεί αυτό το τεκμήριο. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid ", by the "
 msgstr ""
@@ -11033,7 +11040,7 @@ msgstr "-- Κανένα --"
 msgid "-- Select an option--"
 msgstr "Διαγραφή λίστας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:299
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:298
 #, c-format
 msgid "-- none -- "
 msgstr "--κανένα -- "
@@ -11945,7 +11952,6 @@ msgstr "Ενέργεια αν δεν έχει βρεθεί ταύτιση: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:183
@@ -11954,6 +11960,7 @@ msgstr "Ενέργεια αν δεν έχει βρεθεί ταύτιση: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:16
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -12449,8 +12456,8 @@ msgstr "Προσθήκη τύπου τεκμηρίου"
 msgid "Add item(s)"
 msgstr "Προσθήκη τεκμηρίου(ων)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:456
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:456
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:12
 #, c-format
 msgid "Add items"
@@ -13040,7 +13047,7 @@ msgstr "Επιπρόσθετες παράμετροι"
 msgid "Additional subfields (XML)"
 msgstr "Πρόσθετα υποπεδία (XML)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:663
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:664
 #, c-format
 msgid "Additional thanks to..."
 msgstr "Πρόσθετες ευχαριστίες στους..."
@@ -14393,7 +14400,7 @@ msgstr "Ανωνυμοποίηση ιστορικού δανεισμών"
 msgid "Another pattern with this name already exists."
 msgstr "Υπάρχει ήδη διάταξη με αυτό το όνομα."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
 #, c-format
 msgid "Antenna.io"
 msgstr ""
@@ -14540,7 +14547,7 @@ msgstr "Οποιοδήποτε: "
 msgid "Anyone seeing this list"
 msgstr "Πρόβλημα στην αποστολή της λίστας..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, fuzzy, c-format
 msgid "Apache License, Version 2.0"
 msgstr "την Άδεια Apache , Έκδοση 2.0"
@@ -15250,7 +15257,7 @@ msgstr "Περιοχή"
 msgid "Area:"
 msgstr "Περιοχή:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:820
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Armenian Tigran Zargaryan"
@@ -15521,11 +15528,11 @@ msgstr "Καθ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-availability-table.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:10
@@ -16109,15 +16116,15 @@ msgstr "Koha &rsaquo; Αναφορές &rsaquo; Απολεσθέντα τεκμ�
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "BSD 3-clause Licence"
 msgstr "Άδεια BSD 3-clause"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:691
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "BSD License"
 msgstr "BSD License"
@@ -17305,14 +17312,14 @@ msgstr "Αριθμός τιμολογίου προμηθευτή βιβλίων:
 msgid "Boolean"
 msgstr "Boolean"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:683
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "Bootstrap"
 msgstr "Bootstrap"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:686
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:688
 #, fuzzy, c-format
 msgid "Bootstrap Icons"
 msgstr "Bootstrap"
@@ -17638,7 +17645,6 @@ msgstr "Περιορισμός παραρτημάτων"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:16
@@ -17671,6 +17677,7 @@ msgstr "Περιορισμός παραρτημάτων"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
 msgstr ""
@@ -17680,7 +17687,7 @@ msgstr ""
 msgid "Briar Cliff University, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:700
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Material Type Icons Project"
@@ -17705,7 +17712,7 @@ msgstr ""
 msgid "Broader Term"
 msgstr "Ευρύτερος Όρος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:668
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:669
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
@@ -17917,12 +17924,12 @@ msgstr "Bytes"
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, USA"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:782
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "C3.js"
 msgstr "C3.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "C3.js v0.4.11"
 msgstr "C3.js v0.4.11"
@@ -18169,11 +18176,11 @@ msgstr "California College of the Arts, ΗΠΑ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:424
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
@@ -18416,7 +18423,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:498
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:407
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:409
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:123
@@ -18555,13 +18562,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:909
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:377
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:382
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:219
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:342
@@ -18589,6 +18589,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:34
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:377
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:382
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:480
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:66
@@ -19561,9 +19568,9 @@ msgstr "Κατηγορία:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:852
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:489
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:355
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:65
 #, c-format
 msgid "Category: "
@@ -19674,7 +19681,7 @@ msgstr "Αλλαγή ομάδας καλαθιού;"
 msgid "Change category"
 msgstr "Νέα κατηγορία"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:383
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:385
 #, fuzzy, c-format
 msgid "Change currency"
 msgstr "Νέο νόμισμα"
@@ -20535,8 +20542,8 @@ msgstr "software.coop, United Kingdom"
 msgid "Child"
 msgstr "Παιδί"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:809
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
 #, c-format
 msgid "Chocolat.js"
 msgstr ""
@@ -21231,7 +21238,6 @@ msgstr "Καθαρισμός"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
@@ -21244,6 +21250,7 @@ msgstr "Καθαρισμός"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #, c-format
 msgid "Clear all"
@@ -21563,7 +21570,6 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:534
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:540
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:455
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:107
@@ -21575,6 +21581,7 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:424
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:440
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:455
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:185
@@ -21808,8 +21815,8 @@ msgstr ""
 msgid "Code:"
 msgstr "Κωδικός:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:749
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "CodeMirror editing library"
 msgstr "CodeMirror editing library"
@@ -22992,12 +22999,12 @@ msgstr "Αντιγραφή σε όλες τις βιβλιοθήκες"
 msgid "Copyright"
 msgstr "Πνευματικά δικαιώματα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:714
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Πνευματικά δικαιώματα &copy; 2003-2010 phpMyAdmin devel team"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:709
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:710
 #, fuzzy, c-format
 msgid "Copyright &copy; 2012-2016 "
 msgstr "Πνευματικά δικαιώματα &copy; 2008 "
@@ -23123,7 +23130,7 @@ msgstr ""
 "Το αρχείο history.txt δε μπορεί να διαβαστεί. Παρακαλούμε σιγουρευτείτε &lt;"
 "docdir&gt; ότι είναι σωστά ορισμένο στο koha-conf.xml. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:886
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:887
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -23367,7 +23374,7 @@ msgstr "Καθιερωμένη τιμή"
 msgid "Create a new cash register"
 msgstr "Δημιουργία νέας κατηγορίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:669
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:671
 #, c-format
 msgid "Create a new category"
 msgstr "Δημιουργία νέας κατηγορίας"
@@ -23692,12 +23699,12 @@ msgstr "Χρονολογία δημιουργίας"
 msgid "Creation date: "
 msgstr "Χρονολογία δημιουργίας"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:697
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "Creative Commons Attribution 2.5 License"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:702
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "Creative Commons Attribution-ShareAlike 2.5 License"
@@ -23983,17 +23990,17 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:826
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Δανικά)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:779
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
 msgid "D3.js"
 msgstr "D3.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "D3.js v3.5.17"
 msgstr "D3.js v3.5.17"
@@ -24019,7 +24026,7 @@ msgstr ""
 msgid "DISABLED"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "DSpace project"
 msgstr "DSpace project"
@@ -24224,7 +24231,12 @@ msgstr "χρήστης βάσης δεδομένων : "
 msgid "Database: "
 msgstr "Βάση δεδομένων: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:872
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
+#, c-format
+msgid "Dataly Tech, Greece"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:873
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:61
@@ -25050,7 +25062,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:662
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:664
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:312
@@ -25767,7 +25779,7 @@ msgstr "Ειδοποίηση διπλοεγγραφής"
 msgid "Dept."
 msgstr "Dept."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:873
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:874
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:448
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:390
@@ -26116,7 +26128,7 @@ msgstr "Πληροφορίες για όλα τα αιτήματα"
 msgid "Details of payment "
 msgstr "Πληροφορίες για όλα τα αιτήματα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:834
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -26125,7 +26137,7 @@ msgstr ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
 "Szukics, Mirko Tietgen and Marc Véron"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:586
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Devinim, Turkey"
 msgstr ""
@@ -26473,7 +26485,7 @@ msgstr ""
 msgid "Div"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:587
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Do Space, USA"
 msgstr ""
@@ -26644,7 +26656,7 @@ msgstr "Χωρίς ΦΠΑ"
 msgid "Done"
 msgstr "Έγινε"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:588
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "DoverNet, USA"
 msgstr "DoverNet, ΗΠΑ"
@@ -26796,7 +26808,7 @@ msgstr "No (προεπιλεγμένο)"
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
 #, fuzzy, c-format
 msgid "Duchesne County Library, USA"
 msgstr "Washoe County Library System, USA"
@@ -26954,7 +26966,7 @@ msgstr "Αντιγραφή αυτής της αποθηκευμένης έκθε
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:539
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:429
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr ""
 "Εντοπισμός διπλοεγγραφής τιμών. Παρακαλώ διορθώστε αυτά τα σφάλματα και "
@@ -27135,7 +27147,7 @@ msgstr "Παλαιότερη ημερομηνία κράτησης"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:188
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:661
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:663
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:383
@@ -27435,8 +27447,8 @@ msgid "Edit item #%s%s / Barcode %s%s"
 msgstr "Επεξεργασία Αντιτύπου #%s%s / Barcode %s%s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:539
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
@@ -27807,7 +27819,7 @@ msgstr "Email: "
 msgid "Embed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "Emojiarea plug-in for jQuery"
 msgstr "Emojiarea plug-in για jQuery"
@@ -27962,7 +27974,7 @@ msgstr "Διαχειριζόμενο από"
 msgid "Ended: "
 msgstr "Διαχειριζόμενο από"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "English"
 msgstr "Αγγλικά"
@@ -28517,12 +28529,12 @@ msgstr ""
 msgid "Errors occurred:"
 msgstr "Παρουσιάστηκαν σφάλματα:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:855
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:856
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -29064,7 +29076,7 @@ msgstr "Χαρακτηριστικά μέλους"
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "FIT"
 msgstr ""
@@ -29251,22 +29263,22 @@ msgstr "Αποτυχία μεταφόρτωσης εικόνας: _({0}"
 msgid "Fall"
 msgstr "Φθινόπωρο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam Site"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:693
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:694
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
 #, fuzzy, c-format
 msgid "Fargo Public Library, USA"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:594
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:595
 #, fuzzy, c-format
 msgid "Farmington Public Library, USA"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
@@ -29340,7 +29352,7 @@ msgstr "Θήλυ"
 msgid "Female "
 msgstr "Θήλυ "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:592
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Fenway Library Organization, USA"
 msgstr ""
@@ -29591,8 +29603,8 @@ msgstr "Αρχείο: "
 msgid "File: %s"
 msgstr "Αρχείο: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:752
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "FileSaver library"
 msgstr "FileSaver library"
@@ -30054,14 +30066,14 @@ msgstr "Απουσιάζει ο κωδικός κανόνα ταξιθέτηση
 msgid "Following required subfields are missing:"
 msgstr "Απουσιάζει ο κωδικός κανόνα ταξιθέτησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:746
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "Font Awesome"
 msgstr "Font Awesome"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:785
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "Font Face Observer"
 msgstr ""
@@ -30220,7 +30232,7 @@ msgstr "Διαγραφή χρεώσεων εκπρόθεσμων"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:539
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:598
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:484
@@ -30263,7 +30275,7 @@ msgstr "Μορφοποίηση"
 msgid "Formatting:"
 msgstr "Μορφοποίηση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:596
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
 msgstr ""
@@ -30292,7 +30304,7 @@ msgstr "Περιγραφή πλαισίου"
 msgid "Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha"
 msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo;"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (Γαλλικά) "
@@ -30700,12 +30712,12 @@ msgstr "Κεφάλαια"
 msgid "Funds for '%s' "
 msgstr "%s για '%s'%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid "GPL License"
 msgstr "GPL License"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
 #, fuzzy, c-format
 msgid "GPL v3 license"
 msgstr "GPL License"
@@ -30729,7 +30741,7 @@ msgstr "GST %%"
 msgid "GST:"
 msgstr "ΦΠΑ:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
@@ -30885,7 +30897,7 @@ msgstr "Λήψη!"
 msgid "Global system preferences"
 msgstr "Καθολικές προτιμήσεις συστήματος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons Free"
@@ -30973,7 +30985,7 @@ msgstr "Πήγαινε στην κορυφή"
 msgid "Go up"
 msgstr "Πήγαινε προς τα πάνω"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:597
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Goethe-Institut, Germany"
 msgstr ""
@@ -30989,7 +31001,7 @@ msgstr "Χωρίς διεύθυνση"
 msgid "Gone no address flag"
 msgstr "Επισήμανση χωρίς διεύθυνση"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
 #, c-format
 msgid "Gothenburg University Library, Sweden"
 msgstr ""
@@ -31048,7 +31060,7 @@ msgstr "Ομάδα"
 msgid "Group: "
 msgstr "Ομάδα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:297
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:296
 #, c-format
 msgid "Groups of libraries: "
 msgstr "Ομάδες Βιβλιοθηκών: "
@@ -31133,8 +31145,8 @@ msgstr "Οδηγός καθοδηγούμενων αναφορών"
 msgid "H Align"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid "HC Sticky"
 msgstr ""
@@ -31149,7 +31161,7 @@ msgstr "HTML"
 msgid "HTML message:"
 msgstr "Μηνύματα HTML:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:599
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
 #, c-format
 msgid "Halland County Library, Sweden"
 msgstr ""
@@ -31182,7 +31194,7 @@ msgstr "Ανελαστική ημερομηνία λήξης %s:"
 msgid "Hard due date: "
 msgstr "Ανελαστική ημερομηνία λήξης: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:600
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
@@ -31192,7 +31204,7 @@ msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
 msgid "Hashvalue"
 msgstr "τιμή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:601
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
 msgstr ""
@@ -31497,7 +31509,7 @@ msgstr ""
 "Τεκμήριο υψηλής ζήτησης. Η περίοδος δανεισμού έχει μειωθεί σε %s μέρες (λήξη "
 "προθεσμίας %s). Δανεισμός παρ΄ όλα αυτά;"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:602
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
 msgstr ""
@@ -31554,7 +31566,7 @@ msgstr "Σημείωση ιστορικού προσωπικού:"
 msgid "History start date:"
 msgstr "Ημερομηνία έναρξης ιστορικού:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:603
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Hochschule für Gesundheit (hsg), Germany"
@@ -31744,7 +31756,6 @@ msgstr "Αντίτυπα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:66
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:152
@@ -31752,6 +31763,7 @@ msgstr "Αντίτυπα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:353
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:278
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:28
 #, c-format
 msgid "Holds"
@@ -32235,7 +32247,6 @@ msgstr "Αργίες που επαναλαμβάνονται κάθε χρόνο
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
@@ -32268,6 +32279,7 @@ msgstr "Αργίες που επαναλαμβάνονται κάθε χρόνο
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -32392,7 +32404,7 @@ msgstr "Hostname/Port:"
 msgid "Hostname: "
 msgstr "Hostname: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:604
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Hotchkiss School, USA"
 msgstr ""
@@ -32473,7 +32485,7 @@ msgstr "Πως θα διαγραφούν τα μέλη?"
 msgid "How to process items: "
 msgstr "Πώς γίνεται επεξεργασία αντιτύπων: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:824
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:825
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (Κροατικά)"
@@ -34182,7 +34194,7 @@ msgstr "Εσωτερική σημείωση:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:224
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:473
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:397
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
 #, c-format
@@ -34490,7 +34502,7 @@ msgstr "Τιμολόγιο: %s"
 msgid "Invoicing, "
 msgstr "Τιμολόγιο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:665
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -34649,7 +34661,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:841
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:842
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -35140,9 +35152,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:996
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:998
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #, c-format
@@ -35477,8 +35489,8 @@ msgstr "Τύπος τεκμηρίου"
 msgid "JSON URL"
 msgstr "JSON URL"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:776
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "JSZip"
 msgstr "JSZip"
@@ -35488,26 +35500,26 @@ msgstr "JSZip"
 msgid "January"
 msgstr "Ιανουάριος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:803
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid "JavaScript Cookie"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr ""
 "Η βιβλιοθήκη JavaScript από τον Vladimir Agafonkinis υπόκεινται στην άδεια"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, fuzzy, c-format
 msgid "JavaScript library is licensed under both the "
 msgstr ""
 "Η βιβλιοθήκη JavaScript  από τον Vladimir Agafonkinis υπόκεινται στην άδεια"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:737
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr "Javascript Diff Algorithm"
@@ -35522,7 +35534,7 @@ msgstr "Διαχειριστής Jenkins:"
 msgid "Jenkins maintainers:"
 msgstr "Διαχειριστής Jenkins:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:669
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -35570,17 +35582,17 @@ msgstr ""
 msgid "Juvenile"
 msgstr "Έφηβος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS, Portugal"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:605
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "Katipo Communications, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:709
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "Kazik Pietruszewski"
 msgstr ""
@@ -35669,7 +35681,7 @@ msgstr "Λέξη κλειδί:"
 msgid "Keywords:"
 msgstr "Λέξη κλειδί:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:676
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:677
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:25
@@ -35749,7 +35761,7 @@ msgstr "Πεδίο Koha:"
 msgid "Koha full call number"
 msgstr "Πλήρης ταξιθετικός αριθμός συστήματος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:867
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:868
 #, c-format
 msgid "Koha history timeline"
 msgstr "Χρονοδιάγραμμα ιστορικού Koha"
@@ -35759,7 +35771,7 @@ msgstr "Χρονοδιάγραμμα ιστορικού Koha"
 msgid "Koha internal"
 msgstr "Εσωτερικό Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:678
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:679
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -35855,17 +35867,17 @@ msgstr "Koha &rsaquo; Διαχείριση &rsaquo; Ηχητικές ειδοπ�
 msgid "Koha version: "
 msgstr "Έκδοση Koha: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, New Zealand"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
@@ -35907,12 +35919,12 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:799
 #, fuzzy, c-format
 msgid "LGPL v3.0"
 msgstr "LGPL v2.1"
@@ -36067,7 +36079,7 @@ msgstr "Γλώσσα: "
 msgid "Languages"
 msgstr "Γλώσσες"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:847
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -36257,7 +36269,7 @@ msgstr "Koha &rsaquo; Προσκτήσεις &rsaquo; Τιμολόγιο"
 msgid "Later you can modify your form and that's what matters on import."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:845
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:846
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (Λατινικά)"
@@ -36300,8 +36312,8 @@ msgstr "Διάταξη: "
 msgid "Layouts"
 msgstr "Διατάξεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:770
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "Leaflet"
 msgstr "Leaflet"
@@ -36425,7 +36437,7 @@ msgstr "Γράμμα"
 msgid "Lib"
 msgstr "Βιβλιοθήκη"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:609
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
@@ -36687,7 +36699,7 @@ msgstr "Κωδικός Βιβλιοθήκης:"
 msgid "Library of Congress"
 msgstr "Βιβλιοθήκη του μέλους:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:610
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
@@ -36795,7 +36807,7 @@ msgstr "Βιβλιοθήκη: %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Βιβλιοθήκη: %s &rArr; %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:611
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech, Norway"
@@ -37440,7 +37452,7 @@ msgstr "Ιστορικό"
 msgid "Look for existing records in catalog?"
 msgstr "Αναζήτηση για υπάρχουσες εγγραφές στον κατάλογο;"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:612
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
 #, c-format
 msgid "Los Gatos Public Library, USA"
 msgstr "Los Gatos Δημόσια Βιβλιοθήκη, ΗΠΑ"
@@ -37578,12 +37590,12 @@ msgstr "Κάτω αριστερά συντεταγμένη Υ:"
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:613
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
 #, fuzzy, c-format
 msgid "Lund University Library, Sweden"
 msgstr "Δημόσια βιβλιοθήκη Alingsås, Σουηδία"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:847
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:848
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -37611,10 +37623,10 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:171
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:12
 #, c-format
 msgid "MARC"
@@ -37870,36 +37882,36 @@ msgstr ""
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "MIT License"
 msgstr "Άδεια MIT"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
 msgid "MIT and GPLv3 Licenses"
 msgstr "Άδειες MIT και GPLv3"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "MIT licence"
 msgstr "Άδεια MIT"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:804
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:688
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
 #, c-format
 msgid "MIT license"
 msgstr "Άδεια MIT"
@@ -37932,7 +37944,7 @@ msgstr "Μακροεντολές"
 msgid "Macros..."
 msgstr "Μακροεντολή..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:837
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Ουγγρικά)Agnes Imecs"
@@ -38879,7 +38891,7 @@ msgstr "Σημειώστε τον αρχικό προυπολογισμό ως �
 msgid "Mark viewed"
 msgstr "Σημειώστε ως αναγνωσμένο και εγκαταλείψτε"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:614
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
 #, c-format
 msgid "MassCat, USA"
 msgstr ""
@@ -39294,7 +39306,7 @@ msgstr "Μικροδευτερόλεπτο"
 msgid "Middle"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:615
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
 #, fuzzy, c-format
 msgid "Middletown Township Public Library, USA"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
@@ -39816,8 +39828,8 @@ msgstr "Απαιτείται αναβάθμιση της υπομονάδας"
 msgid "Modules:"
 msgstr "Υπομονάδα:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:806
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
 #, fuzzy, c-format
 msgid "Moment.js"
 msgstr "Σχόλια"
@@ -40289,8 +40301,8 @@ msgstr "Όνομα:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -40324,7 +40336,7 @@ msgstr "Με το όνομα: "
 msgid "Narrower Term"
 msgstr "Ειδικότερος Όρος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:616
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
 #, c-format
 msgid "National Library of Finland, Finland"
 msgstr ""
@@ -40346,12 +40358,12 @@ msgid ""
 "contact your server admin if you wish to configure Elasticsearch"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:829
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:827
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:828
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Ολλανδικά-Ολλανδία) Sponsored by Rijksmuseum"
@@ -40479,12 +40491,12 @@ msgstr "Νέος SRU διακομιστής"
 msgid "New Z39.50 server"
 msgstr "Νέος Z39.50 διακομιστής"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
 msgstr "New Zealand Central Agencies Library, Νέα Ζηλανδία"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
 msgstr "New Zealand Ministry of Education Library, Νέα Ζηλανδία"
@@ -41035,7 +41047,7 @@ msgstr "Νέος προμηθευτής"
 msgid "New window"
 msgstr "Απόκρυψη παραθύρου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:617
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:618
 #, fuzzy, c-format
 msgid "Newcastle City Council, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -41154,7 +41166,7 @@ msgstr "Όνομα ημέρας"
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:670
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:671
 #, fuzzy, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco, (Συντάκτης της Τεκμηρίωσης)"
@@ -41404,7 +41416,7 @@ msgstr "Νέα ομάδα καλαθιού"
 msgid "No cards created (empty batch or list?) "
 msgstr "Δεν δημιουργήθηκε καμία κάρτα (άδειασμα της παρτίδας ή της λίστας)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:669
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:671
 #, c-format
 msgid "No categories have been defined. "
 msgstr "Δεν έχουν καθοριστεί κατηγορίες. "
@@ -42392,22 +42404,22 @@ msgstr "Κανονική"
 msgid "Normalization rule: "
 msgstr "Κανόνας κανονικοποίησης: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Νορβηγικά) Axel Bojer and Thomas Gramstad"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:839
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:840
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Νορβηγικά) Unni Knutsen and Marit Kristine Ådland"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:620
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:621
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
 msgstr ""
@@ -42867,12 +42879,12 @@ msgstr "Ημερομηνία Ειδοποίησης"
 msgid "Notify manager:"
 msgstr "Ομάδα Τεκμηρίωσης:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "Noto"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:788
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
 #, c-format
 msgid "Noto fonts"
 msgstr ""
@@ -43215,7 +43227,7 @@ msgstr "OAI σύνολα παραμετροποίησης"
 msgid "OAI sets configuration "
 msgstr "OAI σύνολα παραμετροποίησης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:758
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr "OAI xslt stylesheet"
@@ -43394,7 +43406,7 @@ msgstr "Προβολή OPAC: "
 msgid "OPAC/Staff interface login"
 msgstr "OPAC/Σύνδεση προσωπικού"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:622
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
 #, c-format
 msgid "OPUS"
 msgstr ""
@@ -43408,7 +43420,7 @@ msgstr ""
 "OPUS International Consultants, Ουέλλινγκτον, Νέα Ζηλανδία (Corporate "
 "Serials sponsorship)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:294
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -43831,22 +43843,22 @@ msgstr "Άνοιγμα σε νέο παράθυρο."
 msgid "Open on:"
 msgstr "Ανοικτό σε:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:761
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid "OpenAPI 2.0 schema"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "OpenAPI Initiative (OAI)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:720
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:721
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS Keyboard Shortcuts Library"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:722
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS keyboard shortcuts library"
@@ -44192,7 +44204,7 @@ msgstr "Παραγγελίες με αβέβαιες τιμές"
 msgid "Orders with uncertain prices for vendor "
 msgstr "Παραγγελίες με αβέβαιες τιμές για τον προμηθευτή "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
 #, c-format
 msgid "Orex Digital, Spain"
 msgstr ""
@@ -44250,7 +44262,7 @@ msgstr "Πρωτότυπη έκδοση"
 msgid "Originating library: "
 msgstr "στη Βιβλιοθήκη "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:624
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
 #, fuzzy, c-format
 msgid "Oslo Public Library, Norway"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
@@ -44568,12 +44580,12 @@ msgstr "PM"
 msgid "PSGI: "
 msgstr "PSGI: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, Ηνωμένο Βασίλειο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Μέριλαντ, ΗΠΑ"
@@ -46555,12 +46567,12 @@ msgstr ""
 "Koha &rsaquo; Διαχείριση &rsaquo; Κονδύλια &rsaquo; Κεφάλαια &rsaquo; "
 "Σχεδιασμός για %s κατά %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:625
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:626
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
 msgstr ""
@@ -47336,7 +47348,7 @@ msgstr "Σημείο πώλησης"
 msgid "Policy for %s: %s"
 msgstr "Πολιτική για %s: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:851
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:852
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Πολωνικά)"
@@ -47386,7 +47398,7 @@ msgstr "Θυρίδα: "
 msgid "Port: "
 msgstr "Θυρίδα: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:852
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:853
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Portugu&ecirc;s (Πορτογαλικά)"
@@ -48163,7 +48175,7 @@ msgstr "Πρόοδος εργασίας: "
 msgid "Progress: "
 msgstr "Πρόοδος εργασίας: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:627
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient Systems, Αυστραλία"
@@ -48171,10 +48183,10 @@ msgstr "Prosentient Systems, Αυστραλία"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:273
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:365
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:200
 #, c-format
 msgid "Public"
 msgstr "Δημόσια"
@@ -48722,7 +48734,7 @@ msgstr "RRP με Φ.Π.Α."
 msgid "RT"
 msgstr "ΣΟ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki από το 2004 μέχρι σήμερα)"
@@ -49279,7 +49291,7 @@ msgstr "Ημερομηνία εγγραφής: "
 msgid "Registration date: %s"
 msgstr "Ημερομηνία εγγραφής: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:671
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:672
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -50256,8 +50268,8 @@ msgstr "Επιβεβαίωση νέου κωδικού πρόσβασης:"
 msgid "Require valid email address:"
 msgstr "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:755
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "Require.js JS module system"
 msgstr "Require.js JS module system"
@@ -50394,7 +50406,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:36
@@ -50417,6 +50428,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:307
@@ -50437,7 +50449,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:169
@@ -50456,6 +50467,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:345
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:333
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:34
@@ -51073,7 +51085,7 @@ msgstr "Βάρος"
 msgid "Right to left"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:630
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "Κρατικό Μουσείο, Άμστερνταμ, Ολλανδία"
@@ -51088,7 +51100,7 @@ msgstr ""
 msgid "Robots"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:631
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
 msgstr ""
@@ -51103,7 +51115,7 @@ msgstr "Ανατροπή σε:"
 msgid "Rollover:"
 msgstr "Ανατροπή:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:854
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (Ρουμανικά)"
@@ -51170,7 +51182,7 @@ msgstr "Περιστρεφόμενες Συλλογές"
 msgid "Rotating collections &rsaquo; Tools &rsaquo; Koha"
 msgstr "Koha &rsaquo; Εργαλεία &rsaquo; Φόρτωση Εικόνων Μελών"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
 #, fuzzy, c-format
 msgid "Round Rock Public Library, USA"
 msgstr "Nelsonville Δημόσια Βιβλιοθήκη, Οχάιο, ΗΠΑ"
@@ -51341,7 +51353,7 @@ msgstr "Ένα "
 msgid "SAN-Ouest Provence"
 msgstr "Επαρχία SAN-Ouest"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:633
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Προβηγκία, Γαλλία"
@@ -51368,12 +51380,12 @@ msgstr ""
 msgid "SI Millimeters"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, c-format
 msgid "SIL Open Font License (OFL) v1.1"
 msgstr ""
@@ -51514,7 +51526,7 @@ msgstr "Παράδειγμα 2: STARTDATE:January 1 2010,TRACK:Day"
 msgid "STARTTLS"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "SWITCH Library Consortium, USA"
 msgstr ""
@@ -51567,7 +51579,7 @@ msgstr "Σάββατα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:279
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:491
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:406
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
@@ -51636,11 +51648,6 @@ msgstr "Σάββατα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:643
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:479
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:341
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:119
@@ -51653,6 +51660,11 @@ msgstr "Σάββατα"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:571
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:479
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:127
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:36
@@ -52730,7 +52742,7 @@ msgstr ""
 msgid "Seen"
 msgstr "Εμφανίστηκε"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:634
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
 #, fuzzy, c-format
 msgid "Sefton Council, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -52993,7 +53005,6 @@ msgstr "Διαγραφή λίστας"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:104
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:139
@@ -53006,6 +53017,7 @@ msgstr "Διαγραφή λίστας"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:506
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -53263,8 +53275,8 @@ msgstr "Επιλογή χωρίς τεκμήρια"
 msgid "Select your MARC flavor"
 msgstr "Επιλέξτε το δικό σας σχήμα MARC"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:764
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "Επιλογή"
@@ -54761,7 +54773,7 @@ msgstr "Ταξινόμηση κατά"
 msgid "Sort by :"
 msgstr "Ταξινόμηση κατά :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:315
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #, c-format
@@ -54809,7 +54821,7 @@ msgstr "Ταξινόμηση2"
 msgid "Sortable"
 msgstr "Ταξινομήσιμο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:313
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:312
 #, c-format
 msgid "Sorting"
 msgstr "Ταξινόμηση"
@@ -54882,12 +54894,12 @@ msgstr "Εγγραφές πηγής"
 msgid "Source: "
 msgstr "Πηγή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
 #, c-format
 msgid "South Taranaki District Council, New Zealand"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:637
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
 msgstr ""
@@ -55628,7 +55640,7 @@ msgstr "Βήμα 5: Επιβεβαίωση ορισμού"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Βήμα 6 από 6: Επιλογή της διάταξης της έκθεσης"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:667
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:668
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (πρώιμος Διαχειριστής Τεκμηρίωσης)"
@@ -55677,7 +55689,7 @@ msgstr "Πληροφορίες εναλλαγής αποθέματος για %s
 msgid "Stock rotation details for %s &rsaquo; Catalog &rsaquo; Koha"
 msgstr "Πληροφορίες εναλλαγής αποθέματος για %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:638
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:639
 #, c-format
 msgid "Stockholm University Library, Sweden"
 msgstr ""
@@ -56540,7 +56552,7 @@ msgstr "Διάστημα χρέωσης προστίμου"
 msgid "Suspension in days (day)"
 msgstr "Αναστολή σε ημέρες (ημέρα)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:856
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (Σουηδικά)"
@@ -56761,7 +56773,7 @@ msgstr "Προτιμήσεις συστήματος"
 msgid "System preferences &rsaquo; Administration &rsaquo; Koha"
 msgstr "Koha &rsaquo; Διαχείριση &rsaquo; Ηχητικές ειδοποιήσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:859
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:860
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -56881,7 +56893,7 @@ msgstr "Ρυθμίσεις βάσης δεδομένων:"
 msgid "Table settings &rsaquo; Administration &rsaquo; Koha"
 msgstr "Koha &rsaquo; Διαχείριση &rsaquo; Ηχητικές ειδοποιήσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr "TableDnD plug-in για jQuery"
@@ -57020,12 +57032,12 @@ msgstr "Ετικέτες σε αναμονή για έγκριση"
 msgid "Tags:"
 msgstr "Ετικέτες:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:640
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
 #, c-format
 msgid "Talking Tech, Global"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:641
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Tamil, France"
 msgstr "Ταμίλ, Γαλλία"
@@ -57223,7 +57235,7 @@ msgstr "Να μην αφαιρεθεί κανένα μέλος (test run)"
 msgid "Test the regular expressions:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:857
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:858
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -57322,22 +57334,22 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:515
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:516
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:718
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:722
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:726
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:771
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:777
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:731
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:772
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:778
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:185
 #, c-format
 msgid "The "
@@ -57414,12 +57426,12 @@ msgid ""
 "private."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:698
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:699
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "The Bridge Material Type Icon Set"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:701
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:702
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "The Bridge Material Type Icon Set is licensed under a "
@@ -57915,12 +57927,12 @@ msgstr ""
 msgid "The import id number "
 msgstr "Ο αριθμός αναγνωριστικού εισαγωγής "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "The included "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -58460,7 +58472,7 @@ msgstr ""
 msgid "The value \"%s\" is not supported for mappings"
 msgstr "Η τιμή \"%s\" δεν υποστηρίζεται για αντιστοιχίσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:642
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
 #, c-format
 msgid "Theke Solutions, Argentina"
 msgstr ""
@@ -58835,7 +58847,7 @@ msgstr ""
 msgid "There is no order for this bibliographic record."
 msgstr "Δεν υπάρχει παραγγελία για αυτήν την εγγραφή."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:114
 #, c-format
 msgid "There is no record of any messages that have been sent to this patron."
 msgstr ""
@@ -59793,12 +59805,12 @@ msgstr "Λήξη χρόνου"
 msgid "Timestamp"
 msgstr "Χρονοσφραγίδα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:743
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "TinyMCE WYSIWYG επεξεργαστής"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, fuzzy, c-format
 msgid "TinyMCE WYSIWYG editor v5.0.16 "
 msgstr "TinyMCE WYSIWYG επεξεργαστής v3.5.8 "
@@ -59867,9 +59879,6 @@ msgstr "TinyMCE WYSIWYG επεξεργαστής v3.5.8 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:349
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:150
@@ -59883,6 +59892,9 @@ msgstr "TinyMCE WYSIWYG επεξεργαστής v3.5.8 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/koha-news.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:444
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:17
@@ -60968,7 +60980,7 @@ msgstr "Μετάφραση"
 msgid "Translate item type %s"
 msgstr "Μετάφραση τύπων τεκμηρίου %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:815
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:816
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/localization.tt:67
 #, c-format
 msgid "Translation"
@@ -61062,7 +61074,7 @@ msgstr "Τρίτη"
 msgid "Tuesdays"
 msgstr "Τρίτες"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "Tulong Aklatan, Philippines"
 msgstr ""
@@ -61084,9 +61096,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:265
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:402
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:405
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
@@ -61170,7 +61182,7 @@ msgstr ""
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (Προκαθορισμένο)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:644
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
 #, fuzzy, c-format
 msgid "Uintah Library System, USA"
 msgstr "Washoe County Library System, USA"
@@ -61462,47 +61474,47 @@ msgstr "Μονάδες:"
 msgid "Units: "
 msgstr "Μονάδες: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
 #, fuzzy, c-format
 msgid "Universidad Empresarial Siglo 21, Argentina"
 msgstr "Universidad Nacional de Córdoba, Αργεντινή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:647
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universidad Nacional de Córdoba, Αργεντινή"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:648
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "Universidad ORT Uruguay"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:645
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:646
 #, c-format
 msgid "Universidad de El Salvador, El Salvador"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
 #, fuzzy, c-format
 msgid "University of the Arts London, United Kingdom"
 msgstr "software.coop, United Kingdom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:649
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
 #, c-format
 msgid "Université d'Aix-Marseille, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "Université de Lyon 3, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:651
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
 #, c-format
 msgid "Université de Rennes 2, France"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:652
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "Université de St Etienne, France"
 msgstr ""
@@ -62540,7 +62552,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "Κασέτα VHS/ Βιντεοκασέτα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "Vaara-kirjastot, Finland"
 msgstr ""
@@ -62607,7 +62619,7 @@ msgstr ""
 "Μία καθιερωμένη τιμή προσαρτημένη στα μέλη, η οποία μπορεί να χρησιμοποιηθεί "
 "για στατιστικούς λόγους"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:656
 #, c-format
 msgid "Vanier College, Canada"
 msgstr ""
@@ -62728,7 +62740,7 @@ msgstr "Σημείωση προμηθευτή:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketheader.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:477
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
 #, c-format
@@ -62826,17 +62838,17 @@ msgstr ""
 msgid "Verify you want to delete patrons"
 msgstr "Επιβεβαιώστε ότι επιθυμείτε να διαγράψετε μέλη"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:656
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
 #, c-format
 msgid "Vermont Organization of Koha Automated Libraries (VOKAL), USA"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:797
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
 #, c-format
 msgid "Verovio"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:799
 #, c-format
 msgid ""
 "Verovio is developed by the Swiss RISM Office with the support of the Swiss "
@@ -63091,12 +63103,12 @@ msgstr "Προβολή"
 msgid "Viewing suggestions for library:"
 msgstr "Εκκρεμείς προτάσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:657
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:658
 #, c-format
 msgid "Ville de Victoriaville, Canada"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:658
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "Virginia Tech, USA"
 msgstr ""
@@ -63414,7 +63426,7 @@ msgstr "Προειδοποίηση: δε βρέθηκαν barcodes"
 msgid "Warnings regarding the system configuration"
 msgstr "Προειδοποιήσεις που αφορούν την παραμετροποίηση του συστήματος"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:659
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:660
 #, c-format
 msgid "Washoe County Library System, USA"
 msgstr "Washoe County Library System, USA"
@@ -63863,12 +63875,12 @@ msgstr "XML αρχείο παραμετροποίησης"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT Αρχείο(α) για μετατροπή αποτελεσμάτων: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:661
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Xercode, Ισπανία"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:689
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:690
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -64807,7 +64819,7 @@ msgid "You must pay a value less than or equal to %s. "
 msgstr "Πρέπει να πληρώσετε μια τιμή μικρότερη ή ίση του %s.  "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:427
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:429
 #, fuzzy
 msgid "You must receive at least one item"
 msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα περιοδικό για επεξεργασία"
@@ -65529,7 +65541,7 @@ msgstr "επίπεδο ανάλυσης."
 msgid "and"
 msgstr "και"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "and "
 msgstr "και "
@@ -65554,7 +65566,7 @@ msgstr "και έχει επιστραφεί."
 msgid "and mark one currency as active."
 msgstr "και σημειώστε ένα νόμισμα ως ενεργό."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "and the "
 msgstr "και το "
@@ -65582,7 +65594,7 @@ msgstr "οποιαδήποτε βιβλιοθήκη "
 msgid "any library "
 msgstr "οποιαδήποτε βιβλιοθήκη "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "api/swagger-v2-schema.json"
 msgstr ""
@@ -65593,7 +65605,7 @@ msgstr ""
 msgid "approved"
 msgstr "αποδεκτό"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "are licensed under the "
 msgstr "υπόκεινται στην άδεια "
@@ -65806,49 +65818,49 @@ msgstr ""
 msgid "by %s: "
 msgstr "από %s: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr "από τον Allan Jardine υπόκεινται στην άδεια BSD 3 και GPL v2."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:722
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:723
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "από τον Binny V A υπόκεινται στην άδεια BSD."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, fuzzy, c-format
 msgid "by DIY Co is licensed under the "
 msgstr "από τον Dave Gandy υπόκεινται στην άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:747
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "από τον Dave Gandy υπόκεινται στην άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:769
 #, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "από τον Denis Howlett υπόκεινται στην άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "από τον Eli Grey υπό την άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:790
 #, fuzzy, c-format
 msgid "by Google is a family of fonts licensed under the "
 msgstr "από τον Dave Gandy υπόκεινται στην άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:802
 #, c-format
 msgid ""
 "by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
 "cookies, licensed under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, fuzzy, c-format
 msgid ""
 "by Lars Jung is a JavaScript library that generates QR codes, licensed under "
@@ -65856,29 +65868,29 @@ msgid ""
 msgstr ""
 "Η βιβλιοθήκη JavaScript από τον Vladimir Agafonkinis υπόκεινται στην άδεια"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "από τον Marijn Haverbeke υπό την άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:744
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "από τον Moxiecode (Ephox) υπόκεινται στην άδεια  "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid ""
 "by Some Web Media is a JavaScript library that makes any element on your "
 "page visible while you scroll, licensed under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "από το The Dojo Foundation υπό την άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "από τον Zhixin Wen υπόκεινται στην άδεια MIT."
@@ -65901,7 +65913,7 @@ msgstr "κατά βιβλιοθήκες"
 msgid "by months"
 msgstr "κατά μήνες"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:702
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "από το Bridge Consortium of Carleton College και το St. Olaf College."
@@ -66018,7 +66030,7 @@ msgstr "κάντε κλικ για αποσύνδεση"
 msgid "club %s "
 msgstr "Πίσω %s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "code and "
 msgstr "κωδικός και "
@@ -66074,7 +66086,7 @@ msgstr "περιλαμβάνει"
 msgid "continue creating your request"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "έλεγχος για προβολή στήλης στους Πίνακες δεδομένων"
@@ -66232,7 +66244,7 @@ msgstr "παρουσίαση στοιχείων για αυτόν το βιβλ�
 msgid "do a catalog search"
 msgstr "Αναζήτηση καταλόγου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:589
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:590
 #, fuzzy, c-format
 msgid "doXulting"
 msgstr "Δρομολόγηση"
@@ -66309,7 +66321,7 @@ msgstr "ending.ogg"
 msgid "euro-currency sign"
 msgstr "Νέο νόμισμα"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:822
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -66374,7 +66386,7 @@ msgstr "πεδίο "
 msgid "field(s) "
 msgstr "πεδίο/α "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:762
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:763
 #, fuzzy, c-format
 msgid "file is licensed under the "
 msgstr "υπόκεινται στην άδεια "
@@ -66636,25 +66648,25 @@ msgstr "άκυρες κατηγορίες καθιερωμένων όρων"
 msgid "is"
 msgstr "είναι"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:804
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid ""
 "is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
 "under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:783
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:784
 #, c-format
 msgid "is a D3-based reusable chart library under the "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:786
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:787
 #, fuzzy, c-format
 msgid "is a JavaScript library by Bram Stein licensed under the "
 msgstr ""
 "Η βιβλιοθήκη JavaScript από τον Vladimir Agafonkinis υπόκεινται στην άδεια"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:780
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:781
 #, fuzzy, c-format
 msgid ""
 "is a JavaScript library for manipulating documents based on data. It is "
@@ -66694,12 +66706,12 @@ msgstr "ισούται με"
 msgid "is exactly"
 msgstr "είναι ακριβώς"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:759
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "is licensed under a "
 msgstr "είναι υπό την άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
 #, c-format
 msgid "is licensed under the "
 msgstr "υπόκεινται στην άδεια "
@@ -66724,7 +66736,7 @@ msgstr "τώρα αποκλείεται μέχρι %s."
 msgid "is on hold for "
 msgstr "σε κράτηση για "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "έχει εκδοθεί υπό την άδεια MIT από τον Ludo van den Boom."
@@ -66848,43 +66860,43 @@ msgstr "ο τύπος τεκμηρίου ΔΕΝ ΕΙΝΑΙ χαρτογραφη�
 msgid "itype"
 msgstr "Τύπος τεκμηρίου"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:706
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin"
 msgstr "jQuery Star Rating Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:707
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:708
 #, fuzzy, c-format
 msgid "jQuery Bar Rating Plugin v1.22 by "
 msgstr "jQuery Star Rating Plugin v3.14 από την "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:729
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:740
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Validation Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery and jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:711
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:712
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -66893,49 +66905,49 @@ msgstr ""
 "jQuery insertAtCaret Plugin v1.0 από phpMyAdmin devel team υπόκεινται στην "
 "άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:735
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery multiple select plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:716
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:717
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:718
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery treetable Plugin 3.1.0"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:681
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:800
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:801
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:802
 #, fuzzy, c-format
 msgid "jquery.cookie"
 msgstr "jquery.emojiarea.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:725
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:773
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "jquery.emojiarea.js"
 msgstr "jquery.emojiarea.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:733
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:767
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.tablednd.js"
@@ -66945,8 +66957,8 @@ msgstr "jquery.tablednd.js"
 msgid "kip sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:794
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:795
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:796
 #, c-format
 msgid "kjua"
 msgstr ""
@@ -66995,7 +67007,7 @@ msgstr "τελευταίο σε: %s"
 msgid "let blank for the entire field"
 msgstr "αφήστε κενό ολόκληρο το πεδίο"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, fuzzy, c-format
 msgid "library is licensed under "
 msgstr "The Bridge Material Type Icon Set is licensed under a "
@@ -67005,10 +67017,10 @@ msgstr "The Bridge Material Type Icon Set is licensed under a "
 msgid "library not defined"
 msgstr "δεν καθορίστηκε Βιβλιοθήκη"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:684
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:687
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:807
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:810
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:685
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:688
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:808
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:811
 #, c-format
 msgid "licensed under the "
 msgstr "υπόκεινται στην άδεια "
@@ -67432,12 +67444,12 @@ msgstr "Αίτηση παραγγελίας"
 msgid "please note your reason here..."
 msgstr "παρακαλούμε σημειώστε εδώ την αιτία σας σας..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:738
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "plugin από John Resig υπόκεινται στην άδεια "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:726
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "plugin από Jovan Popovic υπόκεινται στην άδεια BSD και GPL v2."
@@ -67695,7 +67707,7 @@ msgstr "%s %s Το τεκμήριο είναι σε μεταφορά σε "
 msgid "since last transfer"
 msgstr "από την τελευταία μεταφορά"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:635
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:636
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -67820,7 +67832,7 @@ msgstr "πρόταση"
 msgid "suggestion #%s"
 msgstr "πρόταση #%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:831
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "suomi, suomen kieli (Φινλανδικά)"
@@ -67888,12 +67900,12 @@ msgstr ""
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:774
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:775
 #, c-format
 msgid "the Apache License, Version 2.0"
 msgstr "την Άδεια Apache , Έκδοση 2.0"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:765
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -68208,7 +68220,7 @@ msgstr "με την τιμή "
 msgid "won sign"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:741
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
@@ -68389,7 +68401,7 @@ msgstr "| Κατάσταση: %s "
 msgid "×"
 msgstr "×"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-10-20 09:00+0000\n"
+"PO-Revision-Date: 2021-12-09 15:00+0000\n"
 "Last-Translator: Jon McGowan <jon.mcgowan@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /en_GB/21.05/en-GB-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1634720425.973591\n"
+"X-POOTLE-MTIME: 1639062055.743961\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -732,6 +732,9 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
+" users logging in with Google Open ID to automatically register. Requires <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Circulation > Checkout policy
 msgid ""
@@ -3386,7 +3389,7 @@ msgstr ""
 msgid ""
 "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to "
 "someone else via SIP checkout messages."
-msgstr " issues of items reserved to someone else via SIP checkout messages."
+msgstr " issues of items reserved to someone else via SIP issue messages."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -4295,10 +4298,9 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-" If using <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=ExpireReservesMaxPickUpDelay"
-"\">ExpireReservesMaxPickUpDelay</a>, charge a user who allows their waiting "
-"hold to expire a fee of"
+" If using <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"ExpireReservesMaxPickUpDelay\">ExpireReservesMaxPickUpDelay</a>, charge a "
+"user who allows their waiting reservation to expire a fee of"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -5162,11 +5164,10 @@ msgid "circulation.pref#RecordStaffUserOnCheckout# record"
 msgstr "Issue Policy"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecordStaffUserOnCheckout# the user who checked out the "
 "item."
-msgstr " the on-site loans feature."
+msgstr " the user who issued the item."
 
 # Circulation > Fines Policy
 msgid ""
@@ -8320,9 +8321,8 @@ msgid "opac.pref#OPACComments# Don't allow"
 msgstr " Don't show any reservation details"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACComments# patrons to make comments on items on the OPAC."
-msgstr " users to make comments on items on the OPAC."
+msgstr " patrons to make comments on items on the OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
@@ -11346,14 +11346,14 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr ""
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
 "logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
 "out the borrowers.lastseen will update with the current date and time."
 msgstr ""
-" Every time a user will connect, the borrowers.lastseen will be updated with "
-"the current time."
+" The first time each day that a user logs into the OPAC, connects to Koha "
+"via SIP or ILS-DI, or checks an item out the borrowers.lastseen will update "
+"with the current date and time."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
