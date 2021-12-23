@@ -124,7 +124,7 @@ elsif ( $action eq 'toggleSuspend' ) {
 }
 elsif ( $action eq 'cancelBulk' ) {
     my $cancellation_reason = $input->param("cancellation-reason");
-    my @hold_ids            = split ',', $input->param("ids");
+    my @hold_ids            = split( ',', scalar $input->param("ids"));
     my $params              = {
         reason   => $cancellation_reason,
         hold_ids => \@hold_ids,

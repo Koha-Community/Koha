@@ -75,7 +75,7 @@ $template->param( all_branches => 1 ) if $all_branches;
 
 if ($cancelBulk) {
     my $reason   = $input->param("cancellation-reason");
-    my @hold_ids = split ',', $input->param("ids");
+    my @hold_ids = split( ',', scalar $input->param("ids") );
     my $params   = {
         reason   => $reason,
         hold_ids => \@hold_ids,
