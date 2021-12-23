@@ -28,21 +28,22 @@ my $biblio = Koha::Biblios->find(
     { prefetch => [ items, metadata ] }
 );
 
-my $rules = C4::Context->yaml_preference('OpacHiddenItems');
+my $patron = Koha::Patrons->find($loggedinuser);
 
-my @items  = grep { !$_->hidden_in_opac({ rules => $rules }) @{$biblio->items};
 my $record = $biblio->metadata->record;
+my @items  = $biblio->items->filter_by_visible_in_opac({ patron => $patron })->as_list;
 
-my $processor = Koha::RecordProcessor->new(
+my $record_processor = Koha::RecordProcessor->new(
     {
-        filters => ('EmbedItems'),
+        filters => ['EmbedItems'],
         options => {
-            items        => \@items
+            interface => 'opac',
+            items     => \@items
         }
     }
 );
 
-$processor->process( $record );
+$record_processor->process($record);
 
 =head1 DESCRIPTION
 
