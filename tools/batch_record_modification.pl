@@ -112,7 +112,7 @@ if ( $op eq 'form' ) {
         }
     } else {
         # The user enters manually the list of id
-        push @record_ids, split( /\s\n/, $input->param('recordnumber_list') );
+        push @record_ids, split( /\s\n/, scalar $input->param('recordnumber_list') );
     }
 
     for my $record_id ( uniq @record_ids ) {

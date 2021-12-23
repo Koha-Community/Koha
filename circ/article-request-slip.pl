@@ -30,7 +30,7 @@ use Koha::Patrons;
 
 my $cgi = CGI->new;
 
-my $id = $cgi->param('id');
+my $id = scalar $cgi->param('id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

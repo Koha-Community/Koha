@@ -183,7 +183,7 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
             push @uploadedbarcodes, grep { /\S/ } split( /[$split_chars]/, $barcode );
         }
     } else {
-        push @uploadedbarcodes, split(/\s\n/, $input->param('barcodelist') );
+        push @uploadedbarcodes, split(/\s\n/, scalar $input->param('barcodelist') );
         $uploadbarcodes = $barcodelist;
     }
     for my $barcode (@uploadedbarcodes) {
