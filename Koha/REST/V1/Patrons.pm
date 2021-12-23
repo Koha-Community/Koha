@@ -333,46 +333,49 @@ sub delete {
 
         my $safe_to_delete = $patron->safe_to_delete;
 
-        if ( $safe_to_delete eq 'ok' ) {
-            $patron->_result->result_source->schema->txn_do(
-                sub {
-                    $patron->move_to_deleted;
-                    $patron->delete;
+        if ( !$safe_to_delete ) {
+            # Pick the first error, if any
+            my ( $error ) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
+            unless ( $error ) {
+                Koha::Exceptions::Exception->throw('Koha::Patron->safe_to_delete returned false but carried no error message');
+            }
 
-                    return $c->render(
-                        status  => 204,
-                        openapi => q{}
-                    );
-                }
-            );
+            if ( $error->message eq 'has_checkouts' ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => 'Pending checkouts prevent deletion' }
+                );
+            } elsif ( $error->message eq 'has_debt' ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => 'Pending debts prevent deletion' }
+                );
+            } elsif ( $error->message eq 'has_guarantees' ) {
+                return $c->render(
+                    status  => 409,
+                    openapi => { error => 'Patron is a guarantor and it prevents deletion' }
+                );
+            } elsif ( $error->message eq 'is_anonymous_patron' ) {
+                return $c->render(
+                    status  => 403,
+                    openapi => { error => 'Anonymous patron cannot be deleted' }
+                );
+            } else {
+                Koha::Exceptions::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
+            }
         }
-        elsif ( $safe_to_delete eq 'has_checkouts' ) {
-            return $c->render(
-                status  => 409,
-                openapi => { error => 'Pending checkouts prevent deletion' }
-            );
-        }
-        elsif ( $safe_to_delete eq 'has_debt' ) {
-            return $c->render(
-                status  => 409,
-                openapi => { error => 'Pending debts prevent deletion' }
-            );
-        }
-        elsif ( $safe_to_delete eq 'has_guarantees' ) {
-            return $c->render(
-                status  => 409,
-                openapi => { error => 'Patron is a guarantor and it prevents deletion' }
-            );
-        }
-        elsif ( $safe_to_delete eq 'is_anonymous_patron' ) {
-            return $c->render(
-                status  => 403,
-                openapi => { error => 'Anonymous patron cannot be deleted' }
-            );
-        }
-        else {
-            Koha::Exceptions::Exception->throw( "Koha::Patron->safe_to_delete returned an unexpected value: $safe_to_delete" );
-        }
+
+        return $patron->_result->result_source->schema->txn_do(
+            sub {
+                $patron->move_to_deleted;
+                $patron->delete;
+
+                return $c->render(
+                    status  => 204,
+                    openapi => q{}
+                );
+            }
+        );
     } catch {
         if ( blessed $_ && $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
             return $c->render(
