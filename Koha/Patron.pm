@@ -48,6 +48,7 @@ use Koha::Patron::Modifications;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
 use Koha::Plugins;
+use Koha::Result::Boolean;
 use Koha::Subscription::Routinglists;
 use Koha::Token;
 use Koha::Virtualshelves;
@@ -1940,19 +1941,26 @@ sub safe_to_delete {
 
     my $anonymous_patron = C4::Context->preference('AnonymousPatron');
 
-    return 'is_anonymous_patron'
-        if $anonymous_patron && $self->id eq $anonymous_patron;
+    my $error;
 
-    return 'has_checkouts'
-        if $self->checkouts->count;
+    if ( $anonymous_patron && $self->id eq $anonymous_patron ) {
+        $error = 'is_anonymous_patron';
+    }
+    elsif ( $self->checkouts->count ) {
+        $error = 'has_checkouts';
+    }
+    elsif ( $self->account->outstanding_debits->total_outstanding > 0 ) {
+        $error = 'has_debt';
+    }
+    elsif ( $self->guarantee_relationships->count ) {
+        $error = 'has_guarantees';
+    }
 
-    return 'has_debt'
-        if $self->account->outstanding_debits->total_outstanding > 0;
+    if ( $error ) {
+        return Koha::Result::Boolean->new(0)->add_message({ message => $error });
+    }
 
-    return 'has_guarantees'
-        if $self->guarantee_relationships->count;
-
-    return 'ok';
+    return Koha::Result::Boolean->new(1);
 }
 
 =head2 Internal methods

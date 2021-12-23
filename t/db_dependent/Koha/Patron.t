@@ -849,7 +849,7 @@ subtest 'article_requests() tests' => sub {
 
 subtest 'safe_to_delete() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -858,7 +858,10 @@ subtest 'safe_to_delete() tests' => sub {
     ## Make it the anonymous
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
 
-    is( $patron->safe_to_delete, 'is_anonymous_patron', 'Cannot delete, it is the anonymous patron' );
+    ok( !$patron->safe_to_delete, 'Cannot delete, it is the anonymous patron' );
+    my $message = $patron->safe_to_delete->messages->[0];
+    is( $message->type, 'error', 'Type is error' );
+    is( $message->message, 'is_anonymous_patron', 'Cannot delete, it is the anonymous patron' );
     # cleanup
     t::lib::Mocks::mock_preference( 'AnonymousPatron', 0 );
 
@@ -870,7 +873,10 @@ subtest 'safe_to_delete() tests' => sub {
         }
     );
 
-    is( $patron->safe_to_delete, 'has_checkouts', 'Cannot delete, has checkouts' );
+    ok( !$patron->safe_to_delete, 'Cannot delete, has checkouts' );
+    $message = $patron->safe_to_delete->messages->[0];
+    is( $message->type, 'error', 'Type is error' );
+    is( $message->message, 'has_checkouts', 'Cannot delete, has checkouts' );
     # cleanup
     $checkout->delete;
 
@@ -879,19 +885,28 @@ subtest 'safe_to_delete() tests' => sub {
     $builder->build_object({ class => 'Koha::Patrons' })
             ->add_guarantor({ guarantor_id => $patron->id, relationship => 'parent' });
 
-    is( $patron->safe_to_delete, 'has_guarantees', 'Cannot delete, has guarantees' );
+    ok( !$patron->safe_to_delete, 'Cannot delete, has guarantees' );
+    $message = $patron->safe_to_delete->messages->[0];
+    is( $message->type, 'error', 'Type is error' );
+    is( $message->message, 'has_guarantees', 'Cannot delete, has guarantees' );
+
     # cleanup
     $patron->guarantee_relationships->delete;
 
     ## Make it have debt
     my $debit = $patron->account->add_debit({ amount => 10, interface => 'intranet', type => 'MANUAL' });
 
-    is( $patron->safe_to_delete, 'has_debt', 'Cannot delete, has debt' );
+    ok( !$patron->safe_to_delete, 'Cannot delete, has debt' );
+    $message = $patron->safe_to_delete->messages->[0];
+    is( $message->type, 'error', 'Type is error' );
+    is( $message->message, 'has_debt', 'Cannot delete, has debt' );
     # cleanup
     $patron->account->pay({ amount => 10, debits => [ $debit ] });
 
     ## Happy case :-D
-    is( $patron->safe_to_delete, 'ok', 'Can delete, all conditions met' );
+    ok( $patron->safe_to_delete, 'Can delete, all conditions met' );
+    my $messages = $patron->safe_to_delete->messages;
+    is_deeply( $messages, [], 'Patron can be deleted, no messages' );
 
     $schema->storage->txn_rollback;
 };
