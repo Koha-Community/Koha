@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2021-11-25 02:15+0000\n"
+"PO-Revision-Date: 2021-12-13 12:53+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1637806513.671677\n"
+"X-POOTLE-MTIME: 1639400028.456077\n"
 "X-Pootle-Path: /es/20.11/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2040,7 +2040,7 @@ msgstr "No"
 # Administration > Interface options
 msgid ""
 "admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Mostrar los íconos de itemtype en la intranet:"
+msgstr "Mostrar los íconos de itemtype en la interfaz administrativa:"
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Yes"
@@ -2541,14 +2541,12 @@ msgstr ""
 "$SUBCAMPO ( e.j. lccn: 010$a )."
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#CreateAVFromCataloguing# Allow"
-msgstr "Habilite"
+msgstr "Habilitar"
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
-msgstr "No habilite"
+msgstr "No habilitar"
 
 # Cataloging > Interface > CreateAVFromCataloguing
 msgid ""
@@ -2556,6 +2554,8 @@ msgid ""
 "within the cataloguing module. Librarian will need the manage_auth_values "
 "subpermission."
 msgstr ""
+"la creación de valores autorizados en el módulo de catalogación. El usuario "
+"deberá contar con el permiso manage_auth_values subpermission."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -2643,7 +2643,8 @@ msgstr "el editor de catalogación avanzado."
 msgid ""
 "cataloguing.pref#ISBD# Use the following as the staff interface ISBD "
 "template:"
-msgstr "Utilizar la siguiente como plantilla ISBD en la intranet:"
+msgstr ""
+"Utilizar la siguiente como plantilla ISBD en la interfaz administrativa:"
 
 # Cataloging > Display
 msgid ""
@@ -2722,7 +2723,7 @@ msgid ""
 msgstr ""
 "Las sustituciones posibles son <tt>{MARC}</tt> (tipo marc, ej. \"MARC21\" o "
 "\"UNIMARC\"), <tt>{FIELD}</tt> (número de campo, ej. \"000\" o \"048\"), "
-"<tt>{LANG}</tt> (lenguaje de usuario, ej. \"en\" o \"fi-FI\")."
+"<tt>{LANG}</tt> (idioma de usuario, ej. \"en\" o \"fi-FI\")."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# Use"
@@ -2844,8 +2845,9 @@ msgid ""
 "(UNIMARC)."
 msgstr ""
 "campos de nota en las pestañas 'Notas de título' y 'Descripción' en las "
-"páginas de vista detallada del OPAC e intranet. Utilice una coma para "
-"separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
+"páginas de vista detallada del OPAC e interfaz administrativa. Utilice una "
+"coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 "
+"(UNIMARC)."
 
 # Cataloging > Display
 msgid ""
@@ -4849,7 +4851,7 @@ msgid ""
 "copyright clearance stage in request creation. The text you enter will be "
 "the text displayed."
 msgstr ""
-"Al Agregar texto se habilitará la etapa de copyright en la creación de la "
+"Al agregar texto se habilitará la etapa de copyright en la creación de la "
 "solicitud. El texto que ingrese será el que se muestre."
 
 # Circulation > Interlibrary loans
@@ -5469,35 +5471,28 @@ msgid "circulation.pref#RenewAccruingItemWhenPaid# renew"
 msgstr "renovar"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the "
 "system preference \"RenewalPeriodBase\" is set to \"due date\", renewed "
 "items may still be overdue."
 msgstr ""
-"circulation.pref#RenewAccruingItemInOpac# el ejemplar automaticamente. Si el "
-"sistema de preferencia \"RenewalPeriodBase\" se ajusta a \"due date\", "
-"ejemplares renovados pueden estar todavia vencidos."
+"el ítem automáticamente. Si la preferencia \"RenewalPeriodBase\" se "
+"configura en \"fecha de vencimiento\", los ítems renovados aun pueden estar "
+"retrasados."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new "
 "due date on"
-msgstr ""
-"circulation.pref#RenewalPeriodBase#Cuando se renueven los préstamos, base la "
-"nueva fecha de vencimiento en"
+msgstr "Cuando se renueven préstamos, basar la fecha de vencimiento en"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalPeriodBase# the current date."
 msgstr "la fecha actual."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#RenewalPeriodBase# the old due date of the checkout."
-msgstr ""
-"circulation.pref#RenewalPeriodBase# la vieja fecha de vencimiento del "
-"préstamo."
+msgstr "la fecha de vencimiento original del préstamo."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Don't send"
@@ -5508,23 +5503,18 @@ msgid "circulation.pref#RenewalSendNotice# Send"
 msgstr "Enviar"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
 msgstr ""
-"circulation.pref#RenewalSendNotice# una notificación de renovación de "
-"acuerdo a las preferencias de mensajes del usuario para un 'ejemplar en "
-"préstamo'."
+"una notificación de renovación de acuerdo a las preferencias de mensajes del "
+"usuario para un 'ejemplar prestado'."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RentalFeesCheckoutConfirmation# When checking out an item "
 "with rental fees, "
-msgstr ""
-"circulation.pref#RentalFeesCheckoutConfirmation# Cuando se preste un "
-"ejemplar con costos de alquiler, "
+msgstr "Cuando se preste un ítem con costos de alquiler, "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# ask"
@@ -5573,13 +5563,10 @@ msgid ""
 msgstr "para ver si el usuario puede hacer una reserva del ítem."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ReservesMaxPickUpDelay# Mark a hold as problematic if it "
 "has been waiting for more than"
-msgstr ""
-"circulation.pref#ReservesMaxPickUpDelay# Marcar una reserva como "
-"problemática si ha estado en espera por más de"
+msgstr "Marcar una reserva como problemática si ha estado en espera por más de"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesMaxPickUpDelay# days."
@@ -5614,11 +5601,10 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "bloquear"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
 "interface."
-msgstr "la renovación de ejemplares"
+msgstr "la renovación de items desde la interfaz administrativa."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -5873,7 +5859,7 @@ msgstr "al personal especificar una fecha de vencimiento para la devolución."
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the "
 "staff interface, display"
-msgstr "Para los resultados de búsqueda en la intranet, muestre"
+msgstr "Para los resultados de búsqueda en la interfaz administrativa, mostrar"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5972,7 +5958,7 @@ msgstr "No permitir"
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr "que las reservas sean suspendidas desde la intranet."
+msgstr "que las reservas sean suspendidas desde la interfaz administrativa."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -6871,7 +6857,7 @@ msgid ""
 "results and item detail pages on the staff interface."
 msgstr ""
 "imágenes de cubiertas desde Amazon en resultados de búsquedas y en páginas "
-"de detalles de ítem en la intranet."
+"de detalles de ítem en la interfaz administrativa."
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# American"
@@ -8012,7 +7998,6 @@ msgid ""
 msgstr "como el primer día de la semana en el calendario."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#TimeFormat# ."
 msgstr "."
 
@@ -8074,9 +8059,8 @@ msgstr ""
 "mayúscula separados por espacios"
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#dateformat# ."
-msgstr "dd.mm.yyyy"
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8102,7 +8086,7 @@ msgstr "aaaa-mm-dd"
 msgid ""
 "i18n_l10n.pref#language# Enable the following languages on the staff "
 "interface:"
-msgstr "Habilite los siguientes lenguajes en la intranet:"
+msgstr "Habilite los siguientes idiomas en la interfaz administrativa:"
 
 # I18N/L10N
 msgid ""
@@ -8115,7 +8099,7 @@ msgstr ""
 # I18N/L10N
 msgid ""
 "i18n_l10n.pref#opaclanguages# Enable the following languages on the OPAC:"
-msgstr "Habilite los siguientes lenguajes en el OPAC:"
+msgstr "Habilite los siguientes idiomas en el OPAC:"
 
 # I18N/L10N
 msgid ""
@@ -8137,7 +8121,7 @@ msgstr "No permitir"
 msgid ""
 "i18n_l10n.pref#opaclanguagesdisplay# patrons to change the language they see "
 "on the OPAC."
-msgstr "a usuarios cambiar el lenguaje que ven en el OPAC."
+msgstr "a usuarios cambiar el idioma que ven en el OPAC."
 
 # Local Use
 msgid "local_use.pref"
@@ -8233,11 +8217,11 @@ msgstr "información sobre rutinas cron."
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Do"
-msgstr "Muestre"
+msgstr "Mostrar"
 
 # Logging > Debugging
 msgid "logs.pref#DumpSearchQueryTemplate# Don't"
-msgstr "No muestre"
+msgstr "No mostrar"
 
 # Logging > Debugging
 msgid ""
@@ -8261,7 +8245,7 @@ msgid ""
 "comment in the HTML source for the staff interface."
 msgstr ""
 "el volcado de toda variable Template Toolkit a un comentario en el código "
-"HTML para la interfaz del personal."
+"HTML para la interfaz administrativa."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -9361,7 +9345,6 @@ msgid ""
 msgstr "sugerencias de compra de otros usuarios en el OPAC."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -9371,13 +9354,14 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
-"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para el "
-"valor predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
-"li><li>ingrese una URL para una hoja de estilo específica</li></"
-"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTDetailsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
+"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para el valor "
+"predeterminado</li><li> ingrese una ruta para definir un archivo "
+"xslt</li><li>ingrese una URL para una hoja de estilo "
+"específica</li></ul>{langcode} será reemplazado con el idioma actual de la "
+"interfaz."
 
 # OPAC > Appearance
 msgid ""
@@ -9386,7 +9370,6 @@ msgid ""
 msgstr "Mostrar detalles en OPAC utilizando la hoja de estilo XSLT en: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value=\"\">leave "
@@ -9396,13 +9379,14 @@ msgid ""
 "an URL for an external specific stylesheet.</li></ul>{langcode} will be "
 "replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTListsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
-"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
-"predeterminado</li><li> coloque una ruta para definir un archivo xslt</"
-"li><li>coloque un URL para una hoja de estilo externa en específico.</li></"
-"ul>{langcode} será reemplazado con el lenguaje de la interfaz actual"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTListsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
+"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
+"predeterminado</li><li> coloque una ruta para definir un archivo "
+"xslt</li><li>coloque un URL para una hoja de estilo externa en "
+"específico.</li></ul>{langcode} será reemplazado con el idioma de la "
+"interfaz actual."
 
 # OPAC > Appearance
 msgid ""
@@ -9411,7 +9395,6 @@ msgid ""
 msgstr "Mostrar listas en el OPAC utilizando hojas de estilo XSLT como:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class="
 "\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -9421,13 +9404,14 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\"</"
-"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para el "
-"valor predeterminado</li><li> ingrese una ruta para definir un archivo xslt</"
-"li><li>ingrese una URL para una hoja de estilo específica</li></"
-"ul>{langcode} será reemplazado con el lenguaje actual de la interfaz"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTResultsDisplay\" data-value=\"\">dejar vacío</a> para \"no xslt\""
+"</li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para el valor "
+"predeterminado</li><li> ingrese una ruta para definir un archivo "
+"xslt</li><li>ingrese una URL para una hoja de estilo "
+"específica</li></ul>{langcode} será reemplazado con el idioma actual de la "
+"interfaz."
 
 # OPAC > Appearance
 msgid ""
@@ -9909,7 +9893,7 @@ msgstr ""
 msgid ""
 "opac.pref#OpacMaintenanceNotice# Show the following HTML when "
 "OpacMaintenance is enabled:"
-msgstr "Muestre el siguiente HTML cuando se habilite OpacMaintenance:"
+msgstr "Mostrar el siguiente HTML cuando se habilite OpacMaintenance:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -11881,14 +11865,13 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "No"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# Every time a patron will connect or "
 "checks an item out, the borrowers.lastseen will be updated with the current "
 "time."
 msgstr ""
-"Cada vez que un usuario se conecta, borrowers.lastseen se actualizará con la "
-"hora actual."
+"Cada vez que un usuario ingresa o retira un ítem para préstamo, "
+"borrowers.lastseen se actualizará con la fecha y hora actual."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -12022,13 +12005,12 @@ msgid "patrons.pref#patronimages# Don't allow"
 msgstr "No permitir"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#patronimages# images to be uploaded and shown for patrons on "
 "the staff interface."
 msgstr ""
-"patrons.pref# patronimages# imágenes para ser cargadas y mostradas a los "
-"usuarios en la intranet."
+"imágenes para ser cargadas y mostradas a los usuarios en la interfaz "
+"administrativa."
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# Do"
@@ -12115,8 +12097,8 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the OPAC and staff "
 "interface advanced search for limiting searches on the"
 msgstr ""
-"Muestra pestañas en la búsqueda avanzada de OPAC e intranet para limitar "
-"búsquedas en los campos"
+"Muestra pestañas en la búsqueda avanzada del OPAC y la interfaz "
+"administrativa para limitar búsquedas en los campos"
 
 # Searching > Search form
 msgid ""
@@ -12133,9 +12115,9 @@ msgid ""
 "record."
 msgstr ""
 "Koha registra información a nivel de tipo de ejemplar en las páginas de "
-"detalle y resultados en el OPAC y la intranet. Esta información también se "
-"mostrará si la preferencia del sistema item-level_itypes se configura a un "
-"registro bibliográfico."
+"detalle y resultados en el OPAC y la interfaz administrativa. Esta "
+"información también se mostrará si la preferencia del sistema item-"
+"level_itypes se configura a un registro bibliográfico."
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Display"
@@ -12154,14 +12136,12 @@ msgid "searching.pref#BrowseResultSelection# Enable"
 msgstr "Habilite"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
-"searching.pref#BrowseResultSelection# resultados de busqueda de navegación "
-"desde la página de detalle de registro bibliográfico en la interfaz "
-"administrativa."
+"resultados de búsqueda de navegación desde la página de detalle de registro "
+"bibliográfico en la interfaz administrativa."
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -12188,7 +12168,6 @@ msgid "searching.pref#ElasticsearchCrossFields# Enable"
 msgstr "Habilitar"
 
 # Searching > Features > ElasticsearchCrossFields
-#, fuzzy
 msgid ""
 "searching.pref#ElasticsearchCrossFields# See documentation at https://www."
 "elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
@@ -12214,13 +12193,10 @@ msgid "searching.pref#EnableSearchHistory# Keep"
 msgstr "Mantener"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
-msgstr ""
-"searching.pref#EnableSearchHistory# el historial de busqueda del usuario en "
-"la interfaz administrativa."
+msgstr "el historial de búsqueda del usuario en la interfaz administrativa."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -12230,7 +12206,7 @@ msgstr "Truncar longitud de facetas a"
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface."
-msgstr "caracteres, en OPAC/intranet."
+msgstr "caracteres, en OPAC/interfaz administrativa."
 
 # Searching > Results display
 msgid "searching.pref#FacetMaxCount# Show up to"
@@ -12241,36 +12217,30 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "facetas para cada categoría."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# Sort facets"
-msgstr "Mostrar facetas para"
+msgstr "Ordenar facetas"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#FacetOrder# alphabetically"
-msgstr "automáticamente."
+msgstr "alfabéticamente"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# by usage count"
-msgstr "Mostrar hasta"
+msgstr "por número de ocurrencias"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# for each category."
-msgstr "facetas para cada categoría."
+msgstr "para cada categoría."
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#IncludeSeeFromInSearches# <em>see from</em> (non-preferred "
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
-"searching.pref#IncludeSeeFromInSearches# <em>ver desde</em> (forma no "
-"predilecta) cabeceras en las busquedas bibliográficas. Por favor note: "
-"necesitará re-indexar su base de datos bibliográficos cuando cambie su "
-"preferencia."
+"<em>ver desde</em> (forma no predilecta) cabeceras en las búsquedas "
+"bibliográficas. Por favor notar: necesitará re-indexar su base de datos "
+"bibliográficos cuando cambie su preferencia."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -12289,14 +12259,12 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# don't use"
 msgstr "no utilizar"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
-"searching.pref#IntranetNumersPreferPhrase# el operador \"phr\" en la "
-"signatura topografica y numero estadar en la interfaz administrativa de "
-"busqueda."
+"el operador \"phr\" en la signatura topografica y numero estándar en la "
+"interfaz administrativa de búsqueda."
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -12336,13 +12304,12 @@ msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't add"
 msgstr "No agregar"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
 msgstr ""
-"searching.pref#LoadSearchHistoryToTheFirstLoggedUser# historial de busqueda "
-"del usuario no registrado a el proximo usuario registrado."
+"historial de búsqueda del usuario no registrado al próximo usuario "
+"registrado."
 
 # Searching > Results display
 msgid ""
@@ -12398,13 +12365,12 @@ msgid "searching.pref#OPACNumbersPreferPhrase# don't use"
 msgstr "no utilizar"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
-"searching.pref#OPACNumbersPreferPhrase# el operador \"phr\" en la signatura "
-"topográfica y número estándar en las busquedas del OPAC."
+"el operador \"phr\" en la signatura topográfica y número estándar en las "
+"búsquedas del OPAC."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
@@ -12538,18 +12504,17 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Intentar"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-"encontrar.pref#BusquedaConfusa# palabras escritas de manera similar en una "
-"búsqueda (por ejemplo, la búsqueda de <cite>flang</cite> también es similar "
-"a <cite>flange</cite> y <cite>fang</cite>; Afecta corrientemente sólo a las "
-"busquedas de Zebra. Cualquier término de busquedaElastica puede crear una "
-"confusion agregando una ~ directamente después del término)."
+"coincidencia con palabras escritas de manera similar en una búsqueda (por "
+"ejemplo, la búsqueda de <cite>flang</cite> también es similar a "
+"<cite>flange</cite> y <cite>fang</cite>; Actualmente, sólo afecta a las "
+"búsquedas en Zebra. Cualquier término de búsqueda en Elasticsearch puede "
+"convertirse en fuzzy agregando ~ directamente después del término)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -12638,14 +12603,12 @@ msgid "searching.pref#TraceCompleteSubfields# Force"
 msgstr "Forzar"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#TraceCompleteSubfields# subject tracings in the OPAC and "
 "staff interface to search only for complete-subfield matches."
 msgstr ""
-"busqueda.pref#RastreoSubcamposCompletos# rastreo de sujetos en el OPAC y la "
-"interfaz administrativa para buscar solamente los subcampos-completos "
-"similares."
+"trazas de temas en el OPAC y la interfaz administrativa para buscar solo "
+"coincidencias en campos completos."
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
@@ -12694,13 +12657,12 @@ msgid "searching.pref#defaultSortField# ,"
 msgstr ","
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
-"buscando.pref#CampoOrdenadopredeterminado# Por predeterminacion, ordenar los "
-"resultados de búsqueda en el interfaz administrativo por"
+"De forma predeterminada, ordenar los resultados de búsqueda en el interfaz "
+"administrativo por"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
@@ -12761,17 +12723,16 @@ msgid ""
 "Applies to OPAC and staff interface."
 msgstr ""
 "el conteo de facetas. La relevancia de estos números depende fuertemente en "
-"el valor de la preferencia maxRecordsForFacets. Se aplica a las interfaces "
-"OPAC e intranet."
+"el valor de la preferencia maxRecordsForFacets. Aplica al OPAC y la interfaz "
+"administrativa."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#expandedSearchOption# \"More options\" on the OPAC and staff "
 "interface advanced search pages."
 msgstr ""
-"buscando.pref#OpciónBusquedaexpandida# \"Más opciones\" en el OPAC y la "
-"interfaz administrativa páginas avanzadas de búsqueda"
+"\"Más opciones\" en la página de búsquedas avanzadas del OPAC y la interfaz "
+"administrativa."
 
 # Searching > Search form
 msgid "searching.pref#expandedSearchOption# By default,"
@@ -12808,12 +12769,9 @@ msgid "searching.pref#numSearchResults# By default, show"
 msgstr "De forma predeterminada, mostrar"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#numSearchResults# results per page in the staff interface."
-msgstr ""
-"buscando.pref#BusquedaResultadosnum# resultados por página en la interfaz "
-"administrativa"
+msgstr "resultados por página en la interfaz administrativa."
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# Don't show"
@@ -12824,13 +12782,12 @@ msgid "searching.pref#numSearchResultsDropdown# Show"
 msgstr "Mostrar"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#numSearchResultsDropdown# results per page dropdown on staff "
 "interface search results."
 msgstr ""
-"buscando.pref#BuscarResultadosDesplegablenum# resultados por página "
-"desplegables en la interfaz administrativa de resultados de búsqueda."
+"resultados por página en el desplegable de resultados de búsqueda de la "
+"interfaz administrativa."
 
 # Serials
 msgid "serials.pref"
@@ -12851,7 +12808,6 @@ msgid "serials.pref#PreserveSerialNotes# Do"
 msgstr "Hacer"
 
 # Serials
-#, fuzzy
 msgid "serials.pref#PreserveSerialNotes# Don't"
 msgstr "No"
 
@@ -12896,13 +12852,10 @@ msgstr ""
 "circulación."
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#RoutingListNote# Include the following note on all routing "
 "lists:"
-msgstr ""
-"series.pref#NotaListaRuta# Incluir la siguiente nota en todas las listas de "
-"ruta:"
+msgstr "Incluir la siguiente nota en todas la listas de circulación:"
 
 # Serials
 msgid "serials.pref#RoutingSerials# Don't use"
@@ -12923,23 +12876,19 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
 msgstr "Mostrar los"
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on "
 "the staff interface."
 msgstr ""
-"series.pref#CuentaSerieEdicionExhibidaAdministracion# ediciones previas de "
-"una serie en la interfaz administrativa."
+"ediciones previas de una publicación periódica en la interfaz administrativa."
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must "
 "not be rewritten when a subscription is duplicated (separated by pipe |)"
 msgstr ""
-"series.pref#SubscriptionDuplicateDroppedInput# Lista de campos los cuales no "
-"debe de ser reescrito cuando una suscripción se duplica (separado por una "
-"pipa |)"
+"Lista de campos los cuales no debe de ser reescrito cuando una suscripción "
+"se duplica (separado por una pipa |)"
 
 # Serials
 msgid ""
@@ -12962,42 +12911,37 @@ msgid "serials.pref#SubscriptionHistory# view of serial issues."
 msgstr "vista de ejemplares de seriadas."
 
 # Serials
-#, fuzzy
 msgid "serials.pref#makePreviousSerialAvailable# Don't make"
-msgstr "No hagas"
+msgstr "No hacer"
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# Make"
 msgstr "Hacer"
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#makePreviousSerialAvailable# previous serial automatically "
 "available when receiving a new serial issue. The previous issue can also be "
 "set to another item type when receiving a new one. Please note that the item-"
 "level_itypes system preference must be set to specific item."
 msgstr ""
-"serie.pref#makePreviousSerialAvailable# series previas automáticamente se "
-"vuelven disponibles cuando se recibe una nueva edición de la serie. La "
-"edición previa también se puede establecer a otro tipo de ejemplar cuando se "
-"recibe uno nuevo. Por favor note que la preferencia del sistema item-"
-"level_itypes se debe establecer a un ejemplar especifico."
+"el ejemplar previo disponible automáticamente al recibir uno nuevo. El "
+"ejemplar previo se puede configura a otro tipo de ítem cuando se recibe uno "
+"nuevo. Tenga en cuenta que la preferencia de sistema item-level_itypes debe "
+"estar configurada a ítem específico."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Show"
 msgstr "Mostrar pestañas de"
 
 # Serials
-#, fuzzy
 msgid ""
 "serials.pref#opacSerialDefaultTab# as default tab for serials in OPAC. "
 "Please note that the serial collection tab is currently available only for "
 "UNIMARC."
 msgstr ""
-"series.pref#opacSerialDefaultTab# como tabulador predeterminado para series "
-"en el OPAC. Por favor note que el tabulador de colección de series sólo está "
-"disponible para UNIMARC."
+"como pestaña predeterminada para publicaciones periódicas en el OPAC. Note "
+"que la pestaña de Colecciones solo está disponible para UNIMARC."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# holdings tab"
@@ -13086,7 +13030,8 @@ msgid ""
 "staff interface."
 msgstr ""
 "el formato, la audiencia, e iconos de tipo de material y descripciones en "
-"las páginas de resultados y detalle XSLT MARC21 en la intranet."
+"las páginas de resultados y detalle XSLT MARC21 en la interfaz "
+"administrativa."
 
 # Staff interface > Options
 msgid "staff_interface.pref#HidePatronName# Don't show"
@@ -13097,80 +13042,67 @@ msgid "staff_interface.pref#HidePatronName# Show"
 msgstr "Mostrar"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
-"administrativo_interfaz.pref#HidePatronName# los nombres de usuarios que "
-"tienen ejemplares en préstamo o en reserva en la página de detalles o en la "
-"pantalla \"Poner Reserva\"."
+"los nombres de usuarios que tienen ejemplares en préstamo o en reserva en la "
+"página de detalles o en la pantalla \"Reservar\"."
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
 msgstr "No mostrar"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Show"
-msgstr "administrativo_interfaz.pre#IntranetCatalogSearchPulldown# Mostrar"
+msgstr "Mostrar"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetCatalogSearchPulldown# a search field pulldown "
 "for 'Search the catalog' boxes."
 msgstr ""
-"administrativo_interfaz.pref#IntranetCatalogSearchPulldown# un campo de "
-"busqueda desplegable para la casilla 'Buscar en el catálogo'"
+"un campo de búsqueda desplegable para la casilla 'Buscar en el catálogo'"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetCirculationHomeHTML# Show the following HTML in "
 "its own div on the bottom of the home page of the circulation module:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetCirculationHomeHTML# Mostrar el "
-"siguiente HTML en su propia div al fondo de la página principal del módulo "
-"de circulación:"
+"Mostrar el siguiente HTML en su propia div al fondo de la página principal "
+"del módulo de circulación:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#IntranetFavicon# Use the image at"
 msgstr "Utilizar la imagen en"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetFavicon# for the staff interface's favicon. "
 "(This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
-"administrativo_interfaz.pref#IntranetFavicon# para la interfaz "
-"administrativa favicon. (Esto debe de ser un URL completo, empezando con "
-"<code>http://</code>.)"
+"para el favicon de la interfaz administrativa. (Esto debe de ser un URL "
+"completo, empezando con <code>https://</code>.)"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetNav# Show the following HTML to the left of the "
 "More menu at the top of each page on the staff interface (should be a list "
 "of links or blank):"
 msgstr ""
-"administrativo_interfaz.pref#IntranetNav# Mostrar el siguiente HTML a la "
-"izquierda del menú Más en la parte superior de cada página en la interfaz "
-"administrativa (deberá de ser una lista de enlaces o en blanco):"
+"Mostrar el siguiente HTML a la izquierda del menú Más en la parte superior "
+"de cada página en la interfaz administrativa (deberá de ser una lista de "
+"enlaces o en blanco):"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetReportsHomeHTML# Show the following HTML in its "
 "own div on the bottom of the home page of the reports module:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetReportsHomeHTML# Mostrar el siguiente "
-"HTML en su propio div al fondo de la página principal del módulo de reportes:"
+"Mostrar el siguiente HTML en su propio div al fondo de la página principal "
+"del módulo de reportes:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetSlipPrinterJS# Use the following JavaScript for "
 "printing slips. See detailed description on the <a href='https://wiki.koha-"
@@ -13178,72 +13110,60 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetSlipPrinterJS# Utilice el siguiente "
-"JavaScript para imprimir recibos. Vea los detalles de descripción en la <a "
-"href='https://wiki.koha-community.org/wiki/"
-"Setting_up_slip_printer_to_print_silently'>Wiki de Koha</a> y el eventual "
-"complemento de Firefox <a href='https://github.com/edabg/jsprintsetup/"
-"wiki'>documentación jsPrintSetup</a>:"
+"Utilizar el siguiente código JavaScript para imprimir recibos. Ver una "
+"descripción detallada en la <a href='https://wiki.koha-"
+"community.org/wiki/Setting_up_slip_printer_to_print_silently'>Wiki de "
+"Koha</a> y, eventualmente, la documentación del complemento de Firefox <a "
+"href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup</a>:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetUserCSS# Include the following CSS on all pages "
 "in the staff interface:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetUserCSS# Incluya el siguiente CSS en "
-"todas la páginas del cliente administrativo:"
+"Incluir el siguiente CSS en todas la páginas de la interfaz administrativa:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetUserJS# Include the following JavaScript on all "
 "pages in the staff interface:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetUserJS# Incluya el siguiente JavaScript "
-"en todas la páginas del cliente administrativo:"
+"Incluir el siguiente código JavaScript en todas la páginas de la interfaz "
+"administrativa:"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetmainUserblock# Show the following HTML in its "
 "own column on the main page of the staff interface:"
 msgstr ""
-"administrativo_interfaz.pref#IntranetmainUserblock# Mostrar el siguiente "
-"HTML en su propia columna en la página principal de la interfaz "
-"administrativa:"
+"Mostrar el siguiente HTML en su propia columna en la página principal de la "
+"interfaz administrativa:"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#SlipCSS# Include the stylesheet at"
 msgstr "Incluya la hoja de estilo en"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#SlipCSS# on Issue and Hold Slips. (This should be a "
 "complete URL, starting with <code>http://</code>.)"
 msgstr ""
-"administrativo_interfaz.pref#SlipCSS# en Edicion y recibos de  Reservas. "
-"(Esta debe ser una URL completa, comenzando con <code>http://</code>.)"
+"en recibos de préstamos y reservas. (Esta debe ser una URL completa, "
+"comenzando con <code>https://</code>.)"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#StaffDetailItemSelection# Disable"
-msgstr "Desactivar"
+msgstr "Deshabilitar"
 
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#StaffDetailItemSelection# Enable"
 msgstr "Habilitar"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffDetailItemSelection# item selection in record "
 "detail page."
-msgstr ""
-"administrativo_interfaz.pref#StaffDetailItemSelection# la selección de "
-"ejemplar en la página de detalle del registro."
+msgstr "la selección de ejemplar en la página de detalle del registro."
 
 # Staff interface > Appearance
 msgid ""
@@ -13267,7 +13187,8 @@ msgid ""
 "staff_interface.pref#StaffLoginInstructions# Show the following HTML on the "
 "staff interface login page"
 msgstr ""
-"Muestre el siguiente HTML en la página de inicio de sesión de la intranet"
+"Mostrar el siguiente HTML en la página de inicio de sesión de la interfaz "
+"administrativa"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -13285,7 +13206,6 @@ msgstr ""
 "un editor WYSIWYG cuando edite ciertas preferencias del sistema en HTML."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -13303,10 +13223,11 @@ msgstr ""
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# Display details in the staff "
 "interface using XSLT stylesheet at: "
-msgstr "Mostrar detalles en la intranet utilizando la hoja de estilo XSLT en: "
+msgstr ""
+"Mostrar detalles en la interfaz administrativa utilizando la hoja de estilo "
+"XSLT en: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li><a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -13316,22 +13237,24 @@ msgid ""
 "file</li><li>put an URL for an external specific stylesheet.</li></"
 "ul>{langcode} will be replaced with current interface language"
 msgstr ""
-"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"XSLTListsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</"
-"li><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref="
-"\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
-"predeterminado</li><li> coloque una ruta para definir un archivo xslt</"
-"li><li>coloque un URL para una hoja de estilo externa específica.</li></"
-"ul>{langcode} será reemplazado con el lenguaje de la interfaz actual"
+"<br />Opciones:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"XSLTListsDisplay\" data-value=\"\">Dejar vacío</a> para \"no xslt\"</li><li>"
+"ingrese \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
+"XSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
+"predeterminado</li><li> coloque una ruta para definir un archivo "
+"xslt</li><li>coloque un URL para una hoja de estilo externa "
+"específica.</li></ul>{langcode} será reemplazado con el idioma de la "
+"interfaz actual"
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# Display lists in the staff interface "
 "using XSLT stylesheet at: "
-msgstr "Mostrar listas en la intranet utilizando la hoja de estilo XSLT en: "
+msgstr ""
+"Mostrar listas en la interfaz administrativa utilizando la hoja de estilo "
+"XSLT en: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13350,7 +13273,8 @@ msgid ""
 "staff_interface.pref#XSLTResultsDisplay# Display results in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
-"Mostrar resultados en la intranet utilizando la hoja de estilo XSLT en: "
+"Mostrar resultados en la interfaz administrativa utilizando la hoja de "
+"estilo XSLT en: "
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranet_includes# Use include files from the"
@@ -13375,7 +13299,7 @@ msgstr "Mostrar"
 # Staff interface > Options
 msgid ""
 "staff_interface.pref#intranetbookbag# the cart option in the staff interface."
-msgstr "el carrito en la intranet."
+msgstr "el carrito en la interfaz administrativa."
 
 # Staff interface > Appearance
 msgid ""
@@ -13396,9 +13320,9 @@ msgstr ""
 "para sobrescribir configuraciones específicas de la hoja de estilo "
 "predeterminada (dejar blanco para inhabilitar). Ingrese solo el nombre de "
 "archivo, un path local completo o una URL completa comenzando con "
-"<code>http://</code> (si el archivo se encuentra en un servidor remoto). "
+"<code>https://</code> (si el archivo se encuentra en un servidor remoto). "
 "Note que si ingresa un nombre de archivo, el mismo deberá estar el el "
-"subdirectorio css para tema activo y lenguaje dentro del directorio de temas "
+"subdirectorio css para tema activo e idioma dentro del directorio de temas "
 "de Koha. Un path completo se espera comience desde el document root HTTP."
 
 # Staff interface > Appearance
@@ -13416,12 +13340,12 @@ msgid ""
 "directory. A full local path is expected to start from your HTTP document "
 "root."
 msgstr ""
-"en todas la páginas de la intranet, en lugar del css predeterminado "
-"(utilizado cuando deja este campo en blanco). Ingrese solo el nombre de "
-"archivo, una ruta local completa o una URL completa comenzando con "
-"<code>http://</code> (si el archivo se encuentra en un servidor remoto). "
+"en todas la páginas de la interfaz administrativa, en lugar del css "
+"predeterminado (utilizado cuando deja este campo en blanco). Ingrese solo el "
+"nombre de archivo, una ruta local completa o una URL completa comenzando con "
+"<code>https://</code> (si el archivo se encuentra en un servidor remoto). "
 "Note que si ingresa un nombre de archivo, el mismo deberá estar en el "
-"subdirectorio css para el tema y lenguaje activo dentro del directorio de "
+"subdirectorio css para el tema e idioma activo dentro del directorio de "
 "temas de Koha. Se espera que la ruta local completa comience desde raiz de "
 "documentos HTTP."
 
@@ -13437,12 +13361,12 @@ msgstr "Mostrar"
 msgid ""
 "staff_interface.pref#showLastPatron# a link to the last searched patron in "
 "the staff interface."
-msgstr "un enlace al último usuario buscado en la intranet."
+msgstr "un enlace al último usuario buscado en la interfaz administrativa."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#staffClientBaseURL# The staff interface is located at"
-msgstr "La intranet se localiza en"
+msgstr "La interfaz administrativa se encuentra en"
 
 # Staff interface > Appearance
 msgid ""
@@ -13475,7 +13399,7 @@ msgstr "Usar el tema"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# theme on the staff interface."
-msgstr "en la intranet."
+msgstr "en la interfaz administrativa."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewISBD# Allow"
@@ -13489,7 +13413,7 @@ msgstr "No permitir"
 msgid ""
 "staff_interface.pref#viewISBD# staff to view records in ISBD form on the "
 "staff interface."
-msgstr "al personal ver registros en forma ISBD en la intranet."
+msgstr "al personal ver registros en forma ISBD en la interfaz administrativa."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewLabeledMARC# Allow"
@@ -13500,13 +13424,12 @@ msgid "staff_interface.pref#viewLabeledMARC# Don't allow"
 msgstr "No permitir"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#viewLabeledMARC# staff to view records in labeled MARC "
 "form on the staff interface."
 msgstr ""
-"administrativo_interfaz.pref#viewLabeledMARC# administracion ver registros "
-"en la forma etiquetada MARC en la interfaz administrativa."
+"al personal ver registros en la forma plana de MARC en el interfaz "
+"administrativa."
 
 # Staff interface > Options
 msgid "staff_interface.pref#viewMARC# Allow"
@@ -13517,13 +13440,12 @@ msgid "staff_interface.pref#viewMARC# Don't allow"
 msgstr "No permitir"
 
 # Staff interface > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#viewMARC# staff to view records in plain MARC form on "
 "the staff interface."
 msgstr ""
-"administrativo_interfaz.pref#viewMARC# administración ver registros en la "
-"forma plana de MARC en el interfaz administrativa."
+"al personal ver registros en la forma plana de MARC en el interfaz "
+"administrativa."
 
 # Tools
 msgid "tools.pref"
@@ -13583,7 +13505,7 @@ msgstr "imágenes."
 
 # Tools > Batch item
 msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
-msgstr "Muestre hasta"
+msgstr "Mostrar hasta"
 
 # Tools > Batch item
 msgid ""
@@ -13593,7 +13515,7 @@ msgstr "ítems para un proceso de borrado de ítems en lote."
 
 # Tools > Batch item
 msgid "tools.pref#MaxItemsToDisplayForBatchMod# Display up to"
-msgstr "Muestre hasta"
+msgstr "Mostrar hasta"
 
 # Tools > Batch item
 msgid ""
@@ -13625,7 +13547,7 @@ msgstr "Mostrar el autor de novedades:"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# both OPAC and staff interface"
-msgstr "tanto el OPAC como el la intranet"
+msgstr "tanto el OPAC como el la interfaz administrativa"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# not at all"
@@ -13633,7 +13555,7 @@ msgstr "nada"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr "solo intranet"
+msgstr "solamente en la interfaz administrativa"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# ."
@@ -13653,7 +13575,7 @@ msgstr "un editor de texto (CodeMirror)"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
-msgstr "Por defecto, muestre"
+msgstr "Por defecto, mostrar"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# reports on the saved reports page."
