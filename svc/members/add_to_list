@@ -32,9 +32,9 @@ my ( $auth_status, $sessionID ) = check_cookie_auth(
 );
 
 exit 0 if $auth_status ne "ok";
-my $add_to_patron_list       = $input->param('add_to_patron_list');
-my $new_patron_list          = $input->param('new_patron_list');
-my @borrowernumbers          = $input->param('borrowernumbers[]');
+my $add_to_patron_list = $input->param('add_to_patron_list');
+my $new_patron_list    = $input->param('new_patron_list');
+my @borrowernumbers    = $input->multi_param('borrowernumbers[]');
 
 my $response;
 if ($add_to_patron_list) {
