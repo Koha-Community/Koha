@@ -1354,7 +1354,12 @@ sub checkHighHolds {
         due_date    => undef,
     };
 
-    my $holds = Koha::Holds->search( { biblionumber => $item->biblionumber } );
+
+    # Count holds on this record, ignoring the borrowers own holds as they would be filled by the checkout
+    my $holds = Koha::Holds->search({
+        biblionumber => $item->biblionumber,
+        borrowernumber => { '!=' => $patron->borrowernumber }
+    });
 
     if ( $holds->count() ) {
         $return_data->{outstanding} = $holds->count();
@@ -1369,8 +1374,8 @@ sub checkHighHolds {
 
             # static means just more than a given number of holds on the record
 
-            # If the number of holds is less than the threshold, we can stop here
-            if ( $holds->count() < $decreaseLoanHighHoldsValue ) {
+            # If the number of holds is not above the threshold, we can stop here
+            if ( $holds->count() <= $decreaseLoanHighHoldsValue ) {
                 return $return_data;
             }
         }
@@ -1387,7 +1392,9 @@ sub checkHighHolds {
             }
 
             # Remove any items that are not holdable for this patron
-            @items = grep { CanItemBeReserved( $patron , $_, undef, { ignore_found_holds => 1 } )->{status} eq 'OK' } @items;
+            # We need to ignore hold counts as the borrower's own hold that will be filled by the checkout
+            # could prevent them from placing further holds
+            @items = grep { CanItemBeReserved( $patron, $_, undef, { ignore_hold_counts => 1 } )->{status} eq 'OK' } @items;
 
             my $items_count = scalar @items;
 
@@ -1539,6 +1546,7 @@ sub AddIssue {
             );
         }
         else {
+
             unless ($datedue) {
                 my $itype = $item_object->effective_itemtype;
                 $datedue = CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
