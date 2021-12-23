@@ -5,17 +5,17 @@
 [% BLOCK b_layout %]<span>Layout: </span>[% END %]
 [% BLOCK b_template %]<span>Template: </span>[% END %]
 
-[% IF ( error || CGI.param('pdferr') )  %]
+[% IF ( error || error_pdferr )  %]
 <div class="dialog alert">
   <p>
     <strong>WARNING:</strong>
-        [% IF CGI.param('pdferr') %]<span>Error while creating PDF file. </span>
-            [% IF CGI.param('errnocards') %]<span>No cards created (empty batch or list?) </span>[% END %]
-            [% IF CGI.param('errba') %][% INCLUDE b_batch %]<span class="ex">[%- CGI.param('errba') | html -%]</span>[% END %]
-            [% IF CGI.param('errpl') %][% INCLUDE b_patronlist %]<span class="ex">[%- CGI.param('errpl') | html -%]</span>][% END %]
-            [% IF CGI.param('errpt') %][% INCLUDE b_patronnumber %]<span class="ex">[%- CGI.param('errpt') | html -%]</span>[% END %]
-            [% IF CGI.param('errlo') %][% INCLUDE b_layout %]<span class="ex">[%- CGI.param('errlo') | html -%]</span>[% END %]
-            [% IF CGI.param('errtpl') %][% INCLUDE b_template %]<span class="ex">[%- CGI.param('errtpl') | html -%]</span>[% END %]
+        [% IF error_pdferr %]<span>Error while creating PDF file. </span>
+            [% IF error_errnocards %]<span>No cards created (empty batch or list?) </span>[% END %]
+            [% IF error_errba %][% INCLUDE b_batch %]<span class="ex">[%- error_errba | html -%]</span>[% END %]
+            [% IF error_errpl %][% INCLUDE b_patronlist %]<span class="ex">[%- error_errpl | html -%]</span>][% END %]
+            [% IF error_errpt %][% INCLUDE b_patronnumber %]<span class="ex">[%- error_errpt | html -%]</span>[% END %]
+            [% IF error_errlo %][% INCLUDE b_layout %]<span class="ex">[%- error_errlo | html -%]</span>[% END %]
+            [% IF error_errtpl %][% INCLUDE b_template %]<span class="ex">[%- error_errtpl | html -%]</span>[% END %]
             [% INCLUDE asksysadmin %]
         [% END %]
 

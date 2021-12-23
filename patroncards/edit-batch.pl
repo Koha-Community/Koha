@@ -61,6 +61,13 @@ my $errstr = $cgi->param('error') || '';
 my $bor_num_list = $cgi->param('bor_num_list') || undef;
 my $branch_code = C4::Context->userenv->{'branch'};
 
+my @errors = ( 'pdferr', 'errnocards', 'errba', 'errpl', 'errpt', 'errlo', 'errtpl', );
+foreach my $param (@errors) {
+    my $error = $cgi->param($param) ? 1 : 0;
+    $template->param( 'error_' . $param => $error )
+      if $error;
+}
+
 if ($op eq 'remove') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     foreach my $label_id (@label_ids) {

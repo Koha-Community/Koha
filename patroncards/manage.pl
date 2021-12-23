@@ -45,6 +45,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my @errors = ( 'pdferr', 'errnocards', 'errba', 'errpl', 'errpt', 'errlo', 'errtpl', );
+foreach my $param (@errors) {
+    my $error = $cgi->param($param) ? 1 : 0;
+    $template->param( 'error_' . $param => $error )
+      if $error;
+}
+
 my $op = $cgi->param('op') || 'none';
 my $card_element = $cgi->param('card_element') || 'template';   # default to template management
 my $element_id = $cgi->param('element_id') || 0; # there should never be an element with a id of 0 so this is a safe default

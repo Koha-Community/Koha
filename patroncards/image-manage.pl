@@ -26,6 +26,13 @@ my $upload_file = $cgi->upload('uploadfile') || '';
 my $op = $cgi->param('op') || 'none';
 my @image_ids = $cgi->multi_param('image_id');
 
+my @errors = ( 'pdferr', 'errnocards', 'errba', 'errpl', 'errpt', 'errlo', 'errtpl', );
+foreach my $param (@errors) {
+    my $error = $cgi->param($param) ? 1 : 0;
+    $template->param( 'error_' . $param => $error )
+      if $error;
+}
+
 my $source_file = "$file_name"; # otherwise we end up with what amounts to a pointer to a filehandle rather than a user-friendly filename
 
 my $display_columns = { image =>    [  #{db column      => {label => 'col label', is link?          }},
