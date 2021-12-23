@@ -93,7 +93,7 @@ if ( $input->param('sample') ) {
     exit 0;
 }
 
-my @preserve_fields = $input->param('preserve_existing');
+my @preserve_fields = $input->multi_param('preserve_existing');
 
 my $uploadborrowers = $input->param('uploadborrowers');
 my $matchpoint      = $input->param('matchpoint');
