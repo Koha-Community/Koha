@@ -37,7 +37,7 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $action       = $input->param('action');
-my @imagenumbers = $input->param('imagenumber');
+my @imagenumbers = $input->multi_param('imagenumber');
 
 # Array to store the reponse JSON
 my $response = [];

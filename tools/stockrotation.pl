@@ -376,7 +376,7 @@ if (!defined $op) {
 } elsif ($op eq 'move_items_to_rota') {
 
     # The barcodes of the items we're moving
-    my @move = $input->param('move_item');
+    my @move = $input->multi_param('move_item');
 
     foreach my $item(@move) {
 
