@@ -23,6 +23,7 @@ use Koha::Database;
 use Koha::Exceptions;
 use Koha::Patrons;
 
+use List::MoreUtils qw(any);
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 
@@ -340,25 +341,20 @@ sub delete {
                 Koha::Exceptions::Exception->throw('Koha::Patron->safe_to_delete returned false but carried no error message');
             }
 
-            if ( $error->message eq 'has_checkouts' ) {
+            my $error_descriptions = {
+                has_checkouts  => 'Pending checkouts prevent deletion',
+                has_debt       => 'Pending debts prevent deletion',
+                has_guarantees => 'Patron is a guarantor and it prevents deletion',
+                is_anonymous_patron => 'Anonymous patron cannot be deleted',
+            };
+
+            if ( any { $error->message eq $_ } keys %{$error_descriptions} ) {
                 return $c->render(
                     status  => 409,
-                    openapi => { error => 'Pending checkouts prevent deletion' }
-                );
-            } elsif ( $error->message eq 'has_debt' ) {
-                return $c->render(
-                    status  => 409,
-                    openapi => { error => 'Pending debts prevent deletion' }
-                );
-            } elsif ( $error->message eq 'has_guarantees' ) {
-                return $c->render(
-                    status  => 409,
-                    openapi => { error => 'Patron is a guarantor and it prevents deletion' }
-                );
-            } elsif ( $error->message eq 'is_anonymous_patron' ) {
-                return $c->render(
-                    status  => 403,
-                    openapi => { error => 'Anonymous patron cannot be deleted' }
+                    openapi => {
+                        error      => $error_descriptions->{ $error->message },
+                        error_code => $error->message,
+                    }
                 );
             } else {
                 Koha::Exceptions::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
@@ -377,12 +373,6 @@ sub delete {
             }
         );
     } catch {
-        if ( blessed $_ && $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
-            return $c->render(
-                status  => 403,
-                openapi => { error => "Anonymous patron cannot be deleted" }
-            );
-        }
 
         $c->unhandled_exception($_);
     };
