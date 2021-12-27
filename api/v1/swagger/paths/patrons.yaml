@@ -367,7 +367,14 @@
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
         schema:
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
@@ -419,7 +426,10 @@
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -458,7 +468,10 @@
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
         schema:
           $ref: ../definitions.yaml#/error
       "503":
@@ -511,7 +524,14 @@
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
         schema:
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
@@ -551,7 +571,14 @@
         schema:
           $ref: ../definitions.yaml#/error
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
         schema:
           $ref: ../definitions.yaml#/error
     x-koha-authorization:

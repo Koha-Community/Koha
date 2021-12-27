@@ -32,6 +32,17 @@
         description: Register not found
         schema:
           $ref: ../definitions.yaml#/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
     x-koha-authorization:
       permissions:
         cash_management: cashup
@@ -59,6 +70,17 @@
           $ref: ../definitions.yaml#/error
       "404":
         description: Patron not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
         schema:
           $ref: ../definitions.yaml#/error
     x-koha-authorization:
