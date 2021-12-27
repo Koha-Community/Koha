@@ -662,9 +662,14 @@ subtest 'delete() tests' => sub {
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
         t::lib::Mocks::mock_preference('AnonymousPatron', $patron->borrowernumber);
-        $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
-          ->status_is(403, 'Anonymous patron cannot be deleted')
-          ->json_is( { error => 'Anonymous patron cannot be deleted' } );
+        $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber )
+          ->status_is( 409, 'Anonymous patron cannot be deleted' )
+          ->json_is(
+            {
+                error      => 'Anonymous patron cannot be deleted',
+                error_code => 'is_anonymous_patron'
+            }
+          );
         t::lib::Mocks::mock_preference('AnonymousPatron', 0); # back to default
 
         t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
@@ -682,21 +687,36 @@ subtest 'delete() tests' => sub {
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(409, 'Patron with checkouts cannot be deleted')
-          ->json_is( { error => 'Pending checkouts prevent deletion' } );
+          ->json_is(
+            {
+                error      => 'Pending checkouts prevent deletion',
+                error_code => 'has_checkouts'
+            }
+          );
 
         # Make sure it has no pending checkouts
         $checkout->delete;
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(409, 'Patron with debt cannot be deleted')
-          ->json_is( { error => 'Pending debts prevent deletion' } );
+          ->json_is(
+            {
+                error      => 'Pending debts prevent deletion',
+                error_code => 'has_debt'
+            }
+          );
 
         # Make sure it has no debt
         $patron->account->pay({ amount => 10, debits => [ $debit ] });
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(409, 'Patron with guarantees cannot be deleted')
-          ->json_is( { error => 'Patron is a guarantor and it prevents deletion' } );
+          ->json_is(
+            {
+                error      => 'Patron is a guarantor and it prevents deletion',
+                error_code => 'has_guarantees'
+            }
+          );
 
         # Remove guarantee
         $patron->guarantee_relationships->delete;
