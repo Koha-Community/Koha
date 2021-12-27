@@ -76,11 +76,11 @@ sub register {
                 status  => 500,
                 openapi => {
                     error =>
-                      "Something went wrong, check Koha logs for details."
+                      "Something went wrong, check Koha logs for details.",
+                    error_code => 'internal_server_error',
                 }
             );
-          }
-
+        }
     );
 }
 
