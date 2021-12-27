@@ -567,7 +567,13 @@
         schema:
           $ref: ../definitions.yaml#/error
       "409":
-        description: Conflict
+        description: |
+          Conflict. Possible `error_code` attribute values:
+
+            * `has_checkouts`: The patron has pending checkouts
+            * `has_debt`: The patron has pending debts
+            * `has_guarantees`: The patron has guarantees
+            * `is_anonymous_patron`: The system-wide anonymous patron cannot be deleted
         schema:
           $ref: ../definitions.yaml#/error
       "500":
