@@ -103,6 +103,9 @@ sub approve {
         delete $data->{$key};
     }
 
+    my $unwanted = C4::Context->preference('PatronSelfModificationBorrowerUnwantedField');
+    $data->{preferred_name} = $data->{firstname} if ( $unwanted =~ 'preferred_name' && defined $data->{firstname} );
+
     $patron->set($data);
 
     # Take care of extended attributes

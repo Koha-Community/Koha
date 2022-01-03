@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 21;
+        plan tests => 22;
 
         $schema->storage->txn_begin;
 
@@ -264,7 +264,8 @@ subtest 'get() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 8;
+
+        plan tests => 9;
 
         $schema->storage->txn_begin;
 

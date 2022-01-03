@@ -525,6 +525,9 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
 
         $patron = Koha::Patrons->find( $borrowernumber );
 
+        # Ensure preferred name is set even if not passed because of BorrowerUnwantedFields
+        $newdata{preferred_name} = undef unless defined $newdata{preferred_name};
+
         if ($NoUpdateEmail) {
             delete $newdata{'email'};
             delete $newdata{'emailpro'};

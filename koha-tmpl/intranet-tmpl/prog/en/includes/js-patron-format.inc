@@ -20,6 +20,7 @@
 
             var name;
             var firstname   = escape_str(patron.firstname);
+            var preferred_name = escape_str(patron.preferred_name);
             var surname     = escape_str(patron.surname);
 
             if ( patron.middle_name != null && patron.middle_name != '' ) {
@@ -30,10 +31,10 @@
                 firstname += ' (' + escape_str(patron.other_name) + ')';
             }
             if ( config && config.invert_name ) {
-                name = surname + ( firstname ? ', ' + firstname : '' );
+                name = surname + ( preferred_name ? ', ' + preferred_name : '' );
             }
             else {
-                name = firstname + ' ' + surname;
+                name = preferred_name + ' ' + surname;
             }
 
             if ( name.replace(' ', '').length == 0 ) {

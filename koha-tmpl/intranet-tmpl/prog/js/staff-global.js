@@ -709,7 +709,7 @@ function patron_autocomplete(node, options) {
                     (item.link ? '<a href="' + item.link + '">' : "<a>") +
                     (item.surname ? item.surname.escapeHtml() : "") +
                     ", " +
-                    (item.firstname ? item.firstname.escapeHtml() : "") +
+                    (item.preferred_name ? item.preferred_name.escapeHtml() : item.firstname ? item.firstname.escapeHtml() : "") +
                     " " +
                     (item.middle_name ? item.middle_name.escapeHtml() : "") +
                     " " +

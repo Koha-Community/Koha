@@ -4,5 +4,5 @@
     [%- IF patron.title -%]
         <span class="patron-title">[% patron.title | html %]</span>
     [%- END -%]
-    [% patron.firstname | html %] [% patron.middle_name | html %] [% patron.surname | html %]
+    [% patron.preferred_name | html %] [% patron.middle_name | html %] [% patron.surname | html %]
 [%- END -%]

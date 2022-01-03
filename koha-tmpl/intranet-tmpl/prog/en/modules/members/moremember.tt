@@ -135,6 +135,12 @@
 
                                 <div class="rows">
                                     <ol>
+                                        [% IF ( patron.preferred_name && patron.firstname ) %]
+                                            <li id="patron_first_name">
+                                                <span class="label patron_first_name">First name: </span>
+                                                [% patron.firstname | html %]
+                                            </li>
+                                        [% END %]
                                         [% IF ( patron.phone ) %]
                                             <li>
                                                 <span class="label">Primary phone: </span>
@@ -225,7 +231,7 @@
                                                         [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
                                                             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
                                                         [% ELSE %]
-                                                            <li>[% guarantee.firstname | html %] [% guarantee.surname | html %]</li>
+                                                            <li>[% guarantee.preferred_name | html %] [% guarantee.surname | html %]</li>
                                                         [% END %]
                                                     [% END %]
                                                 </ul>
@@ -241,7 +247,7 @@
                                                     [% FOREACH gr IN guarantor_relationships %]
                                                         [% SET guarantor = gr.guarantor %]
                                                         [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %][% IF gr.relationship %] ([% gr.relationship | html %])[% END %]</a></li>
+                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.preferred_name | html %] [% guarantor.surname | html %][% IF gr.relationship %] ([% gr.relationship | html %])[% END %]</a></li>
                                                         [% END %]
                                                     [% END %]
                                                     [% IF patron.contactfirstname OR patron.contactname %]

@@ -535,7 +535,7 @@
                             }
                             [% CASE 'name-address' %]
                             {
-                                "data": "me.surname:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
+                                "data": "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
@@ -560,7 +560,7 @@
                             }
                             [% CASE 'name' %]
                             {
-                                "data": "me.surname:me.firstname:me.middle_name:me.othernames",
+                                "data": "me.surname:me.preferred_name:me.firstname:me.middle_name:me.othernames",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {

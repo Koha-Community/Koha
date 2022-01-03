@@ -330,6 +330,9 @@ elsif ( $op eq 'cud-update' ) {
         $template->param( op => 'edit' );
     }
     else {
+        # If preferred name is not included but firstname is then set preferred_name to firstname
+        $borrower{preferred_name} = $borrower{firstname}
+            if defined $borrower{firstname} && !defined $borrower{preferred_name};
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
         $borrower_changes{'changed_fields'} = join ',', keys %borrower_changes;
         my $extended_attributes_changes = FilterUnchangedAttributes( $borrowernumber, $attributes );

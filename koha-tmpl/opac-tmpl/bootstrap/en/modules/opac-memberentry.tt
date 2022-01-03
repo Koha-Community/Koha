@@ -194,7 +194,7 @@
                                             Guaranteed by
                                             [% FOREACH gr IN patron.guarantor_relationships %]
                                                 [% SET g = gr.guarantor %]
-                                                [% g.firstname | html %] [% g.middle_name | html %] [% g.surname | html %]
+                                                [% g.preferred_name | html %] [% g.middle_name | html %] [% g.surname | html %]
                                                 [%- IF ! loop.last %], [% END %]
                                             [% END %]
                                         </span>
@@ -212,7 +212,7 @@
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
                     [% INCLUDE 'csrf-token.inc' %]
 
-                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' 'lang' ] %]
+                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'preferred_name' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' 'lang' ] %]
                     [% IF mandatory.defined( field ) %]
                         [% SET required.$field = 'required' %]
                     [% END %]
@@ -328,7 +328,7 @@
                     [% END # / defined 'branchcode' %]
 
                     [%# Following on one line for translatability %]
-                    [% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') && hidden.defined('middle_name') && hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('pronouns') && hidden.defined('othernames') && hidden.defined('sex') %]
+                    [% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') && hidden.defined('preferred_name') && hidden.defined('middle_name') && hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('pronouns') && hidden.defined('othernames') && hidden.defined('sex') %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_identity">
@@ -377,6 +377,15 @@
 
                                                 <input type="text" id="borrower_middle_name" name="borrower_middle_name" value="[% borrower.middle_name | html %]" class="[% required.middle_name | html %]" />
                                                 <div class="required_label [% required.middle_name | html %]">Required</div>
+                                            </li>
+                                        [% END %]
+
+                                        [% UNLESS hidden.defined('preferred_name') %]
+                                            <li>
+                                                <label for="borrower_preferred_name" class="[% required.preferred_name | html %]">Preferred name:</label>
+
+                                                <input type="text" id="borrower_preferred_name" name="borrower_preferred_name" value="[% borrower.preferred_name | html %]" class="[% required.preferred_name | html %]" />
+                                                <div class="required_label [% required.preferred_name | html %]">Required</div>
                                             </li>
                                         [% END %]
 

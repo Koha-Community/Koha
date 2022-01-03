@@ -296,7 +296,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                             [% END %]
 
                             [% IF ( step_1 ) %]
-                                [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex && nopronouns %]
+                                [% UNLESS notitle && nosurname && nofirstname && nopreferred_name && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex && nopronouns %]
                                     <fieldset class="rows" id="memberentry_identity">
                                         <legend class="expanded" id="identity_lgd">
                                             <i class="fa fa-caret-down" title="Collapse this section"></i>
@@ -373,6 +373,21 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                         [% END %]
                                                     </li>
                                                 [% END #/UNLESS nofirstname %]
+                                                [% UNLESS nopreferred_name %]
+                                                    <li>
+                                                        [% IF ( mandatorypreferred_name ) %]
+                                                            <label for="preferred_name" class="required">
+                                                        [% ELSE %]
+                                                            <label for="preferred_name">
+                                                        [% END %]
+                                                            Preferred name:
+                                                        </label>
+                                                        <input type="text" id="preferred_name" name="preferred_name" size="20"  value="[% borrower_data.preferred_name | html UNLESS opduplicate %]" />
+                                                        [% IF ( mandatorypreferred_name ) %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                    </li>
+                                                [% END #/UNLESS nopreferred_name %]
                                                 [% UNLESS nomiddle_name %]
                                                     <li>
                                                         [% IF ( mandatorymiddle_name ) %]

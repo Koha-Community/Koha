@@ -8,6 +8,7 @@
     [%- CASE 'cardnumber' -%][% t("Card number") | html %]
     [%- CASE 'surname' -%][% t("Surname") | html %]
     [%- CASE 'firstname' -%][% t("First name") | html %]
+    [%- CASE 'preferred_name' -%][% t("Preferred name") | html %]
     [%- CASE 'middle_name' -%][% t("Middle name") | html %]
     [%- CASE 'title' -%][% t("Salutation") | html %]
     [%- CASE 'othernames' -%][% t("Other name") | html %]
@@ -86,7 +87,7 @@
         <label for="searchfieldstype_filter">Search field:</label>
         <select name="searchfieldstype" class="searchfieldstype_filter">
     [% END %]
-        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname|middle_name|surname|othernames|cardnumber|userid' %]
+        [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' %]
         [%# Above is needed for adding fields from the DefaultPatronSearchFields preference to the dropdowns %]
         [% default_fields = [ 'standard', 'surname', 'cardnumber', 'all_emails', 'borrowernumber', 'userid', 'all_phones', 'full_address', 'dateofbirth', 'sort1', 'sort2' ] %]
         [% search_options = default_fields.merge(standard.split('\|')).unique %]

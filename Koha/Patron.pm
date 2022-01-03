@@ -228,6 +228,11 @@ sub store {
             $self->surname( uc( $self->surname ) )
                 if C4::Context->preference("uppercasesurnames");
 
+            # Add preferred name unless specified
+            unless ( $self->preferred_name ) {
+                $self->preferred_name( $self->firstname );
+            }
+
             $self->relationship(undef)    # We do not want to store an empty string in this field
                 if defined $self->relationship
                 and $self->relationship eq "";
