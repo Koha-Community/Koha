@@ -19,7 +19,7 @@ use Modern::Perl;
 use File::Basename qw(dirname );
 
 use Test::WWW::Mechanize;
-use Test::More tests => 1;
+use Test::More;
 use Test::MockModule;
 
 use C4::Context;
@@ -30,7 +30,11 @@ use t::lib::Mocks;
 use t::lib::Mocks::Zebra;
 
 eval { require Selenium::Remote::Driver; };
-skip "Selenium::Remote::Driver is needed for selenium tests.", 1 if $@;
+if ( $@ ) {
+    plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
+} else {
+    plan tests => 1;
+}
 
 my $s = t::lib::Selenium->new;
 
@@ -101,5 +105,5 @@ subtest 'OPAC - Remove from cart' => sub {
 
 END {
     C4::Context->set_preference('SearchEngine', $SearchEngine_value);
-    $mock_zebra->cleanup;
+    $mock_zebra->cleanup if $mock_zebra;
 };
