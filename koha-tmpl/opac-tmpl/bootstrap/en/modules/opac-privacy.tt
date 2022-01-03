@@ -154,34 +154,48 @@
 
                         <h2>Immediate deletion</h2>
 
-                        <p>Whatever your privacy rule you choose, you can delete all your checkout and hold history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
+                        <p>You can delete all your checkout and hold history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
 
-                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
-                            <legend class="sr-only">Checkout history deletion</legend>
+                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-checkouts">
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="checkouts" value="1" />
-                            <fieldset class="action">
-                                <input type="submit" value="Checkout history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
-                            </fieldset>
                         </form>
 
-                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
-                            <legend class="sr-only">Hold history deletion</legend>
+                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-holds">
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="holds" value="1" />
-                            <fieldset class="action">
-                                <input type="submit" value="Hold history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
-                            </fieldset>
                         </form>
 
-                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
-                            <legend class="sr-only">Checkout and hold history deletion</legend>
+                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-all">
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="all" value="1" />
-                            <fieldset class="action">
-                                <input type="submit" value="Checkout and hold history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
-                            </fieldset>
                         </form>
+                        <table class="table table-bordered table-condensed table-striped">
+                            <tr>
+                                <td colspan=7>Immediately delete my checkout history. This action cannot be undone.</td>
+                                <td colspan=1>
+                                    <fieldset class="action">
+                                        <input type="submit" value="Delete checkout history" form="opac-privacy-delete-checkouts" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=7>Immediately delete my hold history. This action cannot be undone.</td>
+                                <td colspan=1>
+                                    <fieldset class="action">
+                                        <input type="submit" value="Delete hold history" form="opac-privacy-delete-holds" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=7>Immediately delete my checkout history & my hold history. This action cannot be undone.</td>
+                                <td colspan=1>
+                                    <fieldset class="action">
+                                        <input type="submit" value="Delete checkout and hold history" form="opac-privacy-delete-all" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                    </fieldset>
+                                </td>
+                            </tr>
+                        </table>
 
                         [% IF Koha.Preference('StoreLastBorrower') %]
                             <p id="store-last-borrower-msg">Please note, the last person to return an item is tracked for the management of items returned damaged.</p>
