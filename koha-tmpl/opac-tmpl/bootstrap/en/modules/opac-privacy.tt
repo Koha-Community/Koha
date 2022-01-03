@@ -37,12 +37,26 @@
                 <div id="userprivacy" class="maincontent">
                     <h1>Your privacy management</h1>
 
-                    [% IF deleted %]
-                        <div class="alert alert-success">Your checkout history has been deleted.</div>
-                    [% ELSIF history_not_deleted %]
-                        <div class="alert alert-warning">The deletion of your checkout history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
-                    [% ELSIF nothing_to_delete %]
-                        <div class="alert alert-warning">No checkout history to delete</div>
+                    [% IF delete_all_requested || delete_checkouts_requested || delete_holds_requested %]
+                        [% IF delete_all_requested || delete_checkouts_requested %]
+                            [% IF deleted_checkouts %]
+                                <div class="alert alert-success">Your checkout history has been deleted.</div>
+                            [% ELSIF error_deleting_checkouts_history %]
+                                <div class="alert alert-warning">The deletion of your checkout history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
+                            [% ELSIF no_checkouts_to_delete %]
+                                <div class="alert alert-warning">No checkout history to delete</div>
+                            [% END %]
+                        [% END %]
+
+                        [% IF delete_all_requested || delete_holds_requested %]
+                            [% IF deleted_holds %]
+                                <div class="alert alert-success">Your hold history has been deleted.</div>
+                            [% ELSIF error_deleting_holds_history %]
+                                <div class="alert alert-warning">The deletion of your hold history failed. Please help to fix the system by informing your library of this error</div>
+                            [% ELSIF no_holds_to_delete %]
+                                <div class="alert alert-warning">No hold history to delete</div>
+                            [% END %]
+                        [% END %]
                     [% END %]
 
                     [% IF ( privacy_updated ) %]
@@ -140,12 +154,32 @@
 
                         <h2>Immediate deletion</h2>
 
+                        <p>Whatever your privacy rule you choose, you can delete all your checkout and hold history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
+
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
-                            <legend class="sr-only">Immediate deletion</legend>
+                            <legend class="sr-only">Checkout history deletion</legend>
                             <input type="hidden" name="op" value="delete_record" />
-                            <p>Whatever your privacy rule you choose, you can delete all your checkout history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
+                            <input type="hidden" name="checkouts" value="1" />
                             <fieldset class="action">
-                                <input type="submit" value="Immediate deletion" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                <input type="submit" value="Checkout history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                            </fieldset>
+                        </form>
+
+                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
+                            <legend class="sr-only">Hold history deletion</legend>
+                            <input type="hidden" name="op" value="delete_record" />
+                            <input type="hidden" name="holds" value="1" />
+                            <fieldset class="action">
+                                <input type="submit" value="Hold history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                            </fieldset>
+                        </form>
+
+                        <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
+                            <legend class="sr-only">Checkout and hold history deletion</legend>
+                            <input type="hidden" name="op" value="delete_record" />
+                            <input type="hidden" name="all" value="1" />
+                            <fieldset class="action">
+                                <input type="submit" value="Checkout and hold history" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
                             </fieldset>
                         </form>
 
