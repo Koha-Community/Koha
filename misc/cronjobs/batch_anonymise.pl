@@ -17,15 +17,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Koha::Script -cron;
+
 use C4::Context;
+use C4::Log qw( cronlogaction );
+
+use Koha::Database;
+use Koha::Old::Holds;
 use Koha::Patrons;
+
 use Date::Calc qw( Add_Delta_Days Today );
 use Getopt::Long qw( GetOptions );
-use C4::Log qw( cronlogaction );
 
 sub usage {
     print STDERR <<USAGE;
@@ -61,9 +65,16 @@ cronlogaction();
 my ($year,$month,$day) = Today();
 my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
 my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
-$verbose and print "Checkouts before $formatdate will be anonymised.\n";
+$verbose and print "Checkouts and holds before $formatdate will be anonymised.\n";
 
 my $rows = Koha::Patrons->search_patrons_to_anonymise( { before => $formatdate } )->anonymise_issue_history( { before => $formatdate } );
 $verbose and print int($rows) . " checkouts anonymised.\n";
+
+$rows = Koha::Old::Holds
+          ->filter_by_anonymizable
+          ->filter_by_last_update( { days => $days } )
+          ->anonymize;
+
+$verbose and print int($rows) . " holds anonymised.\n";
 
 exit(0);
