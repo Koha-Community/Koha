@@ -34,11 +34,27 @@ This object represents a set of holds that have been filled or canceled
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 anonymize
+
+    $patron->old_holds->anonymize();
+
+Anonymize the given I<Koha::Old::Holds> resultset.
 
 =cut
 
-=head3 type
+sub anonymize {
+    my ( $self, $params ) = @_;
+
+    my $anonymous_id = C4::Context->preference('AnonymousPatron') || undef;
+
+    return $self->update( { borrowernumber => $anonymous_id }, { no_triggers => 1 } );
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
