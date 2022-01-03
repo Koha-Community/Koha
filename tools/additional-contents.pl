@@ -204,12 +204,12 @@ elsif ( $op eq 'delete_confirmed' ) {
                 my $contents =
                   Koha::AdditionalContents->search( { idnew => \@ids } );
 
-                if ( C4::Context->preference("NewsLog") ) {
-                    while ( my $c = $contents->next ) {
+                while ( my $c = $contents->next ) {
+                    Koha::AdditionalContents->search( { code => $c->code } )->delete;
+                    if ( C4::Context->preference("NewsLog") ) {
                         logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s|%s", $c->code, $c->title, $c->lang, $c->content));
                     }
                 }
-                $contents->delete;
             }
         );
     };
