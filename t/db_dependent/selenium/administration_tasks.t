@@ -41,7 +41,7 @@ our ($cleanup_needed);
 
 SKIP: {
     eval { require Selenium::Remote::Driver; };
-    skip "Selenium::Remote::Driver is needed for selenium tests.", 1 if $@;
+    skip "Selenium::Remote::Driver is needed for selenium tests.", 3 if $@;
 
     $cleanup_needed = 1;
 
