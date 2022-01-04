@@ -123,9 +123,9 @@ if($op eq 'delete_confirm'){
         }
         my $items = Koha::Items->search({ itemnumber => \@itemnumbers });
         while ( my $item = $items->next ) {
-            my $error = $item->safe_delete;
+            my $deleted = $item->safe_delete;
             $template->param(error_delitem => 1)
-                if $error eq '1';
+                unless $deleted;
         }
     }
     for my $serialid (@serialsid){
