@@ -78,7 +78,6 @@ sub get_item_from_cookie {
 }
 
 my $input        = CGI->new;
-my $error        = $input->param('error');
 
 my $biblionumber;
 my $itemnumber;
@@ -377,7 +376,7 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
-    $error = $item->safe_delete;
+    my $error = $item->safe_delete;
     if(ref($error) eq 'Koha::Item'){
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
     }else{
@@ -389,7 +388,7 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
-        $error = $item->safe_delete({ skip_record_index => 1 });
+        my $error = $item->safe_delete({ skip_record_index => 1 });
         next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
         push @errors,$error;
     }
