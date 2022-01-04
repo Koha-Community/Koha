@@ -547,7 +547,7 @@ subtest 'get_marc_components() tests' => sub {
         qr{^Warning from simple_search_compat: 'error searching analytics'};
 
     is_deeply(
-        $host_biblio->messages,
+        $host_biblio->object_messages,
         [
             {
                 type    => 'error',

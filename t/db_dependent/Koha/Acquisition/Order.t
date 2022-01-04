@@ -638,7 +638,7 @@ subtest 'cancel() tests' => sub {
     is( $order->cancellationreason, $reason, 'cancellationreason is set' );
     is( ref(Koha::Items->find($item->id)), 'Koha::Item', 'The item is present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
-    my @messages = @{ $order->messages };
+    my @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delitem', 'An error message is attached to the order' );
 
     # Scenario:
@@ -660,7 +660,7 @@ subtest 'cancel() tests' => sub {
     is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( scalar @messages, 0, 'No messages' );
 
     # Scenario:
@@ -696,7 +696,7 @@ subtest 'cancel() tests' => sub {
     is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
     is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The item is still present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_items', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
@@ -743,7 +743,7 @@ subtest 'cancel() tests' => sub {
     is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_active_orders', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
@@ -787,7 +787,7 @@ subtest 'cancel() tests' => sub {
     is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delbiblio_subscriptions', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
@@ -820,7 +820,7 @@ subtest 'cancel() tests' => sub {
     is( $order->cancellationreason, $reason, 'cancellationreason is set' );
     is( Koha::Items->find($item->id), undef, 'The item is not present' );
     is( Koha::Biblios->find($biblio_id), undef, 'The biblio is not present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( scalar @messages, 0, 'No errors' );
 
     # Scenario:
@@ -873,7 +873,7 @@ subtest 'cancel() tests' => sub {
     is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
     is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The on loan item is still present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
-    @messages = @{ $order->messages };
+    @messages = @{ $order->object_messages };
     is( $messages[0]->message, 'error_delitem', 'Cannot delete on loan item' );
     is( $messages[0]->payload->{item}->id, $item_2->id, 'Cannot delete on loan item' );
     is( $messages[0]->payload->{reason}, 'book_on_loan', 'Item on loan notified' );
