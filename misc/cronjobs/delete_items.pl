@@ -7,6 +7,8 @@ use C4::Context;
 use Modern::Perl;
 use Pod::Usage qw( pod2usage );
 
+use Koha::Items;
+
 my $dbh = C4::Context->dbh();
 
 my $query = {
