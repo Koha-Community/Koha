@@ -157,9 +157,9 @@ unless ( $enddate ) {
 
 # building query parameters
 my %where = (
-    'reserve.found' => undef,
-    'reserve.priority' => 1,
-    'reserve.suspend' => 0,
+    'me.found' => undef,
+    'me.priority' => 1,
+    'me.suspend' => 0,
     'itembib.itemlost' => 0,
     'itembib.withdrawn' => 0,
     'itembib.notforloan' => 0,
@@ -171,11 +171,11 @@ my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 my $startdate_iso = $dtf->format_date($startdate);
 my $enddate_iso   = $dtf->format_date($enddate);
 if ( $startdate_iso && $enddate_iso ){
-    $where{'reserve.reservedate'} = [ -and => { '>=', $startdate_iso }, { '<=', $enddate_iso } ];
+    $where{'me.reservedate'} = [ -and => { '>=', $startdate_iso }, { '<=', $enddate_iso } ];
 } elsif ( $startdate_iso ){
-    $where{'reserve.reservedate'} = { '>=', $startdate_iso };
+    $where{'me.reservedate'} = { '>=', $startdate_iso };
 } elsif ( $enddate_iso ){
-    $where{'reserve.reservedate'} = { '<=', $enddate_iso };
+    $where{'me.reservedate'} = { '<=', $enddate_iso };
 }
 
 # Bug 21320
@@ -190,7 +190,7 @@ if ( C4::Context->preference('IndependentBranches') ){
 # get all distinct unfulfilled reserves
 my $holds = Koha::Holds->search(
     { %where },
-    { join => 'itembib', alias => 'reserve', distinct  => 1, columns => qw[me.biblionumber] }
+    { join => 'itembib', distinct  => 1, columns => qw[me.biblionumber] }
 );
 my @biblionumbers = $holds->get_column('biblionumber');
 
@@ -217,8 +217,7 @@ my $holds_biblios_map = {
             {%where},
             {
                 join    => ['itembib', 'biblio'],
-                alias   => 'reserve',
-                select  => ['reserve.biblionumber', 'reserve.reserve_id'],
+                select  => ['me.biblionumber', 'me.reserve_id'],
             }
         )->unblessed
     }
@@ -229,7 +228,6 @@ my $all_holds = {
             { reserve_id => [ values %$holds_biblios_map ]},
             {
                 prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
-                alias    => 'reserve',
             }
         )->as_list
     }
