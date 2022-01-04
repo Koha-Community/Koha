@@ -349,6 +349,7 @@ sub getlanguagecookie {
         -value   => $language,
         -HttpOnly => 1,
         -expires => '+3y'
+        -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
     );
 
     return $cookie;
