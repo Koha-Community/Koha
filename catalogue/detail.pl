@@ -239,7 +239,6 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
-
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
     my $orders = Koha::Acquisition::Orders->search(

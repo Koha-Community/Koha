@@ -139,7 +139,7 @@ if ( $op eq 'delete_confirm' ) {
     while ( my $order = $orders->next ) {
         # cancel the order
         $order->cancel({ delete_biblio => $delbiblio });
-        my @messages = @{ $order->messages };
+        my @messages = @{ $order->object_messages };
 
         if ( scalar @messages > 0 ) {
 

@@ -927,13 +927,13 @@ subtest 'messages() and add_message() tests' => sub {
 
     my $patron = Koha::Patron->new;
 
-    my @messages = @{ $patron->messages };
+    my @messages = @{ $patron->object_messages };
     is( scalar @messages, 0, 'No messages' );
 
     $patron->add_message({ message => "message_1" });
     $patron->add_message({ message => "message_2" });
 
-    @messages = @{ $patron->messages };
+    @messages = @{ $patron->object_messages };
 
     is( scalar @messages, 2, 'Messages are returned' );
     is( ref($messages[0]), 'Koha::Object::Message', 'Right type returned' );
@@ -941,11 +941,11 @@ subtest 'messages() and add_message() tests' => sub {
     is( $messages[0]->message, 'message_1', 'Right message recorded' );
 
     my $patron_id = $builder->build_object({ class => 'Koha::Patrons' })->id;
-    # get a patron from the DB, ->new is not called, ->messages should initialize _messages as an empty arrayref
+    # get a patron from the DB, ->new is not called, ->object_messages should initialize _messages as an empty arrayref
     $patron = Koha::Patrons->find( $patron_id );
 
-    isnt( $patron->messages, undef, '->messages initializes the array if required' );
-    is( scalar @{ $patron->messages }, 0, '->messages returns an empty arrayref' );
+    isnt( $patron->object_messages, undef, '->messages initializes the array if required' );
+    is( scalar @{ $patron->object_messages }, 0, '->messages returns an empty arrayref' );
 
     $schema->storage->txn_rollback;
 };

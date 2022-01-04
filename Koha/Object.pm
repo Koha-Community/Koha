@@ -334,15 +334,15 @@ sub get_from_storage {
     return $object_class->_new_from_dbic($stored_object);
 }
 
-=head3 $object->messages
+=head3 $object->object_messages
 
-    my @messages = @{ $object->messages };
+    my @messages = @{ $object->object_messages };
 
 Returns the (probably non-fatal) messages that were recorded on the object.
 
 =cut
 
-sub messages {
+sub object_messages {
     my ( $self ) = @_;
 
     $self->{_messages} = []

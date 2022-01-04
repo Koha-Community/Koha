@@ -58,7 +58,7 @@ if( $action and $action eq "confirmcancel" ) {
     my $reason = $input->param('reason');
     my $order  = Koha::Acquisition::Orders->find($ordernumber);
     $order->cancel({ reason => $reason, delete_biblio => $delete_biblio });
-    my @messages = @{ $order->messages };
+    my @messages = @{ $order->object_messages };
 
     if ( scalar @messages > 0 ) {
         $template->param( error_delitem => 1 )

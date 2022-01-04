@@ -355,7 +355,7 @@ subtest 'apply() tests' => sub {
     $credit_renew = $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
     is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
 
-    my @messages = @{$credit_renew->messages};
+    my @messages = @{$credit_renew->object_messages};
     is( $messages[0]->type, 'info', 'Info message added for renewal' );
     is( $messages[0]->message, 'renewal', 'Message is "renewal"' );
     is( $messages[0]->payload->{itemnumber}, $item->id, 'itemnumber found in payload' );
