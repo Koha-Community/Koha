@@ -20,7 +20,9 @@ package Koha::Result::Boolean;
 
 use Modern::Perl;
 
-use overload bool => \&as_bool;
+use overload
+   bool => \&as_bool,
+   '==' => \&equals;
 
 use Koha::Object::Message;
 
@@ -115,14 +117,28 @@ sub add_message {
 
 =head3 as_bool
 
-Internal method that exposes the boolean value of the object
+Internal method that exposes the boolean value of the object as a scalar.
 
 =cut
 
 sub as_bool {
     my ($self) = @_;
 
-    return $self->{value};
+    return $self->{value} + 0;
+}
+
+=head3 equals
+
+Internal method implementing equality comparison in scalar context.
+
+=cut
+
+sub equals {
+    my ( $first, $second, $flipped ) = @_;
+
+    return ($flipped)
+      ? $first == $second->as_bool
+      : $first->as_bool == $second;
 }
 
 =head1 AUTHORS

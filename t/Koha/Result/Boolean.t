@@ -23,17 +23,35 @@ use_ok('Koha::Result::Boolean');
 
 subtest 'new() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 2;
 
-    ok( Koha::Result::Boolean->new,
-        'Defaults to true if initialized without the parameter' );
-    ok( Koha::Result::Boolean->new('Martin'),
-        'Evals to true in boolean context if set an expression that evals to true' );
-    ok( !Koha::Result::Boolean->new(0),
-        'Evals to false in boolean context if set a false expression' );
-    ok( !Koha::Result::Boolean->new(""),
-        'Evals to false in boolean context if set a false expression' );
+    subtest 'bool context' => sub {
 
+        plan tests => 4;
+
+        ok( Koha::Result::Boolean->new,
+            'Defaults to true if initialized without the parameter' );
+        ok( Koha::Result::Boolean->new('Martin'),
+            'Evals to true in boolean context if set an expression that evals to true' );
+        ok( !Koha::Result::Boolean->new(0),
+            'Evals to false in boolean context if set a false expression' );
+        ok( !Koha::Result::Boolean->new(""),
+            'Evals to false in boolean context if set a false expression' );
+    };
+
+    subtest '== context' => sub {
+
+        plan tests => 4;
+
+        cmp_ok( Koha::Result::Boolean->new, '==', 1,
+            'Defaults 1 if initialized without the parameter' );
+        cmp_ok( Koha::Result::Boolean->new('Martin'), '==', 1,
+            'Evals 1 if set an expression that evals to true' );
+        cmp_ok( Koha::Result::Boolean->new(0), '==', 0,
+            'Evals 0 if set a false expression' );
+        cmp_ok( Koha::Result::Boolean->new(""), '==', 0,
+            'Evals 0 if set a false expression' );
+    };
 };
 
 subtest 'set_value() tests' => sub {
