@@ -246,6 +246,9 @@
                                                         <label for="borrower_branchcode" class="[% required.branchcode | html %]">Home library:</label>
 
                                                         <select id="borrower_branchcode" name="borrower_branchcode" class="[% required.branchcode | html %]">
+                                                            [% IF required.branchcode %]
+                                                                <option value=""></option>
+                                                            [% END %]
                                                             [% FOREACH l IN libraries %]
                                                                 [% IF l.branchcode == borrower.branchcode %]
                                                                     <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
