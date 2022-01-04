@@ -67,7 +67,7 @@ AddIssue($borrower, $item->barcode);
 is ( IsItemIssued( $item->itemnumber ), 1, "item is now on loan" );
 
 is(
-    $item->safe_delete,
+    @{$item->safe_delete->messages}[0]->message,
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
@@ -77,9 +77,8 @@ is ( IsItemIssued( $item->itemnumber ), 0, "item has been returned" );
 
 $item->discard_changes; # FIXME We should not need that
                         # If we do not, $self->checkout in safe_to_delete will not know the item has been checked out
-is(
-    ref($item->safe_delete),
-    'Koha::Item',
+ok(
+    $item->safe_delete,
     'item that is not on loan can be deleted',
 );
 

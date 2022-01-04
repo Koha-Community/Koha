@@ -91,19 +91,21 @@ foreach my $m (@metadatas) {
             my $itemnumber = $item->itemnumber;
 
             if( $test ){
-                my $result = $item->safe_to_delete;
-                if ( $result eq "1") {
+                my $deleted = $item->safe_to_delete;
+                if ( $deleted ) {
                     say "TEST MODE: Item $itemnumber would have been deleted";
                 } else {
-                    say "TEST MODE: ERROR DELETING ITEM $itemnumber: $result";
+                    my $error = @{$deleted->messages}[0]->message;
+                    say "TEST MODE: ERROR DELETING ITEM $itemnumber: $error";
                 }
             } else {
-                my $result = $item->safe_delete;
-                if ( ref $result eq "Koha::Item" ){
+                my $deleted = $item->safe_to_delete;
+                if ( $deleted ) {
                     say "DELETED ITEM $itemnumber" if $verbose;
                     $deleted_items_count++;
                 } else {
-                    say "ERROR DELETING ITEM $itemnumber: $result";
+                    my $error = @{$deleted->messages}[0]->message;
+                    say "ERROR DELETING ITEM $itemnumber: $error";
                 }
             }
             $total_items_count++;

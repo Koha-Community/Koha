@@ -264,13 +264,16 @@
                             [% IF item.safe_to_delete == 1 %]
                                 <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
                             [% ELSE %]
-                                [% SWITCH item.safe_to_delete%]
-                                [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
-                                [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
-                                [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
-                                [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
-                                [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
-                                [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ item.safe_to_delete _ ')' %]
+                                [% SET messages = item.safe_to_delete.messages %]
+                                [% FOR m IN messages %]
+                                    [% SWITCH m %]
+                                    [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
+                                    [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
+                                    [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
+                                    [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
+                                    [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
+                                    [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ item.safe_to_delete _ ')' %]
+                                    [% END %]
                                 [% END %]
 
                                 <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason | html %]"/></td>

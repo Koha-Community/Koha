@@ -78,12 +78,12 @@ DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() )
 
     my $item_object = Koha::Items->find($item->{itemnumber});
     my $safe_to_delete = $item_object->safe_to_delete;
-    if( $safe_to_delete eq '1' )  {
+    if( $safe_to_delete )  {
         $item_object->safe_delete
             if $OPTIONS->{flags}->{commit};
         verbose "Deleting '$item->{itemnumber}'";
     } else {
-        verbose "Item '$item->{itemnumber}' not deleted: $safe_to_delete";
+        verbose sprintf "Item '%s' not deleted: %s", $item->{itemnumber}, @{$safe_to_delete->messages}[0]->message
     }
 }
 

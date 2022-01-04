@@ -571,7 +571,7 @@ subtest 'request_transfer' => sub {
 };
 
 subtest 'deletion' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -606,15 +606,20 @@ subtest 'deletion' => sub {
     C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
     is(
-        $item->safe_to_delete,
+        @{$item->safe_to_delete->messages}[0]->message,
         'book_on_loan',
         'Koha::Item->safe_to_delete reports item on loan',
     );
 
     is(
-        $item->safe_delete,
+        @{$item->safe_to_delete->messages}[0]->message,
         'book_on_loan',
         'item that is on loan cannot be deleted',
+    );
+
+    ok(
+        ! $item->safe_to_delete,
+        'Koha::Item->safe_to_delete shows item NOT safe to delete'
     );
 
     AddReturn( $item->barcode, $library->branchcode );
@@ -626,13 +631,13 @@ subtest 'deletion' => sub {
     my $item_2 = $builder->build_sample_item({ library => $library_2->branchcode });
 
     is(
-        $item_2->safe_to_delete,
+        @{$item_2->safe_to_delete->messages}[0]->message,
         'not_same_branch',
         'Koha::Item->safe_to_delete reports IndependentBranches restriction',
     );
 
     is(
-        $item_2->safe_delete,
+        @{$item_2->safe_to_delete->messages}[0]->message,
         'not_same_branch',
         'IndependentBranches prevents deletion at another branch',
     );
@@ -646,13 +651,13 @@ subtest 'deletion' => sub {
 
         $item->discard_changes;
         is(
-            $item->safe_to_delete,
+            @{$item->safe_to_delete->messages}[0]->message,
             'linked_analytics',
             'Koha::Item->safe_to_delete reports linked analytics',
         );
 
         is(
-            $item->safe_delete,
+            @{$item->safe_to_delete->messages}[0]->message,
             'linked_analytics',
             'Linked analytics prevents deletion of item',
         );
@@ -661,15 +666,17 @@ subtest 'deletion' => sub {
 
     { # last_item_for_hold
         C4::Reserves::AddReserve({ branchcode => $patron->branchcode, borrowernumber => $patron->borrowernumber, biblionumber => $item->biblionumber });
-        is( $item->safe_to_delete, 'last_item_for_hold', 'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio' );
-
+        is(
+            @{$item->safe_to_delete->messages}[0]->message,
+            'last_item_for_hold',
+            'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio'
+        );
         # With another item attached to the biblio, the item can be deleted
         $builder->build_sample_item({ biblionumber => $item->biblionumber });
     }
 
-    is(
+    ok(
         $item->safe_to_delete,
-        1,
         'Koha::Item->safe_to_delete shows item safe to delete'
     );
 

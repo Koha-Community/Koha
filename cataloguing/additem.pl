@@ -376,11 +376,11 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
-    my $error = $item->safe_delete;
-    if(ref($error) eq 'Koha::Item'){
+    my $deleted = $item->safe_delete;
+    if($deleted) {
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
-    }else{
-        push @errors,$error;
+    } else {
+        push @errors, @{$deleted->messages}[0]->message;
         $nextop="additem";
     }
 #-------------------------------------------------------------------------------
@@ -388,9 +388,8 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
-        my $error = $item->safe_delete({ skip_record_index => 1 });
-        next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
-        push @errors,$error;
+        my $deleted = $item->safe_delete({ skip_record_index => 1 });
+        push @errors, @{$deleted->messages}[0]->message;
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );

@@ -45,6 +45,7 @@ use Koha::Libraries;
 use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
 use Koha::TrackedLinks;
+use Koha::Result::Boolean;
 
 use base qw(Koha::Object);
 
@@ -248,7 +249,7 @@ sub safe_delete {
     my $params = @_ ? shift : {};
 
     my $safe_to_delete = $self->safe_to_delete;
-    return $safe_to_delete unless $safe_to_delete eq '1';
+    return $safe_to_delete unless $safe_to_delete;
 
     $self->move_to_deleted;
 
@@ -274,22 +275,24 @@ returns 1 if the item is safe to delete,
 sub safe_to_delete {
     my ($self) = @_;
 
-    return "book_on_loan" if $self->checkout;
+    my $error;
 
-    return "not_same_branch"
+    $error = "book_on_loan" if $self->checkout;
+
+    $error = "not_same_branch"
       if defined C4::Context->userenv
       and !C4::Context->IsSuperLibrarian()
       and C4::Context->preference("IndependentBranches")
       and ( C4::Context->userenv->{branch} ne $self->homebranch );
 
     # check it doesn't have a waiting reserve
-    return "book_reserved"
+    $error = "book_reserved"
       if $self->holds->search( { found => [ 'W', 'T' ] } )->count;
 
-    return "linked_analytics"
+    $error = "linked_analytics"
       if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
 
-    return "last_item_for_hold"
+    $error = "last_item_for_hold"
       if $self->biblio->items->count == 1
       && $self->biblio->holds->search(
           {
@@ -297,7 +300,11 @@ sub safe_to_delete {
           }
         )->count;
 
-    return 1;
+    if ( $error ) {
+        return Koha::Result::Boolean->new(0)->add_message({ message => $error });
+    }
+
+    return Koha::Result::Boolean->new(1);
 }
 
 =head3 move_to_deleted

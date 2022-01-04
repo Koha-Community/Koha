@@ -127,11 +127,11 @@ sub cancel {
     my $items = $self->items;
     while ( my $item = $items->next ) {
         my $deleted = $item->safe_delete;
-        unless ( ref($deleted) eq 'Koha::Item' ) {
+        unless ( $deleted ) {
             $self->add_message(
                 {
                     message => 'error_delitem',
-                    payload => { item => $item, reason => $deleted }
+                    payload => { item => $item, reason => @{$deleted->messages}[0]->messages }
                 }
             );
         }

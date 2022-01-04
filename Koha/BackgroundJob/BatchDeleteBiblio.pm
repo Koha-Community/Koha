@@ -112,14 +112,14 @@ sub process {
         # Delete items
         my $items = Koha::Items->search({ biblionumber => $biblionumber });
         while ( my $item = $items->next ) {
-            my $error = $item->safe_delete;
-            if(ref($error) ne 'Koha::Item'){
+            my $deleted = $item->safe_delete;
+            if( $deleted ) {
                 push @messages, {
                     type => 'error',
                     code => 'item_not_deleted',
                     biblionumber => $biblionumber,
                     itemnumber => $item->itemnumber,
-                    error => $error,
+                    error => @{$deleted->messages}[0]->messages,
                 };
                 $schema->storage->txn_rollback;
                 $job->progress( ++$job_progress )->store;

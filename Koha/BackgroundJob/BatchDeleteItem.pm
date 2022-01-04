@@ -114,7 +114,7 @@ sub process {
                     my $item = Koha::Items->find($record_id) || next;
 
                     my $return = $item->safe_delete;
-                    unless ( ref($return) ) {
+                    unless ( $return ) {
 
                         # FIXME Do we need to rollback the whole transaction if a deletion failed?
                         push @not_deleted_itemnumbers, $item->itemnumber;
