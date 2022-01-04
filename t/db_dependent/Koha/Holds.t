@@ -410,7 +410,7 @@ subtest 'Desks' => sub {
 };
 
 subtest 'get_items_that_can_fill' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $biblio = $builder->build_sample_biblio;
     my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' }); # For 1, 2, 3, 4
@@ -442,12 +442,16 @@ subtest 'get_items_that_can_fill' => sub {
         }
     );
 
+    my $holds = Koha::Holds->search({ reserve_id => $reserve_id_1 });
+    my $items = $holds->get_items_that_can_fill;
+    is_deeply( [ map { $_->itemnumber } $items->as_list ], [ $item_1->itemnumber ], 'Item level hold can only be filled by the specific item');
+
     my $reserve_id_2 = C4::Reserves::AddReserve(
         {
             borrowernumber => $patron_2->borrowernumber,
             biblionumber   => $biblio->biblionumber,
             priority       => 2,
-            itemnumber     => $item_1->itemnumber,
+            branchcode     => $item_1->homebranch,
         }
     );
 
@@ -476,13 +480,13 @@ subtest 'get_items_that_can_fill' => sub {
         }
     )->store;
 
-    my $holds = Koha::Holds->search(
+    $holds = Koha::Holds->search(
         {
             reserve_id => [ $reserve_id_1, $reserve_id_2, $waiting_reserve_id, ]
         }
     );
 
-    my $items = $holds->get_items_that_can_fill;
+    $items = $holds->get_items_that_can_fill;
     is_deeply( [ map { $_->itemnumber } $items->as_list ],
         [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 2 and 5 are available for filling the hold' );
 
@@ -496,7 +500,7 @@ subtest 'get_items_that_can_fill' => sub {
     )->store;
     $items = $holds->get_items_that_can_fill;
     is_deeply( [ map { $_->itemnumber } $items->as_list ],
-        [ $item_2->itemnumber ], 'Only item 1 is available for filling the hold' );
+        [ $item_2->itemnumber ], 'Only item 2 is available for filling the hold' );
 
 };
 
