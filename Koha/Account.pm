@@ -140,7 +140,7 @@ sub pay {
     }
 
     my $renew_outcomes = [];
-    for my $message ( @{$payment->messages} ) {
+    for my $message ( @{$payment->object_messages} ) {
         push @{$renew_outcomes}, $message->payload;
     }
 

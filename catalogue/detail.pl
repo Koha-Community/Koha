@@ -199,7 +199,7 @@ my $show_analytics;
 if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
     if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
         $show_analytics = 1 if @{$components}; # just show link when having results
-        $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->messages};
+        $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
         my $parts;
         for my $part ( @{$components} ) {
             $part = C4::Search::new_record_from_zebra( 'biblioserver', $part );
@@ -220,7 +220,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
     }
 } else { # check if we should show analytics anyway
     $show_analytics = 1 if $marc_record && @{$biblio->get_marc_components(1)}; # count matters here, results does not
-    $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->messages};
+    $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
 }
 
 # XSLT processing of some stuff
