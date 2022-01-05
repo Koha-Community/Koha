@@ -199,6 +199,11 @@
                         <div class="alert alert-info">
                             <p>Item renewed</p>
                         </div>
+                    [% ELSIF ( renewed == 0) %]
+                        <span class="sco-alert-warning renew"></span>
+                        <div class="alert alert-info">
+                            <p>Item not renewed</p>
+                        </div>
                     [% ELSIF ( returned == 0 ) %]
                         <span class="sco-alert-warning return"></span>
                         <div class="alert alert-info">
