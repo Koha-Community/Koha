@@ -14,7 +14,7 @@
 
         [% IF report.not_deleted_itemnumbers.size %]
             <div class="dialog error">
-                [% report.not_deleted_itemnumbers.size | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers %][% not_deleted_itemnumber.itemnumber | html %][% END %]
+                [% report.not_deleted_itemnumbers.size | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN report.not_deleted_itemnumbers %][% not_deleted_itemnumber | html %] [% END %]
             </div>
         [% END %]
 
