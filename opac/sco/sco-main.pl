@@ -21,13 +21,12 @@
 
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
 #
-# We're in a controlled environment; we trust the user.
-# So the selfcheck station will accept a patronid and issue items to that borrower.
-# FIXME: NOT really a controlled environment...  We're on the internet!
+# We're not in a controlled environment; we never trust the user.
 #
 # The checkout permission comes form the CGI cookie/session of a staff user.
 # The patron is not really logging in here in the same way as they do on the
 # rest of the OPAC.  So don't confuse loggedinuser with the patron user.
+# The patron id/cardnumber is retrieved from the JWT
 
 use Modern::Perl;
 
@@ -94,9 +93,8 @@ if (defined C4::Context->preference('SCOAllowCheckin')) {
 }
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
+my ($op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
     $query->param("op")         || '',
-    $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
@@ -104,16 +102,30 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) =
     $query->param("newissues")  || '',
 );
 
+my $jwt = $query->cookie('JWT');
+if ($op eq "logout") {
+    $template->param( loggedout => 1 );
+    $query->param( patronlogin => undef, patronpw => undef );
+    undef $jwt;
+}
+
 $barcode = barcodedecode( $barcode ) if $barcode;
 
 my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
-my $item     = Koha::Items->find({ barcode => $barcode });
-if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
-    my $dbh = C4::Context->dbh;
-    my $resval;
-    ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
+
+my $patronid = $jwt ? Koha::Token->new->decode_jwt({ token => $jwt }) : undef;
+unless ( $patronid ) {
+    if ( C4::Context->preference('SelfCheckoutByLogin') ) {
+        my $dbh = C4::Context->dbh;
+        ( undef, $patronid ) = checkpw( $dbh, $patronlogin, $patronpw );
+    }
+    else {    # People should not do that unless they know what they are doing!
+              # SelfCheckAllowByIPRanges MUST be configured
+        $patronid = $query->param('patronid');
+    }
+    $jwt = Koha::Token->new->generate_jwt({ id => $patronid }) if $patronid;
 }
 
 my $patron;
@@ -125,15 +137,12 @@ if ( $patronid ) {
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
-if ($op eq "logout") {
-    $template->param( loggedout => 1 );
-    $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
-}
-elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
+
+if ( $patron && $op eq "returnbook" && $allowselfcheckreturns ) {
     my $success        = 0;
     my $human_required = 0;
+    my $item = Koha::Items->find( { barcode => $barcode } );
     if ( C4::Context->preference("CircConfirmItemParts") ) {
-        my $item = Koha::Items->find( { barcode => $barcode } );
         if ( defined($item)
             && $item->materials )
         {
@@ -146,6 +155,8 @@ elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     $template->param( returned => $success );
 }
 elsif ( $patron && ( $op eq 'checkout' ) ) {
+
+    my $item = Koha::Items->find( { barcode => $barcode } );
     my $impossible  = {};
     my $needconfirm = {};
     ( $impossible, $needconfirm ) = CanBookBeIssued(
@@ -166,7 +177,6 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
         }
     }
 
-    #warn "confirm_required: " . $confirm_required ;
     if (scalar keys %$impossible) {
 
         my $issue_error = (keys %$impossible)[0]; # FIXME This is wrong, we assume only one error and keys are not ordered
@@ -181,7 +191,6 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
         if ($issue_error eq 'DEBT') {
             $template->param(DEBT => $impossible->{DEBT});
         }
-        #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
             $template->param(
@@ -198,7 +207,6 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 hide_main           => 1,
         );
     } elsif ( $confirm_required && !$confirmed ) {
-        #warn "failed confirmation";
         $template->param(
             impossible                => 1,
             "circ_error_$issue_error" => 1,
@@ -248,7 +256,6 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
             }
         } else {
             $confirm_required = 1;
-            #warn "issue confirmation";
             $template->param(
                 confirm    => "Issuing title: " . $item->biblio->title,
                 barcode    => $barcode,
@@ -259,16 +266,16 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
 } # $op
 
 if ( $patron && ( $op eq 'renew' ) ) {
+    my $item = Koha::Items->find({ barcode => $barcode });
     my ($status,$renewerror) = CanBookBeRenewed( $patron->borrowernumber, $item->itemnumber );
     if ($status) {
-        #warn "renewing";
         AddRenewal( $patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 1 );
         push @newissueslist, $barcode;
         $template->param( renewed => 1 );
     }
 }
 
-if ($patron) {
+if ( $patron) {
     my $borrowername = sprintf "%s %s", ($patron->firstname || ''), ($patron->surname || '');
     my $pending_checkouts = $patron->pending_checkouts;
     my @checkouts;
@@ -307,7 +314,6 @@ if ($patron) {
         ISSUES => \@checkouts,
         HOLDS => $holds,
         newissues => join(',',@newissueslist),
-        patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
         waiting_holds_count => $waiting_holds_count,
@@ -344,9 +350,18 @@ if ($patron) {
     }
 } else {
     $template->param(
-        patronid   => $patronid,
         nouser     => $patronid,
     );
 }
+
+$cookie = $query->cookie(
+    -name => 'JWT',
+    -value => $jwt // '',
+    -expires => $jwt ? '+1d' : '',
+    -HttpOnly => 1,
+    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+);
+
+$template->param(patronid => $patronid);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
