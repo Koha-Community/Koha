@@ -126,7 +126,7 @@ sub process {
                             biblionumber => $item->biblionumber,
                             barcode      => $item->barcode,
                             title        => $item->biblio->title,
-                            reason       => $return,
+                            reason       => @{$return->messages}[0]->message,
                           };
 
                         next;

@@ -119,7 +119,7 @@ sub process {
                     code => 'item_not_deleted',
                     biblionumber => $biblionumber,
                     itemnumber => $item->itemnumber,
-                    error => @{$deleted->messages}[0]->messages,
+                    error => @{$deleted->messages}[0]->message,
                 };
                 $schema->storage->txn_rollback;
                 $job->progress( ++$job_progress )->store;

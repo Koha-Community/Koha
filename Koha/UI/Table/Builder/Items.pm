@@ -108,7 +108,13 @@ sub _build_headers {
 
     my @witness_attributes = uniq map {
         my $item = $_;
-        map { defined $item->{$_} && $item->{$_} ne "" ? $_ : () } keys %$item
+        map {
+            defined $item->{$_}
+              && !ref( $item->{$_} ) # biblio and safe_to_delete are objects
+              && $item->{$_} ne ""
+              ? $_
+              : ()
+          } keys %$item
     } @$items;
 
     my ( $itemtag, $itemsubfield ) =

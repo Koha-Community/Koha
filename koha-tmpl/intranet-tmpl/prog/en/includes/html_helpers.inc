@@ -261,18 +261,18 @@
                         [% UNLESS can_be_edited %]
                             <td class="error">Cannot delete</td>
                         [% ELSE %]
-                            [% IF item.safe_to_delete == 1 %]
+                            [% IF item.safe_to_delete %]
                                 <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
                             [% ELSE %]
                                 [% SET messages = item.safe_to_delete.messages %]
                                 [% FOR m IN messages %]
-                                    [% SWITCH m %]
+                                    [% SWITCH m.message %]
                                     [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
                                     [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
                                     [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
                                     [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
                                     [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record with biblio-level hold on it") %]
-                                    [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ item.safe_to_delete _ ')' %]
+                                    [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ m.message _ ')' %]
                                     [% END %]
                                 [% END %]
 

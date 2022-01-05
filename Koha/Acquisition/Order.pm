@@ -131,7 +131,7 @@ sub cancel {
             $self->add_message(
                 {
                     message => 'error_delitem',
-                    payload => { item => $item, reason => @{$deleted->messages}[0]->messages }
+                    payload => { item => $item, reason => @{$deleted->messages}[0]->message }
                 }
             );
         }
