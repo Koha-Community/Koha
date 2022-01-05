@@ -76,6 +76,7 @@ requires 'MIME::Lite', '3';
 requires 'MIME::QuotedPrint', '3.07';
 requires 'Modern::Perl', '1.03';
 requires 'Module::CPANfile', '1.1000';
+requires 'Mojo::JWT', '0.08';
 requires 'Mojolicious', '8.12';
 requires 'Mojolicious::Plugin::OpenAPI', '2.16';
 requires 'Net::CIDR', '0.17';
