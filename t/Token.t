@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Time::HiRes qw|usleep|;
 use C4::Context;
@@ -100,4 +100,20 @@ subtest 'Pattern parameter' => sub {
     is( length($id), 10, 'Check length again' );
     ok( $id !~ /[^A-Z]/, 'Only uppercase letters' );
     throws_ok( sub { $tokenizer->generate({ pattern => 'abc{d,e}', }) }, 'Koha::Exceptions::Token::BadPattern', 'Exception should be thrown when wrong pattern is used');
+};
+
+subtest 'JWT' => sub {
+    plan tests => 3;
+
+    my $id = 42;
+    my $jwt = $tokenizer->generate_jwt({ id => $id });
+
+    my $is_valid = $tokenizer->check_jwt({ id => $id, token => $jwt });
+    is( $is_valid, 1, 'valid token should return 1' );
+
+    $is_valid = $tokenizer->check_jwt({ id => 24, token => $jwt });
+    isnt( $is_valid, 1, 'invalid token should not return 1' );
+
+    my $retrieved_id = $tokenizer->decode_jwt({ token => $jwt });
+    is( $retrieved_id, $id, 'id stored in jwt should be correct' );
 };
