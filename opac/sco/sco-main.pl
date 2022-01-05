@@ -118,18 +118,15 @@ if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
 
-my ( $borrower, $patron );
+my $patron;
 if ( $patronid ) {
     Koha::Plugins->call( 'patron_barcode_transform', \$patronid );
     $patron = Koha::Patrons->find( { cardnumber => $patronid } );
-    $borrower = $patron->unblessed if $patron;
 }
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
-#warn "issuer cardnumber: " .   $issuer->{cardnumber};
-#warn "patron cardnumber: " . $borrower->{cardnumber};
 if ($op eq "logout") {
     $template->param( loggedout => 1 );
     $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
@@ -222,7 +219,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 $hold_existed = Koha::Holds->search(
                     {
                         -and => {
-                            borrowernumber => $borrower->{borrowernumber},
+                            borrowernumber => $patron->borrowernumber,
                             -or            => {
                                 biblionumber => $item->biblionumber,
                                 itemnumber   => $item->itemnumber
@@ -232,7 +229,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 )->count;
             }
 
-            AddIssue( $borrower, $barcode );
+            AddIssue( $patron->unblessed, $barcode );
             $template->param( issued => 1 );
             push @newissueslist, $barcode;
 
@@ -243,7 +240,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                     # Note that this should not be needed but since we do not have proper exception handling here we do it this way
                     patron_has_hold_fee => Koha::Account::Lines->search(
                         {
-                            borrowernumber  => $borrower->{borrowernumber},
+                            borrowernumber  => $patron->borrowernumber,
                             debit_type_code => 'RESERVE',
                             description     => $item->biblio->title,
                             date            => $dtf->format_date(dt_from_string)
@@ -265,25 +262,23 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
 } # $op
 
 if ( $patron && ( $op eq 'renew' ) ) {
-    my ($status,$renewerror) = CanBookBeRenewed( $borrower->{borrowernumber}, $item->itemnumber );
+    my ($status,$renewerror) = CanBookBeRenewed( $patron->borrowernumber, $item->itemnumber );
     if ($status) {
         #warn "renewing";
-        AddRenewal( $borrower->{borrowernumber}, $item->itemnumber, undef, undef, undef, undef, 1 );
+        AddRenewal( $patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 1 );
         push @newissueslist, $barcode;
         $template->param( renewed => 1 );
     }
 }
 
-if ($borrower) {
-#   warn "issuer's  branchcode: " .   $issuer->{branchcode};
-#   warn   "user's  branchcode: " . $borrower->{branchcode};
-    my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');
+if ($patron) {
+    my $borrowername = sprintf "%s %s", ($patron->firstname || ''), ($patron->surname || '');
     my $pending_checkouts = $patron->pending_checkouts;
     my @checkouts;
     while ( my $c = $pending_checkouts->next ) {
         my $checkout = $c->unblessed_all_relateds;
         my ($can_be_renewed, $renew_error) = CanBookBeRenewed(
-            $borrower->{borrowernumber},
+            $patron->borrowernumber,
             $checkout->{itemnumber},
         );
         $checkout->{can_be_renewed} = $can_be_renewed; # In the future this will be $checkout->can_be_renewed
@@ -320,7 +315,7 @@ if ($borrower) {
         patronpw => $patronpw,
         waiting_holds_count => $waiting_holds_count,
         noitemlinks => 1 ,
-        borrowernumber => $borrower->{'borrowernumber'},
+        borrowernumber => $patron->borrowernumber,
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
         howpriority   => $show_priority,
@@ -330,13 +325,13 @@ if ($borrower) {
 
     my $patron_messages = Koha::Patron::Messages->search(
         {
-            borrowernumber => $borrower->{'borrowernumber'},
+            borrowernumber => $patron->borrowernumber,
             message_type => 'B',
         }
     );
     $template->param(
         patron_messages => $patron_messages,
-        opacnote => $borrower->{opacnote},
+        opacnote => $patron->opacnote,
     );
 
     my $inputfocus = ($return_only      == 1) ? 'returnbook' :
@@ -347,10 +342,10 @@ if ($borrower) {
 
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
-        my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+        my $patron_image = $patron->image;
         $template->param(
             display_patron_image => 1,
-            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $borrower->{cardnumber}, id => $borrower->{userid}} ),
+            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $patron->cardnumber, id => $patron->userid } ),
         ) if $patron_image;
     }
 } else {
