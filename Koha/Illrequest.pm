@@ -572,7 +572,8 @@ sub _status_graph_union {
             if ( grep { $prev_action eq $_ } @core_status_ids ) {
                 my @next_actions =
                      @{$status_graph->{$prev_action}->{next_actions}};
-                push @next_actions, $backend_status_key;
+                push @next_actions, $backend_status_key
+                    if (!grep(/^$backend_status_key$/, @next_actions));
                 $status_graph->{$prev_action}->{next_actions}
                     = \@next_actions;
             }
@@ -582,7 +583,8 @@ sub _status_graph_union {
             if ( grep { $next_action eq $_ } @core_status_ids ) {
                 my @prev_actions =
                      @{$status_graph->{$next_action}->{prev_actions}};
-                push @prev_actions, $backend_status_key;
+                push @prev_actions, $backend_status_key
+                    if (!grep(/^$backend_status_key$/, @prev_actions));
                 $status_graph->{$next_action}->{prev_actions}
                     = \@prev_actions;
             }
