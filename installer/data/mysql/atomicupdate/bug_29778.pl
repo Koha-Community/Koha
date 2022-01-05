@@ -9,9 +9,11 @@ return {
         $dbh->do(q{
             DELETE FROM additional_contents
             WHERE code NOT IN (
-                SELECT code
-                FROM additional_contents
-                WHERE lang = "default"
+                SELECT code FROM (
+                    SELECT code
+                    FROM additional_contents
+                    WHERE lang = "default"
+                ) as tmp
             );
         });
     },
