@@ -28,8 +28,6 @@
 # The checkout permission comes form the CGI cookie/session of a staff user.
 # The patron is not really logging in here in the same way as they do on the
 # rest of the OPAC.  So don't confuse loggedinuser with the patron user.
-#
-# FIXME: inputfocus not really used in TMPL
 
 use Modern::Perl;
 
@@ -255,7 +253,6 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 confirm    => "Issuing title: " . $item->biblio->title,
                 barcode    => $barcode,
                 hide_main  => 1,
-                inputfocus => 'confirm',
             );
         }
     }
@@ -334,10 +331,7 @@ if ($patron) {
         opacnote => $patron->opacnote,
     );
 
-    my $inputfocus = ($return_only      == 1) ? 'returnbook' :
-                     ($confirm_required == 1) ? 'confirm'    : 'barcode' ;
     $template->param(
-        inputfocus => $inputfocus,
         nofines => 1,
 
     );
