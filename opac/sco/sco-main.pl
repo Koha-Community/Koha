@@ -139,19 +139,28 @@ my $confirm_required = 0;
 my $return_only = 0;
 
 if ( $patron && $op eq "returnbook" && $allowselfcheckreturns ) {
-    my $success        = 0;
-    my $human_required = 0;
+    my $success = 1;
+
+
     my $item = Koha::Items->find( { barcode => $barcode } );
-    if ( C4::Context->preference("CircConfirmItemParts") ) {
+    if ( $success && C4::Context->preference("CircConfirmItemParts") ) {
         if ( defined($item)
             && $item->materials )
         {
-            $human_required = 1;
+            $success = 0;
         }
     }
 
-    ($success) = AddReturn( $barcode, $branch )
-      unless $human_required;
+    if ($success) {
+        # Patron cannot checkin an item they don't own
+        $success = 0
+          unless $patron->checkouts->find( { itemnumber => $item->itemnumber } );
+    }
+
+    if ( $success ) {
+        ($success) = AddReturn( $barcode, $branch )
+    }
+
     $template->param( returned => $success );
 }
 elsif ( $patron && ( $op eq 'checkout' ) ) {
@@ -267,11 +276,16 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
 
 if ( $patron && ( $op eq 'renew' ) ) {
     my $item = Koha::Items->find({ barcode => $barcode });
-    my ($status,$renewerror) = CanBookBeRenewed( $patron->borrowernumber, $item->itemnumber );
-    if ($status) {
-        AddRenewal( $patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 1 );
-        push @newissueslist, $barcode;
-        $template->param( renewed => 1 );
+
+    if ( $patron->checkouts->find( { itemnumber => $item->itemnumber } ) ) {
+        my ($status,$renewerror) = CanBookBeRenewed( $patron->borrowernumber, $item->itemnumber );
+        if ($status) {
+            AddRenewal( $patron->borrowernumber, $item->itemnumber, undef, undef, undef, undef, 1 );
+            push @newissueslist, $barcode;
+            $template->param( renewed => 1 );
+        }
+    } else {
+        $template->param( renewed => 0 );
     }
 }
 
