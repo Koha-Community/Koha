@@ -27,13 +27,16 @@ use Try::Tiny;
 use C4::Auth;
 use C4::Biblio;
 use C4::Items;
-use C4::Output;
+use C4::Output qw(
+    output_html_with_http_headers
+    output_and_exit
+);
 use Koha::Email;
 use Koha::Virtualshelves;
 
 my $query = CGI->new;
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "virtualshelves/sendshelfform.tt",
         query           => $query,
@@ -45,7 +48,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $shelfid    = $query->param('shelfid');
 my $to_address = $query->param('email');
 
-my $dbh = C4::Context->dbh;
+my $shelf = Koha::Virtualshelves->find( $shelfid );
+
+output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
+    if $shelf && !$shelf->can_be_viewed( $loggedinuser );
 
 if ($to_address) {
     my $comment = $query->param('comment');
@@ -59,7 +65,6 @@ if ($to_address) {
         }
     );
 
-    my $shelf = Koha::Virtualshelves->find( $shelfid );
     my $contents = $shelf->get_contents;
     my $marcflavour = C4::Context->preference('marcflavour');
     my $iso2709;
