@@ -21,15 +21,12 @@
 
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
 #
-# We're in a controlled environment; we trust the user.
-# So the selfcheck station will accept a patronid and issue items to that borrower.
-# FIXME: NOT really a controlled environment...  We're on the internet!
+# We're not in a controlled environment; we never trust the user.
 #
 # The checkout permission comes form the CGI cookie/session of a staff user.
 # The patron is not really logging in here in the same way as they do on the
 # rest of the OPAC.  So don't confuse loggedinuser with the patron user.
-#
-# FIXME: inputfocus not really used in TMPL
+# The patron id/cardnumber is retrieved from the JWT
 
 use Modern::Perl;
 
@@ -99,9 +96,8 @@ if (defined C4::Context->preference('AllowSelfCheckReturns')) {
 }
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
+my ($op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
     $query->param("op")         || '',
-    $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
@@ -109,36 +105,56 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) =
     $query->param("newissues")  || '',
 );
 
+my $jwt = $query->cookie('JWT');
+if ($op eq "logout") {
+    $template->param( loggedout => 1 );
+    $query->param( patronlogin => undef, patronpw => undef );
+    undef $jwt;
+}
+
 my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
-my $item     = Koha::Items->find({ barcode => $barcode });
-if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
-    my $dbh = C4::Context->dbh;
-    my $resval;
-    ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
+
+my $patronid = $jwt ? Koha::Token->new->decode_jwt({ token => $jwt }) : undef;
+unless ( $patronid ) {
+    if ( C4::Context->preference('SelfCheckoutByLogin') ) {
+        my $dbh = C4::Context->dbh;
+        ( undef, $patronid ) = checkpw( $dbh, $patronlogin, $patronpw );
+    }
+    else {    # People should not do that unless they know what they are doing!
+              # SelfCheckAllowByIPRanges MUST be configured
+        $patronid = $query->param('patronid');
+    }
+    $jwt = Koha::Token->new->generate_jwt({ id => $patronid }) if $patronid;
 }
 
-my ( $borrower, $patron );
+my $patron;
 if ( $patronid ) {
     $patron = Koha::Patrons->find( { cardnumber => $patronid } );
-    $borrower = $patron->unblessed if $patron;
 }
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
-#warn "issuer cardnumber: " .   $issuer->{cardnumber};
-#warn "patron cardnumber: " . $borrower->{cardnumber};
 if ($op eq "logout") {
     $template->param( loggedout => 1 );
     $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
 }
-elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
-    my ($doreturn) = AddReturn( $barcode, $branch );
+
+if ( $op eq "returnbook" && $allowselfcheckreturns ) {
+
+    # Patron cannot checkin an item they don't own
+    my $item = Koha::Items->find( { barcode => $barcode } );
+    my $doreturn = $patron->checkouts->find( { itemnumber => $item->itemnumber} ) ? 1 : 0;
+
+    if ( $doreturn ) {
+        ($doreturn) = AddReturn( $barcode, $branch );
+    }
     $template->param( returned => $doreturn );
 }
 elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
+    my $item = Koha::Items->find( { barcode => $barcode } );
     my $impossible  = {};
     my $needconfirm = {};
     ( $impossible, $needconfirm ) = CanBookBeIssued(
@@ -159,7 +175,6 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
         }
     }
 
-    #warn "confirm_required: " . $confirm_required ;
     if (scalar keys %$impossible) {
 
         my $issue_error = (keys %$impossible)[0]; # FIXME This is wrong, we assume only one error and keys are not ordered
@@ -174,7 +189,6 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
         if ($issue_error eq 'DEBT') {
             $template->param(DEBT => $impossible->{DEBT});
         }
-        #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
             $template->param(
@@ -184,10 +198,13 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
         }
     } elsif ( $needconfirm->{RENEW_ISSUE} || $op eq 'renew' ) {
         if ($confirmed) {
-            #warn "renewing";
-            AddRenewal( $borrower->{borrowernumber}, $item->itemnumber );
-            push @newissueslist, $barcode;
-            $template->param( renewed => 1 );
+            if ( $patron->checkouts->find( { itemnumber => $item->itemnumber } ) ) {
+                AddRenewal( $patron->borrowernumber, $item->itemnumber );
+                push @newissueslist, $barcode;
+                $template->param( renewed => 1 );
+            } else {
+                $template->param( renewed => 0 );
+            }
         } else {
             #warn "renew confirmation";
             $template->param(
@@ -199,7 +216,6 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
             );
         }
     } elsif ( $confirm_required && !$confirmed ) {
-        #warn "failed confirmation";
         $template->param(
             impossible                => 1,
             "circ_error_$issue_error" => 1,
@@ -218,7 +234,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                 $hold_existed = Koha::Holds->search(
                     {
                         -and => {
-                            borrowernumber => $borrower->{borrowernumber},
+                            borrowernumber => $patron->borrowernumber,
                             -or            => {
                                 biblionumber => $item->biblionumber,
                                 itemnumber   => $item->itemnumber
@@ -228,7 +244,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                 )->count;
             }
 
-            AddIssue( $borrower, $barcode );
+            AddIssue( $patron->unblessed, $barcode );
             $template->param( issued => 1 );
             push @newissueslist, $barcode;
 
@@ -239,7 +255,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                     # Note that this should not be needed but since we do not have proper exception handling here we do it this way
                     patron_has_hold_fee => Koha::Account::Lines->search(
                         {
-                            borrowernumber  => $borrower->{borrowernumber},
+                            borrowernumber  => $patron->borrowernumber,
                             debit_type_code => 'RESERVE',
                             description     => $item->biblio->title,
                             date            => $dtf->format_date(dt_from_string)
@@ -249,27 +265,23 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
             }
         } else {
             $confirm_required = 1;
-            #warn "issue confirmation";
             $template->param(
                 confirm    => "Issuing title: " . $item->biblio->title,
                 barcode    => $barcode,
                 hide_main  => 1,
-                inputfocus => 'confirm',
             );
         }
     }
 } # $op
 
-if ($borrower) {
-#   warn "issuer's  branchcode: " .   $issuer->{branchcode};
-#   warn   "user's  branchcode: " . $borrower->{branchcode};
-    my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');
+if ($patron) {
+    my $borrowername = sprintf "%s %s", ($patron->firstname || ''), ($patron->surname || '');
     my $pending_checkouts = $patron->pending_checkouts;
     my @checkouts;
     while ( my $c = $pending_checkouts->next ) {
         my $checkout = $c->unblessed_all_relateds;
         my ($can_be_renewed, $renew_error) = CanBookBeRenewed(
-            $borrower->{borrowernumber},
+            $patron->borrowernumber,
             $checkout->{itemnumber},
         );
         $checkout->{can_be_renewed} = $can_be_renewed; # In the future this will be $checkout->can_be_renewed
@@ -301,12 +313,11 @@ if ($borrower) {
         ISSUES => \@checkouts,
         HOLDS => $holds,
         newissues => join(',',@newissueslist),
-        patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
         waiting_holds_count => $waiting_holds_count,
         noitemlinks => 1 ,
-        borrowernumber => $borrower->{'borrowernumber'},
+        borrowernumber => $patron->borrowernumber,
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
         howpriority   => $show_priority,
@@ -316,34 +327,40 @@ if ($borrower) {
 
     my $patron_messages = Koha::Patron::Messages->search(
         {
-            borrowernumber => $borrower->{'borrowernumber'},
+            borrowernumber => $patron->borrowernumber,
             message_type => 'B',
         }
     );
     $template->param(
         patron_messages => $patron_messages,
-        opacnote => $borrower->{opacnote},
+        opacnote => $patron->opacnote,
     );
 
-    my $inputfocus = ($return_only      == 1) ? 'returnbook' :
-                     ($confirm_required == 1) ? 'confirm'    : 'barcode' ;
     $template->param(
-        inputfocus => $inputfocus,
         nofines => 1,
 
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
-        my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+        my $patron_image = $patron->image;
         $template->param(
             display_patron_image => 1,
-            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $borrower->{cardnumber}, id => $borrower->{userid}} ),
+            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $patron->cardnumber, id => $patron->userid } ),
         ) if $patron_image;
     }
 } else {
     $template->param(
-        patronid   => $patronid,
         nouser     => $patronid,
     );
 }
+
+$cookie = $query->cookie(
+    -name => 'JWT',
+    -value => $jwt // '',
+    -expires => $jwt ? '+1d' : '',
+    -HttpOnly => 1,
+    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+);
+
+$template->param(patronid => $patronid);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

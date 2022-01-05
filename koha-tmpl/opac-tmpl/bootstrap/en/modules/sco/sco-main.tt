@@ -190,6 +190,11 @@
                     <div class="alert alert-info">
                         <p>Item renewed</p>
                     </div>
+                    [% ELSIF ( renewed == 0) %]
+                    <span class="sco-alert-warning renew"></span>
+                    <div class="alert alert-info">
+                        <p>Item not renewed</p>
+                    </div>
                     [% ELSIF ( returned == 0 ) %]
                     <span class="sco-alert-warning return"></span>
                     <div class="alert alert-info">
@@ -372,9 +377,9 @@
                                         [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
                                             <legend>Log in to your account</legend>
                                             <label for="patronlogin">Login:</label>
-                                            <input type="text" id="patronlogin" class="focus" size="20" name="patronlogin" />
+                                            <input type="text" id="patronlogin" class="focus" size="20" name="patronlogin" autocomplete="off"/>
                                             <label for="patronpw">Password:</label>
-                                            <input type="password" id="patronpw" size="20" name="patronpw" />
+                                            <input type="password" id="patronpw" size="20" name="patronpw" autocomplete="off"/>
                                             <fieldset class="action">
                                                 <button type="submit" class="btn">Log in</button>
                                             </fieldset>

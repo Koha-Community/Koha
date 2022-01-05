@@ -1,6 +1,6 @@
 package Koha::Token;
 
-# Created as wrapper for CSRF tokens, but designed for more general use
+# Created as wrapper for CSRF and JWT tokens, but designed for more general use
 
 # Copyright 2016 Rijksmuseum
 #
@@ -52,6 +52,7 @@ use Modern::Perl;
 use Bytes::Random::Secure ();
 use String::Random ();
 use WWW::CSRF ();
+use Mojo::JWT;
 use Digest::MD5 qw(md5_base64);
 use Encode qw( encode );
 use Koha::Exceptions::Token;
@@ -78,6 +79,9 @@ sub new {
     my $csrf_token = $tokenizer->generate({
         type => 'CSRF', id => $id, secret => $secret,
     });
+    my $jwt = $tokenizer->generate({
+        type => 'JWT, id => $id, secret => $secret,
+    });
 
     Generate several types of tokens. Now includes CSRF.
     For non-CSRF tokens an optional pattern parameter overrides length.
@@ -101,6 +105,8 @@ sub generate {
     my ( $self, $params ) = @_;
     if( $params->{type} && $params->{type} eq 'CSRF' ) {
         $self->{lasttoken} = _gen_csrf( $params );
+    } elsif( $params->{type} && $params->{type} eq 'JWT' ) {
+        $self->{lasttoken} = _gen_jwt( $params );
     } else {
         $self->{lasttoken} = _gen_rand( $params );
     }
@@ -122,6 +128,21 @@ sub generate_csrf {
     return $self->generate({ %$params, type => 'CSRF' });
 }
 
+=head2 generate_jwt
+
+    Like: generate({ type => 'JWT', ... })
+    Note that JWT is designed to encode a structure but here we are actually only allowing a value
+    that will be store in the key 'id'.
+
+=cut
+
+sub generate_jwt {
+    my ( $self, $params ) = @_;
+    return if !$params->{id};
+    $params = _add_default_jwt_params( $params );
+    return $self->generate({ %$params, type => 'JWT' });
+}
+
 =head2 check
 
     my $result = $tokenizer->check({
@@ -137,6 +158,9 @@ sub check {
     my ( $self, $params ) = @_;
     if( $params->{type} && $params->{type} eq 'CSRF' ) {
         return _chk_csrf( $params );
+    }
+    elsif( $params->{type} && $params->{type} eq 'JWT' ) {
+        return _chk_jwt( $params );
     }
     return;
 }
@@ -154,6 +178,33 @@ sub check_csrf {
     return if !$params->{session_id};
     $params = _add_default_csrf_params( $params );
     return $self->check({ %$params, type => 'CSRF' });
+}
+
+=head2 check_jwt
+
+    Like: check({ type => 'JWT', id => $id, token => $token })
+
+    Will return true if the token contains the passed id
+
+=cut
+
+sub check_jwt {
+    my ( $self, $params ) = @_;
+    $params = _add_default_jwt_params( $params );
+    return $self->check({ %$params, type => 'JWT' });
+}
+
+=head2 decode_jwt
+
+    $tokenizer->decode_jwt({ type => 'JWT', token => $token })
+
+    Will return the value of the id stored in the token.
+
+=cut
+sub decode_jwt {
+    my ( $self, $params ) = @_;
+    $params = _add_default_jwt_params( $params );
+    return _decode_jwt( $params );
 }
 
 # --- Internal routines ---
@@ -218,6 +269,41 @@ sub _gen_rand {
     };
     Koha::Exceptions::Token::BadPattern->throw($@) if $@;
     return $token;
+}
+
+sub _add_default_jwt_params {
+    my ( $params ) = @_;
+    my $pw = C4::Context->config('pass');
+    $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
+    return $params;
+}
+
+sub _gen_jwt {
+    my ( $params ) = @_;
+    return if !$params->{id} || !$params->{secret};
+
+    return Mojo::JWT->new(
+        claims => { id => $params->{id} },
+        secret => $params->{secret}
+    )->encode;
+}
+
+sub _chk_jwt {
+    my ( $params ) = @_;
+    return if !$params->{id} || !$params->{secret} || !$params->{token};
+
+    my $claims = Mojo::JWT->new(secret => $params->{secret})->decode($params->{token});
+
+    return 1 if exists $claims->{id} && $claims->{id} == $params->{id};
+}
+
+sub _decode_jwt {
+    my ( $params ) = @_;
+    return if !$params->{token} || !$params->{secret};
+
+    my $claims = Mojo::JWT->new(secret => $params->{secret})->decode($params->{token});
+
+    return $claims->{id};
 }
 
 =head1 AUTHOR
