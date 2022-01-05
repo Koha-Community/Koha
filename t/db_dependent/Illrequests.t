@@ -190,7 +190,7 @@ subtest 'Working with related objects' => sub {
 
 subtest 'Status Graph tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -367,6 +367,125 @@ subtest 'Status Graph tests' => sub {
     },
         "new node + core_status_graph = bigger status graph"
     ) || diag explain $new_graph;
+
+    # Create a duplicate node
+    my $dupe_node = {
+        REQ => {
+            prev_actions   => [ 'NEW', 'REQREV', 'QUEUED', 'CANCREQ' ],
+            id             => 'REQ',
+            name           => 'Requested',
+            ui_method_name => 'Confirm request dupe',
+            method         => 'confirm',
+            next_actions   => [ 'REQREV', 'COMP', 'CHK' ],
+            ui_method_icon => 'fa-check',
+        }
+    };
+    # Add the dupe node to the core_status_grpah
+    my $dupe_graph = $illrq_obj->_status_graph_union( $illrq_obj->_core_status_graph, $dupe_node);
+    # Compare the updated graph to the expected graph
+    # The structure we compare against here is just a copy of the structure found
+    # in Koha::Illrequest::_core_status_graph() + the new node we created above
+    cmp_deeply( $dupe_graph,
+        {
+        NEW => {
+            prev_actions => [ ],                           # Actions containing buttons
+                                                           # leading to this status
+            id             => 'NEW',                       # ID of this status
+            name           => 'New request',               # UI name of this status
+            ui_method_name => 'New request',               # UI name of method leading
+                                                           # to this status
+            method         => 'create',                    # method to this status
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ], # buttons to add to all
+                                                           # requests with this status
+            ui_method_icon => 'fa-plus',                   # UI Style class
+        },
+        REQ => {
+            prev_actions   => [ 'NEW', 'REQREV', 'QUEUED', 'CANCREQ' ],
+            id             => 'REQ',
+            name           => 'Requested',
+            ui_method_name => 'Confirm request dupe',
+            method         => 'confirm',
+            next_actions   => [ 'REQREV', 'COMP', 'CHK' ],
+            ui_method_icon => 'fa-check',
+        },
+        GENREQ => {
+            prev_actions   => [ 'NEW', 'REQREV' ],
+            id             => 'GENREQ',
+            name           => 'Requested from partners',
+            ui_method_name => 'Place request with partners',
+            method         => 'generic_confirm',
+            next_actions   => [ 'COMP', 'CHK' ],
+            ui_method_icon => 'fa-send-o',
+        },
+        REQREV => {
+            prev_actions   => [ 'REQ' ],
+            id             => 'REQREV',
+            name           => 'Request reverted',
+            ui_method_name => 'Revert Request',
+            method         => 'cancel',
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],
+            ui_method_icon => 'fa-times',
+        },
+        QUEUED => {
+            prev_actions   => [ ],
+            id             => 'QUEUED',
+            name           => 'Queued request',
+            ui_method_name => 0,
+            method         => 0,
+            next_actions   => [ 'REQ', 'KILL' ],
+            ui_method_icon => 0,
+        },
+        CANCREQ => {
+            prev_actions   => [ 'NEW' ],
+            id             => 'CANCREQ',
+            name           => 'Cancellation requested',
+            ui_method_name => 0,
+            method         => 0,
+            next_actions   => [ 'KILL', 'REQ' ],
+            ui_method_icon => 0,
+        },
+        COMP => {
+            prev_actions   => [ 'REQ' ],
+            id             => 'COMP',
+            name           => 'Completed',
+            ui_method_name => 'Mark completed',
+            method         => 'mark_completed',
+            next_actions   => [ 'CHK' ],
+            ui_method_icon => 'fa-check',
+        },
+        KILL => {
+            prev_actions   => [ 'QUEUED', 'REQREV', 'NEW', 'CANCREQ' ],
+            id             => 'KILL',
+            name           => 0,
+            ui_method_name => 'Delete request',
+            method         => 'delete',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-trash',
+        },
+        CHK => {
+            prev_actions   => [ 'REQ', 'GENREQ', 'COMP' ],
+            id             => 'CHK',
+            name           => 'Checked out',
+            ui_method_name => 'Check out',
+            needs_prefs    => [ 'CirculateILL' ],
+            needs_perms    => [ 'user_circulate_circulate_remaining_permissions' ],
+            needs_all      => ignore(),
+            method         => 'check_out',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-upload',
+        },
+        RET => {
+            prev_actions   => [ 'CHK' ],
+            id             => 'RET',
+            name           => 'Returned to library',
+            ui_method_name => 'Check in',
+            method         => 'check_in',
+            next_actions   => [ 'COMP' ],
+            ui_method_icon => 'fa-download',
+        }
+    },
+        "new node + core_status_graph = bigger status graph"
+    ) || diag explain $dupe_graph;
 
     $schema->storage->txn_rollback;
 };
