@@ -63,8 +63,8 @@ subtest 'Basic object tests' => sub {
     );
 
     # Relationship to rota
-    isa_ok( $sritem->itemnumber, 'Koha::Item', "Fetched related item." );
-    is( $sritem->itemnumber->itemnumber, $itm->itemnumber, "Related rota OK." );
+    isa_ok( $sritem->item, 'Koha::Item', "Fetched related item." );
+    is( $sritem->item->itemnumber, $itm->itemnumber, "Related rota OK." );
 
     # Relationship to stage
     isa_ok( $sritem->stage, 'Koha::StockRotationStage', "Fetched related stage." );
@@ -89,8 +89,8 @@ subtest 'Tests for needs_repatriating' => sub {
         }
     );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id);
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id);
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id);
     $dbitem->stage->position(1);
 
     my $dbrota = $dbitem->stage->rota;
@@ -109,7 +109,7 @@ subtest 'Tests for needs_repatriating' => sub {
     );
 
     my $branch = $builder->build({ source => 'Branch' });
-    $dbitem->itemnumber->holdingbranch($branch->{branchcode});
+    $dbitem->item->holdingbranch($branch->{branchcode});
 
     # - homebranch != holdingbranch [1]
     is(
@@ -118,8 +118,8 @@ subtest 'Tests for needs_repatriating' => sub {
     );
 
     # Set to incorrect homebranch.
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
-    $dbitem->itemnumber->homebranch($branch->{branchcode});
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id);
+    $dbitem->item->homebranch($branch->{branchcode});
     # - homebranch != stockrotationstage.branch & not in transit [1]
     is(
         $dbitem->needs_repatriating, 1,
@@ -149,23 +149,23 @@ subtest "Tests for repatriate." => sub {
             }
         }
     );
-    my $item_id = $sritem_1->itemnumber->itemnumber;
+    my $item_id = $sritem_1->item->itemnumber;
     my $srstage_1 = $sritem_1->stage;
     $sritem_1->discard_changes;
     $sritem_1->stage->position(1);
     $sritem_1->stage->duration(50);
     my $branch = $builder->build({ source => 'Branch' });
-    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
+    $sritem_1->item->holdingbranch($branch->{branchcode});
 
     # Test a straight up repatriate
     ok($sritem_1->repatriate, "Repatriation done.");
-    my $intransfer = $sritem_1->itemnumber->get_transfer;
+    my $intransfer = $sritem_1->item->get_transfer;
     is($intransfer->frombranch, $branch->{branchcode}, "Origin correct.");
     is($intransfer->tobranch, $sritem_1->stage->branchcode_id, "Target Correct.");
 
     # Reset
     $intransfer->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
+    $sritem_1->item->holdingbranch($branch->{branchcode});
 
     # Setup a conflicting manual transfer
     my $item = Koha::Items->find($item_id);
@@ -179,7 +179,7 @@ subtest "Tests for repatriate." => sub {
 
     # Reset
     $intransfer->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
+    $sritem_1->item->holdingbranch($branch->{branchcode});
 
     # Confirm that stockrotation ignores transfer limits
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
@@ -188,13 +188,13 @@ subtest "Tests for repatriate." => sub {
         {
             fromBranch => $branch->{branchcode},
             toBranch   => $srstage_1->branchcode_id,
-            itemtype   => $sritem_1->itemnumber->effective_itemtype,
+            itemtype   => $sritem_1->item->effective_itemtype,
         }
     )->store;
 
     # Stockrotation should overrule transfer limits
     ok($sritem_1->repatriate, "Repatriation done regardless of transfer limits.");
-    $intransfer = $sritem_1->itemnumber->get_transfer;
+    $intransfer = $sritem_1->item->get_transfer;
     is($intransfer->frombranch, $branch->{branchcode}, "Origin correct.");
     is($intransfer->tobranch, $sritem_1->stage->branchcode_id, "Target Correct.");
 
@@ -229,8 +229,8 @@ subtest "Tests for needs_advancing." => sub {
         }
     );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id);
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id);
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id);
     $dbitem->stage->position(1);
     $dbitem->stage->duration(50);
 
@@ -267,7 +267,7 @@ subtest "Tests for needs_advancing." => sub {
     )->store;
     is($dbitem->needs_advancing, 1, "Ready to be advanced.");
     $dbtransfer->delete;
-    warning_is {$dbitem->needs_advancing} "We have no historical branch transfer for itemnumber " . $dbitem->itemnumber->itemnumber . "; This should not have happened!", "Missing transfer is warned.";
+    warning_is {$dbitem->needs_advancing} "We have no historical branch transfer for itemnumber " . $dbitem->item->itemnumber . "; This should not have happened!", "Missing transfer is warned.";
 
     $schema->storage->txn_rollback;
 };
@@ -286,13 +286,13 @@ subtest "Tests for advance." => sub {
         }
     );
     $sritem_1->discard_changes;
-    $sritem_1->itemnumber->holdingbranch($sritem_1->stage->branchcode_id);
-    my $item_id = $sritem_1->itemnumber->itemnumber;
+    $sritem_1->item->holdingbranch($sritem_1->stage->branchcode_id);
+    my $item_id = $sritem_1->item->itemnumber;
     my $srstage_1 = $sritem_1->stage;
     $srstage_1->position(1)->duration(50)->store; # Configure stage.
     # Configure item
-    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
-    $sritem_1->itemnumber->homebranch($srstage_1->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_1->branchcode_id)->store;
+    $sritem_1->item->homebranch($srstage_1->branchcode_id)->store;
     # Sanity check
     is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Stage sanity check.");
 
@@ -333,18 +333,18 @@ subtest "Tests for advance." => sub {
     ## Test results
     is($sritem_1->stage->stage_id, $srstage_2->stage_id, "Stage updated.");
     is(
-        $sritem_1->itemnumber->homebranch,
+        $sritem_1->item->homebranch,
         $srstage_2->branchcode_id,
         "Item homebranch updated"
     );
-    my $transfer_request = $sritem_1->itemnumber->get_transfer;
+    my $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
     is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target Correct.");
     is($transfer_request->datesent, undef, "Transfer requested, but not sent.");
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_2->branchcode_id)->store;
 
     # Test a cyclical advance
     ok($sritem_1->advance, "Cyclical advancement done.");
@@ -353,17 +353,17 @@ subtest "Tests for advance." => sub {
     ## Test results
     is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Stage updated.");
     is(
-        $sritem_1->itemnumber->homebranch,
+        $sritem_1->item->homebranch,
         $srstage_1->branchcode_id,
         "Item homebranch updated"
     );
-    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->frombranch, $srstage_2->branchcode_id, "Origin correct.");
     is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_1->branchcode_id)->store;
 
     # Confirm that stockrotation ignores transfer limits
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
@@ -372,7 +372,7 @@ subtest "Tests for advance." => sub {
         {
             fromBranch => $srstage_1->branchcode_id,
             toBranch   => $srstage_2->branchcode_id,
-            itemtype   => $sritem_1->itemnumber->effective_itemtype,
+            itemtype   => $sritem_1->item->effective_itemtype,
         }
     )->store;
 
@@ -382,17 +382,17 @@ subtest "Tests for advance." => sub {
     ## Test results
     is($sritem_1->stage->stage_id, $srstage_2->stage_id, "Stage updated ignoring transfer limits.");
     is(
-        $sritem_1->itemnumber->homebranch,
+        $sritem_1->item->homebranch,
         $srstage_2->branchcode_id,
         "Item homebranch updated ignoring transfer limits"
     );
-    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct ignoring transfer limits.");
     is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target correct ignoring transfer limits.");
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_2->branchcode_id)->store;
 
     # Setup a conflicting manual transfer
     my $item = Koha::Items->find($item_id);
@@ -413,14 +413,14 @@ subtest "Tests for advance." => sub {
     isnt($transfer_request->datecancelled, undef, "Conflicting manual transfer was cancelled");
 
     # StockRotationAdvance transfer added
-    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->reason, 'StockrotationAdvance', "StockrotationAdvance transfer added");
     is($transfer_request->frombranch, $srstage_2->branchcode_id, "Origin correct.");
     is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_1->branchcode_id)->store;
 
     # Setup a conflicting reserve transfer
     $item->request_transfer({ to => $srstage_2->branchcode, reason => "Reserve" });
@@ -442,7 +442,7 @@ subtest "Tests for advance." => sub {
     # StockRotationAdvance transfer added
     my $transfer_requests = Koha::Item::Transfers->search(
         {
-            itemnumber    => $sritem_1->itemnumber->itemnumber,
+            itemnumber    => $sritem_1->item->itemnumber,
             datearrived   => undef,
             datecancelled => undef
         }
@@ -451,17 +451,17 @@ subtest "Tests for advance." => sub {
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_2->branchcode_id)->store;
 
     # StockRotationAdvance transfer added
-    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->reason, 'StockrotationAdvance', "StockrotationAdvance transfer remains after reserve is met");
     is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
     is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target correct.");
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_2->branchcode_id)->store;
 
     # Checked out item, advanced to next stage, checkedout from next stage
     # transfer should be generated, but not initiated
@@ -502,7 +502,7 @@ subtest "Tests for advance." => sub {
 
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_3->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_3->branchcode_id)->store;
 
     # Advance again, Remove from rota.
     ok($sritem_1->advance, "Non-cyclical advance.");
@@ -543,8 +543,8 @@ subtest "Tests for investigate (singular)." => sub {
         }
     );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id)->store;
     is($dbitem->investigate->{reason}, 'initiation', "fresh item at stagebranch initiates.");
 
     # Test item not at stagebranch with branchtransfer history ['repatriation']
@@ -560,8 +560,8 @@ subtest "Tests for investigate (singular)." => sub {
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     my $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
-        'frombranch'  => $dbitem->itemnumber->homebranch,
-        'tobranch'    => $dbitem->itemnumber->homebranch,
+        'frombranch'  => $dbitem->item->homebranch,
+        'tobranch'    => $dbitem->item->homebranch,
         'datesent'    => dt_from_string(),
         'datearrived' => dt_from_string(),
         'reason'      => "StockrotationAdvance",
@@ -581,14 +581,14 @@ subtest "Tests for investigate (singular)." => sub {
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
-        'frombranch'  => $dbitem->itemnumber->homebranch,
+        'frombranch'  => $dbitem->item->homebranch,
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => dt_from_string(),
         'datearrived' => dt_from_string(),
         'reason'      => "StockrotationAdvance",
     })->store;
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id)->store;
     is($dbitem->investigate->{reason}, 'not-ready', "older item at stagebranch not-ready.");
 
     # Test item due for advancement ['advancement']
@@ -608,14 +608,14 @@ subtest "Tests for investigate (singular)." => sub {
     my $arrived_duration =  DateTime::Duration->new( days => 52);
     $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
-        'frombranch'  => $dbitem->itemnumber->homebranch,
+        'frombranch'  => $dbitem->item->homebranch,
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => dt_from_string() - $sent_duration,
         'datearrived' => dt_from_string() - $arrived_duration,
         'reason'      => "StockrotationAdvance",
     })->store;
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id)->store;
     is($dbitem->investigate->{reason}, 'advancement',
        "Item ready for advancement.");
 
@@ -636,14 +636,14 @@ subtest "Tests for investigate (singular)." => sub {
     $arrived_duration =  DateTime::Duration->new( days => 52);
     $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
-        'frombranch'  => $dbitem->itemnumber->homebranch,
+        'frombranch'  => $dbitem->item->homebranch,
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => dt_from_string() - $sent_duration,
         'datearrived' => dt_from_string() - $arrived_duration,
         'reason'      => "StockrotationAdvance",
     })->store;
-    $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->homebranch($dbitem->stage->branchcode_id)->store;
+    $dbitem->item->holdingbranch($dbitem->stage->branchcode_id)->store;
     is($dbitem->investigate->{reason}, 'in-demand',
        "Item advances, but in-demand.");
 
@@ -664,7 +664,7 @@ subtest "Tests for investigate (singular)." => sub {
     $arrived_duration =  DateTime::Duration->new( days => 52);
     $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
-        'frombranch'  => $dbitem->itemnumber->homebranch,
+        'frombranch'  => $dbitem->item->homebranch,
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => dt_from_string() - $sent_duration,
         'datearrived' => dt_from_string() - $arrived_duration,
@@ -686,12 +686,12 @@ subtest "Tests for toggle_indemand" => sub {
     });
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     my $firstbranch = $dbitem->stage->branchcode_id;
-    $dbitem->itemnumber->holdingbranch($firstbranch)->store;
+    $dbitem->item->holdingbranch($firstbranch)->store;
     my $dbstage = $dbitem->stage;
     $dbstage->position(1)->duration(50)->store; # Configure stage.
     # Configure item
-    $dbitem->itemnumber->holdingbranch($firstbranch)->store;
-    $dbitem->itemnumber->homebranch($firstbranch)->store;
+    $dbitem->item->holdingbranch($firstbranch)->store;
+    $dbitem->item->homebranch($firstbranch)->store;
     # Sanity check
     is($dbitem->stage->stage_id, $dbstage->stage_id, "Stage sanity check.");
 
@@ -715,7 +715,7 @@ subtest "Tests for toggle_indemand" => sub {
     # Test an item in transfer, toggle cancels transfer and resets indemand.
     ok($dbitem->advance, "Advancement done.");
     $dbitem->get_from_storage;
-    my $transfer = $dbitem->itemnumber->get_transfer;
+    my $transfer = $dbitem->item->get_transfer;
     is(ref($transfer), 'Koha::Item::Transfer', 'Item set to in transfer as expected');
     is($transfer->frombranch, $firstbranch, 'Transfer from set correctly');
     is($transfer->tobranch, $secondbranch, 'Transfer to set correctly');
@@ -727,7 +727,7 @@ subtest "Tests for toggle_indemand" => sub {
     isnt($updated_transfer->datearrived, undef, 'Transfer datearrived set as expected');
     is($dbitem->indemand, 0, "Item retains indemand as expected.");
     is($dbitem->stage_id, $dbstage->id, 'Item stage reset as expected.');
-    is($dbitem->itemnumber->homebranch, $firstbranch, 'Item homebranch reset as expected.');
+    is($dbitem->item->homebranch, $firstbranch, 'Item homebranch reset as expected.');
 
     $schema->storage->txn_rollback;
 };

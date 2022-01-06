@@ -57,15 +57,15 @@ sub _type {
     return 'Stockrotationitem';
 }
 
-=head3 itemnumber
+=head3 item
 
-  my $item = Koha::StockRotationItem->itemnumber;
+  my $item = Koha::StockRotationItem->item;
 
 Returns the item associated with the current stock rotation item.
 
 =cut
 
-sub itemnumber {
+sub item {
     my ( $self ) = @_;
     my $rs = $self->_result->itemnumber;
     return Koha::Item->_new_from_dbic( $rs );
@@ -96,8 +96,8 @@ according to our stockrotation plan.
 
 sub needs_repatriating {
     my ( $self ) = @_;
-    my ( $item, $stage ) = ( $self->itemnumber, $self->stage );
-    if ( $self->itemnumber->get_transfer ) {
+    my ( $item, $stage ) = ( $self->item, $self->stage );
+    if ( $self->item->get_transfer ) {
         return 0;               # We're in transit.
     } elsif ( $item->holdingbranch ne $stage->branchcode_id
                   || $item->homebranch ne $stage->branchcode_id ) {
@@ -117,9 +117,9 @@ Return 1 if this item is ready to be moved on to the next stage in its rota.
 
 sub needs_advancing {
     my ( $self ) = @_;
-    return 0 if $self->itemnumber->get_transfer; # intransfer: don't advance.
+    return 0 if $self->item->get_transfer; # intransfer: don't advance.
     return 1 if $self->fresh;                    # Just on rota: advance.
-    my $completed = $self->itemnumber->_result->branchtransfers->search(
+    my $completed = $self->item->_result->branchtransfers->search(
         { 'reason' => "StockrotationAdvance" },
         { order_by => { -desc => 'datearrived' } }
     );
@@ -136,7 +136,7 @@ sub needs_advancing {
             return 0;
         }
     } else {
-        warn "We have no historical branch transfer for itemnumber " . $self->itemnumber->itemnumber . "; This should not have happened!";
+        warn "We have no historical branch transfer for item " . $self->item->itemnumber . "; This should not have happened!";
     }
 }
 
@@ -157,7 +157,7 @@ sub repatriate {
 
     # Create the transfer.
     my $transfer = try {
-        $self->itemnumber->request_transfer(
+        $self->item->request_transfer(
             {
                 to            => $self->stage->branchcode,
                 reason        => "StockrotationRepatriation",
@@ -168,7 +168,7 @@ sub repatriate {
     };
 
     # Ensure the homebranch is still in sync with the rota stage
-    $self->itemnumber->homebranch( $self->stage->branchcode_id )->store;
+    $self->item->homebranch( $self->stage->branchcode_id )->store;
 
     return defined($transfer) ? 1 : 0;
 }
@@ -194,7 +194,7 @@ pass 'ignore_limits' in the call to request_transfer.
 
 sub advance {
     my ($self)         = @_;
-    my $item           = $self->itemnumber;
+    my $item           = $self->item;
     my $current_branch = $item->holdingbranch;
     my $transfer;
 
@@ -300,7 +300,7 @@ sub toggle_indemand {
 
     # Cancel 'StockrotationAdvance' transfer if one is in progress
     if ($new_indemand) {
-        my $item = $self->itemnumber;
+        my $item = $self->item;
         my $transfer = $item->get_transfer;
         if ($transfer && $transfer->reason eq 'StockrotationAdvance') {
             my $stage = $self->stage;
@@ -334,16 +334,16 @@ generating stockrotation reports about this stockrotationitem.
 sub investigate {
     my ( $self ) = @_;
     my $item_report = {
-        title      => $self->itemnumber->_result->biblioitem
+        title      => $self->item->_result->biblioitem
             ->biblionumber->title,
-        author     => $self->itemnumber->_result->biblioitem
+        author     => $self->item->_result->biblioitem
             ->biblionumber->author,
-        callnumber => $self->itemnumber->itemcallnumber,
-        location   => $self->itemnumber->location,
-        onloan     => $self->itemnumber->onloan,
-        barcode    => $self->itemnumber->barcode,
+        callnumber => $self->item->itemcallnumber,
+        location   => $self->item->location,
+        onloan     => $self->item->onloan,
+        barcode    => $self->item->barcode,
         itemnumber => $self->itemnumber_id,
-        branch => $self->itemnumber->_result->holdingbranch,
+        branch => $self->item->_result->holdingbranch,
         object => $self,
     };
     my $reason;
