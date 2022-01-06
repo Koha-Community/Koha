@@ -738,7 +738,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     if ( $patron ) {
         # Add the valid pickup locations
-        my @pickup_locations = $biblio->pickup_locations({ patron => $patron });
+        my @pickup_locations = $biblio->pickup_locations({ patron => $patron })->as_list;
         $biblioloopiter{pickup_locations} = \@pickup_locations;
         $biblioloopiter{pickup_locations_codes} = [ map { $_->branchcode } @pickup_locations ];
     }
