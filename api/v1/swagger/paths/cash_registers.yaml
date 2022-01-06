@@ -18,6 +18,16 @@
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/q_header"
       - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - manager
+        collectionFormat: csv
     responses:
       "200":
         description: Cashups performed on this register
@@ -58,6 +68,16 @@
     summary: Get cashup
     parameters:
       - $ref: "../swagger.yaml#/parameters/cashup_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - summary
+        collectionFormat: csv
     produces:
       - application/json
     responses:
