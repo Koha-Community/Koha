@@ -871,7 +871,7 @@
     [% Asset.js("js/recalls.js") | $raw %]
     <script>
 
-        columns_settings_issues_table = [% TablesSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
+        table_settings_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
             $("#info_digests").tooltip();

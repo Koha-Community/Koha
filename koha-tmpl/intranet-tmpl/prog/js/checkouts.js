@@ -693,7 +693,7 @@ $(document).ready(function() {
                     .append(ul)
                     .insertBefore(oSettings.nTableWrapper)
             },
-        }, columns_settings_issues_table);
+        }, table_settings_issues_table);
 
         if ( $("#issues-table").length ) {
             $("#issues-table_processing").position({

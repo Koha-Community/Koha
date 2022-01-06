@@ -1305,13 +1305,13 @@
             $(document).ready(function() {
                 $('#suggestiontabs').tabs();
 
-                columns_settings = [% TablesSettings.GetColumns( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+                table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
                 [% FOREACH suggestion IN suggestions %]
                     [% IF ( suggestion.suggestions_loop ) %]
                         KohaTable("table_[% loop.count| html %]", {
                             "sorting": [[ 3, "asc" ]],
                             "autoWidth": false,
-                        }, columns_settings );
+                        }, table_settings );
                     [% END %]
                 [% END %]
 

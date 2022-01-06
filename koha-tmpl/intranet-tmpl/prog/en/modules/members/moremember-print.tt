@@ -210,9 +210,9 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var checkouts_columns = [% TablesSettings.GetColumns( 'circ', 'print_summary', 'print-summary-checkouts', 'json' ) | $raw %];
-        var holds_columns = [% TablesSettings.GetColumns( 'circ', 'print_summary', 'print-summary-holds', 'json' ) | $raw %];
-        var fines_columns = [% TablesSettings.GetColumns( 'circ', 'print_summary', 'print-summary-fines', 'json' ) | $raw %];
+        var checkouts_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-checkouts', 'json' ) | $raw %];
+        var holds_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-holds', 'json' ) | $raw %];
+        var fines_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-fines', 'json' ) | $raw %];
 
         function moveColumnsButton( tableId ){
             /* Hide the export button */

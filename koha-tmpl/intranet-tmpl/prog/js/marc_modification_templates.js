@@ -1,4 +1,4 @@
-/* global __ KohaTable columns_settings */
+/* global __ KohaTable table_settings */
 $(document).ready(function() {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
     window.action_submit_value = $("#action_submit").val();
@@ -110,7 +110,7 @@ $(document).ready(function() {
     });
 
     KohaTable("templatest", {
-    }, columns_settings);
+    }, table_settings);
 
 });
 

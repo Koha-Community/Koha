@@ -179,20 +179,20 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
-        var holdst_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
-        var holdso_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
+        var holdst_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
+        var holdso_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
 
         $(document).ready(function() {
 
             KohaTable("holdst", {
                 "sPaginationType": "full",
                 "order": [[1, 'asc']]
-            }, holdst_columns_settings);
+            }, holdst_table_settings);
 
             KohaTable("holdso", {
                 "sPaginationType": "full",
                 "order": [[1, 'asc']]
-            }, holdso_columns_settings);
+            }, holdso_table_settings);
 
             $('#resultlist').tabs();
 

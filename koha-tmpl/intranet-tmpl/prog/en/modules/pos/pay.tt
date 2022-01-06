@@ -356,12 +356,12 @@
                 sale_table.DataTable().row($(this).parents('tr')).remove().draw(false);
         });
 
-        var items_columns_settings = [% TablesSettings.GetColumns('pos', 'pay', 'invoices', 'json') | $raw %];
+        var items_table_settings = [% TablesSettings.GetTableSettings('pos', 'pay', 'invoices', 'json') | $raw %];
         var items_table = KohaTable("invoices", {
                "sPaginationType": "full",
                "aaSorting": [[ 0, "asc" ]],
                "autoWidth": false
-        }, items_columns_settings, false);
+        }, items_table_settings, false);
 
         $("#invoices").on("click", ".add_button", function(e) {
             e.preventDefault();

@@ -72,7 +72,7 @@ $(document).ready(function() {
         ],
         "sPaginationType": "full",
         "autoWidth": false,
-    }, stock_rotation_items_columns_settings);
+    }, stock_rotation_items_table_settings);
 
     KohaTable("stock_rotation", {
         "aoColumnDefs": [
@@ -81,6 +81,6 @@ $(document).ready(function() {
         ],
         "sPaginationType": "full",
         "autoWidth": false,
-    }, stock_rotation_columns_settings);
+    }, stock_rotation_table_settings);
 
 });

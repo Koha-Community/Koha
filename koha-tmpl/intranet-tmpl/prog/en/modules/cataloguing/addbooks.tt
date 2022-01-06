@@ -314,10 +314,10 @@
                 $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
 
-            columns_settings = [% TablesSettings.GetColumns( 'cataloguing', 'addbooks', 'reservoir-table', 'json' ) | $raw %]
+            var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'addbooks', 'reservoir-table', 'json' ) | $raw %]
             var reservoirt = KohaTable("reservoir-table", {
                 "pagingType": "simple"
-            }, columns_settings );
+            }, table_settings );
         });
 
         /* this function open a popup to search on z3950 server.  */
