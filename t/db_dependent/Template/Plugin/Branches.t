@@ -112,7 +112,7 @@ subtest 'all() tests' => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -167,6 +167,27 @@ subtest 'pickup_locations() tests' => sub {
 
     is( scalar @{$pickup_locations}, 1, 'Only the library returned by $biblio->pickup_locations is returned' );
     is( $pickup_locations->[0]->{branchcode}, $library_2->branchcode, 'Not cheating' );
+
+    subtest 'Koha::Item->pickup_locations and Koha::Biblio->pickup_locations empty tests' => sub {
+
+        plan tests => 2;
+
+        my $biblio_class = Test::MockModule->new('Koha::Biblio');
+        $biblio_class->mock( 'pickup_locations', sub { return Koha::Libraries->new->empty } );
+
+        my $biblio = $builder->build_sample_biblio;
+
+        my @pickup_locations = @{$plugin->pickup_locations({ search_params => { biblio => $biblio->id } })};
+        is( scalar @pickup_locations, 0, 'No pickup locations returned' );
+
+        my $item_class = Test::MockModule->new('Koha::Item');
+        $item_class->mock( 'pickup_locations', sub { return Koha::Libraries->new->empty } );
+
+        my $item = $builder->build_sample_item;
+
+        @pickup_locations = @{$plugin->pickup_locations({ search_params => { item => $item->id } })};
+        is( scalar @pickup_locations, 0, 'No pickup locations returned' );
+    };
 
     subtest 'selected tests' => sub {
 
