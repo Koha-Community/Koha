@@ -272,7 +272,9 @@ sub advance {
         }
     };
     $transfer->receive
-      if $item->holdingbranch eq $new_stage->branchcode_id;  # Already at branch
+      if $item->holdingbranch eq $new_stage->branchcode_id && !$item->checkout;
+      # If item is already at branch, and not checked out
+      # If item is checked out, the return will either receive or initiate the transfer
 
     return $transfer;
 }
