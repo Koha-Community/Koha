@@ -147,7 +147,7 @@ subtest 'set_pickup_location() tests' => sub {
 
 subtest 'is_pickup_location_valid() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -199,6 +199,52 @@ subtest 'is_pickup_location_valid() tests' => sub {
 
     ok( !$item_hold->is_pickup_location_valid({ library_id => $library_1->branchcode }), 'Pickup location invalid');
     ok( $item_hold->is_pickup_location_valid({ library_id => $library_2->id }), 'Pickup location valid' );
+
+    subtest 'pickup_locations() returning ->empty' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+        my $mock_item = Test::MockModule->new('Koha::Item');
+        $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->new->empty; } );
+
+        my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+        $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->new->empty; } );
+
+        my $item   = $builder->build_sample_item();
+        my $biblio = $item->biblio;
+
+        # Test biblio-level holds
+        my $biblio_hold = $builder->build_object(
+            {
+                class => "Koha::Holds",
+                value => {
+                    biblionumber => $biblio->biblionumber,
+                    itemnumber   => undef,
+                }
+            }
+        );
+
+        ok( !$biblio_hold->is_pickup_location_valid({ library_id => $library->branchcode }), 'Pickup location invalid');
+
+        # Test item-level holds
+        my $item_hold = $builder->build_object(
+            {
+                class => "Koha::Holds",
+                value => {
+                    biblionumber => $biblio->biblionumber,
+                    itemnumber   => $item->itemnumber,
+                }
+            }
+        );
+
+        ok( !$item_hold->is_pickup_location_valid({ library_id => $library->branchcode }), 'Pickup location invalid');
+
+        $schema->storage->txn_rollback;
+    };
 
     $schema->storage->txn_rollback;
 };
