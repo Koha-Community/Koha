@@ -111,32 +111,30 @@ sub pickup_locations {
     my $selected      = $params->{selected};
     my @libraries;
 
-    if(defined $search_params->{item} || defined $search_params->{biblio}) {
-        my $item = $search_params->{'item'};
+    if ( defined $search_params->{item} || defined $search_params->{biblio} ) {
+        my $item   = $search_params->{'item'};
         my $biblio = $search_params->{'biblio'};
         my $patron = $search_params->{'patron'};
 
-        unless (! defined $patron || ref($patron) eq 'Koha::Patron') {
+        unless ( !defined $patron || ref($patron) eq 'Koha::Patron' ) {
             $patron = Koha::Patrons->find($patron);
         }
 
         if ($item) {
             $item = Koha::Items->find($item)
               unless ref($item) eq 'Koha::Item';
-            @libraries = $item->pickup_locations( { patron => $patron } )
+            @libraries = $item->pickup_locations( { patron => $patron } )->as_list
               if defined $item;
-        }
-        elsif ($biblio) {
+        } elsif ($biblio) {
             $biblio = Koha::Biblios->find($biblio)
               unless ref($biblio) eq 'Koha::Biblio';
-            @libraries = $biblio->pickup_locations( { patron => $patron } )
+            @libraries = $biblio->pickup_locations( { patron => $patron } )->as_list
               if defined $biblio;
         }
+    } else {
+        @libraries = Koha::Libraries->search( { pickup_location => 1 }, { order_by => ['branchname'] } )
+          unless @libraries;
     }
-
-    @libraries = Koha::Libraries->search( { pickup_location => 1 },
-        { order_by => ['branchname'] } )
-      unless @libraries;
 
     @libraries = map { $_->unblessed } @libraries;
 
