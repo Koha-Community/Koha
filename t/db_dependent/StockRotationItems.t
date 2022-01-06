@@ -273,7 +273,7 @@ subtest "Tests for needs_advancing." => sub {
 };
 
 subtest "Tests for advance." => sub {
-    plan tests => 44;
+    plan tests => 48;
     $schema->storage->txn_begin;
 
     my $sritem_1 = $builder->build_object(
@@ -462,6 +462,30 @@ subtest "Tests for advance." => sub {
     # Arrive at new branch
     $transfer_request->datearrived(dt_from_string())->store;
     $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+
+    # Checked out item, advanced to next stage, checkedout from next stage
+    # transfer should be generated, but not initiated
+    my $issue = $builder->build_object({
+        class => 'Koha::Checkouts',
+        value => {
+             branchcode => $srstage_1->branchcode_id,
+             itemnumber => $sritem_1->itemnumber->itemnumber,
+             returndate => undef
+        }
+    });
+    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+    ok($sritem_1->advance, "Advancement done.");
+    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
+    is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
+    is($transfer_request->datesent, undef, "Transfer waiting to initiate until return.");
+
+    $issue->delete; #remove issue
+    $sritem_1->advance; #advance back to second stage
+    # Set arrived
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+
 
     $srstage_1->rota->cyclical(0)->store;         # Set Rota to non-cyclical.
 
