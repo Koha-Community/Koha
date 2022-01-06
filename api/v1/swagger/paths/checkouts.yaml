@@ -21,6 +21,16 @@
         description: By default, current checkouts are returned, when this is true then
           checked in checkouts are returned as result.
         type: boolean
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - issuer
+        collectionFormat: csv
     produces:
       - application/json
     responses:
@@ -61,6 +71,16 @@
     summary: Get checkout
     parameters:
       - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - issuer
+        collectionFormat: csv
     produces:
       - application/json
     responses:
