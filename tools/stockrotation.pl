@@ -268,7 +268,7 @@ if (!defined $op) {
     $template->param(
         rota_id  => $params{rota_id},
         error    => $params{error},
-        items    => $items,
+        sritems  => $sritems,
         branches => get_branches(),
         stages   => get_stages($rota),
         rota     => $rota,
