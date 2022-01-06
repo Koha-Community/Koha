@@ -1066,7 +1066,7 @@ subtest 'edit() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -1184,6 +1184,24 @@ subtest 'add() tests' => sub {
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
       ->status_is(201);
+
+    # empty cases
+    $mock_biblio->mock( 'pickup_locations', sub {
+        return Koha::Libraries->new->empty;
+    });
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    # empty cases
+    $mock_item->mock( 'pickup_locations', sub {
+        return Koha::Libraries->new->empty;
+    });
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
 
     $schema->storage->txn_rollback;
 };
