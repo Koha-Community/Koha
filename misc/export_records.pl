@@ -100,9 +100,6 @@ if ( $output_format eq 'csv' and not $csv_profile_id ) {
     pod2usage(q|Define a csv profile to export in CSV|);
 }
 
-if ( $timestamp and $record_type ne 'bibs' ) {
-    pod2usage(q|--timestamp can only be used with biblios|);
-}
 
 if ( $record_type ne 'bibs' and $record_type ne 'auths' ) {
     pod2usage(q|--record_type is not valid|);
@@ -210,20 +207,33 @@ if ( $record_type eq 'bibs' ) {
     }
 }
 elsif ( $record_type eq 'auths' ) {
-    my $conditions = {
-        ( $starting_authid or $ending_authid )
+    if ($timestamp) {
+        push @record_ids, $_->{authid} for @{
+            $dbh->selectall_arrayref(
+                q| (
+                SELECT authid
+                FROM auth_header
+                WHERE modification_time >= ?
+            ) |, { Slice => {} }, $timestamp
+            );
+        };
+    } else {
+        my $conditions = {
+            ( $starting_authid or $ending_authid )
             ? (
                 authid => {
                     ( $starting_authid ? ( '>=' => $starting_authid ) : () ),
-                    ( $ending_authid   ? ( '<=' => $ending_authid   ) : () ),
+                    ( $ending_authid   ? ( '<=' => $ending_authid )   : () ),
                 }
-            )
+                )
             : (),
-        ( $authtype ? ( authtypecode => $authtype ) : () ),
-    };
-    # Koha::MetadataRecord::Authority is not a Koha::Object...
-    my $authorities = Koha::Database->new->schema->resultset('AuthHeader')->search( $conditions );
-    @record_ids = map { $_->authid } $authorities->all;
+            ( $authtype ? ( authtypecode => $authtype ) : () ),
+        };
+
+        # Koha::MetadataRecord::Authority is not a Koha::Object...
+        my $authorities = Koha::Database->new->schema->resultset('AuthHeader')->search($conditions);
+        @record_ids = map { $_->authid } $authorities->all;
+    }
 }
 
 @record_ids = uniq @record_ids;
