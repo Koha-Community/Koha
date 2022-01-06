@@ -463,6 +463,9 @@ info:
     "OR" query: `{ "field1": "value2", "field2": "value2" }` will filter the response to only those
     results with both field1 containing value2 AND field2 containing value2 for example.
 
+    Additionally, if you are requesting related data be embedded into the response one can query
+    on the related data using dot notation in the field names.
+
     ### Examples
 
     The following request would return any patron with firstname "Henry" and lastname "Acevedo";
@@ -473,11 +476,23 @@ info:
 
     `curl -u koha:koha --request GET "http://127.0.0.1:8081/api/v1/patrons/" --data-raw "{ "surname": { "-like": "Ace%" }"`
 
-    The following request would return any patron whilse lastname is "Acevedo" OR "Bernardo"
+    The following request would return any patron whose lastname is "Acevedo" OR "Bernardo"
 
     `curl -u koha:koha --request GET "http://127.0.0.1:8081/api/v1/patrons/" --data-raw "{ "surname": [ "Acevedo", "Bernardo" ] }"`
 
+    The following request embeds the related patron extended attributes data and filters on it.
+
+    `curl -u koha:koha =--request GET 'http://127.0.0.1:8081/api/v1/patrons/' --header 'x-koha-embed: extended_attributes' --data-raw '{ "extended_attributes.code": "internet", "extended_attributes.attribute": "1" }'`
+
     ## Special headers
+
+    ### x-koha-embed
+
+    This optional header allows the api consumer to request additional related data
+    to be returned in the api response.  It also allows for cross referencing in the
+    queries as described above. It accepts a comma delimited list of relation names.
+
+    Relations may on occasion also support dot delimited nesting to allow traversal.
 
     ### x-koha-library
 
