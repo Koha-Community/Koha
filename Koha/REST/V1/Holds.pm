@@ -149,13 +149,13 @@ sub add {
             $valid_pickup_location =
               any { $_->branchcode eq $pickup_library_id }
             $item->pickup_locations(
-                { patron => $patron } );
+                { patron => $patron } )->as_list;
         }
         else {
             $valid_pickup_location =
               any { $_->branchcode eq $pickup_library_id }
             $biblio->pickup_locations(
-                { patron => $patron } );
+                { patron => $patron } )->as_list;
         }
 
         return $c->render(
