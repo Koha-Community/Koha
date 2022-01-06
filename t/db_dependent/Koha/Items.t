@@ -1587,7 +1587,7 @@ $schema->storage->txn_rollback;
 
 subtest 'filter_by_visible_in_opac() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -1687,6 +1687,18 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         3,
         'No rules passed, hidelostitems set, patron exception changes nothing'
     );
+
+    $rules = { biblionumber => [ $biblio->biblionumber ] };
+    is(
+        $biblio->items->filter_by_visible_in_opac->count,
+        0,
+        'Biblionumber rule successfully hides all items'
+    );
+
+    my $biblio2 = $builder->build_sample_biblio;
+    $rules = { biblionumber => [ $biblio2->biblionumber ] };
+    my $prefetched = $biblio->items->search({},{ prefetch => ['branchtransfers','reserves'] })->filter_by_visible_in_opac;
+    ok( $prefetched->next, "Can retrieve object when prefetching and hiding on a duplicated column");
 
     $rules = { withdrawn => [ 1, 2 ], copynumber => [ 2 ] };
     is(

@@ -147,11 +147,12 @@ $schema->storage->txn_rollback;
 
 subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
 
-    plan tests => 20;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
 
     # Have two known libraries for testing purposes
     my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
@@ -174,6 +175,14 @@ subtest 'buildKohaItemsNamespace() including/omitting items tests' => sub {
     like(   $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
     like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
     unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+
+    t::lib::Mocks::mock_preference('OpacHiddenItems', 'biblionumber: ['.$biblio2->biblionumber.']');
+    my $hid_rs = $biblio->items->search({ "me.itemnumber" => { '!=' => $item_3->itemnumber } })->filter_by_visible_in_opac();
+    $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, undef, $hid_rs );
+    like(   $xml, qr{<homebranch>$library_1_name</homebranch>}, '$item_1 present in the XML' );
+    like(   $xml, qr{<homebranch>$library_2_name</homebranch>}, '$item_2 present in the XML' );
+    unlike( $xml, qr{<homebranch>$library_3_name</homebranch>}, '$item_3 not present in the XML' );
+
     ## Test passing one item in hidden_items and items_rs
     $xml = C4::XSLT::buildKohaItemsNamespace( $biblio->biblionumber, [ $item_1->itemnumber ], $items_rs->reset );
 
