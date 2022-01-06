@@ -11,4 +11,4 @@ return {
         # Print useful stuff here
         say $out "Update is going well so far";
     },
-}
+};
