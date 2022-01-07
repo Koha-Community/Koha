@@ -102,10 +102,16 @@ binmode(STDOUT);
 my $type = $input->param('type') || 'Code39';
 my $barcode = $input->param('barcode');
 my $notext = $input->param('notext') ? 1 : 0;
+my $height = $input->param('height') || 50;
+my $qrcode_modulesize = $input->param('modulesize') || "5"; # 1+
 my $image;
 
 eval {
-    $image = GD::Barcode->new( $type, $barcode )->plot( NoText => $notext )->png();
+    if( $type eq "QRcode" ){
+        $image = GD::Barcode->new('QRcode', $barcode, { Ecc => "M", ModuleSize => $qrcode_modulesize } )->plot->png();
+    } else {
+        $image = GD::Barcode->new( $type, $barcode )->plot( NoText => $notext, Height => $height )->png();
+    }
 };
 
 if ( $@ ) {
