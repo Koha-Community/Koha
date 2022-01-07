@@ -286,7 +286,7 @@ my $patron = Koha::Patrons->find( $borrowernumber_hold );
 if ( $patron && $multi_hold ) {
     my @multi_pickup_locations =
       Koha::Biblios->search( { biblionumber => \@biblionumbers } )
-      ->pickup_locations( { patron => $patron } );
+      ->pickup_locations( { patron => $patron } )->as_list;
     $template->param( multi_pickup_locations => \@multi_pickup_locations );
 }
 
