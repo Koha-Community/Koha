@@ -73,6 +73,7 @@
     [% IF ( CAN_user_tools_label_creator ) %]
 	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
 	<li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
+    <li><a href="/cgi-bin/koha/labels/barcode-print.pl">Barcode image generator</a></li>
     [% END %]
     [% IF ( CAN_user_tools_rotating_collections ) %]
     <li><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></li>

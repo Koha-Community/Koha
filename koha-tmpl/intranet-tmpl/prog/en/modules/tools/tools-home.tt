@@ -224,7 +224,12 @@
     <dt><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></dt>
     <dd>Create printable labels and barcodes from catalog data</dd>
     [% END %]
-    
+
+    [% IF ( CAN_user_tools_label_creator ) %]
+    <dt><a href="/cgi-bin/koha/labels/barcode-print.pl">Barcode image generator</a></dt>
+    <dd>Configure and create barcodes of various types to be output as an image</dd>
+    [% END %]
+
     [% IF ( CAN_user_tools_label_creator ) %]
     <dt><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></dt>
     <dd>Enter a barcode to generate a printable spine label. For use with dedicated label printers</dd>

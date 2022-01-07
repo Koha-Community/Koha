@@ -712,6 +712,12 @@ fieldset {
         }
 
         li {
+            margin-top: 1em;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
             &[aria-disabled="true"] {
                 color: #999;
             }
@@ -908,10 +914,6 @@ fieldset {
                     padding-left: 0;
                 }
             }
-
-            legend {
-                margin-bottom: 0;
-            }
         }
 
         ol {
@@ -1037,6 +1039,7 @@ legend {
     border-radius: 3px;
     font-size: 123.1%;
     font-weight: bold;
+    margin-bottom: 0;
     padding: .2em .5em;
     width: auto;
 }

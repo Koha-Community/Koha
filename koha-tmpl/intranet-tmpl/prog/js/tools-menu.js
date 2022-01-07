@@ -1,6 +1,6 @@
   $(document).ready(function() {
       var path = location.pathname.substring(1);
-      if (path.indexOf("labels") >= 0 && path.indexOf("spine") < 0 ) {
+      if (path.indexOf("labels") >= 0 && path.indexOf("spine") < 0 && path.indexOf("barcode") < 0 ) {
         $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
       } else if (path.indexOf("patroncards") >= 0 ) {
         $('#navmenulist a[href$="/cgi-bin/koha/patroncards/home.pl"]').addClass("current");
