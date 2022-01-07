@@ -19,7 +19,7 @@
     <xsl:key name="index_data_field_tag"    match="kohaidx:index_data_field"    use="@tag"/>
     <xsl:key name="index_heading_conditional_tag" match="kohaidx:index_heading_conditional" use="@tag"/>
     <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
-    <xsl:key name="index_sort_title_tag"          match="kohaidx:index_sort_title" use="@tag"/>
+    <xsl:key name="index_sort_title_tag"    match="kohaidx:index_sort_title"    use="@tag"/>
 
     <xsl:template match="kohaidx:index_defs">
     <xsl:comment>
@@ -40,7 +40,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xslo:template match="text()" mode="index_heading_conditional"/>
             <xslo:template match="text()" mode="index_match_heading"/>
             <xslo:template match="text()" mode="index_subject_thesaurus"/>
+        <xsl:if test="//kohaidx:index_sort_title">
             <xslo:template match="text()" mode="index_sort_title"/>
+        </xsl:if>
             <xslo:template match="/">
                 <xslo:if test="marc:collection">
                     <collection>
@@ -67,7 +69,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
                     <xslo:apply-templates mode="index_all"/>
+                <xsl:if test="//kohaidx:index_sort_title">
                     <xslo:apply-templates mode="index_sort_title"/>
+                </xsl:if>
                 </z:record>
             </xslo:template>
 
