@@ -55,6 +55,7 @@ use WWW::CSRF ();
 use Mojo::JWT;
 use Digest::MD5 qw(md5_base64);
 use Encode qw( encode );
+use C4::Context;
 use Koha::Exceptions::Token;
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
