@@ -14,4 +14,4 @@ INSERT INTO account_debit_types ( code, description, can_be_invoiced, can_be_sol
 ('RESERVE', 'Hold fee', 0, 0, NULL, 1),
 ('RESERVE_EXPIRED', 'Hold waiting too long', 0, 0, NULL, 1),
 ('VOID', 'Credit has been voided', 0, 0, NULL, 1),
-('ARTICLE_REQUEST', 'Article scan request fee', 0, 0, NULL, 1);
+('ARTICLE_REQUEST', 'Article request fee', 0, 0, NULL, 1);

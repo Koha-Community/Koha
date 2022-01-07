@@ -27,7 +27,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO account_debit_types ( code, description, can_be_invoiced, can_be_sold, default_amount, is_system )
-            VALUES ('ARTICLE_REQUEST', 'Article scan request fee', 0, 0, NULL, 1);
+            VALUES ('ARTICLE_REQUEST', 'Article request fee', 0, 0, NULL, 1);
         }
         );
     },

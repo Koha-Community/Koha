@@ -13,7 +13,7 @@
     [%- SWITCH debit_type_code -%]
         [%- CASE 'ACCOUNT'          -%]Account creation fee
         [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
-        [%- CASE 'ARTICLE_REQUEST'  -%]Article scan request fee
+        [%- CASE 'ARTICLE_REQUEST'  -%]Article request fee
         [%- CASE 'LOST'             -%]Lost item
         [%- CASE 'MANUAL'           -%]Manual fee
         [%- CASE 'NEW_CARD'         -%]New card
