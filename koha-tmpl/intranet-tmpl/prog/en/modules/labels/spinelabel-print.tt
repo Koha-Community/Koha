@@ -26,6 +26,7 @@
             </div>
             <div id="print_button" class="noprint">
                 <button class="btn btn-default print-label"><i class="fa fa-print"></i> Print this label</button>
+                <button class="btn btn-default edit-label"><i class="fa fa-lock"></i> Edit this label</button>
             </div>
 	[% END %]
 
@@ -45,6 +46,12 @@
         $(".close-window").on("click", function(e){
             e.preventDefault();
             window.close();
+        });
+        $('.edit-label').click( function() {
+                $('#spinelabel').attr('contenteditable', function(index, attr){
+                    return attr == 'true' ? null : 'true';
+                });
+                $('.edit-label .fa').toggleClass('fa-lock').toggleClass('fa-unlock');
         });
     });
 </script>
