@@ -131,7 +131,6 @@ my $patron_attrs = Koha::Patron::Attribute::Types->search_with_library_limits(
 
 my $ordinal = 0;
 while (my $attr = $patron_attrs->next ) {
-    warn $attr->code;
     my $row = {
         code => $attr->code,
         description => $attr->description,
