@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'all() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -67,6 +67,9 @@ subtest 'all() tests' => sub {
 
     $name = $plugin->GetName(undef);
     is($name, '', 'received empty string as name of NULL/undefined library code');
+
+    $name = $plugin->GetName(q{});
+    is($name, '', 'received empty string as name of empty string library code');
 
     is($plugin->GetLoggedInBranchcode(), '', 'no active library code if there is no active user session');
     is($plugin->GetLoggedInBranchname(), '', 'no active library name if there is no active user session');
