@@ -348,7 +348,7 @@ sub getlanguagecookie {
         -name    => 'KohaOpacLanguage',
         -value   => $language,
         -HttpOnly => 1,
-        -expires => '+3y'
+        -expires => '+3y',
         -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
     );
 
