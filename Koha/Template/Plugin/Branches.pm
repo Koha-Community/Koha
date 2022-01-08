@@ -30,6 +30,8 @@ use Koha::Libraries;
 
 sub GetName {
     my ( $self, $branchcode ) = @_;
+    return q{} unless defined $branchcode;
+    return q{} if $branchcode eq q{};
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
     my $cache_key    = "Library_branchname:" . $branchcode;
