@@ -133,7 +133,7 @@
 
                                     <h3>[% subscription_LOO.branchname | html %]</h3>
                                     [% IF ( subscription_LOO.location ) %]
-                                        <p>Location : <em>[% AuthorisedValues.GetByCode( 'LOC', subscription_LOO.location, 1 ) | html | html_line_break %]</em></p>
+                                        <p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription_LOO.location, opac => 1 ) | html %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.notes ) %]
