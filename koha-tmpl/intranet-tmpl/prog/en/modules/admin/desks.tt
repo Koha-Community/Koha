@@ -180,7 +180,7 @@
                     <th>Desk ID</th>
                     <th>Desk</th>
                     <th>Library</th>
-                    <th>Action</th>
+                    <th class="nosort">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -220,12 +220,10 @@
     <script>
         $(document).ready(function() {
             $("#table_desks").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                "order": [[ 1, "asc" ]],
+                "columnDefs": [
+                    { "orderable": false, "searchable": false, 'targets': ['nosort'] },
                 ],
-                "aaSorting": [[ 1, "asc" ]],
-                "iDisplayLength": 10,
-                "sPaginationType": "full_numbers"
             }));
         });
     </script>
