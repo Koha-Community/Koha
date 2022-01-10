@@ -40,12 +40,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
-
 my $op                         = $query->param("op");
 my $privacy                    = $query->param("privacy");
 my $privacy_guarantor_checkouts = $query->param("privacy_guarantor_checkouts");
 my $privacy_guarantor_fines     = $query->param("privacy_guarantor_fines");
+
+my $patron = Koha::Patrons->find( $borrowernumber );
 
 if ( $op eq "update_privacy" ) {
     if ( $patron ) {
@@ -69,10 +69,7 @@ elsif ( $op eq "delete_record" ) {
     if ( $all or $checkouts ) {
 
         # delete all reading records for items returned
-        my $rows = eval {
-            Koha::Patrons->search( { 'me.borrowernumber' => $borrowernumber } )
-              ->anonymise_issue_history;
-        };
+        my $rows = eval { $patron->old_checkouts->anonymize + 0 };
 
         $template->param(
             (
