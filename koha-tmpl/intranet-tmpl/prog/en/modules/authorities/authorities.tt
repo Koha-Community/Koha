@@ -210,7 +210,7 @@
 
             [% END %]
         </ol>
-    </nav>
+    </nav> <!-- /#breadcrumbs -->
 
     <div class="main container-fluid">
         <div class="row">
@@ -235,7 +235,7 @@
                             <button class="new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-save"></i> No: Save as new authority</button>
                         </form>
                     </div>
-                [% END %]
+                [% END # /IF duplicateauthid %]
 
                 <form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
                     <input type="hidden" name="op" value="add" />
@@ -262,7 +262,7 @@
                                 <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
                             [% END %]
                         </div>
-                    </div>
+                    </div> <!-- /#toolbar -->
 
                     <div id="authoritytabs" class="toptabs numbered">
                         <ul>
@@ -334,7 +334,7 @@
                                                             size="1"
                                                             maxlength="1"
                                                             value="[% innerloo.indicator2 | html %]" />
-                                                    [% END %] -
+                                                    [% END # /IF ( innerloo.fixedfield ) %] -
                                                 [% ELSE %]
                                                     [% IF ( innerloo.fixedfield ) %]
                                                         <input type="hidden"
@@ -354,8 +354,8 @@
                                                             tabindex="1"
                                                             name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
                                                             value="[% innerloo.indicator2 | html %]" />
-                                                    [% END %]
-                                                [% END %]
+                                                    [% END # /IF ( innerloo.fixedfield ) %]
+                                                [% END # /UNLESS hide_marc %]
 
                                                 [% UNLESS advancedMARCEditor %]
                                                     <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib | html %]</a>
@@ -393,7 +393,7 @@
                                                             <input type="hidden"
                                                                 name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
                                                                 value="[% subfield_loo.subfield | html %]" />
-                                                        [% END %]
+                                                        [% END # /UNLESS hide_marc %]
 
                                                         [% UNLESS advancedMARCEditor %]
                                                             [% IF ( subfield_loo.mandatory ) %]
@@ -408,8 +408,8 @@
                                                                 [% END %]
                                                                     [% subfield_loo.marc_lib | $raw %]
                                                                 </label>
-                                                            </div>
-                                                        [% END %]
+                                                            </div> <!-- /.subfield -->
+                                                        [% END # UNLESS advancedMARCEditor %]
 
                                                         [% SET mv = subfield_loo.marc_value %]
                                                         <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
@@ -439,8 +439,8 @@
                                                                 <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                                                             [% ELSIF ( mv.type == 'hidden_simple' ) %]
                                                                 <input type="hidden" name="[%- mv.name | html -%]" />
-                                                            [% END %]
-                                                        </div>
+                                                            [% END # /IF mv.type %]
+                                                        </div> <!-- /.field_marceditor -->
 
                                                         [% IF ( subfield_loo.mandatory ) %]
                                                             <div class="subfield_loop_mandatory">
@@ -458,7 +458,7 @@
                                                                     <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
                                                                 [% END %]
                                                                 [% mv.javascript | $raw %]
-                                                            [% END %]
+                                                            [% END #/IF ( mv.type == 'text1' ) %]
                                                             [% IF ( subfield_loo.repeatable ) %]
                                                                 <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
                                                                     <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
@@ -466,19 +466,18 @@
                                                                 <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]'); return false;">
                                                                     <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
                                                                 </a>
-                                                            [% END %]
-                                                        </div>
-                                                    </li>
-                                                    <!-- End of the line -->
-                                                [% END %]
+                                                            [% END # /IF ( subfield_loo.repeatable ) %]
+                                                        </div> <!-- /.subfield_controls -->
+                                                    </li> <!-- /.subfield_line -->
+                                                [% END # /FOREACH subfield_loo %]
                                             </ul> <!-- /.sortable_subfield -->
-                                        </li>
-                                    [% END %]<!-- if innerloo.tag -->
-                                [% END %]<!-- BIG_LOO.innerloop -->
+                                        </li> <!-- /.tag -->
+                                    [% END # /IF ( innerloo.tag ) %]
+                                [% END # /FOREACH innerloo %]
                                 </ul> <!-- /.sortable_field -->
-                            </div>
-                        [% END %]<!-- BIG_LOOP -->
-                    </div><!-- tabs -->
+                            </div> <!-- /#tab[% BIG_LOO.number | html %]XX -->
+                        [% END #/FOREACH BIG_LOO %]
+                    </div> <!-- /#authoritytabs -->
 
                     <div name="hidden" id="hidden" class="tab">
                         [% FOREACH hidden_loo IN hidden_loop %]
@@ -488,7 +487,7 @@
                             <input type="hidden" name="kohafield" value="[% hidden_loo.kohafield | html %]" />
                             <input type="hidden" name="tag_mandatory" value="[% hidden_loo.tag_mandatory | html %]" />
                         [% END %]
-                    </div>
+                    </div> <!-- /.tab -->
                     [% IF ( oldauthnumtagfield ) %]
                         <input type="hidden" name="tag" value="[% oldauthnumtagfield | html %]" />
                         <input type="hidden" name="subfield" value="[% oldauthnumtagsubfield | html %]" />
