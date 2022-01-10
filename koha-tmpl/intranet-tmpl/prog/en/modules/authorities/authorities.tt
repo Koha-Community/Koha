@@ -21,7 +21,17 @@
     });
     var Sticky;
     $(document).ready(function() {
-        var tabs = $('#authoritytabs').tabs();
+        var tabs = $('#authoritytabs').tabs().bind('show.ui-tabs', function(e, ui) {
+            $("#"+ui.panel.id+" input:eq(0)").focus();
+        });
+
+        $( "ul.sortable_field", tabs ).sortable();
+        $( "ul.sortable_subfield", tabs ).sortable();
+
+        [% IF tab %]
+            link = $("a[href='#[% tab | html %]']");
+            selectTab( link );
+        [% END %]
         $( "ul.sortable_field", tabs ).sortable();
         $( "ul.sortable_subfield", tabs ).sortable();
         Sticky = $("#toolbar");
@@ -42,7 +52,59 @@
             }
             return false;
         });
+        $(".toolbar-tabs a").on("click",function(e){
+            e.preventDefault();
+            selectTab( $(this ) );
+        });
+
+        $(".tag_anchor").on("click", function(e){
+            e.preventDefault();
+            $(".tag_anchor").removeClass("selected");
+            $(this).addClass("selected");
+            var link = this.href;
+            var linkid = link.substring( link.indexOf("#") + 1 );
+            window.scrollTo( 0, getScrollto( linkid, "toolbar" ) );
+        });
+
+        $("body").on("click", ".linkfield", function(e){
+            e.preventDefault();
+            var tab = $(this).data("tab");
+            var field = $(this).data("field");
+            var tablink = $("a[data-tabid='" + tab + "']" );
+            selectTab( tablink );
+            window.scrollTo( 0, getScrollto( field, "toolbar" ) );
+        });
     });
+
+    function selectTab( tablink ){
+        $(".toolbar-tabs li").removeClass("selected");
+        tablink.parent().addClass("selected");
+        var tabid = tablink.data("tabid");
+        $('#authoritytabs').selectTabByID("#tab" + tabid + "XX");
+        $(".tag_anchors").removeClass("tab_selected").hide();
+        $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
+    }
+
+    /**
+    * Returns a roughly ideal position to scroll an element into view
+    * @param {string} target - The HTML id of the element to scroll into view
+    * @param {string} elemid - The HTML id of the element which might obscure
+    *                          the view of the target element e.g. a floating toolbar
+    * @return {number} - The y-coordinate to pass to window.scrollTo()
+    */
+    function getScrollto( target, elemid ){
+        var dest = $("#" + target );
+        var yoffset = dest.offset();
+
+        if( elemid != "" ){
+            var element = $("#" + elemid );
+            var elem_height = element.outerHeight();
+        } else {
+            elem_height = 0;
+        }
+        return yoffset.top - elem_height - 20;
+    }
+
 
     /**
     * check if z3950 mandatories are set or not
@@ -261,6 +323,33 @@
                             [% ELSE %]
                                 <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
                             [% END %]
+                        </div>
+                        <div class="toolbar-tabs-container">
+                            [% IF ( BIG_LOOP && BIG_LOOP.size > 1 ) %]
+                                <ul class="toolbar-tabs">
+                                    [%- FOREACH BIG_LOO IN BIG_LOOP -%]
+                                        [% IF loop.first %]
+                                            <li class="selected">
+                                        [% ELSE %]
+                                            <li>
+                                        [% END %]
+                                            <a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% BIG_LOO.number | html %]</a>
+                                        </li>
+                                    [%- END -%]
+                                </ul>
+                            [% END %]
+                            <ul class="tag_anchors_list">
+                                [% FOREACH BIG_LOO IN BIG_LOOP %]
+                                    [% IF loop.first %][% SET tab_selected = "tab_selected" %][% ELSE %][% SET tab_selected = "" %][% END %]
+                                    [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                                        [% IF ( innerloo.tag ) %]
+                                            <li class="tag_anchors tag_anchors_[% BIG_LOO.number | html %] [% tab_selected | html %]">
+                                                <a class="tag_anchor" id="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" href="#div_indicator_tag_[% innerloo.tag | uri %]_[% innerloo.index | uri %][% innerloo.random | uri %]">[% innerloo.tag | uri %]</a>
+                                            </li>
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+                            </ul>
                         </div>
                     </div> <!-- /#toolbar -->
 
