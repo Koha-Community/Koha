@@ -241,7 +241,7 @@ if ( $query->param('place_reserve') ) {
 
         my $item = $itemNum ? Koha::Items->find( $itemNum ) : undef;
         # When choosing a specific item, the default pickup library should be dictated by the default hold policy
-        if ( ! C4::Context->preference("OPACAllowUserToChooseBranch") && $itemNum ) {
+        if ( ! C4::Context->preference("OPACAllowUserToChooseBranch") && $item ) {
             my $type = $item->effective_itemtype;
             my $rule = GetBranchItemRule( $patron->branchcode, $type );
 
@@ -256,7 +256,7 @@ if ( $query->param('place_reserve') ) {
         }
 
 #item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
-        if ( $itemNum ) {
+        if ( $item ) {
             my $hostbiblioNum = $item->biblio->biblionumber;
             if ( $hostbiblioNum ne $biblioNum ) {
                 $biblioNum = $hostbiblioNum;
@@ -278,7 +278,7 @@ if ( $query->param('place_reserve') ) {
 
         my $rank = $biblioData->{rank};
         my $patron = Koha::Patrons->find( $borrowernumber );
-        if ( $itemNum ) {
+        if ( $item ) {
             $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
         }
         else {
