@@ -99,16 +99,14 @@ subtest 'sms_provider' => sub {
 };
 
 subtest 'guarantees' => sub {
-    plan tests => 13;
+
+    plan tests => 9;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test|test2' );
 
     my $guarantees = $new_patron_1->guarantee_relationships;
     is( ref($guarantees), 'Koha::Patron::Relationships', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee relationships' );
-    my @guarantees = $new_patron_1->guarantee_relationships;
-    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantee_relationships should return an array in a list context' );
-    is( scalar(@guarantees), 0, 'new_patron_1 should have 0 guarantee' );
 
     my $guarantee_1 = $builder->build({ source => 'Borrower' });
     my $relationship_1 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->id, guarantee_id => $guarantee_1->{borrowernumber}, relationship => 'test' } )->store();
@@ -118,10 +116,8 @@ subtest 'guarantees' => sub {
     $guarantees = $new_patron_1->guarantee_relationships;
     is( ref($guarantees), 'Koha::Patron::Relationships', 'Koha::Patron->guarantee_relationships should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 2, 'new_patron_1 should have 2 guarantees' );
-    @guarantees = $new_patron_1->guarantee_relationships;
-    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantee_relationships should return an array in a list context' );
-    is( scalar(@guarantees), 2, 'new_patron_1 should have 2 guarantees' );
-    $_->delete for @guarantees;
+
+    $guarantees->delete;
 
     #Test return order of guarantees BZ 18635
     my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
@@ -246,7 +242,9 @@ subtest 'category' => sub {
 };
 
 subtest 'siblings' => sub {
-    plan tests => 7;
+
+    plan tests => 6;
+
     my $siblings = $new_patron_1->siblings;
     is( $siblings, undef, 'Koha::Patron->siblings should not crashed if the patron has no guarantor' );
     my $guarantee_1 = $builder->build( { source => 'Borrower' } );
@@ -254,8 +252,6 @@ subtest 'siblings' => sub {
     my $retrieved_guarantee_1 = Koha::Patrons->find($guarantee_1);
     $siblings = $retrieved_guarantee_1->siblings;
     is( ref($siblings), 'Koha::Patrons', 'Koha::Patron->siblings should return a Koha::Patrons result set in a scalar context' );
-    my @siblings = $retrieved_guarantee_1->siblings;
-    is( ref( \@siblings ), 'ARRAY', 'Koha::Patron->siblings should return an array in a list context' );
     is( $siblings->count,  0,       'guarantee_1 should not have siblings yet' );
     my $guarantee_2 = $builder->build( { source => 'Borrower' } );
     my $relationship_2 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->borrowernumber, guarantee_id => $guarantee_2->{borrowernumber}, relationship => 'test' } )->store();

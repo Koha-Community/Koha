@@ -547,7 +547,7 @@ sub marc_records_to_documents {
 
     my %auth_match_headings;
     if( $self->index eq 'authorities' ){
-        my @auth_types = Koha::Authority::Types->search();
+        my @auth_types = Koha::Authority::Types->search->as_list;
         %auth_match_headings = map { $_->authtypecode => $_->auth_tag_to_report } @auth_types;
     }
 

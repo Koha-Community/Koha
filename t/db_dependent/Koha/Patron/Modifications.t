@@ -223,7 +223,7 @@ subtest 'approve tests' => sub {
     my @patron_attributes
         = map { $_->unblessed }
         Koha::Patron::Attributes->search(
-        { borrowernumber => $patron->borrowernumber } );
+        { borrowernumber => $patron->borrowernumber } )->as_list;
 
     is( $patron_attributes[0]->{code},
         'CODE_1', 'Untouched attribute type is preserved (code)' );

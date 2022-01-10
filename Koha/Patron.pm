@@ -518,10 +518,10 @@ sub relationships_debt {
         Koha::Exceptions::BadParameter->throw( { parameter => 'only_this_guarantor' } ) unless @guarantors;
     } elsif ( $self->guarantor_relationships->count ) {
         # I am a guarantee, just get all my guarantors
-        @guarantors = $self->guarantor_relationships->guarantors;
+        @guarantors = $self->guarantor_relationships->guarantors->as_list;
     } else {
         # I am a guarantor, I need to get all the guarantors of all my guarantees
-        @guarantors = map { $_->guarantor_relationships->guarantors } $self->guarantee_relationships->guarantees;
+        @guarantors = map { $_->guarantor_relationships->guarantors->as_list } $self->guarantee_relationships->guarantees->as_list;
     }
 
     my $non_issues_charges = 0;
@@ -530,7 +530,7 @@ sub relationships_debt {
         $non_issues_charges += $guarantor->account->non_issues_charges if $include_guarantors && !$seen->{ $guarantor->id };
 
         # We've added what the guarantor owes, not added in that guarantor's guarantees as well
-        my @guarantees = map { $_->guarantee } $guarantor->guarantee_relationships();
+        my @guarantees = map { $_->guarantee } $guarantor->guarantee_relationships->as_list;
         my $guarantees_non_issues_charges = 0;
         foreach my $guarantee (@guarantees) {
             next if $seen->{ $guarantee->id };
@@ -583,12 +583,12 @@ Returns the siblings of this patron.
 sub siblings {
     my ($self) = @_;
 
-    my @guarantors = $self->guarantor_relationships()->guarantors();
+    my @guarantors = $self->guarantor_relationships()->guarantors()->as_list;
 
     return unless @guarantors;
 
     my @siblings =
-      map { $_->guarantee_relationships()->guarantees() } @guarantors;
+      map { $_->guarantee_relationships()->guarantees()->as_list } @guarantors;
 
     return unless @siblings;
 
@@ -596,7 +596,7 @@ sub siblings {
     @siblings =
       grep { !$seen{ $_->id }++ && ( $_->id != $self->id ) } @siblings;
 
-    return wantarray ? @siblings : Koha::Patrons->search( { borrowernumber => { -in => [ map { $_->id } @siblings ] } } );
+    return Koha::Patrons->search( { borrowernumber => { -in => [ map { $_->id } @siblings ] } } );
 }
 
 =head3 merge_with
@@ -1357,11 +1357,7 @@ sub first_valid_email_address {
 sub get_club_enrollments {
     my ( $self, $return_scalar ) = @_;
 
-    my $e = Koha::Club::Enrollments->search( { borrowernumber => $self->borrowernumber(), date_canceled => undef } );
-
-    return $e if $return_scalar;
-
-    return wantarray ? $e->as_list : $e;
+    return Koha::Club::Enrollments->search( { borrowernumber => $self->borrowernumber(), date_canceled => undef } );
 }
 
 =head3 get_enrollable_clubs
@@ -1378,11 +1374,7 @@ sub get_enrollable_clubs {
 
     $params->{borrower} = $self;
 
-    my $e = Koha::Clubs->get_enrollable($params);
-
-    return $e if $return_scalar;
-
-    return wantarray ? $e->as_list : $e;
+    return Koha::Clubs->get_enrollable($params);
 }
 
 =head3 account_locked

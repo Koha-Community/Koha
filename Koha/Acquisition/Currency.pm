@@ -47,7 +47,7 @@ sub store {
                     currency => { '!=' => $self->currency },
                     active => 1,
                 }
-            );
+            )->as_list;
             for my $currency ( @currencies ) {
                 $currency->active(0);
                 $currency->store;

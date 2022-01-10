@@ -456,10 +456,10 @@ sub _convert_facets {
 
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
-    my @itypes = Koha::ItemTypes->search;
-    my @libraries = Koha::Libraries->search;
+    my @itypes = Koha::ItemTypes->search->as_list;
+    my @libraries = Koha::Libraries->search->as_list;
     my $library_names = { map { $_->branchcode => $_->branchname } @libraries };
-    my @locations = Koha::AuthorisedValues->search( { category => 'LOC' } );
+    my @locations = Koha::AuthorisedValues->search( { category => 'LOC' } )->as_list;
     my $opac = C4::Context->interface eq 'opac' ;
     my %special = (
         itype    => { map { $_->itemtype         => $_->description } @itypes },

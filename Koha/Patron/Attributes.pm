@@ -97,7 +97,7 @@ sub merge_and_replace_with {
     my ( $self, $new_attributes ) = @_;
 
     my @existing_attributes = @{$self->unblessed};
-    my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search };
+    my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search->as_list };
     my @new_attributes;
     for my $attr ( @$new_attributes ) {
 

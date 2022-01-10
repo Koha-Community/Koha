@@ -285,7 +285,7 @@ sub void {
     # Find any applied offsets for the credit so we may reverse them
     my @account_offsets =
       Koha::Account::Offsets->search(
-        { credit_id => $self->id, amount => { '<' => 0 }  } );
+        { credit_id => $self->id, amount => { '<' => 0 }  } )->as_list;
 
     my $void;
     $self->_result->result_source->schema->txn_do(

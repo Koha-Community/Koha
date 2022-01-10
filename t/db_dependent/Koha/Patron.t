@@ -241,7 +241,7 @@ subtest 'add_enrolment_fee_if_needed() tests' => sub {
         $enrollment_fee = $patron->add_enrolment_fee_if_needed(1);
         is( $patron->account->balance * 1, 60, 'Patron charged the enrolment fees' );
 
-        my @debits = $account->outstanding_debits;
+        my @debits = $account->outstanding_debits->as_list;
         is( scalar @debits, 3, '3 enrolment fees' );
         is( $debits[0]->debit_type_code, 'ACCOUNT', 'Account type set correctly' );
         is( $debits[1]->debit_type_code, 'ACCOUNT', 'Account type set correctly' );
@@ -279,7 +279,7 @@ subtest 'add_enrolment_fee_if_needed() tests' => sub {
         my $account = $patron->account;
         is( $patron->account->balance, 0, 'Patron not charged anything' );
 
-        my @debits = $account->outstanding_debits;
+        my @debits = $account->outstanding_debits->as_list;
         is( scalar @debits, 0, 'no debits' );
 
         $schema->storage->txn_rollback;

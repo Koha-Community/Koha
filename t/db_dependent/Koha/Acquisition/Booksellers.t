@@ -129,8 +129,9 @@ subtest '->subscriptions() tests' => sub {
 
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
-    is( $vendor->subscriptions->count, 2, 'Vendor has two subscriptions' );
-    foreach my $subscription ( $vendor->subscriptions ) {
+    my $subscriptions = $vendor->subscriptions;
+    is( $subscriptions->count, 2, 'Vendor has two subscriptions' );
+    while (my $subscription = $subscriptions->next ) {
         is( ref($subscription), 'Koha::Subscription', 'Type is correct' );
     }
 

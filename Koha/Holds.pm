@@ -124,7 +124,7 @@ sub get_items_that_can_fill {
               columns => ['itemnumber'],
               collapse => 1,
           }
-      );
+      )->as_list;
     my @waiting_holds = map { $_->itemnumber }
       Koha::Holds->search(
           { 'found' => 'W' },
@@ -132,7 +132,7 @@ sub get_items_that_can_fill {
               columns => ['itemnumber'],
               collapse => 1,
           }
-      );
+      )->as_list;
 
     return Koha::Items->search(
         {

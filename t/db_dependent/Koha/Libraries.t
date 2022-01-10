@@ -300,7 +300,7 @@ subtest 'get_hold_libraries and validate_hold_sibling' => sub {
     my @hold_libraries_1 = ($library1, $library2);
     my @hold_libraries_2 = ($library3, $library4, $library5);
 
-    my @result = $library1->get_hold_libraries();
+    my @result = $library1->get_hold_libraries()->as_list;
     # library1 and library2 are siblings
     is(scalar(@result), 2, 'get_hold_libraries returns 2 libraries');
 
@@ -310,7 +310,7 @@ subtest 'get_hold_libraries and validate_hold_sibling' => sub {
         ok(exists $map{$hold_library->branchcode}, 'library in hold group');
     }
 
-    @result = $library3->get_hold_libraries();
+    @result = $library3->get_hold_libraries()->as_list;
     # library3, library4 and library5 are siblings
     is(scalar(@result), 3, 'get_hold_libraries returns 3 libraries');
 

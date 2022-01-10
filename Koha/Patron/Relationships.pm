@@ -52,9 +52,7 @@ sub guarantors {
     @guarantor_ids = grep { defined $_ } @guarantor_ids;
     @guarantor_ids = uniq( @guarantor_ids );
 
-    my $guarantors = Koha::Patrons->search( { borrowernumber => \@guarantor_ids } );
-
-    return wantarray ? $guarantors->as_list : $guarantors;
+    return Koha::Patrons->search( { borrowernumber => \@guarantor_ids } );
 }
 
 =head3 guarantees
@@ -71,14 +69,12 @@ sub guarantees {
 
     my @guarantee_ids = uniq( $rs->get_column('guarantee_id')->all() );
 
-    my $guarantees = Koha::Patrons->search(
+    return Koha::Patrons->search(
         { borrowernumber => \@guarantee_ids },
         {
             order_by => { -asc => [ 'surname', 'firstname' ] }
         },
     );
-
-    return wantarray ? $guarantees->as_list : $guarantees;
 }
 
 =head3 type
