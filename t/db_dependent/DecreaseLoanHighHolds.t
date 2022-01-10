@@ -127,10 +127,7 @@ t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsValue',          1 );
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsControl',        'static' );
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsIgnoreStatuses', 'damaged,itemlost,notforloan,withdrawn' );
 
-my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item->barcode };
-my $patron_hr = { borrowernumber => $patron->id, branchcode => $library->{branchcode} };
-
-my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+my $data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded},        1,          "Static mode should exceed threshold" );
 is( $data->{outstanding},     6,          "Should have 6 outstanding holds" );
 is( $data->{duration},        0,          "Should have duration of 0 because of specific circulation rules" );
@@ -151,7 +148,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{duration}, 1, "Should have a duration of 1 because no specific circulation rules so defaults to system preference" );
 
 my $duedate = $data->{due_date};
@@ -160,7 +157,7 @@ is($duedate->min, $orig_due->min, 'New due minute is equal to original due minut
 is($duedate->sec, 0, 'New due date second is zero.');
 
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsControl', 'dynamic' );
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 0, "Should not exceed threshold" );
 
 
@@ -177,13 +174,13 @@ for my $i ( 5 .. 10 ) {
 }
 
 # 12 holds, threshold is 1 over 10 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold of 1" );
 is( $data->{outstanding}, 12, "Should exceed threshold of 1" );
 
 # 12 holds, threshold is 2 over 10 holdable items = 12 (equal is okay)
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsValue', 2 );
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 0, "Should not exceed threshold of 2" );
 
 my $unholdable = pop(@items);
@@ -191,7 +188,7 @@ $unholdable->damaged(-1);
 $unholdable->store();
 
 # 12 holds, threshold is 2 over 9 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold with one damaged item" );
 
 $unholdable->damaged(0);
@@ -199,7 +196,7 @@ $unholdable->itemlost(-1);
 $unholdable->store();
 
 # 12 holds, threshold is 2 over 9 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold with one lost item" );
 
 $unholdable->itemlost(0);
@@ -207,7 +204,7 @@ $unholdable->notforloan(-1);
 $unholdable->store();
 
 # 12 holds, threshold is 2 over 9 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold with one notforloan item" );
 
 $unholdable->notforloan(0);
@@ -215,22 +212,21 @@ $unholdable->withdrawn(-1);
 $unholdable->store();
 
 # 12 holds, threshold is 2 over 9 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
 
 $patron_hold->found('F')->store;
 # 11 holds, threshold is 2 over 9 holdable items = 11
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
 $patron_hold->found(undef)->store;
 
 t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
 
-my $patron_object = Koha::Patrons->find( $patron_hr->{borrowernumber} );
-my ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_object, $item->barcode );
+my ( undef, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
 
-( undef, $needsconfirmation ) = CanBookBeIssued( $patron_object, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
+( undef, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
 ok( !$needsconfirmation->{HIGHHOLDS}, "High holds checkout does not need confirmation" );
 
 Koha::CirculationRules->set_rule(
@@ -243,7 +239,7 @@ Koha::CirculationRules->set_rule(
     }
 );
 
-$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+$data = C4::Circulation::checkHighHolds( $item, $patron );
 is( $data->{duration}, 2, "Circulation rules override system preferences" );
 
 $schema->storage->txn_rollback();
