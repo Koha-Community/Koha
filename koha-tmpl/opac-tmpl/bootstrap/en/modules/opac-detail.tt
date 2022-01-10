@@ -1561,9 +1561,11 @@
             });
         } /* /verify_images */
 
+        let counter_wait = 0;
         function wait_for_images(cb){
 
             var loaded = 1;
+            counter_wait++;
 
             [% IF GoogleJackets %]
                 if ( loaded ) {
@@ -1583,9 +1585,12 @@
                 }
             [% END %]
 
-            if (!loaded) {
+            if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
                 window.setTimeout(function(){wait_for_images(cb);}, 100);
             } else {
+                if (counter_wait >= 50 ) {
+                    console.log("Could not retrieve the images")
+                }
                 cb();
             }
         }
