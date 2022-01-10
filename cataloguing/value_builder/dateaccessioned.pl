@@ -37,6 +37,8 @@ my $builder = sub {
     \$("#$function_name").flatpickr({
         dateFormat: "Y-m-d"
     });
+    /* Set current date on page load */
+    set_to_today($function_name.id);
 });
 
 function Focus$function_name(event) {
