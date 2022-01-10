@@ -77,11 +77,13 @@ if ($plugins_enabled) {
                 foreach my $result ( @{ $response->{items} } ) {
                     next unless $result->{name} =~ /^koha-plugin-/;
                     my $releases = $result->{url} . "/releases/latest";
-                    my $release = from_json( get($releases) );
+                    my $release  = from_json( get($releases) );
+                    my $tag_name = $release->{tag_name};
                     for my $asset ( @{$release->{assets}} ) {
                         if ($asset->{browser_download_url} =~ m/\.kpz$/) {
                             $result->{install_name} = $asset->{name};
-                            $result->{install_url} = $asset->{browser_download_url};
+                            $result->{install_url}  = $asset->{browser_download_url};
+                            $result->{tag_name}     = $tag_name;
                         }
                     }
                     push( @results, { repo => $r, result => $result } );
@@ -100,12 +102,14 @@ if ($plugins_enabled) {
                     my @releases     = @{ from_json( get($releases_url) ) };
 
                     if ( scalar @releases > 0 ) {
+
                         # Pick the first one, the latest release
-                        my $latest = $releases[0];
-                        my $name  = $latest->{name};
-                        my @links = @{$latest->{assets}->{links}};
-                        my $url   = $links[0]->{direct_asset_url};
-                        my @parts = split( '/', $url);
+                        my $latest   = $releases[0];
+                        my $name     = $latest->{name};
+                        my $tag_name = $latest->{tag_name};
+                        my @links    = @{ $latest->{assets}->{links} };
+                        my $url      = $links[0]->{direct_asset_url};
+                        my @parts    = split( '/', $url );
                         my $filename = $parts[-1];
                         next unless $url =~ m/\.kpz$/;
                         my $result = {
@@ -114,6 +118,7 @@ if ($plugins_enabled) {
                             install_url  => $url,
                             html_url     => $web_url,
                             name         => $name,
+                            tag_name     => $tag_name,
                         };
                         push @results, { repo => $r, result => $result };
                     }

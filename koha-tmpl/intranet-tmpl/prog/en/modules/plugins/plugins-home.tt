@@ -77,6 +77,7 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Organization</th>
+                                    <th>Latest version</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -86,6 +87,7 @@
                                     <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name | html %]</a></td>
                                     <td>[% sr.result.description | html %]</td>
                                     <td>[% sr.repo.name | html %]</td>
+                                    <td>[% sr.result.tag_name | html %]</td>
                                     <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
                                 </tr>
                             [% END %]
