@@ -34,7 +34,7 @@ Koha::Objects - Koha Object set base class
 =head1 SYNOPSIS
 
     use Koha::Objects;
-    my @objects = Koha::Objects->search({ borrowernumber => $borrowernumber});
+    my $objects = Koha::Objects->search({ borrowernumber => $borrowernumber});
 
 =head1 DESCRIPTION
 
@@ -122,8 +122,6 @@ sub find_or_create {
 
 =head3 search
 
-    # list context
-    my @objects = Koha::Objects->search([$params, $attributes]);
     # scalar context
     my $objects = Koha::Objects->search([$params, $attributes]);
     while (my $object = $objects->next) {
@@ -133,31 +131,19 @@ sub find_or_create {
 This B<instantiates> the I<Koha::Objects> class, and generates a resultset
 based on the query I<$params> and I<$attributes> that are passed (like in DBIC).
 
-In B<list context> it returns an array of I<Koha::Object> objects.
-In B<scalar context> it returns an iterator.
-
 =cut
 
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
-    if (wantarray) {
-        my @dbic_rows = $self->_resultset()->search($params, $attributes);
+    my $class = ref($self) ? ref($self) : $self;
+    my $rs = $self->_resultset()->search($params, $attributes);
 
-        return $self->_wrap(@dbic_rows);
-
-    }
-    else {
-        my $class = ref($self) ? ref($self) : $self;
-        my $rs = $self->_resultset()->search($params, $attributes);
-
-        return $class->_new_from_dbic($rs);
-    }
+    return $class->_new_from_dbic($rs);
 }
 
 =head3 search_related
 
-    my @objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
     my $objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
 
 Searches the specified relationship, optionally specifying a condition and attributes for matching records.
@@ -168,22 +154,13 @@ sub search_related {
     my ( $self, $rel_name, @params ) = @_;
 
     return if !$rel_name;
-    if (wantarray) {
-        my @dbic_rows = $self->_resultset()->search_related($rel_name, @params);
-        return if !@dbic_rows;
-        my $object_class = _get_objects_class( $dbic_rows[0]->result_class );
 
-        eval "require $object_class";
-        return _wrap( $object_class, @dbic_rows );
+    my $rs = $self->_resultset()->search_related($rel_name, @params);
+    return if !$rs;
+    my $object_class = _get_objects_class( $rs->result_class );
 
-    } else {
-        my $rs = $self->_resultset()->search_related($rel_name, @params);
-        return if !$rs;
-        my $object_class = _get_objects_class( $rs->result_class );
-
-        eval "require $object_class";
-        return _new_from_dbic( $object_class, $rs );
-    }
+    eval "require $object_class";
+    return _new_from_dbic( $object_class, $rs );
 }
 
 =head3 delete
