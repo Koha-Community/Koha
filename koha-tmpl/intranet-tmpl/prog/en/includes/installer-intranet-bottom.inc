@@ -5,7 +5,6 @@
         [% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") | $raw %]
         [% Asset.js("lib/bootstrap/bootstrap.min.js") | $raw %]
         [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
-        [% INCLUDE 'calendar.inc' %]
         <!-- installer-intranet-bottom.inc -->
         <script>
             function _(s) { return s } // dummy function for gettext
@@ -20,6 +19,7 @@
             });
         </script>
         <!-- / installer-intranet-bottom.inc -->
+        [% INCLUDE 'calendar.inc' %]
         [% jsinclude | $raw # Parse the page template's JavaScript block if necessary %]
     </body>
 </html>
