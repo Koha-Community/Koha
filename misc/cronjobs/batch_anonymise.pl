@@ -25,8 +25,8 @@ use C4::Context;
 use C4::Log qw( cronlogaction );
 
 use Koha::Database;
+use Koha::Old::Checkouts;
 use Koha::Old::Holds;
-use Koha::Patrons;
 
 use Date::Calc qw( Add_Delta_Days Today );
 use Getopt::Long qw( GetOptions );
@@ -67,7 +67,11 @@ my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
 my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
 $verbose and print "Checkouts and holds before $formatdate will be anonymised.\n";
 
-my $rows = Koha::Patrons->search_patrons_to_anonymise( { before => $formatdate } )->anonymise_issue_history( { before => $formatdate } );
+my $rows = Koha::Old::Checkouts
+          ->filter_by_anonymizable
+          ->filter_by_last_update( { days => $days, timestamp_column_name => 'returndate' })
+          ->anonymize;
+
 $verbose and print int($rows) . " checkouts anonymised.\n";
 
 $rows = Koha::Old::Holds
