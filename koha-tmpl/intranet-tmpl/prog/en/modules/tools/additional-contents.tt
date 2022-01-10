@@ -574,6 +574,18 @@
                             alert(_("Please specify a title for 'Default'"));
                             return false;
                         }
+                        else {
+                            [% UNLESS wysiwyg %]
+                                let content = $('#content_default').siblings(".CodeMirror")[0].CodeMirror.getValue();
+                            [% ELSE %]
+                                let content = tinyMCE.get('content_default').getContent();
+                            [% END %]
+
+                            if ( ! content.length > 0 ) {
+                                alert(__("Please specify a content for 'Default'"));
+                                return false;
+                            }
+                        }
 
                         form.submit();
                     }
