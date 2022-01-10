@@ -38,6 +38,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Members qw( GetBorrowersToExpunge );
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Old::Checkouts;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::List::Patron qw( GetPatronLists );
@@ -155,7 +156,12 @@ elsif ( $step == 3 ) {
     # Anonymising all members
     if ($do_anonym) {
         #FIXME: anonymisation errors are not handled
-        my $rows = Koha::Patrons->search_patrons_to_anonymise( { before => $last_issue_date } )->anonymise_issue_history( { before => $last_issue_date } );
+        my $rows = Koha::Old::Checkouts
+                     ->filter_by_anonymizable
+                     ->filter_by_last_update({
+                         to => $last_issue_date, timestamp_column_name => 'returndate' })
+                     ->anonymize;
+
         $template->param(
             do_anonym   => $rows,
         );
