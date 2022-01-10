@@ -171,6 +171,8 @@ foreach my $biblioNumber (@biblionumbers) {
 
     # Compute the priority rank.
     my $biblio = Koha::Biblios->find( $biblioNumber );
+    next unless $biblio;
+
     $biblioData->{object} = $biblio;
     my $holds = $biblio->holds;
     my $rank = $holds->count;
