@@ -33,7 +33,7 @@
             if(Check()){
                 $("#f").submit();
             }
-		});
+        });
         $("#z3950submit").click(function(){
             var strQuery = GetZ3950Terms();
             var index = "&index=[% index | html %]";
@@ -44,467 +44,469 @@
         });
     });
 
-/**
- * check if z3950 mandatories are set or not
- */
-function GetZ3950Terms(){
- var strQuery="&authtypecode="+document.forms['f'].authtypecode.value;
-    var mandatories = new Array();
-    var mandatories_label = new Array();
-    [% FOREACH BIG_LOO IN BIG_LOOP %][% FOREACH innerloo IN BIG_LOO.innerloop %][% FOREACH subfield_loo IN innerloo.subfield_loop %][% IF ( subfield_loo.z3950_mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
-        mandatories_label.push("[% subfield_loo.z3950_mandatory | html %]");[% END %][% END %][% END %][% END %]
+    /**
+    * check if z3950 mandatories are set or not
+    */
+    function GetZ3950Terms(){
+        var strQuery="&authtypecode="+document.forms['f'].authtypecode.value;
+        var mandatories = new Array();
+        var mandatories_label = new Array();
+        [% FOREACH BIG_LOO IN BIG_LOOP %][% FOREACH innerloo IN BIG_LOO.innerloop %][% FOREACH subfield_loo IN innerloo.subfield_loop %][% IF ( subfield_loo.z3950_mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
+            mandatories_label.push("[% subfield_loo.z3950_mandatory | html %]");[% END %][% END %][% END %][% END %]
 
-    for(var i=0,len=mandatories.length; i<len ; i++){
-        var field_value = document.getElementById(mandatories[i]).value;
-        if( field_value ){
-            strQuery += "&"+mandatories_label[i]+"="+encodeURIComponent(field_value);
+        for(var i=0,len=mandatories.length; i<len ; i++){
+            var field_value = document.getElementById(mandatories[i]).value;
+            if( field_value ){
+                strQuery += "&"+mandatories_label[i]+"="+encodeURIComponent(field_value);
+            }
         }
+        return strQuery;
     }
-    return strQuery;
-}
 
-/**
- * check if mandatory subfields are written
- */
-function AreMandatoriesNotOk(){
-    var mandatories = new Array();
-    var mandatoriesfields = new Array();
-    var   tab = new Array();
-    var label = new Array();
-    [% FOREACH BIG_LOO IN BIG_LOOP %]
-    	[% FOREACH innerloo IN BIG_LOO.innerloop %]
-			[% IF ( innerloo.mandatory ) %]
-        		mandatoriesfields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+    /**
+    * check if mandatory subfields are written
+    */
+    function AreMandatoriesNotOk(){
+        var mandatories = new Array();
+        var mandatoriesfields = new Array();
+        var   tab = new Array();
+        var label = new Array();
+        [% FOREACH BIG_LOO IN BIG_LOOP %]
+            [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                [% IF ( innerloo.mandatory ) %]
+                    mandatoriesfields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                [% END %]
+                [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                    [% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
+                        tab.push("[% BIG_LOO.number | html %]");
+                        label.push("[% To.json(subfield_loo.marc_lib) | html %]");
+                    [% END %]
+                [% END %]
             [% END %]
-    		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
-    			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
-                    tab.push("[% BIG_LOO.number | html %]");
-                    label.push("[% To.json(subfield_loo.marc_lib) | html %]");
-    			[% END %]
-			[% END %]
-		[% END %]
-	[% END %]
-    var StrAlert = "";
-    for(var i=0,len=mandatories.length; i<len ; i++){
-        var id_string = mandatories[i];
-        // alert (id_string);
-        if( ! $("#" + id_string).val() ){
-            var elt = document.getElementById(id_string);
-            if ( elt.nodeName == 'SELECT' ) {
-                $(elt).siblings('.select2').find("span[role='combobox']").addClass('subfield_not_filled');
-            } else {
-                $(elt).addClass('subfield_not_filled');
+        [% END %]
+        var StrAlert = "";
+        for(var i=0,len=mandatories.length; i<len ; i++){
+            var id_string = mandatories[i];
+            // alert (id_string);
+            if( ! $("#" + id_string).val() ){
+                var elt = document.getElementById(id_string);
+                if ( elt.nodeName == 'SELECT' ) {
+                    $(elt).siblings('.select2').find("span[role='combobox']").addClass('subfield_not_filled');
+                } else {
+                    $(elt).addClass('subfield_not_filled');
+                }
+
+                $(elt).focus();
+                StrAlert += "\t* " + _("%s in tab %s").format(label[i], tab[i]) + "\n";
+            }
+        }
+
+        /* Check for mandatories field(not subfields) */
+        for(var i=0,len=mandatoriesfields.length; i<len; i++){
+            isempty  = true;
+            arr      = mandatoriesfields[i];
+            divid    = "tag_" + arr[0] + "_" + arr[1];
+            varegexp = new RegExp("^tag_" + arr[0] + "_code_");
+
+            if(parseInt(arr[0]) >= 10){
+                elem = document.getElementById(divid);
+                eleminputs = elem.getElementsByTagName('input');
+
+                for(var j=0,len2=eleminputs.length; j<len2; j++){
+
+                    if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
+                        inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
+
+                        for( var k=0; k<len2; k++){
+                            if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
+                                isempty = false
+                            }
+                        }
+                    }
+                }
+            }else{
+                isempty = false;
             }
 
-            $(elt).focus();
-            StrAlert += "\t* " + _("%s in tab %s").format(label[i], tab[i]) + "\n";
+            if(isempty){
+                flag = 1;
+                    StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
+            }
+
         }
-    }
-    
-    /* Check for mandatories field(not subfields) */
-    for(var i=0,len=mandatoriesfields.length; i<len; i++){
-    	isempty  = true;
-    	arr      = mandatoriesfields[i];
-    	divid    = "tag_" + arr[0] + "_" + arr[1];
-    	varegexp = new RegExp("^tag_" + arr[0] + "_code_");
 
-		if(parseInt(arr[0]) >= 10){
-	    	elem = document.getElementById(divid);
-	    	eleminputs = elem.getElementsByTagName('input');
-	    	
-	    	for(var j=0,len2=eleminputs.length; j<len2; j++){
-	
-	    		if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-					inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
-					
-					for( var k=0; k<len2; k++){
-						if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
-							isempty = false
-						}
-					}
-	    		}
-	    	}
-    	}else{
-    		isempty = false;
-    	}
-    	
-    	if(isempty){
-    		flag = 1;
-                StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
-    	}
-    	
-    }
-    
-    
-    if(StrAlert){
-        return _("Can't save this record because the following field aren't filled :") + "\n\n" + StrAlert;
-    }
-    return false;
-}
 
-function Check(){
-    var StrAlert = AreMandatoriesNotOk();
-    if( ! StrAlert ){
-        document.f.submit();
-        return true;
-    } else {
-        alert(StrAlert);
+        if(StrAlert){
+            return _("Can't save this record because the following field aren't filled :") + "\n\n" + StrAlert;
+        }
         return false;
     }
-}
 
-function AddField(field,cntrepeatfield) {
-    document.forms['f'].op.value = "addfield";
-    document.forms['f'].addfield_field.value=field;
-    document.forms['f'].repeat_field.value=cntrepeatfield;
-    document.f.submit();
-}
+    function Check(){
+        var StrAlert = AreMandatoriesNotOk();
+        if( ! StrAlert ){
+            document.f.submit();
+            return true;
+        } else {
+            alert(StrAlert);
+            return false;
+        }
+    }
 
-function addauthority() {
-    X = document.forms[0].authtype.value;
-    window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
-}
-function searchauthority() {
-    X = document.forms[0].authtype2.value;
-    Y = document.forms[0].value.value;
-    window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
-}
-function confirmnotdup(redirect){
-    $("#confirm_not_duplicate").attr("value","1");
-    Check();
-}
+    function AddField(field,cntrepeatfield) {
+        document.forms['f'].op.value = "addfield";
+        document.forms['f'].addfield_field.value=field;
+        document.forms['f'].repeat_field.value=cntrepeatfield;
+        document.f.submit();
+    }
+
+    function addauthority() {
+        X = document.forms[0].authtype.value;
+        window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
+    }
+    function searchauthority() {
+        X = document.forms[0].authtype2.value;
+        Y = document.forms[0].value.value;
+        window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+    }
+    function confirmnotdup(redirect){
+        $("#confirm_not_duplicate").attr("value","1");
+        Check();
+    }
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 
 </head>
 <body id="auth_authorities" class="auth">
 
-<div id="loading">
-   <div>Loading, please wait...</div>
-</div>
-
-[% INCLUDE 'header.inc' %]
-
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-        </li>
-
-        [% IF ( authid ) %]
-            <li>
-                <a href="#" aria-current="page">
-                    Modify authority #[% authid | html %] ([% authtypetext | html %])
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Adding authority [% authtypetext | html %]
-                </a>
-            </li>
-
-        [% END %]
-    </ol>
-</nav>
-
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-
-[% IF ( authid ) %]
-<h1>Modify authority #[% authid | html %] [% authtypetext | html %]</h1>
-[% ELSE %]
-<h1>Adding authority [% authtypetext | html %]</h1>
-[% END %]
-
-[% IF ( duplicateauthid ) %]
-        <div class="dialog alert">
-                <h3>Duplicate record suspected</h3>
-                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
-
-                <form action="authorities.pl" method="get">
-                    <input type="hidden" name="authid" value="[% duplicateauthid | html %]" />
-                    <button type="submit" class="new"><i class="fa fa-pencil"></i> Yes: Edit existing authority</button>
-                </form>
-                <form action="authorities.pl" method="get">
-                    <button class="new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-save"></i> No: Save as new authority</button>
-                </form>
-        </div>
-[% END %]
-
-<form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
-    <input type="hidden" name="op" value="add" />
-    <input type="hidden" name="addfield_field" value="" />
-    <input type="hidden" name="repeat_field" value="" />
-    <input type="hidden" name="authtypecode" value="[% authtypecode | html%]" />
-    <input type="hidden" name="authid" value="[% authid | html %]" />
-    <input type="hidden" name="index" value="[% index | html %]" />
-    <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
-
-    <div id="toolbar" class="btn-toolbar">
-        <div class="btn-group"><a href="#" id="addauth" class="btn btn-default" accesskey="w"><i class="fa fa-save"></i> Save</a></div>
-        <div class="btn-group">
-            [% IF ( authid ) %]
-                <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a>
-            [% ELSE %]
-                <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
-            [% END %]
-        </div>
-        <div class="btn-group">
-            [% IF ( authid ) %]
-                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | url %]">Cancel</a>
-            [% ELSE %]
-                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
-            [% END %]
-        </div>
+    <div id="loading">
+        <div>Loading, please wait...</div>
     </div>
 
-<div id="authoritytabs" class="toptabs numbered">
-    <ul>
-        [% FOREACH BIG_LOO IN BIG_LOOP %]
-        <li><a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a></li>
-        [% END %]
-    </ul>
+    [% INCLUDE 'header.inc' %]
 
-[% FOREACH BIG_LOO IN BIG_LOOP %]
-    <div id="tab[% BIG_LOO.number | html %]XX">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li>
+                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            </li>
+            <li>
+                <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+            </li>
 
-    [% previous = "" %]
-    [% FOREACH innerloo IN BIG_LOO.innerloop %]
-    [% IF ( innerloo.tag ) %]
-    [% IF innerloo.tag != previous %]
-        [% IF previous != "" %]
-            </ul>
-        [% END %]
-        [% previous = innerloo.tag %]
-        [% IF ( innerloo.repeatable ) %]
-            <ul class="sortable_field">
-        [% ELSE %]
-            <ul>
-        [% END %]
-    [% END %]
-    [% IF ( innerloo.repeatable ) %]
-        <li class="tag sortable_tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
-    [% ELSE %]
-        <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
-    [% END %]
-        <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
-        [% UNLESS hide_marc %]
-            [% IF advancedMARCEditor %]
-                <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
+            [% IF ( authid ) %]
+                <li>
+                    <a href="#" aria-current="page">
+                        Modify authority #[% authid | html %] ([% authtypetext | html %])
+                    </a>
+                </li>
+
             [% ELSE %]
-                <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
-            [% END %]
-                [% IF ( innerloo.fixedfield ) %]
-                    <input type="text"
-                        tabindex="1"
-                        class="indicator flat"
-                        style="display:none;"
-                        name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
-                        size="1"
-                        maxlength="1"
-                        value="[% innerloo.indicator1 | html %]" />
-                    <input type="text"
-                        tabindex="1"
-                        class="indicator flat"
-                        style="display:none;"
-                        name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
-                        size="1"
-                        maxlength="1"
-                        value="[% innerloo.indicator2 | html %]" />
-                [% ELSE %]
-                    <input type="text"
-                        tabindex="1"
-                        class="indicator flat"
-                        name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
-                        size="1"
-                        maxlength="1"
-                        value="[% innerloo.indicator1 | html %]" />
-                    <input type="text"
-                        tabindex="1"
-                        class="indicator flat"
-                        name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
-                        size="1"
-                        maxlength="1"
-                        value="[% innerloo.indicator2 | html %]" />
-                [% END %] -
-        [% ELSE %]
-                [% IF ( innerloo.fixedfield ) %]
-                    <input type="hidden"
-                        tabindex="1"
-                        name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
-                        value="[% innerloo.indicator1 | html %]" />
-                    <input type="hidden"
-                        tabindex="1"
-                        name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
-                        value="[% innerloo.indicator2 | html %]" />
-                [% ELSE %]
-                    <input type="hidden"
-                        tabindex="1"
-                        name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
-                        value="[% innerloo.indicator1 | html %]" />
-                    <input type="hidden"
-                        tabindex="1"
-                        name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
-                        value="[% innerloo.indicator2 | html %]" />
-                [% END %]
-        [% END %]
-
-            [% UNLESS advancedMARCEditor %]
-                <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib | html %]</a>
-            [% END %]
-                <span class="field_controls">
-                [% IF ( innerloo.repeatable ) %]
-                    <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]','[% hide_marc | html %]','[% advancedMARCEditor | html %]'); return false;" title="Repeat this Tag">
-                        <img src="[% interface | html %]/[% theme | html %]/img/repeat-tag.png" alt="Repeat this Tag" />
+                <li>
+                    <a href="#" aria-current="page">
+                        Adding authority [% authtypetext | html %]
                     </a>
-                [% END %]
-                    <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Delete this Tag">
-                        <img src="[% interface | html %]/[% theme | html %]/img/delete-tag.png" alt="Delete this Tag" />
-                    </a>
-                </span> <!-- /.field_controls -->
+                </li>
 
-        </div> <!-- /div.tag_title -->
+            [% END %]
+        </ol>
+    </nav>
 
-        <ul class="sortable_subfield">
-        [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-            <!--  One line on the marc editor -->
-            <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
 
-                [% UNLESS hide_marc %]
-                <div class="subfieldcode">
-                        <input type="text"
-                            title="[% subfield_loo.marc_lib | $raw %]"
-                            style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
-                            name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
-                            value="[% subfield_loo.subfield | html %]"
-                            size="1"
-                            maxlength="1"
-                            class="flat"
-                            tabindex="0" />
-                </div>
+                [% IF ( authid ) %]
+                    <h1>Modify authority #[% authid | html %] [% authtypetext | html %]</h1>
                 [% ELSE %]
-                    <input type="hidden"
-                        name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
-                        value="[% subfield_loo.subfield | html %]" />
+                    <h1>Adding authority [% authtypetext | html %]</h1>
                 [% END %]
 
-                [% UNLESS advancedMARCEditor %]
-                    [% IF ( subfield_loo.mandatory ) %]
-                        <div class="subfield subfield_mandatory">
-                    [% ELSE %]
-                        <div class="subfield">
-                    [% END %]
-                        [% IF ( subfield_loo.fixedfield ) %]
-                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
-                        [% ELSE %]
-                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
-                        [% END %]
-                            [% subfield_loo.marc_lib | $raw %]
-                        </label>
+                [% IF ( duplicateauthid ) %]
+                    <div class="dialog alert">
+                        <h3>Duplicate record suspected</h3>
+                        <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
+
+                        <form action="authorities.pl" method="get">
+                            <input type="hidden" name="authid" value="[% duplicateauthid | html %]" />
+                            <button type="submit" class="new"><i class="fa fa-pencil"></i> Yes: Edit existing authority</button>
+                        </form>
+                        <form action="authorities.pl" method="get">
+                            <button class="new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-save"></i> No: Save as new authority</button>
+                        </form>
                     </div>
                 [% END %]
 
-                [% SET mv = subfield_loo.marc_value %]
-                <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
-                [% IF ( mv.type == 'select' ) %]
-                    [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
-                        <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
-                    [% ELSE %]
-                        <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
-                    [% END %]
+                <form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
+                    <input type="hidden" name="op" value="add" />
+                    <input type="hidden" name="addfield_field" value="" />
+                    <input type="hidden" name="repeat_field" value="" />
+                    <input type="hidden" name="authtypecode" value="[% authtypecode | html%]" />
+                    <input type="hidden" name="authid" value="[% authid | html %]" />
+                    <input type="hidden" name="index" value="[% index | html %]" />
+                    <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 
-                     [% FOREACH aval IN mv.values %]
-                         [% IF aval == mv.default %]
-                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
-                         [% ELSE %]
-                         <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
-                         [% END %]
-                     [% END %]
-                     </select>
-                [% ELSIF ( mv.type == 'text1' ) %]
-                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.id | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" />
-                [% ELSIF ( mv.type == 'text2' ) %]
-                    <input type="text" id="[%- mv.id | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" />
-                [% ELSIF ( mv.type == 'text' ) %]
-                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]" />
-                [% ELSIF ( mv.type == 'textarea' ) %]
-                    <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]">[%- mv.value | html -%]</textarea>
-                [% ELSIF ( mv.type == 'hidden' ) %]
-                    <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
-                [% ELSIF ( mv.type == 'hidden_simple' ) %]
-                    <input type="hidden" name="[%- mv.name | html -%]" />
-                [% END %]
-                </div>
-                [% IF ( subfield_loo.mandatory ) %]
-                    <div class="subfield_loop_mandatory">
-                        <span class="required">Required</span>
-                    </div>
-                [% END %]
-                <div class="subfield_controls">
-                    [% IF ( mv.type == 'text1' ) %]
-                        <a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode | html -%]','auth'); return false;" tabindex="1" title="Tag editor">Tag editor</a>
-                    [% ELSIF ( mv.type == 'text2' ) %]
-                        [% IF mv.noclick %]
-                            <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
-                        [% ELSE %]
-                            <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
-                        [% END %]
-                        [% mv.javascript | $raw %]
-                    [% END %]
-                    [% IF ( subfield_loo.repeatable ) %]
-                        <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
-                            <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
-                        </a>
-                        <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]'); return false;">
-                            <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
-                        </a>
-                    [% END %]
-                </div>
-                                </li>
-                                <!-- End of the line -->
+                    <div id="toolbar" class="btn-toolbar">
+                        <div class="btn-group"><a href="#" id="addauth" class="btn btn-default" accesskey="w"><i class="fa fa-save"></i> Save</a></div>
+                        <div class="btn-group">
+                            [% IF ( authid ) %]
+                                <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a>
+                            [% ELSE %]
+                                <a class="btn btn-default" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
                             [% END %]
-                            </ul> <!-- /.sortable_subfield -->
-                        </li>
-                    [% END %]<!-- if innerloo.tag -->
-                [% END %]<!-- BIG_LOO.innerloop -->
-                </ul> <!-- /.sortable_field -->
+                        </div>
+                        <div class="btn-group">
+                            [% IF ( authid ) %]
+                                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | url %]">Cancel</a>
+                            [% ELSE %]
+                                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
+                            [% END %]
+                        </div>
+                    </div>
+
+                    <div id="authoritytabs" class="toptabs numbered">
+                        <ul>
+                            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                                <li><a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a></li>
+                            [% END %]
+                        </ul>
+
+                        [% FOREACH BIG_LOO IN BIG_LOOP %]
+                            <div id="tab[% BIG_LOO.number | html %]XX">
+
+                                [% previous = "" %]
+                                [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                                    [% IF ( innerloo.tag ) %]
+                                        [% IF innerloo.tag != previous %]
+                                            [% IF previous != "" %]
+                                                </ul>
+                                            [% END %]
+                                            [% previous = innerloo.tag %]
+                                            [% IF ( innerloo.repeatable ) %]
+                                                <ul class="sortable_field">
+                                            [% ELSE %]
+                                                <ul>
+                                            [% END %]
+                                        [% END %]
+
+                                        [% IF ( innerloo.repeatable ) %]
+                                            <li class="tag sortable_tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                        [% ELSE %]
+                                            <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                        [% END %]
+
+                                            <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                                [% UNLESS hide_marc %]
+                                                    [% IF advancedMARCEditor %]
+                                                        <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
+                                                    [% ELSE %]
+                                                        <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
+                                                    [% END %]
+                                                    [% IF ( innerloo.fixedfield ) %]
+                                                        <input type="text"
+                                                            tabindex="1"
+                                                            class="indicator flat"
+                                                            style="display:none;"
+                                                            name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            size="1"
+                                                            maxlength="1"
+                                                            value="[% innerloo.indicator1 | html %]" />
+                                                        <input type="text"
+                                                            tabindex="1"
+                                                            class="indicator flat"
+                                                            style="display:none;"
+                                                            name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            size="1"
+                                                            maxlength="1"
+                                                            value="[% innerloo.indicator2 | html %]" />
+                                                    [% ELSE %]
+                                                        <input type="text"
+                                                            tabindex="1"
+                                                            class="indicator flat"
+                                                            name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            size="1"
+                                                            maxlength="1"
+                                                            value="[% innerloo.indicator1 | html %]" />
+                                                        <input type="text"
+                                                            tabindex="1"
+                                                            class="indicator flat"
+                                                            name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            size="1"
+                                                            maxlength="1"
+                                                            value="[% innerloo.indicator2 | html %]" />
+                                                    [% END %] -
+                                                [% ELSE %]
+                                                    [% IF ( innerloo.fixedfield ) %]
+                                                        <input type="hidden"
+                                                            tabindex="1"
+                                                            name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            value="[% innerloo.indicator1 | html %]" />
+                                                        <input type="hidden"
+                                                            tabindex="1"
+                                                            name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            value="[% innerloo.indicator2 | html %]" />
+                                                    [% ELSE %]
+                                                        <input type="hidden"
+                                                            tabindex="1"
+                                                            name="tag_[% innerloo.tag | html %]_indicator1_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            value="[% innerloo.indicator1 | html %]" />
+                                                        <input type="hidden"
+                                                            tabindex="1"
+                                                            name="tag_[% innerloo.tag | html %]_indicator2_[% innerloo.index | html %][% innerloo.random | html %]"
+                                                            value="[% innerloo.indicator2 | html %]" />
+                                                    [% END %]
+                                                [% END %]
+
+                                                [% UNLESS advancedMARCEditor %]
+                                                    <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib | html %]</a>
+                                                [% END %]
+                                                <span class="field_controls">
+                                                    [% IF ( innerloo.repeatable ) %]
+                                                        <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]','[% hide_marc | html %]','[% advancedMARCEditor | html %]'); return false;" title="Repeat this Tag">
+                                                            <img src="[% interface | html %]/[% theme | html %]/img/repeat-tag.png" alt="Repeat this Tag" />
+                                                        </a>
+                                                    [% END %]
+                                                    <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Delete this Tag">
+                                                        <img src="[% interface | html %]/[% theme | html %]/img/delete-tag.png" alt="Delete this Tag" />
+                                                    </a>
+                                                </span> <!-- /.field_controls -->
+                                            </div> <!-- /div.tag_title -->
+
+                                            <ul class="sortable_subfield">
+                                                [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                                                    <!--  One line on the marc editor -->
+                                                    <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
+
+                                                        [% UNLESS hide_marc %]
+                                                            <div class="subfieldcode">
+                                                                <input type="text"
+                                                                    title="[% subfield_loo.marc_lib | $raw %]"
+                                                                    style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
+                                                                    name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
+                                                                    value="[% subfield_loo.subfield | html %]"
+                                                                    size="1"
+                                                                    maxlength="1"
+                                                                    class="flat"
+                                                                    tabindex="0" />
+                                                            </div>
+                                                        [% ELSE %]
+                                                            <input type="hidden"
+                                                                name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
+                                                                value="[% subfield_loo.subfield | html %]" />
+                                                        [% END %]
+
+                                                        [% UNLESS advancedMARCEditor %]
+                                                            [% IF ( subfield_loo.mandatory ) %]
+                                                                <div class="subfield subfield_mandatory">
+                                                            [% ELSE %]
+                                                                <div class="subfield">
+                                                            [% END %]
+                                                                [% IF ( subfield_loo.fixedfield ) %]
+                                                                    <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
+                                                                [% ELSE %]
+                                                                    <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
+                                                                [% END %]
+                                                                    [% subfield_loo.marc_lib | $raw %]
+                                                                </label>
+                                                            </div>
+                                                        [% END %]
+
+                                                        [% SET mv = subfield_loo.marc_value %]
+                                                        <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
+                                                            [% IF ( mv.type == 'select' ) %]
+                                                                [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
+                                                                    <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
+                                                                [% ELSE %]
+                                                                    <select name="[%- mv.name | html -%]" tabindex="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
+                                                                [% END %]
+                                                                    [% FOREACH aval IN mv.values %]
+                                                                        [% IF aval == mv.default %]
+                                                                            <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                                                        [% ELSE %]
+                                                                            <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                                                        [% END %]
+                                                                    [% END %]
+                                                                </select>
+                                                            [% ELSIF ( mv.type == 'text1' ) %]
+                                                                <input type="text" id="[%- mv.id | html -%]" name="[%- mv.id | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" />
+                                                            [% ELSIF ( mv.type == 'text2' ) %]
+                                                                <input type="text" id="[%- mv.id | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" />
+                                                            [% ELSIF ( mv.type == 'text' ) %]
+                                                                <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]" />
+                                                            [% ELSIF ( mv.type == 'textarea' ) %]
+                                                                <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1" size="67" maxlength="[%- mv.maxlength | html -%]">[%- mv.value | html -%]</textarea>
+                                                            [% ELSIF ( mv.type == 'hidden' ) %]
+                                                                <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="67" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                                                            [% ELSIF ( mv.type == 'hidden_simple' ) %]
+                                                                <input type="hidden" name="[%- mv.name | html -%]" />
+                                                            [% END %]
+                                                        </div>
+
+                                                        [% IF ( subfield_loo.mandatory ) %]
+                                                            <div class="subfield_loop_mandatory">
+                                                                <span class="required">Required</span>
+                                                            </div>
+                                                        [% END %]
+
+                                                        <div class="subfield_controls">
+                                                            [% IF ( mv.type == 'text1' ) %]
+                                                                <a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtypecode | html -%]','auth'); return false;" tabindex="1" title="Tag editor">Tag editor</a>
+                                                            [% ELSIF ( mv.type == 'text2' ) %]
+                                                                [% IF mv.noclick %]
+                                                                    <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup">...</a>
+                                                                [% ELSE %]
+                                                                    <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor" title="Tag editor">...</a>
+                                                                [% END %]
+                                                                [% mv.javascript | $raw %]
+                                                            [% END %]
+                                                            [% IF ( subfield_loo.repeatable ) %]
+                                                                <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
+                                                                    <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                                                                </a>
+                                                                <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]'); return false;">
+                                                                    <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
+                                                                </a>
+                                                            [% END %]
+                                                        </div>
+                                                    </li>
+                                                    <!-- End of the line -->
+                                                [% END %]
+                                            </ul> <!-- /.sortable_subfield -->
+                                        </li>
+                                    [% END %]<!-- if innerloo.tag -->
+                                [% END %]<!-- BIG_LOO.innerloop -->
+                                </ul> <!-- /.sortable_field -->
+                            </div>
+                        [% END %]<!-- BIG_LOOP -->
+                    </div><!-- tabs -->
+
+                    <div name="hidden" id="hidden" class="tab">
+                        [% FOREACH hidden_loo IN hidden_loop %]
+                            <input type="hidden" name="tag" value="[% hidden_loo.tag | html %]" />
+                            <input type="hidden" name="subfield" value="[% hidden_loo.subfield | html %]" />
+                            <input type="hidden" name="mandatory" value="[% hidden_loo.mandatory | html %]" />
+                            <input type="hidden" name="kohafield" value="[% hidden_loo.kohafield | html %]" />
+                            <input type="hidden" name="tag_mandatory" value="[% hidden_loo.tag_mandatory | html %]" />
+                        [% END %]
+                    </div>
+                    [% IF ( oldauthnumtagfield ) %]
+                        <input type="hidden" name="tag" value="[% oldauthnumtagfield | html %]" />
+                        <input type="hidden" name="subfield" value="[% oldauthnumtagsubfield | html %]" />
+                        <input type="hidden" name="field_value" value="[% authid | html %]" />
+                        <input type="hidden" name="mandatory" value="0" />
+                        <input type="hidden" name="kohafield" value="[% kohafield | html %]" />
+                        <input type="hidden" name="tag_mandatory" value="[% tag_mandatory | html %]" />
+                        <input type="hidden" name="tag" value="[% oldauthtypetagfield | html %]" />
+                        <input type="hidden" name="subfield" value="[% oldauthtypetagsubfield | html %]" />
+                        <input type="hidden" name="field_value" value="[% authtypecode | html %]" />
+                    [% END %]
+
+                </form>
+
+                [% INCLUDE 'modals/cataloguing_create_av.inc' %]
+
             </div>
-        [% END %]<!-- BIG_LOOP -->
-    </div><!-- tabs -->
-
-<div name="hidden" id="hidden" class="tab">
-[% FOREACH hidden_loo IN hidden_loop %]
-    <input type="hidden" name="tag" value="[% hidden_loo.tag | html %]" />
-    <input type="hidden" name="subfield" value="[% hidden_loo.subfield | html %]" />
-    <input type="hidden" name="mandatory" value="[% hidden_loo.mandatory | html %]" />
-    <input type="hidden" name="kohafield" value="[% hidden_loo.kohafield | html %]" />
-    <input type="hidden" name="tag_mandatory" value="[% hidden_loo.tag_mandatory | html %]" />
-[% END %]
-</div>
-[% IF ( oldauthnumtagfield ) %]
-    <input type="hidden" name="tag" value="[% oldauthnumtagfield | html %]" />
-    <input type="hidden" name="subfield" value="[% oldauthnumtagsubfield | html %]" />
-    <input type="hidden" name="field_value" value="[% authid | html %]" />
-    <input type="hidden" name="mandatory" value="0" />
-    <input type="hidden" name="kohafield" value="[% kohafield | html %]" />
-    <input type="hidden" name="tag_mandatory" value="[% tag_mandatory | html %]" />
-    <input type="hidden" name="tag" value="[% oldauthtypetagfield | html %]" />
-    <input type="hidden" name="subfield" value="[% oldauthtypetagsubfield | html %]" />
-    <input type="hidden" name="field_value" value="[% authtypecode | html %]" />
-[% END %]
-
-</form>
-
-[% INCLUDE 'modals/cataloguing_create_av.inc' %]
-
-</div>
-</div>
-</div>
+        </div>
+    </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
