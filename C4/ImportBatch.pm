@@ -770,13 +770,14 @@ sub BatchCommitItems {
         my $duplicate_barcode = exists( $item->{'barcode'} ) && Koha::Items->find({ barcode => $item->{'barcode'} });
         my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
 
-        my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
+        my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ?, import_error = ? WHERE import_items_id = ?");
         if ( $action eq "replace" && $duplicate_itemnumber ) {
             # Duplicate itemnumbers have precedence, that way we can update barcodes by overlaying
             ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber} );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
-            $updsth->bind_param( 3, $row->{'import_items_id'} );
+            $updsth->bind_param( 3, undef );
+            $updsth->bind_param( 4, $row->{'import_items_id'} );
             $updsth->execute();
             $updsth->finish();
             $num_items_replaced++;
@@ -785,14 +786,16 @@ sub BatchCommitItems {
             ModItemFromMarc( $item_marc, $biblionumber, $itemnumber );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
-            $updsth->bind_param( 3, $row->{'import_items_id'} );
+            $updsth->bind_param( 3, undef );
+            $updsth->bind_param( 4, $row->{'import_items_id'} );
             $updsth->execute();
             $updsth->finish();
             $num_items_replaced++;
         } elsif ($duplicate_barcode) {
             $updsth->bind_param( 1, 'error' );
             $updsth->bind_param( 2, undef );
-            $updsth->bind_param( 3, $row->{'import_items_id'} );
+            $updsth->bind_param( 3, 'duplicate item barcode' );
+            $updsth->bind_param( 4, $row->{'import_items_id'} );
             $updsth->execute();
             $num_items_errored++;
         } else {
@@ -804,7 +807,8 @@ sub BatchCommitItems {
             if( $itemnumber ) {
                 $updsth->bind_param( 1, 'imported' );
                 $updsth->bind_param( 2, $itemnumber );
-                $updsth->bind_param( 3, $row->{'import_items_id'} );
+                $updsth->bind_param( 3, undef );
+                $updsth->bind_param( 4, $row->{'import_items_id'} );
                 $updsth->execute();
                 $updsth->finish();
                 $num_items_added++;
