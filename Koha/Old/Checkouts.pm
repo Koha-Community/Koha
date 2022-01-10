@@ -23,6 +23,51 @@ use Koha::Old::Checkout;
 
 use base qw(Koha::Objects);
 
+=head1 NAME
+
+Koha::Old::Checkouts - Koha Old Checkouts object set class
+
+This object represents a set of completed checkouts
+
+=head1 API
+
+=head2 Class methods
+
+=head3 filter_by_anonymizable
+
+    my $checkouts = $patron->old_checkouts;
+    my $anonymizable_checkouts = $checkouts->filter_by_anonymizable;
+
+This method filters the resultset, so it only contains checkouts that can be
+anonymized given the patron privacy settings.
+
+=cut
+
+sub filter_by_anonymizable {
+    my ( $self, $params ) = @_;
+
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
+
+    return $self->search(
+        {
+            'me.borrowernumber' => { 'not' => undef },
+            'patron.privacy'    => { '<>'  => 0 },
+            (
+                $anonymous_patron
+                ? ( 'me.borrowernumber' => { '!=' => $anonymous_patron } )
+                : ()
+            ),
+        },
+        {
+            join => ['patron'],
+        }
+    );
+}
+
+=head3 filter_by_todays_checkins
+
+=cut
+
 sub filter_by_todays_checkins {
     my ( $self ) = @_;
 
@@ -40,9 +85,35 @@ sub filter_by_todays_checkins {
     });
 }
 
+=head3 anonymize
+
+    $patron->old_checkouts->anonymize();
+
+Anonymize the given I<Koha::Old::Checkouts> resultset.
+
+=cut
+
+sub anonymize {
+    my ( $self, $params ) = @_;
+
+    my $anonymous_id = C4::Context->preference('AnonymousPatron') || undef;
+
+    return $self->update( { borrowernumber => $anonymous_id }, { no_triggers => 1 } );
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
+
 sub _type {
     return 'OldIssue';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Old::Checkout';
