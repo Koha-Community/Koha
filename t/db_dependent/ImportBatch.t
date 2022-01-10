@@ -174,13 +174,13 @@ my $id_import_batch3 = C4::ImportBatch::AddImportBatch($sample_import_batch3);
 
 # Test CleanBatch
 C4::ImportBatch::CleanBatch( $id_import_batch3 );
-my $batch3_clean = $dbh->do('SELECT * FROM import_records WHERE import_batch_id = "$id_import_batch3"');
-is( $batch3_clean, "0E0", "Batch 3 has been cleaned" );
+my $import_record = get_import_record( $id_import_batch3 );
+is( $import_record, "0E0", "Batch 3 has been cleaned" );
 
 # Test DeleteBatch
 C4::ImportBatch::DeleteBatch( $id_import_batch3 );
-my $batch3_results = $dbh->do('SELECT * FROM import_batches WHERE import_batch_id = "$id_import_batch3"');
-is( $batch3_results, "0E0", "Batch 3 has been deleted");
+my $import_batch = C4::ImportBatch::GetImportBatch( $id_import_batch3 );
+is( $import_batch, undef, "Batch 3 has been deleted");
 
 subtest "RecordsFromMarcPlugin" => sub {
     plan tests => 5;
@@ -212,5 +212,10 @@ subtest "RecordsFromMarcPlugin" => sub {
     is( $records->[1]->subfield('100', 'a'), 'Another',
         'Checked one field in second record' );
 };
+
+sub get_import_record {
+    my $id_import_batch = shift;
+    return $dbh->do('SELECT * FROM import_records WHERE import_batch_id = ?', undef, $id_import_batch);
+}
 
 $schema->storage->txn_rollback;
