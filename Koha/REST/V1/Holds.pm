@@ -165,7 +165,7 @@ sub add {
         ) unless $valid_pickup_location || $can_override;
 
         my $can_place_hold
-            = $item_id
+            = $item
             ? C4::Reserves::CanItemBeReserved( $patron, $item )
             : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
@@ -192,7 +192,7 @@ sub add {
             {
                 branchcode       => $pickup_library_id,
                 borrowernumber   => $patron_id,
-                biblionumber     => $biblio_id,
+                biblionumber     => $biblio->id,
                 priority         => $priority,
                 reservation_date => $hold_date,
                 expiration_date  => $expiration_date,

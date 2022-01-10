@@ -388,7 +388,7 @@ sub CanItemBeReserved {
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $biblio     = $item->biblio;
+    my $biblio   = $item->biblio;
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
