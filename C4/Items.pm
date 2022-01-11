@@ -1834,6 +1834,9 @@ sub ToggleNewStatus {
     my $report;
     for my $rule ( @rules ) {
         my $age = $rule->{age};
+        # Default to using items.dateaccessioned if there's an old item modification rule
+        # missing an agefield value
+        my $agefield = $rule->{agefield} ? $rule->{agefield} : 'items.dateaccessioned';
         my $conditions = $rule->{conditions};
         my $substitutions = $rule->{substitutions};
         foreach ( @$substitutions ) {
@@ -1865,7 +1868,7 @@ sub ToggleNewStatus {
             }
         }
         if ( defined $age ) {
-            $query .= q| AND TO_DAYS(NOW()) - TO_DAYS(dateaccessioned) >= ? |;
+            $query .= qq| AND TO_DAYS(NOW()) - TO_DAYS($agefield) >= ? |;
             push @params, $age;
         }
         my $sth = $dbh->prepare($query);

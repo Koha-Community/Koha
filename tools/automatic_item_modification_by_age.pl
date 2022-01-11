@@ -3,6 +3,7 @@
 # This file is part of Koha.
 #
 # Copyright 2013 BibLibre
+# Copyright 2021 Catalyst IT
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -65,6 +66,7 @@ if ( $op eq 'update' ) {
         my @substitution_values = $cgi->multi_param("substitution_value_$unique_id");
         my @condition_fields = $cgi->multi_param("condition_field_$unique_id");
         my @condition_values = $cgi->multi_param("condition_value_$unique_id");
+        my @age_fields = $cgi->multi_param("agefield_$unique_id");
         my $rule = {
             substitutions => [],
             conditions => [],
@@ -84,6 +86,10 @@ if ( $op eq 'update' ) {
         push @{ $rule->{conditions} }, {}
             unless @{ $rule->{conditions} };
         $rule->{age} = $cgi->param("age_$unique_id");
+
+        for my $age_field ( @age_fields ) {
+            $rule->{agefield} = $age_field ? $age_field : "items.dateaccessioned";
+        }
         push @rules, $rule;
     }
     my $syspref_content = to_json( \@rules );
@@ -109,9 +115,11 @@ if ( $@ ) {
 
 my @item_fields = map { "items.$_" } Koha::Items->columns;
 my @biblioitem_fields = map { "biblioitems.$_" } Koha::Biblioitems->columns;
+my @age_fields = ('items.dateaccessioned', 'items.replacementpricedate', 'items.datelastborrowed', 'items.datelastseen', 'items.damaged_on', 'items.itemlost_on', 'items.withdrawn_on');
 $template->param(
     op => $op,
     messages => \@messages,
+    agefields => [ @age_fields ],
     condition_fields => [ @item_fields, @biblioitem_fields ],
     substitution_fields => \@item_fields,
     rules => $rules,

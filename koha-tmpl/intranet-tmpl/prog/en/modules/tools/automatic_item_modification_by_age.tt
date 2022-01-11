@@ -91,6 +91,20 @@
                     <div class="age">
                       <h5>Age in days</h5>
                       <input class="age" type="text" inputmode="numeric" pattern="[0-9]*"  value="[% rule.age | html %]" name="age_[% id | html %]" />
+                      <h5>Age field</h5>
+                          <div class="blocks">
+                              <select name="agefield_[% id | html %]">
+                                  <option value="">Choose an age field</option>
+                                  [% FOR field IN agefields %]
+                                    [% IF rule.agefield == field %]
+                                     <option value="[% field | html %]" selected="selected">[% field | html %]</option>
+                                    [% ELSE %]
+                                     <option value="[% field | html %]">[% field | html %]</option>
+                                    [% END %]
+                                  [% END %]
+                              </select>
+                              <span class="hint">If not set then items.dateaccessioned will be used</span>
+                          </div>
                     </div>
                     <div class="blocks">
                       <h5>Conditions</h5>
@@ -152,6 +166,16 @@
             <div class="age">
               <h5>Age in days</h5>
               <input class="age" type="text" inputmode="numeric" pattern="[0-9]*" value="" name="age" />
+              <h5>Age field</h5>
+              <div class="block">
+                  <select name="agefield">
+                      <option value="">Choose an age field</option>
+                      [% FOR field IN agefields %]
+                           <option value="[% field | html %]">[% field | html %]</option>
+                      [% END %]
+                  </select>
+                  <span class="hint">If not set then items.dateaccessioned will be used</span>
+              </div>
             </div>
             <div class="blocks">
               <h5>Conditions</h5>
@@ -192,6 +216,7 @@
                         <thead>
                           <tr>
                                <th>Age</th>
+                                <th>Age field</th>
                                 <th>Conditions</th>
                                 <th>Substitutions</th>
                             </tr>
@@ -204,6 +229,14 @@
                                             [% rule.age | html %] days
                                         [% ELSE %]
                                             There is no age for this rule.
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF rule.agefield %]
+                                            [% rule.agefield | html %]
+                                        [% ELSE %]
+                                            <!-- In case old rules do not contain an agefield value display that items.dateaccessioned will be used -->
+                                            items.dateaccessioned
                                         [% END %]
                                     </td>
                                     <td>

@@ -75,6 +75,7 @@ $(document).ready(function() {
         new_rule.find("input[name='condition_value']").attr('name', 'condition_value_' + unique_id);
         new_rule.find("input[name='substitution_value']").attr('name', 'substitution_value_' + unique_id);
         new_rule.find("input[name='age']").attr('name', 'age_' + unique_id);
+        new_rule.find("select[name='agefield']").attr('name', 'agefield_' + unique_id);
         new_rule.find("input[name='unique_id']").val(unique_id);
 
         $("#rules").append(new_rule);
