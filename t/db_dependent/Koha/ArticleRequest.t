@@ -199,7 +199,7 @@ subtest 'cancel() tests' => sub {
     is( $ar->cancellation_reason, $reason, 'Cancellation reason stored correctly' );
     is( $ar->notes, $notes, 'Notes stored correctly' );
 
-    is( abs $patron->account->balance, $payed_amount, 'The patron has been refunded the right value' );
+    is( $patron->account->balance, -$payed_amount, 'The patron has a credit balance' );
 
     $schema->storage->txn_rollback;
 };
