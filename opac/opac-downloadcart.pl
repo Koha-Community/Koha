@@ -137,7 +137,7 @@ if ($bib_list && $format) {
                     used_for   => 'export_records',
                     staff_only => 0
                 }
-            )
+            )->as_list
         ]
     );
     $template->param(bib_list => $bib_list); 

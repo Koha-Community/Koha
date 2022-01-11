@@ -97,11 +97,11 @@ if ( $op eq 'add_form' ) {
     $sth2->finish;
     $sth2 = $dbh->prepare("select distinct category from authorised_values");
     $sth2->execute;
-    my @av_cat = Koha::AuthorisedValueCategories->search;
+    my @av_cat = Koha::AuthorisedValueCategories->search->as_list;
     my @authorised_values = map { $_->category_name } @av_cat;
 
     # build thesaurus categories list
-    my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search );
+    my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search->as_list );
 
     # build value_builder list
     my @value_builder = ('');

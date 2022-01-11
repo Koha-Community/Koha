@@ -82,7 +82,7 @@ if ( $op eq 'form' ) {
     # Display the form
     $template->param(
         view => 'form',
-        lists => scalar Koha::Virtualshelves->search(
+        lists => Koha::Virtualshelves->search(
             [
                 { public => 0, owner => $loggedinuser },
                 { public => 1 }

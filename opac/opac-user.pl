@@ -370,7 +370,7 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 {
     my @relatives;
     # Filter out guarantees that don't want guarantor to see checkouts
-    foreach my $gr ( $patron->guarantee_relationships() ) {
+    foreach my $gr ( $patron->guarantee_relationships->as_list ) {
         my $g = $gr->guarantee;
         push( @relatives, $g ) if $g->privacy_guarantor_checkouts;
     }
@@ -382,7 +382,7 @@ if (   C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor')
 {
     my @relatives_with_fines;
     # Filter out guarantees that don't want guarantor to see checkouts
-    foreach my $gr ( $patron->guarantee_relationships() ) {
+    foreach my $gr ( $patron->guarantee_relationships->as_list ) {
         my $g = $gr->guarantee;
         push( @relatives_with_fines, $g ) if $g->privacy_guarantor_fines;
     }

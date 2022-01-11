@@ -127,7 +127,7 @@ sub approve {
                         {   borrowernumber => $patron->borrowernumber,
                             code           => $code
                         }
-                    );
+                    )->as_list;
                 }
                 foreach my $attr ( @{$extended_attributes} ) {
                     $attr->{attribute} = exists $attr->{attribute} ? $attr->{attribute} : $attr->{value};

@@ -62,7 +62,7 @@ elsif ( $op eq 'delete' ) {
     $provider->delete() if $provider;
 }
 
-my @providers = Koha::SMS::Providers->search();
+my @providers = Koha::SMS::Providers->search->as_list;
 
 $template->param( providers => \@providers );
 

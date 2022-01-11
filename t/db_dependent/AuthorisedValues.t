@@ -111,7 +111,7 @@ $av3->lib_opac('');
 is( $av3->opac_description, 'display value 3', 'Got correction opac description if lib_opac is *not* set' );
 
 my @authorised_values =
-  Koha::AuthorisedValues->new()->search( { category => 'av_for_testing' } );
+  Koha::AuthorisedValues->new()->search( { category => 'av_for_testing' } )->as_list;
 is( @authorised_values, 3, "Get correct number of values" );
 
 my $branchcode1 = $builder->build({ source => 'Branch' })->{branchcode};
@@ -119,14 +119,14 @@ my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 
 $av1->add_library_limit( $branchcode1 );
 
-@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode1 );
+@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode1 )->as_list;
 is( @authorised_values, 3, "Search including value with a branch limit ( branch can use the limited value ) gives correct number of results" );
 
-@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode2 );
+@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode2 )->as_list;
 is( @authorised_values, 2, "Search including value with a branch limit ( branch *cannot* use the limited value ) gives correct number of results" );
 
 $av1->del_library_limit( $branchcode1 );
-@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode2 );
+@authorised_values = Koha::AuthorisedValues->search_with_library_limits( { category => 'av_for_testing' }, {}, $branchcode2 )->as_list;
 is( @authorised_values, 3, "Branch limitation deleted successfully" );
 
 $av1->add_library_limit( $branchcode1 );

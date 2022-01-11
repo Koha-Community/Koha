@@ -53,7 +53,7 @@ my @transfers = Koha::Libraries->search(
         prefetch => 'branchtransfers_tobranches',
         order_by => 'branchtransfers_tobranches.tobranch'
     }
-);
+)->as_list;
 
 $template->param(
     libraries => \@transfers,

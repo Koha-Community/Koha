@@ -122,10 +122,10 @@ for my $authvfield (@$statuses) {
 # the full set.
 @notforloans = @{$staton->{'items.notforloan'}} if defined $staton->{'items.notforloan'} and scalar @{$staton->{'items.notforloan'}} > 0;
 
-my @class_sources = Koha::ClassSources->search({ used => 1 });
+my @class_sources = Koha::ClassSources->search({ used => 1 })->as_list;
 my $pref_class = C4::Context->preference("DefaultClassificationSource");
 
-my @itemtypes = Koha::ItemTypes->search;
+my @itemtypes = Koha::ItemTypes->search->as_list;
 my @selected_itemtypes;
 foreach my $itemtype ( @itemtypes ) {
     if ( defined $input->param('itemtype-' . $itemtype->itemtype) ) {

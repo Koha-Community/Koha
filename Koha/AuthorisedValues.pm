@@ -126,7 +126,7 @@ sub get_descriptions_by_koha_field {
     my $cached       = $memory_cache->get_from_cache($cache_key);
     return @$cached if $cached;
 
-    my @avs          = $self->search_by_koha_field($params);
+    my @avs          = $self->search_by_koha_field($params)->as_list;
     my @descriptions = map {
         {
             authorised_value => $_->authorised_value,

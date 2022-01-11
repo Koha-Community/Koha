@@ -78,7 +78,7 @@ if ($op eq 'add_form') {
         push @authorised_value_categories, 'itemtypes';
 
         # build thesaurus categories list
-        my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search );
+        my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search->as_list );
 
 	# build value_builder list
 	my @value_builder=('');

@@ -80,7 +80,7 @@ sub ListForLibrary {
     my ($self) = @_;
     my $branch_limit =
       C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    return scalar Koha::Desks->search(
+    return Koha::Desks->search(
         { branchcode => $branch_limit },
         { order_by   => { '-asc' => 'desk_name' } }
     );

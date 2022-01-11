@@ -326,7 +326,7 @@ $template->param( catalog_details => \@catalog_details, );
 my $suggestion;
 $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
 
-my @currencies = Koha::Acquisition::Currencies->search;
+my @currencies = Koha::Acquisition::Currencies->search->as_list;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # build bookfund list
@@ -367,7 +367,7 @@ if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
 
 # Get the item types list, but only if item_level_itype is YES. Otherwise, it will be in the item, no need to display it in the biblio
 my @itemtypes;
-@itemtypes = Koha::ItemTypes->search unless C4::Context->preference('item-level_itypes');
+@itemtypes = Koha::ItemTypes->search->as_list unless C4::Context->preference('item-level_itypes');
 
 if ( defined $from_subscriptionid ) {
     # Get the last received order for this subscription

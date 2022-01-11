@@ -152,7 +152,7 @@ $template->param(
     freight               => $freight,
     name                  => $bookseller->name,
     active_currency       => $active_currency,
-    currencies            => scalar $currencies->search({ rate => { '!=' => 1 } }),
+    currencies            => $currencies->search({ rate => { '!=' => 1 } }),
     invoiceincgst         => $bookseller->invoiceincgst,
     bookfund              => $budget->{budget_name},
     creator               => $creator,

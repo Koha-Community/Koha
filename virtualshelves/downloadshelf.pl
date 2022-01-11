@@ -100,7 +100,7 @@ if ($shelfid && $format) {
     }
 }
 else {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ]);
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ]);
     $template->param(shelfid => $shelfid); 
 }
 $template->param( messages => \@messages );

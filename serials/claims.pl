@@ -96,7 +96,7 @@ $template->param(
         supplierid => $supplierid,
         claimletter => $claimletter,
         additional_fields_for_subscription => $additional_fields,
-        csv_profiles => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_issues' }) ],
+        csv_profiles => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_issues' })->as_list ],
         letters => $letters,
         (uc(C4::Context->preference("marcflavour"))) => 1
         );

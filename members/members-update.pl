@@ -59,7 +59,7 @@ foreach my $pm (@$pending_modifications) {
     foreach my $type (@modified_atypes) {
         my $type_obj = Koha::Patron::Attribute::Types->find($type);
         my @before   = Koha::Patron::Attributes->search(
-            { borrowernumber => $pm->{borrowernumber}, code => $type } );
+            { borrowernumber => $pm->{borrowernumber}, code => $type } )->as_list;
         my @after = grep { $_->code eq $type } @{ $pm->{extended_attributes} };
         push @{$modified_attributes}, { type => $type_obj, before => \@before, after => \@after };
     }

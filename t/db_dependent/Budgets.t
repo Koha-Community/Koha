@@ -516,7 +516,7 @@ is ( GetBudgetOrdered( $fund ), '20', "total ordered price is 20");
 
 # CloneBudgetPeriod
 # Let's make sure our timestamp is old
-my @orig_funds = Koha::Acquisition::Funds->search({ budget_period_id => $budget_period_id });
+my @orig_funds = Koha::Acquisition::Funds->search({ budget_period_id => $budget_period_id })->as_list;
 foreach my $fund (@orig_funds){
     $fund->timestamp('1999-12-31 23:59:59')->store;
 }

@@ -259,9 +259,9 @@ if ( defined $format ) {
 
 # Display the search form
 
-my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
+my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } )->as_list;
 my @itemtypes;
-foreach my $itemtype ( Koha::ItemTypes->search_with_localization ) {
+foreach my $itemtype ( Koha::ItemTypes->search_with_localization->as_list ) {
     push @itemtypes, {
         value => $itemtype->itemtype,
         label => $itemtype->translated_description,

@@ -91,7 +91,7 @@ my @loop_data;
 foreach my $col ( @cols ) {
     my $found;
     my $readonly = $col =~ /\.(biblio|biblioitem|item)number$/;
-    foreach my $row ( $kohafields->search({ kohafield => $col }) ) {
+    foreach my $row ( $kohafields->search({ kohafield => $col })->as_list ) {
         $found = 1;
         push @loop_data, {
             kohafield    => $col,

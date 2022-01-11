@@ -86,7 +86,7 @@ foreach my $m (@metadatas) {
     if ($delete_items) {
         my $deleted_count = 0;
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my @items = Koha::Items->search( { biblionumber => $biblionumber } );
+        my @items = Koha::Items->search( { biblionumber => $biblionumber } )->as_list;
         foreach my $item ( @items ) {
             my $itemnumber = $item->itemnumber;
 

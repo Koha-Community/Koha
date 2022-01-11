@@ -207,7 +207,7 @@ if ($add) {
 
 my @debit_types = Koha::Account::DebitTypes->search_with_library_limits(
   { can_be_invoiced => 1, archived => 0 },
-  {}, $library_id );
+  {}, $library_id )->as_list;
 
 $template->param(
   debit_types => \@debit_types,

@@ -83,7 +83,7 @@ my $launcher = sub {
     }
 
     my $cn_source = $cgi->param('cn_source') || C4::Context->preference("DefaultClassificationSource");
-    my @class_sources = Koha::ClassSources->search({ used => 1});
+    my @class_sources = Koha::ClassSources->search({ used => 1})->as_list;
 
     #Don't show half the results of show lt or gt
     $real_limit = $results_per_page if $search ne $q;

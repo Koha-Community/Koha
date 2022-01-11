@@ -47,14 +47,14 @@ my @checkouts = Koha::Checkouts->search(
         join       => 'item',
         order_by   => 'timestamp',
     }
-);
+)->as_list;
 my @old_checkouts = Koha::Old::Checkouts->search(
     { biblionumber => $biblionumber },
     {
         join       => 'item',
         order_by   => 'timestamp',
     }
-);
+)->as_list;
 
 my $biblio = Koha::Biblios->find( $biblionumber );
 

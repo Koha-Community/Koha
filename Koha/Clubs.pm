@@ -50,7 +50,7 @@ sub get_enrollable {
     my $borrower = $params->{borrower};
     if ($borrower) {
         delete( $params->{borrower} );
-        my @enrollments = $borrower->get_club_enrollments();
+        my @enrollments = $borrower->get_club_enrollments->as_list;
         if (@enrollments) {
             $params->{'me.id'} = { -not_in => [ map { $_->club()->id() } @enrollments ] };
         }

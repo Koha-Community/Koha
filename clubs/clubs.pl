@@ -45,8 +45,8 @@ my $club_id = $cgi->param('club_id');
 my $club_template = $club_template_id ? Koha::Club::Templates->find( $club_template_id ) : undef;
 my $club = $club_id ? Koha::Clubs->find( $club_id ) : undef;
 
-my @club_templates = Koha::Club::Templates->search();
-my @clubs          = Koha::Clubs->search();
+my @club_templates = Koha::Club::Templates->search->as_list;
+my @clubs          = Koha::Clubs->search->as_list;
 
 $template->param(
     stored         => $stored,

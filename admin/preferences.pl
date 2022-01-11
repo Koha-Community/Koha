@@ -99,7 +99,7 @@ sub _get_chunk {
             } elsif ( $options{'choices'} eq 'staff-templates' ) {
                 $options{'choices'} = { map { $_ => $_ } getallthemes( 'intranet' ) }
             } elsif ( $options{choices} eq 'patron-categories' ) {
-                $options{choices} = { map { $_->categorycode => $_->description } Koha::Patron::Categories->search };
+                $options{choices} = { map { $_->categorycode => $_->description } Koha::Patron::Categories->search->as_list };
                 $add_blank = 1;
             } else {
                 die 'Unrecognized source of preference values: ' . $options{'choices'};

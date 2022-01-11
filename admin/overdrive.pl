@@ -55,7 +55,7 @@ if ( $op && $op eq 'update' ) {
     }
 }
 
-my @branches = Koha::Libraries->search();
+my @branches = Koha::Libraries->search->as_list;
 my @branch_od_info;
 foreach my $branch ( @branches ){
     my $od_info =  Koha::Library::OverDriveInfos->find($branch->branchcode);

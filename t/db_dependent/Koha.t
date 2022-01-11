@@ -202,10 +202,10 @@ subtest 'GetItemTypesCategorized test' => sub{
     $insertSth->execute('BKghjklo3', 'Yet another type of book', 'Qwertyware', 0);
 
     # Azertyware should not exist.
-    my @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Azertyware' });
+    my @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Azertyware' })->as_list;
     is( @itemtypes, 0, 'Search item types by searchcategory: Invalid category returns nothing');
 
-    @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Qwertyware' });
+    @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Qwertyware' })->as_list;
     my @got = map { $_->itemtype } @itemtypes;
     my @expected = ( 'BKghjklo2', 'BKghjklo3' );
     is_deeply(\@got,\@expected,'Search item types by searchcategory: valid category returns itemtypes');

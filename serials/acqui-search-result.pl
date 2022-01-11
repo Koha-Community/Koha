@@ -60,7 +60,7 @@ my ($template, $loggedinuser, $cookie)
 my $supplier=$query->param('supplier');
 my @suppliers = Koha::Acquisition::Booksellers->search(
                     { name     => { -like => "%$supplier%" } },
-                    { order_by => { -asc => 'name' } } );
+                    { order_by => { -asc => 'name' } } )->as_list;
 
 #build result page
 my $loop_suppliers = [];

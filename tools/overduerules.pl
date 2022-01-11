@@ -32,7 +32,7 @@ use Koha::Patron::Categories;
 our $input = CGI->new;
 my $dbh = C4::Context->dbh;
 
-my @patron_categories = Koha::Patron::Categories->search( { overduenoticerequired => { '>' => 0 } } );
+my @patron_categories = Koha::Patron::Categories->search( { overduenoticerequired => { '>' => 0 } } )->as_list;
 my @category_codes  = map { $_->categorycode } @patron_categories;
 our @rule_params     = qw(delay letter debarred);
 

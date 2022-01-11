@@ -177,7 +177,7 @@ my $total = $patron->account->balance;
 my @accountlines = Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber },
     { order_by       => { -desc => 'accountlines_id' } }
-);
+)->as_list;
 
 my $totalcredit;
 if($total <= 0){

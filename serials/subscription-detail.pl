@@ -126,7 +126,7 @@ my $default_bib_view = get_default_view();
 
 my $subscription_object = Koha::Subscriptions->find( $subscriptionid );
 $template->param(
-    available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'subscription' } ) ],
+    available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'subscription' } )->as_list ],
     additional_field_values => {
         map { $_->field->name => $_->value }
           $subscription_object->additional_field_values->as_list

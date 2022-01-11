@@ -424,8 +424,8 @@ if ( $op eq 'list' ) {
         unclosable           => @orders || @cancelledorders ? $basket->{is_standing} : 1,
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
-        csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' }) ],
-        available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) ],
+        csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' })->as_list ],
+        available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } )->as_list ],
         additional_field_values => { map {
             $_->field->name => $_->value
         } Koha::Acquisition::Baskets->find($basketno)->additional_field_values->as_list },

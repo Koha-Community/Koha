@@ -395,11 +395,11 @@ sub delete {
             # This pref should then govern the results of other routines/methods such as
             # Koha::Virtualshelf->new->delete too.
             # FIXME Could be $patron->get_lists
-            $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } );
+            $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } )->as_list;
 
             # We cannot have a FK on borrower_modifications.borrowernumber, the table is also used
             # for patron selfreg
-            $_->delete for Koha::Patron::Modifications->search( { borrowernumber => $self->borrowernumber } );
+            $_->delete for Koha::Patron::Modifications->search( { borrowernumber => $self->borrowernumber } )->as_list;
 
             $self->SUPER::delete;
 
@@ -1207,7 +1207,7 @@ sub get_overdues {
 
 =head3 get_routing_lists
 
-my @routinglists = $patron->get_routing_lists
+my $routinglists = $patron->get_routing_lists
 
 Returns the routing lists a patron is subscribed to.
 
@@ -1779,7 +1779,7 @@ sub _anonymize_column {
 
 =head3 add_guarantor
 
-    my @relationships = $patron->add_guarantor(
+    my $relationship = $patron->add_guarantor(
         {
             borrowernumber => $borrowernumber,
             relationships  => $relationship,

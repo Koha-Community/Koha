@@ -307,7 +307,7 @@ sub getRecords {
     my $results_hashref = ();
 
     # TODO simplify this structure ( { branchcode => $branchname } is enought) and remove this parameter
-    $branches ||= { map { $_->branchcode => { branchname => $_->branchname } } Koha::Libraries->search };
+    $branches ||= { map { $_->branchcode => { branchname => $_->branchname } } Koha::Libraries->search->as_list };
 
     # Initialize variables for the faceted results objects
     my $facets_counter = {};
@@ -1638,7 +1638,7 @@ sub searchResults {
     });
 
     #Build branchnames hash
-    my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
+    my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
 
 # FIXME - We build an authorised values hash here, using the default framework
 # though it is possible to have different authvals for different fws.

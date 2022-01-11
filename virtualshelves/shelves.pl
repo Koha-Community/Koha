@@ -358,7 +358,7 @@ $template->param(
     messages => \@messages,
     public   => $public,
     print    => scalar $query->param('print') || 0,
-    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
+    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

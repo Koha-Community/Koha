@@ -43,7 +43,7 @@ if( Koha::Libraries->search->count < 1){
     $template->param(no_branches => 1);
 }
 
-my @categories = Koha::Patron::Categories->search_with_library_limits;
+my @categories = Koha::Patron::Categories->search_with_library_limits->as_list;
 if(scalar(@categories) < 1){
     $no_add = 1;
     $template->param(no_categories => 1);

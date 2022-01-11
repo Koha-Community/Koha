@@ -139,7 +139,7 @@ if ($do_it) {
         $search_params{object} = $object if $object;
     }
 
-    my @logs = Koha::ActionLogs->search(\%search_params);
+    my @logs = Koha::ActionLogs->search(\%search_params)->as_list;
 
     my @data;
     foreach my $log (@logs) {

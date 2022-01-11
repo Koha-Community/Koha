@@ -42,8 +42,8 @@ my $patronnumber = $cgi->param('borrowernumber');
 
 my $patron = Koha::Patrons->find($patronnumber);
 
-my @enrollments = $patron->get_club_enrollments();
-my @clubs       = $patron->get_enrollable_clubs();
+my @enrollments = $patron->get_club_enrollments->as_list;
+my @clubs       = $patron->get_enrollable_clubs->as_list;
 
 $template->param(
     enrollments    => \@enrollments,

@@ -96,7 +96,7 @@ sub library {
 
 =head3 libraries
 
-my @libraries = $group->libraries( { [invert => 1] } );
+my $libraries = $group->libraries( { [invert => 1] } );
 
 Returns the libraries set as direct children of this group.
 
@@ -117,7 +117,7 @@ sub libraries {
             branchcode => { '!=' => undef },
         },
         { order_by => 'branchcode' }
-    );
+    )->as_list;
 
     my @branchcodes = map { $_->branchcode } @children;
 
@@ -159,7 +159,7 @@ sub all_libraries {
 
 =head3 libraries_not_direct_children
 
-my @libraries = $group->libraries_not_direct_children();
+my $libraries = $group->libraries_not_direct_children();
 
 Returns the libraries *not* set as direct children of this group
 

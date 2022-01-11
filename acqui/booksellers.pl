@@ -83,7 +83,7 @@ if ($booksellerid) {
 } else {
     @suppliers = Koha::Acquisition::Booksellers->search(
                         { name => { -like => "%$supplier%" } },
-                        { order_by => { -asc => 'name' } } );
+                        { order_by => { -asc => 'name' } } )->as_list;
 }
 
 my $supplier_count = @suppliers;

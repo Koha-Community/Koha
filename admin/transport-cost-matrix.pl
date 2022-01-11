@@ -45,7 +45,7 @@ unless ($update) {
     $have_matrix = keys %$cost_matrix if $cost_matrix;
 }
 
-my @branchloop = map { code => $_->branchcode, name => $_->branchname }, Koha::Libraries->search({}, { order_by => 'branchname' });
+my @branchloop = map { code => $_->branchcode, name => $_->branchname }, Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
 my (@branchfromloop, @errors);
 foreach my $branchfrom ( @branchloop ) {
     my $fromcode = $branchfrom->{code};

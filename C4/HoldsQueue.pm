@@ -429,7 +429,7 @@ sub MapItemsToHoldRequests {
 
     map { $_->{_object} = Koha::Items->find( $_->{itemnumber} ) } @$available_items;
     my $libraries = {};
-    map { $libraries->{$_->id} = $_ } Koha::Libraries->search();
+    map { $libraries->{$_->id} = $_ } Koha::Libraries->search->as_list;
 
     # group available items by itemnumber
     my %items_by_itemnumber = map { $_->{itemnumber} => $_ } @$available_items;

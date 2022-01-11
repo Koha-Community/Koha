@@ -79,7 +79,7 @@ $template->param(
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
-    my @providers = Koha::SMS::Providers->search();
+    my @providers = Koha::SMS::Providers->search->as_list;
     $template->param( sms_providers => \@providers, sms_provider_id => $patron->sms_provider_id );
 }
 

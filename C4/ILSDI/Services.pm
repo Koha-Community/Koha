@@ -548,7 +548,7 @@ sub GetPatronInfo {
                     value_description => $_->description, # Awkward retro-compability...
                   }
                   : ()
-            } $patron->extended_attributes->search
+            } $patron->extended_attributes->search->as_list
         ];
     }
 

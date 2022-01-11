@@ -153,7 +153,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                         used_for   => 'export_records',
                         staff_only => 0
                     }
-                )
+                )->as_list
             ]
         );
         $template->param( shelf => $shelf );

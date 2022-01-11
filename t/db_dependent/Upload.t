@@ -217,7 +217,7 @@ subtest 'Test delete_missing' => sub {
 subtest 'Call search_term with[out] private flag' => sub {
     plan tests => 3;
 
-    my @recs = Koha::UploadedFiles->search_term({ term => 'file' });
+    my @recs = Koha::UploadedFiles->search_term({ term => 'file' })->as_list;
     is( @recs, 1, 'Returns only one public result' );
     is( $recs[0]->filename, 'file3', 'Should be file3' );
 
@@ -289,10 +289,10 @@ subtest 'Testing delete_temporary' => sub {
     my $today = dt_from_string;
     $today->subtract( minutes => 2 ); # should be enough :)
     my $dt = $today->clone->subtract( days => 1 );
-    foreach my $rec ( Koha::UploadedFiles->search({ permanent => 1 }) ) {
+    foreach my $rec ( Koha::UploadedFiles->search({ permanent => 1 })->as_list ) {
         $rec->dtcreated($dt)->store;
     }
-    my @recs = Koha::UploadedFiles->search({ permanent => 0 });
+    my @recs = Koha::UploadedFiles->search({ permanent => 0 })->as_list;
     $dt = $today->clone->subtract( days => 3 );
     $recs[0]->dtcreated($dt)->store;
     $dt = $today->clone->subtract( days => 5 );

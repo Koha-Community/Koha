@@ -126,7 +126,7 @@ my $resultsarray = \@results;
 
 $template->param(
     BIBLIO_RESULTS => $resultsarray,
-    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
+    csv_profiles => Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }),
     bib_list => $bib_list,
 );
 

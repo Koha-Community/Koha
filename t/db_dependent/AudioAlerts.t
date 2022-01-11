@@ -27,7 +27,7 @@ BEGIN {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-map { $_->delete() } Koha::AudioAlerts->search();
+map { $_->delete() } Koha::AudioAlerts->search->as_list;
 
 ## Check the basics
 # Creating 3 audio alerts named a, b and c
@@ -97,7 +97,7 @@ is( $c->precedence, 3, "Alert C has a precedence of 3" );
 $a->move('bottom');
 # Changed precedence order from database insert order
 # Insert order was a, b, c. Precedence order is now b, c, a.
-( $b, $c, $a ) = Koha::AudioAlerts->search();
+( $b, $c, $a ) = Koha::AudioAlerts->search->as_list;
 
 is( $b->selector,   'B', 'First sound is indeed B' );
 is( $b->precedence, 1,   "Alert B has a precedence of 1" );

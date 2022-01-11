@@ -68,7 +68,7 @@ if ( $borrowernumber and not $patron ) {
 }
 
 if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
-    my @providers = Koha::SMS::Providers->search();
+    my @providers = Koha::SMS::Providers->search->as_list;
     $template->param( sms_providers => \@providers );
 }
 
@@ -96,7 +96,7 @@ my $userenv = C4::Context->userenv;
 my @messages;
 
 ## Deal with guarantor stuff
-$template->param( relationships => scalar $patron->guarantor_relationships ) if $patron;
+$template->param( relationships => $patron->guarantor_relationships ) if $patron;
 
 my @relations = split /\|/, C4::Context->preference('borrowerRelationship'), -1;
 @relations = ('') unless @relations;

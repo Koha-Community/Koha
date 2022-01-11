@@ -96,7 +96,7 @@ if ( $op eq 'display' ) {
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
     exit;
 } else {
-    my @currencies = Koha::Acquisition::Currencies->search;
+    my @currencies = Koha::Acquisition::Currencies->search->as_list;
 
     # get option values from TaxRates syspref
     my @gst_values = map {

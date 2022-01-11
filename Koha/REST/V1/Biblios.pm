@@ -292,8 +292,8 @@ sub get_checkouts {
 
         my $checkouts =
           ($checked_in)
-          ? $c->objects->search( scalar $biblio->old_checkouts )
-          : $c->objects->search( scalar $biblio->current_checkouts );
+          ? $c->objects->search( $biblio->old_checkouts )
+          : $c->objects->search( $biblio->current_checkouts );
 
         return $c->render(
             status  => 200,

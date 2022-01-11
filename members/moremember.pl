@@ -95,11 +95,11 @@ $template->param( flagged => 1 ) if $patron->account_locked;
 
 my @relatives;
 my $guarantor_relationships = $patron->guarantor_relationships;
-my @guarantees              = $patron->guarantee_relationships->guarantees;
-my @guarantors              = $guarantor_relationships->guarantors;
+my @guarantees              = $patron->guarantee_relationships->guarantees->as_list;
+my @guarantors              = $guarantor_relationships->guarantors->as_list;
 if (@guarantors) {
     push( @relatives, $_->id ) for @guarantors;
-    push( @relatives, $_->id ) for $patron->siblings();
+    push( @relatives, $_->id ) for $patron->siblings->as_list;
 }
 else {
     push( @relatives, $_->id ) for @guarantees;
@@ -162,7 +162,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 if ( C4::Context->preference("ExportCircHistory") ) {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' })->as_list ]);
 }
 
 my $patron_messages = Koha::Patron::Messages->search(

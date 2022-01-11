@@ -565,7 +565,7 @@ sub build_patron_attributes_string {
                     borrowernumber => $self->{borrowernumber},
                     code           => $a->{code}
                 }
-            );
+            )->as_list;
 
             foreach my $attribute ( @attributes ) {
                 my $value = $attribute->attribute();

@@ -301,7 +301,7 @@ else {
         itemtypes                => $itemtypes,
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
-        csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
+        csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ],
         messages                 => \@messages,
     );
 

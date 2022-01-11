@@ -272,7 +272,7 @@ is($holds->next->priority, 0, 'Item is correctly waiting');
 is($holds->next->priority, 1, 'Item is correctly priority 1');
 is($holds->next->priority, 2, 'Item is correctly priority 2');
 
-my @reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3} })->waiting();
+my @reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3} })->waiting->as_list;
 is( @reserves, 1, 'GetWaiting got only the waiting reserve' );
 is( $reserves[0]->borrowernumber(), $requesters{$branch_3}, 'GetWaiting got the reserve for the correct borrower' );
 

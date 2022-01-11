@@ -55,7 +55,7 @@ if ( $op eq 'add_form' ) {
         $template->param( selected_smtp_server => $library->smtp_server );
     }
 
-    my @smtp_servers = Koha::SMTP::Servers->search;
+    my @smtp_servers = Koha::SMTP::Servers->search->as_list;
 
     $template->param(
         library      => $library,

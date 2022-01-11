@@ -837,7 +837,7 @@ sub CanBookBeIssued {
     my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
     $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
-        my @guarantees = map { $_->guarantee } $patron->guarantee_relationships();
+        my @guarantees = map { $_->guarantee } $patron->guarantee_relationships->as_list;
         my $guarantees_non_issues_charges = 0;
         foreach my $g ( @guarantees ) {
             $guarantees_non_issues_charges += $g->account->non_issues_charges;

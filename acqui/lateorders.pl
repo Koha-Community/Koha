@@ -157,6 +157,6 @@ $template->param(
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
     estimateddeliverydateto   => $estimateddeliverydateto,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-    csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_orders' }) ],
+    csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_orders' })->as_list ],
 );
 output_html_with_http_headers $input, $cookie, $template->output;

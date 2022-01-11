@@ -28,7 +28,7 @@ Koha::Objects::Mixin::AdditionalFields
 
 =head3 filter_by_additional_fields
 
-    my @objects = Koha::Foos->filter_by_additional_fields([
+    my $objects = Koha::Foos->filter_by_additional_fields([
         {
             id => 1,
             value => 'foo',

@@ -48,7 +48,7 @@ sub get_root_groups {
 
 =head3 get_search_groups
 
-my @search_groups = $self->get_search_groups({[interface => 'staff' || 'opac']}))
+my $search_groups = $self->get_search_groups({[interface => 'staff' || 'opac']}))
 
 Returns search groups for the specified interface.
 Defaults to OPAC if no interface is specified.

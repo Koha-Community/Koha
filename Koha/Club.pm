@@ -71,7 +71,7 @@ sub club_enrollments {
 
     return unless $self->id();
 
-    return scalar Koha::Club::Enrollments->search( { club_id => $self->id(), date_canceled => undef } );
+    return Koha::Club::Enrollments->search( { club_id => $self->id(), date_canceled => undef } );
 }
 
 =head3 club_fields

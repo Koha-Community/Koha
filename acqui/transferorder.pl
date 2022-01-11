@@ -119,7 +119,7 @@ if( $basketno && $ordernumber) {
     if( $op eq "do_search" ) {
         my @booksellers = Koha::Acquisition::Booksellers->search(
                             { name     => { -like => "%$query%" } },
-                            { order_by => { -asc => 'name' } } );
+                            { order_by => { -asc => 'name' } } )->as_list;
         $template->param(
             query => $query,
             do_search => 1,

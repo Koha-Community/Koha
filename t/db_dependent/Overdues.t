@@ -91,7 +91,7 @@ $dbh->do(q|
         ( '', '', 1, 'LETTER_CODE1', 1, 5, 'LETTER_CODE2', 1, 10, 'LETTER_CODE3', 1 )
 |);
 
-my @branchcodes = map { $_->branchcode } Koha::Libraries->search;
+my @branchcodes = map { $_->branchcode } Koha::Libraries->search->as_list;
 
 my @overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
 is_deeply( [ sort @overdue_branches ], [ sort @branchcodes ], 'If a default rule exists, all branches should be returned' );

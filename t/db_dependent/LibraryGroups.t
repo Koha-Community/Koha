@@ -36,7 +36,7 @@ my $library7 = $builder->build( { source => 'Branch' } );
 my $root_group =
   Koha::Library::Group->new( { title => "Test root group" } )->store();
 
-my @root_groups = Koha::Library::Groups->get_root_groups();
+my @root_groups = Koha::Library::Groups->get_root_groups->as_list;
 my $in_list = any { $_->id eq $root_group->id } @root_groups;
 ok( $in_list, 'New root group is in the list returned by the get_root_groups method');
 
@@ -66,7 +66,7 @@ my $library = $groupA_library1->library();
 is( ref( $library ), 'Koha::Library', 'Method library returns a Koha::Library object' );
 is( $library->id, $groupA_library1->branchcode, 'Branchcode for fetched library matches' );
 
-my @libraries_not_direct_children = $groupA->libraries_not_direct_children();
+my @libraries_not_direct_children = $groupA->libraries_not_direct_children->as_list;
 $in_list = any { $_->id eq $groupA_library1->branchcode } @libraries_not_direct_children;
 ok( !$in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 1 is not in the list');
 $in_list = any { $_->id eq $groupA1_library2->branchcode } @libraries_not_direct_children;
@@ -119,9 +119,9 @@ subtest 'Koha::Library::Group->get_search_groups' => sub {
     $groupA = Koha::Library::Groups->find( $groupA->id );
     $groupB = Koha::Library::Groups->find( $groupB->id );
 
-    my @groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' });
+    my @groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' })->as_list;
     is_deeply( $groups[0]->unblessed, $groupA->unblessed, 'Get search groups opac should return enabled group' );
-    @groups = Koha::Library::Groups->get_search_groups({ interface => 'staff' });
+    @groups = Koha::Library::Groups->get_search_groups({ interface => 'staff' })->as_list;
     is_deeply( $groups[0]->unblessed, $groupB->unblessed, 'Get search groups staff should return enabled group' );
 };
 

@@ -181,7 +181,7 @@ else {
 
     my $CGIsepChoice = GetDelimiterChoices;
 
-    my @branches = Koha::Libraries->search({}, { order_by => 'branchname' });
+    my @branches = Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
 
     my $ccode_subfield_structure = GetMarcSubfieldStructureFromKohaField('items.ccode');
     my $ccode_label;

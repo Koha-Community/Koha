@@ -49,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $schema = Koha::Database->new->schema;
 
-my @keyboard_shortcuts = Koha::KeyboardShortcuts->search();
+my @keyboard_shortcuts = Koha::KeyboardShortcuts->search->as_list;
 
 # Keyboard shortcuts
 $template->param(

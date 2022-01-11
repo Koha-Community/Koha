@@ -682,7 +682,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         $template->param( always_show_holds => $always_show_holds );
         my $show_holds_now = $input->param('show_holds_now');
         unless( (defined $always_show_holds && $always_show_holds eq 'DONT') && !$show_holds_now ){
-            my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
+            my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } )->as_list;
             foreach my $res (
                 sort {
                     my $a_found = $a->found() || '';

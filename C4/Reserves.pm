@@ -989,7 +989,7 @@ Unsuspends all suspended reserves with a suspend_until date from before today.
 sub AutoUnsuspendReserves {
     my $today = dt_from_string();
 
-    my @holds = Koha::Holds->search( { suspend_until => { '<=' => $today->ymd() } } );
+    my @holds = Koha::Holds->search( { suspend_until => { '<=' => $today->ymd() } } )->as_list;
 
     map { $_->resume() } @holds;
 }
@@ -1414,7 +1414,7 @@ AllowHoldsOnDamagedItems or 'holdallowed' own/sibling library)
 sub ItemsAnyAvailableAndNotRestricted {
     my $param = shift;
 
-    my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } );
+    my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } )->as_list;
 
     foreach my $i (@items) {
         my $reserves_control_branch =
@@ -1553,7 +1553,7 @@ sub SuspendAll {
     $params->{borrowernumber} = $borrowernumber if $borrowernumber;
     $params->{biblionumber}   = $biblionumber if $biblionumber;
 
-    my @holds = Koha::Holds->search($params);
+    my @holds = Koha::Holds->search($params)->as_list;
 
     if ($suspend) {
         map { $_->suspend_hold($suspend_until) } @holds;
@@ -2287,7 +2287,7 @@ sub GetMaxPatronHoldsForRecord {
     my ( $borrowernumber, $biblionumber ) = @_;
 
     my $patron = Koha::Patrons->find($borrowernumber);
-    my @items = Koha::Items->search( { biblionumber => $biblionumber } );
+    my @items = Koha::Items->search( { biblionumber => $biblionumber } )->as_list;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 

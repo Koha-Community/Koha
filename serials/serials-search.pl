@@ -76,7 +76,7 @@ if ( $op and $op eq "close" ) {
 }
 
 
-my @additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription', searchable => 1 } );
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription', searchable => 1 } )->as_list;
 my @additional_field_filters;
 for my $field ( @additional_fields ) {
     my $value = $query->param( 'additional_field_' . $field->id );
@@ -163,7 +163,7 @@ else
         }
     }
 
-    my @branches = Koha::Libraries->search( {}, { order_by => ['branchcode'] } );
+    my @branches = Koha::Libraries->search( {}, { order_by => ['branchcode'] } )->as_list;
     my @branches_loop;
     foreach my $b ( @branches ) {
         my $selected = 0;

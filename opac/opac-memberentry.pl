@@ -86,7 +86,7 @@ if ( $action eq 'create' || $action eq 'new' ) {
     $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
       if @PatronSelfRegistrationLibraryList;
 }
-my @libraries = Koha::Libraries->search($params);
+my @libraries = Koha::Libraries->search($params)->as_list;
 
 my ( $min, $max ) = C4::Members::get_cardnumber_length();
 if ( defined $min ) {
@@ -698,7 +698,7 @@ sub ParsePatronAttributes {
     my @values = $cgi->multi_param('patron_attribute_value');
 
     my @editable_attribute_types
-        = map { $_->code } Koha::Patron::Attribute::Types->search({ opac_editable => 1 });
+        = map { $_->code } Koha::Patron::Attribute::Types->search({ opac_editable => 1 })->as_list;
 
     my $ea = each_array( @codes, @values );
     my @attributes;

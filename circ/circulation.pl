@@ -545,11 +545,11 @@ my $view = $batch
 
 my @relatives;
 if ( $patron ) {
-    if ( my @guarantors = $patron->guarantor_relationships()->guarantors() ) {
+    if ( my @guarantors = $patron->guarantor_relationships()->guarantors->as_list ) {
         push( @relatives, $_->id ) for @guarantors;
-        push( @relatives, $_->id ) for $patron->siblings();
+        push( @relatives, $_->id ) for $patron->siblings->as_list;
     } else {
-        push( @relatives, $_->id ) for $patron->guarantee_relationships()->guarantees();
+        push( @relatives, $_->id ) for $patron->guarantee_relationships()->guarantees->as_list;
     }
 }
 my $relatives_issues_count =
@@ -603,7 +603,7 @@ $template->param(
 
 
 if ( C4::Context->preference("ExportCircHistory") ) {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' })->as_list ]);
 }
 
 my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;

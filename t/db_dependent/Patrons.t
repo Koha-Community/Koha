@@ -81,7 +81,7 @@ $b3_new->set({ firstname => 'Some first name for Test 3' })->store();
 $b3_new = Koha::Patrons->find( $b3->borrowernumber() );
 is( t::lib::Dates::compare( $b3_new->updated_on, $now), 0, "borrowers.updated_on should have been set to now on updating" );
 
-my @patrons = Koha::Patrons->search( { branchcode => $branchcode } );
+my @patrons = Koha::Patrons->search( { branchcode => $branchcode } )->as_list;
 is( @patrons, 3, "Found 3 patrons with Search" );
 
 my $unexistent = Koha::Patrons->find( '1234567890' );

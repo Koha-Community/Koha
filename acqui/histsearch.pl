@@ -99,7 +99,7 @@ unless ( $input->param('from') ) {
 }
 $filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } );
 $filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } );
-my @additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket', searchable => 1 } );
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket', searchable => 1 } )->as_list;
 $template->param( available_additional_fields => \@additional_fields );
 my @additional_field_filters;
 foreach my $additional_field (@additional_fields) {

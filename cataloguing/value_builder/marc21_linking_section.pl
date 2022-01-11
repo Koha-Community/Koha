@@ -297,7 +297,7 @@ my $launcher = sub {
             }
         );
 
-        my @itemtypes = Koha::ItemTypes->search;
+        my @itemtypes = Koha::ItemTypes->search->as_list;
 
         $template->param(
             itypeloop => \@itemtypes,

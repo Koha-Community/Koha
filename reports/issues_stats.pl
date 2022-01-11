@@ -82,7 +82,7 @@ $template->param(do_it => $do_it,
 
 our $itemtypes = Koha::ItemTypes->search_with_localization->unblessed;
 
-our @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
+our @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']})->as_list;
 
 our $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
 our $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };

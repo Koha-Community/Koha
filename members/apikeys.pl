@@ -84,7 +84,7 @@ if ($op) {
 
         $template->param(
             fresh_api_key => $api_key,
-            api_keys      => scalar Koha::ApiKeys->search({ patron_id => $patron_id }),
+            api_keys      => Koha::ApiKeys->search({ patron_id => $patron_id }),
         );
     }
 
@@ -121,7 +121,7 @@ if ($op) {
     }
 }
 
-my @api_keys = Koha::ApiKeys->search({ patron_id => $patron_id });
+my @api_keys = Koha::ApiKeys->search({ patron_id => $patron_id })->as_list;
 
 $template->param(
     api_keys   => \@api_keys,

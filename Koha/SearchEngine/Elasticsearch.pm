@@ -1354,10 +1354,10 @@ sub get_facetable_fields {
     my @search_field_names = qw( author itype location su-geo title-series subject ccode holdingbranch homebranch ln );
     my @faceted_fields = Koha::SearchFields->search(
         { name => { -in => \@search_field_names }, facet_order => { '!=' => undef } }, { order_by => ['facet_order'] }
-    );
+    )->as_list;
     my @not_faceted_fields = Koha::SearchFields->search(
         { name => { -in => \@search_field_names }, facet_order => undef }, { order_by => ['facet_order'] }
-    );
+    )->as_list;
     # This could certainly be improved
     return ( @faceted_fields, @not_faceted_fields );
 }

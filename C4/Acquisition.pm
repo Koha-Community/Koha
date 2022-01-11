@@ -2291,7 +2291,7 @@ sub GetHistory {
         push @query_params, @$ordernumbers;
     }
     if ( @$additional_fields ) {
-        my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields($additional_fields);
+        my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields($additional_fields)->as_list;
 
         return [] unless @baskets;
 

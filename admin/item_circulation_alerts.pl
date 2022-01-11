@@ -47,8 +47,8 @@ sub show {
     );
 
     my $branch   = $input->param('branch') || '*';
-    my @categories = Koha::Patron::Categories->search_with_library_limits;
-    my @item_types = Koha::ItemTypes->search;
+    my @categories = Koha::Patron::Categories->search_with_library_limits->as_list;
+    my @item_types = Koha::ItemTypes->search->as_list;
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
     my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });
 

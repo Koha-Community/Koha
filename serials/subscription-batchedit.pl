@@ -47,7 +47,7 @@ foreach my $subscriptionid (@subscriptionids) {
     push @subscriptions, $subscription if $subscription;
 }
 
-my @additional_fields = Koha::AdditionalFields->search({tablename => 'subscription'});
+my @additional_fields = Koha::AdditionalFields->search({tablename => 'subscription'})->as_list;
 
 my $batchedit = $cgi->param('batchedit');
 if ($batchedit) {
@@ -98,7 +98,7 @@ if ($batchedit) {
 
 $template->param(
     subscriptions => \@subscriptions,
-    booksellers => [ Koha::Acquisition::Booksellers->search() ],
+    booksellers => [ Koha::Acquisition::Booksellers->search->as_list ],
     additional_fields => \@additional_fields,
     referrer => scalar $cgi->param('referrer'),
 );

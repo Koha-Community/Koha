@@ -155,7 +155,7 @@ sub additional_report {
 
     my $loggedinuser = C4::Context->userenv ? C4::Context->userenv->{'number'} : undef;
     return {
-        lists => scalar Koha::Virtualshelves->search(
+        lists => Koha::Virtualshelves->search(
             [
                 { public => 0, owner => $loggedinuser },
                 { public => 1 }

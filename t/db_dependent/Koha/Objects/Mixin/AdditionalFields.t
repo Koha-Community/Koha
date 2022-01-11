@@ -88,7 +88,7 @@ my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
         id => $foo->id,
         value => 'foo value for basket1',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
@@ -98,7 +98,7 @@ is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
         id => $foo->id,
         value => 'foo value for basket2',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket2->basketno, 'result is basket2');
@@ -112,7 +112,7 @@ is($baskets[0]->basketno, $basket2->basketno, 'result is basket2');
         id => $bar->id,
         value => 'bar value for basket1',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
@@ -126,7 +126,7 @@ is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
         id => $bar->id,
         value => 'bar value for basket2',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 0, 'search returns no result');
 
@@ -135,7 +135,7 @@ is(scalar @baskets, 0, 'search returns no result');
         id => $foo->id,
         value => 'foo',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 2, 'search returns two results');
 
@@ -148,7 +148,7 @@ is(scalar @baskets, 2, 'search returns two results');
         id => $foo->id,
         value => 'basket1',
     },
-]);
+])->as_list;
 
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');

@@ -212,7 +212,7 @@ $template->param(
 
 if ( $op eq 'list' ) {
     # build categories list
-    my @categories = Koha::AuthorisedValueCategories->search({ category_name => { -not_in => ['', 'branches', 'itemtypes', 'cn_source']}}, { order_by => ['category_name'] } );
+    my @categories = Koha::AuthorisedValueCategories->search({ category_name => { -not_in => ['', 'branches', 'itemtypes', 'cn_source']}}, { order_by => ['category_name'] } )->as_list;
     my @category_list;
     for my $category ( @categories ) {
         push( @category_list, $category->category_name );
@@ -220,7 +220,7 @@ if ( $op eq 'list' ) {
 
     $searchfield ||= $category_list[0];
 
-    my @avs_by_category = Koha::AuthorisedValues->new->search( { category => $searchfield } );
+    my @avs_by_category = Koha::AuthorisedValues->new->search( { category => $searchfield } )->as_list;
     my @loop_data = ();
     # builds value list
     for my $av ( @avs_by_category ) {

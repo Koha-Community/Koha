@@ -132,7 +132,7 @@ sub pickup_locations {
               if defined $biblio;
         }
     } else {
-        @libraries = Koha::Libraries->search( { pickup_location => 1 }, { order_by => ['branchname'] } )
+        @libraries = Koha::Libraries->search( { pickup_location => 1 }, { order_by => ['branchname'] } )->as_list
           unless @libraries;
     }
 

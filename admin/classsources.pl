@@ -60,8 +60,8 @@ if ( $op eq "add_source" ) {
       $cn_source ? Koha::ClassSources->find($cn_source) : undef;
     $template->param(
         class_source => $class_source,
-        sort_rules   => scalar Koha::ClassSortRules->search,
-        split_rules  => scalar Koha::ClassSplitRules->search,
+        sort_rules   => Koha::ClassSortRules->search,
+        split_rules  => Koha::ClassSplitRules->search,
     );
 }
 elsif ( $op eq "add_source_validate" ) {

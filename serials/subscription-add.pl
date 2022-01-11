@@ -130,7 +130,7 @@ $template->param(
     locations_loop=>$locations_loop,
 );
 
-my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
+my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscription' })->as_list;
 my %additional_field_values;
 if ($subscriptionid) {
     my $subscription = Koha::Subscriptions->find($subscriptionid);

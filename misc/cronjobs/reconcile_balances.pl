@@ -81,7 +81,7 @@ my @patron_ids = map { $_->borrowernumber } Koha::Account::Lines->search(
             columns  => [ qw/borrowernumber/ ],
             distinct => 1,
         }
-    );
+    )->as_list;
 
 my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@patron_ids } });
 

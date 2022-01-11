@@ -69,7 +69,7 @@ if ( $op eq 'add_form' ) {
                     location   => $additional_content->location,
                     branchcode => $additional_content->branchcode,
                 }
-            )
+            )->as_list
         };
         $category = $additional_content->category;
     }

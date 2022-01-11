@@ -125,7 +125,7 @@ if ( $selected_accts ) {
     @selected_accountlines = Koha::Account::Lines->search(
         $search_params,
         { order_by => 'date' }
-    );
+    )->as_list;
 
     my $sum = Koha::Account::Lines->search(
         $search_params,

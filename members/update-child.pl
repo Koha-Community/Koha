@@ -80,7 +80,7 @@ elsif ( $op eq 'update' ) {
     # But we should not hit that with a normal use of the interface
     die "You are doing something wrong updating this child" unless $adult_category;
 
-    $_->delete() for $patron->guarantor_relationships();
+    $_->delete() for $patron->guarantor_relationships->as_list;
 
     $patron->categorycode($adult_category->categorycode);
     $patron->store;

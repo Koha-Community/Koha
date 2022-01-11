@@ -50,7 +50,7 @@ if ( C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor')
     my @relatives;
 
     # Filter out guarantees that don't want guarantor to see checkouts
-    foreach my $gr ( $patron->guarantee_relationships() ) {
+    foreach my $gr ( $patron->guarantee_relationships->as_list ) {
         my $g = $gr->guarantee;
         if ( $g->privacy_guarantor_fines ) {
 

@@ -36,8 +36,8 @@ Koha::Uploader - Facilitate file uploads (temporary and permanent)
     # Do something with $upload->count, $upload->result or $upload->err
 
     # get some upload records (in staff) via Koha::UploadedFiles
-    my @uploads1 = Koha::UploadedFiles->search({ filename => $name });
-    my @uploads2 = Koha::UploadedFiles->search_term({ term => $term });
+    my $uploads1 = Koha::UploadedFiles->search({ filename => $name });
+    my $uploads2 = Koha::UploadedFiles->search_term({ term => $term });
 
     # staff download (via Koha::UploadedFile[s])
     my $rec = Koha::UploadedFiles->find( $id );

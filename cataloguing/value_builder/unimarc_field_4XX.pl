@@ -484,7 +484,7 @@ sub plugin {
             }
         );
 
-        my @itemtypes = Koha::ItemTypes->search;
+        my @itemtypes = Koha::ItemTypes->search->as_list;
 
         $template->param(    #classlist => $classlist,
             itypeloop    => \@itemtypes,

@@ -540,7 +540,7 @@ sub get_template_and_user {
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
             useDischarge                                                               => C4::Context->preference('useDischarge'),
-            pending_checkout_notes                                                     => scalar Koha::Checkouts->search({ noteseen => 0 }),
+            pending_checkout_notes                                                     => Koha::Checkouts->search({ noteseen => 0 }),
         );
     }
     else {
@@ -582,7 +582,7 @@ sub get_template_and_user {
             $opac_name = C4::Context->userenv->{'branch'};
         }
 
-        my @search_groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' });
+        my @search_groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' })->as_list;
         $template->param(
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
             LibrarySearchGroups                   => \@search_groups,
@@ -1156,7 +1156,7 @@ sub checkauth {
                         $register_id   = $register->id   if ($register);
                         $register_name = $register->name if ($register);
                     }
-                    my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
+                    my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
                     if ( $type ne 'opac' and C4::Context->preference('AutoLocation') ) {
 
                         # we have to check they are coming from the right ip range
@@ -1578,7 +1578,7 @@ sub check_api_auth {
                     my $library = Koha::Libraries->find($branchcode);
                     $branchname = $library? $library->branchname: '';
                 }
-                my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
+                my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
                 foreach my $br ( keys %$branches ) {
 
                     #     now we work with the treatment of ip

@@ -400,7 +400,7 @@ if ( $op eq 'view' ) {
                 csv_profiles => [
                     Koha::CsvProfiles->search(
                         { type => 'marc', used_for => 'export_records', staff_only => 0 }
-                    )
+                    )->as_list
                 ],
             );
             if ( $page ) {

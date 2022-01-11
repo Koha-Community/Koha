@@ -652,7 +652,7 @@ sub GetBranchcodesWithOverdueRules {
     |);
     if ( $branchcodes->[0] eq '' ) {
         # If a default rule exists, all branches should be returned
-        return map { $_->branchcode } Koha::Libraries->search({}, { order_by => 'branchname' });
+        return map { $_->branchcode } Koha::Libraries->search({}, { order_by => 'branchname' })->as_list;
     }
     return @$branchcodes;
 }
