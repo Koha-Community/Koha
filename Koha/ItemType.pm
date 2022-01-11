@@ -80,7 +80,7 @@ sub translated_descriptions {
         {   entity => 'itemtypes',
             code   => $self->itemtype,
         }
-    );
+    )->as_list;
     return [ map {
         {
             lang => $_->lang,

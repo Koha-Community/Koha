@@ -42,7 +42,7 @@ is(
 );
 
 my @roles = Koha::Patron::HouseboundRoles
-    ->search({ borrowernumber_id => $role->{borrowernumber_id} });
+    ->search({ borrowernumber_id => $role->{borrowernumber_id} })->as_list;
 my $found_role = shift @roles;
 is(
     $found_role->borrowernumber_id,

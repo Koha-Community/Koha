@@ -425,7 +425,7 @@ subtest 'close() tests' => sub {
         'Koha::Exceptions::Acquisition::Basket::AlreadyClosed',
         'Trying to close an already closed basket throws an exception';
 
-    my @close_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basket->id });
+    my @close_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basket->id })->as_list;
     is (scalar @close_logs, 1, 'Basket closure is logged');
 
     $schema->storage->txn_rollback;

@@ -636,7 +636,7 @@ sub GetItemsForInventory {
             '+select' => [ 'marc_subfield_structures.kohafield', 'marc_subfield_structures.frameworkcode', 'me.authorised_value', 'me.lib' ],
             '+as'     => [ 'kohafield',                          'frameworkcode',                          'authorised_value',    'lib' ],
         }
-    );
+    )->as_list;
 
     my $avmapping = { map { $_->get_column('kohafield') . ',' . $_->get_column('frameworkcode') . ',' . $_->get_column('authorised_value') => $_->get_column('lib') } @avs };
 

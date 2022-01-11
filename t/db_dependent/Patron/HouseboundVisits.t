@@ -45,7 +45,7 @@ is(
 
 # Does it work implicitly?
 my @visits = Koha::Patron::HouseboundVisits
-    ->special_search({ borrowernumber => $visit->{borrowernumber} });
+    ->special_search({ borrowernumber => $visit->{borrowernumber} })->as_list;
 my $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,
@@ -55,7 +55,7 @@ is(
 
 # Does it work Explicitly?
 @visits = Koha::Patron::HouseboundVisits
-    ->special_search({ 'me.borrowernumber' => $visit->{borrowernumber} });
+    ->special_search({ 'me.borrowernumber' => $visit->{borrowernumber} })->as_list;
 $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,
@@ -65,7 +65,7 @@ is(
 
 # Does it work without prefetcing?
 @visits = Koha::Patron::HouseboundVisits
-    ->special_search({ borrowernumber => $visit->{borrowernumber} }, { prefetch => [] });
+    ->special_search({ borrowernumber => $visit->{borrowernumber} }, { prefetch => [] })->as_list;
 $found_visit = shift @visits;
 is(
     $found_visit->borrowernumber,

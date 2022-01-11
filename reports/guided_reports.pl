@@ -749,7 +749,7 @@ elsif ($phase eq 'Run this report'){
                         }
                     }
                     elsif ( $authorised_value eq "biblio_framework" ) {
-                        my @frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+                        my @frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] })->as_list;
                         my $default_source = '';
                         push @authorised_values,$default_source;
                         $authorised_lib{$default_source} = 'Default';
@@ -769,7 +769,7 @@ elsif ($phase eq 'Run this report'){
                         }
                     }
                     elsif ( $authorised_value eq "categorycode" ) {
-                        my @patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description']});
+                        my @patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description']})->as_list;
                         %authorised_lib = map { $_->categorycode => $_->description } @patron_categories;
                         push @authorised_values, $_->categorycode for @patron_categories;
                     }

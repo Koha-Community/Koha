@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 59;
+use Test::More tests => 54;
 
 use C4::Context;
 
@@ -90,7 +90,7 @@ Koha::Patron::Relationship->new({ guarantor_id => $chelsea->id, guarantee_id => 
 
 my @gr;
 
-@gr = $kyle->guarantee_relationships();
+@gr = $kyle->guarantee_relationships()->as_list;
 is( @gr, 2, 'Found 2 guarantee relationships for father' );
 is( $gr[0]->guarantor_id, $kyle->id, 'Guarantor matches for first relationship' );
 is( $gr[0]->guarantee_id, $daria->id, 'Guarantee matches for first relationship' );
@@ -108,7 +108,7 @@ is( $gr[1]->guarantee->id, $kylie->id, 'Koha::Patron returned is the correct gua
 is( ref($gr[1]->guarantor), 'Koha::Patron', 'Method guarantor returns a Koha::Patron' );
 is( $gr[1]->guarantor->id, $kyle->id, 'Koha::Patron returned is the correct guarantor' );
 
-@gr = $chelsea->guarantee_relationships();
+@gr = $chelsea->guarantee_relationships()->as_list;
 is( @gr, 2, 'Found 2 guarantee relationships for mother' );
 is( $gr[0]->guarantor_id, $chelsea->id, 'Guarantor matches for first relationship' );
 is( $gr[0]->guarantee_id, $daria->id, 'Guarantee matches for first relationship' );
@@ -126,7 +126,7 @@ is( $gr[1]->guarantee->id, $kylie->id, 'Koha::Patron returned is the correct gua
 is( ref($gr[1]->guarantor), 'Koha::Patron', 'Method guarantor returns a Koha::Patron' );
 is( $gr[1]->guarantor->id, $chelsea->id, 'Koha::Patron returned is the correct guarantor' );
 
-@gr = $daria->guarantor_relationships();
+@gr = $daria->guarantor_relationships()->as_list;
 is( @gr, 2, 'Found 4 guarantor relationships for child' );
 is( $gr[0]->guarantor_id, $kyle->id, 'Guarantor matches for first relationship' );
 is( $gr[0]->guarantee_id, $daria->id, 'Guarantee matches for first relationship' );
@@ -143,13 +143,6 @@ is( ref($gr[1]->guarantee), 'Koha::Patron', 'Method guarantee returns a Koha::Pa
 is( $gr[1]->guarantee->id, $daria->id, 'Koha::Patron returned is the correct guarantee' );
 is( ref($gr[1]->guarantor), 'Koha::Patron', 'Method guarantor returns a Koha::Patron' );
 is( $gr[1]->guarantor->id, $chelsea->id, 'Koha::Patron returned is the correct guarantor' );
-
-my @siblings = $daria->siblings;
-is( @siblings, 1, 'Method siblings called in list context returns list' );
-is( ref($siblings[0]), 'Koha::Patron', 'List contains a Koha::Patron' );
-is( $siblings[0]->firstname, 'Kylie', 'Sibling from list first name matches correctly' );
-is( $siblings[0]->surname, 'Hall', 'Sibling from list surname matches correctly' );
-is( $siblings[0]->id, $kylie->id, 'Sibling from list patron id matches correctly' );
 
 my $siblings = $daria->siblings;
 my $sibling = $siblings->next();

@@ -51,7 +51,7 @@ Returns an arrayref of all visits associated this houseboundProfile.
 sub housebound_visits {
     my ( $self ) = @_;
     my @visits = Koha::Patron::HouseboundVisits
-        ->special_search({ borrowernumber => $self->borrowernumber });
+        ->special_search({ borrowernumber => $self->borrowernumber })->as_list;
     return \@visits;
 }
 

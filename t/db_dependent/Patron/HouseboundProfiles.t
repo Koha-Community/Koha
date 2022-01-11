@@ -41,7 +41,7 @@ is(
 );
 
 my @profiles = Koha::Patron::HouseboundProfiles
-    ->search({ day => $profile->{day} });
+    ->search({ day => $profile->{day} })->as_list;
 my $found_profile = shift @profiles;
 is(
     $found_profile->borrowernumber,

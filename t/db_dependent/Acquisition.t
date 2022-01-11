@@ -911,12 +911,12 @@ subtest 'Acquisition logging' => sub {
 
     Koha::ActionLogs->delete;
     my $basketno = NewBasket( $booksellerid, 1 );
-    my @create_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'ADD_BASKET', object => $basketno });
+    my @create_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'ADD_BASKET', object => $basketno })->as_list;
     is (scalar @create_logs, 1, 'Basket creation is logged');
 
     Koha::ActionLogs->delete;
     C4::Acquisition::ReopenBasket($basketno);
-    my @reopen_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'REOPEN_BASKET', object => $basketno });
+    my @reopen_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'REOPEN_BASKET', object => $basketno })->as_list;
     is (scalar @reopen_logs, 1, 'Basket reopen is logged');
 
     Koha::ActionLogs->delete;
@@ -924,17 +924,17 @@ subtest 'Acquisition logging' => sub {
         basketno => $basketno,
         booksellerid => $booksellerid
     });
-    my @mod_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET', object => $basketno });
+    my @mod_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET', object => $basketno })->as_list;
     is (scalar @mod_logs, 1, 'Basket modify is logged');
 
     Koha::ActionLogs->delete;
     C4::Acquisition::ModBasketHeader($basketno,"Test","","","",$booksellerid);
-    my @mod_header_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_HEADER', object => $basketno });
+    my @mod_header_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_HEADER', object => $basketno })->as_list;
     is (scalar @mod_header_logs, 1, 'Basket header modify is logged');
 
     Koha::ActionLogs->delete;
     C4::Acquisition::ModBasketUsers($basketno,(1));
-    my @mod_users_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_USERS', object => $basketno });
+    my @mod_users_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_USERS', object => $basketno })->as_list;
     is (scalar @mod_users_logs, 1, 'Basket users modify is logged');
 
     t::lib::Mocks::mock_preference('AcquisitionLog', 0);

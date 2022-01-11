@@ -36,11 +36,11 @@ my $nb_categories = Koha::Patron::Categories->count;
 
 # Create sample categories
 my $category_1 = $builder->build( { source => 'Category' } );
-my @categories = Koha::Template::Plugin::Categories->new->all;
+my @categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 1 + $nb_categories, '->all returns all defined categories' );
 
 my $category_2 = $builder->build( { source => 'Category' } );
-@categories = Koha::Template::Plugin::Categories->new->all;
+@categories = Koha::Template::Plugin::Categories->new->all->as_list;
 is( scalar(@categories), 2 + $nb_categories, '->all returns all defined categories' );
 
 is( Koha::Template::Plugin::Categories->GetName(
