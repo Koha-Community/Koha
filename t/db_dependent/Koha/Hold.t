@@ -24,12 +24,14 @@ use Test::More tests => 5;
 use Test::Exception;
 use Test::MockModule;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::ActionLogs;
 use Koha::Holds;
 use Koha::Libraries;
+use Koha::Old::Holds;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -379,6 +381,76 @@ subtest 'is_pickup_location_valid() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # reduce the tests noise
+    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge',
+        undef );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
+
+    # 0 == keep forever
+    $patron->privacy(0)->store;
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->id, status => undef }
+        }
+    );
+    $hold->cancel();
+    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        $patron->borrowernumber, 'Patron link is kept' );
+
+    # 1 == "default", meaning it is not protected from removal
+    $patron->privacy(1)->store;
+    $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->id, status => undef }
+        }
+    );
+    $hold->cancel();
+    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        $patron->borrowernumber, 'Patron link is kept' );
+
+    # 2 == delete immediately
+    $patron->privacy(2)->store;
+    $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->id, status => undef }
+        }
+    );
+    $hold->cancel();
+    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        undef, 'Patron link is deleted immediately' );
+
+    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
+    $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { borrowernumber => $patron->id, status => undef }
+        }
+    );
+    $hold->cancel();
+    is(
+        Koha::Old::Holds->find( $hold->id )->borrowernumber,
+        $anonymous_patron->id,
+        'Patron link is set to the configured anonymous patron immediately'
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -517,6 +517,8 @@ sub cancel {
     my ( $self, $params ) = @_;
     $self->_result->result_source->schema->txn_do(
         sub {
+            my $patron = $self->patron;
+
             $self->cancellationdate( dt_from_string->strftime( '%Y-%m-%d %H:%M:%S' ) );
             $self->priority(0);
             $self->cancellation_reason( $params->{cancellation_reason} );
@@ -550,7 +552,11 @@ sub cancel {
                 }
             }
 
-            $self->_move_to_old;
+            my $old_me = $self->_move_to_old;
+            # anonymize if required
+            $old_me->anonymize
+                if $patron->privacy == 2;
+
             $self->SUPER::delete(); # Do not add a DELETE log
 
             # now fix the priority on the others....
