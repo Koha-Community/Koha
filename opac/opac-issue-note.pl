@@ -50,10 +50,9 @@ $template->param(
 );
 
 my $issue_id = $query->param('issue_id');
-my $issue = Koha::Checkouts->find( $issue_id );
+my $issue = $patron->checkouts->find( $issue_id );
 
-
-if ( !$issue || $issue->borrowernumber != $borrowernumber ) {
+unless ( $issue ) {
     # exit early
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
     exit;
