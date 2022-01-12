@@ -40,22 +40,22 @@
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]
-            [% added.library.branchname | $KohaSpan class = 'name' | $raw %] added to group.
+            [% added.library.branchname | html | $KohaSpan class = 'name' %] added to group.
         [% ELSE %]
-            Group [% added.title | $KohaSpan class = 'name' | $raw %] created.
+            Group [% added.title | html | $KohaSpan class = 'name' %] created.
         [% END %]
     </div>
 [% ELSIF deleted %]
     <div class="dialog message group-deleted">
         [% IF deleted.title %]
-            Group [% deleted.title | $KohaSpan class = 'name' | $raw %] has been deleted.
+            Group [% deleted.title | html | $KohaSpan class = 'name' %] has been deleted.
         [% ELSE %]
-            [% deleted.library | $KohaSpan class = 'name' | $raw %] has been removed from group.
+            [% deleted.library | html | $KohaSpan class = 'name' %] has been removed from group.
         [% END %]
     </div>
 [% ELSIF error_duplicate_title %]
     <div class="dialog alert error-duplicate-group-title">
-            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' | $raw %] already exists.
+            A group with the title [% error_duplicate_title | html | $KohaSpan class = 'name' %] already exists.
     </div>
 [% END %]
 
@@ -359,14 +359,14 @@
         }
 
         function delete_group( id, title ) {
-            $('#delete-group-modal-title').html(title);
+            $('#delete-group-modal-title').text( title );
             $('#delete-group-modal-id').val( id );
             $('#delete-group-modal').modal('show');
         }
 
         function remove_library( id, library, parent_title ) {
-            $('#remove-library-modal-library').html( library );
-            $('#remove-library-modal-group').html(parent_title);
+            $('#remove-library-modal-library').text( library );
+            $('#remove-library-modal-group').text( parent_title );
             $('#remove-library-modal-id').val( id );
             $('#remove-library-modal').modal('show');
         }
