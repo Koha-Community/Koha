@@ -404,7 +404,7 @@ is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 1
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 $item = Koha::Items->find($item->itemnumber);
 is(
-    $item->safe_delete,
+    @{$item->safe_delete->messages}[0]->message,
     'book_reserved',
     'item that is captured to fill a hold cannot be deleted',
 );
