@@ -84,6 +84,7 @@
         <th class="hq-enumchron">Enumeration</th>
         <th class="hq-barcode">Barcode</th>
         <th class="hq-patron">Patron</th>
+        <th class="hq-patroncategory">Patron category</th>
         <th class="hq-sendto">Send to</th>
         <th class="hq-date">Date</th>
         <th class="hq-notes">Notes</th>
@@ -127,6 +128,11 @@
         <td class="hq-patron">
             <span class="filter_column filter_text">
                 <input type="text" placeholder="Patron">
+            </span>
+        </td>
+        <td class="hq-patroncategory">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Patron category">
             </span>
         </td>
         <td class="hq-sendto">
@@ -193,6 +199,7 @@
                  <p>[% itemsloo.patron.phone | html %]</p>
               [% END %]
             </td>
+            <td class="hq-patron-category">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
             <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
             <td class="hq-date" data-order="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</td>
             <td class="hq-notes">[% itemsloo.notes | html %]</td>
