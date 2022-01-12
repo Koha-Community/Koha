@@ -109,14 +109,6 @@
                             [% subfiel.marc_value | html %]
                         [% END %]
                     </span>
-                    [% IF ( subfiel.link ) %]
-                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | uri %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
-                            <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
-                        </a>
-                    [% END %]
-                    [% IF ( subfiel.authority ) %]
-                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]" class="button">Auth</a>
-                    [% END %]
                 </div> <!-- /.subfield_content.marc_field -->
             </div> <!-- /.auth_subfield -->
         [% END %]

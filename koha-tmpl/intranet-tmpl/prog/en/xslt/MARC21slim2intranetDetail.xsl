@@ -688,11 +688,9 @@
                 <xsl:text> </xsl:text>
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                    <xsl:element name="img">
-                        <xsl:attribute name="src">/intranet-tmpl/prog/img/filefind.png</xsl:attribute>
-                        <xsl:attribute name="alt"></xsl:attribute>
-                        <xsl:attribute name="height">15</xsl:attribute>
-                        <xsl:attribute name="width">15</xsl:attribute>
+                    <xsl:element name="i">
+                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                     </xsl:element>
                 </a>
             </xsl:if>
@@ -740,11 +738,9 @@
                         <xsl:text> </xsl:text>
                         <a class='authlink'>
                             <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                            <xsl:element name="img">
-                                <xsl:attribute name="src">/intranet-tmpl/prog/img/filefind.png</xsl:attribute>
-                                <xsl:attribute name="alt"></xsl:attribute>
-                                <xsl:attribute name="height">15</xsl:attribute>
-                                <xsl:attribute name="width">15</xsl:attribute>
+                            <xsl:element name="i">
+                                <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                                <xsl:attribute name="aria-label">View authority record</xsl:attribute>
                             </xsl:element>
                         </a>
                     </xsl:if>
