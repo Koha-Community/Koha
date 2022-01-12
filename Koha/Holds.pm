@@ -117,22 +117,20 @@ sub get_items_that_can_fill {
     push @bibs_or_items, 'me.itemnumber' => { in => \@itemnumbers } if @itemnumbers;
     push @bibs_or_items, 'biblionumber' => { in => \@biblionumbers } if @biblionumbers;
 
-    my @branchtransfers = map { $_->itemnumber }
-      Koha::Item::Transfers->search(
-          { datearrived => undef },
-          {
-              columns => ['itemnumber'],
-              collapse => 1,
-          }
-      )->as_list;
-    my @waiting_holds = map { $_->itemnumber }
-      Koha::Holds->search(
-          { 'found' => 'W' },
-          {
-              columns => ['itemnumber'],
-              collapse => 1,
-          }
-      )->as_list;
+    my @branchtransfers = Koha::Item::Transfers->search(
+        { datearrived => undef },
+        {
+            columns  => ['itemnumber'],
+            collapse => 1,
+        }
+    )->get_columns('itemnumber');
+    my @waiting_holds = Koha::Holds->search(
+        { 'found' => 'W' },
+        {
+            columns  => ['itemnumber'],
+            collapse => 1,
+        }
+    )->get_column('itemnumber');
 
     return Koha::Items->search(
         {

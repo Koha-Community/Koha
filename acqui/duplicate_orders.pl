@@ -117,9 +117,8 @@ elsif ( $op eq 'batch_edit' ) {
     @{$budget_loop} =
       sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$budget_loop};
 
-    my @currencies = Koha::Acquisition::Currencies->search->as_list;
     $template->param(
-        currencies  => \@currencies,
+        currencies  => Koha::Acquisition::Currencies->search,
         budget_loop => $budget_loop,
     );
 }

@@ -43,13 +43,14 @@ if( Koha::Libraries->search->count < 1){
     $template->param(no_branches => 1);
 }
 
-my @categories = Koha::Patron::Categories->search_with_library_limits->as_list;
-if(scalar(@categories) < 1){
+my $categories = Koha::Patron::Categories->search_with_library_limits;
+unless ( $categories->count ) {
     $no_add = 1;
     $template->param(no_categories => 1);
 }
 else {
-    $template->param(categories=>\@categories);
+    # FIXME This does not seem to be used in the template
+    $template->param(categories => $categories);
 }
 
 my $branch =

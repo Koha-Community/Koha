@@ -7,7 +7,7 @@
       <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu" id="export-csv-menu">
           <li><a href="#">Default</a></li>
-          [% IF csv_profiles %]
+          [% IF csv_profiles.count %]
               [% FOR csv IN csv_profiles %]
                 <li><a href="#" data-value="[% csv.export_format_id | html %]">[% csv.profile | html %]</a></li>
               [% END %]

@@ -456,9 +456,9 @@ if( $suggestion_ref->{STATUS} ) {
     );
 }
 
-my @currencies = Koha::Acquisition::Currencies->search->as_list;
+my $currencies = Koha::Acquisition::Currencies->search;
 $template->param(
-    currencies   => \@currencies,
+    currencies   => $currencies,
     suggestion   => $suggestion_ref,
     price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
     total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),

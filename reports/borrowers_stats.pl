@@ -219,7 +219,7 @@ sub calculate {
         }
     }
 
-    my @branchcodes = map { $_->branchcode } Koha::Libraries->search->as_list;
+    my @branchcodes = Koha::Libraries->search->get_column('branchcode');
 	($status  ) and push @loopfilter,{crit=>"Status",  filter=>$status  };
 	($activity) and push @loopfilter,{crit=>"Activity",filter=>$activity};
 # year of activity

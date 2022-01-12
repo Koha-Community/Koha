@@ -91,14 +91,14 @@ sub move {
 
     if ( $where eq 'up' ) {
         unless ( $alert->precedence() == 1 ) {
-            my ($other) = $self->search( { precedence => $alert->precedence() - 1 } )->as_list;
+            my $other = $self->search( { precedence => $alert->precedence() - 1 } )->next;
             $other->precedence( $alert->precedence() )->store();
             $alert->precedence( $alert->precedence() - 1 )->store();
         }
     }
     elsif ( $where eq 'down' ) {
         unless ( $alert->precedence() == $self->get_last_precedence() ) {
-            my ($other) = $self->search( { precedence => $alert->precedence() + 1 } )->as_list;
+            my $other = $self->search( { precedence => $alert->precedence() + 1 } )->next;
             $other->precedence( $alert->precedence() )->store();
             $alert->precedence( $alert->precedence() + 1 )->store();
         }

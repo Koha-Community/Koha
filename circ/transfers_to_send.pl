@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 my $branchcode = C4::Context->userenv->{'branch'};
 
 # transfers requested but not yet sent
-my @transfers = Koha::Libraries->search(
+my $transfers = Koha::Libraries->search(
     {
         'branchtransfers_tobranches.frombranch'    => $branchcode,
         'branchtransfers_tobranches.daterequested' => { '!=' => undef },
@@ -53,10 +53,10 @@ my @transfers = Koha::Libraries->search(
         prefetch => 'branchtransfers_tobranches',
         order_by => 'branchtransfers_tobranches.tobranch'
     }
-)->as_list;
+);
 
 $template->param(
-    libraries => \@transfers,
+    libraries => $transfers,
     show_date => dt_from_string
 );
 

@@ -64,12 +64,12 @@
                         <select name="issues-table-output-format" id="issues-table-output-format">
                             <option value="iso2709_995">MARC with items</option>
                             <option value="iso2709">MARC without items</option>
-                            [% IF csv_profiles.size %]
+                            [% IF csv_profiles.count %]
                                 <option value="csv">CSV</option>
                             [% END %]
                         </select>
 
-                        [% IF csv_profiles.size %]
+                        [% IF csv_profiles.count %]
                             <select name="csv_profile_id">
                                 [% FOREACH csv_profile IN csv_profiles %]
                                     <option value="[% csv_profile.export_format_id | html %]">[% csv_profile.profile | html %]</option>

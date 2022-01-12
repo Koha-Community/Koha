@@ -121,10 +121,8 @@ if ($op) {
     }
 }
 
-my @api_keys = Koha::ApiKeys->search({ patron_id => $patron_id })->as_list;
-
 $template->param(
-    api_keys   => \@api_keys,
+    api_keys   => Koha::ApiKeys->search({ patron_id => $patron_id }),
     csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $cgi->cookie('CGISESSID') }),
     patron     => $patron
 );

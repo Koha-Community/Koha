@@ -86,7 +86,7 @@ if ( $action eq 'create' || $action eq 'new' ) {
     $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
       if @PatronSelfRegistrationLibraryList;
 }
-my @libraries = Koha::Libraries->search($params)->as_list;
+my $libraries = Koha::Libraries->search($params);
 
 my ( $min, $max ) = C4::Members::get_cardnumber_length();
 if ( defined $min ) {
@@ -102,7 +102,7 @@ $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, $action ),
     mandatory         => $mandatory,
-    libraries         => \@libraries,
+    libraries         => $libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
     defaultCategory  => $defaultCategory,
 );
@@ -162,7 +162,7 @@ if ( $action eq 'create' ) {
             borrower       => \%borrower
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
-    } elsif ( ! grep { $borrower{branchcode} eq $_->branchcode } @libraries ) {
+    } elsif ( $libraries->find($borrower{branchcode}) ) {
         die "Branchcode not allowed"; # They hack the form
     }
     else {
@@ -625,7 +625,7 @@ sub GeneratePatronAttributesForm {
     my ( $borrowernumber, $entered_attributes ) = @_;
 
     # Get all attribute types and the values for this patron (if applicable)
-    my @types = grep { $_->opac_editable() or $_->opac_display }
+    my @types = grep { $_->opac_editable() or $_->opac_display } # FIXME filter using DBIC
         Koha::Patron::Attribute::Types->search()->as_list();
     if ( scalar(@types) == 0 ) {
         return [];

@@ -207,7 +207,6 @@ if ( not $ordernumber ) {    # create order
     }
 
     if ( not $biblionumber and Koha::BiblioFrameworks->find('ACQ') ) {
-        #my $acq_mss = Koha::MarcSubfieldStructures->search({ frameworkcode => 'ACQ', tagfield => { '!=' => $itemnumber_tag } });
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
             next if $tag eq $itemnumber_tag;    # skip items fields
@@ -326,7 +325,6 @@ $template->param( catalog_details => \@catalog_details, );
 my $suggestion;
 $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
 
-my @currencies = Koha::Acquisition::Currencies->search->as_list;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # build bookfund list
@@ -452,7 +450,7 @@ $template->param(
     invoiceincgst    => $bookseller->invoiceincgst,
     cur_active_sym   => $active_currency->symbol,
     cur_active       => $active_currency->currency,
-    currencies       => \@currencies,
+    currencies       => Koha::Acquisition::Currencies->search,
     currency         => $data->{currency},
     vendor_currency  => $bookseller->listprice,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,

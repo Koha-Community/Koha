@@ -117,13 +117,13 @@ if( $basketno && $ordernumber) {
     # Search for booksellers to transfer from/to
     $op = '' unless $op;
     if( $op eq "do_search" ) {
-        my @booksellers = Koha::Acquisition::Booksellers->search(
+        my $booksellers = Koha::Acquisition::Booksellers->search(
                             { name     => { -like => "%$query%" } },
-                            { order_by => { -asc => 'name' } } )->as_list;
+                            { order_by => { -asc => 'name' } } );
         $template->param(
             query => $query,
             do_search => 1,
-            booksellersloop => \@booksellers,
+            booksellers => $booksellers,
         );
     }
 }

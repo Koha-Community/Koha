@@ -397,11 +397,13 @@ if ( $op eq 'view' ) {
                 itemsloop          => \@items_info,
                 sortfield          => $sortfield,
                 direction          => $direction,
-                csv_profiles => [
-                    Koha::CsvProfiles->search(
-                        { type => 'marc', used_for => 'export_records', staff_only => 0 }
-                    )->as_list
-                ],
+                csv_profiles => Koha::CsvProfiles->search(
+                    {
+                        type       => 'marc',
+                        used_for   => 'export_records',
+                        staff_only => 0
+                    }
+                  ),
             );
             if ( $page ) {
                 my $pager = $contents->pager;

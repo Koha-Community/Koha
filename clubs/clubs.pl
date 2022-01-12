@@ -45,15 +45,12 @@ my $club_id = $cgi->param('club_id');
 my $club_template = $club_template_id ? Koha::Club::Templates->find( $club_template_id ) : undef;
 my $club = $club_id ? Koha::Clubs->find( $club_id ) : undef;
 
-my @club_templates = Koha::Club::Templates->search->as_list;
-my @clubs          = Koha::Clubs->search->as_list;
-
 $template->param(
     stored         => $stored,
     club_template  => $club_template,
     club           => $club,
-    club_templates => \@club_templates,
-    clubs          => \@clubs,
+    club_templates => Koha::Club::Templates->search,
+    clubs          => Koha::Clubs->search,
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

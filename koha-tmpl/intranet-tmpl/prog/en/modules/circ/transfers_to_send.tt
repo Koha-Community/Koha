@@ -43,7 +43,7 @@
 
                         <h1>Transfers requested of your library as of [% show_date | $KohaDates %]</h1>
 
-                        [% IF ( libraries ) %]
+                        [% IF libraries.count %]
                         <p>Your library is the origin for the following transfer(s)</p>
                         <div id="resultlist">
                             [% FOREACH library IN libraries %]

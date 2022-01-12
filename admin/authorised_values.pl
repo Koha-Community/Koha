@@ -212,13 +212,15 @@ $template->param(
 
 if ( $op eq 'list' ) {
     # build categories list
-    my @categories = Koha::AuthorisedValueCategories->search({ category_name => { -not_in => ['', 'branches', 'itemtypes', 'cn_source']}}, { order_by => ['category_name'] } )->as_list;
-    my @category_list;
-    for my $category ( @categories ) {
-        push( @category_list, $category->category_name );
-    }
+    my @category_names = Koha::AuthorisedValueCategories->search(
+        {
+            category_name =>
+              { -not_in => [ '', 'branches', 'itemtypes', 'cn_source' ] }
+        },
+        { order_by => ['category_name'] }
+    )->get_column('category_name');
 
-    $searchfield ||= $category_list[0];
+    $searchfield ||= $category_names[0];
 
     my @avs_by_category = Koha::AuthorisedValues->new->search( { category => $searchfield } )->as_list;
     my @loop_data = ();
@@ -238,7 +240,7 @@ if ( $op eq 'list' ) {
     $template->param(
         loop     => \@loop_data,
         category => Koha::AuthorisedValueCategories->find($searchfield), # TODO Move this up and add a Koha::AVC->authorised_values method to replace call for avs_by_category
-        categories => \@category_list,
+        category_names => \@category_names,
     );
 
 }

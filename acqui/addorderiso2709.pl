@@ -96,12 +96,11 @@ if ($op eq ""){
 #
 } elsif ($op eq "batch_details"){
 #display lines inside the selected batch
-    # get currencies (for change rates calcs if needed)
-    my @currencies = Koha::Acquisition::Currencies->search->as_list;
 
     $template->param("batch_details" => 1,
                      "basketno"      => $cgiparams->{'basketno'},
-                     currencies => \@currencies,
+                     # get currencies (for change rates calcs if needed)
+                     currencies => Koha::Acquisition::Currencies->search,
                      bookseller => $bookseller,
                      "allmatch" => $allmatch,
                      );
@@ -611,7 +610,6 @@ sub import_biblios_list {
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
-    my @itypes = Koha::ItemTypes->search->as_list;
     $template->param(biblio_list => \@list,
                         num_results => $num_records,
                         import_batch_id => $import_batch_id,
@@ -622,9 +620,9 @@ sub import_biblios_list {
                         "item_action_${item_action}" => 1,
                         item_action => $item_action,
                         item_error => $item_error,
-                        libraries => scalar Koha::Libraries->search(),
+                        libraries => Koha::Libraries->search,
                         locationloop => \@locations,
-                        itypeloop => \@itypes,
+                        itemtypes => Koha::ItemTypes->search,
                         ccodeloop => \@ccodes,
                         notforloanloop => \@notforloans,
                     );

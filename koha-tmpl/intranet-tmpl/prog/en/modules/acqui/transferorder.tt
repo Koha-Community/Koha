@@ -98,7 +98,7 @@
             [% ELSE %]
                 <h3>Choose a vendor to transfer from</h3>
             [% END %]
-            [% IF ( booksellersloop ) %]
+            [% IF booksellers.count %]
                 <table>
                     <thead>
                         <tr>
@@ -107,7 +107,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        [% FOREACH bookseller IN booksellersloop %]
+                        [% FOREACH bookseller IN booksellers %]
                           <tr>
                             <td>[% bookseller.name | html %]</td>
                             <td><a class="btn btn-default btn-xs" href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id | html %][% IF (ordernumber) %]&ordernumber=[% ordernumber | html %][% END %]">Choose</a></td>

@@ -47,16 +47,15 @@ sub show {
     );
 
     my $branch   = $input->param('branch') || '*';
-    my @categories = Koha::Patron::Categories->search_with_library_limits->as_list;
-    my @item_types = Koha::ItemTypes->search->as_list;
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
     my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });
 
-    $template->param(branch             => $branch);
-    $template->param(categories         => \@categories);
-    $template->param(item_types         => \@item_types);
-    $template->param(grid_checkout      => $grid_checkout);
-    $template->param(grid_checkin       => $grid_checkin);
+    $template->param(
+        branch        => $branch,
+        item_types    => Koha::ItemTypes->search,
+        grid_checkout => $grid_checkout,
+        grid_checkin  => $grid_checkin,
+    );
 
     output_html_with_http_headers $input, $cookie, $template->output;
 }

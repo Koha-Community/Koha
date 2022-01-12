@@ -74,7 +74,7 @@ my $basket;
 my $op = $input->param('op');
 my $is_an_edit = $input->param('is_an_edit');
 
-$template->param( available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } )->as_list ] );
+$template->param( available_additional_fields => Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) );
 
 if ( $op eq 'add_form' ) {
     my @contractloop;
@@ -116,9 +116,9 @@ if ( $op eq 'add_form' ) {
         $template->param(contractloop => \@contractloop,
                          basketcontractnumber => $basket->{'contractnumber'});
     }
-    my @booksellers = Koha::Acquisition::Booksellers->search(
+    my $booksellers = Koha::Acquisition::Booksellers->search(
                         undef,
-                        { order_by => { -asc => 'name' } } )->as_list;
+                        { order_by => { -asc => 'name' } } );
 
     $template->param( add_form => 1,
                     basketname => $basket->{'basketname'},
@@ -127,7 +127,7 @@ if ( $op eq 'add_form' ) {
                     booksellername => $bookseller->name,
                     booksellerid => $booksellerid,
                     basketno => $basketno,
-                    booksellers => \@booksellers,
+                    booksellers => $booksellers,
                     is_standing => $basket->{is_standing},
                     create_items => $basket->{create_items},
     );

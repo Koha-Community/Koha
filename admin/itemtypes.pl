@@ -198,7 +198,7 @@ if ( $op eq 'add_form' ) {
 
 if ( $op eq 'list' ) {
     $template->param(
-        itemtypes => scalar Koha::ItemTypes->search,
+        itemtypes => Koha::ItemTypes->search,
         messages  => \@messages,
     );
 }

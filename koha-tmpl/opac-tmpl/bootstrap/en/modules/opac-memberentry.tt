@@ -245,7 +245,7 @@
 
                                             [% UNLESS hidden.defined('branchcode') %]
                                                 <li>
-                                                    [% IF ( libraries.size > 1 ) %]
+                                                    [% IF libraries.count %]
                                                         <label for="borrower_branchcode" class="[% required.branchcode | html %]">Home library:</label>
 
                                                         <select id="borrower_branchcode" name="borrower_branchcode" class="[% required.branchcode | html %]">

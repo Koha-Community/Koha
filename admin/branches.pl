@@ -49,17 +49,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 if ( $op eq 'add_form' ) {
-    my $library;
-    if ($branchcode) {
-        $library = Koha::Libraries->find($branchcode);
-        $template->param( selected_smtp_server => $library->smtp_server );
-    }
-
-    my @smtp_servers = Koha::SMTP::Servers->search->as_list;
-
     $template->param(
-        library      => $library,
-        smtp_servers => \@smtp_servers
+        library      => Koha::Libraries->find($branchcode),
+        smtp_servers => Koha::SMTP::Servers->search,
     );
 } elsif ( $op eq 'add_validate' ) {
     my @fields = qw(

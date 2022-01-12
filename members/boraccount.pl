@@ -174,10 +174,10 @@ if ( $action eq 'discount' ) {
 #get account details
 my $total = $patron->account->balance;
 
-my @accountlines = Koha::Account::Lines->search(
+my $accountlines = Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber },
     { order_by       => { -desc => 'accountlines_id' } }
-)->as_list;
+);
 
 my $totalcredit;
 if($total <= 0){
@@ -209,7 +209,7 @@ $template->param(
     finesview           => 1,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    accounts            => \@accountlines,
+    accounts            => $accountlines,
     payment_id          => $payment_id,
     change_given        => $change_given,
     renew_results       => $renew_results_display,

@@ -215,11 +215,11 @@ Batch list
                         </select>
                         </li>
                         <li><label for="itype_item_[% item.item_id | html %]">itype</label><select id="itype_item_[% item.item_id | html %]" name="itype_[% item.biblio_count | html %]">
-                        [% FOREACH itypeloo IN itypeloop %]
-                          [% IF ( itypeloo.itemtype ) == ( item.itype ) %]
-                            <option value="[% itypeloo.itemtype | html %]" selected="selected">[% itypeloo.description | html %]</option>
+                        [% FOREACH itemtype IN itemtypes %]
+                          [% IF itemtype.itemtype == item.itype %]
+                            <option value="[% itemtype.itemtype | html %]" selected="selected">[% itemtype.description | html %]</option>
                           [% ELSE %]
-                            <option value="[% itypeloo.itemtype | html %]">[% itypeloo.description | html %]</option>
+                            <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html %]</option>
                           [% END %]
                         [% END %]
                         </select>

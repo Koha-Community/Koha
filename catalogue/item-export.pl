@@ -36,7 +36,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 my @itemnumbers = $cgi->multi_param('itemnumber');
 my $format = $cgi->param('format') // 'csv';
 
-my @items = Koha::Items->search({ itemnumber => { -in => \@itemnumbers } })->as_list;
+my $items = Koha::Items->search({ itemnumber => { -in => \@itemnumbers } });
 
 if ($format eq 'barcodes') {
     print $cgi->header({
@@ -44,14 +44,14 @@ if ($format eq 'barcodes') {
         attachment => 'barcodes.txt',
     });
 
-    foreach my $item (@items) {
+    while ( my $item = $items->next ) {
         print $item->barcode . "\n";
     }
     exit;
 }
 
 $template->param(
-    results => \@items,
+    results => $items,
 );
 
 print $cgi->header({

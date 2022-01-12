@@ -603,7 +603,7 @@ $template->param(
 
 
 if ( C4::Context->preference("ExportCircHistory") ) {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' })->as_list ]);
+    $template->param(csv_profiles => Koha::CsvProfiles->search({ type => 'marc' }));
 }
 
 my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;

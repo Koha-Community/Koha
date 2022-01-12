@@ -240,7 +240,7 @@ Authorized values &rsaquo; Administration &rsaquo; Koha
         <p>
             <label for="category_search">Show category: </label>
             <select name="searchfield" id="category_search">
-                [% FOR c IN categories %]
+                [% FOR c IN category_names %]
                     [% IF c == searchfield %]
                         <option value="[% c | html %]" selected="selected">[% c | html %]</option>
                     [% ELSE %]
@@ -323,7 +323,7 @@ Authorized values &rsaquo; Administration &rsaquo; Koha
             </tr>
         </thead>
         <tbody>
-            [% FOR c IN categories %]
+            [% FOR c IN category_names %]
                 <tr>
                     <td><a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% c | uri %]">[% c | html %]</a></td>
                     <td>

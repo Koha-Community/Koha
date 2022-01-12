@@ -72,7 +72,7 @@ GetOptions(
 pod2usage(1) if $help;
 cronlogaction();
 
-my @patron_ids = map { $_->borrowernumber } Koha::Account::Lines->search(
+my @patron_ids = Koha::Account::Lines->search(
         {
             amountoutstanding => { '<' => 0 },
             borrowernumber => { '!=' => undef }
@@ -81,7 +81,7 @@ my @patron_ids = map { $_->borrowernumber } Koha::Account::Lines->search(
             columns  => [ qw/borrowernumber/ ],
             distinct => 1,
         }
-    )->as_list;
+    )->get_column('borrowernumber');
 
 my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@patron_ids } });
 

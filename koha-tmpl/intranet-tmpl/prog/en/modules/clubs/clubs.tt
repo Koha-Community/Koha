@@ -65,7 +65,7 @@
                     </div>
                 [% END %]
 
-                [% IF club_templates %]
+                [% IF club_templates.count %]
                     <table id="club-templates-table">
                         <thead>
                             <tr>
@@ -120,7 +120,7 @@
                 [% IF CAN_user_clubs_edit_clubs %]
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            [% IF club_templates %]
+                            [% IF club_templates.count %]
                                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
                             [% ELSE %]
                                 <button disabled="disabled" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
@@ -134,10 +134,10 @@
                     </div>
                 [% END %]
 
-                [% IF clubs %]
+                [% IF clubs.count %]
                     [% INCLUDE 'clubs-table.inc' %]
                 [% ELSE %]
-                    [% IF club_templates %]
+                    [% IF club_templates.count %]
                         <div class="dialog message">No clubs defined.</div>
                     [% ELSE %]
                         <div class="dialog message">No clubs defined. A club template must be defined before a club can be defined.</div>

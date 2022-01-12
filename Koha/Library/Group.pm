@@ -111,15 +111,13 @@ sub libraries {
 
     my $in_or_not = $invert ? '-not_in' : '-in';
 
-    my @children = Koha::Library::Groups->search(
+    my @branchcodes = Koha::Library::Groups->search(
         {
             parent_id  => $self->id,
             branchcode => { '!=' => undef },
         },
         { order_by => 'branchcode' }
-    )->as_list;
-
-    my @branchcodes = map { $_->branchcode } @children;
+    )->get_column('branchcode');
 
     return Koha::Libraries->search(
         {

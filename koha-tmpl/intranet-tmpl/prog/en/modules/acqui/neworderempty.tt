@@ -145,7 +145,7 @@
         <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
         <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
 
-        [% FOREACH c IN currencies %]
+        [% FOREACH c IN currencies.count %]
             <input type="hidden" id="currency_rate_[% c.currency | html %]"  name="[% c.currency | html %]" value="[% c.rate | html %]" />
         [% END %]
 
@@ -399,7 +399,7 @@
 		<li>
 			<label for="currency">Currency:</label>
             <select name="currency" id="currency" onchange="updateCosts();">
-                [% FOREACH c IN currencies %]
+                [% FOREACH c IN currencies.count %]
                     [% IF ordernumber and c.currency == currency or not ordernumber and c.currency == vendor_currency %]
                         <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
                     [% ELSIF not c.archived %]

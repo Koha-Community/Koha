@@ -130,16 +130,14 @@ if ($bib_list && $format) {
 
 } else { 
     $template->param(
-        csv_profiles => [
-            Koha::CsvProfiles->search(
-                {
-                    type       => 'marc',
-                    used_for   => 'export_records',
-                    staff_only => 0
-                }
-            )->as_list
-        ]
+        csv_profiles => Koha::CsvProfiles->search(
+            {
+                type       => 'marc',
+                used_for   => 'export_records',
+                staff_only => 0
+            }
+        ),
+        bib_list => $bib_list,
     );
-    $template->param(bib_list => $bib_list); 
     output_html_with_http_headers $query, $cookie, $template->output;
 }
