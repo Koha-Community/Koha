@@ -1308,33 +1308,32 @@ sub _read_configuration {
         );
     }
 
-    if ( $conf && $conf->{server} ) {
-        my $nodes = $conf->{server};
-        if ( ref($nodes) eq 'ARRAY' ) {
-            $configuration->{nodes} = $nodes;
-        }
-        else {
-            $configuration->{nodes} = [$nodes];
-        }
-    }
-    else {
+    unless ( exists $conf->{server} ) {
         Koha::Exceptions::Config::MissingEntry->throw(
             "Missing <elasticsearch>/<server> entry in koha-conf.xml"
         );
     }
 
-    if ( defined $conf->{index_name} ) {
-        $configuration->{index_name} = $conf->{index_name};
-    }
-    else {
+    unless ( exists $conf->{index_name} ) {
         Koha::Exceptions::Config::MissingEntry->throw(
             "Missing <elasticsearch>/<index_name> entry in koha-conf.xml",
         );
     }
 
-    $configuration->{cxn_pool} = $conf->{cxn_pool} // 'Static';
+    while ( my ( $var, $val ) = each %$conf ) {
+        if ( $var eq 'server' ) {
+            if ( ref($val) eq 'ARRAY' ) {
+                $configuration->{nodes} = $val;
+            }
+            else {
+                $configuration->{nodes} = [$val];
+            }
+        } else {
+            $configuration->{$var} = $val;
+        }
+    }
 
-    $configuration->{trace_to} = $conf->{trace_to} if defined $conf->{trace_to};
+    $configuration->{cxn_pool} //= 'Static';
 
     return $configuration;
 }
