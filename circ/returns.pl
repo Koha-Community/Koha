@@ -35,9 +35,6 @@ use CGI qw ( -utf8 );
 use DateTime;
 
 use C4::Auth qw( get_template_and_user get_session haspermission );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Circulation qw( barcodedecode GetBranchItemRule AddReturn updateWrongTransfer LostItem );
-use C4::Reserves qw( ModReserve ModReserveAffect GetOtherReserves );
 use C4::Circulation qw( barcodedecode GetBranchItemRule AddReturn updateWrongTransfer LostItem );
 use C4::Context;
 use C4::Items qw( ModItemTransfer );
