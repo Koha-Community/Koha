@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use base qw(Koha::Hold);
 
+use C4::Context;
+
 =head1 NAME
 
 Koha::Old::Hold - Koha Old Hold object class
@@ -29,12 +31,27 @@ This object represents a hold that has been filled or canceled
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 anonymize
+
+    $old_hold->anonymize();
+
+Anonymize the given I<Koha::Old::Hold> object.
 
 =cut
 
+sub anonymize {
+    my ($self) = @_;
 
-=head3 type
+    my $anonymous_id = C4::Context->preference('AnonymousPatron') || undef;
+
+    return $self->update( { borrowernumber => $anonymous_id } );
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
