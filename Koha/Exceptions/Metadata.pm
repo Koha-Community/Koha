@@ -17,10 +17,12 @@ package Koha::Exceptions::Metadata;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Metadata' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Metadata::Invalid' => {
         isa => 'Koha::Exceptions::Metadata',

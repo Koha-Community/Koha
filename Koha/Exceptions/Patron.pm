@@ -2,9 +2,11 @@ package Koha::Exceptions::Patron;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
     'Koha::Exceptions::Patron' => {
-        description => "Something went wrong!"
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Patron::FailedDelete' => {
         isa         => 'Koha::Exceptions::Patron',

@@ -17,9 +17,11 @@ package Koha::Exceptions::ArticleRequest;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
     'Koha::Exceptions::ArticleRequest' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::ArticleRequest::LimitReached' => {
         isa         => 'Koha::Exceptions::ArticleRequest',

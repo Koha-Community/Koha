@@ -2,10 +2,12 @@ package Koha::Exceptions::Authentication;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Authentication' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Authentication::Required' => {
         isa => 'Koha::Exceptions::Authentication',

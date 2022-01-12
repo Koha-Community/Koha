@@ -22,7 +22,6 @@ use Koha::Exceptions::Exception;
 use Exception::Class (
     'Koha::Exceptions::Checkouts::ReturnClaims' => {
         isa         => 'Koha::Exceptions::Exception',
-        description => 'Something went wrong!',
     },
     'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy' => {
         isa         => 'Koha::Exceptions::Checkouts::ReturnClaims',

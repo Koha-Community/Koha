@@ -17,10 +17,12 @@ package Koha::Exceptions::Account;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Account' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Account::IsNotCredit' => {
         isa         => 'Koha::Exceptions::Account',

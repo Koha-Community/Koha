@@ -17,10 +17,12 @@ package Koha::Exceptions::Elasticsearch;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Elasticsearch' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Elasticsearch::BadResponse' => {
         isa         => 'Koha::Exceptions::Elasticsearch',

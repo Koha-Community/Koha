@@ -2,10 +2,12 @@ package Koha::Exceptions::Config;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Config' => {
-        description => 'Something went wrong!',
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Config::MissingEntry' => {
         isa => 'Koha::Exceptions::Config',

@@ -2,10 +2,12 @@ package Koha::Exceptions::Patron::Attribute;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
 
     'Koha::Exceptions::Patron::Attribute' => {
-        description => 'Something went wrong'
+        isa => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Patron::Attribute::InvalidType' => {
         isa         => 'Koha::Exceptions::Patron::Attribute',
