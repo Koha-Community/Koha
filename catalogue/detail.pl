@@ -95,7 +95,7 @@ if ( not defined $record ) {
     exit;
 }
 
-eval { $biblio->metadata->record };
+my $marc_record = eval { $biblio->metadata->record };
 $template->param( decoding_error => $@ );
 
 if($query->cookie("holdfor")){
@@ -144,8 +144,6 @@ $template->param(
     normalized_oclc => $oclc,
     normalized_isbn => $isbn,
 );
-
-my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour });
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
 
@@ -221,7 +219,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
         $template->param( ComponentPartsQuery => $biblio->get_components_query );
     }
 } else { # check if we should show analytics anyway
-    $show_analytics = 1 if @{$biblio->get_marc_components(1)}; # count matters here, results does not
+    $show_analytics = 1 if $marc_record && @{$biblio->get_marc_components(1)}; # count matters here, results does not
     $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->messages};
 }
 
@@ -452,7 +450,7 @@ $template->param(
 );
 
 $template->param(
-    MARCNOTES   => $marcnotesarray,
+    MARCNOTES   => $marc_record ? $biblio->get_marc_notes({ marcflavour => $marcflavour }) : (),
     itemdata_ccode      => $itemfields{ccode},
     itemdata_enumchron  => $itemfields{enumchron},
     itemdata_uri        => $itemfields{uri},
