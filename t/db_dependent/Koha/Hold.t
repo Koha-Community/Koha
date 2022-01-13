@@ -19,17 +19,150 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Test::Exception;
 use Test::MockModule;
 
 use t::lib::TestBuilder;
 
+use Koha::ActionLogs;
+use Koha::Holds;
 use Koha::Libraries;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'fill() tests' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $fee = 15;
+
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { reservefee => $fee }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $category->id }
+        }
+    );
+    my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $title  = 'Do what you want';
+    my $biblio = $builder->build_sample_biblio( { title => $title } );
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->id } );
+    my $hold   = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber   => $biblio->id,
+                borrowernumber => $patron->id,
+                itemnumber     => $item->id,
+                priority       => 10,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldFeeMode', 'any_time_is_collected' );
+    t::lib::Mocks::mock_preference( 'HoldsLog',    1 );
+    t::lib::Mocks::mock_userenv(
+        { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $interface = 'api';
+    C4::Context->interface($interface);
+
+    my $ret = $hold->fill;
+
+    is( ref($ret), 'Koha::Hold', '->fill returns the object type' );
+    is( $ret->id, $hold->id, '->fill returns the object' );
+
+    is( Koha::Holds->find($hold->id), undef, 'Hold no longer current' );
+    my $old_hold = Koha::Old::Holds->find( $hold->id );
+
+    is( $old_hold->id, $hold->id, 'reserve_id retained' );
+    is( $old_hold->priority, 0, 'priority set to 0' );
+    is( $old_hold->found, 'F', 'found set to F' );
+
+    subtest 'fee applied tests' => sub {
+
+        plan tests => 9;
+
+        my $account = $patron->account;
+        is( $account->balance, $fee, 'Charge applied correctly' );
+
+        my $debits = $account->outstanding_debits;
+        is( $debits->count, 1, 'Only one fee charged' );
+
+        my $fee_debit = $debits->next;
+        is( $fee_debit->amount * 1, $fee, 'Fee amount stored correctly' );
+        is( $fee_debit->description, $title,
+            'Fee description stored correctly' );
+        is( $fee_debit->manager_id, $manager->id,
+            'Fee manager_id stored correctly' );
+        is( $fee_debit->branchcode, $manager->branchcode,
+            'Fee branchcode stored correctly' );
+        is( $fee_debit->interface, $interface,
+            'Fee interface stored correctly' );
+        is( $fee_debit->debit_type_code,
+            'RESERVE', 'Fee debit_type_code stored correctly' );
+        is( $fee_debit->itemnumber, $item->id,
+            'Fee itemnumber stored correctly' );
+    };
+
+    my $logs = Koha::ActionLogs->search(
+        {
+            action => 'FILL',
+            module => 'HOLDS',
+            object => $hold->id
+        }
+    );
+
+    is( $logs->count, 1, '1 log line added' );
+
+    # Set HoldFeeMode to something other than any_time_is_collected
+    t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
+
+    $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber   => $biblio->id,
+                borrowernumber => $patron->id,
+                itemnumber     => $item->id,
+                priority       => 10,
+            }
+        }
+    );
+
+    $hold->fill;
+
+    my $account = $patron->account;
+    is( $account->balance, $fee, 'No new charge applied' );
+
+    my $debits = $account->outstanding_debits;
+    is( $debits->count, 1, 'Only one fee charged, because of HoldFeeMode' );
+
+    $logs = Koha::ActionLogs->search(
+        {
+            action => 'FILL',
+            module => 'HOLDS',
+            object => $hold->id
+        }
+    );
+
+    is( $logs->count, 0, 'HoldsLog disabled, no logs added' );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'patron() tests' => sub {
 
