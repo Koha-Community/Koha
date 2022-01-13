@@ -651,7 +651,7 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
 
 subtest 'add() tests (maxreserves behaviour)' => sub {
 
-    plan tests => 7;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -736,6 +736,20 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
       ->json_is( { error => 'Hold cannot be placed. Reason: tooManyReserves' } );
+
+    t::lib::Mocks::mock_preference( 'maxreserves', 0 );
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201, 'maxreserves == 0 => no limit');
+
+    # cleanup for the next tests
+    my $hold_id = $t->tx->res->json->{hold_id};
+    Koha::Holds->find( $hold_id )->delete;
+
+    t::lib::Mocks::mock_preference( 'maxreserves', undef );
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201, 'maxreserves == undef => no limit');
 
     $schema->storage->txn_rollback;
 };
