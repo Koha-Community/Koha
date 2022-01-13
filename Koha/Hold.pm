@@ -607,7 +607,11 @@ sub fill {
                 }
             );
 
-            $self->_move_to_old;
+            my $old_me = $self->_move_to_old;
+            # anonymize if required
+            $old_me->anonymize
+                if $patron->privacy == 2;
+
             $self->SUPER::delete(); # Do not add a DELETE log
 
             # now fix the priority on the others....

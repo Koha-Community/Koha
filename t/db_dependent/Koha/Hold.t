@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'fill() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -163,6 +163,67 @@ subtest 'fill() tests' => sub {
     );
 
     is( $logs->count, 0, 'HoldsLog disabled, no logs added' );
+
+    subtest 'anonymization behavior tests' => sub {
+
+        plan tests => 4;
+
+        # reduce the tests noise
+        t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
+        t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+
+        # 0 == keep forever
+        $patron->privacy(0)->store;
+        my $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => { borrowernumber => $patron->id, status => undef }
+            }
+        );
+        $hold->fill();
+        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            $patron->borrowernumber, 'Patron link is kept' );
+
+        # 1 == "default", meaning it is not protected from removal
+        $patron->privacy(1)->store;
+        $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => { borrowernumber => $patron->id, status => undef }
+            }
+        );
+        $hold->fill();
+        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            $patron->borrowernumber, 'Patron link is kept' );
+
+        # 2 == delete immediately
+        $patron->privacy(2)->store;
+        $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => { borrowernumber => $patron->id, status => undef }
+            }
+        );
+        $hold->fill();
+        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            undef, 'Patron link is deleted immediately' );
+
+        my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
+        $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => { borrowernumber => $patron->id, status => undef }
+            }
+        );
+        $hold->cancel();
+        is(
+            Koha::Old::Holds->find( $hold->id )->borrowernumber,
+            $anonymous_patron->id,
+            'Patron link is set to the configured anonymous patron immediately'
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
