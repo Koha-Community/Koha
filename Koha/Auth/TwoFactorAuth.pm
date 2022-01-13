@@ -17,6 +17,8 @@ package Koha::Auth::TwoFactorAuth;
 
 use Modern::Perl;
 use Auth::GoogleAuth;
+use GD::Barcode;
+use MIME::Base64 qw( encode_base64 );
 
 use base qw( Auth::GoogleAuth );
 
@@ -64,6 +66,26 @@ sub new {
             key_id => $key_id,
         }
     );
+}
+
+=head3 qr_code
+
+    my $image_src = $auth->qr_code;
+
+    Replacement for (unsafer) Auth::GoogleAuth::qr_code.
+    Returns the data URL to fill the src attribute of the
+    image tag on the registration form.
+
+=cut
+
+sub qr_code {
+    my ( $self ) = @_;
+
+    my $otpauth = $self->SUPER::qr_code( undef, undef, undef, 1);
+        # no need to pass secret, key and issuer again
+    my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', Version => 8, ModuleSize => 4 } );
+    my $data = $qrcode->plot->png;
+    return "data:image/png;base64,". encode_base64( $data, q{} ); # does not contain newlines
 }
 
 1;
