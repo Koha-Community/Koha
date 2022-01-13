@@ -580,6 +580,57 @@ sub cancel {
     return $self;
 }
 
+=head3 fill
+
+    $hold->fill;
+
+This method marks the hold as filled. It effectively moves it to old_reserves.
+
+=cut
+
+sub fill {
+    my ( $self ) = @_;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            my $patron = $self->patron;
+
+            $self->set(
+                {
+                    found    => 'F',
+                    priority => 0,
+                }
+            );
+
+            $self->_move_to_old;
+            $self->SUPER::delete(); # Do not add a DELETE log
+
+            # now fix the priority on the others....
+            C4::Reserves::_FixPriority({ biblionumber => $self->biblionumber });
+
+            if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
+                my $fee = $patron->category->reservefee // 0;
+                if ( $fee > 0 ) {
+                    $patron->account->add_debit(
+                        {
+                            amount       => $fee,
+                            description  => $self->biblio->title,
+                            user_id      => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                            library_id   => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                            interface    => C4::Context->interface,
+                            type         => 'RESERVE',
+                            item_id      => $self->itemnumber
+                        }
+                    );
+                }
+            }
+
+            C4::Log::logaction( 'HOLDS', 'FILL', $self->id, $self )
+                if C4::Context->preference('HoldsLog');
+        }
+    );
+    return $self;
+}
+
 =head3 store
 
 Override base store method to set default
