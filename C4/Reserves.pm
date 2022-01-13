@@ -107,7 +107,6 @@ BEGIN {
       ChargeReserveFee
       GetReserveFee
 
-      ModReserveFill
       ModReserveAffect
       ModReserve
       ModReserveStatus
@@ -1105,26 +1104,6 @@ sub ModReserve {
     }
 }
 
-=head2 ModReserveFill
-
-  &ModReserveFill($reserve);
-
-Fill a reserve. If I understand this correctly, this means that the
-reserved book has been found and given to the patron who reserved it.
-
-C<$reserve> specifies the reserve to fill. It is a reference-to-hash
-whose keys are fields from the reserves table in the Koha database.
-
-=cut
-
-sub ModReserveFill {
-    my ($res) = @_;
-    my $reserve_id = $res->{'reserve_id'};
-
-    my $hold = Koha::Holds->find($reserve_id);
-    $hold->fill;
-}
-
 =head2 ModReserveStatus
 
   &ModReserveStatus($itemnumber, $newstatus);
@@ -1807,7 +1786,7 @@ sub _Findgroupreserve {
   _koha_notify_reserve( $hold->reserve_id );
 
 Sends a notification to the patron that their hold has been filled (through
-ModReserveAffect, _not_ ModReserveFill)
+ModReserveAffect)
 
 The letter code for this notice may be found using the following query:
 
@@ -1968,10 +1947,11 @@ sub MoveReserve {
     my ( $restype, $res, undef ) = CheckReserves( $itemnumber, undef, $lookahead );
     return unless $res;
 
-    my $biblionumber     =  $res->{biblionumber};
+    my $biblionumber = $res->{biblionumber};
 
     if ($res->{borrowernumber} == $borrowernumber) {
-        ModReserveFill($res);
+        my $hold = Koha::Holds->find( $res->{reserve_id} );
+        $hold->fill;
     }
     else {
         # warn "Reserved";
@@ -1987,7 +1967,7 @@ sub MoveReserve {
 
         if ( $borr_res ) {
             # The item is reserved by the current patron
-            ModReserveFill($borr_res->unblessed);
+            $borr_res->fill;
         }
 
         if ( $cancelreserve eq 'revert' ) { ## Revert waiting reserve to priority 1

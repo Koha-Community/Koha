@@ -17,7 +17,6 @@ use C4::SIP::ILS::Transaction;
 use C4::Context;
 use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued );
 use C4::Members;
-use C4::Reserves qw(ModReserveFill);
 use Koha::DateUtils;
 
 use parent qw(C4::SIP::ILS::Transaction);
