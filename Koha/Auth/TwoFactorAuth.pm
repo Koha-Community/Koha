@@ -36,6 +36,12 @@ my $ok = $auth->verify($pin_code, 1, $secret32);
 
 It's based on Auth::GoogleAuth
 
+=head2 METHODS
+
+=head3 new
+
+    $obj = Koha::Auth::TwoFactorAuth->new({ patron => $p, secret => $s });
+
 =cut
 
 sub new {

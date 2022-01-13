@@ -39,8 +39,8 @@
                         <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
                         <p>Can't scan the code?</p>
                         <p>To add the entry manually, provide the following details to the application on your phone.</p>
-                        <p>Account: [% issuer %]</p>
-                        <p>Key: [% key_id %]</p>
+                        <p>Account: [% issuer | html %]</p>
+                        <p>Key: [% key_id | html %]</p>
                         <p>Time based: Yes</p>
                     </div>
 
@@ -51,11 +51,11 @@
                         <fieldset class="rows">
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             <input type="hidden" name="op" value="register-2FA" />
-                            <input type="hidden" name="secret32" value="[% secret32 %]" />
+                            <input type="hidden" name="secret32" value="[% secret32 | html %]" />
                             <ol>
                                 <li>
                                     <label for="qr_code">QR code: </label>
-                                    <img id="qr_code" src="[% qr_code_url %]" />
+                                    <img id="qr_code" src="[% qr_code_url | $raw %]" />
                                 </li>
                                 <li>
                                     <label for="pin_code">Pin code: </label>
