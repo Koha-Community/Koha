@@ -144,7 +144,7 @@ like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string sh
 
 # ISO string tests
 subtest 'dt_from_string - iso format' => sub {
-    plan tests => 6;
+    plan tests => 5;
 
     my $module_context = Test::MockModule->new('C4::Context');
     $module_context->mock(
@@ -157,6 +157,7 @@ subtest 'dt_from_string - iso format' => sub {
     # Dateonly
     my $dt_iso = dt_from_string( '2012-01-01', 'iso' );
     cmp_ok( $dt_iso->epoch(), 'eq', '1325372400', 'dt_from_string handles dateonly string' );
+    # Saturday December 31, 2011 23:00:00 (UTC) == Sunday January 01, 2012 00:00:00 Europe/Paris (CET/+01:00)
 
     eval {
         $dt_iso = dt_from_string( '2012-01-32', 'iso' );
@@ -166,17 +167,16 @@ subtest 'dt_from_string - iso format' => sub {
     # Datetime
     $dt_iso = dt_from_string( '2012-01-01T23:59:59', 'iso' );
     cmp_ok( $dt_iso->epoch(), 'eq', '1325458799', 'dt_from_string with no offset assumes "local"' );
+    # Sunday January 01, 2012 22:59:59 (UTC) == Sunday January 01, 2012 23:59:59 Europe/Paris (CET/+01:00)
 
     # Datetime with timezone
     $dt_iso = dt_from_string( '2012-01-01T23:59:59Z', 'iso' );
     cmp_ok( $dt_iso->epoch(), 'eq', '1325462399', 'dt_from_string with UTC prescribed as Z' );
+    # Sunday January 01, 2012 23:59:59 (UTC)
 
     $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
     cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset' );
-
-    $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
-    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string handles an offset' );
-
+    # Sunday January 01, 2012 21:59:59 (UTC) == Sunday January 01, 2012 23:59:59 Europe/Athens (EET/+02:00)
 };
 
 # Return undef if passed mysql 0 dates
