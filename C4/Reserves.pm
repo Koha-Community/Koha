@@ -1122,35 +1122,7 @@ sub ModReserveFill {
     my $reserve_id = $res->{'reserve_id'};
 
     my $hold = Koha::Holds->find($reserve_id);
-    # get the priority on this record....
-    my $priority = $hold->priority;
-
-    # update the hold statuses, no need to store it though, we will be deleting it anyway
-    $hold->set(
-        {
-            found    => 'F',
-            priority => 0,
-        }
-    );
-
-    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
-        if C4::Context->preference('HoldsLog');
-
-    # FIXME Must call Koha::Hold->cancel ? => No, should call ->filled and add the correct log
-    Koha::Old::Hold->new( $hold->unblessed() )->store();
-
-    $hold->delete();
-
-    if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
-        my $reserve_fee = GetReserveFee( $hold->borrowernumber, $hold->biblionumber );
-        ChargeReserveFee( $hold->borrowernumber, $reserve_fee, $hold->biblio->title );
-    }
-
-    # now fix the priority on the others (if the priority wasn't
-    # already sorted!)....
-    unless ( $priority == 0 ) {
-        _FixPriority( { reserve_id => $reserve_id, biblionumber => $hold->biblionumber } );
-    }
+    $hold->fill;
 }
 
 =head2 ModReserveStatus
