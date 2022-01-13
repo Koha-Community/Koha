@@ -78,10 +78,7 @@ if ($op eq 'add_form') {
     if ( $av ) {
         $template->param(
             category_name => $av->category,
-            authorised_value => $av->authorised_value,
-            lib              => $av->lib,
-            lib_opac         => $av->lib_opac,
-            id               => $av->id,
+            av               => $av,
             imagesets        => C4::Koha::getImageSets( checked => $av->imageurl ),
         );
     } else {
@@ -97,8 +94,13 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add') {
     my $new_authorised_value = $input->param('authorised_value');
     my $new_category = $input->param('category');
-    my $imageurl     = $input->param( 'imageurl' ) || '';
-    $imageurl = '' if $imageurl =~ /removeImage/;
+    my $image = $input->param( 'image' ) || '';
+    my $imageurl =
+      $image eq 'removeImage' ? ''
+      : (
+          $image eq 'remoteImage' ? $input->param('remoteImage')
+        : $image
+      );
     my $duplicate_entry = 0;
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
@@ -231,7 +233,7 @@ if ( $op eq 'list' ) {
         $row_data{authorised_value}      = $av->authorised_value;
         $row_data{lib}                   = $av->lib;
         $row_data{lib_opac}              = $av->lib_opac;
-        $row_data{imageurl}              = getitemtypeimagelocation( 'intranet', $av->imageurl );
+        $row_data{image}                 = getitemtypeimagelocation( 'intranet', $av->imageurl );
         $row_data{branches}              = $av->library_limits ? $av->library_limits->as_list : [];
         $row_data{id}                    = $av->id;
         push(@loop_data, \%row_data);

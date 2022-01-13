@@ -119,17 +119,17 @@
                                     <li>
                                         <label for="authorised_value">Authorized value: </label>
                                         [% IF ( action_modify ) %]
-                                            <input type="hidden" id="id" name="id" value="[% id | html %]" />
+                                            <input type="hidden" id="id" name="id" value="[% av.id | html %]" />
                                         [% END %]
-                                        <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value | html %]" maxlength="80" class="focus" />
+                                        <input type="text" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" maxlength="80" class="focus" />
                                     </li>
                                     <li>
                                         <label for="lib">Description: </label>
-                                        <input type="text" name="lib" id="lib" value="[% lib | html %]" maxlength="200" />
+                                        <input type="text" name="lib" id="lib" value="[% av.lib | html %]" maxlength="200" />
                                     </li>
                                     <li>
                                         <label for="lib_opac">Description (OPAC): </label>
-                                        <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac | html %]" maxlength="200" />
+                                        <input type="text" name="lib_opac" id="lib_opac" value="[% av.lib_opac | html %]" maxlength="200" />
                                     </li>
                                     <li><label for="branches">Library limitations: </label>
                                         <select id="branches" name="branches" multiple size="10">
@@ -153,11 +153,18 @@
                                         [% FOREACH imageset IN imagesets %]
                                             [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname | uri %]">[% imageset.imagesetname | html %]</a></li>
                                         [% END %]
+                                        [% IF av.imageurl.match('^http') %]
+                                            <li class="ui-tabs-active">
+                                        [% ELSE %]
+                                            <li>
+                                        [% END %]
+                                            <a href="#remote">Remote image</a>
+                                        </li>
                                     </ul>
                                     <div id="none">
                                         <ul>
                                             <li>
-                                                <label for="noimage">No image: </label><input type="radio" name="imageurl" id="noimage" value="removeImage" />
+                                                <label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" />
                                             </li>
                                         </ul>
                                         <br class="clear" />
@@ -174,11 +181,11 @@
                                                             [% ELSE %]
                                                             [% END %]
                                                             [% IF ( image.checked ) %]
-                                                                <input type="radio" name="imageurl" value="[% image.KohaImage | html %]" checked="checked" />
+                                                                <input type="radio" name="image" value="[% image.KohaImage | html %]" checked="checked" />
                                                             [% ELSE %]
                                                                 [% IF ( image.KohaImage ) %]
                                                                     <!-- to delete the radio button if there is no image after -->
-                                                                    <input type="radio" name="imageurl" value="[% image.KohaImage | html %]" />
+                                                                    <input type="radio" name="image" value="[% image.KohaImage | html %]" />
                                                                 [% END %]
                                                             [% END %]
                                                         </label>
@@ -188,12 +195,30 @@
                                             <br class="clear" />
                                         </div>
                                     [% END # /FOREACH imageset %]
+
+                                    <div id="remote">
+                                        <ul>
+                                            <li>
+                                                <label for="remote_image_check"> Remote image:</label>
+                                                [% IF av.imageurl.match('^http') %]
+                                                    <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
+                                                    <input type="text" name="remoteImage" size="48" maxlength="200" value="[% av.imageurl | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                                    <img src="[% av.imageurl | html %]" alt="" />
+                                                [% ELSE %]
+                                                    <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
+                                                    <input type="text" name="remoteImage" size="48" maxlength="200" value="" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                                [% END %]
+                                            </li>
+                                        </ul>
+                                        <br class="clear" />
+                                    </div>
+
                                 </div> <!-- /#icons -->
                             [% END # /IF action_add_category %]
                         </fieldset>
 
                         <fieldset class="action">
-                            <input type="hidden" name="id" value="[% id | html %]" />
+                            <input type="hidden" name="id" value="[% av.id | html %]" />
                             <input type="submit" value="Save" />
                             <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category_name | url %]">Cancel</a>
                         </fieldset>
@@ -290,7 +315,7 @@
                                             <td>[% loo.lib | html %]</td>
                                             <td>[% loo.lib_opac | html %]</td>
                                             <td>
-                                                [% IF ( loo.imageurl ) %]<img src="[% loo.imageurl | url %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
+                                                [% IF ( loo.image ) %]<img src="[% loo.image | url %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
                                             <td>
                                                 [% IF loo.branches.size > 0 %]
                                                     [% branches_str = "" %]
