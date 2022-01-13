@@ -464,21 +464,21 @@ $template->param(
 );
 
 $template->param(
-    MARCNOTES   => $marc_record ? $biblio->get_marc_notes({ marcflavour => $marcflavour }) : undef,
-    itemdata_ccode      => $itemfields{ccode},
-    itemdata_enumchron  => $itemfields{enumchron},
-    itemdata_uri        => $itemfields{uri},
-    itemdata_copynumber => $itemfields{copynumber},
-    itemdata_stocknumber => $itemfields{stocknumber},
-    itemdata_publisheddate => $itemfields{publisheddate},
-    volinfo                => $itemfields{enumchron},
-        itemdata_itemnotes  => $itemfields{itemnotes},
-        itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
-    z3950_search_params    => C4::Search::z3950_search_args($dat),
-        hostrecords         => $hostrecords,
-    analytics_flag    => $analytics_flag,
+    MARCNOTES               => $marc_record ? $biblio->get_marc_notes() : undef,
+    itemdata_ccode          => $itemfields{ccode},
+    itemdata_enumchron      => $itemfields{enumchron},
+    itemdata_uri            => $itemfields{uri},
+    itemdata_copynumber     => $itemfields{copynumber},
+    itemdata_stocknumber    => $itemfields{stocknumber},
+    itemdata_publisheddate  => $itemfields{publisheddate},
+    volinfo                 => $itemfields{enumchron},
+    itemdata_itemnotes      => $itemfields{itemnotes},
+    itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
+    z3950_search_params     => C4::Search::z3950_search_args($dat),
+    hostrecords             => $hostrecords,
+    analytics_flag          => $analytics_flag,
     C4::Search::enabled_staff_search_views,
-        materials       => $materials_flag,
+    materials => $materials_flag,
 );
 
 if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {

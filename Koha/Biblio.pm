@@ -913,7 +913,7 @@ sub cover_images {
 
 =head3 get_marc_notes
 
-    $marcnotesarray = $biblio->get_marc_notes({ marcflavour => $marcflavour });
+    $marcnotesarray = $biblio->get_marc_notes({ opac => 1 });
 
 Get all notes from the MARC record and returns them in an array.
 The notes are stored in different fields depending on MARC flavour.
@@ -924,7 +924,7 @@ MARC21 5XX $u subfields receive special attention as they are URIs.
 sub get_marc_notes {
     my ( $self, $params ) = @_;
 
-    my $marcflavour = $params->{marcflavour};
+    my $marcflavour = C4::Context->preference('marcflavour');
     my $opac = $params->{opac};
 
     my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';

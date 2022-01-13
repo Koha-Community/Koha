@@ -90,7 +90,7 @@ foreach my $biblionumber ( @bibs ) {
     });
     $record_processor->process($record);
     next unless $record;
-    my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
+    my $marcnotesarray   = $biblio->get_marc_notes({ opac => 1 });
     my $marcauthorsarray = $biblio->get_marc_authors;
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
