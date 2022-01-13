@@ -699,7 +699,7 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    my $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21' });
+    my $notes = $biblio->get_marc_notes;
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
@@ -707,7 +707,7 @@ subtest 'get_marc_notes() MARC21 tests' => sub {
     is( $notes->[4]->{marcnote}, 'Note5', 'Fifth note' );
     is( $notes->[5]->{marcnote}, 'Description should show', 'Authorised value is correctly parsed to show description rather than code' );
     is( @$notes, 6, 'No more notes' );
-    $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21', opac => 1 });
+    $notes = $biblio->get_marc_notes({ opac => 1 });
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
@@ -729,6 +729,7 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'NotesToHide', '310' );
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
 
     my $biblio = $builder->build_sample_biblio;
     my $record = $biblio->metadata->record;
@@ -744,6 +745,7 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( @$notes, 2, 'No more notes' );
 
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     $schema->storage->txn_rollback;
 };
 
