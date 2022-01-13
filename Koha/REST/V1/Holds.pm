@@ -170,7 +170,7 @@ sub add {
             ? C4::Reserves::CanItemBeReserved( $patron_id, $item_id )
             : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
-        if ( $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
+        if ( C4::Context->preference('maxreserves') && $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
             $can_place_hold->{status} = 'tooManyReserves';
         }
 
