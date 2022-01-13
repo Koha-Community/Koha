@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 79;
+use Test::More tests => 80;
 
 use Test::MockModule;
 use Test::Warn;
@@ -146,9 +146,17 @@ like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string sh
 subtest 'dt_from_string - iso format' => sub {
     plan tests => 6;
 
+    my $module_context = Test::MockModule->new('C4::Context');
+    $module_context->mock(
+        'tz',
+        sub {
+            return DateTime::TimeZone->new( name => 'Europe/Paris' );
+        }
+    );
+
     # Dateonly
     my $dt_iso = dt_from_string( '2012-01-01', 'iso' );
-    cmp_ok( $dt_iso->epoch(), 'eq', '1325376000', 'dt_from_string handles dateonly string' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325372400', 'dt_from_string handles dateonly string' );
 
     eval {
         $dt_iso = dt_from_string( '2012-01-32', 'iso' );
@@ -157,11 +165,11 @@ subtest 'dt_from_string - iso format' => sub {
 
     # Datetime
     $dt_iso = dt_from_string( '2012-01-01T23:59:59', 'iso' );
-    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with no offset assumes "local"' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325458799', 'dt_from_string with no offset assumes "local"' );
 
     # Datetime with timezone
     $dt_iso = dt_from_string( '2012-01-01T23:59:59Z', 'iso' );
-    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with UTC prescribed as Z' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325462399', 'dt_from_string with UTC prescribed as Z' );
 
     $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
     cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset' );
