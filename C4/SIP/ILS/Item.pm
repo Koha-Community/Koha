@@ -403,19 +403,6 @@ sub barcode_is_borrowernumber {    # because hold_queue only has borrowernumber.
     return unless $converted;
     return ($number == $converted);
 }
-# FIXME: This methods is very likely not used. It's only reference in the codebase
-#        is itself. I'm 'fixing' it so we can remove ModReserveFill. But filing a bug
-#        for properly removing it.
-sub fill_reserve {
-    my $self = shift;
-    my $hold = shift or return;
-    foreach (qw(biblionumber borrowernumber reservedate)) {
-        $hold->{$_} or return;
-    }
-
-    my $hold_obj = Koha::Holds->find( $hold->id );
-    return $hold_obj->fill;
-}
 
 =head2 build_additional_item_fields_string
 
