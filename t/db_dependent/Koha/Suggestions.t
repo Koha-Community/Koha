@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 use Koha::Suggestion;
@@ -27,6 +27,7 @@ use Koha::Suggestions;
 use Koha::Database;
 use Koha::DateUtils;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -254,6 +255,77 @@ subtest 'fund' => sub {
 
     is( $suggestion->fund, undef,
         '->fund should have returned undef if not fund set' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'search_limited() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Two libraries
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    # A patron from $library_1, that is not superlibrarian at all
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_1->id, flags => 0 }
+        }
+    );
+
+    # Add 3 suggestions, to be sorted by author
+    my $suggestion_1 = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => { branchcode => $library_1->id, author => 'A' }
+        }
+    );
+    my $suggestion_2 = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => { branchcode => $library_2->id, author => 'B' }
+        }
+    );
+    my $suggestion_3 = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => { branchcode => $library_2->id, author => 'C' }
+        }
+    );
+
+    my $resultset = Koha::Suggestions->search(
+        { branchcode => [ $library_1->id, $library_2->id ] },
+        { order_by   => { -desc => ['author'] } } );
+
+    is( $resultset->count, 3, 'Only this three suggestions are returned' );
+
+    # Now the tests
+    t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library_1->id });
+
+    # Disable IndependentBranches
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
+
+    my $filtered_rs = $resultset->search_limited;
+    is( $filtered_rs->count, 3, 'No IndependentBranches, all suggestions returned' );
+
+    # Enable IndependentBranches
+    t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
+
+    $filtered_rs = $resultset->search_limited;
+
+    is( $filtered_rs->count, 1, 'IndependentBranches, only suggestions from own branch returned' );
+
+    # Make the patron superlibrarian to override IndependentBranches
+    $patron->flags(1)->store;
+    # So it reloads C4::Context->userenv->{flags}
+    t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library_1->id });
+
+    $filtered_rs = $resultset->search_limited;
+    is( $filtered_rs->count, 3, 'IndependentBranches but patron is superlibrarian, all suggestions returned' );
 
     $schema->storage->txn_rollback;
 };
