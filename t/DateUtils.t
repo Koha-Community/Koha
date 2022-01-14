@@ -144,7 +144,7 @@ like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string sh
 
 # ISO string tests
 subtest 'dt_from_string - iso format' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     my $module_context = Test::MockModule->new('C4::Context');
     $module_context->mock(
@@ -175,8 +175,14 @@ subtest 'dt_from_string - iso format' => sub {
     # Sunday January 01, 2012 23:59:59 (UTC)
 
     $dt_iso = dt_from_string( '2012-01-01T23:59:59+02:00', 'iso' );
-    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset +02:00' );
     # Sunday January 01, 2012 21:59:59 (UTC) == Sunday January 01, 2012 23:59:59 Europe/Athens (EET/+02:00)
+    # Allow +02 or +0200 too
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59+02', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset +02' );
+    $dt_iso = dt_from_string( '2012-01-01T23:59:59+0200', 'iso' );
+    cmp_ok( $dt_iso->epoch(), 'eq', '1325455199', 'dt_from_string with offset +0200' );
+
 };
 
 # Return undef if passed mysql 0 dates

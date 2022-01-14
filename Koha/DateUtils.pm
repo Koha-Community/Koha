@@ -142,7 +142,7 @@ sub dt_from_string {
         die "Invalid dateformat parameter ($date_format)";
     }
 
-    # Add the faculative time part [hh:mm[:ss]]
+    # Add the facultative time part including time zone offset; ISO8601 allows +02 or +0200 too
     my $time_re .= qr{
             (
                 [Tt]?
@@ -159,7 +159,7 @@ sub dt_from_string {
                     (?<ampm>\w{2})
                 )?
                 (
-                    (?<utc>[Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9]))
+                    (?<utc>[Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):?(?<minutes>[0-5][0-9])?)
                 )?
             )?
     }xms;
@@ -183,7 +183,7 @@ sub dt_from_string {
         }
         if ( $+{offset} ) {
             # If offset given, set inbound timezone using it.
-            $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . $+{minutes} );
+            $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . ( $+{minutes} || '00' ) );
         }
     } elsif ( $do_fallback && $date_string =~ $fallback_re ) {
         %dt_params = (
