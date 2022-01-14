@@ -8,6 +8,7 @@
 [% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacCustomSearch = AdditionalContents.get( location => "OpacCustomSearch", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
+[% SET OpacMoreSearches = AdditionalContents.get( location => "OpacMoreSearches", lang => lang, library => branchcode ) %]
 
 <button id="scrolltocontent">Skip to main content</button>
 <div id="wrapper">
@@ -352,7 +353,7 @@
                             [% END %]
                         </a>
                     </li>
-                    [% Koha.Preference('OpacMoreSearches') | $raw %]
+                    [% PROCESS koha_news_block news => OpacMoreSearches %]
                 </ul> <!-- /.nav#moresearches -->
             </div> <!-- /.row -->
         </div> <!-- /.container-fluid -->
