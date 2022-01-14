@@ -25,6 +25,7 @@ use Test::Exception;
 use Test::MockModule;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Koha::ActionLogs;
 use Koha::Holds;
