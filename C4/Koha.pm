@@ -482,10 +482,10 @@ C<$opac> If set to a true value, displays OPAC descriptions rather than normal o
 =cut
 
 sub GetAuthorisedValues {
-    my ( $category, $opac ) = @_;
+    my $category = shift // '';  # optional parameter
+    my $opac = shift ? 1 : 0;  # normalise to be safe
 
     # Is this cached already?
-    $opac = $opac ? 1 : 0;    # normalise to be safe
     my $branch_limit =
       C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     my $cache_key =
