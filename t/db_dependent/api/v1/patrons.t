@@ -545,7 +545,7 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 44;
+        plan tests => 45;
 
         $schema->storage->txn_begin;
 
@@ -659,7 +659,7 @@ subtest 'update() tests' => sub {
         my $updated_on_got = delete $got->{updated_on};
         my $updated_on_expected = delete $newpatron->{updated_on};
         is_deeply($got, $newpatron, 'Returned patron from update matches expected');
-        t::lib::Dates::compare( $updated_on_got, $updated_on_expected, 'updated_on values matched' );
+        is( t::lib::Dates::compare( $updated_on_got, $updated_on_expected ), 0, 'updated_on values matched' );
 
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
