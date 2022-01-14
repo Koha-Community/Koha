@@ -1019,7 +1019,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
 };
 
 subtest 'ModItemFromMarc' => sub {
-    plan tests => 6;
+    plan tests => 7;
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
@@ -1073,6 +1073,24 @@ subtest 'ModItemFromMarc' => sub {
         $marc = C4::Items::Item2Marc( { %{$item->unblessed}, itemcallnumber => 'yyy' }, $item->biblionumber );
         ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
         is( $item->get_from_storage->cn_sort, 'YYY', 'cn_sort has been updated' );
+    };
+
+    subtest 'onloan' => sub {
+        plan tests => 3;
+
+        my $item = $builder->build_sample_item;
+        $item->set({ onloan => '2022-03-19' })->store;
+        is( $item->onloan, '2022-03-19', 'init values set are expected' );
+
+        my $marc = C4::Items::Item2Marc( $item->get_from_storage->unblessed, $item->biblionumber );
+        my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan' );
+        $marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        is( $item->get_from_storage->onloan, '2022-03-19', 'onloan has not been updated if not passed' );
+
+        $marc = C4::Items::Item2Marc( { %{$item->unblessed}, onloan => '2022-03-26' }, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        is( $item->get_from_storage->onloan, '2022-03-26', 'onloan has been updated when passed in' );
     };
 
     subtest 'permanent_location' => sub {
