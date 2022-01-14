@@ -368,7 +368,6 @@ if (@branchcodes) {
         my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
     $verbose and warn "$branch_word @branches have overdue rules\n";
 
-
     } else {
     
         $verbose and warn "No active overduerules for $branchcodes_word  '@branchcodes'\n";
@@ -842,8 +841,7 @@ END_SQL
         }
         $content .= join( "\n", @output_chunks );
 
-        my $EmailOverduesNoEmail = C4::Context->preference('EmailOverduesNoEmail');
-        if ( $EmailOverduesNoEmail == 0) {
+        if ( C4::Context->preference('EmailOverduesNoEmail') ) {
             my $attachment = {
                 filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
                 type => 'text/plain',
