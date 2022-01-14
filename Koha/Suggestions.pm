@@ -22,7 +22,6 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-
 use Koha::Suggestion;
 
 use base qw(Koha::Objects);
@@ -33,11 +32,40 @@ Koha::Suggestions - Koha Suggestion object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 search_limited
+
+    my $suggestions = Koha::Suggestions->search_limited( $params, $attributes );
+
+Returns all the suggestions the logged in user is allowed to see.
 
 =cut
 
-=head3 type
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $resultset = $self;
+
+    # filter on user branch
+    if (   C4::Context->preference('IndependentBranches')
+        && !C4::Context->IsSuperLibrarian() )
+    {
+        # If IndependentBranches is set and the logged in user is not superlibrarian
+        # Then we want to filter by the user's library (i.e. cannot see suggestions
+        # from other libraries)
+        my $userenv = C4::Context->userenv;
+
+        $resultset = $self->search({ branchcode => $userenv->{branch} })
+            if $userenv && $userenv->{branch};
+    }
+
+    return $resultset->search( $params, $attributes);
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
