@@ -859,6 +859,16 @@ for my $facet ( @$facets ) {
     }
 }
 
+my @search_filters = Koha::SearchFilters->search({ opac => 1 }, { order_by => "name" })->as_list;
+my %active_filters;
+foreach my $sf (@search_filters){
+    $active_filters{$sf->id} = 1 if grep { "search_filter:".$sf->id eq $_->{input_value} } @limit_inputs;
+}
+$template->param(
+    search_filters => \@search_filters,
+    active_filters => \%active_filters,
+) if C4::Context->preference('SavedSearchFilters');
+
 
 $template->param(
             #classlist => $classlist,

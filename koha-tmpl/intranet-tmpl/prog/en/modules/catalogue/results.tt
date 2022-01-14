@@ -82,6 +82,9 @@
                             <input type="submit" id="refine" value="Search">
                         </form>
                     </div>
+                    [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
+                        | <a href="#" id="save_search_filter">Save search as filter</a>
+                    [% END %]
 
                     <div class="searchheader" id="searchheader">
                         <div id="selection_ops">
@@ -345,6 +348,9 @@
                                 <p><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% searchtoorder_basketno | uri %]">View basket<a></p>
                             [% END %]
                             <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
+                            [% IF ( Koha.Preference('SavedSearchFilters') &&CAN_user_parameters_manage_search_filters ) %]
+                                | <a href="#" id="save_search_filter">Save search as filter</a>
+                            [% END %]
                         [% ELSE %]
                             <p>You did not specify any search criteria.</p>
                         [% END %]
@@ -711,6 +717,39 @@
                 </div>
                 [% END #/IF outer_sup_results_loop %]
 
+                [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
+                    <div id="search_filters_modal" class="modal" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 id="search_filters_label">Save: '[% query_desc | html %]' with limits '[% limit_desc | html %]' as filter</h3>
+                            </div>
+                            <div class="modal-body">
+                                <h6>Visibility:</h6>
+                                <label for="show_filter_opac">Show in OPAC?</label>
+                                <input type="checkbox" id="show_filter_opac" name="show_filter_opac">
+                                <label for="show_filter_staff_client">Show in Staff client?</label>
+                                <input type="checkbox" id="show_filter_staff_client" name="show_filter_staff_client">
+                                <hr>
+                                <h6>Save as new search filter:</h6>
+                                <label for="new_filter">Name:</label>
+                                <input id="new_filter" name="new_filter" type="text">
+                                <a id="save_new_filter" class="btn btn-default btn-xs" href="#">Save</a>
+                                </br>OR</br>
+                                <h6>Replace existing search filter:</h6>
+                                <label for="existing_filters">Choose</label>
+                                <select id="existing_filters" name="existing_filters" class="search_filters_list"></select>
+                                <a id="replace_existing_filter" class="btn btn-default btn-xs" href="#">Replace</a>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                [% END %]
+
                 <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
                     <!-- Value will be set here by placeHold() -->
                     <input type="hidden" name="findborrower" id="holdFor" value="" />
@@ -736,6 +775,9 @@
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
+    [% Asset.css("css/humanmsg.css") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         var PREF_AmazonCoverImages = parseInt( "[% Koha.Preference('AmazonCoverImages') | html %]", 10);
         var q_array = new Array();  // will hold search terms, if present
@@ -769,6 +811,8 @@
             query_desc: "[% To.json( query_desc ) | html %]",
             query_cgi: "[% query_cgi | html %]",
             limit_cgi: "[% limit_cgi | html %]",
+            query_json: [% query_json | $raw %],
+            limit_json: [% limit_json | $raw %],
             sort_by: "[% sort_by | html %]",
             gotoPage: "[% gotoPage | html %]",
             gotoNumber: "[% gotoNumber | html %]",
@@ -785,6 +829,83 @@
             if( index){index += ":";}
             window.location.href = "/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %]&[% limit_cgi | $raw %]&[% sort_cgi | $raw %]&limit="+index+escape_str( $("#refiner").val() );
         });
+
+        [% IF ( CAN_user_parameters_manage_search_filters ) %]
+            function getFilters(id) {
+                const select = $("#existing_filters");
+                $("option[value!='']", select).remove();
+                return new Promise(function(resolve, reject) {
+                    $.ajax("/api/v1/search_filters")
+                    .then(resolve, reject);
+                })
+                .then(function(filters) {
+                    filters.forEach(function(filter) {
+                        const opt = $("<option/>");
+                        select.append(opt);
+                        if(id && filter.search_filter_id == id) {
+                            opt.prop('selected', true);
+                        }
+                        opt.attr("value", filter.search_filter_id);
+                        opt.attr("title", "Query:" + filter.filter_query + " Limit:"+filter.filter_limits);
+                        opt.text(filter.name);
+                        opt.data("filter", filter);
+                    });
+                })
+                .then(function(){
+                    select.change();
+                });
+            }
+            $("#save_search_filter").click(function(){
+                getFilters();
+                $("#search_filters_modal").modal('show');
+            });
+            $("#save_new_filter").click(function(){
+                let name = $("#new_filter").val().trim();
+                if(!name){
+                    humanMsg.displayAlert( _("You must provide a name for the new filter"), { className: 'human Error' } );
+                    return;
+                }
+                let opac = $("#show_filter_opac").prop('checked');
+                let staff = $("#show_filter_staff_client").prop('checked');
+                save_search_filter(name,null,opac,staff);
+            });
+            $("#replace_existing_filter").click(function(){
+                let id = $("#existing_filters").val();
+                let name = $("#existing_filters option[value="+id+"]").text();
+                console.log(id,name);
+                save_search_filter(name,id);
+            });
+            function save_search_filter(name,id,opac,staff){
+                let options = {
+                    url: '/api/v1/search_filters',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        name: name,
+                        filter_query: JSON.stringify(search_result.query_json),
+                        filter_limits: JSON.stringify(search_result.limit_json),
+                        opac: opac,
+                        staff_client: staff,
+                    })
+                };
+                if (id){
+                    options.method = "PUT";
+                    options.url = options.url+"/"+id
+                } else {
+                    options.method = "POST";
+                }
+                $.ajax(options)
+                    .then(function(result) {
+                        $("#search_filters_modal").modal('hide');
+                        humanMsg.displayAlert( _("Saved filter: ") + name  , { className: 'human Success' } );
+                        getFilters();
+                    })
+                    .fail(function(err) {
+                        console.log(err);
+                        humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                    });
+            }
+
+        [% END %]
     </script>
     [% Asset.js("js/pages/results.js") | $raw %]
 [% END %]

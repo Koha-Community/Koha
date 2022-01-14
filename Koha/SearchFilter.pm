@@ -15,7 +15,7 @@ package Koha::SearchFilter;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use JSON qw( encode_json decode_json );
 
 use Koha::Database;
 

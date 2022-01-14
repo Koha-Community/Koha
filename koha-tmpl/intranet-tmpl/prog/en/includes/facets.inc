@@ -1,11 +1,29 @@
 [% USE raw %]
 [% USE AuthorisedValues %]
 [% USE Languages %]
+
 [% IF ( opacfacets ) %]
 [% IF ( facets_loop ) %]
 <div id="search-facets">
 <h4>Refine your search</h4>
 <ul>
+[% IF Koha.Preference("SavedSearchFilters") && search_filters.count > 0 %]
+<li id="search-filters">
+<span id="filter_facets">Custom search filters</span>
+<ul>
+    [% SET base_url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi _ limit_cgi %]
+    [% FOREACH search_filter IN search_filters %]
+    <li>
+        [% IF active_filters.${search_filter.id} %]
+            <span class="filter_label">[% search_filter.name | html %]<a href="[% base_url _ '&nolimit=search_filter:' _ search_filter.id | url %]">[X]</a></span>
+        [% ELSE %]
+            <span class="filter_label"><a href="[% base_url _ '&limit=search_filter:' _ search_filter.id | url %]">[% search_filter.name | html %]</a></span>
+        [% END %]
+    </li>
+    [% END %]
+</ul>
+</li>
+[% END %]
     <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]<strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all items</a>[% ELSE %]<a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to currently available items</a>[% END %]</li></ul>
 	[% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])</li>[% END %]
 	</li>
