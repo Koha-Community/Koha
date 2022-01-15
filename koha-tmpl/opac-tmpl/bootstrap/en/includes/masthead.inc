@@ -167,7 +167,7 @@
                                                 [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                                     [% IF ( mylibraryfirst ) %]
                                                         <span title="Search in [% Branches.GetName( mylibraryfirst ) | html %] only">
-                                                            <i class="fa fa-question-circle-o"></i>
+                                                            <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                                                         </span>
                                                     [% END %]
                                                 [% END %]
@@ -279,8 +279,8 @@
                                             [% END # / OpacAddMastheadLibraryPulldown %]
 
                                             <div class="order-5 col-sm-auto">
-                                                <button type="submit" id="searchsubmit" class="btn btn-primary" title="Search">
-                                                    <i class="fa fa-search"></i>
+                                                <button type="submit" id="searchsubmit" class="btn btn-primary" title="Search" aria-label="Search">
+                                                    <i class="fa fa-search" aria-hidden="true"></i>
                                                 </button>
                                             </div>
 
