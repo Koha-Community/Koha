@@ -155,7 +155,7 @@ subtest 'blank' => sub {
 };
 
 subtest 'regex' => sub {
-    plan tests => 6;
+    plan tests => 12;
 
     $items->batch_update(
         {
@@ -201,6 +201,41 @@ subtest 'regex' => sub {
     is_deeply(
         [ $item->as_marc_field->subfield('y') ],
         ['awesome yyy 1|new yyy 2'],
+        'y is not repeatable'
+    );
+
+    $re = {
+        search    => '(awesome)',
+        replace   => '$1ness',
+        modifiers => '',
+    };
+    $items->batch_update(
+        {
+            regex_mod =>
+              { itemnotes => $re, copynumber => $re, x => $re, y => $re }
+        }
+    )->reset;
+    $item = $item->get_from_storage;
+    is( $item->itemnotes, 'awesomeness notes 1|new notes 2' );
+    is_deeply(
+        [ $item->as_marc_field->subfield('z') ],
+        [ 'awesomeness notes 1', 'new notes 2' ],
+        'z is repeatable'
+    );
+
+    is( $item->copynumber, 'awesomeness cn 1|new cn 2' );
+    is_deeply( [ $item->as_marc_field->subfield('t') ],
+        ['awesomeness cn 1|new cn 2'], 't is not repeatable' );
+
+    is_deeply(
+        [ $item->as_marc_field->subfield('x') ],
+        [ 'awesomeness xxx 1', 'new xxx 2' ],
+        'i is repeatable'
+    );
+
+    is_deeply(
+        [ $item->as_marc_field->subfield('y') ],
+        ['awesomeness yyy 1|new yyy 2'],
         'y is not repeatable'
     );
 };
