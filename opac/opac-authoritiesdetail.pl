@@ -168,6 +168,12 @@ if ($show_marc) {
 } else {
     my $summary = BuildSummary($record, $authid, $authtypecode);
     $template->{VARS}->{'summary'} = $summary;
+
+    if ( C4::Context->preference('OPACAuthorIdentifiers') ) {
+        my $authority = Koha::Authorities->find($authid);
+        my $identifiers = $authority->get_identifiers;
+        $template->param( author_identifiers => $identifiers );
+    }
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

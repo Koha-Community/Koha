@@ -494,6 +494,11 @@
                                 </a>
                             </li>
                         [% END %]
+
+                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                            <li id="tab_author_identifiers"><a href="#author_identifiers">Author identifiers</a></li>
+                        [% END %]
+
                     </ul>
 
                     <div class="tab-content">
@@ -952,6 +957,34 @@
                                     [% END %]
                                 </div><!-- / #images -->
                             [% END # / IF OPACLocalCoverImages && localimages.size %]
+
+                            [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                                <div id="author_identifiers" class="tab-pane" role="tabpanel" aria-labelledby="tab_author_identifiers-tab">
+                                    [% FOR author IN author_identifiers %]
+                                        <div class="author_identifier">
+                                            <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
+                                            <ul>
+                                            [% FOR identifier IN author.identifiers %]
+                                                <li>
+                                                [% SWITCH identifier.source.lower %]
+                                                [% CASE 'orcid' %]ORCID:
+                                                [% CASE 'scopus' %]ScopusID:
+                                                [% CASE 'loop' %]loop:
+                                                [% CASE 'rid' %]Publons:
+                                                [% CASE %][% identifier.source | html %]:
+                                                [% END %]
+                                                [% IF identifier.linkage %]
+                                                    <a href="[% identifier.linkage | uri %]">[% identifier.number | html %]</a>
+                                                [% ELSE %]
+                                                    [% identifier.number | html %]
+                                                [% END %]
+                                                </li>
+                                            [% END %]
+                                            </ul>
+                                        </div>
+                                    [% END %]
+                                </div>
+                            [% END %]
 
                     </div> <!-- / #bibliodescriptions -->
 

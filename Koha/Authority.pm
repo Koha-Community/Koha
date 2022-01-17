@@ -114,6 +114,36 @@ sub controlled_indicators {
     });
 }
 
+=head3 get_identifiers
+
+    my $identifiers = $author->get_identifiers;
+
+Return a list of identifiers of the authors which are in 024$2$a
+
+=cut
+
+sub get_identifiers {
+    my ( $self, $params ) = @_;
+
+    my $flavour =
+      C4::Context->preference('marcflavour') eq 'UNIMARC'
+      ? 'UNIMARCAUTH'
+      : 'MARC21';
+    my $record =
+      MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $flavour );
+
+    my @identifiers;
+    for my $field ( $record->field('024') ) {
+        my $sf_2 = $field->subfield('2');
+        my $sf_a = $field->subfield('a');
+        my $sf_6 = $field->subfield('6');
+        next unless $sf_2 && $sf_a;
+        push @identifiers, {source => $sf_2, number => $sf_a, linkage => $sf_6};
+    }
+
+    return \@identifiers;
+}
+
 =head2 Class Methods
 
 =head3 type

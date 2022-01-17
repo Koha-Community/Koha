@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use MARC::Field;
 use MARC::File::XML;
 use MARC::Record;
@@ -241,5 +241,50 @@ sub few_marc_records {
     );
     return [ $marc ];
 }
+
+subtest 'get_identifiers' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+    my $record = MARC::Record->new();
+    $record->add_fields(
+        [
+            '100', ' ', ' ',
+            a => 'Lastname, Firstname',
+            b => 'b',
+            c => 'c',
+            i => 'i'
+        ],
+        [
+            '024', '', '',
+            a => '0000-0002-1234-5678',
+            2 => 'orcid',
+            6 => 'https://orcid.org/0000-0002-1234-5678'
+        ],
+        [
+            '024', '', '',
+            a => '01234567890',
+            2 => 'scopus',
+            6 => 'https://www.scopus.com/authid/detail.uri?authorId=01234567890'
+        ],
+    );
+    my $authid = C4::AuthoritiesMarc::AddAuthority($record, undef, 'PERSO_NAME');
+    my $authority = Koha::Authorities->find($authid);
+    is_deeply(
+        $authority->get_identifiers,
+        [
+            {
+                source  => 'orcid',
+                number  => '0000-0002-1234-5678',
+                linkage => 'https://orcid.org/0000-0002-1234-5678'
+            },
+            {
+                source => 'scopus',
+                number => '01234567890',
+                linkage => 'https://www.scopus.com/authid/detail.uri?authorId=01234567890'
+            }
+        ]
+    );
+};
 
 $schema->storage->txn_rollback;

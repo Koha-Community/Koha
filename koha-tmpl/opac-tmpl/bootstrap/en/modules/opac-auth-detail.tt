@@ -43,7 +43,13 @@
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="col-lg-10 order-first order-md-first order-lg-2">
+                    [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                        <div class="col-lg-5 order-first order-md-first order-lg-2">
+                    [% ELSE %]
+                        <div class="col-lg-10 order-first order-md-first order-lg-2">
+                    [% END %]
+                [% ELSIF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                    <div class="col-lg-6 order-first order-md-first order-lg-2">
                 [% ELSE %]
                     <div class="col order-first order-md-first order-lg-2">
                 [% END %]
@@ -170,6 +176,27 @@
                         </div>
                     </div> <!-- / .#userauthdetails -->
                 </div> <!-- / .col-lg-10/12 -->
+                [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                    [% IF ( OpacNav || OpacNavBottom ) %]
+                        <div class="col-lg-5 order-lg-3">
+                    [% ELSE %]
+                        <div class="col-lg-6 order-lg-3">
+                    [% END %]
+                        <div class="author_identifier">
+                            <span>Identifiers</span>
+                            <ul>
+                            [% FOR identifier IN author_identifiers %]
+                                <li>
+                                [% SWITCH identifier.source.lower %]
+                                [% CASE 'orcid' %]ORCID: <a href="https://orcid.org/[% identifier.number | url %]">[% identifier.number | html %]</a>
+                                [% CASE %][% identifier.source | html %]: [% identifier.number | html %]
+                                [% END %]
+                                </li>
+                            [% END %]
+                            </ul>
+                        </div>
+                    </div>
+                [% END %]
             </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
