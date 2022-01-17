@@ -883,28 +883,25 @@ subtest 'current_checkouts() and old_checkouts() tests' => sub {
 
 subtest 'get_marc_contributors() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    my $biblio = $builder->build_sample_biblio;
+    my $biblio = $builder->build_sample_biblio({ author => 'Main author' });
     my $record = $biblio->metadata->record;
 
     # add author information
     my $field = MARC::Field->new('700','1','','a' => 'Jefferson, Thomas');
     $record->append_fields($field);
-    $field = MARC::Field->new('700','1','','d' => '1743-1826');
-    $record->append_fields($field);
-    $field = MARC::Field->new('700','1','','e' => 'former owner.');
-    $record->append_fields($field);
-    $field = MARC::Field->new('700','1','','5' => 'MH');
+    $field = MARC::Field->new('701','1','','d' => 'Secondary author 2');
     $record->append_fields($field);
 
     # get record
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
 
-    is( 4, @{$biblio->get_marc_contributors}, 'get_marc_contributors retrieves correct number of author subfields' );
+    is( @{$biblio->get_marc_authors}, 3, 'get_marc_authors retrieves correct number of author subfields' );
+    is( @{$biblio->get_marc_contributors}, 2, 'get_marc_contributors retrieves correct number of author subfields' );
     $schema->storage->txn_rollback;
 };
 

@@ -1001,39 +1001,28 @@ sub get_marc_notes {
     return \@marcnotes;
 }
 
-=head3 get_marc_contributors
-
-    my $contributors = $biblio->get_marc_contributors;
-
-Get all contributors (but first author) from the MARC record and returns them in an array.
-They are stored in different fields depending on MARC flavour
-
-=cut
-
-sub get_marc_contributors {
+sub _get_marc_authors {
     my ( $self, $params ) = @_;
 
-    my ( $mintag, $maxtag, $fields_filter );
-    my $marcflavour = C4::Context->preference('marcflavour');
+    my $fields_filter = $params->{fields_filter};
+    my $mintag        = $params->{mintag};
+    my $maxtag        = $params->{maxtag};
+
+    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
+    my $marcflavour        = C4::Context->preference('marcflavour');
 
     # tagslib useful only for UNIMARC author responsibilities
-    my $tagslib;
-    if ( $marcflavour eq "UNIMARC" ) {
-        $tagslib = C4::Biblio::GetMarcStructure( 1, $self->frameworkcode, { unsafe => 1 });
-        $mintag = "700";
-        $maxtag = "712";
-        $fields_filter = '7..';
-    } else { # marc21/normarc
-        $mintag = "700";
-        $maxtag = "720";
-        $fields_filter = '7..';
-    }
+    my $tagslib = $marcflavour eq "UNIMARC"
+      ? C4::Biblio::GetMarcStructure( 1, $self->frameworkcode, { unsafe => 1 } )
+      : undef;
 
     my @marcauthors;
-    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
-
     foreach my $field ( $self->metadata->record->field($fields_filter) ) {
-        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
+
+        next
+          if $mintag && $field->tag() < $mintag
+          || $maxtag && $field->tag() > $maxtag;
+
         my @subfields_loop;
         my @link_loop;
         my @subfields  = $field->subfields();
@@ -1096,6 +1085,76 @@ sub get_marc_contributors {
     }
     return \@marcauthors;
 }
+
+=head3 get_marc_contributors
+
+    my $contributors = $biblio->get_marc_contributors;
+
+Get all contributors (but first author) from the MARC record and returns them in an array.
+They are stored in different fields depending on MARC flavour (700..712 for MARC21)
+
+=cut
+
+sub get_marc_contributors {
+    my ( $self, $params ) = @_;
+
+    my ( $mintag, $maxtag, $fields_filter );
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    if ( $marcflavour eq "UNIMARC" ) {
+        $mintag = "700";
+        $maxtag = "712";
+        $fields_filter = '7..';
+    } else { # marc21/normarc
+        $mintag = "700";
+        $maxtag = "720";
+        $fields_filter = '7..';
+    }
+
+    return $self->_get_marc_authors(
+        {
+            fields_filter => $fields_filter,
+            mintag       => $mintag,
+            maxtag       => $maxtag
+        }
+    );
+}
+
+=head3 get_marc_authors
+
+    my $authors = $biblio->get_marc_authors;
+
+Get all authors from the MARC record and returns them in an array.
+They are stored in different fields depending on MARC flavour
+(main author from 100 then secondary authors from 700..712).
+
+=cut
+
+sub get_marc_authors {
+    my ( $self, $params ) = @_;
+
+    my ( $mintag, $maxtag, $fields_filter );
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    if ( $marcflavour eq "UNIMARC" ) {
+        $fields_filter = '200';
+    } else { # marc21/normarc
+        $fields_filter = '100';
+    }
+
+    my @first_authors = @{$self->_get_marc_authors(
+        {
+            fields_filter => $fields_filter,
+            mintag       => $mintag,
+            maxtag       => $maxtag
+        }
+    )};
+
+    my @other_authors = @{$self->get_marc_contributors};
+
+    return [@first_authors, @other_authors];
+}
+
 
 =head3 to_api
 
