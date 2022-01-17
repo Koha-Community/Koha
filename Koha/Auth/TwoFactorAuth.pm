@@ -29,10 +29,8 @@ Koha::Auth::TwoFactorAuth- Koha class deal with Two factor authentication
 use Koha::Auth::TwoFactorAuth;
 
 my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
-my $auth = Koha::Auth::TwoFactorAuth->new(
-    { patron => $patron, secret => $secret } );
-my $secret32 = $auth->generate_secret32;
-my $ok = $auth->verify($pin_code, 1, $secret32);
+my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron, secret => $secret });
+my $ok = $auth->verify( $pin_code, 1 );
 
 It's based on Auth::GoogleAuth
 

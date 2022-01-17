@@ -78,14 +78,13 @@ if ( $op eq 'enable-2FA' ) {
     my $auth = Koha::Auth::TwoFactorAuth->new(
         { patron => $logged_in_user, secret => $secret } );
 
-    my $secret32 = $auth->generate_secret32;
     my $qr_code_url =
-      $auth->qr_code( $secret32, $auth->key_id, $auth->issuer, );
+      $auth->qr_code( undef, $auth->key_id, $auth->issuer ); # no need to pass secret32
 
     $template->param(
         issuer      => $auth->issuer,
         key_id      => $auth->key_id,
-        secret32    => $secret32,
+        secret32    => $auth->secret32,
         qr_code_url => $qr_code_url,
     );
     $auth->clear;
