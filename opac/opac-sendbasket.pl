@@ -85,7 +85,7 @@ if ( $email_add ) {
                 patron      => $patron,
             }
         );
-        my $marcauthorsarray = $biblio->get_marc_authors;
+        my $marcauthorsarray = $biblio->get_marc_contributors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

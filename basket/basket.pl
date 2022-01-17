@@ -68,7 +68,7 @@ foreach my $biblionumber ( @bibs ) {
     my $dat              = $biblio->unblessed;
     my $record           = $biblio->metadata->record;
     my $marcnotesarray   = $biblio->get_marc_notes;
-    my $marcauthorsarray = $biblio->get_marc_authors;
+    my $marcauthorsarray = $biblio->get_marc_contributors;
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);

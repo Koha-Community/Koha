@@ -94,7 +94,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         next unless $record;
         my $fw               = GetFrameworkCode($biblionumber);
 
-        my $marcauthorsarray = $biblio->get_marc_authors;
+        my $marcauthorsarray = $biblio->get_marc_contributors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

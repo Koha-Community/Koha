@@ -73,7 +73,7 @@ if ( $email_add ) {
         my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
         my $dat              = $biblio->unblessed;
         my $record           = $biblio->metadata->record({ embed_items => 1 });
-        my $marcauthorsarray = $biblio->get_marc_authors;
+        my $marcauthorsarray = $biblio->get_marc_contributors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

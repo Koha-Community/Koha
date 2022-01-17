@@ -1001,16 +1001,16 @@ sub get_marc_notes {
     return \@marcnotes;
 }
 
-=head3 get_marc_authors
+=head3 get_marc_contributors
 
-    my $authors = $biblio->get_marc_authors;
+    my $contributors = $biblio->get_marc_contributors;
 
-Get all authors from the MARC record and returns them in an array.
-The authors are stored in different fields depending on MARC flavour
+Get all contributors (but first author) from the MARC record and returns them in an array.
+They are stored in different fields depending on MARC flavour
 
 =cut
 
-sub get_marc_authors {
+sub get_marc_contributors {
     my ( $self, $params ) = @_;
 
     my ( $mintag, $maxtag, $fields_filter );

@@ -84,7 +84,7 @@ foreach my $biblionumber ( @bibs ) {
     $record_processor->process($record);
     next unless $record;
     my $marcnotesarray   = $biblio->get_marc_notes({ opac => 1 });
-    my $marcauthorsarray = $biblio->get_marc_authors;
+    my $marcauthorsarray = $biblio->get_marc_contributors;
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
