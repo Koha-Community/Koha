@@ -82,4 +82,12 @@ $(document).ready(function () {
     $("#facet_biblios > table").tableDnD({
         onDragClass: "dragClass highlighted-row",
     });
+
+    $("#es_mappings").on("submit", function(e){
+        e.preventDefault();
+        $("#search_fields_table").DataTable().search('').draw();
+        $("#mapping_biblios_table").DataTable().search('').draw();
+        $("#mapping_authorities_table").DataTable().search('').draw();
+        this.submit();
+    });
 });
