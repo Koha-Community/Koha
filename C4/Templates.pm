@@ -113,6 +113,12 @@ sub output {
     $vars->{opaclayoutstylesheet} =
         C4::Context->preference('opaclayoutstylesheet');
 
+    if(exists $self->{VARS}{lang}) {
+        warn "Preventing \$template->lang='" . ($self->{vars}{lang}//'-undef-')
+            . "' to be overwritten by template->{VARS}{lang}='" . ($self->{VARS}{lang}//'-undef-') . "'";
+        delete $self->{VARS}{lang};
+    }
+
     # add variables set via param to $vars for processing
     $vars = { %$vars, %{ $self->{VARS} } };
 
