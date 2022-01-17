@@ -239,7 +239,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = '0.00';    #TODO not right with pay_individual
 }
 
-$template->param(%$borrower);
+$template->param(borrower_data => $borrower);
 
 if ( $input->param('error_over') ) {
     $template->param( error_over => 1, total_due => scalar $input->param('amountoutstanding') );
