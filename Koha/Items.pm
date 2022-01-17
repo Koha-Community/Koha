@@ -363,13 +363,17 @@ sub batch_update {
     return ( { modified_itemnumbers => \@modified_itemnumbers, modified_fields => $modified_fields }, $self );
 }
 
-sub apply_regex { # FIXME Should be moved outside of Koha::Items
+sub apply_regex {
+    # FIXME Should be moved outside of Koha::Items
+    # FIXME This is nearly identical to Koha::SimpleMARC::_modify_values
     my ($params) = @_;
     my $search   = $params->{search};
     my $replace  = $params->{replace};
     my $modifiers = $params->{modifiers} || q{};
     my $value = $params->{value};
 
+    $replace =~ s/"/\\"/g;                    # Protection from embedded code
+    $replace = '"' . $replace . '"'; # Put in a string for /ee
     my @available_modifiers = qw( i g );
     my $retained_modifiers  = q||;
     for my $modifier ( split //, $modifiers ) {
@@ -377,16 +381,16 @@ sub apply_regex { # FIXME Should be moved outside of Koha::Items
           if grep { /$modifier/ } @available_modifiers;
     }
     if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
-        $value =~ s/$search/$replace/ig;
+        $value =~ s/$search/$replace/igee;
     }
     elsif ( $retained_modifiers eq 'i' ) {
-        $value =~ s/$search/$replace/i;
+        $value =~ s/$search/$replace/iee;
     }
     elsif ( $retained_modifiers eq 'g' ) {
-        $value =~ s/$search/$replace/g;
+        $value =~ s/$search/$replace/gee;
     }
     else {
-        $value =~ s/$search/$replace/;
+        $value =~ s/$search/$replace/ee;
     }
 
     return $value;
