@@ -813,7 +813,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 $template->param( "show_guarantor" => ( $category_type =~ /A|I|S|X/ ) ? 0 : 1 ); # associate with step to know where you are
-$template->param(%data);
+$template->param( borrower_data => \%data );
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
 $template->param(  step  => $step   ) if $step;	# associate with step to know where u are
 
