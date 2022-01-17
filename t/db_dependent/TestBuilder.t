@@ -33,11 +33,12 @@ BEGIN {
 }
 
 our $schema = Koha::Database->new->schema;
-$schema->storage->txn_begin;
 our $builder;
 
 subtest 'Start with some trivial tests' => sub {
     plan tests => 7;
+
+    $schema->storage->txn_begin;
 
     $builder = t::lib::TestBuilder->new;
     isnt( $builder, undef, 'We got a builder' );
@@ -61,11 +62,15 @@ subtest 'Start with some trivial tests' => sub {
     warning_like { $builder->build( $param ) }
         qr/Violation of unique constraint/,
         'Catch warn on adding existing record';
+
+    $schema->storage->txn_rollback;
 };
 
 
 subtest 'Build all sources' => sub {
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     my @sources = $builder->schema->sources;
     my @source_in_failure;
@@ -82,11 +87,15 @@ subtest 'Build all sources' => sub {
         diag( "The following sources have not been generated correctly: " .
         join ', ', @source_in_failure );
     }
+
+    $schema->storage->txn_rollback;
 };
 
 
 subtest 'Test length of some generated fields' => sub {
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     # Test the length of a returned character field
     my $bookseller = $builder->build({ source  => 'Aqbookseller' });
@@ -98,11 +107,15 @@ subtest 'Test length of some generated fields' => sub {
 
     my $item = $builder->build({ source => 'Item' });
     is( $item->{replacementprice}, sprintf("%.2f", $item->{replacementprice}), "The number of decimals for floats should not be more than 2" );
+
+    $schema->storage->txn_rollback;
 };
 
 
 subtest 'Test FKs in overduerules_transport_type' => sub {
     plan tests => 5;
+
+    $schema->storage->txn_begin;
 
     my $my_overduerules_transport_type = {
         message_transport_type => {
@@ -143,11 +156,15 @@ subtest 'Test FKs in overduerules_transport_type' => sub {
         undef,
         'build generates values if they are not given'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 
 subtest 'Tests with composite FK in userpermission' => sub {
     plan tests => 9;
+
+    $schema->storage->txn_begin;
 
     my $my_user_permission = default_userpermission();
     my $user_permission = $builder->build({
@@ -206,6 +223,8 @@ subtest 'Tests with composite FK in userpermission' => sub {
         $my_user_permission->{code}->{description},
         'build stored description correctly'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 sub default_userpermission {
@@ -238,6 +257,8 @@ sub default_userpermission {
 subtest 'Test build with NULL values' => sub {
     plan tests => 3;
 
+    $schema->storage->txn_begin;
+
     # PK should not be null
     my $params = { source => 'Branch', value => { branchcode => undef }};
     warning_like { $builder->build( $params ) }
@@ -255,11 +276,15 @@ subtest 'Test build with NULL values' => sub {
     $info = $schema->source( 'Reserve' )->column_info( 'itemnumber' );
     is( $reserve && $info->{is_nullable} && $info->{is_foreign_key} &&
         !defined( $reserve->{itemnumber} ), 1, 'Nullable FK' );
+
+    $schema->storage->txn_rollback;
 };
 
 
 subtest 'Tests for delete method' => sub {
     plan tests => 12;
+
+    $schema->storage->txn_begin;
 
     # Test delete with single and multiple records
     my $basket1 = $builder->build({ source => 'Aqbasket' });
@@ -299,11 +324,14 @@ subtest 'Tests for delete method' => sub {
              code       => undef };
     is( $builder->delete({ source => 'Permission', records => $val }), 0,
         'delete returns zero for an undef search with a composite PK' );
-};
 
+    $schema->storage->txn_rollback;
+};
 
 subtest 'Auto-increment values tests' => sub {
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     # Pick a table with AI PK
     my $source  = 'Biblio'; # table
@@ -328,20 +356,28 @@ subtest 'Auto-increment values tests' => sub {
             value  => { biblionumber => 123 },
         }) } qr/^Value not allowed for auto_incr/,
         'Build should not overwrite an auto_incr column';
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Date handling' => sub {
     plan tests => 2;
+
+    $schema->storage->txn_begin;
 
     $builder = t::lib::TestBuilder->new;
 
     my $patron = $builder->build( { source => 'Borrower' } );
     is( length( $patron->{updated_on} ),  19, 'A timestamp column value should be YYYY-MM-DD HH:MM:SS' );
     is( length( $patron->{dateofbirth} ), 10, 'A date column value should be YYYY-MM-DD' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Default values' => sub {
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     $builder = t::lib::TestBuilder->new;
     my $item = $builder->build( { source => 'Item' } );
@@ -358,11 +394,15 @@ subtest 'Default values' => sub {
         $patron = $builder->build_object({ class => 'Koha::Patrons', value => {categorycode => $patron_category_X->categorycode} });
         is( $patron->category->category_type, 'X', );
     };
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'build_object() tests' => sub {
 
     plan tests => 5;
+
+    $schema->storage->txn_begin;
 
     $builder = t::lib::TestBuilder->new();
 
@@ -428,10 +468,14 @@ subtest 'build_object() tests' => sub {
                 { class => 'Koha::Patrons', categorycode => 'foobar' } );
         } qr{Unknown parameter\(s\): categorycode}, "Unknown parameter detected";
     };
+
+    $schema->storage->txn_rollback;
 };
 
 subtest '->build parameter' => sub {
     plan tests => 4;
+
+    $schema->storage->txn_begin;
 
     # Test to make sure build() warns user of unknown parameters.
     warnings_are {
@@ -460,9 +504,9 @@ subtest '->build parameter' => sub {
         $builder->build(
             { source => 'Borrower', categorycode => 'foobar' } );
     } qr{Unknown parameter\(s\): categorycode}, "Unkown parameter detected";
-};
 
-$schema->storage->txn_rollback;
+    $schema->storage->txn_rollback;
+};
 
 subtest 'build_sample_biblio() tests' => sub {
 
