@@ -24,6 +24,7 @@ use C4::Output qw( output_and_exit output_html_with_http_headers );
 
 use Koha::Patrons;
 use Koha::Auth::TwoFactorAuth;
+use Koha::Token;
 
 my $cgi = CGI->new;
 
@@ -44,8 +45,15 @@ unless ( C4::Context->preference('TwoFactorAuthentication') ) {
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
 my $op = $cgi->param('op') // '';
+my $csrf_pars = {
+    session_id => scalar $cgi->cookie('CGISESSID'),
+    token  => scalar $cgi->param('csrf_token'),
+};
 
 if ( $op eq 'register-2FA' ) {
+    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
+        unless Koha::Token->new->check_csrf($csrf_pars);
+
     my $pin_code = $cgi->param('pin_code');
     my $secret32 = $cgi->param('secret32');
     my $auth     = Koha::Auth::TwoFactorAuth->new(
@@ -91,6 +99,8 @@ if ( $op eq 'enable-2FA' ) {
     $op = 'register';
 }
 elsif ( $op eq 'disable-2FA' ) {
+    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
+        unless Koha::Token->new->check_csrf($csrf_pars);
     $logged_in_user->auth_method('password')->store;
 }
 
