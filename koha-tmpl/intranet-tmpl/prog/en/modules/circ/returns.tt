@@ -1327,6 +1327,11 @@
                 this.form.submit();
             });
 
+            $('.approve').on("click",function(e){
+                let barcode = document.getElementById('confirm-hold-barcode');
+                if ( barcode ) barcode.remove();
+                this.form.submit();
+            });
             $('.cancel-hold').on("click",function(e){
                 this.form.cancel_reserve.value = 1;
                 this.form.submit();
