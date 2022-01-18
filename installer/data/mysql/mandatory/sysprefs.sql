@@ -412,6 +412,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacAllowSharingPrivateLists','0',NULL,'If set, allows opac users to share private lists with other patrons','YesNo'),
 ('OPACAllowUserToChooseBranch','1','1','Allow the user to choose the branch they want to pickup their hold from','YesNo'),
 ('OPACAmazonCoverImages','0','','Display cover images on OPAC from Amazon Web Services','YesNo'),
+('OPACAuthorIdentifiers','0','','Display author identifiers on the OPAC detail page','YesNo'),
 ('OpacAuthorities','1',NULL,'If ON, enables the search authorities link on OPAC','YesNo'),
 ('OPACBaseURL','',NULL,'Specify the Base URL of the OPAC, e.g., http://opac.mylibrary.com, including the protocol (http:// or https://). Otherwise, the http:// will be added automatically by Koha upon saving.','Free'),
 ('opacbookbag','1','','If ON, enables display of Cart feature','YesNo'),
