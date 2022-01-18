@@ -267,7 +267,7 @@ subtest "Tests for needs_advancing." => sub {
     )->store;
     is($dbitem->needs_advancing, 1, "Ready to be advanced.");
     $dbtransfer->delete;
-    warning_is {$dbitem->needs_advancing} "We have no historical branch transfer for itemnumber " . $dbitem->item->itemnumber . "; This should not have happened!", "Missing transfer is warned.";
+    warning_is {$dbitem->needs_advancing} "We have no historical branch transfer for item " . $dbitem->item->itemnumber . "; This should not have happened!", "Missing transfer is warned.";
 
     $schema->storage->txn_rollback;
 };
@@ -469,13 +469,13 @@ subtest "Tests for advance." => sub {
         class => 'Koha::Checkouts',
         value => {
              branchcode => $srstage_1->branchcode_id,
-             itemnumber => $sritem_1->itemnumber->itemnumber,
+             itemnumber => $sritem_1->item->itemnumber,
              returndate => undef
         }
     });
-    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_1->branchcode_id)->store;
     ok($sritem_1->advance, "Advancement done.");
-    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    $transfer_request = $sritem_1->item->get_transfer;
     is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
     is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
     is($transfer_request->datesent, undef, "Transfer waiting to initiate until return.");
@@ -484,7 +484,7 @@ subtest "Tests for advance." => sub {
     $sritem_1->advance; #advance back to second stage
     # Set arrived
     $transfer_request->datearrived(dt_from_string())->store;
-    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+    $sritem_1->item->holdingbranch($srstage_2->branchcode_id)->store;
 
 
     $srstage_1->rota->cyclical(0)->store;         # Set Rota to non-cyclical.

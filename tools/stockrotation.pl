@@ -252,7 +252,7 @@ if (!defined $op) {
 
     # Get all items on this rota, for each prefetch their
     # stage and biblio objects
-    my $items = Koha::StockRotationItems->search(
+    my $sritems = Koha::StockRotationItems->search(
         { 'stage.rota_id' => $params{rota_id} },
         {
             prefetch => {
