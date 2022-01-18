@@ -600,6 +600,10 @@ sub _gen_default_values {
             suggesteddate => dt_from_string()->ymd,
             STATUS        => 'ASKED'
         },
+        ReturnClaim => {
+            issue_id => undef, # It should be a FK but we removed it
+                               # We don't want to generate a random value
+        },
     };
 }
 
