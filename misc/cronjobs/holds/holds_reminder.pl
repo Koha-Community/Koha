@@ -96,7 +96,7 @@ patrons with waiting holds.
 
 =item B<-triggered>
 
-Optional parameter, only sned notices for holds exactly <days> waiting.
+Optional parameter, only send notices for holds exactly <days> waiting.
 If not included a notice will be sent to all patrons with waiting holds
 equal to OR greater than <days>. This option is useful if the cron is
 being run daily to avoid spamming the patrons.
