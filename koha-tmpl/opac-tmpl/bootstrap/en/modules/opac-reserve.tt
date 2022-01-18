@@ -362,6 +362,7 @@
                                                         [% IF ( itemdata_enumchron ) %]
                                                             <th>Vol info</th>
                                                         [% END %]
+                                                        <th>Notes</th>
                                                         <th>Information</th>
                                                     </tr>
 
@@ -404,6 +405,9 @@
                                                             [% IF ( itemdata_enumchron ) %]
                                                                 <td class="vol_info">[% itemLoo.enumchron | html %]</td>
                                                             [% END %]
+                                                            <td class="itemnotes">
+                                                                [% itemLoo.itemnotes | html %]
+                                                            </td>
                                                             <td class="information">
                                                                 [% IF ( itemLoo.dateDue ) %]
                                                                     <span class="checkedout">Due [% itemLoo.dateDue | html %]</span>

@@ -490,6 +490,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
         $itemLoopIter->{ccode} = $itemInfo->{ccode};
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
+        $itemLoopIter->{itemnotes} = $itemInfo->{itemnotes};
         if ($itemLevelTypes) {
             $itemLoopIter->{translated_description} = $itemInfo->{translated_description};
             $itemLoopIter->{itype} = $itemInfo->{itype};
