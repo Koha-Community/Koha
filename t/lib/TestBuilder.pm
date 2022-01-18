@@ -596,6 +596,10 @@ sub _gen_default_values {
         BorrowerAttributeType => {
             mandatory => 0,
         },
+        ReturnClaim => {
+            issue_id => undef, # It should be a FK but we removed it
+                               # We don't want to generate a random value
+        },
     };
 }
 
