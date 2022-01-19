@@ -282,8 +282,8 @@ sub edit {
         # suspended_until can also be set to undef
         my $suspended_until =
           exists $body->{suspended_until}
-          ? dt_from_string( $body->{suspended_until}, 'rfc3339' )
-          : dt_from_string( $hold->suspend_until,     'iso' );
+          ? $body->{suspended_until} && dt_from_string( $body->{suspended_until}, 'rfc3339' )
+          : $hold->suspend_until     && dt_from_string( $hold->suspend_until,     'iso' );
 
         my $params = {
             reserve_id    => $hold_id,

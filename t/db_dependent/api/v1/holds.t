@@ -892,7 +892,7 @@ subtest 'pickup_locations() tests' => sub {
 
 subtest 'edit() tests' => sub {
 
-    plan tests => 37;
+    plan tests => 39;
 
     $schema->storage->txn_begin;
 
@@ -1010,6 +1010,8 @@ subtest 'edit() tests' => sub {
                 branchcode   => $library_3->branchcode,
                 itemnumber   => $item->itemnumber,
                 priority     => 1,
+                suspend       => 0,
+                suspend_until => undef,
             }
         }
     );
@@ -1061,7 +1063,11 @@ subtest 'edit() tests' => sub {
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
 
+    is( $item_hold->suspend, 0, 'Location change should not activate suspended status' );
+    is( $item_hold->suspend_until, undef, 'Location change should keep suspended_until be undef' );
+
     $schema->storage->txn_rollback;
+
 };
 
 subtest 'add() tests' => sub {
