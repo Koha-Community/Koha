@@ -420,8 +420,6 @@ sub run_tests {
 
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
-    my $newincbiblioitemnumber=$biblioitemnumber+1;
-    $dbh->do("UPDATE biblioitems SET biblioitemnumber = ? WHERE biblionumber = ?;", undef, $newincbiblioitemnumber, $biblionumber );
     my $updatedrecord = GetMarcBiblio({
         biblionumber => $biblionumber,
         embed_items  => 0 });
@@ -434,7 +432,6 @@ sub run_tests {
     } else {
         $biblioitemnumbertotest = $updatedrecord->field($biblioitem_tag)->subfield($biblioitem_subfield);
     }
-    is ($newincbiblioitemnumber, $biblioitemnumbertotest, 'Check newincbiblioitemnumber');
 
     # test for GetMarcUrls
     $marc_record->append_fields(
@@ -597,14 +594,14 @@ sub create_author_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 47;
+    plan tests => 46;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 47;
+    plan tests => 46;
 
     # Mock the auth type data for UNIMARC
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
