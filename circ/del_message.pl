@@ -40,6 +40,14 @@ my $borrowernumber = $input->param('borrowernumber');
 my $message_id     = $input->param('message_id');
 
 my $message = Koha::Patron::Messages->find($message_id);
+if ( $message
+    && !C4::Context->preference('AllowAllMessageDeletion')
+    && C4::Context->userenv->{'branch'} ne $message->branchcode )
+{
+    print $input->redirect("/cgi-bin/koha/errors/403.pl");
+    exit;
+}
+
 $message->delete if $message;
 
 if ( $input->param('from') eq  "moremember" ) {
