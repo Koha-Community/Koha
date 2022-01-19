@@ -168,19 +168,19 @@ sub __npx {
 }
 
 sub N__ {
-    return @_;
+    return $_[0];
 }
 
 sub N__n {
-    return @_;
+    return $_[0];
 }
 
 sub N__p {
-    return @_;
+    return $_[1];
 }
 
 sub N__np {
-    return @_;
+    return $_[1];
 }
 
 sub _base_directory {

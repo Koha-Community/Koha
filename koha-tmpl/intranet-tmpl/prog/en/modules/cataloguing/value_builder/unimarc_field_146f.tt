@@ -1,0 +1,141 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin unimarc_field_146e &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="unimarc_field_146f" class="cat">
+    <div class="container-fluid">
+        <h1>Framework plugin for UNIMARC 146$f</h1>
+
+        <form class="form-horizontal" id="form">
+            <input type="hidden" id="id" name="id" value="[% id | html %]">
+
+            <div class="form-group">
+                <label for="number" class="col-sm-3 control-label">Number of instruments</label>
+                <div class="col-sm-9">
+                    <input inputmode="numeric" pattern="^[0-9]{0,2}$" title="a number between 0 and 99 (inclusive)" id="number" name="number" value="[% number | html %]">
+                    <p class="help-block">A number between 0 and 99 (inclusive)</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category" class="col-sm-3 control-label">Category of instrument</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="category">
+                        <option value=""></option>
+                        [% FOREACH optgroup IN category_optgroups %]
+                            <optgroup label="[% optgroup.label | html %]">
+                                [% FOREACH option IN optgroup.options %]
+                                    [% IF option.value == category %]
+                                        <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
+                                    [% ELSE %]
+                                        <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %] ([% optgroup.label | html %])</option>
+                                    [% END %]
+                                [% END %]
+                            </optgroup>
+                        [% END %]
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tessitura" class="col-sm-3 control-label">Tessitura</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="tessitura">
+                        <option value=""></option>
+                        [% FOREACH option IN tessitura_options %]
+                            [% IF option.value == tessitura %]
+                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% ELSE %]
+                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="number_of_hands_or_keys" class="col-sm-3 control-label">Number of hands / players; keys of pitched instruments</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="number_of_hands_or_keys">
+                        <option value=""></option>
+                        [% FOREACH option IN number_of_hands_or_keys_options %]
+                            [% IF option.value == number_of_hands_or_keys %]
+                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% ELSE %]
+                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="other" class="col-sm-3 control-label">Other (position 7)</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="other">
+                        <option value=""></option>
+                        [% FOREACH option IN other_options %]
+                            [% IF option.value == other %]
+                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% ELSE %]
+                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="other2" class="col-sm-3 control-label">Other (position 8)</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="other2">
+                        <option value=""></option>
+                        [% FOREACH option IN other2_options %]
+                            [% IF option.value == other2 %]
+                                <option value="[% option.value | html %]" selected>[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% ELSE %]
+                                <option value="[% option.value | html %]">[% option.value | html %] &ndash; [% option.label | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit">OK</button>
+                    <a href="#" class="cancel close">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    [% INCLUDE 'select2.inc' %]
+    <script>
+        $(document).ready(function () {
+            $('#category').select2();
+        });
+    </script>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            const id = document.getElementById('id').value;
+            const number = document.getElementById('number').value;
+            const category = document.getElementById('category').value;
+            const tessitura = document.getElementById('tessitura').value;
+            const number_of_hands_or_keys = document.getElementById('number_of_hands_or_keys').value;
+            const other = document.getElementById('other').value;
+            const other2 = document.getElementById('other2').value;
+            const value =
+                (number ? number.toString().padStart(2, '0') : 'uu') +
+                category.padStart(3, ' ') +
+                tessitura.padStart(1, ' ') +
+                number_of_hands_or_keys.padStart(1, ' ') +
+                other.padStart(1, ' ') +
+                other2.padStart(1, ' ');
+            opener.document.getElementById(id).value = value;
+            window.close();
+        });
+    </script>
+
+[% INCLUDE 'popup-bottom.inc' %]
