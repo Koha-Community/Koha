@@ -49,7 +49,7 @@ __PACKAGE__->table("club_template_fields");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 16
+  size: 32
 
 =cut
 
@@ -63,7 +63,7 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "mediumtext", is_nullable => 1 },
   "authorised_value_category",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -111,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LRnLRjyMHuEd3KMRMHd3KA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-19 06:49:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yh8KZ8fjZclGd0GicxTaBA
 
 sub koha_object_class {
     'Koha::Club::Template::Field';
