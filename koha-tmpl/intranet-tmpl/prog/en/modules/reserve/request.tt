@@ -118,7 +118,7 @@
             [% END %]
 
             [% UNLESS ( multi_hold ) %]
-                <h1>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
+                <h1>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</h1>
             [% ELSE %]
                 <h1>
                     [% IF ( patron ) %]
