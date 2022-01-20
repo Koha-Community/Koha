@@ -223,9 +223,10 @@ sub authenticate_api_request {
                                                 $cookie, undef,
                                                 { remote_addr => $remote_addr });
         if ($status eq "ok") {
-            $user = Koha::Patrons->find( $session->param('number') )
-              unless $session->param('sessiontype')
-                 and $session->param('sessiontype') eq 'anon';
+            $user = Koha::Patrons->find( $session->param('number') );
+            $cookie_auth = 1;
+        }
+        elsif ($status eq "anon") {
             $cookie_auth = 1;
         }
         elsif ($status eq "maintenance") {
