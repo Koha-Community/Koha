@@ -16,9 +16,10 @@ package Koha::Auth::TwoFactorAuth;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Auth::GoogleAuth;
 use GD::Barcode;
 use MIME::Base64 qw( encode_base64 );
+
+use Koha::Exceptions;
 
 use base qw( Auth::GoogleAuth );
 
@@ -42,30 +43,42 @@ It's based on Auth::GoogleAuth
 
     $obj = Koha::Auth::TwoFactorAuth->new({ patron => $p, secret => $s });
 
+    Patron is mandatory.
+    Secret is optional, defaults to patron's secret.
+    Passing secret32 overrules secret! Secret32 should be base32.
+
 =cut
 
 sub new {
     my ($class, $params) = @_;
     my $patron   = $params->{patron};
-    my $secret   = $params->{secret};
     my $secret32 = $params->{secret32};
+    my $secret = $params->{secret};
 
-    if (!$secret && !$secret32){
-        $secret32 = $patron->secret;
+    Koha::Exceptions::MissingParameter->throw("Mandatory patron parameter missing")
+        unless $patron && ref($patron) eq 'Koha::Patron';
+
+    my $type = 'secret32';
+    if( $secret32 ) {
+        Koha::Exceptions::BadParameter->throw("Secret32 should be base32")
+            if $secret32 =~ /[^a-z2-7]/;
+    } elsif( $secret ) {
+        $type = 'secret';
+    } elsif( $patron->secret ) {
+        $secret32 = $patron->secret; # saved already in base32
+    } else {
+        Koha::Exceptions::MissingParameter->throw("No secret passed or patron has no secret");
     }
 
     my $issuer = $patron->library->branchname;
     my $key_id = sprintf "%s_%s",
       $issuer, ( $patron->email || $patron->userid );
 
-    return $class->SUPER::new(
-        {
-            ( $secret   ? ( secret   => $secret )   : () ),
-            ( $secret32 ? ( secret32 => $secret32 ) : () ),
-            issuer => $issuer,
-            key_id => $key_id,
-        }
-    );
+    return $class->SUPER::new({
+        $type => $secret32 || $secret,
+        issuer => $issuer,
+        key_id => $key_id,
+    });
 }
 
 =head3 qr_code
