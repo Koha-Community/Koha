@@ -134,6 +134,11 @@
                     </select>
                     <span>Enables additional debug output in the logs</span>
                 </li>
+                <li>
+                    <label for="smtp_default">Default server: </label>
+                    <input type="checkbox" name="smtp_default" id="smtp_default" />
+                    <span>Sets this SMTP server as the default SMTP server.</span>
+                </li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -216,6 +221,15 @@
                     [%- END -%]
                     </select>
                 </li>
+                <li>
+                    <label for="smtp_default">Default server: </label>
+                    [% IF smtp_server.is_default %]
+                        <input type="checkbox" name="smtp_default" id="smtp_default" checked="checked"/>
+                    [% ELSE %]
+                        <input type="checkbox" name="smtp_default" id="smtp_default" />
+                    [% END %]
+                    <span>Sets this SMTP server as the default SMTP server.</span>
+                </li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -256,6 +270,7 @@
                         <th>Timeout (secs)</th>
                         <th>SSL</th>
                         <th>Authenticated</th>
+                        <th>Is default</th>
                         <th data-class-name="actions noExport">Actions</th>
                     </tr>
                 </thead>
@@ -361,6 +376,18 @@
                     {
                         "data": function( row, type, val, meta ) {
                             if ( row.user_name != null ) {
+                                return _("Yes");
+                            }
+                            else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if ( row.is_default ) {
                                 return _("Yes");
                             }
                             else {

@@ -5270,6 +5270,7 @@ CREATE TABLE `smtp_servers` (
   `user_name` varchar(80) DEFAULT NULL,
   `password` varchar(80) DEFAULT NULL,
   `debug` tinyint(1) NOT NULL DEFAULT 0,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `host_idx` (`host`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -64,15 +64,31 @@ subtest 'transport() tests' => sub {
 
 subtest 'is_system_default() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
-    my $smtp_server = $builder->build_object({ class => 'Koha::SMTP::Servers' });
+    Koha::SMTP::Servers->search()->delete();
+
+    my $smtp_server = $builder->build_object(
+        {
+            class => 'Koha::SMTP::Servers',
+            value => { is_default => 0 }
+        }
+    );
+
     ok( !$smtp_server->is_system_default, 'A generated server is not the system default' );
 
     my $system_default_server = Koha::SMTP::Servers->get_default;
     ok( $system_default_server->is_system_default, 'The server returned by get_default is the system default' );
+
+    $smtp_server = $builder->build_object(
+        {
+            class => 'Koha::SMTP::Servers',
+            value => { ssl_mode => 'disabled', debug => 0, is_default => 1 }
+        }
+    );
+    is( Koha::SMTP::Servers->get_default->id, $smtp_server->id, "Default server correctly retrieved from database" );
 
     $schema->storage->txn_rollback;
 };

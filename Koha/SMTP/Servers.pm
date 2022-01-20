@@ -44,9 +44,13 @@ sub get_default {
     my ($self) = @_;
 
     my $default;
+
     my $smtp_config = C4::Context->config('smtp_server');
 
-    if ( $smtp_config ) {
+    if ( $default = $self->search({ is_default => 1 }, { rows => 1 })->single ) {
+
+    }
+    elsif ( $smtp_config ) {
         $default = Koha::SMTP::Server->new( $smtp_config );
     }
     else {
