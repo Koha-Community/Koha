@@ -68,11 +68,10 @@ if ( $op eq 'register-2FA' ) {
     );
 
     if ($verified) {
-        $logged_in_user->secret($secret32);
-        $op = 'registered';
-
         # FIXME Generate a (new?) secret
+        $logged_in_user->secret($secret32);
         $logged_in_user->auth_method('two-factor')->store;
+        $op = 'registered';
     }
     else {
         $template->param( invalid_pin => 1, );
@@ -81,7 +80,6 @@ if ( $op eq 'register-2FA' ) {
 }
 
 if ( $op eq 'enable-2FA' ) {
-
     my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
     my $auth = Koha::Auth::TwoFactorAuth->new(
         { patron => $logged_in_user, secret => $secret } );
@@ -99,6 +97,7 @@ if ( $op eq 'enable-2FA' ) {
 elsif ( $op eq 'disable-2FA' ) {
     output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf($csrf_pars);
+    $logged_in_user->secret(undef);
     $logged_in_user->auth_method('password')->store;
 }
 
