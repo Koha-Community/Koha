@@ -227,21 +227,21 @@ subtest "store() tests" => sub {
 
 subtest "set_waiting() tests" => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin();
-
-    # Disable logging
-    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
 
     my $hold = $builder->build_object({ class => 'Koha::Holds' });
 
     $hold->waitingdate('2021-01-01');
-
     $hold->set_waiting();
+    is($hold->waitingdate, '2021-01-01', "Setting waiting when already waiting should not update waitingdate");
 
-    is($hold->waitingdate,'2021-01-01',"Setting waiting when already waiting should not update waitingdate");
+    $hold->waitingdate(undef)->store;
+    $hold->set_waiting();
+    isnt($hold->waitingdate, undef, "Setting waiting when not waiting already should update waitingdate");
 
+    $schema->storage->txn_rollback();
 };
 
 subtest "delete() tests" => sub {

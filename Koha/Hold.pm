@@ -180,18 +180,11 @@ sub set_waiting {
 
     $self->priority(0);
 
-    my $waiting_date;
     my $today = dt_from_string();
-
-    if ( $self->waitingdate ) {
-        $waiting_date = $self->waitingdate;
-    } else {
-        $waiting_date = $today->ymd;
-    }
 
     my $values = {
         found => 'W',
-        waitingdate => $waiting_date,
+        ( !$self->waitingdate ? ( waitingdate => $today->ymd ) : () ),
         desk_id => $desk_id,
     };
 
