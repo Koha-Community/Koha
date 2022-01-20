@@ -1744,6 +1744,8 @@ Possible return values in C<$status> are:
 
 =item "ok" -- user authenticated; C<$sessionID> have valid values.
 
+=item "anon" -- user not authenticated but valid for anonymous session.
+
 =item "failed" -- credentials are not correct; C<$sessionid> are undef
 
 =item "maintenance" -- DB is in maintenance mode; no login possible at the moment
@@ -1828,20 +1830,21 @@ sub check_cookie_auth {
             $userid    = undef;
             $sessionID = undef;
             return ( "expired", undef );
-        } else {
+        } elsif ( $userid ) {
             $session->param( 'lasttime', time() );
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
                 return ( "ok", $sessionID );
-            } else {
-                $session->delete();
-                $session->flush;
-                C4::Context->_unset_userenv($sessionID);
-                $userid    = undef;
-                $sessionID = undef;
-                return ( "failed", undef );
             }
+        } else {
+            return ( "anon", $session );
         }
+        $session->delete();
+        $session->flush;
+        C4::Context->_unset_userenv($sessionID);
+        $userid    = undef;
+        $sessionID = undef;
+        return ( "failed", undef );
     } else {
         return ( "expired", undef );
     }
