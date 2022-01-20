@@ -925,14 +925,11 @@ sub checkauth {
                     -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
                 );
 
-                my $sessiontype = $session->param('sessiontype') || '';
-                unless ( $sessiontype && $sessiontype eq 'anon' ) {    #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
-                    $flags = haspermission( $userid, $flagsrequired );
-                    if ($flags) {
-                        $loggedin = 1;
-                    } else {
-                        $info{'nopermission'} = 1;
-                    }
+                $flags = haspermission( $userid, $flagsrequired );
+                if ($flags) {
+                    $loggedin = 1;
+                } else {
+                    $info{'nopermission'} = 1;
                 }
             }
         } elsif ( !$logout ) {
@@ -953,7 +950,7 @@ sub checkauth {
 
     unless ( $userid ) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
-        my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
+        $session ||= get_session("") or die "Auth ERROR: Cannot get_session()";
 
         # Save anonymous search history in new session so it can be retrieved
         # by get_template_and_user to store it in user's search history after
