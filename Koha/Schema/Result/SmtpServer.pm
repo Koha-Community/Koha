@@ -78,6 +78,12 @@ __PACKAGE__->table("smtp_servers");
   default_value: 0
   is_nullable: 0
 
+=head2 is_default
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -107,6 +113,8 @@ __PACKAGE__->add_columns(
   "password",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "debug",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "is_default",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -140,11 +148,12 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-21 18:02:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OpyR6JhcwWKQP2+hyaLiww
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-20 18:18:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D+EewRQjaYPN3VEOAt8Tkg
 
 __PACKAGE__->add_columns(
-    '+debug' => { is_boolean => 1 }
+    '+debug'      => { is_boolean => 1 },
+    '+is_default' => { is_boolean => 1 },
 );
 
 sub koha_objects_class {
