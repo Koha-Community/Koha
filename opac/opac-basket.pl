@@ -26,7 +26,6 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Items qw( GetHiddenItemnumbers GetItemsInfo );
 use C4::Circulation qw( GetTransfers );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -63,12 +62,7 @@ if (C4::Context->preference('TagsEnabled')) {
 	}
 }
 
-my $borcat = q{};
-if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    # we need to fetch the borrower info here, so we can pass the category
-    my $patron = Koha::Patrons->find($borrowernumber);
-    $borcat = $patron ? $patron->categorycode : $borcat;
-}
+my $logged_in_user = Koha::Patrons->find($borrowernumber);
 
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
 my $rules = C4::Context->yaml_preference('OpacHiddenItems');
@@ -95,27 +89,16 @@ foreach my $biblionumber ( @bibs ) {
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 
-    # grab all the items...
-    my @all_items        = &GetItemsInfo( $biblionumber );
-
-    # determine which ones should be hidden / visible
-    my @hidden_items     = GetHiddenItemnumbers({ items => \@all_items, borcat => $borcat });
-
     # If every item is hidden, then the biblio should be hidden too.
     next
       if $biblio->hidden_in_opac({ rules => $rules });
 
-    # copy the visible ones into the items array.
-    my @items;
-    foreach my $item (@all_items) {
-
-            # next if item is hidden
-            next  if  grep  { $item->{itemnumber} eq $_  } @hidden_items ;
-
-            my $reserve_status = C4::Reserves::GetReserveStatus($item->{itemnumber});
-            if( $reserve_status eq "Waiting"){ $item->{'waiting'} = 1; }
-            if( $reserve_status eq "Reserved"){ $item->{'onhold'} = 1; }
-            push @items, $item;
+    # grab all the items...
+    my $items        = $biblio->items->filter_by_visible_in_opac({ patron => $logged_in_user })->unblessed;
+    foreach my $item (@$items) {
+        my $reserve_status = C4::Reserves::GetReserveStatus($item->{itemnumber});
+        if( $reserve_status eq "Waiting"){ $item->{'waiting'} = 1; }
+        if( $reserve_status eq "Reserved"){ $item->{'onhold'} = 1; }
     }
 
     my $hasauthors = 0;
@@ -137,7 +120,7 @@ foreach my $biblionumber ( @bibs ) {
         $dat->{'even'} = 1;
     }
 
-    for my $itm (@items) {
+    for my $itm (@$items) {
         if ($itm->{'location'}){
             $itm->{'location_opac'} = $shelflocations->{$itm->{'location'} };
         }
@@ -150,7 +133,7 @@ foreach my $biblionumber ( @bibs ) {
     }
     $num++;
     $dat->{biblionumber} = $biblionumber;
-    $dat->{ITEM_RESULTS}   = \@items;
+    $dat->{ITEM_RESULTS}   = $items;
     $dat->{MARCNOTES}      = $marcnotesarray;
     $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
     $dat->{MARCAUTHORS}    = $marcauthorsarray;

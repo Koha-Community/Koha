@@ -19,7 +19,7 @@ use Modern::Perl;
 use Data::Dumper;
 
 use MARC::Record;
-use C4::Items qw( ModItemTransfer GetHiddenItemnumbers GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
+use C4::Items qw( ModItemTransfer GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
 use C4::Biblio qw( GetMarcFromKohaField EmbedItemsInMarcBiblio GetMarcBiblio AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::Items;
@@ -186,105 +186,6 @@ subtest 'ModItemTransfer tests' => sub {
 
     my $transfer3 = $transfers->next;
     is($transfer3->reason, 'Manual', "Reason set via ModItemTransfer");
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'GetHiddenItemnumbers tests' => sub {
-
-    plan tests => 11;
-
-    # This sub is controlled by the OpacHiddenItems system preference.
-
-    $schema->storage->txn_begin;
-
-    my $builder = t::lib::TestBuilder->new;
-    my $library1 = $builder->build({
-        source => 'Branch',
-    });
-
-    my $library2 = $builder->build({
-        source => 'Branch',
-    });
-    my $itemtype = $builder->build({
-        source => 'Itemtype',
-    });
-
-    # Create a new biblio
-    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->build_sample_biblio();
-
-    # Add two items
-    my $item1_itemnumber = $builder->build_sample_item(
-        {
-            biblionumber => $biblio->biblionumber,
-            library      => $library1->{branchcode},
-            withdrawn    => 1,
-            itype        => $itemtype->{itemtype}
-        }
-    )->itemnumber;
-    my $item2_itemnumber = $builder->build_sample_item(
-        {
-            biblionumber => $biblio->biblionumber,
-            library      => $library2->{branchcode},
-            withdrawn    => 0,
-            itype        => $itemtype->{itemtype}
-        }
-    )->itemnumber;
-    my $opachiddenitems;
-    my @itemnumbers = ($item1_itemnumber,$item2_itemnumber);
-    my @hidden;
-    my @items;
-    push @items, Koha::Items->find( $item1_itemnumber )->unblessed;
-    push @items, Koha::Items->find( $item2_itemnumber )->unblessed;
-
-    # Empty OpacHiddenItems
-    t::lib::Mocks::mock_preference('OpacHiddenItems','');
-    ok( !defined( GetHiddenItemnumbers( { items => \@items } ) ),
-        "Hidden items list undef if OpacHiddenItems empty");
-
-    # Blank spaces
-    t::lib::Mocks::mock_preference('OpacHiddenItems','  ');
-    ok( scalar GetHiddenItemnumbers( { items => \@items } ) == 0,
-        "Hidden items list empty if OpacHiddenItems only contains blanks");
-
-    # One variable / value
-    $opachiddenitems = "
-        withdrawn: [1]";
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( { items => \@items } );
-    ok( scalar @hidden == 1, "Only one hidden item");
-    is( $hidden[0], $item1_itemnumber, "withdrawn=1 is hidden");
-
-    # One variable, two values
-    $opachiddenitems = "
-        withdrawn: [1,0]";
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( { items => \@items } );
-    ok( scalar @hidden == 2, "Two items hidden");
-    is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and withdrawn=0 hidden");
-
-    # Two variables, a value each
-    $opachiddenitems = "
-        withdrawn: [1]
-        homebranch: [$library2->{branchcode}]
-    ";
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    @hidden = GetHiddenItemnumbers( { items => \@items } );
-    ok( scalar @hidden == 2, "Two items hidden");
-    is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch library2 hidden");
-
-    # Override hidden with patron category
-    t::lib::Mocks::mock_preference( 'OpacHiddenItemsExceptions', 'S' );
-    @hidden = GetHiddenItemnumbers( { items => \@items, borcat => 'PT' } );
-    ok( scalar @hidden == 2, "Two items still hidden");
-    @hidden = GetHiddenItemnumbers( { items => \@items, borcat => 'S' } );
-    ok( scalar @hidden == 0, "Two items not hidden");
-
-    # Valid OpacHiddenItems, empty list
-    @items = ();
-    @hidden = GetHiddenItemnumbers( { items => \@items } );
-    ok( scalar @hidden == 0, "Empty items list, no item hidden");
 
     $schema->storage->txn_rollback;
 };

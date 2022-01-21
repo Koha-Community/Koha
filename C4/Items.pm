@@ -38,7 +38,6 @@ BEGIN {
         GetItemsLocationInfo
         GetHostItemsInfo
         get_hostitemnumbers_of
-        GetHiddenItemnumbers
         GetMarcItem
         CartToShelf
         GetAnalyticsCount
@@ -981,65 +980,6 @@ sub get_hostitemnumbers_of {
     }
 
     return @returnhostitemnumbers;
-}
-
-=head2 GetHiddenItemnumbers
-
-    my @itemnumbers_to_hide = GetHiddenItemnumbers({ items => \@items, borcat => $category });
-
-Given a list of items it checks which should be hidden from the OPAC given
-the current configuration. Returns a list of itemnumbers corresponding to
-those that should be hidden. Optionally takes a borcat parameter for certain borrower types
-to be excluded
-
-=cut
-
-sub GetHiddenItemnumbers {
-    my $params = shift;
-    my $items = $params->{items};
-    if (my $exceptions = C4::Context->preference('OpacHiddenItemsExceptions') and $params->{'borcat'}){
-        foreach my $except (split(/\|/, $exceptions)){
-            if ($params->{'borcat'} eq $except){
-                return; # we don't hide anything for this borrower category
-            }
-        }
-    }
-    my @resultitems;
-
-    my $hidingrules = C4::Context->yaml_preference('OpacHiddenItems');
-
-    return
-        unless $hidingrules;
-
-    my $dbh = C4::Context->dbh;
-
-    # For each item
-    foreach my $item (@$items) {
-
-        # We check each rule
-        foreach my $field (keys %$hidingrules) {
-            my $val;
-            if (exists $item->{$field}) {
-                $val = $item->{$field};
-            }
-            else {
-                my $query = "SELECT $field from items where itemnumber = ?";
-                $val = $dbh->selectrow_array($query, undef, $item->{'itemnumber'});
-            }
-            $val = '' unless defined $val;
-
-            # If the results matches the values in the yaml file
-            if (any { $val eq $_ } @{$hidingrules->{$field}}) {
-
-                # We add the itemnumber to the list
-                push @resultitems, $item->{'itemnumber'};
-
-                # If at least one rule matched for an item, no need to test the others
-                last;
-            }
-        }
-    }
-    return @resultitems;
 }
 
 =head1 LIMITED USE FUNCTIONS

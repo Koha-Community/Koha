@@ -99,7 +99,7 @@ use C4::Charset qw(
 );
 use C4::Linker;
 use C4::OAI::Sets;
-use C4::Items qw( GetHiddenItemnumbers GetMarcItem );
+use C4::Items qw( GetMarcItem );
 
 use Koha::Logger;
 use Koha::Caches;
@@ -2531,15 +2531,13 @@ sub EmbedItemsInMarcBiblio {
         }
         push @items, { itemnumber => $itemnumber, item => $item };
     }
-    my @items2pass = map { $_->{item} } @items;
-    my @hiddenitems =
-      $opachiddenitems
-      ? C4::Items::GetHiddenItemnumbers({
             items  => \@items2pass,
             borcat => $borcat })
       : ();
     # Convert to a hash for quick searching
     my %hiddenitems = map { $_ => 1 } @hiddenitems;
+    my @itemnumbers = Koha::Items->search( { itemnumber => $itemnumbers } )
+      ->filter_by_visible_in_opac({ patron => })->get_column('itemnumber');
     foreach my $itemnumber ( map { $_->{itemnumber} } @items ) {
         next if $hiddenitems{$itemnumber};
         my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );

@@ -1802,18 +1802,13 @@ sub searchResults {
             }
             $item->{description} = $itemtypes{ $item->{itype} }{translated_description} if $item->{itype};
 
-	        # OPAC hidden items
+            # OPAC hidden items
             if ($is_opac) {
-                # hidden because lost
-                if ($hidelostitems && $item->{itemlost}) {
+                # hidden based on OpacHiddenItems syspref or because lost
+                my $hi = Koha::Items->search( { itemnumber => $item->{itemnumber} } )
+                                    ->filter_by_visible_in_opac({ patron => $search_context->{patron} });
+                unless ( $hi->count ) {
                     push @hiddenitems, $item->{itemnumber};
-                    $hideatopac_count++;
-                    next;
-                }
-                # hidden based on OpacHiddenItems syspref
-                my @hi = C4::Items::GetHiddenItemnumbers({ items=> [ $item ], borcat => $search_context->{category} });
-                if (scalar @hi) {
-                    push @hiddenitems, @hi;
                     $hideatopac_count++;
                     next;
                 }

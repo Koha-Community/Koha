@@ -45,7 +45,7 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Items qw( GetHiddenItemnumbers GetItemsInfo );
+use C4::Items qw( GetItemsInfo );
 use C4::Circulation qw( GetTransfers );
 use C4::Tags qw( get_tags );
 use C4::XISBN qw( get_xisbns );
@@ -110,7 +110,7 @@ if( $specific_item ) {
     @all_items = grep { $_->{itemnumber} == $query->param('itemnumber') } @all_items;
     $template->param( specific_item => 1 );
 }
-my @hiddenitems;
+my @items_to_show;
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $biblio = Koha::Biblios->find( $biblionumber );
@@ -128,8 +128,8 @@ unless ( $patron and $patron->category->override_hidden_items ) {
         exit;
     }
     if ( scalar @all_items >= 1 ) {
-        push @hiddenitems,
-          GetHiddenItemnumbers( { items => \@all_items, borcat => $patron ? $patron->categorycode : undef } );
+        @items_to_show = Koha::Items->search( { itemnumber => [ map { $_->{itemnumber} } @all_items ] } )
+                                    ->filter_by_visible_in_opac( { patron => $patron } )->as_list;
     }
 }
 
@@ -254,8 +254,8 @@ if ($session->param('busc')) {
         my $hits;
         my @newresults;
         my $search_context = {
-            'interface' => 'opac',
-            'category'  => ($patron) ? $patron->categorycode : q{}
+            interface => 'opac',
+            patron    => $patron,
         };
         for (my $i=0;$i<@servers;$i++) {
             my $server = $servers[$i];
@@ -518,18 +518,17 @@ if ( C4::Context->preference('EasyAnalyticalRecords') ) {
 my @items;
 
 # Are there items to hide?
-my $hideitems;
-$hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddenitems) > 0;
-
 # Hide items
-if ($hideitems) {
+if ( @items_to_show != @all_items ) {
     for my $itm (@all_items) {
-	if  ( C4::Context->preference('hidelostitems') ) {
-	    push @items, $itm unless $itm->{itemlost} or any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
-	} else {
-	    push @items, $itm unless any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+        next unless any { $itm->{itemnumber} eq $_ } @items_to_show;
+        if ( C4::Context->preference('hidelostitems') ) {
+            push @items, $itm unless $itm->{itemlost};
+        }
+        else {
+            push @items, $itm;
+        }
     }
-}
 } else {
     # Or not
     @items = @all_items;

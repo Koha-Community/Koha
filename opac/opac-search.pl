@@ -590,7 +590,7 @@ my @sup_results_array;
 my $search_context = {};
 $search_context->{'interface'} = 'opac';
 if (C4::Context->preference('OpacHiddenItemsExceptions')){
-    $search_context->{'category'} = $patron ? $patron->categorycode : q{};
+    $search_context->{patron} = $patron;
 }
 
 my $variables = { anonymous_session => ($borrowernumber) ? 0 : 1 };
