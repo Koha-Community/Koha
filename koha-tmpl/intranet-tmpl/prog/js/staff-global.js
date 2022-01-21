@@ -205,6 +205,7 @@ function logOut(){
     removeLastBorrower();
     localStorage.removeItem("sql_reports_activetab");
     localStorage.removeItem("searches");
+    localStorage.removeItem("bibs_selected");
 }
 
 function openHelp(){
@@ -320,11 +321,11 @@ function delBibToContext( bibnum ) {
 }
 
 function setContextBiblioNumbers( bibnums ) {
-    $.cookie('bibs_selected', JSON.stringify( bibnums ));
+    localStorage.setItem('bibs_selected', JSON.stringify( bibnums ) );
 }
 
 function getContextBiblioNumbers() {
-    var r = $.cookie('bibs_selected');
+    var r = localStorage.getItem('bibs_selected');
     if ( r ) {
         return JSON.parse(r);
     }
