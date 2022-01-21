@@ -18,6 +18,7 @@ package Koha::BackgroundJob::BatchUpdateBiblio;
 use Modern::Perl;
 use JSON qw( decode_json encode_json );
 
+use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Virtualshelves;
 use Koha::SearchEngine;
@@ -87,7 +88,8 @@ sub process {
 
         # Modify the biblio
         my $error = eval {
-            my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+            my $biblio = Koha::Biblios->find($biblionumber);
+            my $record = $biblio->metadata->record;
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
             C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode, {

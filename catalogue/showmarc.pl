@@ -30,9 +30,10 @@ use Encode;
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetMarcBiblio GetXmlBiblio );
+use C4::Biblio qw( GetXmlBiblio );
 use C4::XSLT;
 
+use Koha::Biblios;
 use Koha::Import::Records;
 
 my $input= CGI->new;
@@ -65,7 +66,8 @@ if ($importid) {
     }
 }
 else {
-    $record =GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    $record = $biblio->metadata->record;
 }
 if(!ref $record) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");

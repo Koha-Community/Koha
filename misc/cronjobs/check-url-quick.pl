@@ -23,7 +23,7 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio );
+use Koha::Biblios;
 use AnyEvent;
 use AnyEvent::HTTP qw( http_request );
 use Encode qw( encode_utf8 );
@@ -93,7 +93,8 @@ sub check_all_url {
         cb       => sub {
             return if $count > $maxconn;
             while ( my ($biblionumber) = $sth->fetchrow ) {
-                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+                my $biblio = Koha::Biblios->find($biblionumber);
+                my $record = $biblio->metadata->record;
                 for my $tag (@tags) {
                     foreach my $field ( $record->field($tag) ) {
                         my $url = $field->subfield('u');

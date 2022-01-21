@@ -22,7 +22,6 @@ use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio qw(
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcSeries
     GetMarcSubjects
     GetMarcUrls
@@ -82,7 +81,7 @@ foreach my $biblionumber ( @bibs ) {
 
     # No filtering on the item records needed for the record itself
     # since the only reason item information is grabbed is because of branchcodes.
-    my $record = &GetMarcBiblio({ biblionumber => $biblionumber });
+    my $record = $biblio->metadata->record;
     my $framework = &GetFrameworkCode( $biblionumber );
     $record_processor->options({
         interface => 'opac',

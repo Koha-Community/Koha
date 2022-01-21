@@ -8,7 +8,8 @@ use strict;
 # Koha modules used
 
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio ModBiblioMarc );
+use C4::Biblio qw( ModBiblioMarc );
+use Koha::Biblios;
 use MARC::File::USMARC;
 
 
@@ -22,7 +23,8 @@ print "Creating/updating field 100 if needed\n";
 while (my ($biblionumber,$time)=$sth->fetchrow ){
 #   my $record;
 # print "record : $biblionumber \n";
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio ? $biblio->metadata->record : undef;
 # print "=> ".$record->as_formatted;
     MARCmodrecord($biblionumber,$record,$time) if ($record);
 #

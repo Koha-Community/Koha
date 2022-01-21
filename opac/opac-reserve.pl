@@ -25,7 +25,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Koha qw( getitemtypeimagelocation getitemtypeimagesrc );
 use C4::Circulation qw( GetBranchItemRule GetTransfers );
 use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest );
-use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Items qw( GetHostItemsInfo GetItemsInfo );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
@@ -150,7 +150,10 @@ foreach my $biblioNumber (@biblionumbers) {
 
     my @itemInfos = GetItemsInfo($biblioNumber);
 
-    my $marcrecord= GetMarcBiblio({ biblionumber => $biblioNumber });
+    my $biblio = Koha::Biblios->find( $biblioNumber );
+    next unless $biblio;
+
+    my $marcrecord = $biblio->metadata->record;
 
     # flag indicating existence of at least one item linked via a host record
     # adding items linked via host biblios
@@ -165,9 +168,6 @@ foreach my $biblioNumber (@biblionumbers) {
     }
 
     # Compute the priority rank.
-    my $biblio = Koha::Biblios->find( $biblioNumber );
-    next unless $biblio;
-
     $biblioData->{object} = $biblio;
     my $holds = $biblio->holds;
     my $rank = $holds->count;

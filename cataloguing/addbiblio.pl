@@ -28,7 +28,6 @@ use C4::Biblio qw(
     AddBiblio
     DelBiblio
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcFromKohaField
     GetMarcStructure
     GetUsedMarcStructure
@@ -47,6 +46,7 @@ use C4::Charset qw( SetMarcUnicodeFlag );
 use Koha::BiblioFrameworks;
 use Koha::DateUtils qw( dt_from_string );
 
+use Koha::Biblios;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
@@ -749,9 +749,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $biblio;
 if ($biblionumber){
-    my $does_bib_exist = Koha::Biblios->find($biblionumber);
-    if (!defined $does_bib_exist){
+    $biblio = Koha::Biblios->find($biblionumber);
+    unless ( $biblio ) {
         $biblionumber = undef;
         $template->param( bib_doesnt_exist => 1 );
     }
@@ -800,8 +801,8 @@ my (
 	$biblioitemnumber
 );
 
-if (($biblionumber) && !($breedingid)){
-    $record = GetMarcBiblio({ biblionumber => $biblionumber });
+if ( $biblio && !$breedingid ) {
+    $record = $biblio->metadata->record;
 }
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;

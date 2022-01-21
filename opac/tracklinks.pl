@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Auth qw( checkauth );
 use C4::Biblio;
 use C4::Output qw( output_error );
+use Koha::Biblios;
 use Koha::Items;
 use Koha::Linktracker;
 use CGI qw ( -utf8 );
@@ -59,7 +60,8 @@ if ($uri && ($biblionumber || $itemnumber) ) {
         # get borrower info
     }
 
-    my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record;
     my $marc_urls = $record ? C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour')) : [];
     my $search_crit = { uri => { -like => "%$uri%" } };
     if( $itemnumber ) { # itemnumber is leading over biblionumber

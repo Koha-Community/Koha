@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::External::BakerTaylor qw( image_url link_url );
 use C4::Koha qw(
     GetNormalizedEAN
@@ -353,10 +353,11 @@ if ( $op eq 'view' ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
-                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-                my $framework = GetFrameworkCode( $biblionumber );
-                my $biblio = Koha::Biblios->find( $biblionumber );
-                $record_processor->options({
+                my $biblio       = Koha::Biblios->find($biblionumber);
+                my $record       = $biblio->metadata->record;
+                my $framework    = GetFrameworkCode($biblionumber);
+                $record_processor->options(
+                    {
                     interface => 'opac',
                     frameworkcode => $framework
                 });

@@ -9,7 +9,8 @@ use Text::CSV_XS;
 use Text::Bidi qw( log2vis );
 
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField );
+use C4::Biblio qw( GetMarcFromKohaField );
+use Koha::Biblios;
 use Koha::ClassSources;
 use Koha::ClassSortRules;
 use Koha::ClassSplitRules;
@@ -337,7 +338,8 @@ sub draw_label_text {
     my $font = $self->{'font'};
     my $item = _get_label_item($self->{'item_number'});
     my $label_fields = _get_text_fields($self->{'format_string'});
-    my $record = GetMarcBiblio({ biblionumber => $item->{'biblionumber'} });
+    my $biblio = Koha::Biblios->find($item->{biblionumber});
+    my $record = $biblio->metadata->record;
     # FIXME - returns all items, so you can't get data from an embedded holdings field.
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
     my $cn_source = ($item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
@@ -554,7 +556,8 @@ sub csv_data {
     my $self = shift;
     my $label_fields = _get_text_fields($self->{'format_string'});
     my $item = _get_label_item($self->{'item_number'});
-    my $bib_record = GetMarcBiblio({ biblionumber => $item->{biblionumber} });
+    my $biblio = Koha::Biblios->find($item->{biblionumber});
+    my $bib_record = $biblio->metadata->record;
     my @csv_data = (map { _get_barcode_data($_->{'code'},$item,$bib_record) } @$label_fields);
     return \@csv_data;
 }

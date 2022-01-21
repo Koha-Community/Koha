@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio qw(
-    GetMarcBiblio
     GetMarcSeries
     GetMarcSubjects
     GetMarcUrls
@@ -67,7 +66,7 @@ foreach my $biblionumber ( @bibs ) {
 
     my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
     my $dat              = $biblio->unblessed;
-    my $record           = &GetMarcBiblio({ biblionumber => $biblionumber });
+    my $record           = $biblio->metadata->record;
     my $marcnotesarray   = $biblio->get_marc_notes;
     my $marcauthorsarray = $biblio->get_marc_authors;
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );

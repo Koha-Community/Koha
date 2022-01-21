@@ -24,8 +24,9 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Biblio qw( GetMarcBiblio ModBiblio PrepHostMarcField );
+use C4::Biblio qw( ModBiblio PrepHostMarcField );
 use C4::Context;
+use Koha::Biblios;
 
 
 my $query = CGI->new;
@@ -42,13 +43,14 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
-my $biblio = GetMarcBiblio({ biblionumber => $biblionumber });
+my $biblio = Koha::Biblios->find($biblionumber);
+my $record = $biblio->metadata->record;
 my $marcflavour = C4::Context->preference("marcflavour");
 $marcflavour ||="MARC21";
 if ($marcflavour eq 'MARC21') {
-    $template->param(bibliotitle => $biblio->subfield('245','a'));
+    $template->param(bibliotitle => $record->subfield('245','a'));
 } elsif ($marcflavour eq 'UNIMARC') {
-    $template->param(bibliotitle => $biblio->subfield('200','a'));
+    $template->param(bibliotitle => $record->subfield('200','a'));
 }
 
 $template->param(biblionumber => $biblionumber);
@@ -59,9 +61,9 @@ if ( $barcode && $biblionumber ) {
 
     if ($item) {
         my $field = PrepHostMarcField( $item->biblio->biblionumber, $item->itemnumber, $marcflavour );
-        $biblio->append_fields($field);
+        $record->append_fields($field);
 
-        my $modresult = ModBiblio( $biblio, $biblionumber, '' );
+        my $modresult = ModBiblio( $record, $biblionumber, '' );
         if ($modresult) {
             $template->param( success => 1 );
         }

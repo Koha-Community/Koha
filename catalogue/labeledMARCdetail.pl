@@ -26,7 +26,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Biblio qw(
     GetBiblioData
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcStructure
 );
 use C4::Search qw( z3950_search_args enabled_staff_search_views );
@@ -56,7 +55,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
+my $record = $biblio_object->metadata->record;
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
     $template->param( unknownbiblionumber => 1,
@@ -66,7 +66,6 @@ if ( not defined $record ) {
     exit;
 }
 
-my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
 my $tagslib = GetMarcStructure(1,$frameworkcode);
 my $biblio = GetBiblioData($biblionumber);
 

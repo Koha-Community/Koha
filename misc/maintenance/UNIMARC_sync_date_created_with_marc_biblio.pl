@@ -8,7 +8,8 @@ use strict;
 use warnings;
 
 use Koha::Script;
-use C4::Biblio qw( GetMarcBiblio ModBiblio );
+use C4::Biblio qw( ModBiblio );
+use Koha::Biblios;
 use Getopt::Long qw( GetOptions );
 
 sub _read_marc_code {
@@ -83,10 +84,11 @@ my $sth_prepared;
 
 sub updateMarc {
     my $id     = shift;
-    my $biblio = GetMarcBiblio({ biblionumber => $id });
+    my $biblio = Koha::Biblios->find($id);
+    $biblio  &&= $biblio->metadata->record;
 
     unless ($biblio) {
-        $debug and warn '[ERROR] GetMarcBiblio did not return any biblio.';
+        $debug and warn '[ERROR] Biblio not found.';
         return;
     }
 

@@ -33,7 +33,7 @@ use Text::CSV;
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio ModBiblio );
+use C4::Biblio qw( ModBiblio );
 use C4::Koha qw( GetVariationsOfISBN );
 
 use Koha::Biblios;
@@ -145,7 +145,8 @@ while ( my $row = $csv->getline_hr($fh) ) {
 
     foreach my $biblionumber (@biblionumbers) {
         $counter++;
-        my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+        my $biblio = Koha::Biblios->find($biblionumber);
+        my $record = $biblio->metadata->record;
 
         if ($verbose) {
             say "Found matching record! Biblionumber: $biblionumber";

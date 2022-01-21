@@ -64,6 +64,7 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
+use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -948,7 +949,8 @@ sub get_hostitemnumbers_of {
         return ();
     }
 
-    my $marcrecord = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $marcrecord = $biblio->metadata->record;
     return unless $marcrecord;
 
     my ( @returnhostitemnumbers, $tag, $biblio_s, $item_s );

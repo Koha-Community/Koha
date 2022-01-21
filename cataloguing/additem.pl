@@ -26,7 +26,6 @@ use C4::Auth qw( get_template_and_user haspermission );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Biblio qw(
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcFromKohaField
     GetMarcStructure
     IsMarcStructureInternal
@@ -37,6 +36,7 @@ use C4::Circulation qw( barcodedecode LostItem );
 use C4::Barcodes;
 use C4::Barcodes::ValueBuilder;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Biblios;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Items;
@@ -163,7 +163,7 @@ $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibra
 $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
 our $tagslib = &GetMarcStructure(1,$frameworkcode);
-my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+my $record = $biblio->metadata->record;
 
 output_and_exit_if_error( $input, $cookie, $template,
     { module => 'cataloguing', record => $record } );

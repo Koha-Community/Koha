@@ -23,7 +23,7 @@ use warnings;
 use MARC::Field;
 
 use C4::Context;
-use C4::Biblio qw( GetFrameworkCode GetMarcBiblio ModBiblio );
+use C4::Biblio qw( GetFrameworkCode ModBiblio );
 use C4::Search qw( FindDuplicate new_record_from_zebra );
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
@@ -1463,8 +1463,9 @@ sub merge {
 
     my $counteditedbiblio = 0;
     foreach my $biblionumber ( @biblionumbers ) {
-        my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
-        next if !$marcrecord;
+        my $biblio = Koha::Biblios->find($biblionumber);
+        next unless $biblio;
+        my $marcrecord = $biblio->metadata->record;
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype) {
             my $countfrom = 0;    # used in strict mode to remove duplicates

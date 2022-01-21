@@ -23,7 +23,7 @@ use Modern::Perl;
 use C4::Koha qw( GetAuthorisedValues );
 use CGI qw ( -utf8 );
 use HTML::Entities;
-use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Items qw( GetHostItemsInfo GetItemsInfo );
 use C4::Acquisition qw( GetOrderFromItemnumber GetBasket GetInvoice );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
@@ -113,10 +113,11 @@ for my $itm (@all_items) {
                                ($itemnumber != $itm->{itemnumber}));
 }
 
-my $record=GetMarcBiblio({ biblionumber => $biblionumber });
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $record = $biblio ? $biblio->metadata->record : undef;
 
 output_and_exit( $query, $cookie, $template, 'unknown_biblio')
-    unless $record;
+    unless $biblio && $record;
 
 my $hostrecords;
 # adding items linked via host biblios
@@ -125,8 +126,6 @@ if (@hostitems){
         $hostrecords =1;
         push (@items,@hostitems);
 }
-
-my $biblio = Koha::Biblios->find( $biblionumber );
 
 my $totalcount=@all_items;
 my $showncount=@items;

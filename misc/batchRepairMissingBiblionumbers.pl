@@ -8,7 +8,8 @@ use warnings;
 # Koha modules used
 use Koha::Script;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio ModBiblioMarc );
+use C4::Biblio qw( ModBiblioMarc );
+use Koha::Biblios;
 
 
 my $dbh = C4::Context->dbh;
@@ -17,7 +18,8 @@ my $sth=$dbh->prepare("SELECT biblio.biblionumber, biblioitemnumber, frameworkco
 $sth->execute();
 
 while (my ($biblionumber,$biblioitemnumber,$frameworkcode)=$sth->fetchrow ){
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record;
     C4::Biblio::_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
     my $biblionumber = eval {ModBiblioMarc( $record, $biblionumber )};
     if($@){

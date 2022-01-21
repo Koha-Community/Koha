@@ -18,10 +18,11 @@ package Koha::UI::Form::Builder::Item;
 use Modern::Perl;
 use MARC::Record;
 use C4::Context;
-use C4::Biblio qw( GetFrameworkCode GetMarcBiblio GetMarcStructure IsMarcStructureInternal );
+use C4::Biblio qw( GetFrameworkCode GetMarcStructure IsMarcStructureInternal );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::ClassSource qw( GetClassSources );
 
+use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 
@@ -491,8 +492,9 @@ sub edit_form {
       : undef;
 
     my $biblionumber   = $self->{biblionumber};
-    my $frameworkcode  = $biblionumber ? GetFrameworkCode($biblionumber) : q{};
-    my $marc_record    = $biblionumber ? GetMarcBiblio( { biblionumber => $biblionumber } ) : undef;
+    my $biblio         = Koha::Biblios->find($biblionumber);
+    my $frameworkcode  = $biblio ? GetFrameworkCode($biblionumber) : q{};
+    my $marc_record    = $biblio ? $biblio->metadata->record : undef;
     my @subfields;
     my $tagslib = GetMarcStructure( 1, $frameworkcode );
     foreach my $tag ( keys %{$tagslib} ) {

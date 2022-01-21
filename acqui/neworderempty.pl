@@ -77,7 +77,6 @@ use C4::Suggestions qw( GetSuggestion GetSuggestionInfo );
 use C4::Biblio qw(
     AddBiblio
     GetBiblioData
-    GetMarcBiblio
     GetMarcFromKohaField
     GetMarcPrice
     GetMarcStructure
@@ -92,6 +91,7 @@ use C4::ImportBatch qw( SetImportRecordStatus SetMatchedBiblionumber GetImportRe
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies qw( get_active );
+use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::MarcSubfieldStructures;
@@ -296,7 +296,8 @@ $biblionumber = $data->{biblionumber};
 # - no ordernumber, no biblionumber: from a suggestion, from a new order
 if ( not $ordernumber or $biblionumber ) {
     if ( C4::Context->preference('UseACQFrameworkForBiblioRecords') ) {
-        my $record = $biblionumber ? GetMarcBiblio({ biblionumber => $biblionumber }) : undef;
+        my $biblio = Koha::Biblios->find($biblionumber);
+        my $record = $biblio ? $biblio->metadata->record : undef;
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
             next if $tag eq $itemnumber_tag; # skip items fields

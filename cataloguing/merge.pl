@@ -27,7 +27,6 @@ use C4::Biblio qw(
     DelBiblio
     GetBiblioData
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcFromKohaField
     GetMarcStructure
     ModBiblio
@@ -85,7 +84,8 @@ if ($merge) {
     }
 
     # Rewriting the leader
-    $record->leader(GetMarcBiblio({ biblionumber => $ref_biblionumber })->leader());
+    my $biblio = Koha::Biblios->find($ref_biblionumber);
+    $record->leader($biblio->metadata->record->leader());
 
     my $frameworkcode = $input->param('frameworkcode');
 
@@ -93,7 +93,7 @@ if ($merge) {
     ModBiblio($record, $ref_biblionumber, $frameworkcode);
 
     # Moving items and article requests from the other record to the reference record
-    my $biblio = Koha::Biblios->find($ref_biblionumber);
+    $biblio = $biblio->get_from_storage;
     foreach my $biblionumber (@biblionumbers) {
         my $from_biblio = Koha::Biblios->find($biblionumber);
         $from_biblio->items->move_to_biblio($biblio);
@@ -116,7 +116,8 @@ if ($merge) {
     my $report_header = {};
     foreach my $biblionumber ($ref_biblionumber, @biblionumbers) {
         # build report
-        my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
+        my $biblio = Koha::Biblios->find($biblionumber);
+        my $marcrecord = $biblio->metadata->record;
         my %report_record = (
             biblionumber => $biblionumber,
             fields => {},
@@ -204,7 +205,8 @@ if ($merge) {
         # Creating a loop for display
         my @records;
         foreach my $biblionumber (@biblionumbers) {
-            my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
+            my $biblio = Koha::Biblios->find($biblionumber);
+            my $marcrecord = $biblio->metadata->record;
             my $frameworkcode = GetFrameworkCode($biblionumber);
             my $recordObj = Koha::MetadataRecord->new({'record' => $marcrecord, schema => $marcflavour});
             my $record = {

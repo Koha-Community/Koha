@@ -29,8 +29,8 @@ use C4::Koha qw(
     GetNormalizedUPC
 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Biblio qw( GetMarcBiblio );
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Reviews;
 use POSIX qw( ceil floor );
@@ -93,7 +93,7 @@ for my $result (@$reviews){
     my $biblionumber = $result->{biblionumber};
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $biblioitem = $biblio->biblioitem;
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $record = $biblio->metadata->record;
 	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);
 	$result->{normalized_ean} = GetNormalizedEAN($record,$marcflavour);
 	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);

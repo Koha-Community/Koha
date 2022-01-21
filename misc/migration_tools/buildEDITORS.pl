@@ -10,8 +10,8 @@ use MARC::Record;
 use MARC::Batch;
 use Koha::Script;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio );
 use C4::AuthoritiesMarc;
+use Koha::Biblios;
 use Time::HiRes qw( gettimeofday );
 
 use Getopt::Long qw( GetOptions );
@@ -70,7 +70,8 @@ my $i=1;
 my $counter;
 my %hash;
 while (my ($bibid) = $sth->fetchrow) {
-    my $record = GetMarcBiblio({ biblionumber => $bibid });
+    my $biblio = Koha::Biblios->find($bibid);
+    my $record = $biblio->metadata->record;
 	my $isbnField = $record->field('010');
 	next unless $isbnField;
 	my $isbn=$isbnField->subfield('a');

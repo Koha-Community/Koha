@@ -8,7 +8,8 @@ use strict;
 # Koha modules used
 
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblioMarc );
+use C4::Biblio qw( GetMarcFromKohaField ModBiblioMarc );
+use Koha::Biblios;
 use MARC::File::USMARC;
 
 $|=1;
@@ -19,7 +20,8 @@ $sth->execute();
 
 my $i=1;
 while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
- my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+ my $biblio = Koha::Biblios->find($biblionumber);
+ my $record = $biblio->metadata->record;
     print ".";
     print "\r$i" unless $i %100;
     MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);

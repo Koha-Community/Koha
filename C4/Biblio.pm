@@ -364,8 +364,8 @@ sub ModBiblio {
     }
 
     if ( C4::Context->preference("CataloguingLog") ) {
-        my $newrecord = GetMarcBiblio({ biblionumber => $biblionumber });
-        logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio BEFORE=>" . $newrecord->as_formatted );
+        my $biblio = Koha::Biblios->find($biblionumber);
+        logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio BEFORE=>" . $biblio->metadata->record->as_formatted );
     }
 
     if ( !$options->{disable_autolink} && C4::Context->preference('BiblioAddsAuthorities') ) {
@@ -1948,8 +1948,9 @@ This function returns a host field populated with data from the host record, the
 sub PrepHostMarcField {
     my ($hostbiblionumber,$hostitemnumber, $marcflavour) = @_;
     $marcflavour ||="MARC21";
-    
-    my $hostrecord = GetMarcBiblio({ biblionumber => $hostbiblionumber });
+
+    my $biblio = Koha::Biblios->find($hostbiblionumber);
+    my $hostrecord = $biblio->metadata->record;
     my $item = Koha::Items->find($hostitemnumber);
 
 	my $hostmarcfield;
@@ -2952,7 +2953,9 @@ Generate the host item entry for an analytic child entry
 sub prepare_host_field {
     my ( $hostbiblio, $marcflavour ) = @_;
     $marcflavour ||= C4::Context->preference('marcflavour');
-    my $host = GetMarcBiblio({ biblionumber => $hostbiblio });
+
+    my $biblio = Koha::Biblios->find($hostbiblio);
+    my $host = $biblio->metadata->record;
     # unfortunately as_string does not 'do the right thing'
     # if field returns undef
     my %sfd;
@@ -3090,14 +3093,15 @@ sub UpdateTotalIssues {
     my ($biblionumber, $increase, $value, $skip_holds_queue) = @_;
     my $totalissues;
 
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-    unless ($record) {
-        carp "UpdateTotalIssues could not get biblio record";
-        return;
-    }
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio = Koha::Biblios->find($biblionumber);
     unless ($biblio) {
         carp "UpdateTotalIssues could not get datas of biblio";
+        return;
+    }
+
+    my $record = $biblio->metadata->record;
+    unless ($record) {
+        carp "UpdateTotalIssues could not get biblio record";
         return;
     }
     my $biblioitem = $biblio->biblioitem;
@@ -3223,7 +3227,8 @@ sub ApplyMarcOverlayRules {
         carp 'ApplyMarcOverlayRules called on undefined record';
         return;
     }
-    my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $old_record = $biblio->metadata->record;
 
     # Skip overlay rules if called with no context
     if ($old_record && defined $params->{overlay_context}) {

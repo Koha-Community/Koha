@@ -32,11 +32,12 @@ use Date::Calc qw(
     Today
 );
 use POSIX qw( strftime );
-use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
+use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::Log qw( logaction );    # logaction
 use C4::Serials::Frequency qw( GetSubscriptionFrequency );
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
+use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Serial;
 use Koha::Subscriptions;
@@ -1497,7 +1498,7 @@ sub NewSubscription {
     #set serial flag on biblio if not already set.
     my $biblio = Koha::Biblios->find( $biblionumber );
     if ( $biblio and !$biblio->serial ) {
-        my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+        my $record = $biblio->metadata->record;
         my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial' );
         if ($tag) {
             eval { $record->field($tag)->update( $subf => 1 ); };

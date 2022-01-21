@@ -6,7 +6,7 @@ use strict;
 use Koha::Script;
 use C4::Context;
 use C4::Items qw( ModItemFromMarc );
-use C4::Biblio qw( GetMarcBiblio );
+use Koha::Biblios;
 
 my $dbh=C4::Context->dbh;
 
@@ -20,7 +20,8 @@ my $rqitemnumber=$dbh->prepare("SELECT itemnumber, biblionumber from items where
 $rqbiblios->execute;
 $|=1;
 while (my ($biblionumber)= $rqbiblios->fetchrow_array){
-    my $record=GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record;
     foreach my $itemfield ($record->field('995')){
         my $marcitem=MARC::Record->new();
         $marcitem->encoding('UTF-8');

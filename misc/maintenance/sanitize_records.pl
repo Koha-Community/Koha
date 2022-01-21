@@ -23,6 +23,7 @@ use Koha::Script;
 use C4::Charset;
 use C4::Context;
 use C4::Biblio;
+use Koha::Biblios;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 
@@ -109,7 +110,12 @@ for my $biblionumber (@biblionumbers) {
         say " skipping. ERROR: Invalid biblionumber." if $verbose;
         next;
     }
-    my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    unless ( $biblio ) {
+        say " skipping. ERROR: biblionumber not found." if $verbose;
+        next;
+    }
+    my $record = $biblio->metadata->record;
     unless ($record) {
         say " skipping. ERROR: Invalid record." if $verbose;
         next;

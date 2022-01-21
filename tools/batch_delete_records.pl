@@ -27,7 +27,7 @@ use Try::Tiny;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetMarcBiblio );
+use C4::Biblio;
 use C4::AuthoritiesMarc;
 use Koha::Virtualshelves;
 
@@ -101,7 +101,7 @@ if ( $op eq 'form' ) {
                 next;
             }
             my $biblio = $biblio_object->unblessed;
-            my $record = &GetMarcBiblio({ biblionumber => $record_id });
+            my $record = $biblio_object->metadata->record;
             $biblio->{itemnumbers} = [Koha::Items->search({ biblionumber => $record_id })->get_column('itemnumber')];
             $biblio->{holds_count} = $biblio_object->holds->count;
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );

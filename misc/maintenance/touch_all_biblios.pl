@@ -25,7 +25,8 @@ use Getopt::Long qw( GetOptions );
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio ModBiblio );
+use C4::Biblio qw( ModBiblio );
+use Koha::Biblios;
 use Pod::Usage qw( pod2usage );
 
 
@@ -75,8 +76,9 @@ $sth1->execute();
 
 # fetch info from the search
 while (my ($biblionumber, $frameworkcode) = $sth1->fetchrow_array){
-  my $record = GetMarcBiblio({ biblionumber => $biblionumber });
- 
+  my $biblio = Koha::Biblios->find($biblionumber);
+  my $record = $biblio->metadata->record;
+
   my $modok = ModBiblio($record, $biblionumber, $frameworkcode);
 
   if ($modok) {
