@@ -35,9 +35,9 @@ use XML::SAX::Writer;
 use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
-use C4::Biblio qw( GetMarcBiblio );
 use C4::XSLT qw( transformMARCXML4XSLT );
 use Koha::XSLT::Base;
+use Koha::Biblios;
 
 =head1 NAME
 
@@ -176,13 +176,8 @@ sub get_biblio_marcxml {
         $expanded_avs = $conf->{format}->{$format}->{expanded_avs};
     }
 
-    my $record = GetMarcBiblio(
-        {
-            biblionumber => $biblionumber,
-            embed_items  => $with_items,
-            opac         => 1
-        }
-    );
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record({ embed_items => $with_items, opac => 1 });
     $record = transformMARCXML4XSLT( $biblionumber, $record )
         if $expanded_avs;
 

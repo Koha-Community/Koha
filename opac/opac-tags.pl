@@ -40,7 +40,6 @@ use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_with_http_headers is_ajax output_html_with_http_headers );
 use C4::Scrubber;
-use C4::Biblio qw( GetMarcBiblio );
 use C4::Items qw( GetItemsInfo );
 use C4::Tags qw(
     add_tag
@@ -50,6 +49,7 @@ use C4::Tags qw(
     stratify_tags
 );
 use C4::XSLT qw( XSLTParse4Display );
+use Koha::Biblios;
 
 
 use Koha::Logger;
@@ -230,7 +230,6 @@ my $my_tags = [];
 
 if ($loggedinuser) {
     my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
-    $borcat = $patron ? $patron->categorycode : $borcat;
     my $rules = C4::Context->yaml_preference('OpacHiddenItems');
     my $should_hide = ( $rules ) ? 1 : 0;
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
@@ -252,11 +251,13 @@ if ($loggedinuser) {
     foreach my $tag (@$my_tags) {
         $tag->{visible} = 0;
         my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
-        my $record = &GetMarcBiblio({
-            biblionumber => $tag->{biblionumber},
-            embed_items  => 1,
-            opac         => 1,
-            borcat       => $borcat });
+        my $record = $biblio->metadata->record(
+            {
+                embed_items => 1,
+                opac        => 1,
+                patron      => $patron,
+            }
+        );
         next unless $record;
         my @hidden_items;
         if ($should_hide) {

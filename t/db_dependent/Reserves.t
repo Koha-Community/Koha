@@ -29,10 +29,11 @@ use DateTime::Duration;
 
 use C4::Circulation qw( AddReturn AddIssue );
 use C4::Items;
-use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
+use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::Members;
 use C4::Reserves qw( AddReserve AlterPriority CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
+use Koha::Biblios;
 use Koha::Caches;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
@@ -643,7 +644,8 @@ t::lib::Mocks::mock_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 #Reserving an not-agerestricted Biblio by a Borrower with no dateofbirth is tested previously.
 
 #Set the ageRestriction for the Biblio
-my $record = GetMarcBiblio({ biblionumber =>  $bibnum });
+$biblio = Koha::Biblios->find($bibnum);
+my $record = $biblio->metadata->record;
 my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.agerestriction" );
 $record->append_fields(  MARC::Field->new($ageres_tagid, '', '', $ageres_subfieldid => 'PEGI 16')  );
 C4::Biblio::ModBiblio( $record, $bibnum, $frameworkcode );

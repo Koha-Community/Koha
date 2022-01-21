@@ -27,12 +27,12 @@ use Try::Tiny qw( catch try );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw(
     GetFrameworkCode
-    GetMarcBiblio
     GetMarcISBN
     GetMarcSubjects
 );
 use C4::Items qw( GetItemsInfo );
 use C4::Output qw( output_html_with_http_headers );
+use Koha::Biblios;
 use Koha::Email;
 use Koha::Patrons;
 use Koha::Virtualshelves;
@@ -73,7 +73,6 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
     );
 
     my $patron = Koha::Patrons->find( $borrowernumber );
-    my $borcat = $patron ? $patron->categorycode : q{};
 
     my $shelf = Koha::Virtualshelves->find( $shelfid );
     my $contents = $shelf->get_contents;
@@ -85,11 +84,13 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         my $biblionumber = $content->biblionumber;
         my $biblio       = Koha::Biblios->find( $biblionumber ) or next;
         my $dat          = $biblio->unblessed;
-        my $record           = GetMarcBiblio({
-            biblionumber => $biblionumber,
-            embed_items  => 1,
-            opac         => 1,
-            borcat       => $borcat });
+        my $record = $biblio->metadata->record(
+            {
+                embed_items => 1,
+                opac        => 1,
+                patron      => $patron,
+            }
+        );
         next unless $record;
         my $fw               = GetFrameworkCode($biblionumber);
 

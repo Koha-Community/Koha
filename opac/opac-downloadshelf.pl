@@ -22,10 +22,11 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetFrameworkCode GetISBDView GetMarcBiblio );
+use C4::Biblio qw( GetFrameworkCode GetISBDView );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
 use C4::Ris qw( marc2ris );
+use Koha::Biblios;
 use Koha::CsvProfiles;
 use Koha::RecordProcessor;
 use Koha::Virtualshelves;
@@ -48,12 +49,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
-my $borcat = q{};
-if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    # we need to fetch the borrower info here, so we can pass the category
-    my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
-    $borcat = $borrower ? $borrower->categorycode : $borcat;
-}
+my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $shelfnumber = $query->param('shelfnumber');
 my $format  = $query->param('format');
@@ -93,12 +89,15 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
 
-                my $record = GetMarcBiblio({
-                    biblionumber => $biblionumber,
-                    embed_items  => 1,
-                    opac         => 1,
-                    borcat       => $borcat });
-                my $framework = &GetFrameworkCode( $biblionumber );
+                my $biblio = Koha::Biblios->find($biblionumber);
+                my $record = $biblio->metadata->record->(
+                    {
+                        embed_items => 1,
+                        opac        => 1,
+                        patron      => $patron,
+                    }
+                );
+                my $framework = $biblio->frameworkcode;
                 $record_processor->options({
                     interface => 'opac',
                     frameworkcode => $framework

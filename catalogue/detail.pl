@@ -32,7 +32,7 @@ use C4::Koha qw(
 );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Items qw( GetAnalyticsCount GetHostItemsInfo GetItemsInfo );
 use C4::Circulation qw( GetTransfers );
 use C4::Reserves;
@@ -87,8 +87,8 @@ if ( C4::Context->config('enable_plugins') ) {
 
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
-my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 my $biblio = Koha::Biblios->find( $biblionumber );
+my $record = $biblio->metadata->record;
 $template->param( 'biblio', $biblio );
 
 if ( not defined $record ) {

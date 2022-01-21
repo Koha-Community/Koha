@@ -29,7 +29,6 @@ BEGIN {
     @EXPORT_OK = qw(
         AddBiblio
         GetBiblioData
-        GetMarcBiblio
         GetISBDView
         GetMarcControlnumber
         GetMarcISBN
@@ -1184,91 +1183,6 @@ sub GetMarcSubfieldStructureFromKohaField {
     my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # Do not change framework
     return unless $mss->{$kohafield};
     return wantarray ? @{$mss->{$kohafield}} : $mss->{$kohafield}->[0];
-}
-
-=head2 GetMarcBiblio
-
-  my $record = GetMarcBiblio({
-      biblionumber => $biblionumber,
-      embed_items  => $embeditems,
-      opac         => $opac,
-      borcat       => $patron_category });
-
-Returns MARC::Record representing a biblio record, or C<undef> if the
-biblionumber doesn't exist.
-
-Both embed_items and opac are optional.
-If embed_items is passed and is 1, items are embedded.
-If opac is passed and is 1, the record is filtered as needed.
-
-=over 4
-
-=item C<$biblionumber>
-
-the biblionumber
-
-=item C<$embeditems>
-
-set to true to include item information.
-
-=item C<$opac>
-
-set to true to make the result suited for OPAC view. This causes things like
-OpacHiddenItems to be applied.
-
-=item C<$borcat>
-
-If the OpacHiddenItemsExceptions system preference is set, this patron category
-can be used to make visible OPAC items which would be normally hidden.
-It only makes sense in combination both embed_items and opac values true.
-
-=back
-
-=cut
-
-sub GetMarcBiblio {
-    my ($params) = @_;
-
-    if (not defined $params) {
-        carp 'GetMarcBiblio called without parameters';
-        return;
-    }
-
-    my $biblionumber = $params->{biblionumber};
-    my $embeditems   = $params->{embed_items} || 0;
-    my $opac         = $params->{opac} || 0;
-    my $borcat       = $params->{borcat} // q{};
-
-    if (not defined $biblionumber) {
-        carp 'GetMarcBiblio called with undefined biblionumber';
-        return;
-    }
-
-    my $marcxml = GetXmlBiblio( $biblionumber );
-    $marcxml = StripNonXmlChars( $marcxml );
-    MARC::File::XML->default_record_format( C4::Context->preference('marcflavour') );
-    my $record = MARC::Record->new();
-
-    if ($marcxml) {
-        $record = eval {
-            MARC::Record::new_from_xml( $marcxml, "UTF-8",
-                C4::Context->preference('marcflavour') );
-        };
-        if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
-        return unless $record;
-
-        C4::Biblio::EmbedItemsInMarcBiblio({
-            marc_record  => $record,
-            biblionumber => $biblionumber,
-            opac         => $opac,
-            borcat       => $borcat })
-          if ($embeditems);
-
-        return $record;
-    }
-    else {
-        return;
-    }
 }
 
 =head2 GetXmlBiblio
@@ -2470,82 +2384,6 @@ sub ModZebra {
     }
 }
 
-=head2 EmbedItemsInMarcBiblio
-
-    EmbedItemsInMarcBiblio({
-        marc_record  => $marc,
-        biblionumber => $biblionumber,
-        item_numbers => $itemnumbers,
-        opac         => $opac });
-
-Given a MARC::Record object containing a bib record,
-modify it to include the items attached to it as 9XX
-per the bib's MARC framework.
-if $itemnumbers is defined, only specified itemnumbers are embedded.
-
-If $opac is true, then opac-relevant suppressions are included.
-
-If opac filtering will be done, borcat should be passed to properly
-override if necessary.
-
-=cut
-
-sub EmbedItemsInMarcBiblio {
-    my ($params) = @_;
-    my ($marc, $biblionumber, $itemnumbers, $opac, $borcat);
-    $marc = $params->{marc_record};
-    if ( !$marc ) {
-        carp 'EmbedItemsInMarcBiblio: No MARC record passed';
-        return;
-    }
-    $biblionumber = $params->{biblionumber};
-    $itemnumbers = $params->{item_numbers};
-    $opac = $params->{opac};
-    $borcat = $params->{borcat} // q{};
-
-    $itemnumbers = [] unless defined $itemnumbers;
-
-    my $frameworkcode = GetFrameworkCode($biblionumber);
-    _strip_item_fields($marc, $frameworkcode);
-
-    # ... and embed the current items
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
-    $sth->execute($biblionumber);
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
-
-    my @item_fields; # Array holding the actual MARC data for items to be included.
-    my @items;       # Array holding items which are both in the list (sitenumbers)
-                     # and on this biblionumber
-
-    # Flag indicating if there is potential hiding.
-    my $opachiddenitems = $opac
-      && ( C4::Context->preference('OpacHiddenItems') !~ /^\s*$/ );
-
-    while ( my ($itemnumber) = $sth->fetchrow_array ) {
-        next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
-        my $item;
-        if ( $opachiddenitems ) {
-            $item = Koha::Items->find($itemnumber);
-            $item = $item ? $item->unblessed : undef;
-        }
-        push @items, { itemnumber => $itemnumber, item => $item };
-    }
-            items  => \@items2pass,
-            borcat => $borcat })
-      : ();
-    # Convert to a hash for quick searching
-    my %hiddenitems = map { $_ => 1 } @hiddenitems;
-    my @itemnumbers = Koha::Items->search( { itemnumber => $itemnumbers } )
-      ->filter_by_visible_in_opac({ patron => })->get_column('itemnumber');
-    foreach my $itemnumber ( map { $_->{itemnumber} } @items ) {
-        next if $hiddenitems{$itemnumber};
-        my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
-        push @item_fields, $item_marc->field($itemtag);
-    }
-    $marc->append_fields(@item_fields);
-}
-
 =head1 INTERNAL FUNCTIONS
 
 =head2 _koha_marc_update_bib_ids
@@ -3093,7 +2931,7 @@ sub UpdateTotalIssues {
 
     my $biblio = Koha::Biblios->find($biblionumber);
     unless ($biblio) {
-        carp "UpdateTotalIssues could not get datas of biblio";
+        carp "UpdateTotalIssues could not get biblio";
         return;
     }
 

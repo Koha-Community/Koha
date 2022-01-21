@@ -26,7 +26,7 @@ use MARC::Record; # marc2marcxml, marcxml2marc, changeEncoding
 use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
 use Biblio::EndnoteStyle;
 use Unicode::Normalize qw( NFC ); # _entity_encode
-use C4::Biblio qw( GetFrameworkCode GetMarcBiblio );
+use C4::Biblio qw( GetFrameworkCode );
 use C4::Koha; #marc2csv
 use C4::XSLT;
 use YAML::XS; #marcrecords2csv
@@ -454,18 +454,16 @@ C<$itemnumbers> a list of itemnumbers to export
 =cut
 
 sub marcrecord2csv {
-    my ($biblio, $id, $header, $csv, $fieldprocessing, $itemnumbers) = @_;
+    my ($biblionumber, $id, $header, $csv, $fieldprocessing, $itemnumbers) = @_;
     my $output;
 
     # Getting the record
-    my $record = GetMarcBiblio({ biblionumber => $biblio });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    return unless $biblio;
+    my $record = $biblio->metadata->record({ embed_items => 1, itemnumbers => $itemnumbers });
     return unless $record;
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio,
-        item_numbers => $itemnumbers });
     # Getting the framework
-    my $frameworkcode = GetFrameworkCode($biblio);
+    my $frameworkcode = $biblio->frameworkcode;
 
     # Getting information about the csv profile
     my $profile = Koha::CsvProfiles->find($id);

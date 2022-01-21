@@ -28,8 +28,8 @@ use Koha::Exceptions::Elasticsearch;
 use Koha::SearchEngine::Zebra::Indexer;
 use Koha::BackgroundJob::UpdateElasticIndex;
 use C4::AuthoritiesMarc qw//;
-use C4::Biblio;
 use C4::Context;
+use Koha::Biblios;
 
 =head1 NAME
 
@@ -337,7 +337,7 @@ sub index_records {
 sub _get_record {
     my ( $self, $record_id ) = @_;
     return $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX
-        ? C4::Biblio::GetMarcBiblio({ biblionumber => $record_id, embed_items  => 1 })
+        ? Koha::Biblios->find($record_id)->metadata->record({ embed_items => 1 })
         : C4::AuthoritiesMarc::GetAuthority($record_id);
 }
 

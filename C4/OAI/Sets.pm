@@ -31,6 +31,7 @@ OAI Set description can be found L<here|http://www.openarchives.org/OAI/openarch
 
 use Modern::Perl;
 use C4::Context;
+use Koha::Biblio::Metadata;
 
 use vars qw(@ISA @EXPORT);
 
@@ -610,10 +611,13 @@ sub UpdateOAISetsBiblio {
     return unless($biblionumber and $record);
 
     if (C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData')) {
-        C4::Biblio::EmbedItemsInMarcBiblio({
-            marc_record  => $record,
-            biblionumber => $biblionumber
-        });
+        $record = Koha::Biblio::Metadata->record(
+            {
+                record       => $record,
+                embed_items  => 1,
+                biblionumber => $biblionumber,
+            }
+        );
     }
 
     my $sets_biblios;

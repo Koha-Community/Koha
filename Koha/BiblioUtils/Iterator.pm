@@ -44,6 +44,7 @@ Returns biblionumber and marc in list context.
 =cut
 
 use C4::Biblio;
+use Koha::Biblio::Metadata;
 
 use Carp qw( confess );
 use MARC::Record;
@@ -107,10 +108,13 @@ sub next {
         confess "No biblionumber column returned in the request."
           if ( !defined($bibnum) );
 
-        # TODO this should really be in Koha::BiblioUtils or something similar.
-        C4::Biblio::EmbedItemsInMarcBiblio({
-            marc_record  => $marc,
-            biblionumber => $bibnum });
+        $marc = Koha::Biblio::Metadata->record(
+            {
+                record       => $marc,
+                embed_items  => 1,
+                biblionumber => $bibnum,
+            }
+        );
     }
 
     if (wantarray) {

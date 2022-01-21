@@ -25,8 +25,8 @@ use MARC::Record;
 use Data::Dumper;
 
 use Koha::Database;
-use C4::Biblio qw( GetMarcBiblio );
 use C4::OAI::Sets qw( AddOAISet ModOAISet ModOAISetMappings CalcOAISetsBiblio );
+use Koha::Biblios;
 
 use t::lib::TestBuilder;
 
@@ -98,11 +98,11 @@ my $biblionumber1 = $biblio_1->biblionumber;
 my $biblionumber2 = $biblio_2->biblionumber;
 
 
-my $record = GetMarcBiblio({ biblionumber => $biblionumber1 });
+my $record = $biblio_1->metadata->record;
 my @setsEq = CalcOAISetsBiblio($record);
 ok(!@setsEq, 'If only one condition is true, the record does not belong to the set');
 
-$record = GetMarcBiblio({ biblionumber => $biblionumber2 });
+$record = $biblio_2->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
 is_deeply(@setsEq, $set1_id, 'If all conditions are true, the record belongs to the set');
 
@@ -169,12 +169,12 @@ $biblio_2 = $builder->build_sample_biblio({ author => 'myAuthor', itemtype => 'm
 $biblionumber1 = $biblio_1->biblionumber;
 $biblionumber2 = $biblio_2->biblionumber;
 
-$record = GetMarcBiblio({ biblionumber => $biblionumber1 });
+$record = $biblio_1->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
 
 is_deeply(@setsEq, $set1_id, 'Boolean operators precedence is respected, the record with only the title belongs to the set');
 
-$record = GetMarcBiblio({ biblionumber => $biblionumber2 });
+$record = $biblio_2->metadata->record;
 @setsEq = CalcOAISetsBiblio($record);
 is_deeply(@setsEq, $set1_id, 'Boolean operators precedence is respected, the record with author and itemtype belongs to the set');
 

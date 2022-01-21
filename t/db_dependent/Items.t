@@ -20,7 +20,7 @@ use Data::Dumper;
 
 use MARC::Record;
 use C4::Items qw( ModItemTransfer GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
-use C4::Biblio qw( GetMarcFromKohaField EmbedItemsInMarcBiblio GetMarcBiblio AddBiblio );
+use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::Items;
 use Koha::Database;
@@ -34,7 +34,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 14;
+use Test::More tests => 12;
 
 use Test::Warn;
 
@@ -617,127 +617,6 @@ subtest 'Koha::Item(s) tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
-    plan tests => 8;
-
-    $schema->storage->txn_begin();
-
-    my $builder = t::lib::TestBuilder->new;
-    my $library1 = $builder->build({
-        source => 'Branch',
-    });
-    my $library2 = $builder->build({
-        source => 'Branch',
-    });
-    my $itemtype = $builder->build({
-        source => 'Itemtype',
-    });
-
-    my $biblio = $builder->build_sample_biblio();
-    my $item_infos = [
-        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
-        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
-        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
-        { homebranch => $library2->{branchcode}, holdingbranch => $library2->{branchcode} },
-        { homebranch => $library2->{branchcode}, holdingbranch => $library2->{branchcode} },
-        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
-        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
-        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
-    ];
-    my $number_of_items = scalar @$item_infos;
-    my $number_of_items_with_homebranch_is_CPL =
-      grep { $_->{homebranch} eq $library1->{branchcode} } @$item_infos;
-
-    my @itemnumbers;
-    for my $item_info (@$item_infos) {
-        my $itemnumber = $builder->build_sample_item(
-            {
-                biblionumber  => $biblio->biblionumber,
-                homebranch    => $item_info->{homebranch},
-                holdingbranch => $item_info->{holdingbranch},
-                itype         => $itemtype->{itemtype}
-            }
-        )->itemnumber;
-
-        push @itemnumbers, $itemnumber;
-    }
-
-    # Emptied the OpacHiddenItems pref
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', '' );
-
-    my ($itemfield) =
-      C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
-    my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->biblionumber });
-    warning_is { C4::Biblio::EmbedItemsInMarcBiblio() }
-    { carped => 'EmbedItemsInMarcBiblio: No MARC record passed' },
-      'Should carp is no record passed.';
-
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber });
-    my @items = $record->field($itemfield);
-    is( scalar @items, $number_of_items, 'Should return all items' );
-
-    my $marc_with_items = C4::Biblio::GetMarcBiblio({
-        biblionumber => $biblio->biblionumber,
-        embed_items  => 1 });
-    is_deeply( $record, $marc_with_items, 'A direct call to GetMarcBiblio with items matches');
-
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber,
-        item_numbers => [ $itemnumbers[1], $itemnumbers[3] ] });
-    @items = $record->field($itemfield);
-    is( scalar @items, 2, 'Should return all items present in the list' );
-
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber,
-        opac         => 1 });
-    @items = $record->field($itemfield);
-    is( scalar @items, $number_of_items, 'Should return all items for opac' );
-
-    my $opachiddenitems = "
-        homebranch: ['$library1->{branchcode}']";
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber });
-    @items = $record->field($itemfield);
-    is( scalar @items,
-        $number_of_items,
-        'Even with OpacHiddenItems set, all items should have been embedded' );
-
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber,
-        opac         => 1 });
-    @items = $record->field($itemfield);
-    is(
-        scalar @items,
-        $number_of_items - $number_of_items_with_homebranch_is_CPL,
-'For OPAC, the pref OpacHiddenItems should have been take into account. Only items with homebranch ne CPL should have been embedded'
-    );
-
-    $opachiddenitems = "
-        homebranch: ['$library1->{branchcode}', '$library2->{branchcode}']";
-    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    C4::Biblio::EmbedItemsInMarcBiblio({
-        marc_record  => $record,
-        biblionumber => $biblio->biblionumber,
-        opac         => 1 });
-    @items = $record->field($itemfield);
-    is(
-        scalar @items,
-        0,
-'For OPAC, If all items are hidden, no item should have been embedded'
-    );
-
-    $schema->storage->txn_rollback;
-};
-
 
 subtest 'get_hostitemnumbers_of' => sub {
     plan tests => 3;

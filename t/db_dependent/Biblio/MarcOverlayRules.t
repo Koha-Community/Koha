@@ -22,8 +22,9 @@ use POSIX qw(floor);
 use MARC::Record;
 
 use C4::Context;
-use C4::Biblio qw( AddBiblio ModBiblio DelBiblio GetMarcBiblio );
+use C4::Biblio qw( AddBiblio ModBiblio DelBiblio );
 use Koha::Database;
+use Koha::Biblios;
 
 use Test::More tests => 24;
 use Test::MockModule;
@@ -755,7 +756,8 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 
     # Since marc merc rules are not run on save, only update
     # saved record should be identical to orig_record
-    my $saved_record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $saved_record = $biblio->metadata->record;
 
     my @all_fields = $saved_record->fields();
     # Koha also adds 999c field, therefore 4 not 3
@@ -783,7 +785,7 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 
     ModBiblio($saved_record, $biblionumber, '', { overlay_context => { 'source' => 'test' } });
 
-    my $updated_record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $updated_record = $biblio->metadata->record;
 
     $expected_record = build_record([
             # "250" field has been appended

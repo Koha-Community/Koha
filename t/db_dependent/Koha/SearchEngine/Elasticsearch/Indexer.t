@@ -28,6 +28,7 @@ use t::lib::TestBuilder;
 use MARC::Record;
 
 use Koha::Database;
+use Koha::Biblios;
 
 my $schema = Koha::Database->schema();
 
@@ -113,7 +114,7 @@ subtest 'index_records() tests' => sub {
     "When passing record and ids to index_records they are correctly passed through to update_index";
 
     $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' });
-    $marc_record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->biblionumber, embed_items  => 1 });
+    $marc_record = $biblio->metadata->record({ embed_items => 1 });
     warning_is {
         $indexer->index_records( [ $biblio->biblionumber ],
             'specialUpdate', 'biblioserver' );

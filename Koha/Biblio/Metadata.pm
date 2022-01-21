@@ -17,9 +17,11 @@ package Koha::Biblio::Metadata;
 
 use Modern::Perl;
 
-use MARC::Record;
 use MARC::File::XML;
+use Scalar::Util qw( blessed );
 
+use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Items qw( GetMarcItem );
 use Koha::Database;
 use Koha::Exceptions::Metadata;
 
@@ -48,6 +50,35 @@ corresponds to this table:
     | marcxml    | MARC::Record   |
     -------------------------------
 
+    $record = $biblio->metadata->record({
+        {
+            embed_items => 0|1
+            itemnumbers => $itemnumbers,
+            opac        => $opac
+        }
+    );
+
+    Koha::Biblio::Metadata::record(
+        {
+            record       => $record,
+            embed_items  => 1,
+            biblionumber => $biblionumber,
+            itemnumbers  => $itemnumbers,
+            opac         => $opac
+        }
+    );
+
+Given a MARC::Record object containing a bib record,
+modify it to include the items attached to it as 9XX
+per the bib's MARC framework.
+if $itemnumbers is defined, only specified itemnumbers are embedded.
+
+If $opac is true, then opac-relevant suppressions are included.
+
+If opac filtering will be done, patron should be passed to properly
+override if necessary.
+
+
 =head4 Error handling
 
 =over
@@ -62,12 +93,21 @@ corresponds to this table:
 
 sub record {
 
-    my ($self) = @_;
+    my ($self, $params) = @_;
 
-    my $record;
+    my $record = $params->{record};
+    my $embed_items = $params->{embed_items};
+    my $format = blessed($self) ? $self->format : $params->{format};
+    $format ||= 'marcxml';
 
-    if ( $self->format eq 'marcxml' ) {
-        $record = eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->schema ); };
+    if ( !$record && !blessed($self) ) {
+        Koha::Exceptions::Metadata->throw(
+            'Koha::Biblio::Metadata->record must be called on an instantiated object or like a class method with a record passed in parameter'
+        );
+    }
+
+    if ( $format eq 'marcxml' ) {
+        $record ||= eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->schema ); };
         my $marcxml_error = $@;
         chomp $marcxml_error;
         unless ($record) {
@@ -82,13 +122,66 @@ sub record {
     }
     else {
         Koha::Exceptions::Metadata->throw(
-            'Koha::Biblio::Metadata->record called on unhandled format: ' . $self->format );
+            'Koha::Biblio::Metadata->record called on unhandled format: ' . $format );
+    }
+
+    if ( $embed_items ) {
+        $self->_embed_items({ %$params, format => $format, record => $record });
     }
 
     return $record;
 }
 
 =head2 Internal methods
+
+=head3 _embed_items
+
+=cut
+
+sub _embed_items {
+    my ( $self, $params ) = @_;
+
+    my $record       = $params->{record};
+    my $format       = $params->{format};
+    my $biblionumber = $params->{biblionumber} || $self->biblionumber;
+    my $itemnumbers = $params->{itemnumbers} // [];
+    my $patron      = $params->{patron};
+    my $opac        = $params->{opac};
+
+    if ( $format eq 'marcxml' ) {
+
+        # First remove the existing items from the MARC record
+        my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+        foreach my $field ( $record->field($itemtag) ) {
+            $record->delete_field($field);
+        }
+
+        my $biblio = Koha::Biblios->find($biblionumber);
+
+        my $items = $biblio->items;
+        if ( @$itemnumbers ) {
+            $items = $items->search({ itemnumber => { -in => $itemnumbers } });
+        }
+        if ( $opac ) {
+            $items = $items->filter_by_visible_in_opac({ patron => $patron });
+        }
+        my @itemnumbers = $items->get_column('itemnumber');
+        my @item_fields;
+        for my $itemnumber ( @itemnumbers ) {
+            my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
+            push @item_fields, $item_marc->field($itemtag);
+        }
+        $record->append_fields(@item_fields);
+
+    }
+    else {
+        Koha::Exceptions::Metadata->throw(
+            'Koha::Biblio::Metadata->embed_item called on unhandled format: ' . $format );
+    }
+
+    return $record;
+}
+
 
 =head3 _type
 

@@ -25,12 +25,12 @@ use C4::Output;
 use C4::Biblio qw(
     GetFrameworkCode
     GetISBDView
-    GetMarcBiblio
     GetMarcControlnumber
 );
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Ris qw( marc2ris );
+use Koha::Biblios;
 use Koha::RecordProcessor;
 
 my $query = CGI->new;
@@ -43,23 +43,25 @@ my $error = q{};
 # Determine logged in user's patron category.
 # Blank if not logged in.
 my $userenv = C4::Context->userenv;
-my $borcat = q{};
+my $patron;
 if ($userenv) {
     my $borrowernumber = $userenv->{'number'};
     if ($borrowernumber) {
-        my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
-        $borcat = $borrower ? $borrower->categorycode : $borcat;
+        $patron = Koha::Patrons->find( $borrowernumber );
     }
 }
 
 my $include_items = ($format =~ /bibtex/) ? 0 : 1;
-my $marc = $biblionumber
-    ? GetMarcBiblio({
-        biblionumber => $biblionumber,
-        embed_items  => $include_items,
-        opac         => 1,
-        borcat       => $borcat })
-    : undef;
+my $biblio = Koha::Biblios->find($biblionumber);
+my $marc = $biblio
+  ? $biblio->metadata->record(
+    {
+        embed_items => 1,
+        opac        => 1,
+        patron      => $patron,
+    }
+  )
+  : undef;
 
 if(!$marc) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
@@ -77,8 +79,7 @@ if( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ){
     }
 }
 
-# ASSERT: There is a biblionumber, because GetMarcBiblio returned something.
-my $framework = GetFrameworkCode( $biblionumber );
+my $framework = $biblio->frameworkcode;
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {

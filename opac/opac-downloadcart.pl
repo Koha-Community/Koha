@@ -23,10 +23,11 @@ use CGI qw ( -utf8 );
 use Encode qw( encode );
 
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetFrameworkCode GetISBDView GetMarcBiblio );
+use C4::Biblio qw( GetFrameworkCode GetISBDView );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
 use C4::Ris qw( marc2ris );
+use Koha::Biblios;
 use Koha::CsvProfiles;
 use Koha::RecordProcessor;
 
@@ -48,12 +49,7 @@ my $dbh     = C4::Context->dbh;
 
 if ($bib_list && $format) {
 
-    my $borcat = q{};
-    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-        # we need to fetch the borrower info here, so we can pass the category
-        my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
-        $borcat = $borrower ? $borrower->categorycode : $borcat;
-    }
+    my $patron = Koha::Patrons->find($borrowernumber);
 
     my @bibs = split( /\//, $bib_list );
 
@@ -78,13 +74,16 @@ if ($bib_list && $format) {
         my $record_processor = Koha::RecordProcessor->new({
             filters => 'ViewPolicy'
         });
-        foreach my $biblio (@bibs) {
+        foreach my $biblionumber (@bibs) {
 
-            my $record = GetMarcBiblio({
-                biblionumber => $biblio,
-                embed_items  => 1,
-                opac         => 1,
-                borcat       => $borcat });
+            my $biblio = Koha::Biblios->find($biblionumber);
+            my $record = $biblio->metadata->record(
+                {
+                    embed_items => 1,
+                    opac        => 1,
+                    patron      => $patron,
+                }
+            );
             my $framework = &GetFrameworkCode( $biblio );
             $record_processor->options({
                 interface => 'opac',

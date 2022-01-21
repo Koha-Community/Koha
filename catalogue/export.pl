@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Record;
 use C4::Auth qw( get_template_and_user );
 use C4::Output;
-use C4::Biblio qw( GetMarcBiblio GetMarcControlnumber );
+use C4::Biblio qw( GetMarcControlnumber );
 use CGI qw ( -utf8 );
 use C4::Ris qw( marc2ris );
 
@@ -27,9 +27,8 @@ if ($op eq "export") {
             my $file_id = $biblionumber;
             my $file_pre = "bib-";
 
-            my $marc = GetMarcBiblio({
-                biblionumber => $biblionumber,
-                embed_items  => 1 });
+            my $biblio = Koha::Biblios->find($biblionumber);
+            my $marc   = $biblio->metadata->record({ embed_items => 1 });
 
             if( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ){
                 my $marcflavour = C4::Context->preference('marcflavour'); #FIXME This option is required but does not change control num behaviour

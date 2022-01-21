@@ -33,7 +33,7 @@ use Koha::MarcSubfieldStructures;
 use C4::Linker::Default qw( get_link );
 
 BEGIN {
-    use_ok('C4::Biblio', qw( AddBiblio GetMarcFromKohaField BiblioAutoLink GetMarcSubfieldStructure GetMarcSubfieldStructureFromKohaField LinkBibHeadingsToAuthorities GetBiblioData GetMarcBiblio ModBiblio GetMarcISSN GetMarcControlnumber GetMarcISBN GetMarcPrice GetFrameworkCode GetMarcUrls IsMarcStructureInternal GetMarcStructure GetXmlBiblio DelBiblio ));
+    use_ok('C4::Biblio', qw( AddBiblio GetMarcFromKohaField BiblioAutoLink GetMarcSubfieldStructure GetMarcSubfieldStructureFromKohaField LinkBibHeadingsToAuthorities GetBiblioData ModBiblio GetMarcISSN GetMarcControlnumber GetMarcISBN GetMarcPrice GetFrameworkCode GetMarcUrls IsMarcStructureInternal GetMarcStructure GetXmlBiblio DelBiblio ));
 }
 
 my $schema = Koha::Database->new->schema;
@@ -273,8 +273,10 @@ sub run_tests {
     is( $data->{ title }, undef,
         '(GetBiblioData) Title field is empty in fresh biblio.');
 
+    my $biblio = Koha::Biblios->find($biblionumber);
+
     my ( $isbn_field, $isbn_subfield ) = get_isbn_field();
-    my $marc = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $marc = $biblio->metadata->record;
     is( $marc->subfield( $isbn_field, $isbn_subfield ), $isbn, );
 
     # Add title
@@ -285,7 +287,7 @@ sub run_tests {
     is( $data->{ title }, $title,
         'ModBiblio correctly added the title field, and GetBiblioData.');
     is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after ModBiblio.');
-    $marc = GetMarcBiblio({ biblionumber => $biblionumber });
+    $marc = $biblio->metadata->record;
     my ( $title_field, $title_subfield ) = get_title_field();
     is( $marc->subfield( $title_field, $title_subfield ), $title, );
 
@@ -422,9 +424,7 @@ sub run_tests {
 
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
-    my $updatedrecord = GetMarcBiblio({
-        biblionumber => $biblionumber,
-        embed_items  => 0 });
+    my $updatedrecord = $biblio->metadata->record;
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
@@ -706,7 +706,8 @@ subtest 'MarcFieldForCreatorAndModifier' => sub {
     my $record = MARC::Record->new();
     my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
 
-    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    my $biblio = Koha::Biblios->find($biblionumber);
+    $record = $biblio->metadata->record;
     is($record->subfield('998', 'a'), 123, '998$a = 123');
     is($record->subfield('998', 'b'), 'John Doe', '998$b = John Doe');
     is($record->subfield('998', 'c'), 123, '998$c = 123');
@@ -715,7 +716,7 @@ subtest 'MarcFieldForCreatorAndModifier' => sub {
     $c4_context->mock('userenv', sub { return { number => 321, firstname => 'Jane', surname => 'Doe'}; });
     C4::Biblio::ModBiblio($record, $biblionumber, '');
 
-    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    $record = $biblio->metadata->record;
     is($record->subfield('998', 'a'), 123, '998$a = 123');
     is($record->subfield('998', 'b'), 'John Doe', '998$b = John Doe');
     is($record->subfield('998', 'c'), 321, '998$c = 321');

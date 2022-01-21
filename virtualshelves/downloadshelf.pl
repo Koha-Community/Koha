@@ -22,11 +22,11 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetMarcBiblio );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Record;
 use C4::Ris qw( marc2ris );
 
+use Koha::Biblios;
 use Koha::CsvProfiles;
 use Koha::Virtualshelves;
 
@@ -68,9 +68,8 @@ if ($shelfid && $format) {
             else { #Other formats
                 while ( my $content = $contents->next ) {
                     my $biblionumber = $content->biblionumber;
-                    my $record = GetMarcBiblio({
-                        biblionumber => $biblionumber,
-                        embed_items  => 1 });
+                    my $biblio = Koha::Biblios->find($biblionumber);
+                    my $record = $biblio->metadata->record({ embed_items => 1 });
                     if ($format eq 'iso2709') {
                         $output .= $record->as_usmarc();
                     }

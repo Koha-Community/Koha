@@ -26,7 +26,6 @@ use Try::Tiny qw( catch try );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw(
-    GetMarcBiblio
     GetMarcISBN
     GetMarcSubjects
 );
@@ -35,6 +34,8 @@ use C4::Output qw(
     output_html_with_http_headers
     output_and_exit
 );
+
+use Koha::Biblios;
 use Koha::Email;
 use Koha::Virtualshelves;
 
@@ -78,9 +79,7 @@ if ($to_address) {
         my $biblionumber     = $content->biblionumber;
         my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
         my $dat              = $biblio->unblessed;
-        my $record           = GetMarcBiblio({
-            biblionumber => $biblionumber,
-            embed_items  => 1 });
+        my $record           = $biblio->metadata->record({ embed_items => 1 });
         my $marcauthorsarray = $biblio->get_marc_authors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 

@@ -45,7 +45,6 @@ use Getopt::Std qw( getopts );
 use Koha::Script;
 use C4::Context;
 use C4::Charset qw( StripNonXmlChars );
-use C4::Biblio;
 use C4::OAI::Sets qw(
     AddOAISetsBiblios
     CalcOAISetsBiblio
@@ -55,6 +54,7 @@ use C4::OAI::Sets qw(
     GetOAISetsMappings
     ModOAISetsBiblios
 );
+use Koha::Biblio::Metadata;
 
 my %opts;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
@@ -141,9 +141,13 @@ foreach my $res (@$results) {
         next;
     }
     if($embed_items) {
-        C4::Biblio::EmbedItemsInMarcBiblio({
-            marc_record  => $record,
-            biblionumber => $biblionumber });
+        $record = Koha::Biblio::Metadata->record(
+            {
+                marc_record  => $record,
+                embed_items  => 1,
+                biblionumber => $biblionumber,
+            }
+        );
     }
 
     my @biblio_sets = CalcOAISetsBiblio($record, $mappings);

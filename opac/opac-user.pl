@@ -32,7 +32,6 @@ use C4::External::BakerTaylor qw( image_url link_url );
 use C4::Reserves qw( GetReserveStatus );
 use C4::Members;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Biblio qw( GetMarcBiblio );
 use Koha::Account::Lines;
 use Koha::Biblios;
 use Koha::Libraries;
@@ -98,8 +97,6 @@ if( $query->param('update_arc') && C4::Context->preference("AllowPatronToControl
 }
 
 my $borr = $patron->unblessed;
-# unblessed is a hash vs. object/undef. Hence the use of curly braces here.
-my $borcat = $borr ? $borr->{categorycode} : q{};
 
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
@@ -279,17 +276,14 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
         }
 
-        $issue->{biblio_object} = Koha::Biblios->find($issue->{biblionumber});
+        my $biblio_object = Koha::Biblios->find($issue->{biblionumber});
+        $issue->{biblio_object} = $biblio_object;
         push @issuedat, $issue;
         $count++;
 
         my $isbn = GetNormalizedISBN($issue->{'isbn'});
         $issue->{normalized_isbn} = $isbn;
-        my $marcrecord = GetMarcBiblio({
-            biblionumber => $issue->{'biblionumber'},
-            embed_items  => 1,
-            opac         => 1,
-            borcat       => $borcat });
+        my $marcrecord = $biblio_object->metadata->record({ embed_items => 1, opac => 1, patron => $patron,});
         $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
 
                 # My Summary HTML

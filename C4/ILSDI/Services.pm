@@ -24,8 +24,7 @@ use C4::Members;
 use C4::Items qw( get_hostitemnumbers_of );
 use C4::Circulation qw( CanBookBeRenewed barcodedecode CanBookBeIssued AddRenewal );
 use C4::Accounts;
-use C4::Biblio qw( GetMarcBiblio );
-use C4::Reserves qw( CanBookBeReserved IsAvailableForItemLevelRequest CalculatePriority AddReserve CanItemBeReserved CanReserveBeCanceledFromOpac);
+use C4::Reserves qw( CanBookBeReserved IsAvailableForItemLevelRequest CalculatePriority AddReserve CanItemBeReserved );
 use C4::Context;
 use C4::Auth;
 use CGI qw ( -utf8 );
@@ -218,10 +217,7 @@ sub GetRecords {
 
         my $biblioitem = $biblio->biblioitem->unblessed;
 
-        my $embed_items = 1;
-        my $record = GetMarcBiblio({
-            biblionumber => $biblionumber,
-            embed_items  => $embed_items });
+        my $record = $biblio->metadata->record({ embed_items => 1 });
         if ($record) {
             $biblioitem->{marcxml} = $record->as_xml_record();
         }

@@ -40,7 +40,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use CGI qw ( -utf8 );
-use C4::Biblio qw( GetBiblioData GetFrameworkCode GetISBDView GetMarcBiblio );
+use C4::Biblio qw( GetBiblioData GetISBDView );
 use C4::Serials qw( CountSubscriptionFromBiblionumber GetSubscription GetSubscriptionsFromBiblionumber );
 use C4::Search qw( z3950_search_args enabled_staff_search_views );
 
@@ -66,18 +66,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( not defined $biblionumber ) {
-       # biblionumber invalid -> report and exit
-       $template->param( unknownbiblionumber => 1,
-                                biblionumber => $biblionumber
-       );
-       output_html_with_http_headers $query, $cookie, $template->output;
-       exit;
+my $biblio = Koha::Biblios->find( $biblionumber );
+unless ( $biblionumber && $biblio ) {
+   # biblionumber invalid -> report and exit
+   $template->param( unknownbiblionumber => 1,
+                            biblionumber => $biblionumber
+   );
+   output_html_with_http_headers $query, $cookie, $template->output;
+   exit;
 }
 
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1 });
+my $record = $biblio->metadata->record({ embed_items => 1 });
 
 if ( not defined $record ) {
        # biblionumber invalid -> report and exit
@@ -88,8 +87,7 @@ if ( not defined $record ) {
        exit;
 }
 
-my $biblio = Koha::Biblios->find( $biblionumber );
-my $framework = GetFrameworkCode( $biblionumber );
+my $framework = $biblio->frameworkcode;
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {

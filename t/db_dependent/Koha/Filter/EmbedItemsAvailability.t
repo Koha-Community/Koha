@@ -25,7 +25,8 @@ use t::lib::TestBuilder;
 
 use MARC::Record;
 
-use C4::Biblio qw( GetMarcFromKohaField AddBiblio GetMarcBiblio );
+use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
+use Koha::Biblios;
 use Koha::Database;
 use Koha::RecordProcessor;
 
@@ -84,7 +85,8 @@ subtest 'EmbedItemsAvailability tests' => sub {
     my $processor = Koha::RecordProcessor->new( { filters => ('EmbedItemsAvailability') } );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio_object = Koha::Biblios->find($biblionumber);
+    my $record = $biblio_object->metadata->record;
     ok( !defined $record->field('999')->subfield('x'), q{The record doesn't originally contain 999$x} );
     # Apply filter
     $processor->process($record);
@@ -123,7 +125,8 @@ subtest 'EmbedItemsAvailability tests' => sub {
     $processor = Koha::RecordProcessor->new( { filters => ('EmbedItemsAvailability') } );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
-    $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    $biblio_object = Koha::Biblios->find($biblionumber);
+    $record = $biblio_object->metadata->record;
     ok( !defined $record->subfield('999', 'x'), q{The record doesn't originally contain 999$x} );
     # Apply filter
     $processor->process($record);

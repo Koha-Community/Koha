@@ -28,7 +28,6 @@ use CGI qw(:standard -utf8);
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Biblio qw( GetMarcBiblio );
 use C4::Auth qw( get_template_and_user );
 use C4::ImportBatch qw( GetImportBiblios );
 use C4::AuthoritiesMarc qw( GetAuthority );
@@ -62,11 +61,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ( $type eq 'biblio' ) {
-    $record = GetMarcBiblio({
-        biblionumber => $recordid,
-        embed_items  => 1,
-    });
     my $biblio = Koha::Biblios->find( $recordid );
+    $record = $biblio->metadata->record->({ embed_items => 1 });
     $recordTitle = $biblio->title;
 }
 elsif ( $type eq 'auth' ) {

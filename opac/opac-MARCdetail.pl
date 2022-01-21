@@ -52,7 +52,6 @@ use CGI qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
     GetAuthorisedValueDesc
-    GetMarcBiblio
     GetMarcControlnumber
     GetMarcFromKohaField
     GetMarcISSN
@@ -91,24 +90,20 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->find( $loggedinuser );
-my $borcat = q{};
-if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    # we need to fetch the borrower info here, so we can pass the category
-    $borcat = $patron ? $patron->categorycode : $borcat;
-}
-
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1,
-    opac         => 1,
-    borcat       => $borcat });
+my $patron = Koha::Patrons->find($loggedinuser);
+my $biblio = Koha::Biblios->find($biblionumber);
+my $record = $biblio->metadata->record(
+    {
+        embed_items => 1,
+        opac        => 1,
+        patron      => $patron,
+    }
+);
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
-my $biblio = Koha::Biblios->find( $biblionumber );
 unless ( $patron and $patron->category->override_hidden_items ) {
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems

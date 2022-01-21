@@ -33,10 +33,11 @@ use YAML::XS;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Biblio qw( AddBiblio GetMarcBiblio ModBiblio DelBiblio );
+use C4::Biblio qw( AddBiblio ModBiblio DelBiblio );
 use C4::Context;
 use C4::OAI::Sets qw(AddOAISet);
 
+use Koha::Biblios;
 use Koha::Biblio::Metadatas;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -104,7 +105,8 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     $sth2->execute($timestamp,$biblionumber);
     $timestamp .= 'Z';
     $timestamp =~ s/ /T/;
-    $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    $record = $biblio->metadata->record;
     my $record_transformed = $record->clone;
     $record_transformed->delete_fields( $record_transformed->field('952'));
     $record_transformed = XMLin($record_transformed->as_xml_record);
@@ -391,7 +393,8 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
 
     # Modify record to trigger auto update of timestamp
     (my $biblionumber = $marcxml[0]->{header}->{identifier}) =~ s/^.*:(.*)/$1/;
-    my $record = GetMarcBiblio({biblionumber => $biblionumber});
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record;
     $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
     ModBiblio( $record, $biblionumber );
     my $from_dt = dt_from_string(
@@ -577,7 +580,7 @@ subtest 'Tests for timestamp handling' => sub {
             },
             metadata => {
                 record => XMLin(
-                    GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+                    $biblio1->metadata->record({ embed_items => 1, opac => 1})->as_xml_record()
                 )
             }
         }
@@ -590,7 +593,7 @@ subtest 'Tests for timestamp handling' => sub {
             },
             metadata => {
                 record => XMLin(
-                    GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 0, opac => 1 })->as_xml_record()
+                    $biblio1->metadata->record({opac => 1})->as_xml_record()
                 )
             }
         }
@@ -649,7 +652,7 @@ subtest 'Tests for timestamp handling' => sub {
 
     $expected->{record}{header}{datestamp} = $utc_timestamp;
     $expected->{record}{metadata}{record} = XMLin(
-        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+        $biblio1->metadata->record({ embed_items => 1, opac => 1})->as_xml_record()
     );
 
     test_query(
@@ -715,7 +718,7 @@ subtest 'Tests for timestamp handling' => sub {
 
     $expected->{record}{header}{datestamp} = $utc_timestamp;
     $expected->{record}{metadata}{record} = XMLin(
-        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+        $biblio1->metadata->record({ embed_items => 1, opac => 1})->as_xml_record()
     );
 
     test_query(
@@ -744,7 +747,7 @@ subtest 'Tests for timestamp handling' => sub {
     $sth_del_item->execute($timestamp, $item2->itemnumber);
 
     $expected->{record}{metadata}{record} = XMLin(
-        GetMarcBiblio({ biblionumber => $biblio1->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+        $biblio1->metadata->record({ embed_items => 1, opac => 1})->as_xml_record()
     );
 
     test_query(
@@ -827,7 +830,7 @@ subtest 'Tests for timestamp handling' => sub {
                 },
                 metadata => {
                     record => XMLin(
-                        GetMarcBiblio({ biblionumber => $biblio2->biblionumber, embed_items => 1, opac => 1 })->as_xml_record()
+                        $biblio2->metadata->record({ embed_items => 1, opac => 1})->as_xml_record()
                     )
                 }
             }
@@ -843,7 +846,7 @@ subtest 'Tests for timestamp handling' => sub {
                 },
                 metadata => {
                     record => XMLin(
-                        GetMarcBiblio({ biblionumber => $biblio2->biblionumber, embed_items => 0, opac => 1 })->as_xml_record()
+                        $biblio2->metadata->record->as_xml_record()
                     )
                 }
             }

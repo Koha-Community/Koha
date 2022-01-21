@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Date::Calc qw( Add_Delta_Days Add_Delta_YM );
 use C4::Koha qw( GetAuthorisedValues );
-use C4::Biblio qw( GetMarcBiblio );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Context;
@@ -365,7 +364,8 @@ sub redirect_add_subscription {
     }
 
     my @additional_fields;
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record({ embed_items => 1 });
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
@@ -484,7 +484,8 @@ sub redirect_mod_subscription {
     );
 
     my @additional_fields;
-    my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $record = $biblio->metadata->record({ embed_items => 1 });
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);

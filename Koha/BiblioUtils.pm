@@ -27,12 +27,9 @@ Koha::BiblioUtils - contains fundamental biblio-related functions
 
 This contains functions for normal operations on biblio records.
 
-Note: really, C4::Biblio does the main functions, but the Koha namespace is
-the new thing that should be used.
-
 =cut
 
-use C4::Biblio;
+use Koha::Biblios;
 use Koha::MetadataIterator;
 use Koha::Database;
 use Modern::Perl;
@@ -140,8 +137,7 @@ sub get_all_biblios_iterator {
 
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
-    my $rs =
-      $schema->resultset('Biblio')->search(
+    my $rs = Koha::Biblios->search(
         $search_terms,
         $search_options );
     my $next_func = sub {
@@ -149,9 +145,7 @@ sub get_all_biblios_iterator {
         while (1) {
             my $row = $rs->next();
             return if !$row;
-            my $marc = C4::Biblio::GetMarcBiblio({
-                biblionumber => $row->biblionumber,
-                embed_items  => 1 });
+            my $marc = $row->metadata->record({ embed_items => 1 });
             my $next = eval {
                 $class->new($marc, $row->biblionumber);
             };
@@ -188,9 +182,9 @@ If set to true, item data is embedded in the record. Default is to not do this.
 sub get_marc_biblio {
     my ($class, $bibnum, %options) = @_;
 
-    return C4::Biblio::GetMarcBiblio({
-        biblionumber => $bibnum,
-        embed_items  => ($options{item_data} ? 1 : 0 ) });
+    my $record = Koha::Biblios->find($bibnum)
+      ->metadata->record( { $options{item_data} ? ( embed_items => 1 ) : () } );
+    return $record;
 }
 
 1;

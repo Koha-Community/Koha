@@ -22,8 +22,9 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use MARC::Record;
 
-use C4::Biblio qw( ModBiblio ModBiblioMarc GetMarcBiblio );
+use C4::Biblio qw( ModBiblio ModBiblioMarc );
 use Koha::Database;
+use Koha::Biblios;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -41,7 +42,7 @@ subtest "Check MARC field length calculation" => sub {
 
     is( $record->leader, ' 'x24, 'No leader lengths' );
     C4::Biblio::ModBiblioMarc( $record, $biblio->biblionumber );
-    my $savedrec = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->biblionumber });
+    my $savedrec = $biblio->metadata->record;
     like( substr($savedrec->leader,0,5), qr/^\d{5}$/, 'Record length found' );
     like( substr($savedrec->leader,12,5), qr/^\d{5}$/, 'Base address found' );
 };
