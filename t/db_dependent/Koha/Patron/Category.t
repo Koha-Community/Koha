@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -201,4 +202,20 @@ subtest 'effective_require_strong_password' => sub {
   is($category->effective_require_strong_password, 1, 'Patron should be required strong password from category');
 
   $schema->storage->txn_rollback;
+};
+
+subtest 'get_password_expiry_date() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    $category->password_expiry_days( undef )->store;
+
+    is( $category->get_password_expiry_date(), undef, "No date returned if expiry days undef" );
+
+    $category->password_expiry_days( 32 )->store;
+    is( $category->get_password_expiry_date(), dt_from_string()->add( days => 32 )->ymd, "Date correctly calculated from password_expiry_days when set");
+
 };

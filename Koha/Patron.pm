@@ -269,7 +269,7 @@ sub store {
                 $self->plain_text_password( $self->password );
 
                 $self->password_expiration_date( $self->password
-                    ? $self->category->get_password_expiry_date
+                    ? $self->category->get_password_expiry_date || undef
                     : undef );
                 # Create a disabled account if no password provided
                 $self->password( $self->password
@@ -802,7 +802,7 @@ Returns 1 if the patron's password is expired or 0;
 sub password_expired {
     my ($self) = @_;
     return 0 unless $self->password_expiration_date;
-    return 1 if dt_from_string( $self->password_expiration_date ) < dt_from_string->truncate( to => 'day' );
+    return 1 if dt_from_string( $self->password_expiration_date ) <= dt_from_string->truncate( to => 'day' );
     return 0;
 }
 
@@ -905,7 +905,7 @@ sub set_password {
 
     my $digest = Koha::AuthUtils::hash_password($password);
 
-    $self->password_expiration_date( $self->category->get_password_expiry_date );
+    $self->password_expiration_date( $self->category->get_password_expiry_date || undef );
 
     # We do not want to call $self->store and retrieve password from DB
     $self->password($digest);
