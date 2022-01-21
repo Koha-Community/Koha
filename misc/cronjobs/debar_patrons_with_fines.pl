@@ -41,6 +41,11 @@ debt to the library.
 
 Display the help message and exit
 
+=item B<-a|--amount>
+
+Sets the minimum amount the patron owes before we debar them.
+Defaults to 0, meaning anyone that owes anything will be debared.
+
 =item B<-m|--message>
 
 Add the passed message in the debarment comment
@@ -74,6 +79,7 @@ use C4::Log qw( cronlogaction );
 
 my ( $help, $confirm, $message, $expiration, $file );
 GetOptions(
+    'a|amount'       => \$amount,
     'h|help'         => \$help,
     'c|confirm:s'    => \$confirm,
     'm|message:s'    => \$message,
@@ -84,7 +90,7 @@ pod2usage(1) if $help;
 pod2usage(1) unless ( $confirm && ( $message || $file ) );
 
 cronlogaction();
-my $badBorrowers = Koha::Patrons->filter_by_amount_owed( { more_than => 0 } );
+my $badBorrowers = Koha::Patrons->filter_by_amount_owed( { more_than => $amount // 0 } );
 $message = getMessageContent();
 
 while ( my $bb = $badBorrowers->next ) {
