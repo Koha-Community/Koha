@@ -163,6 +163,10 @@
                     </fieldset>
                 </li>
                 <li>
+                    <label for="password_expiry_days">Password expiration: </label>
+                    <input type="text" name="password_expiry_days" id="password_expiry_days" value="[% category.password_expiry_days | html %]" size="3" maxlength="5" /> days
+                </li>
+                <li>
                     <label for="dateofbirthrequired">Age required: </label>
                     <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% category.dateofbirthrequired | html %]" size="3" maxlength="3" /> years
                 </li>
@@ -451,6 +455,7 @@
                         [% END %]
                     </td>
                 </tr>
+                <tr><th scope="row">Password expiration: </th><td>[% category.password_expiry_days | html %] days</td></tr>
                 <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired | html %] years</td></tr>
                 <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
                 <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
@@ -519,6 +524,7 @@
                     <th scope="col">Category name</th>
                     <th scope="col">Type</th>
                     <th scope="col">Enrollment period</th>
+                    <th scope="col">Password expiration</th>
                     <th scope="col">Age required</th>
                     <th scope="col">Upper age limit</th>
                     <th scope="col">Enrollment fee</th>
@@ -561,6 +567,11 @@
                                 until [% category.enrolmentperioddate | $KohaDates %]
                             [% END %]
                         </td>
+                        [% IF (category.password_expiry_days) %]
+                            <td>[% category.password_expiry_days | html %] days</td>
+                        [% ELSE %]
+                            <td>-</td>
+                        [% END %]
                         [% IF (category.dateofbirthrequired) %]
                             <td>[% category.dateofbirthrequired | html %] years</td>
                         [% ELSE %]

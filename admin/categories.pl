@@ -63,6 +63,7 @@ elsif ( $op eq 'add_validate' ) {
     my $description = $input->param('description');
     my $enrolmentperiod = $input->param('enrolmentperiod');
     my $enrolmentperioddate = $input->param('enrolmentperioddate') || undef;
+    my $password_expiry_days = $input->param('password_expiry_days') || undef;
     my $upperagelimit = $input->param('upperagelimit');
     my $dateofbirthrequired = $input->param('dateofbirthrequired');
     my $enrolmentfee = $input->param('enrolmentfee');
@@ -103,6 +104,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->description($description);
         $category->enrolmentperiod($enrolmentperiod);
         $category->enrolmentperioddate($enrolmentperioddate);
+        $category->password_expiry_days($password_expiry_days);
         $category->upperagelimit($upperagelimit);
         $category->dateofbirthrequired($dateofbirthrequired);
         $category->enrolmentfee($enrolmentfee);
@@ -134,6 +136,7 @@ elsif ( $op eq 'add_validate' ) {
             description => $description,
             enrolmentperiod => $enrolmentperiod,
             enrolmentperioddate => $enrolmentperioddate,
+            password_expiry_days => $password_expiry_days,
             upperagelimit => $upperagelimit,
             dateofbirthrequired => $dateofbirthrequired,
             enrolmentfee => $enrolmentfee,

@@ -491,7 +491,12 @@ sub _basic_auth {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Invalid password' );
     }
 
-    return Koha::Patrons->find({ userid => $user_id });
+    my $patron = Koha::Patrons->find({ userid => $user_id });
+    if ( $patron->password_expired ) {
+        Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Password has expired' );
+    }
+
+    return $patron;
 }
 
 =head3 _set_userenv

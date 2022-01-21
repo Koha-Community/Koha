@@ -50,6 +50,13 @@
     [% IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
         <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
     [% END %]
+[% ELSIF password_has_expired %]
+    <div id="login_error"><strong>Error: </strong>Your password has expired!</div>
+    [% IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
+        <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
+    [% ELSE %]
+        <p>You must contact the library to have your password reset</p>
+    [% END %]
 [% ELSIF invalid_username_or_password %]
 <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
 [% END %]

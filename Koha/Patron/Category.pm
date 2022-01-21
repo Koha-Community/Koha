@@ -113,6 +113,26 @@ sub get_expiry_date {
     }
 }
 
+=head3 get_password_expiry_date
+
+Returns date based on password expiry days set for the category. If the value is not set
+we return undef, password does not expire
+
+my $expiry_date = $category->get_password_expiry_date();
+
+=cut
+
+sub get_password_expiry_date {
+    my ($self, $date ) = @_;
+    if ( $self->password_expiry_days ) {
+        $date ||= dt_from_string;
+        $date = dt_from_string( $date ) unless ref $date;
+        return $date->add( days => $self->password_expiry_days )->ymd;
+    } else {
+        return;
+    }
+}
+
 =head3 effective_reset_password
 
 Returns if patrons in this category can reset their password. If set in $self->reset_password

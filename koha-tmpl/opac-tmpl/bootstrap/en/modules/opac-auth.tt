@@ -167,7 +167,16 @@
                             [% END # /IF GoogleOpenIDConnect %]
                         [% END # /UNLESS OPACShibOnly %]
 
-                        [% IF !Koha.Preference('OPACShibOnly') or SCO_login or SCI_login %]
+                        [% IF password_has_expired %]
+                            <p class="error"><strong>Error: </strong>Your password has expired!</p>
+                            [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                <div id="resetpassword">
+                                    <a href="/cgi-bin/koha/opac-password-recovery.pl">Reset your password?</a>
+                                </div>
+                            [% ELSE %]
+                                <p>You must contact the library to reset your password</p>
+                            [% END %]
+                        [% ELSIF !Koha.Preference('OPACShibOnly') or SCO_login or SCI_login %]
                             [% IF SCO_login %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="auth" id="auth" method="post" autocomplete="off">
                             [% ELSIF SCI_login %]
@@ -218,7 +227,7 @@
                                     </div>
                                 [% END %]
                             </form>
-                        [% END # / IF !OPACShibOnly or SCO_login or SCI_login %]
+                        [% END # / IF password_has_expired / ELSIF !OPACShibOnly or SCO_login or SCI_login %]
                     [% END # / IF loginprompt %]
 
                     [% ELSE %]
