@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -439,6 +439,32 @@ subtest '_timeout_syspref' => sub {
 
     t::lib::Mocks::mock_preference('timeout', "10x");
     is( C4::Auth::_timeout_syspref, 600, );
+};
+
+subtest 'check_cookie_auth' => sub {
+    plan tests => 1;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
+
+    # Mock a CGI object with real userid param
+    my $cgi = Test::MockObject->new();
+    $cgi->mock(
+        'param',
+        sub {
+            my $var = shift;
+            if ( $var eq 'userid' ) { return $patron->userid; }
+            elsif ( $var eq 'timeout' ) { return 3600; }
+        }
+    );
+    $cgi->mock('multi_param', sub {return q{}} );
+    $cgi->mock( 'cookie', sub { return; } );
+    $cgi->mock( 'request_method', sub { return 'POST' } );
+
+    # Setting authnotrequired=1 or we wont' hit the return but the end of the sub that prints headers
+    my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 1 );
+
+    my ($auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
+    is( $auth_status, 'anon', 'check_cookie_auth should not return ok if the user has not been authenticated before' );
 };
 
 $schema->storage->txn_rollback;
