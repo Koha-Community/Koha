@@ -1632,3 +1632,31 @@ tables:
             - "Callnumber: <<items.itemcallnumber>>"
             - "Waiting since: <<recalls.waitingdate>>"
             - "Notes: <<recalls.recallnotes>>"
+
+        - module: members
+          code: 2FA_DEREGISTER
+          branchcode: ""
+          name: "Confirmation of deregistering two factor authentication"
+          is_html: 1
+          title: "Confirmation of deregistering two factor authentication"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<p>Dear [% borrower.firstname %] [% borrower.surname %],</p>"
+            - "<p>This is to confirm that we deregistered two factor authentication for you.</p>"
+            - "<p>If you did not deregister, someone else may be using your account. Please contact technical support.</p>"
+            - "<p>Your library</p>"
+
+        - module: members
+          code: 2FA_REGISTER
+          branchcode: ""
+          name: "Confirmation of registering two factor authentication"
+          is_html: 1
+          title: "Confirmation of registering two factor authentication"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<p>Dear [% borrower.firstname %] [% borrower.surname %],</p>"
+            - "<p>This is to confirm that we registered two factor authentication for you.</p>"
+            - "<p>If you did not register, someone else may be using your account. Please contact technical support.</p>"
+            - "<p>Your library</p>"
