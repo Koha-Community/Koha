@@ -72,6 +72,9 @@ if ( $op eq 'register-2FA' ) {
         $logged_in_user->secret($secret32);
         $logged_in_user->auth_method('two-factor')->store;
         $op = 'registered';
+        if( $logged_in_user->notice_email_address ) {
+            $auth->send_confirm_notice({ patron => $logged_in_user });
+        }
     }
     else {
         $template->param( invalid_pin => 1, );
@@ -97,8 +100,12 @@ if ( $op eq 'enable-2FA' ) {
 elsif ( $op eq 'disable-2FA' ) {
     output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf($csrf_pars);
+    my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $logged_in_user });
     $logged_in_user->secret(undef);
     $logged_in_user->auth_method('password')->store;
+    if( $logged_in_user->notice_email_address ) {
+        $auth->send_confirm_notice({ patron => $logged_in_user, deregister => 1 });
+    }
 }
 
 $template->param(

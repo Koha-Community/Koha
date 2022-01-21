@@ -8,6 +8,9 @@ use Exception::Class (
     'Koha::Exceptions::Patron' => {
         isa => 'Koha::Exception',
     },
+    'Koha::Exceptions::Patron::MissingEmailAddress' => {
+        description => "Patron has no email address",
+    },
     'Koha::Exceptions::Patron::FailedDelete' => {
         isa         => 'Koha::Exceptions::Patron',
         description => "Deleting patron failed"
