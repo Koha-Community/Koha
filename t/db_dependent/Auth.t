@@ -445,6 +445,8 @@ subtest '_timeout_syspref' => sub {
 subtest 'check_cookie_auth' => sub {
     plan tests => 1;
 
+    t::lib::Mocks::mock_preference('timeout', "1d"); # back to default
+
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
 
     # Mock a CGI object with real userid param
@@ -454,7 +456,6 @@ subtest 'check_cookie_auth' => sub {
         sub {
             my $var = shift;
             if ( $var eq 'userid' ) { return $patron->userid; }
-            elsif ( $var eq 'timeout' ) { return 3600; }
         }
     );
     $cgi->mock('multi_param', sub {return q{}} );
