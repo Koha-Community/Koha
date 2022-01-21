@@ -3590,6 +3590,43 @@ code {
     font-weight: bold;
 }
 
+.tab-content {
+    border: 1px solid #B9D8D9;
+    border-top-width: 0;
+    padding: 1em;
+}
+
+.nav-tabs {
+    > li {
+        > a {
+            background-color: #e6f0f2;
+            border: 1px solid #b9d8d9;
+            border-radius: 4px 4px 0 0;
+            line-height: 1.42857143;
+            margin-right: .4em;
+            padding: .5em 1em;
+
+            &:hover {
+                background-color: #EEF4F5;
+                border-color: #b9d8d9;
+            }
+        }
+
+        &.active {
+            a,
+            a:hover,
+            a:focus {
+                background-color: #fff;
+                border: 1px solid #b9d8d9;
+                border-bottom-color: transparent;
+                color: #000;
+                cursor: default;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
 // End Bootstrap overrides
 
 .waiting {
