@@ -947,7 +947,6 @@
 </div> <!-- /#barcodeSubmittedModal -->
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
@@ -979,6 +978,7 @@
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/checkouts.js") | $raw %]
     [% Asset.js("js/holds.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
     <script>
         columns_settings_issues_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
         columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
