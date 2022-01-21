@@ -38,7 +38,6 @@ use C4::Output qw( parametrized_url output_html_with_http_headers );
 use C4::Biblio qw(
     CountItemsIssued
     GetBiblioData
-    GetMarcBiblio
     GetMarcControlnumber
     GetMarcISBN
     GetMarcISSN
@@ -114,15 +113,13 @@ if( $specific_item ) {
 my @hiddenitems;
 my $patron = Koha::Patrons->find( $borrowernumber );
 
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    opac         => 1 });
-if ( ! $record ) {
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $record = $biblio ? $biblio->metadata->record : undef;
+unless ( $biblio && $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
 
-my $biblio = Koha::Biblios->find( $biblionumber );
 unless ( $patron and $patron->category->override_hidden_items ) {
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
