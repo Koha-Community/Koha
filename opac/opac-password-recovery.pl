@@ -211,8 +211,8 @@ elsif ($uniqueKey) {    #reset password form
         username        => $username,
         errLinkNotValid => $errLinkNotValid,
         hasError        => ( $errLinkNotValid ? 1 : 0 ),
-        minPasswordLength => $borrower ? $borrower->category->effective_min_password_length: undef,
-        RequireStrongPassword => $borrower ? $borrower->category->effective_require_strong_password: undef,
+        minPasswordLength => $borrower ? $borrower->category->effective_min_password_length : undef,
+        RequireStrongPassword => $borrower ? $borrower->category->effective_require_strong_password : undef,
     );
 }
 else {    #password recovery form (to send email)
