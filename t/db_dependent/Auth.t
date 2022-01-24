@@ -442,7 +442,7 @@ subtest '_timeout_syspref' => sub {
 };
 
 subtest 'check_cookie_auth' => sub {
-    plan tests => 1;
+    plan tests => 4;
 
     t::lib::Mocks::mock_preference('timeout', "1d"); # back to default
 
@@ -464,8 +464,17 @@ subtest 'check_cookie_auth' => sub {
     # Setting authnotrequired=1 or we wont' hit the return but the end of the sub that prints headers
     my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 1 );
 
-    my ($auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
-    is( $auth_status, 'anon', 'check_cookie_auth should not return ok if the user has not been authenticated before' );
+    my ($auth_status, $session) = C4::Auth::check_cookie_auth($sessionID);
+    isnt( $auth_status, 'ok', 'check_cookie_auth should not return ok if the user has not been authenticated before if no permissions needed' );
+    is( $auth_status, 'anon', 'check_cookie_auth should return anon if the user has not been authenticated before and no permissions needed' );
+
+    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 1 );
+
+    ($auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
+    isnt( $auth_status, 'ok', 'check_cookie_auth should not return ok if the user has not been authenticated before and permissions needed' );
+    is( $auth_status, 'anon', 'check_cookie_auth should return anon if the user has not been authenticated before and permissions needed' );
+
+    #FIXME We should have a test to cover 'failed' status when a user has logged in, but doesn't have permission
 };
 
 $schema->storage->txn_rollback;
