@@ -23,6 +23,7 @@ use Carp qw( croak );
 
 use Digest::MD5 qw( md5_base64 );
 use CGI::Session;
+use CGI::Session::ErrorHandler;
 use URI;
 use URI::QueryParam;
 
@@ -901,7 +902,7 @@ sub checkauth {
                 $anon_search_history = $session->param('search_history');
                 $session->delete();
                 $session->flush;
-                C4::Context->_unset_userenv($sessionID);
+                C4::Context::_unset_userenv($sessionID);
             }
             elsif ($logout) {
 
@@ -910,7 +911,7 @@ sub checkauth {
                 my $shibSuccess = C4::Context->userenv->{'shibboleth'};
                 $session->delete();
                 $session->flush;
-                C4::Context->_unset_userenv($sessionID);
+                C4::Context::_unset_userenv($sessionID);
 
                 if ($cas and $caslogout) {
                     logout_cas($query, $type);
@@ -1103,7 +1104,7 @@ sub checkauth {
                 }
                 else {
                     $info{'nopermission'} = 1;
-                    C4::Context->_unset_userenv($sessionID);
+                    C4::Context::_unset_userenv($sessionID);
                 }
                 my ( $borrowernumber, $firstname, $surname, $userflags,
                     $branchcode, $branchname, $emailaddress, $desk_id,
@@ -1228,7 +1229,7 @@ sub checkauth {
             else {
                 if ($userid) {
                     $info{'invalid_username_or_password'} = 1;
-                    C4::Context->_unset_userenv($sessionID);
+                    C4::Context::_unset_userenv($sessionID);
                 }
                 $session->param( 'lasttime', time() );
                 $session->param( 'ip',       $session->remote_addr() );
@@ -1686,57 +1687,57 @@ sub check_cookie_auth {
     # however, if a userid parameter is present (i.e., from
     # a form submission, assume that any current cookie
     # is to be ignored
-    unless ( defined $sessionID and $sessionID ) {
+    unless ( $sessionID ) {
         return ( "failed", undef );
     }
+    C4::Context::_unset_userenv($sessionID); # remove old userenv first
     my $session   = get_session($sessionID);
-    C4::Context->_new_userenv($sessionID);
     if ($session) {
-        C4::Context->interface($session->param('interface'));
-        C4::Context->set_userenv(
-            $session->param('number'),       $session->param('id') // '',
-            $session->param('cardnumber'),   $session->param('firstname'),
-            $session->param('surname'),      $session->param('branch'),
-            $session->param('branchname'),   $session->param('flags'),
-            $session->param('emailaddress'), $session->param('shibboleth'),
-            $session->param('desk_id'),      $session->param('desk_name'),
-            $session->param('register_id'),  $session->param('register_name')
-        );
-
         my $userid   = $session->param('id');
         my $ip       = $session->param('ip');
         my $lasttime = $session->param('lasttime');
         my $timeout = _timeout_syspref();
 
         if ( !$lasttime || ( $lasttime < time() - $timeout ) ) {
-
             # time out
             $session->delete();
             $session->flush;
-            C4::Context->_unset_userenv($sessionID);
             return ("expired", undef);
-        } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $remote_addr ) {
 
+        } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $remote_addr ) {
             # IP address changed
             $session->delete();
             $session->flush;
-            C4::Context->_unset_userenv($sessionID);
             return ( "restricted", undef, { old_ip => $ip, new_ip => $remote_addr});
+
         } elsif ( $userid ) {
             $session->param( 'lasttime', time() );
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
+                C4::Context->_new_userenv($sessionID);
+                C4::Context->interface($session->param('interface'));
+                C4::Context->set_userenv(
+                    $session->param('number'),       $session->param('id') // '',
+                    $session->param('cardnumber'),   $session->param('firstname'),
+                    $session->param('surname'),      $session->param('branch'),
+                    $session->param('branchname'),   $session->param('flags'),
+                    $session->param('emailaddress'), $session->param('shibboleth'),
+                    $session->param('desk_id'),      $session->param('desk_name'),
+                    $session->param('register_id'),  $session->param('register_name')
+                );
                 return ( "ok", $session );
+            } else {
+                $session->delete();
+                $session->flush;
+                return ( "failed", undef );
             }
+
         } else {
+            C4::Context->_new_userenv($sessionID);
+            C4::Context->interface($session->param('interface'));
+            C4::Context->set_userenv( undef, q{} );
             return ( "anon", $session );
         }
-        # If here user was logged in, but doesn't have correct permissions
-        # could be an 'else' at `if($flags) return "ok"` , but left here to catch any errors
-        $session->delete();
-        $session->flush;
-        C4::Context->_unset_userenv($sessionID);
-        return ( "failed", undef );
     } else {
         return ( "expired", undef );
     }
@@ -1782,9 +1783,13 @@ sub _get_session_params {
 sub get_session {
     my $sessionID      = shift;
     my $params = _get_session_params();
-    my $session = CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
-    if ( ! $session ){
-        die CGI::Session->errstr();
+    my $session;
+    if( $sessionID ) { # find existing
+        CGI::Session::ErrorHandler->set_error( q{} ); # clear error, cpan issue #111463
+        $session = CGI::Session->load( $params->{dsn}, $sessionID, $params->{dsn_args} );
+    } else {
+        $session = CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
+        # $session->flush;
     }
     return $session;
 }
