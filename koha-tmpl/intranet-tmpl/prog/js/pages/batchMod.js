@@ -100,7 +100,7 @@ function showAllColumns() {
     });
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child("+nb_cols+"),#itemst tr th:nth-child("+nb_cols+")").nextAll().show();
-    $.removeCookie("showColumns", { path: '/' });
+    Cookies.remove("showColumns", { path: '/' });
     $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 

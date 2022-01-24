@@ -1,4 +1,4 @@
-/* global shortcut delBasket Sticky AUDIO_ALERT_PATH */
+/* global shortcut delBasket Sticky AUDIO_ALERT_PATH Cookies */
 /* exported addBibToContext delBibToContext escape_str escape_price openWindow _ removeFocus toUC confirmDelete confirmClone playSound */
 if ( KOHA === undefined ) var KOHA = {};
 
@@ -194,7 +194,7 @@ function checkEnter(e){ //e is event object passed from function invocation
 }
 
 function clearHoldFor(){
-    $.removeCookie("holdfor", { path: '/' });
+    Cookies.remove("holdfor", { path: '/' });
 }
 
 function logOut(){
