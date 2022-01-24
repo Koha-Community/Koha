@@ -85,7 +85,7 @@ function showAllColumns() {
     });
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child(3),#itemst tr th:nth-child(3)").nextAll().show();
-    $.removeCookie("showColumns", { path: '/' });
+    Cookies.remove("showColumns", { path: '/' });
     $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 

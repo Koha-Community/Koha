@@ -1,4 +1,4 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ Cookies */
 
 function verify_images() {
     /* Loop over each container in the template which contains covers */
@@ -348,8 +348,8 @@ function placeHold () {
 }
 
 function forgetPatronAndClub(){
-    $.removeCookie("holdfor", { path: '/' });
-    $.removeCookie("holdforclub", { path: '/' });
+    Cookies.remove("holdfor", { path: '/' });
+    Cookies.remove("holdforclub", { path: '/' });
     $(".holdforlink").remove();
     $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> " + __("Place hold") + "</a>");
 }
