@@ -1839,6 +1839,8 @@ sub check_cookie_auth {
         } else {
             return ( "anon", $session );
         }
+        # If here user was logged in, but doesn't have correct permissions
+        # could be an 'else' at `if($flags) return "ok"` , but left here to catch any errors
         $session->delete();
         $session->flush;
         C4::Context->_unset_userenv($sessionID);
