@@ -287,7 +287,7 @@ sub run_tests {
     is( $data->{ title }, $title,
         'ModBiblio correctly added the title field, and GetBiblioData.');
     is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after ModBiblio.');
-    $marc = $biblio->metadata->record;
+    $marc = $biblio->get_from_storage->metadata->record;
     my ( $title_field, $title_subfield ) = get_title_field();
     is( $marc->subfield( $title_field, $title_subfield ), $title, );
 
@@ -424,8 +424,8 @@ sub run_tests {
 
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
-    my $updatedrecord = $biblio->metadata->record;
     my $frameworkcode = GetFrameworkCode($biblionumber);
+    my $updatedrecord = $biblio->metadata->record;
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
     my $biblioitemnumbertotest;
@@ -716,7 +716,7 @@ subtest 'MarcFieldForCreatorAndModifier' => sub {
     $c4_context->mock('userenv', sub { return { number => 321, firstname => 'Jane', surname => 'Doe'}; });
     C4::Biblio::ModBiblio($record, $biblionumber, '');
 
-    $record = $biblio->metadata->record;
+    $record = $biblio->get_from_storage->metadata->record;
     is($record->subfield('998', 'a'), 123, '998$a = 123');
     is($record->subfield('998', 'b'), 'John Doe', '998$b = John Doe');
     is($record->subfield('998', 'c'), 321, '998$c = 321');

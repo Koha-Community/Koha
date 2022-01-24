@@ -785,7 +785,7 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
 
     ModBiblio($saved_record, $biblionumber, '', { overlay_context => { 'source' => 'test' } });
 
-    my $updated_record = $biblio->metadata->record;
+    my $updated_record = $biblio->get_from_storage->metadata->record;
 
     $expected_record = build_record([
             # "250" field has been appended
