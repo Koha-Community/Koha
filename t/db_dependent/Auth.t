@@ -461,6 +461,8 @@ subtest 'check_cookie_auth' => sub {
     $cgi->mock( 'cookie', sub { return; } );
     $cgi->mock( 'request_method', sub { return 'POST' } );
 
+    $ENV{REMOTE_ADDR} = '127.0.0.1';
+
     # Setting authnotrequired=1 or we wont' hit the return but the end of the sub that prints headers
     my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 1 );
 
