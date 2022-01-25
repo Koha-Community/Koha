@@ -259,7 +259,9 @@
                 <li>
                     <label for="branchlimit">Library: </label>
                     <select name="branchlimit" id="branchlimit">
+                    [% IF !Koha.Preference('IndependentBranches') || (Koha.Preference('IndependentBranches') && CAN_user_superlibrarian) %]
                         <option value="">All</option>
+                    [% END %]
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => branchlimit, only_from_group => 1 ) %]
                     </select>
                 </li>
