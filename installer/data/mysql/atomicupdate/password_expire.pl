@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 return {
-    bug_number => "BUG_NUMBER",
+    bug_number => "29924",
     description => "Add password expiration",
     up => sub {
         my ($args) = @_;
