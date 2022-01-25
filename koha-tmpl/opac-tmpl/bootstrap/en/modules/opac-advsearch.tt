@@ -449,7 +449,6 @@
 
 [% BLOCK jsinclude %]
 [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
 <script>
 $(document).ready(function() {
     [% IF search_groups %]
@@ -472,12 +471,11 @@ $(document).ready(function() {
     [% END %]
 
     $('#advsearches').tabs();
-    jQuery.cookie.json = true;
 
     $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
 
     [% IF ( ReturnToSearch ) %]
-        if (form_serialized = jQuery.cookie("form_serialized")) {
+        if (form_serialized = JSON.parse( Cookies.get("form_serialized") ) ) {
             // Add missing term inputs if there were more than 3
             var count = (form_serialized.match(/&q=/g) || []).length;
             for(var i = 3 ; i < count ; i++) {
@@ -485,7 +483,7 @@ $(document).ready(function() {
             }
             $('#advsearch form').deserialize(form_serialized);
         }
-        if (form_serialized_limits = jQuery.cookie("form_serialized_limits")) {
+        if (form_serialized_limits = JSON.parse( Cookies.get("form_serialized_limits") ) ) {
             $('#language-limit')     .val(form_serialized_limits[0]);
             $('#branchloop')         .val(form_serialized_limits[1]);
             $('#subtype_audience')   .val(form_serialized_limits[2]);
@@ -496,9 +494,9 @@ $(document).ready(function() {
         }
     [% ELSE %]
         //Clear all form cookies
-        jQuery.removeCookie("form_serialized", { path: '/'});
-        jQuery.removeCookie("form_serialized_limits", { path: '/'});
-        jQuery.removeCookie("search_path_code", { path: '/'});
+        Cookies.remove("form_serialized", { path: '/'});
+        Cookies.remove("form_serialized_limits", { path: '/'});
+        Cookies.remove("search_path_code", { path: '/'});
     [% END %]
     $('#advsearch_form').submit(function() {
         $('[name^="limit"]').each(function(){
@@ -514,18 +512,18 @@ $(document).ready(function() {
             }
         });
         form_serialized = $(this).serialize();
-        jQuery.cookie("form_serialized", form_serialized,{ path: '/'});
+        Cookies.set("form_serialized", JSON.stringify( form_serialized ), { path: '/'});
         form_serialized_limits = [
             $('#language-limit').val(),   $('#branchloop').val(),
             $('#subtype_audience').val(), $('#subtype_content').val(),
             $('#subtype_format').val(),   $('#subtype_additional').val(),
             $('#locloop').val()
         ];
-        jQuery.cookie("form_serialized_limits", form_serialized_limits,{ path: '/'});
+        Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/'});
         [% IF ( expanded_options ) %]
-        jQuery.cookie("search_path_code", 'exs',{ path: '/'});
+            Cookies.set("search_path_code", JSON.stringify('exs'), { path: '/'});
         [% ELSE %]
-        jQuery.cookie("search_path_code", 'ads',{ path: '/'});
+            Cookies.set("search_path_code", JSON.stringify('ads'), { path: '/'});
         [% END %]
     });
 

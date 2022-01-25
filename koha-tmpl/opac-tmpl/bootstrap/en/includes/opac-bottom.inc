@@ -280,14 +280,14 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% END %]
 
-[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
+[% Asset.js("lib/js-cookie/js.cookie-3.0.1.min.js") | $raw %]
 <script>
 $(document).ready(function() {
     if($('#searchsubmit').length) {
         $(document).on("click", '#searchsubmit', function(e) {
-            jQuery.removeCookie("form_serialized", { path: '/'});
-            jQuery.removeCookie("form_serialized_limits", { path: '/'});
-            jQuery.removeCookie("search_path_code", { path: '/'});
+            Cookies.remove("form_serialized", { path: '/'});
+            Cookies.remove("form_serialized_limits", { path: '/'});
+            Cookies.remove("search_path_code", { path: '/'});
         });
     }
 });
