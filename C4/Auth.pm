@@ -561,9 +561,10 @@ sub get_template_and_user {
             unless ( $pagename =~ /^(?:MARC|ISBD)?detail$/
                 or $pagename =~ /^showmarc$/
                 or $pagename =~ /^addbybiblionumber$/
-                or $pagename =~ /^review$/ ) {
-                my $sessionSearch = get_session( $sessionID || $in->{'query'}->cookie("CGISESSID") );
-                $sessionSearch->clear( ["busc"] ) if ( $sessionSearch->param("busc") );
+                or $pagename =~ /^review$/ )
+            {
+                my $sessionSearch = get_session( $sessionID );
+                $sessionSearch->clear( ["busc"] ) if $sessionSearch;
             }
         }
 
@@ -899,6 +900,7 @@ sub checkauth {
                 $session->delete();
                 $session->flush;
                 C4::Context::_unset_userenv($sessionID);
+                $sessionID = undef;
             }
             elsif ($logout) {
 
@@ -908,6 +910,7 @@ sub checkauth {
                 $session->delete();
                 $session->flush;
                 C4::Context::_unset_userenv($sessionID);
+                $sessionID = undef;
 
                 if ($cas and $caslogout) {
                     logout_cas($query, $type);
@@ -945,7 +948,6 @@ sub checkauth {
     }
 
     unless ( $loggedin ) {
-        $sessionID = undef;
         $userid    = undef;
     }
 
@@ -1243,6 +1245,7 @@ sub checkauth {
             $session->param( 'sessiontype', 'anon' );
             $session->param( 'interface', $type);
         }
+        $session->flush;
     }    # END unless ($userid)
 
     # finished authentification, now respond
