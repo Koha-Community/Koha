@@ -1623,7 +1623,7 @@ sub check_api_auth {
 
 =head2 check_cookie_auth
 
-  ($status, $sessionId) = check_api_auth($cookie, $userflags);
+  ($status, $sessionId) = check_cookie_auth($cookie, $userflags);
 
 Given a CGISESSID cookie set during a previous login to Koha, determine
 if the user has the privileges specified by C<$userflags>. C<$userflags>
