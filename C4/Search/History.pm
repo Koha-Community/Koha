@@ -218,6 +218,7 @@ sub set_to_session {
     return () unless $session;
     $session->param( 'search_history',
         uri_escape( encode_json($search_history) ) );
+    $session->flush;
 }
 
 1;
