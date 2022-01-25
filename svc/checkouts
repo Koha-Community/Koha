@@ -34,8 +34,11 @@ use Koha::ItemTypes;
 
 my $input = CGI->new;
 
-my ( $auth_status, $session ) =
-  check_cookie_auth( $input->cookie('CGISESSID'));
+my ( $auth_status, $session ) = check_cookie_auth( $input->cookie('CGISESSID'));
+if( $auth_status ne 'ok' ) {
+    print CGI::header( '-status' => '401' );
+    exit 0;
+}
 
 my $userid   = $session->param('id');
 
