@@ -494,6 +494,9 @@
                 .then(resolve, reject);
             })
             .then(function(profiles) {
+                profiles.sort( function(a, b) {
+                  return a.name.localeCompare(b.name);
+                });
                 profiles.forEach(function(profile) {
                     const opt = $("<option/>");
                     select.append(opt);
