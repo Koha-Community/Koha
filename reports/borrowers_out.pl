@@ -204,6 +204,11 @@ sub calculate {
     $strcalc .= " , " . $dbh->quote($colfield) if ($colfield);
     $strcalc .= " FROM borrowers ";
     $strcalc .= "WHERE 1 ";
+    if(C4::Context->preference('IndependentBranches') && !C4::Context->IsSuperLibrarian()){
+      $strcalc .= "AND branchcode = '".C4::Context->userenv->{branch}."' ";
+    }
+
+
     my @query_args;
     if ( @$filters[0] ) {
         @$filters[0]=~ s/\*/%/g;
