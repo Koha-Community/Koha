@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -483,7 +483,7 @@ subtest 'check_cookie_auth' => sub {
 };
 
 subtest 'checkauth & check_cookie_auth' => sub {
-    plan tests => 27;
+    plan tests => 31;
 
     # flags = 4 => { catalogue => 1 }
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 4 } });
@@ -517,12 +517,18 @@ subtest 'checkauth & check_cookie_auth' => sub {
 
     $ENV{"HTTP_COOKIE"} = "CGISESSID=$sessionID";
     # Not authenticated yet, checkauth didn't return the session
-    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
+    {
+        local *STDOUT;
+        my $stdout;
+        open STDOUT, '>', \$stdout;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1} );
+        close STDOUT;
+    }
     is( $sessionID, undef);
     is( $userid, undef);
 
-    # Same here, check_cookie_auth does not return the session
-    my ( $auth_status, $session ) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
+    # Sending undefined fails obviously
+    my ( $auth_status, $session ) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1} );
     is( $auth_status, 'failed' );
     is( $session, undef );
 
@@ -544,55 +550,103 @@ subtest 'checkauth & check_cookie_auth' => sub {
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
     is( $sessionID, undef );
     is( $ENV{"HTTP_COOKIE"}, "CGISESSID=$first_sessionID", 'HTTP_COOKIE not unset' );
-    ( $auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
-    is( $auth_status, "failed");
+    ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, {catalogue => 1} );
+    is( $auth_status, "expired");
     is( $session, undef );
 
     {
         # Trying to access without sessionID
-        undef $ENV{"HTTP_COOKIE"};
         $cgi = CGI->new;
         ( $auth_status, $session) = C4::Auth::check_cookie_auth(undef, {catalogue => 1});
         is( $auth_status, 'failed' );
         is( $session, undef );
 
-        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
+        # This will fail on permissions
+        undef $ENV{"HTTP_COOKIE"};
+        {
+            local *STDOUT;
+            my $stdout;
+            open STDOUT, '>', \$stdout;
+            ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1} );
+            close STDOUT;
+        }
         is( $userid, undef );
         is( $sessionID, undef );
-
     }
 
     {
-        # Hit unauthorized page then reuse the cookie
-        undef $ENV{"HTTP_COOKIE"};
+        # First logging in
         $cgi = CGI->new;
-        # Logging in
         $cgi->param('userid', $patron->userid);
         $cgi->param('password', $password);
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
         is( $userid, $patron->userid );
         $first_sessionID = $sessionID;
 
-        $ENV{"HTTP_COOKIE"} = "CGISESSID=$sessionID";
-
         # Patron does not have the borrowers permission
-        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {borrowers => 1});
+        # $ENV{"HTTP_COOKIE"} = "CGISESSID=$sessionID"; # not needed, we use $cgi here
+        {
+            local *STDOUT;
+            my $stdout;
+            open STDOUT, '>', \$stdout;
+            ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {borrowers => 1} );
+            close STDOUT;
+        }
         is( $userid, undef );
         is( $sessionID, undef );
 
-        ( $auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, {borrowers => 1});
+        # When calling check_cookie_auth, the session will be deleted
+        ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, { borrowers => 1 } );
         is( $auth_status, "failed" );
         is( $session, undef );
+        ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, { borrowers => 1 } );
+        is( $auth_status, 'expired', 'Session no longer exists' );
 
-        # Reuse the cookie
+        # Try reusing the deleted session: since it does not exist, we should get a new one now when passing correct permissions
+        $cgi->cookie( -name => 'CGISESSID', value => $first_sessionID );
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
         is( $userid, $patron->userid );
-        is( $sessionID, $first_sessionID );
-
-        ( $auth_status, $session) = C4::Auth::check_cookie_auth($sessionID, 0, {catalogue => 1});
+        isnt( $sessionID, undef, 'Check if we have a sessionID' );
+        isnt( $sessionID, $first_sessionID, 'New value expected' );
+        ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID, {catalogue => 1} );
         is( $auth_status, "ok" );
-        is( $session, $first_sessionID );
+        is( $session->id, $sessionID, 'Same session' );
+        # Two additional tests on userenv
+        is( $C4::Context::context->{activeuser}, $session->id, 'Check if environment has been setup for session' );
+        is( C4::Context->userenv->{id}, $userid, 'Check userid in userenv' );
     }
+};
+
+subtest 'Userenv clearing in check_cookie_auth' => sub {
+    # Note: We did already test userenv for a logged-in user in previous subtest
+    plan tests => 9;
+
+    t::lib::Mocks::mock_preference( 'timeout', 600 );
+    my $cgi = CGI->new;
+
+    # Create a new anonymous session by passing a fake session ID
+    $cgi->cookie( -name => 'CGISESSID', -value => 'fake_sessionID' );
+    my ($userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 1);
+    my ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );
+    is( $auth_status, 'anon', 'Should be anonymous' );
+    is( $C4::Context::context->{activeuser}, $session->id, 'Check activeuser' );
+    is( defined C4::Context->userenv, 1, 'There should be a userenv' );
+    is(  C4::Context->userenv->{id}, q{}, 'userid should be empty string' );
+
+    # Make the session expire now, check_cookie_auth will delete it
+    $session->param('lasttime', time() - 1200 );
+    $session->flush;
+    ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );
+    is( $auth_status, 'expired', 'Should be expired' );
+    is( C4::Context->userenv, undef, 'Environment should be cleared too' );
+
+    # Show that we clear the userenv again: set up env and check deleted session
+    C4::Context->_new_userenv( $sessionID );
+    C4::Context->set_userenv; # empty
+    is( defined C4::Context->userenv, 1, 'There should be an empty userenv again' );
+    ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );
+    is( $auth_status, 'expired', 'Should be expired already' );
+    is( C4::Context->userenv, undef, 'Environment should be cleared again' );
 };
 
 $schema->storage->txn_rollback;
