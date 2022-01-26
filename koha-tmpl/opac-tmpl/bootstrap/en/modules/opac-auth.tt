@@ -171,9 +171,11 @@
                             <div class="alert alert-info">
                                 <p><strong>Error: </strong>Your password has expired!</p>
                             </div>
-                            [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                            [% IF Koha.Preference('EnableExpiredPasswordReset') %]
+                                <a href="/cgi-bin/koha/opac-reset-password.pl">Reset your password</a>.
+                            [% ELSIF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
                                 <div id="resetpassword">
-                                    <a href="/cgi-bin/koha/opac-password-recovery.pl">Reset your password?</a>
+                                    <a href="/cgi-bin/koha/opac-password-recovery.pl">Reset your password</a>
                                 </div>
                             [% ELSE %]
                                 <p>You must contact the library to reset your password</p>

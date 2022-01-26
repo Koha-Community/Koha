@@ -366,6 +366,14 @@ Patrons:
          - a strong password for staff and patrons
          - (must contain at least one digit, one lowercase and one uppercase).
      -
+         - pref: EnableExpiredPasswordReset
+           choices:
+               1: "Enable"
+               0: "Don't enable"
+         - the ability for patrons to directly reset their password when it is expired.
+         - If not enable patrons must either use the 'Forgot your password' feature or have staff
+         - reset their password.
+     -
          - Block a patron's account if it reaches
          - pref: FailedLoginAttempts
            class: integer
