@@ -88,7 +88,7 @@
                                     <tr>
                                         <th class="anti-the">Title</th>
                                         <th>[% IF ( ccodesearch ) %]Collection[% ELSE %]Item type[% END %]</th>
-                                        <th class="title-num">Checkouts</th>
+                                        <th>Checkouts</th>
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                             <th class="NoSort">&nbsp;</th>
                                         [% END %]
@@ -118,9 +118,9 @@
                                                     [% ItemTypes.GetDescription(result.itemtype) | html %]
                                                 [% END %]
                                             </td>
-                                            <td>
+                                            <td data-order="[% result.count | html %]">
                                                 <span class="tdlabel">Checkouts: </span>
-                                                <span title="[% result.count | html %]">[% result.count | html %]</span>
+                                                [% result.count | html %]
                                             </td>
                                             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                                 <td>
@@ -153,8 +153,7 @@
                 "sorting": [[2, "desc"]],
                 "columnDefs": [
                     { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                    { "type": "anti-the", "targets" : [ "anti-the" ] },
-                    { "type": "title-numeric", "targets" : [ "title-num"] },
+                    { "type": "anti-the", "targets" : [ "anti-the" ] }
                 ]
             }));
         });
