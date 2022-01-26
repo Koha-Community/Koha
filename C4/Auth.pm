@@ -883,6 +883,7 @@ sub checkauth {
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") ) {    # assignment, not comparison
         my ( $return, $more_info );
+        # NOTE: $flags in the following call is still undefined !
         ( $return, $session, $more_info ) = check_cookie_auth( $sessionID, $flags,
             { remote_addr => $ENV{REMOTE_ADDR}, skip_version_check => 1 }
         );
