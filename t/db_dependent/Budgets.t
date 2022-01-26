@@ -8,7 +8,7 @@ BEGIN {
 }
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
-use C4::Acquisition qw( NewBasket AddInvoice GetInvoice ModReceiveOrder populate_order_with_prices );
+use C4::Acquisition qw( NewBasket AddInvoice GetInvoice ModReceiveOrder );
 
 use Koha::ActionLogs;
 use Koha::Acquisition::Booksellers;
@@ -37,10 +37,14 @@ my $library = $builder->build({
     source => 'Branch',
 });
 
+my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+$patron->store;
+
 t::lib::Mocks::mock_userenv(
     {
         flags => 1,
-        userid => 'my_userid',
+        userid => $patron->userid,
+        borrowernumber => $patron->borrowernumber,
         branch => $library->{branchcode},
     }
 );
@@ -1073,11 +1077,9 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 
 #Okay we have basically what the user would enter, now we do some maths
 
-    $spent_orderinfo = C4::Acquisition::populate_order_with_prices({
-            order        => $spent_orderinfo,
-            booksellerid => $spent_orderinfo->{booksellerid},
-            ordering     => 1,
-    });
+    my $spent_order_obj = Koha::Acquisition::Order->new($spent_orderinfo);
+    $spent_order_obj->populate_with_prices_for_ordering();
+    $spent_orderinfo = $spent_order_obj->unblessed();
 
 #And let's place the order
 
@@ -1160,11 +1162,9 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 
 #Do our maths
 
-    $spent_orderinfo = C4::Acquisition::populate_order_with_prices({
-            order        => $spent_orderinfo,
-            booksellerid => $spent_orderinfo->{booksellerid},
-            receiving    => 1,
-    });
+    $spent_order_obj = Koha::Acquisition::Order->new($spent_orderinfo);
+    $spent_order_obj->populate_with_prices_for_receiving();
+    $spent_orderinfo = $spent_order_obj->unblessed();
     my $received_order = $builder->build({ source => 'Aqorder', value => $spent_orderinfo });
 
 #And receive a copy of the order so we have both spent and ordered values

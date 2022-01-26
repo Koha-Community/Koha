@@ -72,7 +72,7 @@ the ISBN of the record ordered.
 =item C<quantity>
 the quantity to order.
 
-=item C<list_price>
+=item C<listprice>
 the price of this order.
 
 =item C<uncertainprice>
@@ -121,7 +121,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use JSON qw ( to_json encode_json );
 use C4::Auth qw( get_template_and_user );
-use C4::Acquisition qw( FillWithDefaultValues populate_order_with_prices ModOrder ModOrderUsers );
+use C4::Acquisition qw( FillWithDefaultValues ModOrderUsers );
 use C4::Suggestions qw( ModSuggestion );
 use C4::Biblio qw(
     AddBiblio
@@ -228,9 +228,30 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # get CGI parameters
-my $orderinfo = $input->Vars;
-$orderinfo->{'list_price'}    ||=  0;
-$orderinfo->{'uncertainprice'} ||= 0;
+my $orderinfo = {
+    ordernumber => scalar $input->param('ordernumber'),
+    basketno => scalar $input->param('basketno'),
+    biblionumber => scalar $input->param('biblionumber'),
+    invoiceid => scalar $input->param('invoiceid'),
+    quantity => scalar $input->param('quantity'),
+    budget_id => scalar $input->param('budget_id'),
+    currency => scalar $input->param('currency'),
+    listprice => scalar $input->param('listprice'),
+    uncertainprice => scalar $input->param('uncertainprice'),
+    tax_rate_on_ordering => scalar $input->param('tax_rate'),
+    discount => scalar $input->param('discount'),
+    rrp => scalar $input->param('rrp'),
+    replacementprice => scalar $input->param('replacementprice'),
+    ecost => scalar $input->param('ecost'),
+    unitprice => scalar $input->param('unitprice'),
+    order_internalnote => scalar $input->param('order_internalnote'),
+    order_vendornote => scalar $input->param('order_vendornote'),
+    sort1 => scalar $input->param('sort1'),
+    sort2 => scalar $input->param('sort2'),
+    subscriptionid => scalar $input->param('subscriptionid'),
+};
+
+$orderinfo->{uncertainprice} ||= 0;
 $orderinfo->{subscriptionid} ||= undef;
 
 my $user     = $input->remote_user;
@@ -272,18 +293,18 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
             #if it doesn't create it
             $record = TransformKohaToMarc(
                 {
-                    "biblio.title"                => "$$orderinfo{title}",
-                    "biblio.author"               => $$orderinfo{author}          ? $$orderinfo{author}        : "",
-                    "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
-                    "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
-                    "biblioitems.ean"             => $$orderinfo{ean}             ? $$orderinfo{ean}           : "",
-                    "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
-                    "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
-                    "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
-                    "biblioitems.itemtype"        => $$orderinfo{itemtype} ? $$orderinfo{itemtype} : "",
-                    "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
-                });
-
+                    "biblio.title"                => $input->param('title') || '',
+                    "biblio.author"               => $input->param('author') || '',
+                    "biblio.seriestitle"          => $input->param('series') || '',
+                    "biblioitems.isbn"            => $input->param('isbn') || '',
+                    "biblioitems.ean"             => $input->param('ean') || '',
+                    "biblioitems.publishercode"   => $input->param('publishercode') || '',
+                    "biblioitems.publicationyear" => $input->param('publicationyear') || '',
+                    "biblio.copyrightdate"        => $input->param('publicationyear') || '',
+                    "biblioitems.itemtype"        => $input->param('itemtype') || '',
+                    "biblioitems.editionstatement"=> $input->param('editionstatement') || '',
+                }
+            );
         }
         C4::Acquisition::FillWithDefaultValues( $record );
 
@@ -294,10 +315,10 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     }
 
     # change suggestion status if applicable
-    if ( $orderinfo->{suggestionid} ) {
+    if ( my $suggestionid = $input->param('suggestionid') ) {
         ModSuggestion(
             {
-                suggestionid => $orderinfo->{suggestionid},
+                suggestionid => $suggestionid,
                 biblionumber => $orderinfo->{biblionumber},
                 STATUS       => 'ORDERED',
             }
@@ -306,47 +327,31 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
 
-    $orderinfo = C4::Acquisition::populate_order_with_prices(
-        {
-            order        => $orderinfo,
-            booksellerid => $orderinfo->{booksellerid},
-            ordering     => 1,
-        }
-    );
-
-    # if we already have $ordernumber, then it's an ordermodif
-    my $order = Koha::Acquisition::Order->new($orderinfo);
+    my $order;
+    my $log_action_name;
     if ( $orderinfo->{ordernumber} ) {
-        ModOrder($orderinfo);
-        # Log the order modification
-        if (C4::Context->preference("AcquisitionLog")) {
-            my $infos = {};
-            foreach my $field(@log_order_fields) {
-                $infos->{$field} = $orderinfo->{$field};
-            }
-            logaction(
-                'ACQUISITIONS',
-                'MODIFY_ORDER',
-                $orderinfo->{ordernumber},
-                encode_json($infos)
-            );
-        }
+        $order = Koha::Acquisition::Orders->find($orderinfo->{ordernumber});
+        $order->set($orderinfo);
+        $log_action_name = 'MODIFY_ORDER';
+    } else {
+        $order = Koha::Acquisition::Order->new($orderinfo);
+        $log_action_name = 'CREATE_ORDER';
     }
-    else { # else, it's a new line
-        $order->store;
-        # Log the order creation
-        if (C4::Context->preference("AcquisitionLog")) {
-            my $infos = {};
-            foreach my $field(@log_order_fields) {
-                $infos->{$field} = $orderinfo->{$field};
-            }
-            logaction(
-                'ACQUISITIONS',
-                'CREATE_ORDER',
-                $order->ordernumber,
-                encode_json($infos)
-            );
+    $order->populate_with_prices_for_ordering();
+    $order->store;
+
+    # Log the order creation
+    if (C4::Context->preference("AcquisitionLog")) {
+        my $infos = {};
+        foreach my $field(@log_order_fields) {
+            $infos->{$field} = $order->$field;
         }
+        logaction(
+            'ACQUISITIONS',
+            $log_action_name,
+            $order->ordernumber,
+            encode_json($infos)
+        );
     }
     my $order_users_ids = $input->param('users_ids');
     my @order_users = split( /:/, $order_users_ids );
@@ -417,7 +422,7 @@ if (C4::Context->preference("AcquisitionLog") && $basketno) {
 }
 
 my $booksellerid=$$orderinfo{booksellerid};
-if (my $import_batch_id=$$orderinfo{import_batch_id}) {
+if (my $import_batch_id = $input->param('import_batch_id')) {
     print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&basketno=$basketno&booksellerid=$booksellerid");
 } elsif ( defined $orderinfo->{invoiceid} ) {
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=" . $orderinfo->{invoiceid});

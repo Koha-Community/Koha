@@ -26,7 +26,7 @@ use C4::Auth qw( checkauth );
 use JSON qw( encode_json );
 use C4::Output;
 use C4::Context;
-use C4::Acquisition qw( GetInvoice GetOrder populate_order_with_prices ModReceiveOrder );
+use C4::Acquisition qw( GetInvoice GetOrder ModReceiveOrder );
 use C4::Biblio qw( GetFrameworkCode GetMarcFromKohaField TransformHtmlToXml );
 use C4::Items qw( GetMarcItem ModItemFromMarc AddItemFromMarc );
 use C4::Log qw(logaction);
@@ -98,29 +98,23 @@ if ($quantityrec > $origquantityrec ) {
         }
     }
 
-    $order->{order_internalnote} = $input->param("order_internalnote");
-    $order->{tax_rate_on_receiving} = $input->param("tax_rate");
-    $order->{replacementprice} = $replacementprice;
-    $order->{unitprice} = $unitprice;
+    $order_obj->order_internalnote(scalar $input->param("order_internalnote"));
+    $order_obj->tax_rate_on_receiving(scalar $input->param("tax_rate"));
+    $order_obj->replacementprice($replacementprice);
+    $order_obj->unitprice($unitprice);
 
-    $order = C4::Acquisition::populate_order_with_prices(
-        {
-            order => $order,
-            booksellerid => $booksellerid,
-            receiving => 1
-        }
-    );
+    $order_obj->populate_with_prices_for_receiving();
 
     # save the quantity received.
     if ( $quantityrec > 0 ) {
         if ( $order_obj->subscriptionid ) {
             # Quantity can only be modified if linked to a subscription
-            $order->{quantity} = $quantity; # quantityrec will be deduced from this value in ModReceiveOrder
+            $order_obj->quantity($quantity); # quantityrec will be deduced from this value in ModReceiveOrder
         }
         ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
             {
                 biblionumber     => $biblionumber,
-                order            => $order,
+                order            => $order_obj->unblessed,
                 quantityreceived => $quantityrec,
                 user             => $user,
                 invoice          => $invoice,

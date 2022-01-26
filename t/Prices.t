@@ -8,13 +8,12 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 16;
+        plan tests => 15;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
 }
 
-use_ok('C4::Acquisition', qw( populate_order_with_prices ));
 use_ok('C4::Context');
 use_ok('Koha::Number::Price');
 
@@ -38,11 +37,18 @@ fixtures_ok [
         [ 3, '1 0', 1, 0 ],
         [ 4, '1 1', 1, 1 ],
     ],
+    Aqbasket => [
+        [ qw/ basketno basketname booksellerid / ],
+        [ 1, '0 0', 1 ],
+        [ 2, '0 1', 2 ],
+        [ 3, '1 0', 3 ],
+        [ 4, '1 1', 4 ],
+    ],
 ], 'add currency fixtures';
 
 my $bookseller_module = Test::MockModule->new('Koha::Acquisition::Bookseller');
 
-my ( $basketno_0_0,  $basketno_1_1 );
+my ( $basketno_0_0, $basketno_0_1, $basketno_1_0, $basketno_1_1 ) = (1, 2, 3, 4);
 my ( $invoiceid_0_0, $invoiceid_1_1 );
 my $today;
 
@@ -53,7 +59,7 @@ for my $currency_format ( qw( US FR ) ) {
 
         my $biblionumber_0_0 = 42;
 
-        my $order_0_0 = {
+        my $order_0_0 = Koha::Acquisition::Order->new({
             biblionumber     => $biblionumber_0_0,
             quantity         => 2,
             listprice        => 82,
@@ -63,21 +69,16 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_0_0,
             rrp              => 82.00,
             ecost            => 73.80,
-            tax_rate         => 0.0500,
+            tax_rate_on_ordering  => 0.0500,
+            tax_rate_on_receiving => 0.0500,
             discount         => 10,
             datereceived     => $today
-        };
-        $order_0_0 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_0_0,
-                booksellerid => 1,
-                ordering     => 1,
-            }
-        );
+        });
+        $order_0_0->populate_with_prices_for_ordering();
 
         compare(
             {
-                got      => $order_0_0->{rrp_tax_included},
+                got      => $order_0_0->rrp_tax_included,
                 expected => 86.10,
                 conf     => '0 0',
                 field    => 'rrp_tax_included'
@@ -85,7 +86,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{rrp_tax_excluded},
+                got      => $order_0_0->rrp_tax_excluded,
                 expected => 82.00,
                 conf     => '0 0',
                 field    => 'rrp_tax_excluded'
@@ -93,7 +94,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{ecost_tax_included},
+                got      => $order_0_0->ecost_tax_included,
                 expected => 77.49,
                 conf     => '0 0',
                 field    => 'ecost_tax_included'
@@ -101,7 +102,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{ecost_tax_excluded},
+                got      => $order_0_0->ecost_tax_excluded,
                 expected => 73.80,
                 conf     => '0 0',
                 field    => 'ecost_tax_excluded'
@@ -109,24 +110,18 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{tax_value_on_ordering},
+                got      => $order_0_0->tax_value_on_ordering,
                 expected => 7.38,
                 conf     => '0 0',
                 field    => 'tax_value'
             }
         );
 
-        $order_0_0 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_0_0,
-                booksellerid => 1,
-                receiving    => 1,
-            }
-        );
+        $order_0_0->populate_with_prices_for_receiving();
 
         compare(
             {
-                got      => $order_0_0->{unitprice_tax_included},
+                got      => $order_0_0->unitprice_tax_included,
                 expected => 77.49,
                 conf     => '0 0',
                 field    => 'unitprice_tax_included'
@@ -134,7 +129,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{unitprice_tax_excluded},
+                got      => $order_0_0->unitprice_tax_excluded,
                 expected => 73.80,
                 conf     => '0 0',
                 field    => 'unitprice_tax_excluded'
@@ -142,7 +137,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_0->{tax_value_on_receiving},
+                got      => $order_0_0->tax_value_on_receiving,
                 expected => 7.38,
                 conf     => '0 0',
                 field    => 'tax_value'
@@ -154,7 +149,7 @@ for my $currency_format ( qw( US FR ) ) {
         plan tests => 11;
 
         my $biblionumber_1_1 = 43;
-        my $order_1_1        = {
+        my $order_1_1        = Koha::Acquisition::Order->new({
             biblionumber     => $biblionumber_1_1,
             quantity         => 2,
             listprice        => 82,
@@ -164,22 +159,17 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
-            tax_rate         => 0.0500,
+            tax_rate_on_ordering  => 0.0500,
+            tax_rate_on_receiving => 0.0500,
             discount         => 10,
             datereceived     => $today
-        };
+        });
 
-        $order_1_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_1,
-                booksellerid => 4,
-                ordering     => 1,
-            }
-        );
+        $order_1_1->populate_with_prices_for_ordering();
 
         compare(
             {
-                got      => $order_1_1->{rrp_tax_included},
+                got      => $order_1_1->rrp_tax_included,
                 expected => 82.00,
                 conf     => '1 1',
                 field    => 'rrp_tax_included'
@@ -187,7 +177,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{rrp_tax_excluded},
+                got      => $order_1_1->rrp_tax_excluded,
                 expected => 78.10,
                 conf     => '1 1',
                 field    => 'rrp_tax_excluded'
@@ -195,7 +185,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{ecost_tax_included},
+                got      => $order_1_1->ecost_tax_included,
                 expected => 73.80,
                 conf     => '1 1',
                 field    => 'ecost_tax_included'
@@ -203,7 +193,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{ecost_tax_excluded},
+                got      => $order_1_1->ecost_tax_excluded,
                 expected => 70.29,
                 conf     => '1 1',
                 field    => 'ecost_tax_excluded'
@@ -211,24 +201,18 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{tax_value_on_ordering},
+                got      => $order_1_1->tax_value_on_ordering,
                 expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
             }
         );
 
-        $order_1_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_1,
-                booksellerid => 4,
-                receiving    => 1,
-            }
-        );
+        $order_1_1->populate_with_prices_for_receiving();
 
         compare(
             {
-                got      => $order_1_1->{unitprice_tax_included},
+                got      => $order_1_1->unitprice_tax_included,
                 expected => 73.80,
                 conf     => '1 1',
                 field    => 'unitprice_tax_included'
@@ -236,7 +220,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{unitprice_tax_excluded},
+                got      => $order_1_1->unitprice_tax_excluded,
                 expected => 70.29,
                 conf     => '1 1',
                 field    => 'unitprice_tax_excluded'
@@ -244,15 +228,17 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{tax_value_on_receiving},
+                got      => $order_1_1->tax_value_on_receiving,
                 expected => 7.03,
                 conf     => '1 1',
                 field    => 'tax_value'
             }
         );
 
-        # When unitprice is 0.00 C4::Acquisition->populate_order_with_prices() falls back to using ecost_tax_included and ecost_tax_excluded
-        $order_1_1        = {
+        # When unitprice is 0.00
+        # Koha::Acquisition::Order::populate_with_prices_for_ordering() falls
+        # back to using ecost_tax_included and ecost_tax_excluded
+        $order_1_1        = Koha::Acquisition::Order->new({
             biblionumber     => $biblionumber_1_1,
             quantity         => 1,
             listprice        => 10,
@@ -262,22 +248,17 @@ for my $currency_format ( qw( US FR ) ) {
             invoiceid        => $invoiceid_1_1,
             rrp              => 10.00,
             ecost            => 10.00,
-            tax_rate         => 0.1500,
+            tax_rate_on_ordering  => 0.1500,
+            tax_rate_on_receiving => 0.1500,
             discount         => 0,
             datereceived     => $today
-        };
+        });
 
-        $order_1_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_1,
-                booksellerid => 4,
-                ordering     => 1,
-            }
-        );
+        $order_1_1->populate_with_prices_for_ordering();
 
         compare(
             {
-                got      => $order_1_1->{ecost_tax_included},
+                got      => $order_1_1->ecost_tax_included,
                 expected => 10.00,
                 conf     => '1 1',
                 field    => 'ecost_tax_included'
@@ -285,7 +266,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{ecost_tax_excluded},
+                got      => $order_1_1->ecost_tax_excluded,
                 expected => 8.70,
                 conf     => '1 1',
                 field    => 'ecost_tax_excluded'
@@ -293,7 +274,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_1->{tax_value_on_ordering},
+                got      => $order_1_1->tax_value_on_ordering,
                 expected => 1.30,
                 conf     => '1 1',
                 field    => 'tax_value'
@@ -305,32 +286,27 @@ for my $currency_format ( qw( US FR ) ) {
         plan tests => 9;
 
         my $biblionumber_1_0 = 44;
-        my $order_1_0        = {
+        my $order_1_0 = Koha::Acquisition::Order->new({
             biblionumber     => $biblionumber_1_0,
             quantity         => 2,
             listprice        => 82,
             unitprice        => 0,
             quantityreceived => 2,
-            basketno         => $basketno_1_1,
+            basketno         => $basketno_1_0,
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
-            tax_rate         => 0.0500,
+            tax_rate_on_ordering  => 0.0500,
+            tax_rate_on_receiving => 0.0500,
             discount         => 10,
             datereceived     => $today
-        };
+        });
 
-        $order_1_0 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_0,
-                booksellerid => 3,
-                ordering     => 1,
-            }
-        );
+        $order_1_0->populate_with_prices_for_ordering();
 
         compare(
             {
-                got      => $order_1_0->{rrp_tax_included},
+                got      => $order_1_0->rrp_tax_included,
                 expected => 82,
                 conf     => '1 0',
                 field    => 'rrp_tax_included'
@@ -338,7 +314,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{rrp_tax_excluded},
+                got      => $order_1_0->rrp_tax_excluded,
                 expected => 78.10,
                 conf     => '1 0',
                 field    => 'rrp_tax_excluded'
@@ -346,7 +322,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{ecost_tax_included},
+                got      => $order_1_0->ecost_tax_included,
                 expected => 73.80,
                 conf     => '1 0',
                 field    => 'ecost_tax_included'
@@ -354,7 +330,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{ecost_tax_excluded},
+                got      => $order_1_0->ecost_tax_excluded,
                 expected => 70.29,
                 conf     => '1 0',
                 field    => 'ecost_tax_excluded'
@@ -364,41 +340,30 @@ for my $currency_format ( qw( US FR ) ) {
         # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
         compare(
             {
-                got      => $order_1_0->{tax_value_on_ordering},
+                got      => $order_1_0->tax_value_on_ordering,
                 expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
             }
         );
-        $order_1_0->{unitprice} = 70.29;
-        $order_1_0 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_0,
-                booksellerid => 3,
-                ordering    => 1,
-            }
-        );
+        $order_1_0->unitprice(70.29);
+        $order_1_0->populate_with_prices_for_ordering();
+
         # If a unitprice is provided at ordering, we calculate the tax from that
         compare(
             {
-                got      => $order_1_0->{tax_value_on_ordering},
+                got      => $order_1_0->tax_value_on_ordering,
                 expected => 6.69,
                 conf     => '1 0',
                 field    => 'tax_value'
             }
         );
 
-        $order_1_0 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_1_0,
-                booksellerid => 3,
-                receiving    => 1,
-            }
-        );
+        $order_1_0->populate_with_prices_for_receiving();
 
         compare(
             {
-                got      => $order_1_0->{unitprice_tax_included},
+                got      => $order_1_0->unitprice_tax_included,
                 expected => 73.80,
                 conf     => '1 0',
                 field    => 'unitprice_tax_included'
@@ -406,7 +371,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{unitprice_tax_excluded},
+                got      => $order_1_0->unitprice_tax_excluded,
                 expected => 70.29,
                 conf     => '1 0',
                 field    => 'unitprice_tax_excluded'
@@ -414,7 +379,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_1_0->{tax_value_on_receiving},
+                got      => $order_1_0->tax_value_on_receiving,
                 expected => 7.03,
                 conf     => '1 0',
                 field    => 'tax_value'
@@ -426,32 +391,27 @@ for my $currency_format ( qw( US FR ) ) {
         plan tests => 9;
 
         my $biblionumber_0_1 = 45;
-        my $order_0_1        = {
+        my $order_0_1 = Koha::Acquisition::Order->new({
             biblionumber     => $biblionumber_0_1,
             quantity         => 2,
             listprice        => 82,
             unitprice        => 0,
             quantityreceived => 2,
-            basketno         => $basketno_1_1,
+            basketno         => $basketno_0_1,
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
-            tax_rate         => 0.0500,
+            tax_rate_on_ordering  => 0.0500,
+            tax_rate_on_receiving => 0.0500,
             discount         => 10,
             datereceived     => $today
-        };
+        });
 
-        $order_0_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_0_1,
-                booksellerid => 2,
-                ordering     => 1,
-            }
-        );
+        $order_0_1->populate_with_prices_for_ordering();
 
         compare(
             {
-                got      => $order_0_1->{rrp_tax_included},
+                got      => $order_0_1->rrp_tax_included,
                 expected => 86.10,
                 conf     => '0 1',
                 field    => 'rrp_tax_included'
@@ -459,7 +419,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{rrp_tax_excluded},
+                got      => $order_0_1->rrp_tax_excluded,
                 expected => 82.00,
                 conf     => '0 1',
                 field    => 'rrp_tax_excluded'
@@ -467,7 +427,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{ecost_tax_included},
+                got      => $order_0_1->ecost_tax_included,
                 expected => 77.49,
                 conf     => '0 1',
                 field    => 'ecost_tax_included'
@@ -475,7 +435,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{ecost_tax_excluded},
+                got      => $order_0_1->ecost_tax_excluded,
                 expected => 73.80,
                 conf     => '0 1',
                 field    => 'ecost_tax_excluded'
@@ -485,40 +445,29 @@ for my $currency_format ( qw( US FR ) ) {
         # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
         compare(
             {
-                got      => $order_0_1->{tax_value_on_ordering},
+                got      => $order_0_1->tax_value_on_ordering,
                 expected => 7.38,
                 conf     => '0 1',
                 field    => 'tax_value'
             }
         );
-        $order_0_1->{unitprice} = 77.490000;
-        $order_0_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_0_1,
-                booksellerid => 2,
-                ordering     => 1,
-            }
-        );
+        $order_0_1->unitprice(77.490000);
+        $order_0_1->populate_with_prices_for_ordering();
+
         # If a unitprice is provided at ordering, we calculate the tax from that
         compare(
             {
-                got      => $order_0_1->{tax_value_on_ordering},
+                got      => $order_0_1->tax_value_on_ordering,
                 expected => 7.75,
                 conf     => '0 1',
                 field    => 'tax_value'
             }
         );
-        $order_0_1 = C4::Acquisition::populate_order_with_prices(
-            {
-                order        => $order_0_1,
-                booksellerid => 2,
-                receiving    => 1,
-            }
-        );
+        $order_0_1->populate_with_prices_for_receiving();
 
         compare(
             {
-                got      => $order_0_1->{unitprice_tax_included},
+                got      => $order_0_1->unitprice_tax_included,
                 expected => 77.49,
                 conf     => '0 1',
                 field    => 'unitprice_tax_included'
@@ -526,7 +475,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{unitprice_tax_excluded},
+                got      => $order_0_1->unitprice_tax_excluded,
                 expected => 73.80,
                 conf     => '0 1',
                 field    => 'unitprice_tax_excluded'
@@ -534,14 +483,13 @@ for my $currency_format ( qw( US FR ) ) {
         );
         compare(
             {
-                got      => $order_0_1->{tax_value_on_receiving},
+                got      => $order_0_1->tax_value_on_receiving,
                 expected => 7.38,
                 conf     => '0 1',
                 field    => 'tax_value'
             }
         );
     };
-
 }
 
 sub compare {

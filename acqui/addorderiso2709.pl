@@ -33,7 +33,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch qw( GetImportRecordsRange GetImportRecordMarc GetImportRecordMatches SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
 use C4::Matcher;
 use C4::Search qw( FindDuplicate );
-use C4::Acquisition qw( populate_order_with_prices );
 use C4::Biblio qw(
     AddBiblio
     GetMarcFromKohaField
@@ -43,7 +42,6 @@ use C4::Biblio qw(
 );
 use C4::Items qw( PrepareItemrecordDisplay AddItemFromMarc );
 use C4::Budgets qw( GetBudget GetBudgets GetBudgetHierarchy CanUserUseBudget GetBudgetByCode );
-use C4::Acquisition qw( populate_order_with_prices );
 use C4::Suggestions;    # GetSuggestion
 use C4::Members;
 
@@ -273,7 +271,8 @@ if ($op eq ""){
                         # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
                         $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                         $price = Koha::Number::Price->new($price)->unformat;
-                        $orderinfo{tax_rate} = $bookseller->tax_rate;
+                        $orderinfo{tax_rate_on_ordering} = $bookseller->tax_rate;
+                        $orderinfo{tax_rate_on_receiving} = $bookseller->tax_rate;
                         my $c = $c_discount ? $c_discount : $bookseller->discount;
                         $orderinfo{discount} = $c;
                         if ( $c ) {
@@ -282,7 +281,6 @@ if ($op eq ""){
                         }
                         $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                         $orderinfo{unitprice} = $orderinfo{ecost};
-                        $orderinfo{total} = $orderinfo{ecost} * $infos->{quantity};
                     } else {
                         $orderinfo{listprice} = 0;
                     }
@@ -291,18 +289,9 @@ if ($op eq ""){
                     # remove uncertainprice flag if we have found a price in the MARC record
                     $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
 
-                    %orderinfo = %{
-                        C4::Acquisition::populate_order_with_prices(
-                            {
-                                order        => \%orderinfo,
-                                booksellerid => $booksellerid,
-                                ordering     => 1,
-                                receiving    => 1,
-                            }
-                        )
-                    };
-
                     my $order = Koha::Acquisition::Order->new( \%orderinfo )->store;
+                    $order->populate_with_prices_for_ordering();
+                    $order->populate_with_prices_for_receiving();
                     $order->add_item( $_ ) for @{ $budget_hash->{$budget_id}->{itemnumbers} };
                 }
             }
@@ -331,7 +320,8 @@ if ($op eq ""){
                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
                 $c_price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                 $c_price = Koha::Number::Price->new($c_price)->unformat;
-                $orderinfo{tax_rate} = $bookseller->tax_rate;
+                $orderinfo{tax_rate_on_ordering} = $bookseller->tax_rate;
+                $orderinfo{tax_rate_on_receiving} = $bookseller->tax_rate;
                 my $c = $c_discount ? $c_discount : $bookseller->discount;
                 $orderinfo{discount} = $c;
                 if ( $c ) {
@@ -340,7 +330,6 @@ if ($op eq ""){
                 }
                 $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                 $orderinfo{unitprice} = $orderinfo{ecost};
-                $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
             } else {
                 $orderinfo{listprice} = 0;
             }
@@ -348,18 +337,10 @@ if ($op eq ""){
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
 
-        %orderinfo = %{
-            C4::Acquisition::populate_order_with_prices(
-                {
-                    order        => \%orderinfo,
-                    booksellerid => $booksellerid,
-                    ordering     => 1,
-                    receiving    => 1,
-                }
-            )
-        };
-
-        my $order = Koha::Acquisition::Order->new( \%orderinfo )->store;
+        my $order = Koha::Acquisition::Order->new( \%orderinfo );
+        $order->populate_with_prices_for_ordering();
+        $order->populate_with_prices_for_receiving();
+        $order->store;
 
         # 4th, add items if applicable
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
