@@ -239,3 +239,68 @@ function keep_text(clicked_index) {
         searchboxes[i].value = persist;
     }
 }
+
+// Extends jQuery API
+jQuery.extend({uniqueArray:function(array){
+    return $.grep(array, function(el, index) {
+        return index === $.inArray(el, array);
+    });
+}});
+
+function removeByValue(arr, val) {
+    for(var i=0; i<arr.length; i++) {
+        if(arr[i] == val) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+}
+
+function addBibToContext( bibnum ) {
+    bibnum = parseInt(bibnum, 10);
+    var bibnums = getContextBiblioNumbers();
+    bibnums.push(bibnum);
+    setContextBiblioNumbers( bibnums );
+    setContextBiblioNumbers( $.uniqueArray( bibnums ) );
+}
+
+function delBibToContext( bibnum ) {
+    var bibnums = getContextBiblioNumbers();
+    removeByValue( bibnums, bibnum );
+    setContextBiblioNumbers( $.uniqueArray( bibnums ) );
+}
+
+function setContextBiblioNumbers( bibnums ) {
+    $.cookie('bibs_selected', JSON.stringify( bibnums ), { path: '/' });
+}
+
+function getContextBiblioNumbers() {
+    var r = $.cookie('bibs_selected');
+    if ( r ) {
+        return JSON.parse(r);
+    }
+    r = new Array();
+    return r;
+}
+
+function resetSearchContext() {
+    setContextBiblioNumbers( new Array() );
+}
+
+function saveOrClearSimpleSearchParams() {
+    // Simple masthead search - pass value for display on details page
+    var pulldown_selection;
+    var searchbox_value;
+    if( $("#cat-search-block select.advsearch").length ){
+        pulldown_selection = $("#cat-search-block select.advsearch").val();
+    } else {
+        pulldown_selection ="";
+    }
+    if( $("#cat-search-block #search-form").length ){
+        searchbox_value = $("#cat-search-block #search-form").val();
+    } else {
+        searchbox_value ="";
+    }
+    localStorage.setItem('cat_search_pulldown_selection', pulldown_selection );
+    localStorage.setItem('searchbox_value', searchbox_value );
+}
