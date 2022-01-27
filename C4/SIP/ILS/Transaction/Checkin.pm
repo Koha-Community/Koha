@@ -170,7 +170,7 @@ sub do_checkin {
 
     # Set sort bin based on info in the item associated with the issue, and the
     # mapping from SIP2SortBinMapping
-    $self->sort_bin( _get_sort_bin( $self->{item} ) );
+    $self->sort_bin( _get_sort_bin( $item, $branch ) );
 
     $self->ok($return);
 
@@ -197,19 +197,20 @@ sub patron_id {
 
 =head1 _get_sort_bin
 
-Takes an item represented as a hashref as argument.
+Takes a Koha::Item object and the return branch branchcode as arguments.
 
 Uses the contents of the SIP2SortBinMapping syspref to determine the sort_bin
 value that should be returned for an item checked in via SIP2.
 
 The mapping should be:
 
- <branchcode>:<item field>:<item field value>:<sort bin number>
+ <branchcode>:<item field>:<comparitor>:<item field value>:<sort bin number>
 
 For example:
 
- CPL:itype:BOOK:1
- CPL:location:OFFICE:2
+ CPL:itype:eq:BOOK:1
+ CPL:location:eq:OFFICE:2
+ CPL:classmark:<:339.6:3
 
 This will give:
 
@@ -218,6 +219,8 @@ This will give:
 =item * sort_bin = "1" for items at the CPL branch with an itemtype of BOOK
 
 =item * sort_bin = "2" for items at the CPL branch with a location of OFFICE
+
+=item * sort_bin = "3" for items at the CPL branch with a classmark less than 339.6
 
 =back
 
@@ -228,7 +231,7 @@ Returns the ID of the appropriate sort_bin, if there is one, or undef.
 sub _get_sort_bin {
 
     # We should get an item represented as a hashref here
-    my ( $item ) = @_;
+    my ( $item, $branch ) = @_;
     return undef unless $item;
 
     # Get the mapping and split on newlines
@@ -237,18 +240,42 @@ sub _get_sort_bin {
     my @lines = split /\r\n/, $raw_map;
 
     # Iterate over the mapping. The first hit wins.
-    foreach my $line ( @lines ) {
+    my $rule = 0;
+    foreach my $line (@lines) {
+        warn "Rule: " . $rule++ . " - " . $line . "\n";
+
         # Split the line into fields
-        my ( $branchcode, $item_property, $value, $sort_bin ) = split /:/, $line;
+        my ( $branchcode, $item_property, $comparitor, $value, $sort_bin ) =
+          split /:/, $line;
+        if ( $value =~ s/^\$// ) {
+            $value = $item->$value;
+        }
         # Check the fields against values in the item
-        if ( ( $item->{homebranch} eq $branchcode ) && ( $item->{$item_property} eq $value ) ) {
-            return $sort_bin;
+        if ( $branch eq $branchcode ) {
+            my $property = $item->$item_property;
+            if ( ( $comparitor eq 'eq' || $comparitor eq '=' ) && ( $property eq $value ) ) {
+                return $sort_bin;
+            }
+            if ( ( $comparitor eq 'ne' || $comparitor eq '!=' ) && ( $property ne $value ) ) {
+                return $sort_bin;
+            }
+            if ( ( $comparitor eq '<' ) && ( $property < $value ) ) {
+                return $sort_bin;
+            }
+            if ( ( $comparitor eq '>' ) && ( $property > $value ) ) {
+                return $sort_bin;
+            }
+            if ( ( $comparitor eq '<=' ) && ( $property <= $value ) ) {
+                return $sort_bin;
+            }
+            if ( ( $comparitor eq '>=' ) && ( $property >= $value ) ) {
+                return $sort_bin;
+            }
         }
     }
 
     # Return undef if no hits were found
     return undef;
-
 }
 
 1;
