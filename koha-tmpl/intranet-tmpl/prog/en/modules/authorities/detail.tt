@@ -151,7 +151,12 @@
                         }
                     },
                     "plugins" : [ "types" ]
-                }).on('ready.jstree', function(){ $(this).jstree('open_all')
+                }).on('ready.jstree', function(){
+                    $(this).jstree('open_all');
+                    $("#hier"+[% authid %]+"_anchor").on("click",
+                        function(e){e.preventDefault(); return false;}
+                    ).css("text-decoration", "none").css("color", "#333");
+                    $(".currentauth").css("text-decoration", "none").css("color", "#333");
                 }).bind("select_node.jstree", function (e, data) {
                     e.preventDefault();
                     document.location.href = data.node.a_attr.href;
