@@ -9,7 +9,33 @@
 [% USE Koha %]
 
 <style>
-tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent !important; } #dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
+tr.selected {
+    background-color : #FFFFCC;
+}
+
+tr.selected td {
+    background-color : transparent !important;
+}
+
+#dataPreview {
+    width : 90%;
+    top: 5%;
+}
+
+#dataPreview pre {
+    overflow: unset;
+}
+
+.modal-body {
+    max-height: 380px;
+}
+
+@media (max-width: 767px) {
+    #dataPreview {
+        margin: 0;
+        width : auto;
+    }
+}
 </style>
 </head>
 
