@@ -232,7 +232,7 @@ sub _get_sort_bin {
 
     # We should get an item represented as a hashref here
     my ( $item, $branch ) = @_;
-    return undef unless $item;
+    return unless $item;
 
     # Get the mapping and split on newlines
     my $raw_map = C4::Context->preference('SIP2SortBinMapping');
@@ -275,7 +275,7 @@ sub _get_sort_bin {
     }
 
     # Return undef if no hits were found
-    return undef;
+    return;
 }
 
 1;
