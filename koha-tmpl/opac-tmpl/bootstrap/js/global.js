@@ -160,7 +160,7 @@ enquire.register("screen and (max-width:608px)", {
     }
 });
 
-enquire.register("screen and (min-width:768px)", {
+enquire.register("screen and (min-width:992px)", {
     match : function() {
         facetMenu( "show" );
     },
@@ -194,7 +194,7 @@ $(document).ready(function(){
     $(".js-show").show();
     $(".js-hide").hide();
 
-    if( $(window).width() < 768 ){
+    if( $(window).width() < 991 ){
         facetMenu("hide");
     }
 
