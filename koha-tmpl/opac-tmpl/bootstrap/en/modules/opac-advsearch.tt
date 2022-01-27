@@ -521,9 +521,9 @@ $(document).ready(function() {
         ];
         Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/'});
         [% IF ( expanded_options ) %]
-            Cookies.set("search_path_code", JSON.stringify('exs'), { path: '/'});
+            Cookies.set("search_path_code", 'exs', { path: '/'});
         [% ELSE %]
-            Cookies.set("search_path_code", JSON.stringify('ads'), { path: '/'});
+            Cookies.set("search_path_code", 'ads', { path: '/'});
         [% END %]
     });
 
