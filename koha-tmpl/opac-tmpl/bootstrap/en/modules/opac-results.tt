@@ -102,18 +102,10 @@
                     </div>
                 [% END %]
 
-                [% IF ( total ) %]
-                    [% IF ( opacfacets ) %]
-                        <div class="col-lg-10 order-first order-md-first order-lg-2 maincontent">
-                    [% ELSE %]
-                        <div class="col order-first order-md-first order-lg-2 maincontent">
-                   [% END %]
+                [% IF ( opacfacets ) %]
+                    <div class="col-lg-10 maincontent">
                 [% ELSE %]
-                    [% IF ( opacfacets ) %]
-                        <div class="col-lg-10 order-first order-md-first order-lg-2">
-                    [% ELSE %]
-                        <div class="col order-first order-md-first order-lg-2">
-                    [% END %]
+                    <div class="col maincontent">
                 [% END %]
 
                 [% IF ( searchdesc ) %]

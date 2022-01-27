@@ -151,13 +151,79 @@ function confirmModal(message, title, yes_label, no_label, callback) {
     });
 })(jQuery);
 
-$("#scrolltocontent").click(function() {
-    var content = $(".maincontent");
-    if (content.length > 0) {
-        $('html,body').animate({
-                scrollTop: content.first().offset().top
-            },
-        'slow');
-        content.first().find(':focusable').eq(0).focus();
+enquire.register("screen and (max-width:608px)", {
+    match : function() {
+        if($("body.scrollto").length > 0){
+            window.scrollTo( 0, $(".maincontent").offset().top );
+        }
     }
+});
+
+enquire.register("screen and (min-width:992px)", {
+    match : function() {
+        facetMenu( "show" );
+    },
+    unmatch : function() {
+        facetMenu( "hide" );
+    }
+});
+
+function facetMenu( action ){
+    if( action == "show" ){
+        $(".menu-collapse-toggle").off("click", facetHandler );
+        $(".menu-collapse").show();
+    } else {
+        $(".menu-collapse-toggle").on("click", facetHandler ).removeClass("menu-open");
+        $(".menu-collapse").hide();
+    }
+}
+
+var facetHandler = function(e){
+    e.preventDefault();
+    $(this).toggleClass("menu-open");
+    $(".menu-collapse").toggle();
+};
+
+$(document).ready(function(){
+    $("html").removeClass("no-js").addClass("js");
+    $(".close").click(function(){
+        window.close();
+    });
+    $(".focus").focus();
+    $(".js-show").show();
+    $(".js-hide").hide();
+
+    if( $(window).width() < 991 ){
+        facetMenu("hide");
+    }
+
+    // clear the basket when user logs out
+    $("#logout").click(function(){
+        var nameCookie = "bib_list";
+        var valCookie = readCookie(nameCookie);
+        if (valCookie) { // basket has contents
+            updateBasket(0,null);
+            delCookie(nameCookie);
+            return true;
+        } else {
+            return true;
+        }
+    });
+
+    $(".loginModal-trigger").on("click",function(e){
+        e.preventDefault();
+        $("#loginModal").modal("show");
+    });
+    $("#loginModal").on("shown.bs.modal", function(){
+        $("#muserid").focus();
+    });
+
+    $("#scrolltocontent").click(function() {
+	var content = $(".maincontent");
+	if (content.length > 0) {
+        $('html,body').animate({ scrollTop: content.first().offset().top },
+			       'slow');
+            content.first().find(':focusable').eq(0).focus();
+	}
+    });
 });
