@@ -229,7 +229,7 @@ subtest 'get_template_and_user' => sub {   # Tests for the language URL paramete
             -HttpOnly => 1
         );
 
-        return ( $userid, $session_cookie, $sessionID, $flags );
+        return ( $userid, [ $session_cookie ], $sessionID, $flags );
     }
 
     # Mock checkauth, build the scenario

@@ -154,6 +154,7 @@ sub get_template_and_user {
 
     my $in = shift;
     my ( $user, $cookie, $sessionID, $flags );
+    $cookie = [];
 
     # Get shibboleth login attribute
     my $shib = C4::Context->config('useshibboleth') && shib_ok();
@@ -243,7 +244,7 @@ sub get_template_and_user {
         if ($kick_out) {
             $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac',
                 $in->{query} );
-            $cookie = $in->{query}->cookie(
+            push @$cookie, $in->{query}->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
                 -expires  => '',
@@ -652,11 +653,7 @@ sub get_template_and_user {
         # what to do
         my $language = C4::Languages::getlanguage( $in->{'query'} );
         my $languagecookie = C4::Templates::getlanguagecookie( $in->{'query'}, $language );
-        if ( ref $cookie eq 'ARRAY' ) {
-            push @{$cookie}, $languagecookie;
-        } else {
-            $cookie = [ $cookie, $languagecookie ];
-        }
+        push @{$cookie}, $languagecookie;
     }
 
     return ( $template, $borrowernumber, $cookie, $flags );
@@ -806,6 +803,15 @@ sub _timeout_syspref {
     return $timeout;
 }
 
+sub clear_all_cookies {
+    my ( $query ) = shift;
+    my @cookies;
+    for my $cookie_name ( $query->cookie ) {
+        push @cookies, $query->cookie( -name => $cookie_name, -value => '', -expires => '', -HttpOnly => 1 );
+    }
+    return \@cookies;
+}
+
 sub checkauth {
     my $query = shift;
 
@@ -842,6 +848,7 @@ sub checkauth {
     my $loggedin = 0;
     my %info;
     my ( $userid, $cookie, $sessionID, $flags );
+    $cookie = [];
     my $logout = $query->param('logout.x');
 
     my $anon_search_history;
@@ -865,7 +872,7 @@ sub checkauth {
     if ( !$shib and defined( $ENV{'REMOTE_USER'} ) and $ENV{'REMOTE_USER'} ne '' and $userid = $ENV{'REMOTE_USER'} ) {
 
         # Using Basic Authentication, no cookies required
-        $cookie = $query->cookie(
+        push @$cookie, $query->cookie(
             -name     => 'CGISESSID',
             -value    => '',
             -expires  => '',
@@ -910,6 +917,7 @@ sub checkauth {
                 my $shibSuccess = C4::Context->userenv->{'shibboleth'};
                 $session->delete();
                 $session->flush;
+                $cookie = clear_all_cookies($query);
                 C4::Context::_unset_userenv($sessionID);
                 $sessionID = undef;
 
@@ -923,7 +931,7 @@ sub checkauth {
                 }
             } else {
 
-                $cookie = $query->cookie(
+                push @$cookie, $query->cookie(
                     -name     => 'CGISESSID',
                     -value    => $session->id,
                     -HttpOnly => 1,
@@ -965,7 +973,7 @@ sub checkauth {
 
         $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
-        $cookie = $query->cookie(
+        push @$cookie, $query->cookie(
             -name     => 'CGISESSID',
             -value    => $sessionID,
             -HttpOnly => 1,
@@ -1165,7 +1173,7 @@ sub checkauth {
                         $domain =~ s|\.\*||g;
                         if ( $ip !~ /^$domain/ ) {
                             $loggedin = 0;
-                            $cookie = $query->cookie(
+                            push @$cookie, $query->cookie(
                                 -name     => 'CGISESSID',
                                 -value    => '',
                                 -HttpOnly => 1,
@@ -1253,8 +1261,8 @@ sub checkauth {
     if ( $loggedin || $authnotrequired )
     {
         # successful login
-        unless ($cookie) {
-            $cookie = $query->cookie(
+        unless (@$cookie) {
+            push @$cookie, $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
                 -HttpOnly => 1,
