@@ -205,10 +205,10 @@ if ($cgi->param("returntosearch")) {
 }
 if ($cgi->cookie("search_path_code")) {
     my $pathcode = $cgi->cookie("search_path_code");
-    if ($pathcode eq '"ads"') {
+    if ($pathcode eq 'ads') {
         $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?returntosearch=1');
     }
-    elsif ($pathcode eq '"exs"') {
+    elsif ($pathcode eq 'exs') {
          $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?expanded_options=1&returntosearch=1');
     }
     else {
