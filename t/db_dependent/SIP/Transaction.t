@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -522,6 +522,58 @@ subtest checkin_withdrawn => sub {
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '0');
     $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
     is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
+};
+
+subtest _get_sort_bin => sub {
+    plan tests => 4;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch   = $library->branchcode;
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2  = $library2->branchcode;
+
+    my $rules = <<"RULES";
+$branch:homebranch:ne:\$holdingbranch:X\r
+$branch:effective_itemtype:eq:CD:0\r
+$branch:itemcallnumber:<:340:1\r
+$branch:itemcallnumber:<:370:2\r
+$branch:itemcallnumber:<:600:3\r
+$branch2:homebranch:ne:\$holdingbranch:X\r
+$branch2:effective_itemtype:eq:CD:4\r
+$branch2:itemcallnumber:>:600:5\r
+RULES
+    t::lib::Mocks::mock_preference('SIP2SortBinMapping', $rules);
+
+    my $item_cd = $builder->build_sample_item(
+        {
+            library     => $library->branchcode,
+            itype       => 'CD'
+        }
+    );
+
+    my $item_book = $builder->build_sample_item(
+        {
+            library        => $library->branchcode,
+            itype          => 'BOOK',
+            itemcallnumber => '200.01'
+        }
+    );
+
+    my $bin;
+
+    # Set holdingbranch as though item returned to library other than homebranch (As AddReturn would)
+    $item_cd->holdingbranch($library2->branchcode)->store();
+    $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library2->branchcode );
+    is($bin, 'X', "Item parameter on RHS of comparison works (ne comparitor)");
+
+    # Reset holdingbranch as though item returned to home library
+    $item_cd->holdingbranch($library->branchcode)->store();
+    $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library->branchcode );
+    is($bin, '0', "Fixed value on RHS of comparison works (eq comparitor)");
+    $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
+    is($bin, '1', "Rules applied in order (< comparitor)");
+    $item_book->itemcallnumber('350.20')->store();
+    is($bin, '2', "Rules applied in order (< comparitor)");
 };
 
 subtest item_circulation_status => sub {
