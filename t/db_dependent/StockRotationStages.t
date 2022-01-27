@@ -310,7 +310,7 @@ subtest 'Tests for investigate (singular)' => sub {
                 }
             );
             my $dbitem = Koha::StockRotationItems->find($item);
-            $dbitem->itemnumber->homebranch($code)
+            $dbitem->item->homebranch($code)
                 ->holdingbranch($code)->store;
             $cnt++;
         }
@@ -352,7 +352,7 @@ subtest 'Tests for investigate (singular)' => sub {
                 }
             );
             my $dbitem = Koha::StockRotationItems->find($item);
-            $dbitem->itemnumber->homebranch($code)
+            $dbitem->item->homebranch($code)
                 ->holdingbranch($code)->store;
             $cnt++;
         }
