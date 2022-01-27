@@ -320,7 +320,7 @@ function delBibToContext( bibnum ) {
 }
 
 function setContextBiblioNumbers( bibnums ) {
-    $.cookie('bibs_selected', JSON.stringify( bibnums ));
+    $.cookie('bibs_selected', JSON.stringify( bibnums ), { path: '/' });
 }
 
 function getContextBiblioNumbers() {
