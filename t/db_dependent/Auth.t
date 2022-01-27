@@ -602,6 +602,11 @@ subtest 'checkauth & check_cookie_auth' => sub {
         ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, { borrowers => 1 } );
         is( $auth_status, 'expired', 'Session no longer exists' );
 
+        # NOTE: It is not what the UI is doing.
+        # From the UI we are allowed to hit an unauthorized page then reuse the session to hit back authorized area.
+        # It is because check_cookie_auth is ALWAYS called from checkauth WITHOUT $flagsrequired
+        # It then return "ok", when the previous called got "failed"
+
         # Try reusing the deleted session: since it does not exist, we should get a new one now when passing correct permissions
         $cgi->cookie( -name => 'CGISESSID', value => $first_sessionID );
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
