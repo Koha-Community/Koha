@@ -1491,11 +1491,8 @@
             $("#cancelModalConfirmBtn").on("click",function(e) {
                 let link;
                 if(cancel_link.data('bulk')) {
-                    [% IF biblionumbers %]
-                        link = `request.pl?biblionumbers=[% biblionumbers | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
-                    [% ELSE %]
-                        link = `request.pl?biblionumber=[% biblionumber | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
-                    [% END %]
+                    [% SET data_url = 'biblionumber=' _ biblionumbers.join('&biblionumber=') %]
+                    link = `request.pl?[% data_url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
                 } else {
                     let borrowernumber = cancel_link.data('borrowernumber');
                     let biblionumber = cancel_link.data('biblionumber');
