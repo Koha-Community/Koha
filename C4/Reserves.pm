@@ -1034,7 +1034,7 @@ sub ModReserve {
     my $cancellation_reason = $params->{'cancellation_reason'};
     my $date = $params->{expirationdate};
 
-    return if $rank eq "n";
+    return if defined $rank && $rank eq "n";
 
     return unless ( $reserve_id || ( $borrowernumber && ( $biblionumber || $itemnumber ) ) );
 
@@ -1047,6 +1047,9 @@ sub ModReserve {
     }
 
     $hold ||= Koha::Holds->find($reserve_id);
+
+    # FIXME Other calls may fail
+    Koha::Exceptions::ObjectNotFound->throw( 'No hold with id ' . $reserve_id ) unless $hold;
 
     if ( $rank eq "del" ) {
         $hold->cancel({ cancellation_reason => $cancellation_reason });

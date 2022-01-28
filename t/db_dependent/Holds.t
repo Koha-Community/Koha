@@ -7,7 +7,9 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 72;
+use Test::More tests => 73;
+use Test::Exception;
+
 use MARC::Record;
 
 use C4::Biblio;
@@ -220,6 +222,13 @@ is( $hold->priority, '1', "Test AlterPriority(), move up" );
 AlterPriority( 'bottom', $hold->reserve_id, undef, 2, 1, 6 );
 $hold = Koha::Holds->find( $reserveid );
 is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
+
+
+$hold->delete;
+throws_ok
+    { C4::Reserves::ModReserve({ reserve_id => $hold->reserve_id }) }
+    'Koha::Exceptions::ObjectNotFound',
+    'No hold with id ' . $hold->reserve_id;
 
 # Regression test for bug 2394
 #
