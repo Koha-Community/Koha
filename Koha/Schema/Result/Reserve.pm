@@ -160,7 +160,15 @@ the date the item was marked as waiting for the patron at the library
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
+the date the hold expires (calculated value)
+
+=head2 patron_expiration_date
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+the date the hold expires - usually the date entered by the patron to say they don't need the hold after a certain date
 
 =head2 lowestPriority
 
@@ -257,6 +265,8 @@ __PACKAGE__->add_columns(
   "waitingdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "expirationdate",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "patron_expiration_date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "lowestPriority",
   {
@@ -421,8 +431,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BlMb2M0MEmFuTiMSSBEseg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:08:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Q8/GFCOkXdn+jg69HZ0GQ
 
 __PACKAGE__->belongs_to(
   "item",
