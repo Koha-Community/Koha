@@ -25,6 +25,8 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw( uniq );
+use Try::Tiny;
+
 use C4::Output;
 use C4::Reserves qw( ModReserve ModReserveCancelAll );
 use C4::Auth qw( get_template_and_user );
@@ -83,7 +85,15 @@ else {
             $params->{reservedate} = $reservedates[$i] ? dt_from_string($reservedates[$i]) : undef;
         }
 
-        ModReserve($params);
+        try {
+            ModReserve($params);
+        } catch {
+            if ($_->isa('Koha::Exceptions::ObjectNotFound')){
+                warn $_;
+            } else {
+                $_->rethrow;
+            }
+        }
     }
 }
 
