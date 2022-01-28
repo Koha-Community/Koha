@@ -126,6 +126,14 @@ __PACKAGE__->table("article_requests");
 
 optional authorised value AR_CANCELLATION
 
+=head2 debit_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+Debit line with cost for article scan request
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -200,6 +208,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "cancellation_reason",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "debit_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "created_on",
   {
     data_type => "timestamp",
@@ -281,6 +291,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 debit
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Accountline>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "debit",
+  "Koha::Schema::Result::Accountline",
+  { accountlines_id => "debit_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -302,8 +332,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-10-15 09:05:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U4C1bwfCj048twrT3yRD6Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:21:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/mPsUO8VPK6DVIX7Rynk0A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

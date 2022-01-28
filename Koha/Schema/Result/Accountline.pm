@@ -240,6 +240,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 article_requests
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ArticleRequest>
+
+=cut
+
+__PACKAGE__->has_many(
+  "article_requests",
+  "Koha::Schema::Result::ArticleRequest",
+  { "foreign.debit_id" => "self.accountlines_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowernumber
 
 Type: belongs_to
@@ -381,8 +396,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MBdnk+5gD5TMX/ZOqEf3kA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:21:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PjQR7oUkefiDt+eV69jZ3A
 
 =head2 library
 
