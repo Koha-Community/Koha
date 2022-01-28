@@ -40,7 +40,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type            => "opac",
         debug           => 1,
         authnotrequired => 1,
-        flagsrequired   => { self_check => "self_checkout_module" },
     }
 );
 
