@@ -72,11 +72,7 @@
             <tr>
                 <th class="NoSort">&nbsp;</th>
                 [% FOREACH item_header IN item_header_loop %]
-                    [% IF item_header.column_name %]
-                        <th data-colname="[% item_header.column_name | html %]">
-                    [% ELSE %]
-                        <th>
-                    [% END %]
+                    <th data-colname="[% item_header.attribute | html %]">
                         [% item_header.header_value | html %]
                     </th>
                 [% END %]
