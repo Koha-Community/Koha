@@ -17,10 +17,12 @@
                 <tr class="clickable" data-url="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber | html %]">
                     <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.surname | html %], [% borrower.firstname | html %]</a></td>
             [% ELSIF destination == "holds" %]
+                [% SET data_url = "/cgi-bin/koha/reserve/request.pl?borrowernumber=" _ borrower.borrowernumber %]
+                [% FOREACH biblionumber IN biblionumbers %]
+                    [% SET data_url = data_url _ "&amp;biblionumber=" _ biblionumber %]
+                [% END %]
                 [% IF multi_hold %]
-                    [% SET data_url = "/cgi-bin/koha/reserve/request.pl?borrowernumber=" _ borrower.borrowernumber _ "&amp;multi_hold=1&amp;biblionumbers=" _ biblionumbers %]
-                [% ELSE %]
-                    [% SET data_url = "/cgi-bin/koha/reserve/request.pl?borrowernumber=" _ borrower.borrowernumber _ "&amp;biblionumber=" _ biblionumber %]
+                    [% SET data_url = data_url _ "&amp;multi_hold=1" %]
                 [% END %]
                 <tr class="clickable" data-url="[% data_url | url %]">
                     <td><a href="[% data_url | url %]">[% borrower.surname | html %], [% borrower.firstname | html %]</a></td>
