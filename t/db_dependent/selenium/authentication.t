@@ -3,7 +3,7 @@
 # This file is part of Koha.
 #
 # Copyright (C) 2017  Catalyst IT
-# Copyright 2018 Koha Development team
+# Copyright 2021 Koha Development team
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ SKIP: {
     my $driver   = $s->driver;
 
     subtest 'Staff interface authentication' => sub {
-        plan tests => 5;
+        plan tests => 6;
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get($mainpage);
         like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
@@ -68,11 +68,74 @@ SKIP: {
         $s->auth( $patron->userid, $password );
         like( $driver->get_title, qr(Koha staff interface), 'Patron with flags superlibrarian should be able to login' );
 
+        subtest 'not authorized' => sub {
+            plan tests => 17;
+
+            # First, logout!
+            $driver->get($mainpage . q|?logout.x=1|);
+            $patron->flags(4)->store; # Patron has only catalogue permission
+            like( $driver->get_title, qr(Log in to Koha), 'Patron should hit the login form after logout' );
+            # Login!
+            $s->fill_form({ userid => $patron->userid, password => $password });
+            $s->driver->find_element('//input[@id="submit-button"]')->click;
+
+            my $cookie = $driver->get_cookie_named('CGISESSID');
+            my $first_sessionID = $cookie->{value};
+
+            # Patron is logged in and got a CGISESSID cookie, miam
+            like( $driver->get_title, qr(Koha staff interface), 'Patron is logged in' );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session after login, the session has been upgraded' );
+
+            # Authorized page can be accessed, cookie does not change
+            $driver->get( $s->base_url . q|catalogue/search.pl| );
+            like( $driver->get_title, qr(Advanced search), 'Patron can access advanced search' );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session after hit' );
+
+            # Unauthorized page redirect to the login form
+            $driver->get( $s->base_url . q|circ/circulation.pl| );
+            like( $driver->get_title, qr(Access denied), 'Patron cannot access the circulation module' );
+            # But the patron does not lose the CGISESSID cookie!
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session if unauthorized page is hit' );
+
+            # Luckily mainpage can still be accessed
+            $s->click( { id => 'mainpage', main_class => 'main container-fluid' } );
+            like( $driver->get_title, qr(Koha staff interface), 'Patron can come back to the mainpage' );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session if back to the mainpage' );
+
+            # As well as the search
+            $driver->get( $s->base_url . q|catalogue/search.pl| );
+            like( $driver->get_title, qr(Advanced search), 'Patron can access advanced search' );
+            # But circulation module is prohibided!
+            $driver->get( $s->base_url . q|circ/circulation.pl| );
+            like( $driver->get_title, qr(Access denied), 'Patron cannot access the circulation module' );
+            # Still can reuse the same cookie
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session if unauthorized page is hit' );
+
+            # This is the "previous page" using the back() JS
+            $s->click( { id => 'previous_page', main_class => 'main container-fluid' } );
+            like( $driver->get_title, qr(Advanced search), 'Patron can come back to the previous page' );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session if back to the previous page' );
+
+            # Check with a script that is using check_cookie_auth, session must not be deleted!
+            $driver->get( $s->base_url . q|svc/checkouts| );
+            #FIXME - 500 is the current behaviour, but it's not nice. It could be improved.
+            like( $driver->get_title, qr(Error 500), 'Patron cannot access svc script where circulate permissions are required');
+            $driver->get( $s->base_url . q|catalogue/search.pl| );
+            like( $driver->get_title, qr(Advanced search), 'Patron can reuse the cookie after a script that used check_cookie_auth' );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, 'no new session if unauthorized page is hit' );
+        };
         push @data_to_cleanup, $patron, $patron->category, $patron->library;
     };
 
     subtest 'OPAC interface authentication' => sub {
-        plan tests => 6;
+        plan tests => 7;
 
         my $mainpage = $s->opac_base_url . q|opac-main.pl|;
 
@@ -148,6 +211,67 @@ SKIP: {
         $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->find_element('//div[@id="login"]'); # logged out
+
+        subtest 'not authorized' => sub {
+            plan tests => 13;
+
+            $driver->get($mainpage . q|?logout.x=1|);
+            $driver->get($mainpage);
+            my $cookie = $driver->get_cookie_named('CGISESSID');
+            my $first_sessionID = $cookie->{value};
+
+            # User is not logged in, navigation does not generate a new cookie
+            $driver->get( $s->opac_base_url . q|opac-search.pl| );
+            like( $driver->get_title, qr(Advanced search) );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+
+            # Login
+            $driver->get($mainpage);
+            $s->fill_form( { userid => $patron->userid, password => $password } );
+            $s->submit_form;
+
+            # After logged in, the same cookie is reused
+            like( $driver->get_title, qr(Your library home) );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+            $driver->get( $s->opac_base_url . q|opac-search.pl| );
+            like( $driver->get_title, qr(Advanced search) );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+
+            # Logged in user can place holds
+            $driver->get( $s->opac_base_url . q|opac-reserve.pl| ); # We may need to pass a biblionumber here in the future
+            like( $driver->get_title, qr(Placing a hold) );
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+
+            $driver->get($mainpage . q|?logout.x=1|);
+
+            # FIXME This new get should not be needed, but the cookie is not modified right after logout
+            # However it's not the behavour when testing the UI
+            $driver->get($mainpage);
+
+            # After logout a new cookie is generated, the previous session has been deleted
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            isnt( $cookie->{value}, $first_sessionID, );
+            $first_sessionID = $cookie->{value};
+
+            $driver->get( $s->opac_base_url . q|svc/checkout_notes| );
+            #FIXME - 500 is the current behaviour, but it's not nice. It could be improved.
+            like( $driver->get_title, qr(An error has occurred), 'Patron cannot access svc');
+            # No new cookie generated
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+
+            $driver->get( $s->opac_base_url . q|opac-reserve.pl| );
+            like( $driver->get_title, qr(Log in to your account) );
+
+            # Still no new cookie generated
+            $driver->get($mainpage);
+            $cookie = $driver->get_cookie_named('CGISESSID');
+            is( $cookie->{value}, $first_sessionID, );
+        };
 
         push @data_to_cleanup, $patron, $patron->category, $patron->library;
     };
