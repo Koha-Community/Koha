@@ -1,9 +1,11 @@
 [% USE raw %]
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Authority search results &rsaquo; Authorities &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/addbiblio.css") | $raw %]
 </head>
 
 <body id="auth_searchresultlist" class="auth">
@@ -77,6 +79,9 @@
           [% UNLESS ( resul.used ) %]
             <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash"></i> Delete</a></li>
           [% END %]
+          <li class="authorizedheading">
+            <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa fa-eye"></i> MARC preview</a>
+          </li>
         </ul>
       </div>
       </td>
@@ -85,6 +90,8 @@
     [% END %]
   </table>
 </div>
+
+[% INCLUDE 'authority-detail-modal.inc' %]
 
 <div class="pages">[% pagination_bar | $raw %]</div>
 
@@ -96,6 +103,27 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
+    <script>
+        $(document).ready(function(){
+            $(".authorizedheading a").on("click", function(e){
+                e.preventDefault();
+                var authid = $(this).data("authid");
+
+                $.get("/cgi-bin/koha/authorities/detail.pl", { authid : authid }, function( data ){
+                    var auth_detail = $(data).find("#authoritiestabs");
+                    auth_detail.find("ul").remove();
+                    $("#authorityDetail .modal-title").html(_("Authority") + " " + authid );
+                    $("#authorityDetail .modal-body").html( auth_detail );
+                });
+
+                $("#authorityDetail").modal("show");
+            });
+            $("#authorityDetail").on("hidden.bs.modal", function(){
+                $("#authorityDetail .modal-body, #authorityDetail .modal-title").html("");
+                $("#authorityDetail .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /></div>");
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
