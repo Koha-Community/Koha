@@ -219,5 +219,44 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     return table;
 }
 
+
+/* get_columns_saved_state checks for a DataTables configuration saved
+* in the browser's local storage. If it is present, the columns
+* configuration supplied by Koha is overwritten
+*
+* It takes two parameters:
+*  - localstorage_config, the DataTables saved state object from local storage
+*  - columns_settings, the columns settings object supplied by the template
+*
+* An example:
+*
+*    var columns_settings = [% ColumnsSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
+*    var saved_table = localStorage.getItem("DataTables_TABLE_ID_/cgi-bin/koha/PATH/TO/SCRIPT.pl");
+*    var updated_settings = get_columns_saved_state( saved_table, columns_settings );
+*
+*    KohaTable("TABLE_ID", {
+*        "stateSave": true
+*    }, updated_settings);
+*/
+
+function get_columns_saved_state( localstorage_config, columns_settings ){
+    var tables = JSON.parse( localstorage_config );
+    // if a table configuration was found in local storage, parse it
+    if( tables ){
+        var stateSave_column_visibility = [];
+        $(tables.columns).each(function(){
+            stateSave_column_visibility.push( this.visible === true ? 0 : 1 );
+        });
+        $.each( columns_settings, function( index, key ){
+            if( stateSave_column_visibility[ index ] !== columns_settings[key] ){
+                columns_settings[ index ].is_hidden = stateSave_column_visibility[ index ];
+            }
+        });
+        return columns_settings;
+    } else {
+        return columns_settings;
+    }
+}
+
 </script>
 <!-- / columns_settings.inc -->

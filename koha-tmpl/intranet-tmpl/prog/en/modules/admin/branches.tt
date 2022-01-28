@@ -492,6 +492,9 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     [% INCLUDE 'str/tinymce_i18n.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
+        var saved_table = localStorage.getItem("DataTables_libraries_/cgi-bin/koha/admin/branches.pl");
+        var updated_settings = get_columns_saved_state(saved_table, table_settings);
+
         $(document).ready(function() {
 
             var libraries_url = '/api/v1/libraries';
@@ -501,6 +504,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                 },
                 'embed': [ 'smtp_server' ],
                 'emptyTable': '<div class="dialog message">'+_("There are no libraries defined.")+' <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">'+_("Start defining libraries")+'</a>.</div>',
+                "stateSave": true,
                 "columnDefs": [ {
                     "targets": [0,1,3,4,7,9,10,11,12,13,14,15,16],
                     "render": function (data, type, row, meta) {
@@ -667,7 +671,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                         "orderable": false
                     }
                 ]
-            }, table_settings);
+            }, updated_settings);
 
             [% UNLESS library %]
                 $("#Aform").on("submit", function( event ) {
