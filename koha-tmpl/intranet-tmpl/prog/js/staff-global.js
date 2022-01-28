@@ -213,6 +213,7 @@ function logOut(){
     localStorage.removeItem("sql_reports_activetab");
     localStorage.removeItem("searches");
     localStorage.removeItem("bibs_selected");
+    localStorage.removeItem("patron_search_selections");
 }
 
 function openHelp(){

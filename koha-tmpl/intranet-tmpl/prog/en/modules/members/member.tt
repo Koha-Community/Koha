@@ -95,6 +95,10 @@
                     [% IF CAN_user_borrowers_edit_borrowers %]
                           <button id="merge-patrons" class="btn btn-sm btn-default disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
                     [% END %]
+                    <div id="patron_search_selected" class="btn-group" style="display:none;">
+                        <span></span>
+                        <a href="#" id="clear-patron-selection"><i class="fa fa-remove"></i> Clear</a>
+                    </div>
                   </div>
                 </div>
             [% END %]
@@ -147,15 +151,38 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
+        function showPatronSelections( number ){
+            $("#patron_search_selected").show().find("span").text(_("Patrons selected: " + number ) );
+        }
 
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
-                if ( $('.selection:checked').length > 1 ) {
+                var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
+                var borrowernumber = $(this).val();
+                if( $(this).prop("checked") ){
+                    patron_search_selections.push( $(this).val() );
+                    localStorage.setItem('patron_search_selections', JSON.stringify( patron_search_selections ));
+                    showPatronSelections( patron_search_selections.length );
+                } else {
+                    var filtered = patron_search_selections.filter(function( value ){
+                        return value !== borrowernumber;
+                    });
+                    if( filtered.length > 0 ){
+                        localStorage.setItem('patron_search_selections', JSON.stringify( filtered ));
+                        patron_search_selections = filtered;
+                        showPatronSelections( filtered.length );
+                    } else {
+                        patron_search_selections = [];
+                        localStorage.removeItem('patron_search_selections');
+                        $("#patron_search_selected").hide();
+                    }
+                }
+                if ( patron_search_selections.length > 1 ) {
                     /* More than one checkbox has been checked */
                     $('#merge-patrons').prop('disabled', false).removeClass("disabled");
                     $("#patronlist-menu").removeClass("disabled").prop("disabled", false);
-                } else if ( $('.selection:checked').length == 1 ) {
+                } else if ( patron_search_selections.length == 1 ) {
                     /* At least one checkbox has been checked */
                     $('#merge-patrons').prop('disabled', true).addClass("disabled");
                     $("#patronlist-menu").removeClass("disabled").prop("disabled", false);
@@ -167,17 +194,24 @@
             });
 
             $('#merge-patrons').on('click', function() {
-                var merge_patrons_url = 'merge-patrons.pl?' + $('.selection:checked')
-                    .map(function() {
-                       return "id=" + $(this).val()
-                    }).get().join('&');
+                var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
+                var merge_patrons_url = 'merge-patrons.pl?id=' + patron_search_selections.join("&id=");
                 window.location.href = merge_patrons_url;
+            });
+
+            $("#clear-patron-selection").on("click", function(e){
+                e.preventDefault();
+                $(".selection").prop("checked", false).change();
+                localStorage.removeItem("patron_search_selections");
+                $("#patron_search_selected").hide();
+                $('#merge-patrons').prop('disabled', true).addClass("disabled");
+                $("#patronlist-menu").addClass("disabled").prop("disabled", true);
             });
 
             $("#patronlist-dropdown").on("click", ".patron-list-add", function(e){
                 e.preventDefault();
-
-                if ( $("#memberresultst input:checkbox:checked").length == 0 ) {
+                var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
+                if ( patron_search_selections.length == 0 ) {
                     alert( _("You have not selected any patrons to add to a list!") );
                     $(".btn-group").removeClass("open"); /* Close button menu */
                     return false;
@@ -247,35 +281,57 @@
         });
 
         function patronListAdd(){
-            var borrowernumbers = [];
-            $("#memberresultst").find("input:checkbox:checked").each(function(){
-                borrowernumbers.push($(this).val());
-            });
-            var data = {
-                add_to_patron_list: $("#add_to_patron_list").val(),
-                new_patron_list: $("#new_patron_list").val(),
-                borrowernumbers: borrowernumbers
-            };
-            $.ajax({
-                data: data,
-                type: 'POST',
-                url: '/cgi-bin/koha/svc/members/add_to_list',
-                success: function(data) {
-                    $("#patron_list_dialog").show();
-                    $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
-                    $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
-                    $("#patron_list_dialog > a").html(data.patron_list.name);
+            var borrowernumbers = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
+            if ( borrowernumbers.length > 0 ){
+                var data = {
+                    add_to_patron_list: $("#add_to_patron_list").val(),
+                    new_patron_list: $("#new_patron_list").val(),
+                    borrowernumbers: borrowernumbers
+                };
+                $.ajax({
+                    data: data,
+                    type: 'POST',
+                    url: '/cgi-bin/koha/svc/members/add_to_list',
+                    success: function(data) {
+                        $("#patron_list_dialog").show();
+                        $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
+                        $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
+                        $("#patron_list_dialog > a").html(data.patron_list.name);
 
-                    if ( $('#add_to_patron_list').val() == 'new' ) {
-                        /* Add a new entry to the menu */
-                        $("#patronlist-dropdown .divider").before('<li><a class="patron-list-add" href="#" data-listid="' + data.patron_list.patron_list_id + '">' + data.patron_list.name + '</li>');
+                        if ( $('#add_to_patron_list').val() == 'new' ) {
+                            /* Add a new entry to the menu */
+                            $("#patronlist-dropdown .divider").before('<li><a class="patron-list-add" href="#" data-listid="' + data.patron_list.patron_list_id + '">' + data.patron_list.name + '</li>');
+                        }
+                    },
+                    error: function() {
+                        alert( _("An error occurred. Patron list could not be updated.") );
                     }
-                },
-                error: function() {
-                    alert( _("An error occurred. Patron list could not be updated.") );
+                });
+                return true;
+            } else {
+                alert( _("You have not selected any patrons to add to a list!") );
+                return false;
+            }
+        }
+
+        function prepSelections(){
+            var selected_patrons = JSON.parse( localStorage.getItem("patron_search_selections") );
+            if( selected_patrons && selected_patrons.length > 0 ){
+                showPatronSelections( selected_patrons.length );
+
+                $('#merge-patrons').prop('disabled', true);
+                $("input.selection").each(function(){
+                    var cardnumber = $(this).val();
+                    if( selected_patrons.indexOf( cardnumber ) >= 0 ){
+                        $(this).prop("checked", true );
+                    }
+                });
+
+                if( selected_patrons.length > 1 ){
+                    $('#merge-patrons').removeClass("disabled").prop('disabled', false);
+                    $('#patronlist-menu').removeClass("disabled").prop('disabled', false);
                 }
-            });
-            return true;
+            }
         }
 
         $('#memberresultst tbody').on('click','td',function(e){
@@ -302,7 +358,7 @@
     [% ELSE %]
         [% SET redirect_url = '/cgi-bin/koha/members/moremember.pl' %]
     [% END %]
-    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns,actions => ['edit', 'checkout'], redirect_if_one_result => 1, redirect_url => redirect_url, sticky_header => "searchheader", sticky_to => "searchresults", default_sort_column => 'name-address', display_search_description => 1 %]
+    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns,actions => ['edit', 'checkout'], redirect_if_one_result => 1, redirect_url => redirect_url, sticky_header => "searchheader", sticky_to => "searchresults", default_sort_column => 'name-address', display_search_description => 1, remember_selections => 1 %]
 
 [% END %]
 

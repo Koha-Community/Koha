@@ -368,7 +368,7 @@
                         return json.data;
                     }
                 },
-                [% IF open_on_row_click OR preview_on_name_click %]
+                [% IF open_on_row_click OR preview_on_name_click OR remember_selections %]
                 "drawCallback": function( settings ) {
                     var api = this.api();
                     var data = api.data();
@@ -387,6 +387,9 @@
                     $.each($(this).find("tbody tr"), function(index, tr) {
                         $(tr).find("a.patron_name").addClass("patron_preview");
                     });
+                    [% END %]
+                    [% IF remember_selections %]
+                        prepSelections();
                     [% END %]
                 },
                 [% END %]
