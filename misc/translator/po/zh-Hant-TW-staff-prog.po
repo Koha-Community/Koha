@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2021-12-16 01:29-0300\n"
-"PO-Revision-Date: 2021-12-17 09:04+0000\n"
+"POT-Creation-Date: 2022-01-18 20:34-0300\n"
+"PO-Revision-Date: 2022-01-07 03:59+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1639731895.454381\n"
+"X-POOTLE-MTIME: 1641527951.239010\n"
 "X-Pootle-Path: /zh_TW/20.11/zh-Hant-TW-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3942,7 +3942,7 @@ msgstr "%s &rsaquo; %s修改%s新增%s 縣市 %s &rsaquo; 確認刪除縣市 %s 
 #, c-format
 msgid ""
 "%s &rsaquo; %sModify%sNew%s Desk %s &rsaquo; Confirm deletion of desk %s "
-msgstr "%s &rsaquo; %s修改%s新增%s 出納台 %s &rsaquo; 確認刪除出納台 %s "
+msgstr "%s &rsaquo; %s修改%s新增%s 流通櫃台 %s &rsaquo; 確認刪除流通櫃台 %s "
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF debit_type.code 
@@ -17443,6 +17443,8 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
@@ -17501,8 +17503,6 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:638
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:642
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:646
@@ -19440,7 +19440,7 @@ msgstr "新增收款台："
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:94
 #, c-format
 msgid "Choose desk:"
-msgstr "選擇館員工作站："
+msgstr "選擇流通櫃台："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:63
 #, c-format
@@ -19617,7 +19617,7 @@ msgstr "流通與罰款規則"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:104
 #, c-format
 msgid "Circulation desks"
-msgstr "流通表單"
+msgstr "流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:143
@@ -19913,10 +19913,10 @@ msgstr "清除"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -21843,7 +21843,7 @@ msgstr "新增縣市"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:159
 #, c-format
 msgid "Create a new desk"
-msgstr "新增虛擬書桌"
+msgstr "新增流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:264
 #, c-format
@@ -23139,7 +23139,7 @@ msgstr "結合圖書館、讀者類型與館藏類型，設定的流通與罰款
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:105
 #, c-format
 msgid "Define circulation desks"
-msgstr "定義流通櫃檯"
+msgstr "定義流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:109
 #, c-format
@@ -23611,7 +23611,7 @@ msgstr "刪除此欄位並複製至 '剪貼簿'"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:99
 #, c-format
 msgid "Delete desk \"%s\"?"
-msgstr "刪除書桌嗎 \"%s\" ？"
+msgstr "刪除流通櫃台嗎 \"%s\" ？"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:240
@@ -24222,48 +24222,48 @@ msgstr "認定館藏的狀態是遺失 (新增或編輯館藏時使用)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:138
 #, c-format
 msgid "Desk"
-msgstr "書桌"
+msgstr "流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:137
 #, c-format
 msgid "Desk ID"
-msgstr "書桌 ID"
+msgstr "流通櫃台 ID"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:67
 #, c-format
 msgid "Desk ID: "
-msgstr "書桌 ID: "
+msgstr "流通櫃台 ID: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/desks-admin-search.inc:7
 #, c-format
 msgid "Desk search:"
-msgstr "書桌搜尋:"
+msgstr "流通櫃台搜尋:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Desk:"
-msgstr "書桌: "
+msgstr "流通櫃台: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:133
 #, c-format
 msgid "Desk: "
-msgstr "書桌: "
+msgstr "流通櫃台: "
 
 #. %1$s:  update.old_desk or "?" | html 
 #. %2$s:  LoginDeskname or "?" | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:52
 #, c-format
 msgid "Desk: %s &rArr; %s"
-msgstr "櫃台：%s &rArr; %s"
+msgstr "流通櫃台：%s &rArr; %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:49
 #, c-format
 msgid "Desks"
-msgstr "書桌"
+msgstr "流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:190
 #, c-format
@@ -24299,8 +24299,8 @@ msgstr "還入訊息："
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -32616,11 +32616,11 @@ msgstr "目前無法儲存館藏號"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:894
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:117
@@ -34567,9 +34567,9 @@ msgid "Koha &rsaquo; Circulation &rsaquo; Set library"
 msgstr "Koha &rsaquo; 流通 &rsaquo; 設定圖書館"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Set library and desk"
-msgstr "Koha &rsaquo; 流通 &rsaquo; 設定圖書館"
+msgstr "Koha &rsaquo; 流通 &rsaquo; 設定圖書館及流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:6
 #, c-format
@@ -39724,7 +39724,7 @@ msgstr "N/A"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:136
 #, c-format
 msgid "NO DESK SET"
-msgstr ""
+msgstr "未設定流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:66
 #, c-format
@@ -42111,8 +42111,8 @@ msgstr "說明：接下來的兩個欄位之一必須等於 1"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:63
@@ -48250,13 +48250,13 @@ msgstr "網路圖示："
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:486
@@ -50172,6 +50172,7 @@ msgstr "星期六"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:254
@@ -50205,7 +50206,6 @@ msgstr "星期六"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:585
@@ -50674,7 +50674,7 @@ msgstr "搜尋幣別"
 #: koha-tmpl/intranet-tmpl/prog/en/includes/desks-admin-search.inc:29
 #, c-format
 msgid "Search desks"
-msgstr "搜尋櫃台"
+msgstr "搜尋流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:58
@@ -51448,11 +51448,11 @@ msgstr "選定時間"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -52137,9 +52137,9 @@ msgid "Set desk"
 msgstr "新的流通櫃台"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:160
-#, fuzzy, c-format
+#, c-format
 msgid "Set desk and cash register"
-msgstr "新增類型"
+msgstr "新增流通櫃台及收銀類型"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #, c-format
@@ -52181,14 +52181,14 @@ msgstr "開始新增收銀機"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-nav.inc:20
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:150
-#, fuzzy, c-format
+#, c-format
 msgid "Set library and desk"
-msgstr "設定圖書館："
+msgstr "設定圖書館及流通櫃台："
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/header.inc:148
-#, fuzzy, c-format
+#, c-format
 msgid "Set library, desk and register"
-msgstr "設定圖書館："
+msgstr "設定圖書館,流通櫃台及收銀"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:47
 #, c-format
@@ -56631,7 +56631,7 @@ msgstr "沒有指定的模版。請先新增模版。"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:158
 #, c-format
 msgid "There are no desks defined. "
-msgstr "沒有定義櫃台。"
+msgstr "沒有定義流通櫃台。"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/includes/clubs-table.inc:80
