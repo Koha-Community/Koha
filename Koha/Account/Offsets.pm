@@ -62,7 +62,7 @@ sub total {
 
 =head3 filter_by_non_reversible
 
-    my $non_reversible = $debit->->search(..)->filter_by_non_reversible;
+    my $non_reversible_offsets = Koha::Account::Offsets->search(..)->filter_by_non_reversible;
 
 Filter offsets so only non-reversible ones are left in the resultset.
 
@@ -88,9 +88,9 @@ sub filter_by_non_reversible {
 
 =head3 filter_by_reversible
 
-    my $reversible = Koha::Account::Offsets->search(..)->filter_by_reversible;
+    my $reversible_offsets = Koha::Account::Offsets->search(..)->filter_by_reversible;
 
-Filter offsets so only non ones are left in the resultset.
+Filter offsets so only reversible ones are left in the resultset.
 
 =cut
 
