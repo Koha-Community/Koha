@@ -135,7 +135,11 @@ sub submit_form {
     }
 
     my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
-    $self->driver->find_element($default_submit_selector)->click
+    my @elts = map { my $size = $_->get_size; ( $size->{height} && $size->{width} ) ? $_ : () } $self->driver->find_elements($default_submit_selector);
+
+    die "Too many forms are displayed. Cannot submit." if @elts > 1;
+
+    return $elts[0]->click;
 }
 
 sub click {
