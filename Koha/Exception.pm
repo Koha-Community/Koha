@@ -10,15 +10,42 @@ use Exception::Class (
 
 sub full_message {
     my $self = shift;
-    my $msg = $self->description;
-    my @fields;
+
+    # If a message was passed manually, use it
+    return sprintf "Exception '%s' thrown '%s'\n", ref($self), $self->message
+      if $self->message;
+
     my $field_hash = $self->field_hash;
-    while ( my ( $field, $value ) = each %$field_hash ) {
-        push @fields, $field . " => " . $value;
+
+    my $description = $self->description;
+    my @fields;
+
+    foreach my $key ( sort keys %$field_hash ) {
+        push @fields, $key . " => " . $field_hash->{$key}
+          if defined $field_hash->{$key};
     }
+
     return
       sprintf "Exception '%s' thrown '%s'" . ( @fields ? " with %s" : "" ) . "\n",
-      ref($self), $msg, ( @fields ? join ', ', @fields : () );
+      ref($self), $description, ( @fields ? join ', ', @fields : () );
 }
+
+=head1 NAME
+
+Koha::Exception - Base class for exceptions
+
+=head1 Exceptions
+
+=head2 Koha::Exception
+
+Generic exception.
+
+=head1 Class methods
+
+=head2 full_message
+
+Generic method for exception stringifying.
+
+=cut
 
 1;
