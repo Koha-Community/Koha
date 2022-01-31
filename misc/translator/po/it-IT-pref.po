@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2021-11-17 21:18+0000\n"
+"PO-Revision-Date: 2022-01-30 11:56+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1637183917.929514\n"
+"X-POOTLE-MTIME: 1643543762.907128\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/21.05/it-IT-pref.po\n"
@@ -740,6 +740,18 @@ msgstr "ISO2709 (formato di interscambio)"
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Array ricercabile"
+
+msgid "admin.pref#EmailOverduesNoEmail# Don't send"
+msgstr "Non spedire"
+
+msgid "admin.pref#EmailOverduesNoEmail# Send"
+msgstr "Spedisci"
+
+# Administration > Interface options > EmailOverduesNoEmail
+msgid ""
+"admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
+"address to staff."
+msgstr ""
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
@@ -9499,57 +9511,12 @@ msgstr ""
 "default il campo 'Titolo' è obbligaatorio."
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr "Autore"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr "Titolo della raccolta"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr "Data di copyright o di pubblicazione"
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for "
 "patron purchase suggestions:"
 msgstr ""
 "I campi che sono obbligatori da inserire per gli utenti quando fanno "
 "suggerimentti di acquisto:"
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr "ISBN, ISSN o altro numero standard"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr "Tipo di copia"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr "Biblioteca o filiale"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr "Nota"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr "Motivazione utente"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr "Luogo di pubblicazione"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr "Editore"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr "Titolo"
 
 # OPAC > Policy
 msgid ""
@@ -9563,55 +9530,10 @@ msgstr ""
 "\">OPACSuggestionMandatoryFields</a> dei campi indesiderati "
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr "Autore"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr "Titolo della raccolta"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr "Copyright o data di publicazione"
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
 msgstr "Campi da nascondere nei suggerimenti di acquisti fatti dagli utenti:"
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr "ISBN, ISSN o altro numero standard"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr "Tipo di copia"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr "Biblioteca o sottobiblioteca"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr "Note"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr "Motivo della richiesta"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr "Luogo di pubblicazione"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr "Editore"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr "Quantità"
 
 # OPAC > Appearance
 msgid ""
@@ -13957,7 +13879,10 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Di default mostra"
 
 # Tools > Reports
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
+#, fuzzy
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
 msgstr "i reports nella pagine dei reports salvati."
 
 # Tools > Upload
@@ -14530,6 +14455,100 @@ msgstr ""
 # OPAC > Appearance
 #~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
 #~ msgstr "i risultati provenienti da "
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
+#~ msgstr "Autore"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
+#~ msgstr "Titolo della raccolta"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
+#~ msgstr "Data di copyright o di pubblicazione"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr "ISBN, ISSN o altro numero standard"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
+#~ msgstr "Tipo di copia"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
+#~ msgstr "Biblioteca o filiale"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
+#~ msgstr "Nota"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
+#~ msgstr "Motivazione utente"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
+#~ msgstr "Luogo di pubblicazione"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
+#~ msgstr "Editore"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
+#~ msgstr "Titolo"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
+#~ msgstr "Autore"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
+#~ msgstr "Titolo della raccolta"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
+#~ msgstr "Copyright o data di publicazione"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr "ISBN, ISSN o altro numero standard"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
+#~ msgstr "Tipo di copia"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
+#~ msgstr "Biblioteca o sottobiblioteca"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
+#~ msgstr "Note"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
+#~ msgstr "Motivo della richiesta"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
+#~ msgstr "Luogo di pubblicazione"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
+#~ msgstr "Editore"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
+#~ msgstr "Quantità"
 
 # OPAC > Appearance
 #~ msgid ""
