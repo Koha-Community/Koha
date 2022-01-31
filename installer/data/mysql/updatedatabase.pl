@@ -23742,10 +23742,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 20.11.12 release" );
 }
 
-
 $DBversion = '20.11.13.000';
 if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 20.11.13 release" );
+}
+
+$DBversion = '20.11.14.000';
+if ( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.14 release" );
 }
 
 # SEE bug 13068
