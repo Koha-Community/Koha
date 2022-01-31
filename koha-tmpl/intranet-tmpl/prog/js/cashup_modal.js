@@ -20,7 +20,7 @@ $(document).ready(function() {
                 tbody.empty();
                 for (out of data.summary.payout_grouped) {
                     if ( out.credit_type_code == 'REFUND' ) {
-                        tbody.append('<tr><td>' + out.credit_type.description + ' against ' + out.related_debit.debit_type.description + '</td><td>- ' + out.total + '</td></tr>');
+                        tbody.append('<tr><td>' + out.credit_type.description + ' ' + __("against") + ' ' + out.related_debit.debit_type.description + '</td><td>- ' + out.total + '</td></tr>');
                     } else {
                         tbody.append('<tr><td>' + out.credit_type.description + '</td><td>- ' + out.total + '</td></tr>');
                     }
