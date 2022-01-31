@@ -669,6 +669,7 @@ sub to_api_mapping {
         itemnumber       => 'item_id',
         waitingdate      => 'waiting_date',
         expirationdate   => 'expiration_date',
+        patron_expiration_date => undef,
         lowestPriority   => 'lowest_priority',
         suspend          => 'suspended',
         suspend_until    => 'suspended_until',
