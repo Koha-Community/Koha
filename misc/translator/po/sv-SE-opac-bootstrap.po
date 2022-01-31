@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-20 13:52-0300\n"
-"PO-Revision-Date: 2021-11-23 10:36+0000\n"
-"Last-Translator: marie.hedbom <marie.hedbom@musikverket.se>\n"
+"PO-Revision-Date: 2022-01-20 08:22+0000\n"
+"Last-Translator: Alexander Borkowski <alexander.borkowski@kau.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1637663812.198708\n"
+"X-POOTLE-MTIME: 1642666932.496211\n"
 "X-Pootle-Path: /sv/18.05/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -139,9 +139,9 @@ msgstr "%s %s %s Obs! Det här fönstret stängs automatiskt om 5 sekunder. %s "
 #. %2$s:  author.surname | html 
 #. %3$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s by "
-msgstr "%s %s %s %s av "
+msgstr "%s %s %s av "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -221,9 +221,9 @@ msgstr "%s %s (inte godkänd) %s"
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1039
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
@@ -1828,9 +1828,9 @@ msgstr "%s%s%sKoha online%s katalog senaste kommentarerna"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sLibrary catalog%s"
-msgstr "Bibliotekskatalog "
+msgstr "%s%s%sBibliotekskatalog%s"
 
 # No translatable text
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
@@ -3046,9 +3046,9 @@ msgstr "(relaterade sökningar: %s%s%s) "
 #. %2$s:  relate.related_search | html 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:121
-#, fuzzy, c-format
+#, c-format
 msgid "(related searches:%s %s%s)."
-msgstr "(relaterade sökningar: %s%s%s) "
+msgstr "(relaterade sökningar:%s %s%s) "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
@@ -8939,9 +8939,9 @@ msgstr "Förlag: %s %s in %s %s %s , %s %s %s , %s %s "
 #. %3$s:  IF news_item 
 #. %4$s:  SET author = koha_new.author 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Published on %s %s %s %s by "
-msgstr "Publicerad den %s %s av "
+msgstr "Publicerad den %s %s %s %s av "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
@@ -9661,9 +9661,8 @@ msgstr "Sök"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
-#, fuzzy
 msgid "Search %s"
-msgstr "Sök"
+msgstr "Sök %s"
 
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
@@ -9829,9 +9828,8 @@ msgstr "Välj alla "
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:230
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:233
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:237
-#, fuzzy
 msgid "Select search result: %s"
-msgstr "Välj sökningar:"
+msgstr "Välj sökningar: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:99
@@ -11107,16 +11105,15 @@ msgstr "Det finns inget minsta eller högsta antal tecken. "
 #. %4$s:  ELSIF ( ERROR.failed_delete ) 
 #. %5$s:  ERROR.failed_delete | html 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was a problem with this operation: %s ERROR: illegal parameter %s %s "
 "ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
 "the tag %s. "
 msgstr ""
-"Ett problem inträffade med den här operationen: %s Taggar är inte aktiverade "
-"på det här systemet. %s ERROR: ogiltig parameter %s %s ERROR: Du måste logga "
-"in för att slutföra den här åtgärden. %s ERROR: Du kan inte ta bort taggen "
-"%s. "
+"Ett problem inträffade med den här operationen: %s ERROR: ogiltig parameter %"
+"s %s ERROR: Du måste logga in för att slutföra den här åtgärden. %s ERROR: "
+"Du kan inte ta bort taggen %s. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:32
 #, c-format
