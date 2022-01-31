@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2021-11-26 17:29+0000\n"
+"PO-Revision-Date: 2022-01-18 14:48+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1637947787.717842\n"
+"X-POOTLE-MTIME: 1642517318.915583\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -734,6 +734,22 @@ msgstr "ISO2709 (formato de troca)"
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Matriz pesquisável"
+
+# Patrons > Notices and notifications
+msgid "admin.pref#EmailOverduesNoEmail# Don't send"
+msgstr "Não enviar"
+
+# Patrons > Notices and notifications
+msgid "admin.pref#EmailOverduesNoEmail# Send"
+msgstr "Enviar"
+
+# Administration > Interface options > EmailOverduesNoEmail
+msgid ""
+"admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
+"address to staff."
+msgstr ""
+"os avisos de atraso dos leitores sem endereço de email para o staff da "
+"biblioteca."
 
 # Patrons > Notices and notifications > PhoneNotification
 msgid ""
@@ -9493,56 +9509,11 @@ msgstr ""
 "'Título' será obrigatório por omissão."
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr "Autor"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr "Título da coleção"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr "Direitos ou data de publicação"
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for "
 "patron purchase suggestions:"
 msgstr ""
 "Campos que devem ser obrigatórios para as sugestões de aquisição do leitor:"
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr "ISBN, ISSN ou outro número normalizado"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr "Tipo de documento"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr "Biblioteca"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr "Nota"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr "Motivo"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr "Lugar da publicação"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr "Editor"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr "Título"
 
 # OPAC > Policy
 msgid ""
@@ -9556,56 +9527,11 @@ msgstr ""
 "\">OPACSuggestionMandatoryFields</a> campos indesejados "
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr "Autor"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr "Título da colecção"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr "Direitos de autor ou data de publicação"
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
 msgstr ""
 "Campos que devem ser obrigatórios nas sugestões de aquisição do leitor:"
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr "ISBN, ISSN ou outro número padrão"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr "Tipo de documento"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr "Biblioteca ou polo"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr "Nota"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr "Motivo do leitor"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr "Local da publicação"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr "Nome do editor"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr "Quantidade"
 
 # OPAC > Appearance
 msgid ""
@@ -10574,7 +10500,6 @@ msgstr ""
 "aparecer no ecrã de auto-modificação do leitor:"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfModificationMandatoryField# The following <a "
 "href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' "
@@ -10583,7 +10508,7 @@ msgid ""
 msgstr ""
 "As seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/"
 "borrowers.html' target='blank'>colunas da base de dados</a> devem ser "
-"preenchidas no ecrã de auto-registo do leitor:"
+"preenchidas no ecrã de modificação do leitor:"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -13980,8 +13905,12 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Por omissão, mostrar"
 
 # Tools > Reports
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
-msgstr "relatórios na página de relatórios pré-definidos."
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
+msgstr ""
+"relatórios na página de relatórios pré-definidos. É recomendado o valor de "
+"20. Se deixar o campo vazio, todos os relatórios serão mostrados."
 
 # Tools > Upload
 msgid ""
@@ -14556,6 +14485,100 @@ msgstr "linhas de um relatório pedido via web service."
 # OPAC > Appearance
 #~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
 #~ msgstr "os resultados da "
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
+#~ msgstr "Autor"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
+#~ msgstr "Título da coleção"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
+#~ msgstr "Direitos ou data de publicação"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr "ISBN, ISSN ou outro número normalizado"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
+#~ msgstr "Tipo de documento"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
+#~ msgstr "Biblioteca"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
+#~ msgstr "Nota"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
+#~ msgstr "Motivo"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
+#~ msgstr "Lugar da publicação"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
+#~ msgstr "Editor"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
+#~ msgstr "Título"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
+#~ msgstr "Autor"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
+#~ msgstr "Título da colecção"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
+#~ msgstr "Direitos de autor ou data de publicação"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr "ISBN, ISSN ou outro número padrão"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
+#~ msgstr "Tipo de documento"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
+#~ msgstr "Biblioteca ou polo"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
+#~ msgstr "Nota"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
+#~ msgstr "Motivo do leitor"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
+#~ msgstr "Local da publicação"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
+#~ msgstr "Nome do editor"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
+#~ msgstr "Quantidade"
 
 # OPAC > Appearance
 #~ msgid ""

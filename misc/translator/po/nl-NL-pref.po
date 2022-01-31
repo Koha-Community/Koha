@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2021-05-07 11:46+0000\n"
+"PO-Revision-Date: 2022-01-04 14:26+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1620387992.523151\n"
+"X-POOTLE-MTIME: 1641306411.217445\n"
 "X-Pootle-Path: /nl_NL/21.05/nl-NL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -347,14 +347,15 @@ msgid "acquisitions.pref#EmailPurchaseSuggestions# EmailAddressForSuggestions"
 msgstr "EmailAddressForSuggestions"
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# If you choose <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"acquisitions.pref#EmailPurchaseSuggestions# Bij het kiezen voor "
-"EmailAddressForSuggestions moet een geldig e-mailadres ingevoerd worden: "
+"Bij het kiezen voor <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailAddressForSuggestions"
+"\">EmailAddressForSuggestions</a> moet een geldig e-mailadres ingevoerd "
+"worden:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#EmailPurchaseSuggestions# KohaAdminEmailAddress"
@@ -789,8 +790,23 @@ msgstr "ISO2709 (uitwisselingsformat)"
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Doorzoekbare reeks"
 
-# OPAC > Privacy
+# Accounting > Policy
 #, fuzzy
+msgid "admin.pref#EmailOverduesNoEmail# Don't send"
+msgstr "Gebruik geen"
+
+# Patrons > General
+#, fuzzy
+msgid "admin.pref#EmailOverduesNoEmail# Send"
+msgstr "die Ausweisnummer"
+
+# Administration > Interface options > EmailOverduesNoEmail
+msgid ""
+"admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
+"address to staff."
+msgstr ""
+
+# OPAC > Privacy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -798,15 +814,16 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"opac.pref#OPACPrivacy# dat lenen hun eigen privacy-instelling voor hun "
-"leesgeschiedenis kiezen. Dit vereist opacreadinghistory en AnonymousPatron"
+"Samen met <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>, activeert <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -814,8 +831,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"opac.pref#OPACPrivacy# dat lenen hun eigen privacy-instelling voor hun "
-"leesgeschiedenis kiezen. Dit vereist opacreadinghistory en AnonymousPatron"
+"Samen met <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>, "
+"activeert <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -836,7 +855,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Ja"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -847,9 +865,13 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
-"admin.pref#GoogleOpenIDConnect# Selecteer OAuth2 bij het creëren van een app "
-"in de Google cloud console, en stel de web origin in op your_opac_url en de "
-"redirect url op your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect ."
+"Selecteer OAuth2 bij het creëren van een app in de Google cloud console, en "
+"stel de web origin in op your_opac_url en de redirect url op your_opac_url/"
+"cgi-bin/koha/svc/auth/googleopenidconnect . Vereist dat <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a> en <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> ingesteld zijn."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -861,25 +883,24 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "Niet toestaan dat"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref#GoogleOpenIDConnectAutoRegister# gebruikers inloggen met Google "
-"Open ID om automatisch te registreren."
+"dat leners inloggen met Google Open ID om automatisch te registreren. "
+"Vereist <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"opac.pref#OpacMaintenanceNotice# Toon de volgende HTML als OpacMaintenance "
-"ingeschakeld is:"
+"Vereist <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -891,14 +912,13 @@ msgstr ""
 "het automatisch registeren van een Google Open ID lener."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"opac.pref#OpacMaintenanceNotice# Toon de volgende HTML als OpacMaintenance "
-"ingeschakeld is:"
+"Vereist <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -910,15 +930,14 @@ msgstr ""
 "bij het automatisch registreren van een Google Open ID lener."
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"opac.pref#OpacHiddenItemsExceptions# Lijst van lenercategorieën, gescheiden "
-"door |, die wel items kunnen zien die verborgen zijn door "
-"<code>OpacHiddenItems</code>"
+"Laat leeg voor alle Google domeinen. Vereist <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 #, fuzzy
@@ -1107,15 +1126,16 @@ msgid "admin.pref#UsageStats# ."
 msgstr "Nee"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
 "a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
-"admin.pref#UsageStats# <br><strong>LET OP:</strong> De andere \"UsageStats\" "
-"voorkeuren hebben geen effect als deze voorkeur op \"nee\" staat."
+"<br><strong>LET OP:</strong> De andere <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"systeemvoorkeuren hebben geen effect als deze voorkeur is ingesteld op \"Nee"
+"\" (niet delen)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1180,15 +1200,15 @@ msgstr ""
 "hea.koha-community.org\">Hea Koha gemeenschapswebsite</a>."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
 "effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsCountry# <br><strong>LET OP:</strong> Deze waarde heeft "
-"geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1975,16 +1995,15 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsGeolocation# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 #, fuzzy
@@ -2002,16 +2021,15 @@ msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "Geolocatie van de hoofdvestiging: "
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value "
 "has no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibrariesInfo# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 #, fuzzy
@@ -2040,16 +2058,15 @@ msgstr ""
 "verstuurd."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryName# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2064,16 +2081,15 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr ""
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryType# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2124,16 +2140,15 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "abonnement"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"admin.pref#UsageStatsLibraryUrl# <br><strong>LET OP:</strong> Deze waarde "
-"heeft geen effect als de UsageStats systeemvoorkeur is ingesteld op \"Deel "
-"niet\""
+"<br><strong>LET OP:</strong> Deze waarde heeft geen effect als de <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> systeemvoorkeur is ingesteld op \"Nee\" (deel niet)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2369,15 +2384,15 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Bij het bewerken van records,"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"authorities.pref#AutoCreateAuthorities# zullen thesaurusrecords die vermist "
-"zijn (BiblioAddsAuthorities moet op \"toestaan\" staan om effect te hebben)."
+"thesaurusrecords die vermist zijn (<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> "
+"moet op \"toestaan\" staan om effect te hebben)."
 
 # Authorities > General
 #, fuzzy
@@ -3804,7 +3819,6 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "Vereis"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -3812,8 +3826,11 @@ msgid ""
 "Enabling this system preference will block all checkouts for patrons with "
 "fines both via the web-based self checkout system and via SIP."
 msgstr ""
-"circulation.pref#AllFinesNeedOverride# dat staf handmatig boetes negeert, "
-"zelfs boetes lager dan noissuescharge."
+"dat staf handmatig boetes negeert, zelfs boetes lager dan ingesteld in de <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> systeemvoorkeur. "
+"Bij inschakeling hiervan wordt alle uitleen aan leners met boetes via zowel "
+"de webgebaseerde als de SIP zelfuitleen geblokkeerd."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3856,15 +3873,15 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "Niet toestaan"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
 "\">noissuescharge</a> system preference."
 msgstr ""
-"circulation.pref#AllowFineOverride# dat staf handmatig uitleent aan leners "
-"die meer dan noissuescharge aan boetes hebben."
+"dat staf handmatig uitleent aan leners die meer aan boetes hebben dan "
+"ingesteld in de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> systeemvoorkeur."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4565,15 +4582,15 @@ msgstr ""
 "uitleningen per uur moet dit ingeschakeld zijn.</strong>"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> This "
 "system preference requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-"circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> Deze "
-"systeemvoorkeur vereist dat FinesMode is ingesteld op 'Calculate and charge.'"
+"<br /><strong>NOTE:</strong> Deze systeemvoorkeur vereist dat <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode\">FinesMode</"
+"a> is ingesteld op \"Berekenen en aanslaan.\""
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -4613,15 +4630,16 @@ msgstr ""
 "toestaan"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
 "Values to be applied must be defined in <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=UpdateItemWhenLostFromHoldList"
 "\">UpdateItemWhenLostFromHoldList</a>."
 msgstr ""
-"circulation.pref#CanMarkHoldsToPullAsLost# vanaf het 'Op te halen aanvragen' "
-"scherm"
+"vanaf het 'Op te halen aanvragen' scherm. Te gebruiken waarden moeten "
+"ingesteld zijn in <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UpdateItemWhenLostFromHoldList"
+"\">UpdateItemWhenLostFromHoldList</a>."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -5083,7 +5101,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Sta niet toe"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically "
 "if they have not been picked by within the time period specified in the <a "
@@ -5093,11 +5110,12 @@ msgid ""
 "the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask "
 "your system administrator to schedule it."
 msgstr ""
-"circulation.pref#ExpireReservesMaxPickUpDelay# dat aanvragen vanzelf "
-"verlopen indien ze niet binnen de in ReservesMaxPickupDelay opgegeven tijd "
-"worden opgehaald.<br><strong>LET OP:</strong> Deze systeemvoorkeur vereist "
-"de <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Vraag "
-"de systeembeheerder deze in te plannen."
+"dat aanvragen vanzelf verlopen indien ze niet binnen de in <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay"
+"\">ReservesMaxPickUpDelay</a> systeemvoorkeur opgegeven tijd worden "
+"opgehaald. <br><strong>LET OP:</strong> Deze systeemvoorkeur vereist de "
+"<code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Vraag de "
+"systeembeheerder deze in te plannen."
 
 # Circulation > Holds Policy
 #, fuzzy
@@ -5105,7 +5123,6 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
 msgstr "Sta toe"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
@@ -5113,20 +5130,20 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-"circulation.pref#ExpireReservesMaxPickUpDelayCharge# Bij gebruik van "
-"ExpireReservesMaxPickUpDelay leners die aanvragen laten verlopen kosten in "
-"rekening brengen ter waarde van"
+"Bij gebruik van <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>, dan leners die aanvragen laten verlopen "
+"kosten in rekening brengen ter waarde van"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
 "\">ExpireReservesMaxPickUpDelay</a>,"
 msgstr ""
-"circulation.pref#ExpireReservesMaxPickUpDelayCharge# Bij gebruik van "
-"ExpireReservesMaxPickUpDelay leners die aanvragen laten verlopen kosten in "
-"rekening brengen ter waarde van"
+"Bij gebruik van <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ExpireReservesMaxPickUpDelay"
+"\">ExpireReservesMaxPickUpDelay</a>,"
 
 # Circulation > Holds Policy
 #, fuzzy
@@ -5310,14 +5327,14 @@ msgid "circulation.pref#HoldsInNoissuesCharge# Include"
 msgstr "Wel"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
-"circulation.pref#HoldsInNoissuesCharge# aanvraagkosten meenemen bij het "
-"opsommen van kosten voor noissuecharge."
+"aanvraagkosten meenemen bij het opsommen van kosten voor de limiet ingesteld "
+"in de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> systeemvoorkeur."
 
 # Circulation > Holds Policy
 #, fuzzy
@@ -5405,15 +5422,15 @@ msgstr ""
 "Op te halen aanvragen lijst in op"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end "
 "date is controlled by the system preference <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=ConfirmFutureHolds"
 "\">ConfirmFutureHolds</a>."
 msgstr ""
-"circulation.pref#HoldsToPullStartDate# dag(en) geleden. Let op dat de "
-"standaard einddatum wordt beheerd door voorkeur ConfirmFutureHolds."
+"dag(en) geleden. Let op dat de standaard einddatum wordt beheerd door de "
+"systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ConfirmFutureHolds\">ConfirmFutureHolds</a>."
 
 # Circulation > Checkout Policy
 msgid ""
@@ -5694,15 +5711,15 @@ msgid "circulation.pref#ManInvInNoissuesCharge# Include"
 msgstr "Wel"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ManInvInNoissuesCharge# custom debit type charges when "
 "summing up charges for limit set in the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a> "
 "system preference."
 msgstr ""
-"circulation.pref#ManInvInNoissuesCharge# losse debettype kosten meenemen bij "
-"het opsommen van kosten voor noissuescharge."
+"losse debettype kosten meenemen bij het opsommen van kosten voor de limiet "
+"ingesteld in de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> systeemvoorkeur."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -5865,16 +5882,16 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Niet toestaan"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
-"circulation.pref#OPACAllowHoldDateInFuture# dat leners aanvragen kunnen doen "
-"die pas op de wachtlijst komen vanaf een bepaalde toekomstige datum. "
-"(AllowHoldDateInFuture must also be enabled)."
+"dat leners aanvragen kunnen doen die pas op de wachtlijst komen vanaf een "
+"bepaalde toekomstige datum. (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> moet "
+"ingeschakeld zijn)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5893,14 +5910,14 @@ msgstr ""
 "afhaalbibliotheek kiest."
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more "
 "than the value of <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a>,"
 msgstr ""
-"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Als een lener meer "
-"verschuldigd is dan de waarde van OPACFineNoRenewals,"
+"Als een lener meer verschuldigd is dan de waarde van <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a>,"
 
 # Circulation > Checkout Policy
 #, fuzzy
@@ -5937,15 +5954,15 @@ msgstr ""
 "worden bij de bibliotheek waar het exemplaar beschikbaar is."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 msgstr ""
-"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Lenercategorieën "
-"niet beïnvloed door OPACHoldsIfAvailableAtPickup"
+"Lenercategorieën niet beïnvloed door <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
+"\">OPACHoldsIfAvailableAtPickup</a>:"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -6290,14 +6307,14 @@ msgid "circulation.pref#RentalsInNoissuesCharge# Include"
 msgstr "Wel"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#RentalsInNoissuesCharge# rental charges when summing up "
 "charges for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
-"circulation.pref#RentalsInNoissuesCharge# huurkosten meenemen bij het "
-"opsommen van kosten voor noissuescharge."
+"huurkosten meenemen bij het opsommen van kosten voor limiet ingesteld in de "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">noissuescharge</a> systeemvoorkeur."
 
 # Circulation > Holds Policy
 #, fuzzy
@@ -7026,7 +7043,6 @@ msgstr ""
 "vanaf het Op te halen aanvragen-scherm."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to "
 "set items.itemlost to 1 when the item is marked as lost. (Requires <a href="
@@ -7034,8 +7050,10 @@ msgid ""
 "op=search&searchfield=CanMarkHoldsToPullAsLost\">CanMarkHoldsToPullAsLost</"
 "a>)"
 msgstr ""
-"circulation.pref#UpdateItemWhenLostFromHoldList# Bv: \"itemlost: 1\" om "
-"items.itemlost op 1 te zetten wanneer een exemplaar als zoek gemarkeerd wordt"
+"Bv: \"itemlost: 1\" om items.itemlost op 1 te zetten wanneer een exemplaar "
+"als zoek gemarkeerd wordt. (Vereist <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=CanMarkHoldsToPullAsLost"
+"\">CanMarkHoldsToPullAsLost</a>)"
 
 # Circulation > Checkin Policy
 msgid ""
@@ -7888,13 +7906,10 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Toon geen"
 
 # Enhanced Content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# For control fields you can use just "
 "{field}, like {001}."
-msgstr ""
-"enhanced_content.pref#CustomCoverImages# eigen externe url afbeeldingen in "
-"de stafclient.<br/>"
+msgstr "Gebruik voor controlevelden enkel {field}, bv {001}."
 
 # Enhanced Content > Local or remote cover images
 msgid ""
@@ -8032,15 +8047,15 @@ msgstr ""
 "de stafcliënt."
 
 # Enhanced Content > Manual
-#, fuzzy
 msgid ""
 "enhanced_content.pref#KohaManualBaseURL# If starts with '/',  the value of "
 "<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=staffClientBaseURL\">staffClientBaseURL</a> will be "
 "used as a prefix."
 msgstr ""
-"enhanced_content.pref#KohaManualBaseURL# Indien voorafgegaan door '/', wordt "
-"de waarde van staffClientBaseURL gebruikt als voorvoegsel."
+"Indien beginnend met '/', wordt de waarde van <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=staffClientBaseURL"
+"\">staffClientBaseURL</a> gebruikt als voorvoegsel."
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Location of the Koha manual"
@@ -8646,16 +8661,16 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "Toon"
 
 # Enhanced Content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
-"enhanced_content.pref#SyndeticsEditions# informatie over andere edities van "
-"een titel van Syndetics op detailpagina's in de OPAC (indien "
-"OPACFRBRizeEditions aan staat)."
+"SyndeticsEditions# informatie over andere edities van een titel van "
+"Syndetics op detailpagina's in de OPAC (indien <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a> aan staat)."
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -8863,7 +8878,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "Gebruik"
 
 # Enhanced Content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -8872,9 +8886,12 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"enhanced_content.pref#ThingISBN# de ThingISBN service om andere edities van "
-"een titel te tonen (indien ofwel FRBRizeEditions of OPACFRBRizeEditions aan "
-"staat). Dit staat los van Library Thing for Libraries."
+"de ThingISBN service om andere edities van een titel te tonen (indien ofwel "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> of <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a> aan staat). Dit staat los van Library Thing for "
+"Libraries."
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -9232,15 +9249,15 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Niet"
 
 # Logging > Debugging
-#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
 "be visible."
 msgstr ""
-"logs.pref#DumpSearchQueryTemplate# de zoekopdracht als sjabloonparameter "
-"opslaan, vereist DumpTemplateVars[interface] om zichtbaar te zijn."
+"de zoekopdracht als sjabloonparameter opslaan, vereist <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars"
+"\">DumpTemplateVars</a>[interface] om zichtbaar te zijn."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9509,15 +9526,15 @@ msgid "opac.pref#AnonSuggestions# Don't allow"
 msgstr "Niet toestaan"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
 "suggestions. Suggestions are connected to the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> "
 "system preference."
 msgstr ""
-"opac.pref#AnonSuggestions# dat niet-ingelogde leners aanschafsuggesties "
-"doen. Suggesties zijn verbonden aan de AnonymousPatron syspref"
+"dat niet-ingelogde leners aanschafsuggesties doen. Suggesties zijn verbonden "
+"aan de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> systeemvoorkeur."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -9738,14 +9755,13 @@ msgstr ""
 "detailpagina."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
 "option must be turned on."
 msgstr ""
-"opac.pref#OPACDisplay856uAsImage# . Let op: De overeenkomstige OPACXSLT "
-"optie moet aan staan."
+". Let op: De overeenkomstige <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACXSLT\">OPACXSLT</a> optie moet aan staan."
 
 # OPAC > Appearance
 msgid ""
@@ -9817,15 +9833,15 @@ msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Include"
 msgstr "Meenemen"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACFineNoRenewalsIncludeCredits# outstanding/unapplied credits "
 "when applying the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a> rule to "
 "patrons."
 msgstr ""
-"opac.pref#OPACFineNoRenewalsIncludeCredits# van openstaande/onverwerkte "
-"kredieten bij toepassen van de OPACFineNoRenewals regel op gebruikers"
+"van openstaande/onverwerkte kredieten bij toepassen van de <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a> regel op gebruikers"
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -10017,7 +10033,6 @@ msgid "opac.pref#OPACPrivacy# Don't allow"
 msgstr "Niet toestaan"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for "
 "their checkout history. This requires <a href=\"/cgi-bin/koha/admin/"
@@ -10026,8 +10041,12 @@ msgid ""
 "op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> system "
 "preferences."
 msgstr ""
-"opac.pref#OPACPrivacy# dat lenen hun eigen privacy-instelling voor hun "
-"leesgeschiedenis kiezen. Dit vereist opacreadinghistory en AnonymousPatron"
+"dat leners hun eigen privacy-instelling voor hun leesgeschiedenis kiezen. "
+"Dit vereist de <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> en de <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> "
+"systeemvoorkeuren."
 
 # OPAC > OpenURL
 #, fuzzy
@@ -10280,58 +10299,12 @@ msgstr ""
 "verplicht."
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr "Auteur"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr "Collectietitel"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr "Copyright of uitgiftedatum"
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for "
 "patron purchase suggestions:"
 msgstr ""
 "opac.pref#OPACSuggestionMandatoryFields# Verplichte velden voor "
 "aanschafsuggesties van leners:"
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN of ander standaardnummer"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr "Item type"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr "Bibliotheek of vestiging"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr "Opmerking"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr "Reden lener"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr "Reden lener"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr "Naam uitgever"
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr "Titel"
 
 # OPAC > Policy > OPACSuggestionUnwantedFields
 msgid ""
@@ -10343,69 +10316,12 @@ msgstr ""
 
 # OPAC > Policy
 #, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr "Auteur"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr "Collectietitel"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr "Copyright of uitgiftedatum"
-
-# OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
 msgstr ""
 "opac.pref#OPACSuggestionMandatoryFields# Verplichte velden voor "
 "aanschafsuggesties van leners:"
-
-# OPAC > Policy
-#, fuzzy
-msgid ""
-"opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN of ander standaardnummer"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr "Item type"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr "Bibliotheek of vestiging"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr "Opmerking"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr "Reden lener"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr "Reden lener"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr "Naam uitgever"
-
-# OPAC > Policy
-#, fuzzy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr "Titel"
 
 # OPAC > Appearance
 msgid ""
@@ -10476,7 +10392,6 @@ msgstr ""
 "de OPAC."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10488,12 +10403,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTDetailsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard stylesheet</li><li>Voer een pad in om een xslt bestand te "
+"definiëren</li><li>Voer een pad in voor een externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de aangepaste stylesheet data in de exemplaarvelden "
+"gebruikt</li></ul>Bij meerdere stylesheets voor verschillende talen wordt de "
+"placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 msgid ""
@@ -10504,7 +10422,6 @@ msgstr ""
 "op: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10516,12 +10433,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard stylesheet</li><li>Voer een pad in om een xslt bestand te "
+"definiëren</li><li>Voer een pad in voor een externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de aangepaste stylesheet data in de exemplaarvelden "
+"gebruikt</li></ul>Bij meerdere stylesheets voor verschillende talen wordt de "
+"placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 msgid ""
@@ -10532,7 +10452,6 @@ msgstr ""
 "stylesheet op: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -10544,12 +10463,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard stylesheet</li><li>Voer een pad in om een xslt bestand te "
+"definiëren</li><li>Voer een pad in voor een externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de aangepaste stylesheet data in de exemplaarvelden "
+"gebruikt</li></ul>Bij meerdere stylesheets voor verschillende talen wordt de "
+"placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 msgid ""
@@ -10874,15 +10796,14 @@ msgstr ""
 "wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, separated by "
 "|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
-"opac.pref#OpacHiddenItemsExceptions# Lijst van lenercategorieën, gescheiden "
-"door |, die wel items kunnen zien die verborgen zijn door "
-"<code>OpacHiddenItems</code>"
+"Lijst van lenercategorieën, gescheiden door |, die exemplaren kunnen zien "
+"die anders verborgen worden door <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10895,15 +10816,14 @@ msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
 msgstr "Arceren"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsHidesRecord# the bibliographic record when all its "
 "items are hidden by <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 msgstr ""
-"opac.pref#OpacHiddenItemsExceptions# Lijst van lenercategorieën, gescheiden "
-"door |, die wel items kunnen zien die verborgen zijn door "
-"<code>OpacHiddenItems</code>"
+"het bibliografisch record waarvan alle exemplaren verborgen worden door <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 
 # OPAC > Appearance
 #, fuzzy
@@ -11090,14 +11010,13 @@ msgstr ""
 "database bijgewerkt moet worden, alleen onvoorwaardelijk."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacMaintenanceNotice# Show the following HTML when <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
 msgstr ""
-"opac.pref#OpacMaintenanceNotice# Toon de volgende HTML als OpacMaintenance "
-"ingeschakeld is:"
+"Toon de volgende HTML als <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacMaintenance\">OpacMaintenance</a> ingeschakeld is:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -11194,15 +11113,15 @@ msgstr ""
 "authenticatie voor toegang. "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacPublic# Note: This does not affect the public API, see the <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=RESTPublicAnonymousRequests"
 "\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
-"opac.pref#OpacPublic# Let op: Dit heeft geen effect op de openbare API, zie "
-"de <code>RESTPublicAnonymousRequests</code> voor beheer van de API."
+"Let op: Dit heeft geen effect op de openbare API, zie de <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=RESTPublicAnonymousRequests"
+"\">RESTPublicAnonymousRequests</a> voor beheer van de API."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -11431,9 +11350,8 @@ msgid ""
 "target='blank'>database columns</a> will not appear on the patron self-"
 "modification screen:"
 msgstr ""
-"opac.pref#PatronSelfModificationBorrowerUnwantedField# De volgende <a "
-"href='http://schema.koha-community.org/__VERSION__/tables/items.html' "
-"target='blank'>database columns</a> zijn niet zichtbaar op de "
+"De volgende <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"items.html' target='blank'>databasekolommen</a> zijn niet zichtbaar op de "
 "zelfbewerkingspagina van een lener:"
 
 # Acquisitions > Policy
@@ -11808,15 +11726,14 @@ msgid "opac.pref#ShowReviewerPhoto# Show"
 msgstr "Toon"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The "
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
-"opac.pref#ShowReviewerPhoto# avatar van reviewer naast reactie in OPAC. De "
-"avatar wordt gezocht op www.libravatar.org met behulp van de lener's e-"
-"mailadres."
+"avatar van reviewer naast reactie in OPAC. De avatar wordt gezocht op <a "
+"href=\"https://www.libravatar.org\" target=\"_blank\">Libravatar</a> met "
+"behulp van de lener's e-mailadres."
 
 # OPAC > Features
 #, fuzzy
@@ -12608,15 +12525,13 @@ msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
-"opac.pref#OpacBrowser# <br><strong>LET OP:</strong> Deze systeemvoorkeur "
-"vereist de <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. "
-"Vraag de systeembeheerder deze in te plannen."
+"<br><strong>LET OP:</strong> Deze systeemvoorkeur vereist de misc/cronjobs/"
+"cleanup_database.pl cronjob. Vraag de systeembeheerder deze in te plannen."
 
 # Patrons > General > LockExpiredDelay
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
@@ -14576,7 +14491,6 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14589,12 +14503,15 @@ msgid ""
 "different langues the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"staff_interface.pref#XSLTDetailsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard</li><li>Voer een pad in om een xslt bestand te definiëren</"
+"li><li>Voer een url in voor een specifieke externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de handmatige stylesheet data gebruikt in de "
+"exemplaarvelden</li></ul>Bij meerdere stylesheets voor verschillende talen "
+"wordt de placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 #, fuzzy
@@ -14606,7 +14523,6 @@ msgstr ""
 "op: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14618,12 +14534,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different langues the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTListsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard</li><li>Voer een pad in om een xslt bestand te definiëren</"
+"li><li>Voer een url in voor een specifieke externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de handmatige stylesheet data gebruikt in de "
+"exemplaarvelden</li></ul>Bij meerdere stylesheets voor verschillende talen "
+"wordt de placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 #, fuzzy
@@ -14635,7 +14554,6 @@ msgstr ""
 "stylesheet op: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14648,12 +14566,15 @@ msgid ""
 "different langues the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"staff_interface.pref#XSLTResultsDisplay# <br />Opties:<ul><li>Voer \"<a href="
-"\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value="
-"\"default\">default</a>\" in voor de standaard</li><li>Voer een pad in om "
-"een xslt bestand te definiëren</li><li>Voer een url in voor een specifieke "
-"externe stylesheet.</li></ul>{langcode} wordt vervangen door de huidige "
-"interfacetaal"
+"<br />Opties:<ul><li>Voer \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" in voor de "
+"standaard</li><li>Voer een pad in om een xslt bestand te definiëren</"
+"li><li>Voer een url in voor een specifieke externe stylesheet.</li><li>LET "
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de handmatige stylesheet data gebruikt in de "
+"exemplaarvelden</li></ul>Bij meerdere stylesheets voor verschillende talen "
+"wordt de placeholder {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 #, fuzzy
@@ -14971,7 +14892,9 @@ msgstr ""
 
 # Logging > Logging
 #, fuzzy
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
 msgstr ""
 "logs.pref#ReportsLog# wanneer rapporten worden toegevoegd, verwijderd of "
 "aangepast."
@@ -15536,6 +15459,115 @@ msgstr ""
 # OPAC > Appearance
 #~ msgid "opac.pref#HighlightOwnItemsOnOPAC# results from the "
 #~ msgstr "van resultaten van de "
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
+#~ msgstr "Auteur"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
+#~ msgstr "Collectietitel"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
+#~ msgstr "Copyright of uitgiftedatum"
+
+# OPAC > Policy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN of ander "
+#~ "standaardnummer"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
+#~ msgstr "Item type"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
+#~ msgstr "Bibliotheek of vestiging"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
+#~ msgstr "Opmerking"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
+#~ msgstr "Reden lener"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
+#~ msgstr "Reden lener"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
+#~ msgstr "Naam uitgever"
+
+# OPAC > Policy
+#~ msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
+#~ msgstr "Titel"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
+#~ msgstr "Auteur"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
+#~ msgstr "Collectietitel"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
+#~ msgstr "Copyright of uitgiftedatum"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid ""
+#~ "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard "
+#~ "number"
+#~ msgstr ""
+#~ "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN of ander "
+#~ "standaardnummer"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
+#~ msgstr "Item type"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
+#~ msgstr "Bibliotheek of vestiging"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
+#~ msgstr "Opmerking"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
+#~ msgstr "Reden lener"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
+#~ msgstr "Reden lener"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
+#~ msgstr "Naam uitgever"
+
+# OPAC > Policy
+#, fuzzy
+#~ msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
+#~ msgstr "Titel"
 
 # OPAC > Appearance
 #, fuzzy

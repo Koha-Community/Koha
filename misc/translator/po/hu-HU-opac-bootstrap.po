@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2021-12-15 07:15-0300\n"
+"POT-Creation-Date: 2022-01-15 08:06-0300\n"
 "PO-Revision-Date: 2021-04-23 07:46+0000\n"
 "Last-Translator: Mira Buzanszky <mira.buzanszky@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -245,7 +245,7 @@ msgstr "%s %s (nem engedélyezett) %s "
 #. %4$s:  HTML5MediaSet.child | html 
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:912
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:906
 #, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
 msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
@@ -362,7 +362,7 @@ msgstr ""
 #. %9$s:  CASE 
 #. %10$s:  m.code | html 
 #. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:278
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:286
 #, c-format
 msgid ""
 "%s %s The suggestion has not been added. You have reached your limit for "
@@ -430,7 +430,7 @@ msgstr "%s %s küldte az online katalógusból, a lista neve : %s."
 #. %3$s:  Koha.Preference('URLLinkText') | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1311
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1305
 #, fuzzy, c-format
 msgid "%s %s%s%sLink to resource%s "
 msgstr "%s%s%sLink a forráshoz%s"
@@ -606,18 +606,6 @@ msgstr ""
 "%s A pdf-fájl létrehozása közben hiba lépett fel. Kérjük, keresse meg a "
 "rendszergazdát a probléma elhárítása érdekében. %s "
 
-#. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#, c-format
-msgid "%s Automatic renewal "
-msgstr "%s Automatikus meghosszabbítás "
-
-#. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
-#, c-format
-msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "%s Automatikus meghosszabbítás sikertelen, fiókja lejárt. "
-
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -771,23 +759,6 @@ msgid ""
 "online%s catalog "
 msgstr ""
 
-#. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
-#. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
-#, c-format
-msgid ""
-"%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
-msgstr ""
-"%s Nem hosszabbítható meg %s Automatikus meghosszabbítás sikertelen "
-"befizetetlen bírságok miatt. "
-
-#. %1$s:  ELSIF ( ISSUE.too_soon ) 
-#. %2$s:  ISSUE.soonestrenewdate | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#, c-format
-msgid "%s No renewal before %s "
-msgstr "%s A meghosszabbítás %s előtt nem lehetséges "
-
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:66
@@ -817,23 +788,6 @@ msgstr "%s Nincs cím %s %s%s,%s "
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s Nem engedélyezett"
-
-#. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#, c-format
-msgid "%s Not renewable "
-msgstr "%s Nem újítható meg "
-
-#. %1$s:  ELSIF ( ISSUE.too_many ) 
-#. %2$s:  ELSIF ( ISSUE.too_unseen ) 
-#. %3$s:  ISSUE.renewsleft | html 
-#. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#, c-format
-msgid ""
-"%s Not renewable %s Item must be renewed at the library. %s renewals "
-"remaining %s Not allowed "
-msgstr ""
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -894,7 +848,7 @@ msgstr "%s Professzionális értékelés"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:266
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:274
 #, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
@@ -1128,8 +1082,8 @@ msgstr "%s állomány"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:513
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:542
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #, c-format
 msgid "%s items are on order."
 msgstr ""
@@ -1580,7 +1534,7 @@ msgstr "%sKönyvtár%sKönyvtárak%s"
 #. %10$s:  IF ( suggestions_loo.reason ) 
 #. %11$s:  suggestions_loo.reason | html 
 #. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:423
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:431
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
@@ -1670,8 +1624,8 @@ msgstr "%slista:%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1018
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1023
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
 #, fuzzy, c-format
 msgid "%sby %s%s "
 msgstr "%sszerző %s%s"
@@ -2403,8 +2357,8 @@ msgstr "(Még nem támogatott)"
 msgid "(On-site checkout)"
 msgstr "0 Kölcsönzések"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1261
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1255
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
 #, c-format
 msgid "(Opens below)"
 msgstr ""
@@ -2573,8 +2527,8 @@ msgstr "(lejárt)"
 
 #. For the first occurrence,
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:523
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1329
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:521
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1323
 #, c-format
 msgid "(priority %s)"
 msgstr "(prioritás %s)"
@@ -2604,7 +2558,7 @@ msgid "(remove)"
 msgstr "(eltávolítás)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:208
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:221
 #, c-format
 msgid "-- Choose --"
 msgstr "-- Kérjük válasszon --"
@@ -2662,8 +2616,8 @@ msgstr "0.00"
 msgid "000 "
 msgstr "000 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:509
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:538
 #, c-format
 msgid "1 item is on order."
 msgstr ""
@@ -2762,7 +2716,7 @@ msgstr ""
 msgid "A specific item"
 msgstr "Egy bizonyos példány"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:431
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
 #, c-format
 msgid "About the author"
 msgstr "A szerzőről"
@@ -3045,7 +2999,7 @@ msgid "Amazon cover image"
 msgstr "Borító"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 msgid "Amazon cover image (<a href='%s'>see the original image</a>)"
 msgstr ""
 
@@ -3201,7 +3155,7 @@ msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Biztosan el akarod távolítani a kijelölt listát?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Biztosan törölni szeretné ezeket a javaslatokat?"
 
@@ -3212,7 +3166,7 @@ msgid "Are you sure you want to delete this list?"
 msgstr "Biztosan törölni szeretné ezt a listát?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "Biztosan törölni szeretné ezt a javaslatot?"
 
@@ -3264,7 +3218,7 @@ msgstr "Biztosan el akarod távolítani a kijelölt listát?"
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Biztosan törölni szeretnéd az előjegyzést?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
 #, c-format
 msgid "Arrived"
 msgstr ""
@@ -3309,8 +3263,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( subscription.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:685
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:688
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:679
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:682
 #, c-format
 msgid "At library: %s"
 msgstr "A könyvtár: %s"
@@ -3386,7 +3340,7 @@ msgstr "Szerző (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Szerző (Z-A)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:661
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:655
 #, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "Syndetics által szolgáltatott szerzői információk"
@@ -3476,6 +3430,23 @@ msgstr "Szerzők"
 msgid "Auto-renewal"
 msgstr "Automatikus meghosszabbítás engedélyezése: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#, fuzzy, c-format
+msgid "Automatic renewal"
+msgstr "%s Automatikus meghosszabbítás "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:391
+#, fuzzy, c-format
+msgid "Automatic renewal failed, you have unpaid fines."
+msgstr ""
+"%s Nem hosszabbítható meg %s Automatikus meghosszabbítás sikertelen "
+"befizetetlen bírságok miatt. "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:399
+#, fuzzy, c-format
+msgid "Automatic renewal failed, your account is expired."
+msgstr "%s Automatikus meghosszabbítás sikertelen, fiókja lejárt. "
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:8
 #, c-format
 msgid "Availability"
@@ -3507,7 +3478,7 @@ msgstr "Elérhető számok"
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
@@ -3536,13 +3507,13 @@ msgstr ""
 msgid "Back to lists"
 msgstr "Vissza a listákhoz"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:986
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
 #, c-format
 msgid "Back to results"
 msgstr "Vissza a találatokhoz"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:986
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
 msgid "Back to the results search list"
 msgstr "Vissza a találati listához"
 
@@ -3552,7 +3523,7 @@ msgid "Backends"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:111
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
@@ -3722,8 +3693,8 @@ msgstr "Katalógus böngészése"
 msgid "Browse our catalog &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:969
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
 #, c-format
 msgid "Browse results"
 msgstr "Találatok böngészése"
@@ -3737,8 +3708,8 @@ msgstr "Találatok böngészése"
 msgid "Browse search"
 msgstr "Böngészés hierarchia szerint"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1261
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1255
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "Böngészés a polcon"
@@ -3777,7 +3748,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
@@ -3829,7 +3800,7 @@ msgid "Call number:"
 msgstr "Katalógusszám:"
 
 #. %1$s:  subscription.callnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:698
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:692
 #, c-format
 msgid "Call number: %s"
 msgstr "Katalógusszám: %s"
@@ -3838,7 +3809,7 @@ msgstr "Katalógusszám: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:244
@@ -3852,7 +3823,7 @@ msgstr "Katalógusszám: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:636
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:267
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
@@ -3869,7 +3840,7 @@ msgid "Cancel"
 msgstr "Mégsem"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:708
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:702
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:158
 #, c-format
 msgid "Cancel email notification"
@@ -4147,7 +4118,7 @@ msgstr "Idézet"
 msgid "City:"
 msgstr "Város:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:753
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
 #, c-format
 msgid "Claimed"
 msgstr ""
@@ -4178,7 +4149,7 @@ msgstr "Törlés"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:225
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:252
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:338
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, c-format
 msgid "Clear all"
 msgstr "Összes kiválasztás megszüntetése"
@@ -4209,7 +4180,7 @@ msgstr "Dátum törlése"
 msgid "Click here if you're not %s"
 msgstr "Kattintson ide, ha Ön nem %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:927
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:921
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Kattintson a képre, hogy megjeleníthesse egy képnézegető programmal!"
@@ -4239,9 +4210,9 @@ msgstr "Kattintson ide egy új ablak megnyitásához"
 msgid "Click to view in Google Books"
 msgstr "Kattints ide a Google Books megnyitásához"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:967
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1093
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:170
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:184
@@ -4296,19 +4267,19 @@ msgid "Clubs you can enroll in"
 msgstr "Klubok, melyekbe beiratkozhat"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy
 msgid "Coce image from Amazon.com"
 msgstr "Értékelés (az Amazon.com szerint):"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy
 msgid "Coce image from Google Books"
 msgstr "Kattints ide a Google Books megnyitásához"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy
 msgid "Coce image from Open Library"
 msgstr "Open Library: "
@@ -4320,7 +4291,7 @@ msgstr "Gyűjtse össze az Önt érdeklő dokumentumokat!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:114
 #, c-format
@@ -4365,16 +4336,16 @@ msgstr "Üzenetküldés beállításai"
 
 #. For the first occurrence,
 #. %1$s:  review.patron.firstname | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:817
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:819
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:823
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #, c-format
 msgid "Comment by %s"
 msgstr "Megjegyzések %s"
 
 #. %1$s:  review.patron.firstname | html 
 #. %2$s:  review.patron.surname|truncate(2,'.') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
 #, c-format
 msgid "Comment by %s %s"
 msgstr "Megjegyzés %s %s"
@@ -4382,7 +4353,7 @@ msgstr "Megjegyzés %s %s"
 #. %1$s:  review.patron.title | html 
 #. %2$s:  review.patron.firstname | html 
 #. %3$s:  review.patron.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Kommentálta %s %s %s"
@@ -4415,13 +4386,13 @@ msgid "Comments on %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:447
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:445
 #, c-format
 msgid "Comments%s"
 msgstr "Megjegyzések %s"
 
 #. %1$s:  ComponentParts.size | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:411
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
 #, fuzzy, c-format
 msgid "Components (%s)"
 msgstr "Megjegyzések %s"
@@ -4455,7 +4426,7 @@ msgid "Confirm primary email:"
 msgstr "Megerősített elsődleges email:"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:250
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #, fuzzy
 msgid "Confirm your suggestion"
 msgstr "Javaslat elküldése"
@@ -4513,7 +4484,7 @@ msgid "Copy"
 msgstr "Szerzői jog"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, c-format
 msgid "Copy number"
@@ -4584,7 +4555,7 @@ msgstr "Kurzus szám:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:26
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1169
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:301
 #, c-format
 msgid "Course reserves"
@@ -4626,7 +4597,7 @@ msgstr "Kurzusok"
 msgid "Courses &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:429
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:431
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:475
@@ -4638,7 +4609,7 @@ msgid "Cover image"
 msgstr "Borító"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 msgid "Cover image source unknown"
 msgstr ""
 
@@ -4693,7 +4664,7 @@ msgstr "Hitel"
 msgid "Credits (%s)"
 msgstr "Credits (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
 #, fuzzy, c-format
 msgid "Current library"
 msgstr "Honkönyvtár"
@@ -4741,7 +4712,7 @@ msgstr "Tanterv"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:140
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy, c-format
 msgid "Custom cover image"
 msgstr "Borító"
@@ -4790,7 +4761,7 @@ msgid "Date added:"
 msgstr "Dátum hozzáadva"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 #, c-format
 msgid "Date due"
 msgstr "Kölcsönzés lejáratának dátuma"
@@ -4873,15 +4844,15 @@ msgstr ""
 "Meghatározza a metaadat sémát, amely szerint a bejegyzések visszaadásra "
 "kerülnek, lehetséges értékek: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:752
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:355
 #, c-format
 msgid "Delete"
 msgstr "Törlés"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:448
 #, fuzzy
 msgid "Delete selected"
 msgstr "1-5 A nyilvántartásban levő dátum"
@@ -5156,7 +5127,7 @@ msgstr "HIBA: Nem található bejegyzés a következő azonosítóhoz: %s"
 msgid "ERROR: No record id specified. "
 msgstr "HIBA: Nincs azonosító megadva."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:809
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:803
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:710
 #, c-format
 msgid "Edit"
@@ -5208,7 +5179,7 @@ msgstr ""
 msgid "Editing issue note for %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:455
 #, c-format
 msgid "Editions"
 msgstr "Kiadások"
@@ -5258,7 +5229,7 @@ msgstr "Jelenlegi munkamenet"
 msgid "Enhanced content: "
 msgstr "Bármely tartalom "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
 #, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr ""
@@ -5446,17 +5417,17 @@ msgstr ""
 msgid "Example response"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:419
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:417
 #, c-format
 msgid "Excerpt"
 msgstr "Kivonat"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:632
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:626
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:737
 #, c-format
 msgid "Expected"
 msgstr ""
@@ -5871,7 +5842,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:206
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:326
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:282
 #, c-format
@@ -5879,8 +5850,8 @@ msgid "Go"
 msgstr "Alkalmaz"
 
 #. LI
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1016
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1021
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
 msgid "Go to detail"
 msgstr "Bővebben"
 
@@ -6076,12 +6047,12 @@ msgstr "Lelőhely (könyvtárak)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
 #, c-format
 msgid "Holdings"
 msgstr "Állomány"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:535
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:533
 #, c-format
 msgid "Holdings:"
 msgstr "Állomány:"
@@ -6176,7 +6147,7 @@ msgstr "Kezdőlap"
 msgid "Home libraries"
 msgstr "Honkönyvtárak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:178
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
@@ -6419,7 +6390,7 @@ msgid "Image from Amazon.com"
 msgstr "Értékelés (az Amazon.com szerint):"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy, c-format
 msgid "Image from Baker &amp; Taylor"
 msgstr "Lásd Baker & Taylor"
@@ -6432,7 +6403,7 @@ msgid "Image from Coce"
 msgstr "%s kiadványa "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 msgid "Image from Google Books (<a href='%s'>see the original image</a>)"
 msgstr ""
 
@@ -6447,17 +6418,17 @@ msgid "Image from OpenLibrary"
 msgstr "Üzenet a könyvtártól:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 msgid "Image from OpenLibrary (<a href='%s'>see the original image</a>)"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, c-format
 msgid "Image from Syndetics"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:59
 #, c-format
 msgid "Images"
@@ -6571,7 +6542,7 @@ msgstr "Helyrajzi szám"
 msgid "Issue"
 msgstr "Szám"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:729
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:723
 #, c-format
 msgid "Issue #"
 msgstr "Szám"
@@ -6617,7 +6588,7 @@ msgstr ""
 msgid "Item URI"
 msgstr "# Dokumentumok"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:484
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
 #, c-format
 msgid "Item call number"
 msgstr "Tétel katalógusszám"
@@ -6647,12 +6618,12 @@ msgstr "Rongálódott példány"
 msgid "Item details"
 msgstr "További részletek"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Előjegyezze"
@@ -6666,6 +6637,12 @@ msgstr "Elveszett dokumentum"
 #, fuzzy, c-format
 msgid "Item must be checked out at a circulation desk."
 msgstr "Sajnáljuk, ez a dokumentum nem kölcsönözhető erről a számítógépről."
+
+#. %1$s:  ISSUE.renewsleft | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:385
+#, c-format
+msgid "Item must be renewed at the library. %s renewals remaining"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:211
 #, fuzzy, c-format
@@ -6689,7 +6666,7 @@ msgid "Item renewed"
 msgstr "A kiadvány meghosszabbítása nem engedélyezett."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:176
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
@@ -6886,12 +6863,12 @@ msgstr "Utolsó frissítés"
 msgid "Last updated:"
 msgstr "Utolsó frissítés:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:745
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
 #, c-format
 msgid "Late"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:726
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:720
 #, c-format
 msgid "Latest serials"
 msgstr ""
@@ -6943,7 +6920,7 @@ msgstr ""
 msgid "Libraries"
 msgstr "Köyvtárak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:480
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
@@ -7087,11 +7064,11 @@ msgstr "Betöltés... "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:930
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #, fuzzy, c-format
 msgid "Local cover image"
 msgstr "Borító"
@@ -7126,7 +7103,7 @@ msgstr "Hely"
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html 
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:695
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
 #, c-format
 msgid "Location: %s %s %s "
 msgstr "Földrajzi fekvés: %s %s %s "
@@ -7175,7 +7152,7 @@ msgid "Log in to see your own saved tags."
 msgstr "Jelentkezzen be, hogy láthatóak legyenek az elmentett címkék."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:55
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:858
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:404
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:102
@@ -7367,12 +7344,12 @@ msgstr "Befizetés"
 msgid "Male:"
 msgstr "Férfi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:362
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:370
 #, c-format
 msgid "Managed by"
 msgstr "Menedzselte"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:415
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:423
 #, c-format
 msgid "Managed by:"
 msgstr "Menedzselte:"
@@ -7392,7 +7369,7 @@ msgstr "Március"
 msgid "Match:"
 msgstr "Találat:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1140
 #, c-format
 msgid "Materials specified"
 msgstr "Meghatározott anyagok"
@@ -7424,33 +7401,33 @@ msgstr "Üzenetei"
 msgid "Minimum amount needed by this service is %s"
 msgstr "Minimális összeg amely szükséges a szolgáltatás számára a %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:740
 #, c-format
 msgid "Missing"
 msgstr "Hiányzik"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:749
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
 #, c-format
 msgid "Missing (damaged)"
 msgstr "Hiányzik (megrongálódott)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:750
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
 #, c-format
 msgid "Missing (lost)"
 msgstr "Hiányzik (elveszett)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:741
 #, c-format
 msgid "Missing (never received)"
 msgstr "Hiányzik (nem érkezett)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:742
 #, c-format
 msgid "Missing (sold out)"
 msgstr "Hiányzik (eladva)"
 
 #. %1$s:  subscription.missinglist | html | html_line_break 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:712
 #, fuzzy, c-format
 msgid "Missing issues: %s "
 msgstr "%s talált sorok. "
@@ -7476,7 +7453,7 @@ msgid "Monday"
 msgstr "Hétfő"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:764
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:758
 #, c-format
 msgid "More details"
 msgstr "További részletek"
@@ -7596,8 +7573,8 @@ msgstr "Lista létrehozása"
 msgid "New password:"
 msgstr "Új jelszó:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:334
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:478
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Új beszerzési javaslat"
@@ -7634,7 +7611,7 @@ msgstr ""
 msgid "News from %s%s%sthe library%s"
 msgstr "News from %s%s%sthe library%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:992
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:986
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7645,7 +7622,7 @@ msgid "Next"
 msgstr "Következő találat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
 #, c-format
@@ -7703,7 +7680,7 @@ msgstr "Nincsenek törölhető kölcsönzési előzményei"
 msgid "No checkouts"
 msgstr "Kölcsönözések"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:880
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:133
@@ -7771,6 +7748,11 @@ msgstr "Nincs hozzáférhető dokumentum:"
 msgid "No limit"
 msgstr "Nincs korlát"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:389
+#, fuzzy, c-format
+msgid "No longer renewable"
+msgstr "%s Nem újítható meg "
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "No matching records found"
@@ -7786,12 +7768,12 @@ msgstr ""
 msgid "No operation parameter has been passed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:559
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:557
 #, c-format
 msgid "No other items."
 msgstr "Nincs több tétel."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:545
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
 #, c-format
 msgid "No physical items for this record"
 msgstr "Nincs tényleges példány csatolva ehhez a bejegyzéshez"
@@ -7815,6 +7797,12 @@ msgstr "Nincs nyilvános listája."
 #, fuzzy, c-format
 msgid "No record was removed."
 msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+
+#. %1$s:  ISSUE.soonestrenewdate | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:407
+#, fuzzy, c-format
+msgid "No renewal before %s"
+msgstr "%s A meghosszabbítás %s előtt nem lehetséges "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:364
 #, c-format
@@ -7880,12 +7868,12 @@ msgid "No, do not delete"
 msgstr "Nem, ne törölje"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 msgid "No, do not delete suggestion"
 msgstr "Nem, ne törölje a javaslatot"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 msgid "No, do not delete suggestions"
 msgstr "Nem, ne törölje a javaslatokat"
 
@@ -7942,6 +7930,11 @@ msgstr "Nincs megadva: "
 msgid "Normal view"
 msgstr "Normál nézet"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
+#, fuzzy, c-format
+msgid "Not allowed "
+msgstr "%s Nem engedélyezett"
+
 #. %1$s:  PROCESS error_message messages=error.messages 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:94
 #, c-format
@@ -7967,7 +7960,7 @@ msgstr "Nem kölcsönözhető %s"
 msgid "Not for loan (%s)"
 msgstr "Nem kölcsönözhető (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:751
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:745
 #, c-format
 msgid "Not issued"
 msgstr ""
@@ -7977,13 +7970,23 @@ msgstr ""
 msgid "Not on hold"
 msgstr "Nincs előjegyezve"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#, fuzzy, c-format
+msgid "Not renewable"
+msgstr "%s Nem újítható meg "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
+#, fuzzy, c-format
+msgid "Not renewable "
+msgstr "%s Nem újítható meg "
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:133
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr "Nem erre számított? Nézze meg ezt: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:733
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:368
 #, c-format
 msgid "Note"
 msgstr "Megjegyzés"
@@ -7993,7 +7996,7 @@ msgstr "Megjegyzés"
 msgid "Note:"
 msgstr "Megjegyzés:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:408
 #, c-format
 msgid "Note: "
 msgstr "Megjegyzés: "
@@ -8066,7 +8069,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:766
 #, c-format
@@ -8089,8 +8092,8 @@ msgstr "Megjegyzések/Hozzászólások"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:217
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:229
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:233
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:237
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:241
 #, c-format
 msgid "Notes:"
 msgstr "Megjegyzések:"
@@ -8119,9 +8122,9 @@ msgstr "Megjegyzés:"
 msgid "Nov"
 msgstr "Nov"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:452
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:940
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:934
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -8196,8 +8199,8 @@ msgstr "Megrendelve"
 msgid "On-site checkouts"
 msgstr "0 Kölcsönzések"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:332
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:468
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:340
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:476
 #, c-format
 msgid ""
 "Once the library has processed those suggestions you will be able to place "
@@ -8217,7 +8220,7 @@ msgid "Online resources:"
 msgstr "Online források:"
 
 #. %1$s:  ComponentParts.size | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:609
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
 #, c-format
 msgid "Only %s results are shown: "
 msgstr ""
@@ -8264,12 +8267,12 @@ msgstr "Cím szerinti sorrend"
 msgid "Order by: "
 msgstr "Rendezés szempontja: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:868
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:862
 #, fuzzy, c-format
 msgid "Other editions"
 msgstr "E mű egyéb kiadásai"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:866
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:860
 #, c-format
 msgid "Other editions of this work"
 msgstr "E mű egyéb kiadásai"
@@ -8340,7 +8343,7 @@ msgid "OverDrive search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:525
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:523
 #, c-format
 msgid "Overall queue priority: %s"
 msgstr ""
@@ -8478,7 +8481,7 @@ msgid "Patent document"
 msgstr "Szabadalmi dokumentum"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:834
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
 #, c-format
 msgid "Patron comment on %s"
 msgstr "Olvasó megjegyzés %s"
@@ -8623,7 +8626,7 @@ msgstr "Előjegyzés"
 msgid "Placing a hold &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sKoha online%s katalógus"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:469
 #, c-format
 msgid "Play media"
 msgstr "Média lejátszása"
@@ -8963,7 +8966,7 @@ msgstr "Népszerűség (növekvő)"
 msgid "Popularity (most to least)"
 msgstr "Népszerűség (csökkenő)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:851
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
 #, fuzzy, c-format
 msgid "Post your comments on this title. "
 msgstr "Tegye közzé e dokumentumhoz kapcsolódó megjegyzését. "
@@ -9007,8 +9010,8 @@ msgstr ""
 msgid "Prev"
 msgstr "&lt;&lt; Előző"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:979
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:975
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -9169,7 +9172,7 @@ msgstr "Nyilvános listák"
 msgid "Public lists:"
 msgstr "Nyilvános listák:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:730
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:724
 #, c-format
 msgid "Publication date"
 msgstr "Publikáció dátuma"
@@ -9296,7 +9299,7 @@ msgid "Really fuzzy "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:206
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:219
 #, c-format
 msgid "Reason for suggestion: "
 msgstr "A javaslat oka: "
@@ -9306,7 +9309,7 @@ msgstr "A javaslat oka: "
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:731
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:725
 #, c-format
 msgid "Received date"
 msgstr ""
@@ -9719,8 +9722,8 @@ msgstr "Jogi cikkek"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:167
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:179
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:193
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:213
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:239
 #, c-format
 msgid "Required"
 msgstr "Kötelező"
@@ -9854,7 +9857,7 @@ msgid ""
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:422
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:420
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:12
 #, c-format
 msgid "Reviews"
@@ -9865,7 +9868,7 @@ msgstr "Szemlék"
 msgid "Reviews from LibraryThing.com:"
 msgstr "Ismertetések a LibraryThing.com-ról:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:635
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr ""
@@ -9995,7 +9998,7 @@ msgstr "Szkennelje be a következő dokumentumot vagy írja be a vonalkódot:"
 #. INPUT type=submit name=do
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:436
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:85
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:180
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:74
@@ -10052,7 +10055,7 @@ msgstr "E szerző műveinek keresése"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:33
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:307
 #, c-format
 msgid "Search for:"
 msgstr "Keresés:"
@@ -10184,12 +10187,12 @@ msgid "See also:"
 msgstr "Lásd még:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 msgid "See: %s%s%snext biblio%s"
 msgstr "Megjelenítés: %s%s%skövetkező bibliográfia%s"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:979
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
 msgid "See: %s%s%sprevious biblio%s"
 msgstr "Megjelenítés: %s%s%selőző bibliográfia%s"
 
@@ -10210,16 +10213,16 @@ msgid "Select a specific item:"
 msgstr "Egy bizonyos példány előjegyízése:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:222
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:251
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:335
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, c-format
 msgid "Select all"
 msgstr "Összes kiválasztása"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Összes kiválasztása"
@@ -10238,13 +10241,13 @@ msgstr "Keresések kiválasztása a következő művelethez: "
 msgid "Select searches to: "
 msgstr "Keresések kiválasztása a következő művelethez: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:345
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, fuzzy, c-format
 msgid "Select suggestions to: "
 msgstr "Javaslat kiválasztás: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1098
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
 msgstr "Tétel kiválasztás kereséshez"
@@ -10371,13 +10374,13 @@ msgstr "Szeptember"
 msgid "Serial"
 msgstr "Sorozat"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:462
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:460
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:481
 #, c-format
 msgid "Serial collection"
 msgstr "Sorozatgyűjtemény"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:479
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:477
 #, fuzzy, c-format
 msgid "Serial collections"
 msgstr "Sorozatgyűjtemény"
@@ -10418,7 +10421,7 @@ msgstr "A kapcsolat megszakadt"
 msgid "Settings updated"
 msgstr "A beállítások frissültek"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1055
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1049
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, c-format
 msgid "Share"
@@ -10444,7 +10447,7 @@ msgid "Share a list with another patron"
 msgstr "Lista megosztása másik olvasóval"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 msgid "Share by email"
 msgstr "Megosztás emailben"
 
@@ -10455,22 +10458,22 @@ msgid "Share list"
 msgstr "Lista megosztása"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1060
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1054
 msgid "Share on Facebook"
 msgstr "Megosztás a Facebookon"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
 msgid "Share on LinkedIn"
 msgstr "Megosztás LinkedIn-en"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1066
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1060
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "Megosztás LinkedIn-en"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1142
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
 #, c-format
 msgid "Shelving location"
 msgstr "Polc helye"
@@ -10500,7 +10503,7 @@ msgstr "Az utolsó 50 elem megjelenítése"
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:507
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
@@ -10592,7 +10595,7 @@ msgstr "Elérhető példányok megjelenítése"
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:434
 #, c-format
 msgid "Similar items"
 msgstr "Hasonló dokumentumok"
@@ -10832,12 +10835,12 @@ msgid "Statistics"
 msgstr "Statisztika"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:732
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:726
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:371
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:768
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
@@ -10846,7 +10849,7 @@ msgid "Status"
 msgstr "Állapota"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:201
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:423
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:431
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, c-format
 msgid "Status:"
@@ -10869,7 +10872,7 @@ msgstr "3. lépés: Klikkeljen a 'Befejezés' gombra."
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "2. lépés: Szkennelje be mindegyik dokumentum vonalkódját egyenként."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:754
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
 #, c-format
 msgid "Stopped"
 msgstr ""
@@ -10981,8 +10984,8 @@ msgid "Submit update request"
 msgstr "Módosítási kérelem elküldése"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:254
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:257
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:262
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:265
 msgid "Submit your suggestion"
 msgstr "Javaslat elküldése"
 
@@ -10992,7 +10995,7 @@ msgid "Subscribe to a subscription alert"
 msgstr "Az előfizetéshez tartozó számok"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:710
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:704
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:162
 #, c-format
 msgid "Subscribe to email notification on new issues"
@@ -11041,7 +11044,7 @@ msgstr "Előfizetések: "
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:703
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:697
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Előfizetés ettől: %s eddig:%s %s %s most (jelenlegi)%s"
@@ -11068,7 +11071,7 @@ msgid "Subscriptions"
 msgstr "Előfizetések"
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:440
 #, c-format
 msgid "Subscriptions ( %s )"
 msgstr "Előfizetések ( %s )"
@@ -11084,34 +11087,34 @@ msgstr ""
 msgid "Suggest for purchase"
 msgstr "Javasolta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:308
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:311
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:319
 #, fuzzy, c-format
 msgid "Suggested by anyone"
 msgstr "Javasolta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:307
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:315
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:318
 #, fuzzy, c-format
 msgid "Suggested by me"
 msgstr "A javaslatot tette:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:304
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:312
 #, c-format
 msgid "Suggested by:"
 msgstr "A javaslatot tette:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:369
 #, fuzzy, c-format
 msgid "Suggested for"
 msgstr "Javasolta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:407
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:415
 #, fuzzy, c-format
 msgid "Suggested for:"
 msgstr "Javasolta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:367
 #, fuzzy, c-format
 msgid "Suggested on"
 msgstr "Javasolta"
@@ -11121,7 +11124,7 @@ msgstr "Javasolta"
 msgid "Suggestions"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:358
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:366
 #, c-format
 msgid "Summary"
 msgstr "Összesítés"
@@ -11194,7 +11197,7 @@ msgstr "A rendszer karbantartása"
 msgid "System-wide only"
 msgstr "csak rendszerszintűen"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:415
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:413
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:763
 #, c-format
 msgid "TOC"
@@ -11206,7 +11209,7 @@ msgstr "Tartalomjegyzék"
 msgid "Table of contents"
 msgstr "Syndetics által szolgáltatott tartalomjegyzék"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:619
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:613
 #, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "Syndetics által szolgáltatott tartalomjegyzék"
@@ -11223,7 +11226,7 @@ msgstr "Bármely tartalom "
 msgid "Tag"
 msgstr "Címke"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:437
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:435
 #, c-format
 msgid "Tag browser"
 msgstr "Címkeböngésző"
@@ -11322,7 +11325,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  subscription.opacdisplaycount | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:724
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:718
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "Ehhez az előfizetéshez kapcsolódó utolsó %s szám:"
@@ -11542,7 +11545,7 @@ msgstr ""
 msgid "The password has been changed for user \"%s\"."
 msgstr "Megváltozott \"%s\" felhasználó jelszava."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:294
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:302
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr "A kiválasztott javaslatok törlődtek."
@@ -11591,12 +11594,12 @@ msgid "The userid "
 msgstr "Tézis "
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:675
 #, fuzzy, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "%s elõfizetés kapcsolódik ehhez a címhez."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
 #, c-format
 msgid "There are no comments on this title."
 msgstr "Nincs hozzászólás ehhez a címhez."
@@ -11606,13 +11609,13 @@ msgstr "Nincs hozzászólás ehhez a címhez."
 msgid "There are no items that can be placed on hold."
 msgstr ", egyik dokumentumot sem lehet előjegyezni. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:447
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:456
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:455
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:464
 #, fuzzy, c-format
 msgid "There are no pending purchase suggestions matching your search."
 msgstr "Nincsenek függőben lévő beszerzési javaslatok."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:451
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:459
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "Nincsenek függőben lévő beszerzési javaslatok."
@@ -11702,7 +11705,7 @@ msgstr ""
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:680
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:674
 #, c-format
 msgid "This is a serial"
 msgstr "Ez egy sorozat"
@@ -11808,8 +11811,8 @@ msgstr "Ennek az üzenetnek a következő oka(i) lehet(nek):"
 msgid "This news item does not exist. "
 msgstr "Ez a tétel nem létezik."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:426
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1077
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11817,12 +11820,12 @@ msgid ""
 msgstr ""
 
 #. %1$s:  items_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
 #, c-format
 msgid "This record has many physical items (%s). "
 msgstr "Ehhez a rekordhoz több példány is tartozik (%s). "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:692
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:686
 #, c-format
 msgid "This subscription is closed."
 msgstr "Ez az előfizetés lezárva."
@@ -11896,7 +11899,7 @@ msgid "Title (Z-A)"
 msgstr "Cím (Z-A)"
 
 #. %1$s:  title_notes_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:401
 #, c-format
 msgid "Title notes ( %s )"
 msgstr "Címjegyzetek ( %s )"
@@ -11987,7 +11990,7 @@ msgid "Total due if credit(s) applied:"
 msgstr ""
 
 #. %1$s:  holds_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:519
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:517
 #, c-format
 msgid "Total holds: %s"
 msgstr ""
@@ -12041,7 +12044,7 @@ msgstr "Típus:"
 msgid "UF"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -12242,12 +12245,12 @@ msgstr "Nézet"
 msgid "View all"
 msgstr "Összes megjelenítése"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:449
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:457
 #, fuzzy, c-format
 msgid "View all suggestions"
 msgstr "Keresési javaslatok"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
 #, fuzzy, c-format
 msgid "View all the physical items."
 msgstr "Ehhez a rekordhoz több példány is tartozik (%s). "
@@ -12279,7 +12282,7 @@ msgid "View on Amazon.com"
 msgstr "Értékelés (az Amazon.com szerint):"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1007
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1001
 msgid "View record \"%s\""
 msgstr "Bejegyzés megjelenítése \"%s\""
 
@@ -12294,7 +12297,7 @@ msgstr "Jegyezzen elő egy bizonyos példányt"
 msgid "View your search history"
 msgstr "Keresési előzmények megjelenítése"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
 #, c-format
 msgid "Vol info"
@@ -12394,7 +12397,7 @@ msgid "With selected searches: "
 msgstr "Művelet a kiválasztott keresésekkel: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, fuzzy
 msgid "With selected suggestions: "
 msgstr "Kiválasztott javaslatokkal: "
@@ -12477,13 +12480,13 @@ msgid "Yes, delete"
 msgstr "Kiválasztott javaslatokkal: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, fuzzy
 msgid "Yes, delete suggestion"
 msgstr "Kiválasztott javaslatokkal: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:485
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:493
 #, fuzzy
 msgid "Yes, delete suggestions"
 msgstr "Kiválasztott javaslatokkal: "
@@ -12545,7 +12548,7 @@ msgstr "Bejelentkezés másik IP címről. Kérjük, jelentkezzen be újra."
 msgid "You are not allowed to call this page directly"
 msgstr "Nincsenek függõ szerzeményezési javaslatok."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:461
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
 #, c-format
 msgid "You are not authorized to see pending purchase suggestions."
 msgstr "Ön nem jogosult a függőben lévő vásárlási javaslat megtekintésére."
@@ -12731,12 +12734,12 @@ msgstr "Ezt a művet már kikérte."
 msgid "You have no fines or charges"
 msgstr "Nincs késedelmi dija, vagy más tartozása."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:458
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:466
 #, fuzzy, c-format
 msgid "You have no pending purchase suggestions."
 msgstr "Nincsenek függőben lévő beszerzési javaslatok."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:449
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:457
 #, fuzzy, c-format
 msgid "You have no pending purchase suggestions. "
 msgstr "Nincsenek függőben lévő beszerzési javaslatok."
@@ -12756,7 +12759,7 @@ msgid "You have nothing checked out"
 msgstr "Nincs Önnél könyv."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:340
 #, fuzzy, c-format
 msgid ""
 "You have reached your limit for suggestions you can place at this time (%s)."
@@ -12773,7 +12776,7 @@ msgstr ""
 "Ez alkalommal %s darabnál több javaslatot nem nyújthat be. Miután a könyvtár "
 "feldolgozta eddigi javaslatait, ismét további javaslatokat nyújthat be."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:468
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:476
 #, fuzzy, c-format
 msgid "You have reached your limit for suggestions you can place at this time."
 msgstr "Ez alkalommal több javaslatot már nem nyújthat be."
@@ -12791,7 +12794,7 @@ msgstr ""
 msgid "You have renewed this item the maximum number of times allowed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:708
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:702
 #, c-format
 msgid "You have subscribed to email notification on new issues. "
 msgstr "Feliratkozott email értesítőre új lapszám érkezésekor. "
@@ -12825,8 +12828,8 @@ msgstr ""
 #. %1$s:  Koha.Preference('MaxTotalSuggestions') | html 
 #. %2$s:  Koha.Preference('NumberOfSuggestionDays') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:330
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:338
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:474
 #, c-format
 msgid "You may only add up to %s suggestions in %s days."
 msgstr ""
@@ -12854,7 +12857,7 @@ msgstr ""
 msgid "You must have an email address to enroll"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:713
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:707
 #, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
@@ -13049,12 +13052,12 @@ msgstr "%s%s%sKoha online%s katalógus"
 msgid "Your checkout history has been deleted."
 msgstr "Az olvasási előzményei törlődtek."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:794
 #, c-format
 msgid "Your comment"
 msgstr "Megjegyzése:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:796
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr "Megjegyzése (függőben, jóváhagyásra várva)"
@@ -13308,14 +13311,14 @@ msgstr "A biztonsági beállítások frissültek."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:354
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:362
 #, c-format
 msgid "Your purchase suggestions"
 msgstr "Beszerzési javaslatok"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, fuzzy
@@ -13451,7 +13454,7 @@ msgid "[% limit or"
 msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:917
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:911
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr "[%s tag-et nem támogatja a böngészője.] "
@@ -13519,7 +13522,7 @@ msgstr "olvasó sorszáma"
 msgid "by"
 msgstr "szerző"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:890
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:884
 #, c-format
 msgid "by "
 msgstr "szerző "
@@ -13618,8 +13621,8 @@ msgstr "keresztnév"
 msgid "for more information on what it does and how to configure it."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:426
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, c-format
 msgid "here"
 msgstr "itt"
@@ -13769,7 +13772,7 @@ msgstr ""
 msgid "log in using a different account"
 msgstr "bejelentkezés másik fiókkal"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:248
 #, c-format
 msgid "negcap "
 msgstr "negcap "
@@ -13887,7 +13890,7 @@ msgstr "másodlagos email cím"
 msgid "see also:"
 msgstr "lásd még:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:609
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
 #, c-format
 msgid "show all component parts"
 msgstr ""
@@ -14058,7 +14061,7 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "Valami hiba van az üzenetével"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:858
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
 #, fuzzy, c-format
 msgid "to post a comment. "
 msgstr "hozzászólás küldéséhez."

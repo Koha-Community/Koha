@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-14 20:45+0000\n"
-"Last-Translator: dataly <gveranis@dataly.gr>\n"
+"PO-Revision-Date: 2022-01-20 11:04+0000\n"
+"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1634244313.587239\n"
+"X-POOTLE-MTIME: 1642676699.401184\n"
 "X-Pootle-Path: /el/21.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -116,6 +116,9 @@ msgid ""
 "collecting payments. Enabling this preference allows paying fines of partial "
 "cents which may not be visible in the interface."
 msgstr ""
+"στρογγυλοποίηση προστίμου στο πλησιέστερο λεπτό όταν συλλέγονται οι "
+"πληρωμές. Η ενεργοποίηση αυτής της προτίμησης επιτρέπει την πληρωμή "
+"προστίμων μερικών λεπτών που ενδέχεται να μην είναι ορατά στη διεπαφή."
 
 # Accounting > Features
 msgid ""
@@ -406,18 +409,20 @@ msgid ""
 "acquisitions.pref#OrderPriceRounding# Determines whether full precision "
 "values or rounded values should be used in price calculations."
 msgstr ""
+"καθορίζει πότε τιμές πλήρους ακρίβειας ή στρογγυλεμένες τιμές θα "
+"χρησιμοποιούνται στους υπολογισμούς τιμολόγησης"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Don't round"
-msgstr ""
+msgstr "να μην στρογγυλοποιούνται"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# Round"
-msgstr ""
+msgstr "να στρογγυλοποιούνται"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#OrderPriceRounding# to nearest cent.<br>"
-msgstr ""
+msgstr "στο πλησιέστερο λεπτό.<br>"
 
 # Acquisitions > Policy
 msgid ""
@@ -459,6 +464,8 @@ msgid ""
 "acquisitions.pref#TaxRates# Please note: The database will only accept "
 "values up to 4 decimals precision, further values will be rounded."
 msgstr ""
+"Σημείωση: Η βάση δεδομένων θα δέχεται τιμές πάνω από 4 δεκαδικά ψηφία, "
+"περαιτέρω τιμές θα στρογγυλοποιηθούν."
 
 # Acquisitions > Policy
 #, fuzzy
@@ -707,6 +714,22 @@ msgstr ""
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
+msgstr ""
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "admin.pref#EmailOverduesNoEmail# Don't send"
+msgstr "Να μην αποστέλλεται"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "admin.pref#EmailOverduesNoEmail# Send"
+msgstr "Να αποστέλλεται"
+
+# Administration > Interface options > EmailOverduesNoEmail
+msgid ""
+"admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
+"address to staff."
 msgstr ""
 
 # Administration > Google OpenID Connect > GoogleOAuth2ClientID
@@ -3000,8 +3023,9 @@ msgid ""
 "code>, <code>biblioitems</code> or <code>items</code> tables, surrounded by "
 "&lt; and &gt;.)"
 msgstr ""
-"(Εισαγωγή σε στήλες από τους πίνακες <code>biblio</code>, <code>biblioitems</"
-"code> ή <code>items</code>, περικυκλωμένα από  &lt; και &gt;.)"
+"(εισαγωγή σε στήλες από τους πίνακες <code>biblio</code>, "
+"<code>biblioitems</code> ή <code>items</code>, περικλειώμενα από &lt; και "
+"&gt;.)"
 
 # Cataloging > Spine labels
 msgid ""
@@ -6835,13 +6859,10 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr ""
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# For control fields you can use just "
 "{field}, like {001}."
-msgstr ""
-"των τοπικών εικόνων εξώφυλλων στις αναζητήσεις και τις σελίδες λεπτομερειών "
-"στον OPAC."
+msgstr "ως πεδία ελέγχου μπορείτε να χρησιμοποιήσετε μόνο {field}, όπως {001}."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8295,6 +8316,8 @@ msgid ""
 "their own privacy settings for showing the patron's fines to the patron's "
 "guarantor."
 msgstr ""
+"τα μέλη να επιλέγουν τις ρυθμίσεις ιδιωτικότητας τους για την προβολή των "
+"προστίμων τους στο μέλος που έχει οριστεί ως εγγυητής."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -8988,54 +9011,9 @@ msgid ""
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr ""
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for "
 "patron purchase suggestions:"
-msgstr ""
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
 msgstr ""
 
 # OPAC > Policy > OPACSuggestionUnwantedFields
@@ -9047,54 +9025,9 @@ msgid ""
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr ""
-
-# OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
-msgstr ""
-
-# OPAC > Policy
-msgid ""
-"opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr ""
-
-# OPAC > Policy
-msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
 msgstr ""
 
 # OPAC > Appearance
@@ -13108,8 +13041,10 @@ msgstr ""
 msgid "tools.pref#NumSavedReports# By default, show"
 msgstr ""
 
-# Tools > Reports
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
+# Tools > Reports > NumSavedReports
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
 msgstr ""
 
 # Tools > Upload
