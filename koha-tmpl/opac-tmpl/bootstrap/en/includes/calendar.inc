@@ -126,6 +126,14 @@
 
         $(document).ready(function(){
             $(".flatpickr").flatpickr();
+
+            $(".clear-flatpickr").on("click", function(e){
+                e.preventDefault();
+                var element = $(this).data("fp");
+                if( element ){
+                    document.querySelector("#" + element )._flatpickr.clear();
+                }
+            });
         });
 
 </script>

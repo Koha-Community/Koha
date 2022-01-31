@@ -886,7 +886,7 @@
                     <label for="suspend_untilDate">Suspend until:</label>
                     <input type="text" name="suspend_until" id="suspend_untilDate" size="10" />
                     [% INCLUDE 'date-format.inc' %]
-                    <p><a href="#" id="suspend-modal-clear-date">Clear date to suspend indefinitely</a></p>
+                    <p><a href="#" class="clear-flatpickr" data-fp="suspend_untilDate">Clear date to suspend indefinitely</a></p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
@@ -985,11 +985,6 @@
                 $("#suspendHoldReserveId").val( reserve_id );
                 $("#suspendHoldTitle").html( "<em>" + title + "</em>" );
                 $("#suspendHoldModal").modal("show");
-            });
-
-            $("#suspend-modal-clear-date").on( "click", function(e) {
-                e.preventDefault();
-                suspend_until_date.clear();
             });
 
             $("#suspendHoldModal").on("hidden.bs.modal", function(){

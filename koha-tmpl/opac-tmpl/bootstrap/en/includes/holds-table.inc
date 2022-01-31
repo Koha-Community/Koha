@@ -175,6 +175,7 @@
                         [% IF AutoResumeSuspendedHolds %]
                             <label for="suspend_until"> until </label>
                             <input type="text" name="suspend_until" id="suspend_until" class="flatpickr futuredate" size="10" />
+                            <p><a href="#" class="clear-flatpickr" data-fp="suspend_until">Clear date to suspend indefinitely</a></p>
                         [% END %]
                     </form>
                 </div>
