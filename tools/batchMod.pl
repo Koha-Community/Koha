@@ -130,7 +130,7 @@ if ($op eq "action") {
             splice(@searches,$i,1);
             splice(@replaces,$i,1);
             splice(@modifiers,$i,1);
-            $i--; # We made the arrays smaller - go back a step in interation
+            $i--; # We made the arrays smaller - go back a step in iteration
         }
     }
 
