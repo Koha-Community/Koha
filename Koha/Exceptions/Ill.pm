@@ -17,12 +17,12 @@ package Koha::Exceptions::Ill;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::Ill' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Ill::InvalidBackendId' => {
         isa => 'Koha::Exceptions::Ill',

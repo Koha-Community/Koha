@@ -40,7 +40,7 @@ use Fcntl qw( LOCK_EX LOCK_NB );
 
 use C4::Context;
 use Koha::Exceptions;
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 sub import {
     my $class = shift;
@@ -136,10 +136,10 @@ sub lock_exec {
     my $lock_params = ($params->{wait}) ? LOCK_EX : LOCK_EX | LOCK_NB;
 
     open my $lock_handle, '>', $self->{lock_file}
-        or Koha::Exceptions::Exception->throw("Unable to open the lock file ".$self->{lock_file}.": $!");
+        or Koha::Exception->throw("Unable to open the lock file ".$self->{lock_file}.": $!");
     $self->{lock_handle} = $lock_handle;
     flock( $lock_handle, $lock_params )
-        or Koha::Exceptions::Exception->throw("Unable to acquire the lock ".$self->{lock_file}.": $!");
+        or Koha::Exception->throw("Unable to acquire the lock ".$self->{lock_file}.": $!");
 }
 
 =head2 Internal methods

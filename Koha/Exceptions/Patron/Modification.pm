@@ -2,12 +2,12 @@ package Koha::Exceptions::Patron::Modification;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::Patron::Modification' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Patron::Modification::DuplicateVerificationToken' => {
         isa => 'Koha::Exceptions::Patron::Modification',

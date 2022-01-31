@@ -907,7 +907,7 @@ sub _handle_to_api_child {
 
     if ( defined $child ) {
 
-        Koha::Exceptions::Exception->throw( "Asked to embed $curr but its return value doesn't implement to_api" )
+        Koha::Exception->throw( "Asked to embed $curr but its return value doesn't implement to_api" )
             if defined $next and blessed $child and !$child->can('to_api');
 
         if ( blessed $child ) {

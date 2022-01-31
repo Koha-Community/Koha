@@ -226,7 +226,7 @@ sub index_status {
                 INDEX_STATUS_RECREATE_REQUIRED,
             )
         ) {
-            Koha::Exceptions::Exception->throw("Invalid index status: $status");
+            Koha::Exception->throw("Invalid index status: $status");
         }
         C4::Context->set_preference($key, $status);
         return $status;
@@ -263,7 +263,7 @@ sub update_mappings {
             $self->set_index_status_recreate_required();
             my $reason = $_[0]->{vars}->{body}->{error}->{reason};
             my $index_name = $self->index_name;
-            Koha::Exceptions::Exception->throw(
+            Koha::Exception->throw(
                 error => "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
             );
         };

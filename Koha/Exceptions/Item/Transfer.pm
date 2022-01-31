@@ -17,12 +17,12 @@ package Koha::Exceptions::Item::Transfer;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::Item::Transfer' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Item::Transfer::InQueue' => {
         isa         => 'Koha::Exceptions::Item::Transfer',

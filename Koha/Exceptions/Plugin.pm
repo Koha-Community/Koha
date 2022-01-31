@@ -17,11 +17,11 @@ package Koha::Exceptions::Plugin;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Plugin' => {
-        isa         => 'Koha::Exceptions::Exception',
+        isa         => 'Koha::Exception',
     },
     'Koha::Exceptions::Plugin::ForbiddenAction' => {
         isa         => 'Koha::Exceptions::Plugin',

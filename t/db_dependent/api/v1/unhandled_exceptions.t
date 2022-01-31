@@ -53,7 +53,7 @@ subtest 'unhandled_exception() tests' => sub {
     my $message = 'delete died';
 
     my $mock_patron = Test::MockModule->new('Koha::Patron');
-    $mock_patron->mock( 'delete', sub { Koha::Exceptions::Exception->throw($message); } );
+    $mock_patron->mock( 'delete', sub { Koha::Exception->throw($message); } );
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 

@@ -338,7 +338,7 @@ sub delete {
             # Pick the first error, if any
             my ( $error ) = grep { $_->type eq 'error' } @{ $safe_to_delete->messages };
             unless ( $error ) {
-                Koha::Exceptions::Exception->throw('Koha::Patron->safe_to_delete returned false but carried no error message');
+                Koha::Exception->throw('Koha::Patron->safe_to_delete returned false but carried no error message');
             }
 
             my $error_descriptions = {
@@ -357,7 +357,7 @@ sub delete {
                     }
                 );
             } else {
-                Koha::Exceptions::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
+                Koha::Exception->throw( 'Koha::Patron->safe_to_delete carried an unexpected message: ' . $error->message );
             }
         }
 

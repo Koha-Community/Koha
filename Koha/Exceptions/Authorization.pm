@@ -2,12 +2,12 @@ package Koha::Exceptions::Authorization;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::Authorization' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Authorization::Unauthorized' => {
         isa => 'Koha::Exceptions::Authorization',

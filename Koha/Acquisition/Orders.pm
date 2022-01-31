@@ -22,7 +22,7 @@ use Koha::Database;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Order;
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use base qw(Koha::Objects);
 

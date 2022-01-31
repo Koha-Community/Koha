@@ -17,12 +17,12 @@ package Koha::Exceptions::MarcOverlayRule;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::MarcOverlayRule' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::MarcOverlayRule::InvalidTagRegExp' => {
         isa => 'Koha::Exceptions::MarcOverlayRule',

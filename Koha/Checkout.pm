@@ -199,12 +199,12 @@ sub claim_returned {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
+        if ( $_->isa('Koha::Exception') ) {
             $_->rethrow();
         }
         else {
             # ?
-            Koha::Exceptions::Exception->throw( "Unhandled exception" );
+            Koha::Exception->throw( "Unhandled exception" );
         }
     };
 }

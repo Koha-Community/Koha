@@ -29,7 +29,7 @@ use Koha::Acquisition::Orders;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use Koha::MarcSubfieldStructures;
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use MARC::Field;
 use MARC::Record;
@@ -541,7 +541,7 @@ subtest 'get_marc_components() tests' => sub {
     $search_mod->unmock( 'simple_search_compat');
 
     $search_mod->mock( 'simple_search_compat',
-        sub { Koha::Exceptions::Exception->throw("error searching analytics") }
+        sub { Koha::Exception->throw("error searching analytics") }
     );
     warning_like { $components = $host_biblio->get_marc_components }
         qr{^Warning from simple_search_compat: 'error searching analytics'};

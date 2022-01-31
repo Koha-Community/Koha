@@ -3,7 +3,7 @@ package Koha::Plugin::Test;
 ## It's good practice to use Modern::Perl
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 use Koha::Plugins::Tab;
 
 use Mojo::JSON qw( decode_json );
@@ -99,13 +99,13 @@ sub item_barcode_transform {
     if ( Scalar::Util::looks_like_number( $$barcode ) ) {
         $$barcode = $$barcode * 2
     }
-    Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $param");
+    Koha::Exception->throw("item_barcode_transform called with parameter: $param");
 }
 
 sub patron_barcode_transform {
     my ( $self, $barcode ) = @_;
     $$barcode //= '';
-    Koha::Exceptions::Exception->throw("patron_barcode_transform called with parameter: $$barcode");
+    Koha::Exception->throw("patron_barcode_transform called with parameter: $$barcode");
 }
 
 sub configure {
@@ -144,7 +144,7 @@ sub api_namespace {
 
 sub after_hold_create {
     my ( $self, $param ) = @_;
-    Koha::Exceptions::Exception->throw("after_hold_create called with parameter " . ref($param) );
+    Koha::Exception->throw("after_hold_create called with parameter " . ref($param) );
 }
 
 sub after_biblio_action {
@@ -154,10 +154,10 @@ sub after_biblio_action {
     my $biblio_id = $params->{biblio_id};
 
     if ( $action ne 'delete' ) {
-        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action, ref: " . ref($biblio) );
+        Koha::Exception->throw("after_biblio_action called with action: $action, ref: " . ref($biblio) );
     }
     else {
-        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action, id: $biblio_id") if $biblio_id;
+        Koha::Exception->throw("after_biblio_action called with action: $action, id: $biblio_id") if $biblio_id;
     }
 }
 
@@ -170,12 +170,12 @@ sub after_item_action {
     if ( $action ne 'delete' ) {
         my $itemnumber_defined = (defined $item->itemnumber) ? 'yes' : 'no';
         my $item_id_defined    = (defined $item_id) ? 'yes' : 'no';
-        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, ref: " . ref($item) . " ".
+        Koha::Exception->throw("after_item_action called with action: $action, ref: " . ref($item) . " ".
                                            "item_id defined: $item_id_defined ".
                                            "itemnumber defined: $itemnumber_defined" );
     }
     else {
-        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, id: $item_id" ) if $item_id;
+        Koha::Exception->throw("after_item_action called with action: $action, id: $item_id" ) if $item_id;
     }
 }
 
@@ -183,7 +183,7 @@ sub after_authority_action {
     my ( $self, $params ) = @_;
     my $action = $params->{action} // q{};
     my $id = $params->{authority_id} // 0;
-    Koha::Exceptions::Exception->throw("after_authority_action called with action: $action, id: $id");
+    Koha::Exception->throw("after_authority_action called with action: $action, id: $id");
 }
 
 sub after_circ_action {
@@ -196,13 +196,13 @@ sub after_circ_action {
     my $type = $payload->{type};
 
     if ( $action eq 'renewal' ) {
-        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
+        Koha::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
     }
     elsif ( $action eq 'checkout') {
-        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout) . " type: $type");
+        Koha::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout) . " type: $type");
     }
     elsif ( $action eq 'checkin' ) {
-        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
+        Koha::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
     }
 }
 

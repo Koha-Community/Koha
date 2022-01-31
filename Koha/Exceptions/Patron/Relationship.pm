@@ -17,12 +17,12 @@ package Koha::Exceptions::Patron::Relationship;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
 
     'Koha::Exceptions::Patron::Relationship' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Patron::Relationship::DuplicateRelationship' => {
         isa         => 'Koha::Exceptions::Patron::Relationship',

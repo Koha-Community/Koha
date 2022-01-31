@@ -17,11 +17,11 @@ package Koha::Exceptions::ArticleRequest;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::ArticleRequest' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::ArticleRequest::LimitReached' => {
         isa         => 'Koha::Exceptions::ArticleRequest',

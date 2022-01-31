@@ -329,7 +329,7 @@ subtest "to_api() tests" => sub {
         $new_biblio_api = $new_biblio->to_api(
             { embed => { 'items' => { children => { asd => {} } } } } );
     }
-    'Koha::Exceptions::Exception',
+    'Koha::Exception',
 "An exception is thrown if a blessed object to embed doesn't implement to_api";
 
     is(

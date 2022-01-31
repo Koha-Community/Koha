@@ -3,7 +3,7 @@ package Koha::Plugin::TestItemBarcodeTransform;
 ## It's good practice to use Modern::Perl
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 use Koha::Plugins::Tab;
 
 use Mojo::JSON qw( decode_json );
@@ -38,7 +38,7 @@ sub item_barcode_transform {
     if ( Scalar::Util::looks_like_number( $$barcode ) ) {
         $$barcode = $$barcode * 4
     }
-    Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $param");
+    Koha::Exception->throw("item_barcode_transform called with parameter: $param");
 }
 
 1;

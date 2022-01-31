@@ -17,11 +17,11 @@ package Koha::Exceptions::Hold;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Hold' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Hold::CannotSuspendFound' => {
         isa         => 'Koha::Exceptions::Hold',

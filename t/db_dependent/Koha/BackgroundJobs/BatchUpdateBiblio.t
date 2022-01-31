@@ -26,7 +26,7 @@ use JSON qw( encode_json decode_json );
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateBiblio;
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -40,7 +40,7 @@ subtest "Exceptions must be stringified" => sub {
 
     my $C4_biblio_module = Test::MockModule->new('C4::Biblio');
     $C4_biblio_module->mock( 'ModBiblio',
-        sub { Koha::Exceptions::Exception->throw("It didn't work"); } );
+        sub { Koha::Exception->throw("It didn't work"); } );
 
     my $biblio = $builder->build_sample_biblio;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );

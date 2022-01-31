@@ -22,7 +22,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Logger;
@@ -462,7 +462,7 @@ elsif ( $op eq "add-open-article-requests-limit" ) {
     my $categorycode                = $input->param('categorycode');
     my $open_article_requests_limit = strip_non_numeric( scalar $input->param('open_article_requests_limit') );
 
-    Koha::Exceptions::Exception->throw("No value passed for article request limit")
+    Koha::Exception->throw("No value passed for article request limit")
       if not defined $open_article_requests_limit # There is a JS check for that
       || $open_article_requests_limit eq '';
 
@@ -536,7 +536,7 @@ elsif ( $op eq "set-article-request-fee" ) {
     my $category = $input->param('article_request_fee_category');
     my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
 
-    Koha::Exceptions::Exception->throw("No value passed for article request fee")
+    Koha::Exception->throw("No value passed for article request fee")
       if not defined $fee # There is a JS check for that
       || $fee eq '';
 

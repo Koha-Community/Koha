@@ -126,9 +126,9 @@ sub enqueue {
                 # Picking a random id (memcached_namespace) from the config
                 my $namespace = C4::Context->config('memcached_namespace');
                 $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_type), body => $json_args } )
-                  or Koha::Exceptions::Exception->throw('Job has not been enqueued');
+                  or Koha::Exception->throw('Job has not been enqueued');
             } catch {
-                if ( ref($_) eq 'Koha::Exceptions::Exception' ) {
+                if ( ref($_) eq 'Koha::Exception' ) {
                     $_->rethrow;
                 } else {
                     warn sprintf "The job has not been sent to the message broker: (%s)", $_;
@@ -236,7 +236,7 @@ sub _derived_class {
 
     my $class = $self->type_to_class_mapping->{$job_type};
 
-    Koha::Exceptions::Exception->throw($job_type . ' is not a valid job_type')
+    Koha::Exception->throw($job_type . ' is not a valid job_type')
         unless $class;
 
     eval "require $class";

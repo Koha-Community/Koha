@@ -2,11 +2,11 @@ package Koha::Exceptions::Checkout;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
+use Koha::Exception;
 
 use Exception::Class (
     'Koha::Exceptions::Checkout' => {
-        isa => 'Koha::Exceptions::Exception',
+        isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Checkout::FailedRenewal' => {
         isa         => 'Koha::Exceptions::Checkout',
