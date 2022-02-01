@@ -569,7 +569,7 @@ foreach my $biblioNum (@biblionumbers) {
         # items_any_available defined outside of the current loop,
         # so we avoiding loop inside IsAvailableForItemLevelRequest:
         $policy_holdallowed &&=
-            CanItemBeReserved( $patron, $tem )->{status} eq 'OK' &&
+            CanItemBeReserved( $patron, $item )->{status} eq 'OK' &&
             IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
 
         if ($policy_holdallowed) {
