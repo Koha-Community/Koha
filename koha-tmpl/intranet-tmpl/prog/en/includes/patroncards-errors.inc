@@ -36,7 +36,7 @@
         [% ELSIF ( error == 301 ) %]
             <span>An error has occurred while attempting to upload the image file. </span>[% INCLUDE asksysadmin %]
         [% ELSIF ( error == 302 ) %]
-            <span>Image exceeds 500KB. Please resize and import again. </span>
+            <span>Image exceeds 2MB. Please resize and import again. </span>
         [% ELSIF ( error == 303 ) %]
             <span>The database image quota currently only allows a maximum of [% image_limit | html %] images to be stored at any one time. Please delete one or more images to free up quota space. </span>
         [% ELSIF ( error == 304 ) %]
