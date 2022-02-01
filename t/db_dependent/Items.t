@@ -21,6 +21,7 @@ use Data::Dumper;
 use MARC::Record;
 use C4::Items qw( ModItemTransfer GetHiddenItemnumbers GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
 use C4::Biblio qw( GetMarcFromKohaField EmbedItemsInMarcBiblio GetMarcBiblio AddBiblio );
+use C4::Circulation qw( AddIssue );
 use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -407,7 +408,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 17;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
@@ -432,13 +433,14 @@ subtest 'SearchItems test' => sub {
     my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
 
     # Add two items
-    my $item1_itemnumber = $builder->build_sample_item(
+    my $item1 = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
             library      => $library1->{branchcode},
             itype        => $itemtype->{itemtype}
         }
-    )->itemnumber;
+    );
+    my $item1_itemnumber = $item1->itemnumber;
     my $item2_itemnumber = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
@@ -450,6 +452,7 @@ subtest 'SearchItems test' => sub {
     my ($items, $total_results);
 
     ($items, $total_results) = SearchItems();
+
     is($total_results, $initial_items_count + 2, "Created 2 new items");
     is(scalar @$items, $total_results, "SearchItems() returns all items");
 
@@ -627,6 +630,26 @@ subtest 'SearchItems test' => sub {
     $filter->{filters}[0]->{ifnull} = 0;
     ($items, $total_results) = SearchItems($filter);
     is($total_results, 1, 'found all items of library1 with new_status=0 with ifnull = 0');
+
+    t::lib::Mocks::mock_userenv({ branchcode => $item1->homebranch });
+    my $patron_borrower = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
+    AddIssue( $patron_borrower, $item1->barcode );
+    # Search item where item is checked out
+    $filter = {
+        field => 'onloan',
+        query => 'not null',
+        operator => 'is',
+    };
+    ($items, $total_results) = SearchItems($filter);
+    ok(scalar @$items == 1, 'found 1 checked out item');
+
+    # When sorting by descending availability, checked out item should show first
+    my $params = {
+        sortby => 'availability',
+        sortorder => 'DESC',
+    };
+    ($items, $total_results) = SearchItems(undef,$params);
+    is($items->[0]->{barcode}, $item1->barcode, 'Items sorted as expected by availability');
 
     $schema->storage->txn_rollback;
 };
