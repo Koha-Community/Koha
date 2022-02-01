@@ -269,7 +269,7 @@ sub handle_file {
         # Now process any imagefiles
         $logger->debug("Source: $source");
         my $size = ( stat($source) )[7];
-        if ( $size > 550000 ) {
+        if ( $size > 2097152 ) {
             # This check is necessary even with image resizing to avoid possible security/performance issues...
             $filerrors{'OVRSIZ'} = 1;
             push my @filerrors, \%filerrors;
