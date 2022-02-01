@@ -30,7 +30,7 @@
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Upload results
+                    MARC staging results
                 </a>
             </li>
         [% ELSE %]
@@ -55,9 +55,8 @@
 </div>
 [% END %]
 
-<h1>Stage MARC records for import</h1>
 [% IF ( uploadmarc ) %]
-<p>MARC staging results :</p>
+<h1>MARC staging results</h1>
 <ul>
     [% SWITCH (record_type) %]
     [% CASE 'biblio' %]
@@ -91,6 +90,7 @@
 </p>
 [% END %]
 [% ELSE %]
+<h1>Stage MARC records for import</h1>
 <ul>
     <li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
     <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
