@@ -144,25 +144,7 @@ elsif ( $action eq 'cancelBulk' ) {
 
 if ($findborrower) {
     my $patron = Koha::Patrons->find( { cardnumber => $findborrower } );
-    if ( $patron ) {
-        $borrowernumber_hold = $patron->borrowernumber;
-    } else {
-        my $dt_params = { iDisplayLength => -1 };
-        my $results = C4::Utils::DataTables::Members::search(
-            {
-                searchmember => $findborrower,
-                dt_params => $dt_params,
-            }
-        );
-        my $borrowers = $results->{patrons};
-        if ( scalar @$borrowers == 1 ) {
-            $borrowernumber_hold = $borrowers->[0]->{borrowernumber};
-        } elsif ( @$borrowers ) {
-            $template->param( borrowers => $borrowers );
-        } else {
-            $messageborrower = "'$findborrower'";
-        }
-    }
+    $borrowernumber_hold = $patron->borrowernumber if $patron;
 }
 
 if($findclub) {

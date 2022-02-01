@@ -163,18 +163,30 @@
                             [% END %]
                         </ul>
                         <div id="holds_patronsearch_pane">
-                            <form id="holds_patronsearch" action="request.pl" method="post">
+                            <form id="holds_patronsearch" method="get">
                                 <div class="hint">Enter patron card number or partial name:</div>
-                                <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
+                                <input type="text" size="40" id="patron" class="focus" autocomplete="off" />
                                 <input type="submit" value="Search" />
                                 [% FOREACH biblionumber IN biblionumbers %]
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                                 [% END %]
-
                             </form> <!-- /#holds_patronsearch -->
-                            [% IF borrowers %]
-                                [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
-                            [% END %]
+
+                            <table id="table_borrowers" class="selections-table" style="display: none;">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Address</th>
+                                  <th>Card number</th>
+                                  <th>Date of birth</th>
+                                  <th>Category</th>
+                                  <th>Library</th>
+                                  <th>Primary phone</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                            </table>
+
                         </div>
                         [% IF clubcount %]
                             <div id="holds_clubsearch_pane">
@@ -1146,7 +1158,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
-    [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw%]
     <script>
@@ -1404,6 +1415,7 @@
         }
 
          $(document).ready(function() {
+
             $("#always_show_holds").change(function(){
                 if( $(this).prop('checked') ){
                     document.cookie = 'always_show_holds=DO';
@@ -1507,41 +1519,6 @@
                 return false;
             });
 
-            [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
-                [% IF ( PatronAutoComplete ) %]
-                $( "#patron" ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        $( "#patron" ).val( ui.item.cardnumber );
-                        $( "#holds_patronsearch" ).submit();
-                        return false;
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append(
-                        "<a>"
-                            + ( item.surname ? item.surname.escapeHtml() : "" )
-                            + ", "
-                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
-                            + " "
-                            + "<small>"
-                                + ( item.address ? item.address.escapeHtml() : "" )
-                                + " "
-                                + ( item.city ? item.city.escapeHtml() : "" )
-                                + " "
-                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
-                                + " "
-                                + ( item.country ? item.country.escapeHtml() : "" )
-                            + "</small>"
-                        + "</a>" )
-                    .appendTo( ul );
-                };
-                [% END %]
-            [% END %]
             Sticky = $("#toolbar");
             Sticky.hcSticky({
                 stickTo: "#existing_holds",
@@ -1592,6 +1569,78 @@
                 }
                 return false;
             });
+
+            [% FOREACH biblionumber IN biblionumbers %]
+                [% SET url_biblio_params = url_biblio_params _ "&amp;biblionumber=" _ biblionumber %]
+            [% END %]
+            [% IF multi_hold %]
+                [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
+            [% END %]
+            search = 0;
+            dtMemberResults = KohaTable("table_borrowers", {
+                'bServerSide': true,
+                'sAjaxSource': "/cgi-bin/koha/svc/members/search",
+                'fnServerData': function(sSource, aoData, fnCallback) {
+                    if ( ! search ) {
+                        return;
+                    }
+                    aoData.push({
+                        'name': 'searchmember',
+                        'value': $("#patron").val()
+                    },{
+                        'name': 'template_path',
+                        'value': 'reserve/tables/members_results.tt',
+                    });
+                    $.ajax({
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'url': sSource,
+                        'data': aoData,
+                        'success': function(json){
+                            // redirect if there is only 1 result.
+                            if ( json.aaData.length == 1 ) {
+                                var borrowernumber = json.aaData[0].borrowernumber;
+                                document.location.href = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + borrowernumber + "[% url_biblio_params %]"
+                                return false;
+                            }
+                            fnCallback(json);
+                        }
+                    });
+                },
+                'fnDrawCallback': function (oSettings) {
+                    var data = this.fnGetData();
+                    $.each($(this).find("tbody tr"), function(index, tr) {
+                        let url = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + data[index].borrowernumber + "[% url_biblio_params %]"
+                        $(tr).off('click').on('click', function() {
+                            document.location.href = url;
+                        }).addClass('clickable');
+                        $(tr).find("a.patron_preview").attr('href', url);
+                    });
+                },
+                'aoColumns':[
+                    { 'mDataProp': 'dt_name' },
+                    { 'mDataProp': 'dt_address' },
+                    { 'mDataProp': 'dt_cardnumber' },
+                    { 'mDataProp': 'dt_dateofbirth' },
+                    { 'mDataProp': 'dt_category' },
+                    { 'mDataProp': 'dt_branch' },
+                    { 'mDataProp': 'dt_phone' },
+                ],
+                'bFilter': false,
+                'bAutoWidth': false,
+                'sPaginationType': 'full_numbers',
+                "bProcessing": true
+            }, columns_settings_borrowers_table );
+            $("#table_borrowers_wrapper").hide();
+
+            function filter() {
+                search = 1;
+                $("#table_borrowers").show();
+                $("#table_borrowers_wrapper").show();
+                dtMemberResults.fnDraw();
+                return false;
+            }
+            $("#holds_patronsearch").on("submit", filter);
 
         });
         $('.printholdslip').click(function(){
