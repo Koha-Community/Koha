@@ -12,13 +12,29 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<style>
-    fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
-    fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
-    fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
-    fieldset.rows .ui-tabs-nav { margin-left : 10px; }
-    #lib, #lib_opac { width: 75% }
-</style>
+[% FILTER collapse %]
+    <style>
+        fieldset.rows div.toptabs li {
+            clear: none;
+            margin-right:.4em;
+            padding-bottom: 0;
+            width: auto;
+        }
+        #lib,
+        #lib_opac {
+            width: 75%;
+        }
+        .authval-icons {
+            display: flex;
+            flex-wrap: wrap;
+            clear: both;
+        }
+        .authval-icons label {
+            float: none;
+            width: auto;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="admin_authorised_values" class="admin">
@@ -146,35 +162,46 @@
                                     </li>
                                 </ol>
 
-                                <div id="icons" class="toptabs" style="clear:both">
-                                    <h5 style="margin-left:10px;">Choose an icon:</h5>
-                                    <ul>
-                                        <li><a href="#none">None</a></li>
+                                <div id="icons" class="toptabs">
+                                    <h5>Choose an icon:</h5>
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation">
+                                            <a aria-controls="none" role="tab" data-toggle="tab" href="#none">None</a>
+                                        </li>
                                         [% FOREACH imageset IN imagesets %]
-                                            [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname | uri %]">[% imageset.imagesetname | html %]</a></li>
+                                            [% IF ( imageset.imagesetactive ) %]
+                                                <li role="presentation" class="active">
+                                            [% ELSE %]
+                                                <li role="presentation">
+                                            [% END %]
+                                                <a aria-controls="[% imageset.imagesetname | html %]" role="tab" data-toggle="tab" href="#[% imageset.imagesetname | uri %]">[% imageset.imagesetname | html %]</a>
+                                            </li>
                                         [% END %]
                                         [% IF av.imageurl.match('^http') %]
-                                            <li class="ui-tabs-active">
+                                            <li role="presentation" class="active">
                                         [% ELSE %]
-                                            <li>
+                                            <li role="presentation">
                                         [% END %]
-                                            <a href="#remote">Remote image</a>
+                                            <a aria-controls="remote" role="tab" data-toggle="tab" href="#remote">Remote image</a>
                                         </li>
                                     </ul>
-                                    <div id="none">
-                                        <ul>
-                                            <li>
-                                                <label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" />
-                                            </li>
-                                        </ul>
-                                        <br class="clear" />
-                                    </div>
+                                    <div class="tab-content">
+                                        <div id="none" role="tabpanel" class="tab-pane">
+                                            <div class="authval-icons">
+                                                <label for="noimage">No image:
+                                                    <input type="radio" name="imageurl" id="noimage" value="removeImage" />
+                                                </label>
+                                            </div>
+                                        </div> <!-- /.tab-pane -->
 
-                                    [% FOREACH imageset IN imagesets %]
-                                        <div id="[% imageset.imagesetname | html %]">
-                                            <ul>
-                                                [% FOREACH image IN imageset.images %]
-                                                    <li style="float: none; display: inline-block; clear : none; width: auto;">
+                                        [% FOREACH imageset IN imagesets %]
+                                            [% IF ( imageset.imagesetactive ) %]
+                                                <div id="[% imageset.imagesetname | html %]" role="tabpanel" class="tab-pane active">
+                                            [% ELSE %]
+                                                <div id="[% imageset.imagesetname | html %]" role="tabpanel" class="tab-pane">
+                                            [% END %]
+                                                <div class="authval-icons">
+                                                    [% FOREACH image IN imageset.images %]
                                                         <label>
                                                             [% IF ( image.StaffImageUrl ) %]
                                                                 <img src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
@@ -189,30 +216,23 @@
                                                                 [% END %]
                                                             [% END %]
                                                         </label>
-                                                    </li>
-                                                [% END # /FOREACH image %]
-                                            </ul>
-                                            <br class="clear" />
-                                        </div>
-                                    [% END # /FOREACH imageset %]
+                                                    [% END # /FOREACH image %]
+                                                </div> <!-- /.authval-icons -->
+                                            </div> <!-- /.tab-pane -->
+                                        [% END # /FOREACH imageset %]
 
-                                    <div id="remote">
-                                        <ul>
-                                            <li>
-                                                <label for="remote_image_check"> Remote image:</label>
-                                                [% IF av.imageurl.match('^http') %]
-                                                    <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
-                                                    <input type="text" name="remoteImage" size="48" maxlength="200" value="[% av.imageurl | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-                                                    <img src="[% av.imageurl | html %]" alt="" />
-                                                [% ELSE %]
-                                                    <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-                                                    <input type="text" name="remoteImage" size="48" maxlength="200" value="" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-                                                [% END %]
-                                            </li>
-                                        </ul>
-                                        <br class="clear" />
-                                    </div>
-
+                                        <div id="remote" role="tabpanel" class="tab-pane">
+                                            <label for="remote_image_check"> Remote image:</label>
+                                            [% IF av.imageurl.match('^http') %]
+                                                <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
+                                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% av.imageurl | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                                <img src="[% av.imageurl | html %]" alt="" />
+                                            [% ELSE %]
+                                                <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
+                                                <input type="text" name="remoteImage" size="48" maxlength="200" value="" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                            [% END %]
+                                        </div> <!-- /.tab-pane -->
+                                    </div> <!-- /.tab-content -->
                                 </div> <!-- /#icons -->
                             [% END # /IF action_add_category %]
                         </fieldset>
@@ -415,7 +435,6 @@
             if ( $("#branches option:selected").length < 1 ) {
                 $("#branches option:first").attr("selected", "selected");
             }
-            $('#icons').tabs();
 
             $("a.delete").click(function(){
                 return confirm(_("Are you sure you want to delete this authorized value?"));
@@ -428,6 +447,10 @@
             $("#delete_category").on('submit', function(){
                 return confirm(_("Are you sure you want to delete this authorized value category?"));
             });
+
+            if( $(".tab-pane.active").length < 1 ){
+                $("#icons a:first").tab("show");
+            }
         });
     </script>
 [% END %]
