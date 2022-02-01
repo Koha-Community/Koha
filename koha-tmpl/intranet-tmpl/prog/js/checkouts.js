@@ -897,55 +897,11 @@ $(document).ready(function() {
         } ).prop('checked', false);
     }
 
-    // Handle return claims
-    $(document).on("click", '.claim-returned-btn', function(e){
-        e.preventDefault();
-        itemnumber = $(this).data('itemnumber');
-
-        $('#claims-returned-itemnumber').val(itemnumber);
-        $('#claims-returned-notes').val("");
-        $('#claims-returned-charge-lost-fee').attr('checked', false)
-        $('#claims-returned-modal').modal()
+    // Refresh after return claim
+    $('body').on('refreshClaimModal', function () {
+        refreshReturnClaimsTable();
+        issuesTable.api().ajax.reload();
     });
-    $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
-        let itemnumber = $('#claims-returned-itemnumber').val();
-        let notes = $('#claims-returned-notes').val();
-        let fee = $('#claims-returned-charge-lost-fee').attr('checked') ? true : false;
-
-        $('#claims-returned-modal').modal('hide')
-
-        $('.claim-returned-btn[data-itemnumber="' + itemnumber + '"]').replaceWith('<img id="return_claim_spinner_' + itemnumber + ' src=' + interface + '/' + theme + '/img/spinner-small.gif />');
-
-        params = {
-            item_id: itemnumber,
-            notes: notes,
-            charge_lost_fee: fee,
-            created_by: logged_in_user_borrowernumber,
-        };
-
-        $.post( '/api/v1/return_claims', JSON.stringify(params), function( data ) {
-
-            id = "#return_claim_spinner_" + data.item_id;
-
-            let created_on = new Date(data.created_on);
-
-            let content = "";
-            if ( data.claim_id ) {
-                content = '<span class="badge">' + created_on.toLocaleDateString() + '</span>';
-                $(id).parent().parent().addClass('ok');
-            } else {
-                content = __("Unable to claim as returned");
-                $(id).parent().parent().addClass('warn');
-            }
-
-            $(id).replaceWith( content );
-
-            refreshReturnClaimsTable();
-            issuesTable.api().ajax.reload();
-        }, "json")
-
-    });
-
 
     // Don't load return claims table unless it is clicked on
     var returnClaimsTable;

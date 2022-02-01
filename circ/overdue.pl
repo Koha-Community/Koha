@@ -255,12 +255,15 @@ if ($noreport) {
         items.replacementprice,
         items.enumchron,
         items.itemnotes_nonpublic,
-        items.itype
+        items.itype,
+        return_claims.created_on AS return_claim_created_on,
+        return_claims.id AS return_claim_id
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
     LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
     LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
     LEFT JOIN biblio      ON (biblio.biblionumber=items.biblionumber )
+    LEFT JOIN return_claims ON (return_claims.borrowernumber=borrowers.borrowernumber AND return_claims.itemnumber=items.itemnumber)
     WHERE 1=1 "; # placeholder, since it is possible that none of the additional
                  # conditions will be selected by user
     $strsth.=" AND date_due               < '" . $todaysdate     . "' " unless ($showall or $datedueto);
@@ -308,6 +311,11 @@ if ($noreport) {
         my $pattrs = $borrowernumber_to_attributes{$data->{borrowernumber}} || {};  # patron attrs for this borrower
         # $pattrs is a hash { attrcode => [  [value,displayvalue], [value,displayvalue]... ] }
 
+        my $return_claim_created_on = $data->{return_claim_created_on};
+        if ( defined $return_claim_created_on ) {
+            $return_claim_created_on = output_pref({ dt => dt_from_string($return_claim_created_on ) });
+        }
+
         my @patron_attr_value_loop;   # template array [ {value=>v1}, {value=>v2} ... } ]
         for my $pattr_filter (grep { ! $_->{isclone} } @patron_attr_filter_loop) {
             my @displayvalues = map { $_->[1] } @{ $pattrs->{$pattr_filter->{code}} };   # grab second value from each subarray
@@ -347,6 +355,8 @@ if ($noreport) {
             itemcallnumber         => $data->{itemcallnumber},
             replacementprice       => $data->{replacementprice},
             itemnotes_nonpublic    => $data->{itemnotes_nonpublic},
+            return_claim_created_on => $return_claim_created_on,
+            return_claim_id        => $data->{return_claim_id},
             enumchron              => $data->{enumchron},
             itemtype               => $data->{itype},
             patron_attr_value_loop => \@patron_attr_value_loop,

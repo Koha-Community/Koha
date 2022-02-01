@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE Koha %]
 [%- USE Branches -%]
 [%- USE Price -%]
 [%- USE ItemTypes -%]
@@ -9,6 +10,7 @@
 [%- USE TablesSettings -%]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% PROCESS 'modal-claims.inc' %]
 <title>Items overdue as of [% todaysdate | html %] &rsaquo; Circulation &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
@@ -92,6 +94,7 @@
           <th>Item type</th>
           <th>Price</th>
           <th>Non-public note</th>
+          <th>Return claims</th>
         </tr>
       </thead>
       [%- BLOCK subject -%]Overdue:[%- END -%]
@@ -117,11 +120,27 @@
             <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
           <td>[% overdueloo.replacementprice | $Price %]</td>
           <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
+          <td>
+            [% IF ( overdueloo.return_claim_created_on ) %]
+                <span class="badge">[% overdueloo.return_claim_created_on | html %]</span>
+            [% ELSIF Koha.Preference('ClaimReturnedLostValue') %]
+                <a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber=[% overdueloo.itemnum | html %]>
+                    <i class="fa fa-exclamation-circle"></i> Claim returned
+                </a>
+            [% ELSE %]
+                <a class="btn btn-default btn-xs" disabled="disabled" title="ClaimReturnedLostValue is not set, this feature is disabled">
+                    <i class="fa fa-exclamation-circle"></i> Claim returned
+                </a>
+            [% END %]
+          </td>
         </tr>
       [% END %]
       </tbody>
     </table>
   </div>
+
+ <!-- Claims Returned Modal -->
+ [% PROCESS 'modal-claims-display' %]
 
 [% ELSE %]
 
@@ -266,6 +285,8 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% PROCESS 'modal-claims-js' %]
     <script>
         function clone_input( node, original_id ) {
             var original = node;

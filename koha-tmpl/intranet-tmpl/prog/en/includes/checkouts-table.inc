@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% PROCESS 'modal-claims.inc' %]
 <div id="checkouts">
     [% IF ( issuecount ) %]
         <div id="issues-table-loading-message">
@@ -92,6 +93,8 @@
 </div>
 
 <!-- Claims Returned Modal -->
+
+[% PROCESS 'modal-claims-display' %]
 <div class="modal fade" id="claims-returned-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-modal-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

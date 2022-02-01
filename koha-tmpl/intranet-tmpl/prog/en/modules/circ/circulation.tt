@@ -1029,6 +1029,8 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("lib/jquery/plugins/rowGroup/dataTables.rowGroup.min.js") | $raw %]
+    [% PROCESS 'modal-claims-js' %]
+
     <script>
         /* Set some variable needed in circulation.js */
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
