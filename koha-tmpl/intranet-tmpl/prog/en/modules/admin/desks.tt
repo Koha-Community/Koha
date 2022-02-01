@@ -180,7 +180,7 @@
                     <th>Desk ID</th>
                     <th>Desk</th>
                     <th>Library</th>
-                    <th class="nosort">Action</th>
+                    <th class="NoSort noExport">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -217,14 +217,12 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            $("#table_desks").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "order": [[ 1, "asc" ]],
-                "columnDefs": [
-                    { "orderable": false, "searchable": false, 'targets': ['nosort'] },
-                ],
-            }));
+            KohaTable("table_desks", {
+                "order": [[ 1, "asc" ]]
+            });
         });
     </script>
 [% END %]
