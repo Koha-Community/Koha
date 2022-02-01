@@ -86,7 +86,7 @@ if ($op eq 'upload') {
             else {
                 my $errstr = '';
                 my $size = $image->Get('filesize');
-                $errstr =  302 if $size > 500000;
+                $errstr =  302 if $size > 2097152;
                 $image->Set(magick => 'png'); # convert all images to png as this is a lossless format which is important for resizing operations later on
                 my $err = put_image($image_name, $image->ImageToBlob()) || '0';
                 $errstr = 101 if $err == 1;
