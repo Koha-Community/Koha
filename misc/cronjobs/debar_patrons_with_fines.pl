@@ -77,11 +77,11 @@ use Koha::Patron::Debarments;
 
 use C4::Log qw( cronlogaction );
 
-my ( $help, $confirm, $message, $expiration, $file );
+my ( $amount, $help, $confirm, $message, $expiration, $file );
 GetOptions(
-    'a|amount'       => \$amount,
+    'a|amount:i'     => \$amount,
     'h|help'         => \$help,
-    'c|confirm:s'    => \$confirm,
+    'c|confirm'      => \$confirm,
     'm|message:s'    => \$message,
     'f|file:s'       => \$file,
     'e|expiration:s' => \$expiration,
