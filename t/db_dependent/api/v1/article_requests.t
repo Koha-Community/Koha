@@ -57,8 +57,12 @@ subtest 'cancel() tests' => sub {
 "//$userid:$password@/api/v1/article_requests/$deleted_article_request_id"
     )->status_is(404)->json_is( { error => "Article request not found" } );
 
-    my $article_request =
-      $builder->build_object( { class => 'Koha::ArticleRequests' } );
+    my $article_request = $builder->build_object(
+        {
+            class => 'Koha::ArticleRequests',
+            value => { debit_id => undef }
+        }
+    );
 
     my $reason = 'A reason';
     my $notes  = 'Some notes';
@@ -131,7 +135,7 @@ subtest 'patron_cancel() tests' => sub {
     my $article_request = $builder->build_object(
         {
             class => 'Koha::ArticleRequests',
-            value => { borrowernumber => $patron->id }
+            value => { borrowernumber => $patron->id, debit_id => undef }
         }
     );
 
