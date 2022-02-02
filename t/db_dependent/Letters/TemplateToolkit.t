@@ -379,8 +379,13 @@ Chapters: <<article_requests.chapters>>
 Notes: <<article_requests.patron_notes>>
         |;
         reset_template( { template => $template, code => $code, module => 'circulation' } );
-        my $article_request = $builder->build({ source => 'ArticleRequest' });
-        Koha::ArticleRequests->find( $article_request->{id} )->cancel;
+        my $article_request = $builder->build_object(
+            {
+                class => 'Koha::ArticleRequests',
+                value => { debit_id => undef }
+            }
+        );
+        $article_request->cancel;
         my $letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
 
         my $tt_template = q|
@@ -401,7 +406,7 @@ Chapters: [% article_request.chapters %]
 Notes: [% article_request.patron_notes %]
         |;
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
-        Koha::ArticleRequests->find( $article_request->{id} )->cancel;
+        $article_request->cancel;
         my $tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
         is( $tt_letter->content, $letter->content, 'Compare AR_* notices' );
         isnt( $tt_letter->message_id, $letter->message_id, 'Comparing AR_* notices should compare 2 different messages' );
