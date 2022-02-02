@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Price %]
 [% USE Branches %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Acquisitions &rsaquo; Koha</title>
@@ -216,7 +217,7 @@
         dt_overwrite_html_sorting_localeCompare();
 
         $(document).ready(function() {
-
+            var column_settings = [% TablesSettings.GetColumns( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
             var oTable = KohaTable("accounts", {
                 "fnDrawCallback": function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
@@ -256,7 +257,7 @@
                 'aaSortingFixed': [[ 1, 'asc' ]],
                 'bPaginate': false,
                 "bAutoWidth": false
-            });
+            }, column_settings );
 
             $(oTable).treetable({
                 expandable: true
