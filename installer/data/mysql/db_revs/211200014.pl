@@ -7,7 +7,6 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
-
         $dbh->do(q{
             INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added)
             VALUES ( 'yi', 'language', 'Yiddish', NOW() );
@@ -48,4 +47,4 @@ return {
             VALUES ( 'yi', 'Hebr');
         });
     },
-}
+};
