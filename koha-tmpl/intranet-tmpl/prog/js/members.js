@@ -77,12 +77,12 @@ function update_category_code(category_code) {
 }
 
 function select_user(borrowernumber, borrower, relationship) {
-    let is_guarantor = $(`.guarantor-details[data-borrowernumber=${borrower.borrowernumber}]`).length;
+    let is_guarantor = $(`.guarantor-details[data-borrowernumber=${borrowernumber}]`).length;
 
     if ( is_guarantor ) {
         alert("Patron is already a guarantor for this patron");
     } else {
-        $('#guarantor_id').val(borrower.borrowernumber);
+        $('#guarantor_id').val(borrowernumber);
         $('#guarantor_surname').val(borrower.surname);
         $('#guarantor_firstname').val(borrower.firstname);
 
@@ -113,7 +113,7 @@ function select_user(borrowernumber, borrower, relationship) {
         fieldset.find('.new_guarantor_relationship').first().val( guarantor_relationship );
         $('#relationship').find('option:eq(0)').prop('selected', true);
 
-        fieldset.find('.guarantor-details').first().attr( 'data-borrowernumber', borrower.borrowernumber );
+        fieldset.find('.guarantor-details').first().attr( 'data-borrowernumber', borrowernumber );
 
         $('#guarantor_relationships').append( fieldset );
         fieldset.show();
@@ -197,7 +197,7 @@ $(document).ready(function(){
 
     $('body').on('click', '#guarantor_search', function(e) {
         e.preventDefault();
-        var newin = window.open('guarantor_search.pl','popup','width=800,height=600,resizable=no,toolbar=false,scrollbars=yes,top');
+        var newin = window.open('/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,dateofbirth,address,action','popup','width=800,height=600,resizable=no,toolbar=false,scrollbars=yes,top');
     });
 
     $('#guarantor_relationships').on('click', '.guarantor_cancel', function(e) {

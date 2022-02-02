@@ -26,7 +26,7 @@
                 firstname += ' (' + escape_str(patron.other_name) + ')';
             }
             if ( config && config.invert_name ) {
-                name = surname + ', ' + firstname;
+                name = surname + ( firstname ? ', ' + firstname : '' );
             }
             else {
                 name = firstname + ' ' + surname;

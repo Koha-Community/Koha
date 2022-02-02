@@ -602,7 +602,20 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 });
 
                                 if ( default_filters ) {
-                                    and_query_parameters.push(default_filters);
+                                    let additional_filters = {};
+                                    for ( f in default_filters ) {
+                                        if ( typeof(default_filters[f]) === 'function' ) {
+                                            let val = default_filters[f]();
+                                            if ( val != undefined && val != "" ) {
+                                                additional_filters[f] = val;
+                                            }
+                                        } else {
+                                            additional_filters[f] = default_filters[f];
+                                        }
+                                    }
+                                    if ( Object.keys(additional_filters).length ) {
+                                        and_query_parameters.push(additional_filters);
+                                    }
                                 }
                                 query_parameters = and_query_parameters;
                                 if ( or_query_parameters.length) {
@@ -778,16 +791,50 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 if ( is_searchable ) {
-                    var title = $(this).text();
-                    var existing_search = table_dt.column(i).search();
-                    if ( existing_search ) {
-                        $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
+                    let input_type = 'input';
+                    if ( $(this).data('filter') ) {
+                        input_type = 'select'
+                        let filter_type = $(this).data('filter');
+                        if ( filter_type == 'libraries' ) {
+                            var existing_search = table_dt.column(i).search();
+                            let select = $('<select><option value=""></option></select');
+
+                            $(libraries).each(function(){
+                                let o = $('<option value="%s">%s</option>'.format(this.branchcode, this.branchname));
+                                if ( existing_search == this.branchcode ) {
+                                    o.prop("selected", "selected");
+                                }
+                                o.appendTo(select);
+                            });
+                            $(this).html( select );
+                        } else if ( filter_type == 'categories' ) {
+                            var existing_search = table_dt.column(i).search();
+                            let select = $('<select><option value=""></option></select');
+
+                            $(categories).each(function(){
+                                let o = $('<option value="%s">%s</option>'.format(this.categorycode, this.description));
+                                if ( existing_search == this.categorycode ) {
+                                    o.prop("selected", "selected");
+                                }
+                                o.appendTo(select);
+                            });
+                            $(this).html( select );
+                        } else {
+                            console.log("Unknown filter " + filter_type);
+                            return;
+                        }
                     } else {
-                        var search_title = _("%s search").format(title);
-                        $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
+                        var title = $(this).text();
+                        var existing_search = table_dt.column(i).search();
+                        if ( existing_search ) {
+                            $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
+                        } else {
+                            var search_title = _("%s search").format(title);
+                            $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
+                        }
                     }
 
-                    $( 'input', this ).on( 'keyup change', function () {
+                    $( input_type, this ).on( 'keyup change', function () {
                         if ( table_dt.column(i).search() !== this.value ) {
                             table_dt
                                 .column(i)
