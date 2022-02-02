@@ -437,7 +437,7 @@
                         }
                     },
                     {
-                        [% SET summary_fields = "biblio.author:biblio.title:biblio.isbn:biblio.publisher:me.internal_note:me.vendor_note" %]
+                        [% SET summary_fields = "biblio.title:biblio.author:biblio.isbn:biblio.publisher:me.internal_note:me.vendor_note" %]
                         [% IF Koha.Preference('marcflavour')=='UNIMARC' %][% SET summary_fields = summary_fields _ ":biblio.ean" %][% END %]
                         "data": "[% summary_fields | html %]",
                         "render": function(data, type, row, meta) {
@@ -514,7 +514,7 @@
 
                             return result;
                         },
-                        "orderable": false,
+                        "orderable": true,
                     },
                     {
                         "data": "",
