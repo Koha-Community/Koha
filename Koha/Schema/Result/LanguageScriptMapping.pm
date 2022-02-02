@@ -26,7 +26,7 @@ __PACKAGE__->table("language_script_mapping");
 =head2 language_subtag
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 25
 
 =head2 script_subtag
@@ -39,14 +39,26 @@ __PACKAGE__->table("language_script_mapping");
 
 __PACKAGE__->add_columns(
   "language_subtag",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
+  { data_type => "varchar", is_nullable => 0, size => 25 },
   "script_subtag",
   { data_type => "varchar", is_nullable => 1, size => 25 },
 );
 
+=head1 PRIMARY KEY
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:c9gZ400zs7OkvI1JDCjyCg
+=over 4
+
+=item * L</language_subtag>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("language_subtag");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-02 07:13:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8pCxOS9p6qswA642MyRexA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

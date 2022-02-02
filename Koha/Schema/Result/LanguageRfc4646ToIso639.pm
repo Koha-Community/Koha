@@ -64,9 +64,25 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:80baGnx1j4ZZjs0Qn5VMsw
+=head2 C<uniq_code>
+
+=over 4
+
+=item * L</rfc4646_subtag>
+
+=item * L</iso639_2_code>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("uniq_code", ["rfc4646_subtag", "iso639_2_code"]);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-02 07:13:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8PERWsCJ6PY9XHzD++SXTQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
