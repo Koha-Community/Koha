@@ -451,47 +451,55 @@ sub TooMany {
                 $checkouts = $patron->checkouts; # if branch is the patron's home branch, then count all loans by patron
             } else {
                 $checkouts = $patron->checkouts->search(
-                    { 'item.homebranch' => $maxissueqty_rule->branchcode },
-                    { prefetch          => 'item' } );
+                    { 'item.homebranch' => $maxissueqty_rule->branchcode } );
             }
         } else {
             $checkouts = $patron->checkouts; # if rule is not branch specific then count all loans by patron
         }
+        $checkouts = $checkouts->search(undef, { prefetch => 'item' });
+
         my $sum_checkouts;
         my $rule_itemtype = $maxissueqty_rule->itemtype;
-        while ( my $c = $checkouts->next ) {
-            my $itemtype = $c->item->effective_itemtype;
-            my @types;
-            unless ( $rule_itemtype ) {
-                # matching rule has the default item type, so count only
-                # those existing loans that don't fall under a more
-                # specific rule
-                @types = Koha::CirculationRules->search(
-                    {
-                        branchcode => $maxissueqty_rule->branchcode,
-                        categorycode => [ $maxissueqty_rule->categorycode, $cat_borrower ],
-                        itemtype  => { '!=' => undef },
-                        rule_name => 'maxissueqty'
-                    }
-                )->get_column('itemtype');
 
-                next if grep {$_ eq $itemtype} @types;
-            } else {
-                my @types;
-                if ( $parent_maxissueqty_rule ) {
+        my @types;
+        unless ( $rule_itemtype ) {
+            # matching rule has the default item type, so count only
+            # those existing loans that don't fall under a more
+            # specific rule
+            @types = Koha::CirculationRules->search(
+                {
+                    branchcode => $maxissueqty_rule->branchcode,
+                    categorycode => [ $maxissueqty_rule->categorycode, $cat_borrower ],
+                    itemtype  => { '!=' => undef },
+                    rule_name => 'maxissueqty'
+                }
+            )->get_column('itemtype');
+        } else {
+            if ( $parent_maxissueqty_rule ) {
                 # if we have a parent item type then we count loans of the
                 # specific item type or its siblings or parent
-                    my $children = Koha::ItemTypes->search({ parent_type => $parent_type });
-                    @types = $children->get_column('itemtype');
-                    push @types, $parent_type;
-                } elsif ( $child_types ) {
+                my $children = Koha::ItemTypes->search({ parent_type => $parent_type });
+                @types = $children->get_column('itemtype');
+                push @types, $parent_type;
+            } elsif ( $child_types ) {
                 # If we are a parent type, we need to count all child types and our own type
-                    @types = $child_types->get_column('itemtype');
-                    push @types, $type; # And don't forget to count our own types
-                } else { push @types, $type; } # Otherwise only count the specific itemtype
+                @types = $child_types->get_column('itemtype');
+                push @types, $type; # And don't forget to count our own types
+            } else {
+                # Otherwise only count the specific itemtype
+                push @types, $type;
+            }
+        }
 
+        while ( my $c = $checkouts->next ) {
+            my $itemtype = $c->item->effective_itemtype;
+
+            unless ( $rule_itemtype ) {
+                next if grep {$_ eq $itemtype} @types;
+            } else {
                 next unless grep {$_ eq $itemtype} @types;
             }
+
             $sum_checkouts->{total}++;
             $sum_checkouts->{onsite_checkouts}++ if $c->onsite_checkout;
             $sum_checkouts->{itemtype}->{$itemtype}++;
