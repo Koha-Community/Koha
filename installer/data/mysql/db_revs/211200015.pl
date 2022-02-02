@@ -9,8 +9,8 @@ return {
 
         # Correct "[% borrowers." (where present and restricted to specific notice)
         $dbh->do(q|
-UPDATE letter SET content = REPLACE(content, '[% borrowers.', '[% borrower.')
-WHERE code = 'NOTIFY_MANAGER'
+            UPDATE letter SET content = REPLACE(content, '[% borrowers.', '[% borrower.')
+            WHERE code = 'NOTIFY_MANAGER'
         |);
     },
 };
