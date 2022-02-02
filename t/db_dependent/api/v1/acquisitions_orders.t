@@ -137,7 +137,7 @@ subtest 'list() tests' => sub {
 
     subtest 'sorting tests' => sub {
 
-        plan tests => 10;
+        plan tests => 14;
 
         $schema->storage->txn_begin;
 
@@ -187,6 +187,30 @@ subtest 'list() tests' => sub {
 
         is( $result->[0]->{order_id}, $order_2->id, 'The first element is order_2' );
         is( $result->[1]->{order_id}, $order_1->id, 'The second element is order_1' );
+
+        $biblio_1->biblioitem->set(
+            {
+                isbn          => 'A',
+                ean           => 'Y',
+                publishercode => 'M',
+            }
+        )->store;
+
+        $biblio_2->biblioitem->set(
+            {
+                isbn          => 'B',
+                ean           => 'X',
+                publishercode => 'L',
+            }
+        )->store;
+
+        $result =
+          $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?_order_by=-biblio.isbn,+biblio.ean,-biblio.publisher&basket_id=" . $basket->id => {'x-koha-embed' => 'biblio'} )
+            ->status_is( 200, "query successful" )
+            ->tx->res->json;
+
+        is( $result->[0]->{order_id}, $order_2->id, 'Ordered correctly' );
+        is( $result->[1]->{order_id}, $order_1->id, 'Ordered correctly' );
 
         $schema->storage->txn_rollback;
     };
