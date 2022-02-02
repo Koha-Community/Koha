@@ -17,58 +17,60 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 1;
 
 use Koha::Database;
 use Koha::Patron::HouseboundProfiles;
 
 use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
-$schema->storage->txn_begin;
-
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-# Profile Tests
+subtest 'housebound_visits() tests' => sub {
 
-my $profile = $builder->build({ source => 'HouseboundProfile' });
+    plan tests => 3;
 
-is(
-    Koha::Patron::HouseboundProfiles
-          ->find($profile->{borrowernumber})->borrowernumber,
-    $profile->{borrowernumber},
-    "Find created profile."
-);
+    $schema->storage->txn_begin;
 
-my @profiles = Koha::Patron::HouseboundProfiles
-    ->search({ day => $profile->{day} })->as_list;
-my $found_profile = shift @profiles;
-is(
-    $found_profile->borrowernumber,
-    $profile->{borrowernumber},
-    "Search for created profile."
-);
+    my $profile = $builder->build({ source => 'HouseboundProfile' });
 
-# ->housebound_profile Tests
+    is(
+        Koha::Patron::HouseboundProfiles
+            ->find($profile->{borrowernumber})->borrowernumber,
+        $profile->{borrowernumber},
+        "Find created profile."
+    );
 
-my $visit1 = $builder->build({
-    source => 'HouseboundVisit',
-    value  => {
-        borrowernumber => $profile->{borrowernumber},
-    },
-});
-my $visit2 = $builder->build({
-    source => 'HouseboundVisit',
-    value  => {
-        borrowernumber => $profile->{borrowernumber},
-    },
-});
+    my @profiles = Koha::Patron::HouseboundProfiles
+        ->search({ day => $profile->{day} })->as_list;
+    my $found_profile = shift @profiles;
+    is(
+        $found_profile->borrowernumber,
+        $profile->{borrowernumber},
+        "Search for created profile."
+    );
 
-is(
-    scalar @{$found_profile->housebound_visits},
-    2,
-    "Fetch housebound_visits."
-);
+    # ->housebound_profile Tests
 
-$schema->storage->txn_rollback;
+    my $visit1 = $builder->build({
+        source => 'HouseboundVisit',
+        value  => {
+            borrowernumber => $profile->{borrowernumber},
+        },
+    });
+    my $visit2 = $builder->build({
+        source => 'HouseboundVisit',
+        value  => {
+            borrowernumber => $profile->{borrowernumber},
+        },
+    });
 
+    is(
+        $found_profile->housebound_visits->count,
+        2,
+        "Fetch housebound_visits."
+    );
+
+    $schema->storage->txn_rollback;
+};

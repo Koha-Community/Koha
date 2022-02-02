@@ -42,17 +42,17 @@ Standard Koha::Objects definitions, and additional methods.
 
 =head3 housebound_visits
 
-  my $visits = Koha::Patron::HouseboundProfile->housebound_visits;
+    my $visits = Koha::Patron::HouseboundProfile->housebound_visits;
 
-Returns an arrayref of all visits associated this houseboundProfile.
+Returns a I<Koha::Patron::HouseboundVisits> iterator for all the visits
+associated this houseboundProfile.
 
 =cut
 
 sub housebound_visits {
     my ( $self ) = @_;
-    my @visits = Koha::Patron::HouseboundVisits
-        ->special_search({ borrowernumber => $self->borrowernumber })->as_list;
-    return \@visits;
+    return Koha::Patron::HouseboundVisits
+        ->special_search({ borrowernumber => $self->borrowernumber });
 }
 
 =head3 _type
