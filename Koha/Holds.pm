@@ -123,7 +123,7 @@ sub get_items_that_can_fill {
             columns  => ['itemnumber'],
             collapse => 1,
         }
-    )->get_columns('itemnumber');
+    )->get_column('itemnumber');
     my @waiting_holds = Koha::Holds->search(
         { 'found' => 'W' },
         {
