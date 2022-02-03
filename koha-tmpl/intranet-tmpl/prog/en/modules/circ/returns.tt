@@ -1184,7 +1184,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% IF ( ReturnClaims ) %]
         <script>
@@ -1193,7 +1192,6 @@
         </script>
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
-    [% INCLUDE 'timepicker.inc' %]
 
     <script>
         function Dopop(link) {

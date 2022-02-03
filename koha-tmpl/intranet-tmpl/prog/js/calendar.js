@@ -101,33 +101,6 @@ function DateTime_from_syspref(date_time) {
     return datetime;
 }
 
-/* Instead of including multiple localization files as you would normally see with
-   jQueryUI we expose the localization strings in the default configuration */
-jQuery(function ($) {
-    $.datepicker.regional[''] = {
-        closeText: __("Done"),
-        prevText: __("Prev"),
-        nextText: __("Next"),
-        currentText: __("Today"),
-        monthNames: [__("January"), __("February"), __("March"), __("April"), __("May"), __("June"),
-            __("July"), __("August"), __("September"), __("October"), __("November"), __("December")
-        ],
-        monthNamesShort: [__("Jan"), __("Feb"), __("Mar"), __("Apr"), __("May"), __("Jun"),
-            __("Jul"), __("Aug"), __("Sep"), __("Oct"), __("Nov"), __("Dec")
-        ],
-        dayNames: [__("Sunday"), __("Monday"), __("Tuesday"), __("Wednesday"), __("Thursday"), __("Friday"), __("Saturday")],
-        dayNamesShort: [__("Sun"), __("Mon"), __("Tue"), __("Wed"), __("Thu"), __("Fri"), __("Sat")],
-        dayNamesMin: [__("Su"), __("Mo"), __("Tu"), __("We"), __("Th"), __("Fr"), __("Sa")],
-        weekHeader: __("Wk"),
-        dateFormat: dateformat_string,
-        firstDay: calendarFirstDayOfWeek,
-        isRTL: bidi,
-        showMonthAfterYear: false,
-        yearSuffix: ''
-    };
-    $.datepicker.setDefaults($.datepicker.regional['']);
-});
-
 /*  jQuery Validator plugin custom method
     This allows you to check that a given date falls after another.
     It is required that a message be defined.
@@ -170,53 +143,3 @@ var flatpickr_months = {
     shorthand: [ __("Jan"), __("Feb"), __("Mar"), __("Apr"), __("May"), __("Jun"), __("Jul"), __("Aug"), __("Sep"), __("Oct"), __("Nov"), __("Dec")],
     longhand: [ __("January"), __("February"), __("March"), __("April"), __("May"), __("June"), __("July"), __("August"), __("September"), __("October"), __("November"), __("December")]
 };
-
-$(document).ready(function () {
-
-    $.datepicker.setDefaults({
-        showOn: "both",
-        buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAT0lEQVQ4jWNgoAZYd/LVf3IwigGkAuwGLE4hDg9eA4il8RqADVdtLYVjZLVEuwDZAKJcgKxh+zkyXIBuI8lhgG4jOqZdLJACMAygKDNRAgBj9qOB+rWnhAAAAABJRU5ErkJggg==",
-        buttonImageOnly: true,
-        buttonText: __("Select date"),
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        showOtherMonths: true,
-        selectOtherMonths: true,
-        yearRange: "c-100:c+10"
-    });
-
-    $(".datepicker").datepicker({
-        onClose: function (dateText, inst) {
-            validate_date(dateText, inst);
-        },
-    }).on("change", function () {
-        if (!is_valid_date($(this).val())) {
-            $(this).val("");
-        } else {
-            var the_date = $.datepicker.parseDate(dateformat_string, $(this).val());
-            $(this).datepicker("setDate",the_date);
-        }
-    });
-    // http://jqueryui.com/demos/datepicker/#date-range
-    var dates = $(".datepickerfrom, .datepickerto").datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function (selectedDate) {
-            var option = this.id == "from" ? "minDate" : "maxDate",
-                instance = $(this).data("datepicker");
-            var date = $.datepicker.parseDate(
-                instance.settings.dateFormat ||
-                $.datepicker._defaults.dateFormat,
-                selectedDate, instance.settings);
-            dates.not(this).datepicker("option", option, date);
-        },
-        onClose: function (dateText, inst) {
-            validate_date(dateText, inst);
-        },
-    }).on("change", function () {
-        if (!is_valid_date($(this).val())) {
-            $(this).val("");
-        }
-    });
-});

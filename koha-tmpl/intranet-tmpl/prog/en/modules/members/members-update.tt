@@ -211,6 +211,7 @@
             $( "#pending_updates" ).accordion({
                 collapsible: true,
                 heightStyle: "content",
+                header: ".panel-header",
                 [%- IF ( active ) -%]
                     active: $(".panel-header").index( $("#panel-header-[% active | html %]") )
                 [%- ELSE -%]

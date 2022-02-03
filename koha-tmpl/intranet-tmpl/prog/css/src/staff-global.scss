@@ -233,7 +233,6 @@ aside {
                 width: 100%;
             }
 
-            .hasDatepicker,
             .flatpickr-input {
                 margin-right: 3px;
                 width: calc(100% - 20px);
@@ -2788,14 +2787,14 @@ td {
     font-weight: normal;
 }
 
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-    background: #FFFFFF none;
-    border: 1px solid #AAAAAA;
-    color: #212121;
-    font-weight: normal;
-}
+// .ui-state-active,
+// .ui-widget-content .ui-state-active,
+// .ui-widget-header .ui-state-active {
+//     background: #FFFFFF none;
+//     border: 1px solid #AAAAAA;
+//     color: #212121;
+//     font-weight: normal;
+// }
 
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
@@ -2819,12 +2818,31 @@ td {
     cursor: default;
     position: absolute;
 
-    &.ui-widget-content {
-        .ui-state-hover {
-            background: #E6F0F2 none;
-            border: 1px solid #B9D8D9;
-            color: #212121;
-            font-weight: normal;
+    &.ui-menu {
+        li {
+            &.ui-menu-item {
+                padding: 3px 1em 3px .4em;
+
+                &:hover {
+                    background: #E6F0F2 none;
+                    color: #212121;
+                    font-weight: normal;
+                }
+
+                .ui-state-active {
+                    background: transparent none;
+                    border: 0;
+                }
+
+                .ui-menu-item-wrapper {
+                    padding: unset;
+                }
+
+                .ui-state-active,
+                .ui-state-focus {
+                    margin: 0;
+                }
+            }
         }
     }
 }
@@ -3150,68 +3168,6 @@ td {
     * {
         visibility: hidden;
     }
-}
-
-// jQuery UI Datepicker
-.ui-datepicker {
-    box-shadow: 1px 1px 3px 0 #666;
-
-    table {
-        border: 0;
-        border-collapse: collapse;
-        font-size: .9em;
-        margin: 0 0 .4em;
-        width: 100%;
-    }
-
-    th {
-        background: transparent none;
-        border: 0;
-        font-weight: bold;
-        padding: .7em .3em;
-        text-align: center;
-    }
-}
-
-.ui-datepicker-trigger {
-    vertical-align: middle;
-}
-
-// css for timepicker
-.ui-timepicker-div {
-    dl {
-        text-align: left;
-
-        dd {
-            margin: 0 10px 10px 65px;
-        }
-
-        dt {
-            height: 25px;
-            margin-bottom: -25px;
-        }
-
-        td {
-            font-size: 90%;
-        }
-    }
-
-    .ui-widget-header {
-        margin-bottom: 8px;
-    }
-}
-
-.ui-tpicker-grid-label {
-    background: none;
-    border: 0;
-    margin: 0;
-    padding: 0;
-}
-
-.ui_tpicker_second,
-.ui_tpicker_millisec,
-.ui_tpicker_microsec {
-    display: none;
 }
 
 // jQuery UI Accordion
@@ -4561,19 +4517,18 @@ div .suggestion_note {
 }
 
 .ac-library {
-    background-color: #EEE;
+    background-color: #EEE !important;
     border-radius: 4px;
     color: #000;
     display: inline-block;
     font-size: 80%;
-    padding: 1px 4px;
+    padding: 1px 4px !important;
 }
 
 .ac-currentlibrary {
     .ac-library {
-        background-color: #E6FCB7;
+        background-color: #E6FCB7 !important;
         font-weight: bold;
-
     }
 }
 

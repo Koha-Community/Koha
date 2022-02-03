@@ -2,7 +2,7 @@
 [% USE Asset %]
         [% Asset.js("lib/jquery/jquery-2.2.3.min.js") | $raw %]
         [% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") | $raw %]
-        [% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") | $raw %]
+        [% Asset.js("lib/jquery/jquery-ui-1.13.1.min.js") | $raw %]
         [% Asset.js("lib/bootstrap/bootstrap.min.js") | $raw %]
         [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
         <!-- installer-intranet-bottom.inc -->

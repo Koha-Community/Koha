@@ -6,23 +6,18 @@
 <script>
     var debug    = "[% debug | html %]";
     var dateformat_pref = "[% Koha.Preference('dateformat ') | html %]";
-    var dateformat_string = "";
     var flatpickr_dateformat_string = "";
     switch ( dateformat_pref ){
         case "us":
-            dateformat_string = "mm/dd/yy";
             flatpickr_dateformat_string = "m/d/Y";
             break;
         case "metric":
-            dateformat_string = "dd/mm/yy";
             flatpickr_dateformat_string = "d/m/Y";
             break;
         case "dmydot":
-            dateformat_string = "dd.mm.yy";
             flatpickr_dateformat_string = "d.m.Y";
             break;
         default:
-            dateformat_string = "yy-mm-dd";
             flatpickr_dateformat_string = "Y-m-d";
     }
     var sentmsg = 0;
