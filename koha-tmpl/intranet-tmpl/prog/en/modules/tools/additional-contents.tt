@@ -166,6 +166,12 @@
     <div id="toolbar" class="btn-toolbar">
         <div class="btn-group">
             <button class="btn btn-default" id="submit_form"><i class="fa fa-save"></i> Save</button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
+            </ul>
         </div>
         [% IF category == 'news' %]
             <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/additional-contents.pl"><i class="fa fa-remove"></i> Cancel</a>
@@ -178,6 +184,9 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="category" value="[% category | html %]" />
         <input type="hidden" name="code" value="[% additional_content.code | html %]" />
+        <input type="hidden" name="idnew" value="[% additional_content.idnew | html %]" />
+        <input type="hidden" id="redirect" name="redirect" value="" />
+        <input type="hidden" id="editmode" name="editmode" value="[% editmode | html %]" />
         <fieldset class="rows">
             <ol>
                 <li>
@@ -438,6 +447,13 @@
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
+    <script>
+        $("#saveandcontinue").on("click",function(e){
+            e.preventDefault();
+            $("#redirect").val("just_save");
+            $("#submit_form").click();
+        });
+    </script>
     [% IF additional_contents.count %]
         [% INCLUDE 'datatables.inc' %]
         <script>
