@@ -144,8 +144,8 @@ sub all_libraries {
 
     my @libraries;
 
-    push (@libraries, $self->libraries);
-    my @children = $self->children->search({ branchcode => undef });
+    push (@libraries, $self->libraries->as_list);
+    my @children = $self->children->search({ branchcode => undef })->as_list;
     foreach my $c (@children) {
         push( @libraries, $c->all_libraries );
     }
