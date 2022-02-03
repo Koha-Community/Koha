@@ -40,11 +40,16 @@ my $op             = $cgi->param('op') || 'list';
 my $id             = $cgi->param('id');
 my $category       = $cgi->param('category') || 'news';
 my $wysiwyg;
+my $redirect       = $cgi->param('redirect');
+my $editmode;
+
 if( $cgi->param('editmode') ){
     $wysiwyg = $cgi->param('editmode') eq "wysiwyg" ? 1 : 0;
 } else {
     $wysiwyg = C4::Context->preference("AdditionalContentsEditor") eq "tinymce" ? 1 : 0;
 }
+
+$editmode = $wysiwyg eq 1 ? "wysiwyg" : "text";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -136,6 +141,7 @@ elsif ( $op eq 'add_validate' ) {
                 );
                 $updated = $additional_content->_result->get_dirty_columns;
                 $additional_content->store;
+                $id = $additional_content->idnew;
             };
             if ($@) {
                 $success = 0;
@@ -170,6 +176,7 @@ elsif ( $op eq 'add_validate' ) {
                       ? 'News_' . $additional_content->idnew
                       : $location . '_' . $additional_content->idnew;
                     $additional_content->code($code)->store;
+                    $id = $additional_content->idnew;
                 }
             };
             if ($@) {
@@ -183,7 +190,13 @@ elsif ( $op eq 'add_validate' ) {
         }
 
     }
-    $op = 'list';
+
+    if( $redirect eq "just_save" ){
+        print $cgi->redirect("/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&editmode=$editmode&redirect=done");
+        exit;
+    } else {
+        $op = 'list';
+    }
 }
 elsif ( $op eq 'delete_confirmed' ) {
     my @ids = $cgi->multi_param('ids');
@@ -252,6 +265,7 @@ $template->param(
     op        => $op,
     category  => $category,
     wysiwyg   => $wysiwyg,
+    editmode  => $editmode,
     languages => \@languages,
 );
 
