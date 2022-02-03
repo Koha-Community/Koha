@@ -17,14 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 50;
+use Test::More tests => 48;
 use DateTime::Duration;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Biblio qw( AddBiblio );
-use C4::Circulation qw( AddIssue AddIssuingCharge AddRenewal AddReturn GetIssuingCharges GetOpenIssue GetRenewCount GetUpcomingDueIssues );
+use C4::Circulation qw( AddIssue AddIssuingCharge AddRenewal AddReturn GetIssuingCharges GetRenewCount GetUpcomingDueIssues );
 use C4::Context;
 use C4::Items;
 use C4::Reserves qw( AddReserve );
@@ -49,7 +49,6 @@ can_ok(
       AddRenewal
       AddReturn
       GetIssuingCharges
-      GetOpenIssue
       GetRenewCount
       GetUpcomingDueIssues
       )
@@ -296,11 +295,6 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
     }
 };
 
-#Test GetOpenIssue
-is( GetOpenIssue(), undef, "Without parameter GetOpenIssue returns undef" );
-is( GetOpenIssue(-1), undef,
-    "With wrong parameter GetOpenIssue returns undef" );
-my $openissue = GetOpenIssue($borrower_id1, $item_id1);
 
 my @renewcount;
 #Test GetRenewCount

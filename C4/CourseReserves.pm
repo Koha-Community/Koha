@@ -20,12 +20,12 @@ use Modern::Perl;
 use List::MoreUtils qw( any );
 
 use C4::Context;
-use C4::Circulation qw( GetOpenIssue );
 
 use Koha::Courses;
 use Koha::Course::Instructors;
 use Koha::Course::Items;
 use Koha::Course::Reserves;
+use Koha::Checkouts;
 
 use vars qw(@FIELDS);
 our (@ISA, @EXPORT_OK);
@@ -873,7 +873,7 @@ sub GetCourseReserves {
             $cr->{'item'}        = $item;
             $cr->{'biblio'}      = $biblio;
             $cr->{'biblioitem'}  = $biblioitem;
-            $cr->{'issue'}       = GetOpenIssue( $cr->{'itemnumber'} );
+            $cr->{'issue'}       = Koha::Checkouts->find({ itemnumber => $cr->{'itemnumber'} });
         }
     }
 

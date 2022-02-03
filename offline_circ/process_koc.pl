@@ -26,7 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Accounts;
-use C4::Circulation qw( barcodedecode GetOpenIssue AddRenewal AddIssue MarkIssueReturned );
+use C4::Circulation qw( barcodedecode AddRenewal AddIssue MarkIssueReturned );
 use C4::Items qw( ModDateLastSeen );
 use C4::Members;
 use C4::Stats;
@@ -253,13 +253,12 @@ sub kocIssueItem {
 
     if ( $issue ) { ## Item is currently checked out to another person.
         #warn "Item Currently Issued.";
-        my $issue = GetOpenIssue( $item->itemnumber ); # FIXME Hum? That does not make sense, if it's in the issue table, the issue is open (i.e. returndate is null)
 
-        if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
+        if ( $issue->borrowernumber eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
             #warn "Item issued to this member already, renewing.";
 
             C4::Circulation::AddRenewal(
-                $issue->{'borrowernumber'},    # borrowernumber
+                $issue->borrowernumber,        # borrowernumber
                 $item->itemnumber,             # itemnumber
                 undef,                         # branch
                 undef,                         # datedue - let AddRenewal calculate it automatically
@@ -280,9 +279,9 @@ sub kocIssueItem {
 
         } else {
             #warn "Item issued to a different member.";
-            #warn "Date of previous issue: $issue->{'issuedate'}";
+            #warn "Date of previous issue: $issue->issuedate";
             #warn "Date of this issue: $circ->{'date'}";
-            my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->{'issuedate'} );
+            my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->issuedate );
             my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
 
             if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.

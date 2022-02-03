@@ -95,7 +95,6 @@ BEGIN {
       GetBranchBorrowerCircRule
       GetBranchItemRule
       GetBiblioIssues
-      GetOpenIssue
       GetUpcomingDueIssues
       CheckIfIssuedToPatron
       IsItemIssued
@@ -2790,28 +2789,6 @@ sub _GetCircControlBranch {
     return $branch;
 }
 
-=head2 GetOpenIssue
-
-  $issue = GetOpenIssue( $itemnumber );
-
-Returns the row from the issues table if the item is currently issued, undef if the item is not currently issued
-
-C<$itemnumber> is the item's itemnumber
-
-Returns a hashref
-
-=cut
-
-sub GetOpenIssue {
-  my ( $itemnumber ) = @_;
-  return unless $itemnumber;
-  my $dbh = C4::Context->dbh;  
-  my $sth = $dbh->prepare( "SELECT * FROM issues WHERE itemnumber = ? AND returndate IS NULL" );
-  $sth->execute( $itemnumber );
-  return $sth->fetchrow_hashref();
-
-}
-
 =head2 GetUpcomingDueIssues
 
   my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
@@ -4011,12 +3988,12 @@ sub ProcessOfflineReturn {
 
     if ( $item ) {
         my $itemnumber = $item->itemnumber;
-        my $issue = GetOpenIssue( $itemnumber );
+        my $issue = $item->checkout;
         if ( $issue ) {
             my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
             ModDateLastSeen( $itemnumber, $leave_item_lost );
             MarkIssueReturned(
-                $issue->{borrowernumber},
+                $issue->borrowernumber,
                 $itemnumber,
                 $operation->{timestamp},
             );
@@ -4043,11 +4020,11 @@ sub ProcessOfflineIssue {
             return "Barcode not found.";
         }
         my $itemnumber = $item->itemnumber;
-        my $issue = GetOpenIssue( $itemnumber );
+        my $issue = $item->checkout;
 
-        if ( $issue and ( $issue->{borrowernumber} ne $patron->borrowernumber ) ) { # Item already issued to another patron mark it returned
+        if ( $issue and ( $issue->borrowernumber ne $patron->borrowernumber ) ) { # Item already issued to another patron mark it returned
             MarkIssueReturned(
-                $issue->{borrowernumber},
+                $issue->borrowernumber,
                 $itemnumber,
                 $operation->{timestamp},
             );
