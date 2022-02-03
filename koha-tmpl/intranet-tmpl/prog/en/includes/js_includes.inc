@@ -16,8 +16,8 @@
     </script>
 [% END %]
 
-[% Asset.js("lib/jquery/jquery-2.2.3.min.js") | $raw %]
-[% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-3.6.0.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-migrate-3.3.2.min.js") | $raw %]
 [% Asset.js("lib/jquery/jquery-ui-1.13.1.min.js") | $raw %]
 [% Asset.js("lib/shortcut/shortcut.js") | $raw %]
 [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
