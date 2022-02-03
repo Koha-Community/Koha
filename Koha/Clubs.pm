@@ -70,19 +70,7 @@ sub get_enrollable {
         ]
     ];
 
-    my $rs = $self->_resultset()->search( $params, { prefetch => 'club_template' } );
-
-    if (wantarray) {
-        my $class = ref($self) ? ref($self) : $self;
-
-        return $class->_wrap( $rs->all() );
-
-    }
-    else {
-        my $class = ref($self) ? ref($self) : $self;
-
-        return $class->_new_from_dbic($rs);
-    }
+    return $self->search( $params, { prefetch => 'club_template' } );
 }
 
 =head3 filter_out_empty
