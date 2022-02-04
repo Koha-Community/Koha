@@ -22,6 +22,7 @@ use Modern::Perl;
 use base qw(Koha::Hold);
 
 use C4::Context;
+use Koha::Exceptions::SysPref;
 
 =head1 NAME
 
@@ -44,7 +45,10 @@ Anonymize the given I<Koha::Old::Hold> object.
 sub anonymize {
     my ($self) = @_;
 
-    my $anonymous_id = C4::Context->preference('AnonymousPatron') || undef;
+    my $anonymous_id = C4::Context->preference('AnonymousPatron');
+
+    Koha::Exceptions::SysPref::NotSet->throw( syspref => 'AnonymousPatron' )
+        unless $anonymous_id;
 
     return $self->update( { borrowernumber => $anonymous_id } );
 }

@@ -78,7 +78,10 @@ Anonymize the given I<Koha::Old::Holds> resultset.
 sub anonymize {
     my ( $self, $params ) = @_;
 
-    my $anonymous_id = C4::Context->preference('AnonymousPatron') || undef;
+    my $anonymous_id = C4::Context->preference('AnonymousPatron');
+
+    Koha::Exceptions::SysPref::NotSet->throw( syspref => 'AnonymousPatron' )
+        unless $anonymous_id;
 
     return $self->update( { borrowernumber => $anonymous_id }, { no_triggers => 1 } );
 }
