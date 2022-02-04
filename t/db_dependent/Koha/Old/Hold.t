@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 1;
+use Test::Exception;
 
 use Koha::Database;
 
@@ -29,7 +30,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'anonymize() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -54,14 +55,15 @@ subtest 'anonymize() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
-    $hold_1->anonymize;
+    throws_ok
+        { $hold_1->anonymize; }
+        'Koha::Exceptions::SysPref::NotSet',
+        'Exception thrown because AnonymousPatron not set';
 
-    is( $patron->old_holds->count, 1, 'Patron has 1 linked completed holds' );
+    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_holds->count, 2, 'No changes, patron has 2 linked completed holds' );
 
-    # Reload
-    $hold_1->discard_changes;
-    $hold_2->discard_changes;
-    is( $hold_1->borrowernumber, undef,
+    is( $hold_1->borrowernumber, $patron->id,
         'Anonymized hold not linked to patron' );
     is( $hold_2->borrowernumber, $patron->id,
         'Not anonymized hold still linked to patron' );

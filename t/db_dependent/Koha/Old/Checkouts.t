@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 2;
+use Test::Exception;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
@@ -31,13 +32,26 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'anonymize() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     is( $patron->old_checkouts->count, 0, 'Patron has no old checkouts' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
+
+    throws_ok
+        { $patron->old_checkouts->anonymize; }
+        'Koha::Exceptions::SysPref::NotSet',
+        'Exception thrown because AnonymousPatron not set';
+
+    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
     is( $patron->old_checkouts->anonymize + 0,
         0, 'Anonymizing an empty resultset returns 0' );
 
@@ -81,6 +95,17 @@ subtest 'anonymize() tests' => sub {
     # filter them so only the older two are part of the resultset
     my $checkouts = $patron->old_checkouts->filter_by_last_update(
         { days => 1, days_inclusive => 1 } );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
+    throws_ok
+        { $checkouts->anonymize; }
+        'Koha::Exceptions::SysPref::NotSet',
+        'Exception thrown because AnonymousPatron not set';
+
+    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_checkouts->count, 4, 'Patron has 4 completed checkouts' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
 
     # Anonymize them
     my $anonymized_count = $checkouts->anonymize();

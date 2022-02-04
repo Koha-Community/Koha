@@ -18,11 +18,13 @@
 use Modern::Perl;
 
 use Test::More tests => 2;
+use Test::Exception;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Old::Holds;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
@@ -30,13 +32,26 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'anonymize() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     is( $patron->old_holds->count, 0, 'Patron has no old holds' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
+
+    throws_ok
+        { $patron->old_holds->anonymize; }
+        'Koha::Exceptions::SysPref::NotSet',
+        'Exception thrown because AnonymousPatron not set';
+
+    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
     is( $patron->old_holds->anonymize + 0, 0, 'Anonymizing an empty resultset returns 0' );
 
     my $hold_1 = $builder->build_object(
@@ -78,6 +93,18 @@ subtest 'anonymize() tests' => sub {
     # filter them so only the older two are part of the resultset
     my $holds = $patron->old_holds->search({ timestamp => { '<=' => dt_from_string()->subtract( days => 2 ) } });
     # Anonymize them
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
+    throws_ok
+        { $holds->anonymize; }
+        'Koha::Exceptions::SysPref::NotSet',
+        'Exception thrown because AnonymousPatron not set';
+
+    is( $@->syspref, 'AnonymousPatron', 'syspref parameter is correctly passed' );
+    is( $patron->old_holds->count, 4, 'Patron has 4 completed holds' );
+
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
+
     my $anonymized_count = $holds->anonymize();
     is( $anonymized_count, 2, 'update() tells 2 rows were updated' );
 
