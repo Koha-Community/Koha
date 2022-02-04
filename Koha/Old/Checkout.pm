@@ -18,6 +18,7 @@ package Koha::Old::Checkout;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Exceptions::SysPref;
 use Koha::Libraries;
 
 use base qw(Koha::Object);
@@ -87,6 +88,25 @@ sub issuer {
     my $issuer_rs = $self->_result->issuer;
     return unless $issuer_rs;
     return Koha::Patron->_new_from_dbic( $issuer_rs );
+}
+
+=head3 anonymize
+
+    $checkout->anonymize();
+
+Anonymize the given I<Koha::Old::Checkout> object.
+
+=cut
+
+sub anonymize {
+    my ($self) = @_;
+
+    my $anonymous_id = C4::Context->preference('AnonymousPatron');
+
+    Koha::Exceptions::SysPref::NotSet->throw( syspref => 'AnonymousPatron' )
+        unless $anonymous_id;
+
+    return $self->update( { borrowernumber => $anonymous_id } );
 }
 
 =head3 to_api_mapping
