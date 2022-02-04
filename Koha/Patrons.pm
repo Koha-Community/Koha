@@ -158,45 +158,6 @@ sub search_patrons_to_anonymise {
     return Koha::Patrons->_new_from_dbic($rs);
 }
 
-=head3 anonymise_issue_history
-
-    Koha::Patrons->search->anonymise_issue_history( { [ before => $older_than_date ] } );
-
-Anonymise issue history (old_issues) for all patrons older than the given date (optional).
-To make sure all the conditions are met, the caller has the responsibility to
-call search_patrons_to_anonymise to filter the Koha::Patrons set
-
-=cut
-
-sub anonymise_issue_history {
-    my ( $self, $params ) = @_;
-
-    my $older_than_date = $params->{before};
-
-    $older_than_date = dt_from_string $older_than_date if $older_than_date;
-
-    # The default of 0 does not work due to foreign key constraints
-    # The anonymisation should not fail quietly if AnonymousPatron is not a valid entry
-    # Set it to undef (NULL)
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $nb_rows = 0;
-    while ( my $patron = $self->next ) {
-        my $old_issues_to_anonymise = $patron->old_checkouts->search(
-        {
-            (
-                $older_than_date
-                ? ( returndate =>
-                      { '<' => $dtf->format_datetime($older_than_date) } )
-                : ()
-            )
-        }
-        );
-        my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
-        $nb_rows += $old_issues_to_anonymise->update( { 'old_issues.borrowernumber' => $anonymous_patron } );
-    }
-    return $nb_rows;
-}
-
 =head3 delete
 
     Koha::Patrons->search({ some filters here })->delete({ move => 1 });

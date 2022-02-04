@@ -1018,7 +1018,8 @@ subtest 'notice_email_address' => sub {
     $patron->delete;
 };
 
-subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
+subtest 'search_patrons_to_anonymise' => sub {
+
     plan tests => 5;
 
     # TODO create a subroutine in t::lib::Mocks
@@ -1079,7 +1080,16 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         my $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } );
         is( ref($patrons_to_anonymise), 'Koha::Patrons', 'search_patrons_to_anonymise should return Koha::Patrons' );
 
-        my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history( { before => '2010-10-11' } );
+        my $rows_affected = Koha::Old::Checkouts->search(
+            {
+                borrowernumber => [
+                    Koha::Patrons->search_patrons_to_anonymise(
+                        { before => '2011-11-12' }
+                    )->get_column('borrowernumber')
+                ],
+                returndate => { '<' => '2011-10-11', }
+            }
+        )->anonymize;
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
 
         $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } );
@@ -1094,7 +1104,16 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $patron->{borrowernumber}, 'The issue should not have been anonymised, the returned date is later' );
 
-        $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history;
+        $rows_affected = Koha::Old::Checkouts->search(
+            {
+                borrowernumber => [
+                    Koha::Patrons->search_patrons_to_anonymise(
+                        { before => '2011-11-12' }
+                    )->get_column('borrowernumber')
+                ],
+                returndate => { '<' => '2011-11-12', }
+            }
+        )->anonymize;
         $sth->execute($item_2->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue should have been anonymised, the returned date is before' );
@@ -1102,7 +1121,14 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         my $sth_reset = $dbh->prepare(q|UPDATE old_issues SET borrowernumber = ? WHERE itemnumber = ?|);
         $sth_reset->execute( $patron->{borrowernumber}, $item_1->itemnumber );
         $sth_reset->execute( $patron->{borrowernumber}, $item_2->itemnumber );
-        $rows_affected = Koha::Patrons->search_patrons_to_anonymise->anonymise_issue_history;
+        $rows_affected = Koha::Old::Checkouts->search(
+            {
+                borrowernumber => [
+                    Koha::Patrons->search_patrons_to_anonymise->get_column(
+                        'borrowernumber')
+                ]
+            }
+        )->anonymize;
         $sth->execute($item_1->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue 1 should have been anonymised, before parameter was not passed' );
@@ -1166,7 +1192,15 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
 
         my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
-        my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
+        my $rows_affected = Koha::Old::Checkouts->search(
+            {
+                borrowernumber => [
+                    Koha::Patrons->search_patrons_to_anonymise(
+                        { before => '2010-10-11' }
+                    )->get_column('borrowernumber')
+                ]
+            }
+        )->anonymize;
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
 
         my $dbh = C4::Context->dbh;
