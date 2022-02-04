@@ -43,21 +43,21 @@ Returns the default I<Koha::SMTP::Server> object.
 sub get_default {
     my ($self) = @_;
 
-    my $default;
+    my $default = $self->search({ is_default => 1 }, { rows => 1 })->single;
 
-    my $smtp_config = C4::Context->config('smtp_server');
+    unless ($default) { # no database default
+        my $smtp_config = C4::Context->config('smtp_server');
 
-    if ( $default = $self->search({ is_default => 1 }, { rows => 1 })->single ) {
+        if ( $smtp_config ) { # use koha-conf.xml
+            $default = Koha::SMTP::Server->new( $smtp_config );
+        }
+        else {
+            $default = Koha::SMTP::Server->new( $self->default_setting );
+        }
 
+        $default->{_is_system_default} = 1;
     }
-    elsif ( $smtp_config ) {
-        $default = Koha::SMTP::Server->new( $smtp_config );
-    }
-    else {
-        $default = Koha::SMTP::Server->new( $self->default_setting );
-    }
 
-    $default->{_is_system_default} = 1;
     return $default;
 }
 
