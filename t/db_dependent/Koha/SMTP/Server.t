@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 use Test::Warn;
 
@@ -101,6 +101,36 @@ subtest 'to_api() tests' => sub {
 
     my $smtp_server = $builder->build_object({ class => 'Koha::SMTP::Servers' });
     ok( !exists $smtp_server->to_api->{password}, 'Password is not part of the API representation' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::SMTP::Servers->search->delete;
+
+    my $server_1 = $builder->build_object(
+        { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
+    my $server_2 = $builder->build_object(
+        { class => 'Koha::SMTP::Servers', value => { is_default => 0 } } );
+    my $server_3 = $builder->build_object(
+        { class => 'Koha::SMTP::Servers', value => { is_default => 1 } } );
+
+    my $default_servers = Koha::SMTP::Servers->search( { is_default => 1 } );
+
+    is( $default_servers->count,    1,             'Only one default server' );
+    is( $default_servers->next->id, $server_3->id, 'Server 3 is the default' );
+
+    $server_1->set( { is_default => 1 } )->store->discard_changes;
+
+    $default_servers = Koha::SMTP::Servers->search( { is_default => 1 } );
+
+    is( $default_servers->count,    1,             'Only one default server' );
+    is( $default_servers->next->id, $server_1->id, 'Server 1 is the default' );
 
     $schema->storage->txn_rollback;
 };

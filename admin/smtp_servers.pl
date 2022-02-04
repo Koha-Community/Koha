@@ -54,11 +54,7 @@ if ( $op eq 'add' ) {
     my $debug      = ( scalar $input->param('smtp_debug_mode') ) ? 1 : 0;
     my $is_default = ( scalar $input->param('smtp_default') ) ? 1 : 0;
 
-    my $schema = Koha::Database->new->schema;
     try {
-        $schema->storage->txn_begin;
-
-        Koha::SMTP::Servers->search->update({ is_default => 0 }) if $is_default;
 
         Koha::SMTP::Server->new(
             {
@@ -75,10 +71,8 @@ if ( $op eq 'add' ) {
         )->store;
 
         push @messages, { type => 'message', code => 'success_on_insert' };
-        $schema->storage->txn_commit;
     }
     catch {
-        $schema->storage->txn_rollback;
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             push @messages,
               {
@@ -133,12 +127,7 @@ elsif ( $op eq 'edit_save' ) {
         my $debug      = ( scalar $input->param('smtp_debug_mode') ) ? 1 : 0;
         my $is_default = ( scalar $input->param('smtp_default') ) ? 1 : 0;
 
-        my $schema = Koha::Database->new->schema;
-
         try {
-            $schema->storage->txn_begin;
-
-            Koha::SMTP::Servers->search->update({ is_default => 0 }) if $is_default;
 
             $smtp_server->password( $password )
                 if defined $password and $password ne '****'
@@ -162,10 +151,8 @@ elsif ( $op eq 'edit_save' ) {
                 type => 'message',
                 code => 'success_on_update'
             };
-            $schema->storage->txn_commit;
         }
         catch {
-            $schema->storage->txn_rollback;
             push @messages,
             {
                 type   => 'alert',

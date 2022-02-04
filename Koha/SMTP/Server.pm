@@ -31,6 +31,30 @@ Koha::SMTP::Server - Koha SMTP Server Object class
 
 =head2 Class methods
 
+=head3 store
+
+    $server->store;
+
+Overloaded store method.
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            Koha::SMTP::Servers->search->update( { is_default => 0 },
+                { no_triggers => 1 } )
+              if $self->is_default;
+
+            $self = $self->SUPER::store;
+        }
+    );
+
+    return $self;
+}
+
 =head3 transport
 
     my $transport = $smtp_server->transport;
