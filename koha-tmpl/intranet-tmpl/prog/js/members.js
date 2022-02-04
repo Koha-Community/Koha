@@ -225,7 +225,7 @@ $(document).ready(function(){
     $.validator.addMethod(
         "phone",
         function(value, element, phone) {
-            let e164_re = /^(\+[1-9]\d{0,2})?\d{1,12}$/;
+            let e164_re = /^((\+?|(0{2})?)?[1-9]{0,2})?\d{1,12}$/;
             let has_plus = value.charAt(0) === '+';
             value = value.replace(/\D/g,'');
             if ( has_plus ) value = '+' + value;
