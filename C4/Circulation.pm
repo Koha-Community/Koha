@@ -2341,17 +2341,6 @@ sub MarkIssueReturned {
 
     my $issue_id = $issue->issue_id;
 
-    my $anonymouspatron;
-    if ( $privacy && $privacy == 2 ) {
-        # The default of 0 will not work due to foreign key constraints
-        # The anonymisation will fail if AnonymousPatron is not a valid entry
-        # We need to check if the anonymous patron exist, Koha will fail loudly if it does not
-        # Note that a warning should appear on the about page (System information tab).
-        $anonymouspatron = C4::Context->preference('AnonymousPatron');
-        die "Fatal error: the patron ($borrowernumber) has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or not set correctly."
-            unless Koha::Patrons->find( $anonymouspatron );
-    }
-
     my $schema = Koha::Database->schema;
 
     # FIXME Improve the return value and handle it from callers
@@ -2372,7 +2361,7 @@ sub MarkIssueReturned {
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy && $privacy == 2) {
-            $old_checkout->borrowernumber($anonymouspatron)->store;
+            $old_checkout->anonymize;
         }
 
         # And finally delete the issue
