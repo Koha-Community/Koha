@@ -1,4 +1,4 @@
-[% SET KohaSpan %]
+[% USE KohaSpan %]
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
