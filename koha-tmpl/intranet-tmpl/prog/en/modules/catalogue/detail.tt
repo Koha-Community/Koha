@@ -827,11 +827,11 @@ Note that permanent location is a code, and location may be an authval.
             <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</td>
             <td>
               [% SWITCH order.orderstatus %]
-                [% CASE 'new' ]<span>New</span>
-                [% CASE 'ordered' ]<span>Ordered</span>
-                [% CASE 'partial' ]<span>Partial</span>
-                [% CASE 'complete' ]<span>Complete</span>
-                [% CASE 'cancelled' ]<span>Cancelled</span>
+                [% CASE 'new' %]<span>New</span>
+                [% CASE 'ordered' %]<span>Ordered</span>
+                [% CASE 'partial' %]<span>Partial</span>
+                [% CASE 'complete' %]<span>Complete</span>
+                [% CASE 'cancelled' %]<span>Cancelled</span>
               [% END %]
             </td>
             <td>[% order.quantity | html %]</td>

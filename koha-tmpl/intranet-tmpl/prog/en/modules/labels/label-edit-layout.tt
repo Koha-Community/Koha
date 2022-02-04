@@ -2,11 +2,11 @@
 [% SET footerjs = 1 %]
 [%- BLOCK translate_label_types -%]
     [%-  SWITCH type -%]
-        [%- CASE 'BIB' -]<span> Only the bibliographic data is printed</span>
-        [%- CASE 'BARBIB'-]<span> Barcode proceeds bibliographic data</span>
-        [%- CASE 'BIBBAR'-]<span> Bibliographic data proceeds barcode</span>
-        [%- CASE 'ALT' -]<span> Barcode and bibliographic data are printed on alternating labels</span>
-        [%- CASE 'BAR' -]<span> Only the barcode is printed</span>
+        [%- CASE 'BIB' -%]<span> Only the bibliographic data is printed</span>
+        [%- CASE 'BARBIB'-%]<span> Barcode proceeds bibliographic data</span>
+        [%- CASE 'BIBBAR'-%]<span> Bibliographic data proceeds barcode</span>
+        [%- CASE 'ALT' -%]<span> Barcode and bibliographic data are printed on alternating labels</span>
+        [%- CASE 'BAR' -%]<span> Only the barcode is printed</span>
     [%- END -%]
 [%- END -%]
     [% INCLUDE 'doc-head-open.inc' %]
@@ -16,9 +16,9 @@
 
 [% BLOCK translate_justification_types %]
 [%  SWITCH type %]
-[%   CASE 'L' ]<span>Left</span>
-[%   CASE 'C' ]<span>Center</span>
-[%   CASE 'R' ]<span>Right</span>
+[%   CASE 'L' %]<span>Left</span>
+[%   CASE 'C' %]<span>Center</span>
+[%   CASE 'R' %]<span>Right</span>
 [%  END %]
 [% END %]
 <body id="labels_label-edit-layout" class="tools labels">

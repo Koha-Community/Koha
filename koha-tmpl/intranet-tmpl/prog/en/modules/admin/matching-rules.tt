@@ -18,13 +18,13 @@
 
 [% BLOCK norms_text %]
     [% SWITCH norm %]
-        [% CASE 'none' ]<span>None</span>
-        [% CASE 'remove_spaces' ]<span>Remove spaces</span>
-        [% CASE 'upper_case' ]<span>Uppercase</span>
-        [% CASE 'lower_case' ]<span>Lowercase</span>
-        [% CASE 'legacy_default' ]<span>Legacy default</span>
-        [% CASE 'ISBN' ]<span>ISBN</span>
-        [% CASE ]<span>[% norm | html %]</span>
+        [% CASE 'none' %]<span>None</span>
+        [% CASE 'remove_spaces' %]<span>Remove spaces</span>
+        [% CASE 'upper_case' %]<span>Uppercase</span>
+        [% CASE 'lower_case' %]<span>Lowercase</span>
+        [% CASE 'legacy_default' %]<span>Legacy default</span>
+        [% CASE 'ISBN' %]<span>ISBN</span>
+        [% CASE %]<span>[% norm | html %]</span>
     [% END %]
 [% END %]
 

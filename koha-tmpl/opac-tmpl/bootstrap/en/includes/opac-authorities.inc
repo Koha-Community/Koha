@@ -24,13 +24,13 @@
 [% BLOCK authtypelabel %]
     [% UNLESS ( type=='seefrom' || type=='seealso' || type=='' ) %]
         <span class="type">[% FILTER trim %][% SWITCH type %]
-        [% CASE 'earlier' ]<span>Earlier heading</span>
-        [% CASE 'later' ]<span>Later heading</span>
-        [% CASE 'acronym' ]<span>Acronym</span>
-        [% CASE 'musical' ]<span>Musical composition</span>
-        [% CASE 'broader' ]<span>Broader heading</span>
-        [% CASE 'narrower' ]<span>Narrower heading</span>
-        [% CASE ]<span>[% type | html %]</span>
+        [% CASE 'earlier' %]<span>Earlier heading</span>
+        [% CASE 'later' %]<span>Later heading</span>
+        [% CASE 'acronym' %]<span>Acronym</span>
+        [% CASE 'musical' %]<span>Musical composition</span>
+        [% CASE 'broader' %]<span>Broader heading</span>
+        [% CASE 'narrower' %]<span>Narrower heading</span>
+        [% CASE %]<span>[% type | html %]</span>
         [% END %][% END %]</span>
     [% END %]
 [% END %]
@@ -60,11 +60,11 @@
 
 [% BLOCK language %]
     [% SWITCH lang %]
-        [% CASE ['en', 'eng'] ]<span>English</span>
-        [% CASE ['fr', 'fre'] ]<span>French</span>
-        [% CASE ['it', 'ita'] ]<span>Italian</span>
-        [% CASE ['de', 'ger', 'deu'] ]<span>German</span>
-        [% CASE ['es', 'spa'] ]<span>Spanish</span>
-        [% CASE ]<span>[% lang | html %]</span>
+        [% CASE ['en', 'eng'] %]<span>English</span>
+        [% CASE ['fr', 'fre'] %]<span>French</span>
+        [% CASE ['it', 'ita'] %]<span>Italian</span>
+        [% CASE ['de', 'ger', 'deu'] %]<span>German</span>
+        [% CASE ['es', 'spa'] %]<span>Spanish</span>
+        [% CASE %]<span>[% lang | html %]</span>
     [% END %]
 [% END %]
