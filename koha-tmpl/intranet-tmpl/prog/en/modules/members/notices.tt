@@ -87,7 +87,7 @@
                                         <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
                                         <td>
                                             [% IF ( QUEUED_MESSAGE.failure_code ) %]
-            [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]<span><span>Invalid borrowernumber [% borrowernumber | html %]</span>
+            [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]<span>Invalid borrowernumber [% borrowernumber | html %]</span>
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]<span>Unable to find an email address for this borrower</span>
             [% ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) %]<span>Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
             [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]<span>Missing from email address</span>

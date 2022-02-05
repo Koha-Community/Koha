@@ -71,7 +71,7 @@
         [%- data.cardnumber | html -%]
     [%- END -%]
 [%- ELSE -%]
-    <span>A patron from library [% Branches.GetName( patron.branchcode ) | html -%]<span>
+    <span>A patron from library [% Branches.GetName( patron.branchcode ) | html -%]</span>
 [%- END -%]
 
 [%- IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -%]

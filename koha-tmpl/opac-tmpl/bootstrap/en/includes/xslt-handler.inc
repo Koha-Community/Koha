@@ -2,7 +2,7 @@
     [% CASE 'XSLTH_ERR_NO_FILE' %]
         <span>No XSLT file passed.</span>
     [% CASE 'XSLTH_ERR_FILE_NOT_FOUND' %]
-        <span>XSLT file not found.</span></span>
+        <span>XSLT file not found.</span>
     [% CASE 'XSLTH_ERR_LOADING' %]
         <span>Error while loading stylesheet.</span>
     [% CASE 'XSLTH_ERR_PARSING_CODE' %]
