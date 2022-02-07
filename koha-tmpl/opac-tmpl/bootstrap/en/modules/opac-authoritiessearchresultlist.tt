@@ -106,7 +106,13 @@
                                     <tbody>
                                         [% FOREACH resul IN result %]
                                             <tr>
-                                                <td>[% PROCESS authresult summary=resul.summary %]</td>
+                                                <td>
+                                                    [% IF resul.html %]
+                                                        [% resul.html | $raw %]
+                                                    [% ELSE %]
+                                                        [% PROCESS authresult summary=resul.summary authid=resul.authid %]
+                                                    [% END %]
+                                                </td>
                                                 <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | uri %]">Details</a>
                                                 <td>[% resul.authtype | html %]</td>
                                                 [% UNLESS ( resul.isEDITORS ) %]

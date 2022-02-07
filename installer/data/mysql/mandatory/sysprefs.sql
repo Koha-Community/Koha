@@ -70,6 +70,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AuthorityMergeLimit','50',NULL,'Maximum number of biblio records updated immediately when an authority record has been modified.','integer'),
 ('AuthorityMergeMode','loose','loose|strict','Authority merge mode','Choice'),
 ('AuthoritySeparator','--','10','Used to separate a list of authorities in a display. Usually --','free'),
+('AuthorityXSLTOpacResultsDisplay','','','Enable XSL stylesheet control over authority results page display on opac','Free'),
 ('AuthorityXSLTResultsDisplay','','','Enable XSL stylesheet control over authority results page display on intranet','Free'),
 ('AuthSuccessLog','0',NULL,'If enabled, log successful authentications','YesNo'),
 ('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),

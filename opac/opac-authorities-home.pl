@@ -28,6 +28,8 @@ use C4::Context;
 use C4::Output qw( pagination_bar output_html_with_http_headers );
 use C4::Koha;
 use C4::Search::History;
+use C4::Languages;
+use Koha::XSLT::Base;
 
 use Koha::Authority::Types;
 use Koha::SearchEngine::Search;
@@ -98,6 +100,27 @@ if ( $op eq "do_search" ) {
     }
     else {
         $to = $startfrom * $resultsperpage;
+    }
+
+    my $AuthorityXSLTOpacResultsDisplay = C4::Context->preference('AuthorityXSLTOpacResultsDisplay');
+    if ($results && $AuthorityXSLTOpacResultsDisplay) {
+        my $lang = C4::Languages::getlanguage();
+        foreach my $result (@$results) {
+            my $authority = Koha::Authorities->find($result->{authid});
+            next unless $authority;
+            my $authtypecode = $authority->authtypecode;
+            my $xsl = $AuthorityXSLTOpacResultsDisplay;
+
+            $xsl =~ s/\{langcode\}/$lang/g;
+            $xsl =~ s/\{authtypecode\}/$authtypecode/g;
+            my $xslt_engine = Koha::XSLT::Base->new;
+            my $output = $xslt_engine->transform({ xml => $authority->marcxml, file => $xsl });
+            if ($xslt_engine->err) {
+                warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
+                next;
+            }
+            $result->{html} = $output;
+        }
     }
 
     $template->param( result => $results ) if $results;
