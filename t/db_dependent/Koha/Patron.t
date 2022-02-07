@@ -133,7 +133,7 @@ subtest 'relationships_debt() tests' => sub {
 
 sub _test_combinations {
     my ( $patrons, $parent1_debt, $parent2_debt, $child1_debt, $child2_debt ) = @_;
-    diag("Testing with parent 1 debt $parent1_debt | Parent 2 debt $parent2_debt | Child 1 debt $child1_debt | Child 2 debt $child2_debt");
+    note("Testing with parent 1 debt $parent1_debt | Parent 2 debt $parent2_debt | Child 1 debt $child1_debt | Child 2 debt $child2_debt");
     # Options
     # P1 => P1 + C1 + C2 ( - P1 ) ( + P2 )
     # P2 => P2 + C1 + C2 ( - P2 ) ( + P1 )
@@ -144,7 +144,7 @@ sub _test_combinations {
     for my $i ( 0 .. 7 ) {
         my ( $only_this_guarantor, $include_guarantors, $include_this_patron )
           = split '', sprintf( "%03b", $i );
-        diag("---------------------");
+        note("---------------------");
         for my $patron ( @$patrons ) {
             if ( $only_this_guarantor
                 && !$patron->guarantee_relationships->count )

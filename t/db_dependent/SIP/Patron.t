@@ -272,11 +272,15 @@ subtest "fine_items tests" => sub {
     is( @$fine_items, 0, "Got zero fine items" );
 };
 
+$schema->storage->txn_rollback;
+
 subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
     plan tests => 1;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+    $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $child  = $builder->build_object({ class => 'Koha::Patrons' });
@@ -308,5 +312,5 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
     is( $sip_patron->fines_amount, 11.11,"Guarantee fines correctly included");
 
+    $schema->storage->txn_rollback;
 };
-$schema->storage->txn_rollback;
