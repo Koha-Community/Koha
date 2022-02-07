@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>[% IF ( supplierid ) -%] Claims for [% suppliername | html %] &rsaquo; [% END %] Claims &rsaquo; Serials &rsaquo; Koha</title>
@@ -130,6 +131,7 @@
                                         <th>Issue number</th>
                                         <th>Status</th>
                                         <th>Since</th>
+                                        <th>Published on</th>
                                         <th>Claims count</th>
                                         <th>Claim date</th>
                                         [% FOR field IN additional_fields_for_subscription %]
@@ -167,6 +169,9 @@
                                             <td class="planneddate" data-order="[% missingissue.planneddateISO | html %]">
                                                 [% missingissue.planneddate | html %]
                                             </td>
+                                            <td class="publisheddate" data-order="[% missingissue.publisheddate | html %]">
+                                                [% missingissue.publisheddate | $KohaDates %]
+                                            </td>
                                             <td>[% missingissue.claims_count | html %]</td>
                                             <td data-order="[% missingissue.claimdateISO | html %]">
                                                 [% missingissue.claimdate | html %]
@@ -191,10 +196,11 @@
                                         <td><input type="text" class="filter" data-column_num="5" placeholder="Search issue number" /></td>
                                         <td><input type="text" class="filter" data-column_num="6" placeholder="Search status" /></td>
                                         <td><input type="text" class="filter" data-column_num="7" placeholder="Search since" /></td>
-                                        <td><input type="text" class="filter" data-column_num="8" placeholder="Search claim count" /></td>
-                                        <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim date" /></td>
+                                        <td><input type="text" class="filter" data-column_num="8" placeholder="Search published on" /></td>
+                                        <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim count" /></td>
+                                        <td><input type="text" class="filter" data-column_num="10" placeholder="Search claim date" /></td>
                                         [% FOR field IN additional_fields_for_subscription %]
-                                            <td><input type="text" class="filter" data-column_num="[% loop.count + 9 | html %]" placeholder="Search [% field.name | html %]" /></td>
+                                            <td><input type="text" class="filter" data-column_num="[% loop.count + 10 | html %]" placeholder="Search [% field.name | html %]" /></td>
                                         [% END %]
                                     </tr>
                                 </tfoot>
