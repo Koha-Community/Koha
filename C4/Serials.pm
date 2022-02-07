@@ -1867,7 +1867,7 @@ sub GetLateOrMissingIssues {
                 serialid,      aqbooksellerid,        name,
                 biblio.title,  biblioitems.issn,      planneddate,    serialseq,
                 serial.status, serial.subscriptionid, claimdate, claims_count,
-                subscription.branchcode
+                subscription.branchcode, serial.publisheddate
             FROM      serial
                 LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid
                 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
@@ -1885,7 +1885,7 @@ sub GetLateOrMissingIssues {
             serialid,      aqbooksellerid,         name,
             biblio.title,  planneddate,           serialseq,
                 serial.status, serial.subscriptionid, claimdate, claims_count,
-                subscription.branchcode
+                subscription.branchcode, serial.publisheddate
             FROM serial
                 LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
                 LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber
