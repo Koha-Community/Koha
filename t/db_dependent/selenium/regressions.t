@@ -36,7 +36,7 @@ eval { require Selenium::Remote::Driver; };
 if ( $@ ) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 7;
+    plan tests => 8;
 }
 
 my $s = t::lib::Selenium->new;
