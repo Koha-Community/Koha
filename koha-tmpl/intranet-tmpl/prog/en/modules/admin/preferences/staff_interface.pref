@@ -1,6 +1,11 @@
 Staff interface:
     Appearance:
         -
+            - 'Display authority details in the opac interface using XSLT stylesheet at: '
+            - pref: AuthorityXSLTOpacDetailsDisplay
+              class: file
+            - '<br />Options:<ul><li>Put a path to define a xslt file</li><li>Put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language and {authtypecode} will be replaced by the authority type code'
+        -
             - 'Display authority results in the staff interface using XSLT stylesheet at: '
             - pref: AuthorityXSLTResultsDisplay
               class: file

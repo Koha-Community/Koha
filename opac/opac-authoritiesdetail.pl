@@ -41,6 +41,7 @@ use Modern::Perl;
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcUrls );
 use C4::Context;
+use C4::Languages;
 use C4::Output qw( output_html_with_http_headers );
 use C4::AuthoritiesMarc qw( GetAuthority BuildSummary GetTagsLabels GenerateHierarchy );
 use CGI qw ( -utf8 );
@@ -48,6 +49,7 @@ use C4::Koha;
 
 use Koha::Authorities;
 use Koha::Authority::Types;
+use Koha::XSLT::Base;
 
 my $query = CGI->new;
 
@@ -166,8 +168,25 @@ if ($show_marc) {
     }
     $template->param( "Tab0XX" => \@loop_data );
 } else {
-    my $summary = BuildSummary($record, $authid, $authtypecode);
-    $template->{VARS}->{'summary'} = $summary;
+    my $AuthorityXSLTOpacDetailsDisplay = C4::Context->preference('AuthorityXSLTOpacDetailsDisplay');
+    if ($AuthorityXSLTOpacDetailsDisplay) {
+        my $lang = C4::Languages::getlanguage();
+
+        my $xsl = $AuthorityXSLTOpacDetailsDisplay;
+
+        $xsl =~ s/\{langcode\}/$lang/g;
+        $xsl =~ s/\{authtypecode\}/$authtypecode/g;
+        my $xslt_engine = Koha::XSLT::Base->new;
+        my $output = $xslt_engine->transform({ xml => $authority->marcxml, file => $xsl });
+        if ($xslt_engine->err) {
+            warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
+            next;
+        }
+        $template->param(html => $output);
+    } else {
+        my $summary = BuildSummary($record, $authid, $authtypecode);
+        $template->param(summary => $summary);
+    }
 
     if ( C4::Context->preference('OPACAuthorIdentifiers') ) {
         my $authority = Koha::Authorities->find($authid);
