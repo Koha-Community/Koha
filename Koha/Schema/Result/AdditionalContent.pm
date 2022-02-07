@@ -44,7 +44,7 @@ category for the additional content
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 20
+  size: 100
 
 code to group content per lang
 
@@ -86,7 +86,7 @@ the body of your additional content
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 25
+  size: 50
 
 location for the additional content(koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
 
@@ -143,7 +143,7 @@ __PACKAGE__->add_columns(
   "category",
   { data_type => "varchar", is_nullable => 0, size => 20 },
   "code",
-  { data_type => "varchar", is_nullable => 0, size => 20 },
+  { data_type => "varchar", is_nullable => 0, size => 100 },
   "location",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "branchcode",
@@ -153,7 +153,7 @@ __PACKAGE__->add_columns(
   "content",
   { data_type => "mediumtext", is_nullable => 0 },
   "lang",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "published_on",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "updated_on",
@@ -249,8 +249,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-07-16 07:12:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0HtqQpArwFtGrsivukyG1Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-07 17:33:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8XBxGaOBL30SKzof8rThAw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

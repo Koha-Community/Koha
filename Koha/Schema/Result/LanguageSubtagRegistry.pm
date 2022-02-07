@@ -84,9 +84,25 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M4QL1kgte1o/Wz+XjSduWA
+=head2 C<uniq_lang>
+
+=over 4
+
+=item * L</subtag>
+
+=item * L</type>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("uniq_lang", ["subtag", "type"]);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-07 17:33:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oaYDhSazc2SC0M4gGH9QQw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
