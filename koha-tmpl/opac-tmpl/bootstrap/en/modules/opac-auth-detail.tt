@@ -75,88 +75,92 @@
                             [% IF count %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a>[% ELSE %]This authority is not used in any records.[% END %]
                         </div>
 
-                        <div class="authstanza">
-                            [% FOREACH authorize IN summary.authorized %]
-                                <div class="heading authorized auth[% seefro.field | html %]">
-                                    <span class="label">Preferred form: </span>
-                                    <span class="authorized">[% authorize.heading | html %]</span>
+                        [% IF html %]
+                            [% html | $raw %]
+                        [% ELSE %]
+                            <div class="authstanza">
+                                [% FOREACH authorize IN summary.authorized %]
+                                    <div class="heading authorized auth[% seefro.field | html %]">
+                                        <span class="label">Preferred form: </span>
+                                        <span class="authorized">[% authorize.heading | html %]</span>
+                                    </div>
+                                [% END %]
+                                [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
+                            </div>
+
+                            [% IF summary.seefrom.size %]
+                                <div class="authstanza seefrom">
+                                    <div class="authstanzaheading">Used for/see from:</div>
+                                    <ul class="seefrom">
+                                        [% FOREACH seefro IN summary.seefrom %]
+                                            <li class="heading seefrom auth[% seefro.field | html %]">
+                                                [% IF seefro.type && seefro.type != 'seefrom' %]
+                                                    <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
+                                                [% END %]
+                                                <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
+                                            </li>
+                                        [% END %]
+                                        [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
+                                    </ul>
                                 </div>
                             [% END %]
-                            [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
-                        </div>
 
-                        [% IF summary.seefrom.size %]
-                            <div class="authstanza seefrom">
-                                <div class="authstanzaheading">Used for/see from:</div>
-                                <ul class="seefrom">
-                                    [% FOREACH seefro IN summary.seefrom %]
-                                        <li class="heading seefrom auth[% seefro.field | html %]">
-                                            [% IF seefro.type && seefro.type != 'seefrom' %]
-                                                <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
-                                            [% END %]
-                                            <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
-                                        </li>
-                                    [% END %]
-                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
-                                </ul>
-                            </div>
+                            [% IF summary.seealso.size %]
+                                <div class="authstanza seealso">
+                                    <div class="authstanzaheading">See also:</div>
+                                    <ul class="seelso">
+                                        [% FOREACH seeals IN summary.seealso %]
+                                            <li class="heading seealso auth[% seeals.field | html %]">
+                                                [% IF seeals.type && seeals.type != 'seealso' %]
+                                                    <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
+                                                [% END %]
+                                                <span class="seealso">[% PROCESS authheadingdisplay heading=seeals.heading search=seeals.search authid=seeals.authid %]</span>
+                                            </li>
+                                        [% END %]
+                                        [% PROCESS otherscript headings=summary.otherscript wantcategory='seealso' %]
+                                    </ul>
+                                </div>
+                            [% END %]
+
+                            [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
+                                <div class="authstanza">
+                                    <div class="authstanzaheading">Other forms:</div>
+                                    <ul>
+                                        [% FOREACH otherscrip IN summary.otherscript %]
+                                            <li>
+                                                [% PROCESS language lang=otherscrip.lang | trim %]:
+                                                <span class="otherscript">[% otherscrip.term | html %]</span>
+                                            </li>
+                                        [% END %]
+                                    </ul>
+                                </div>
+                            [% END %]
+
+                            [% IF ( MARCURLS ) %]
+                                <div class="authstanza online_resources">
+                                    <span class="label">Online resources:</span>
+                                    <ul>
+                                        [% FOREACH MARCurl IN MARCURLS %]
+                                            <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
+                                                [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
+                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                [% ELSE %]
+                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
+                                                [% END %]
+                                                [% MARCurl.linktext | html %]</a>
+                                                [% IF ( MARCurl.notes ) %]
+                                                    <ul>
+                                                        [% FOREACH note IN MARCurl.notes %]
+                                                            <li>[% note.note | html %]</li>
+                                                        [% END %]
+                                                    </ul>
+                                                [% END %]
+                                            </li>
+                                        [% END # /FOREACH MARCURLS %]
+                                    </ul>
+                                </div>
+                            [% END # / IF MARCURLS %]
                         [% END %]
-
-                        [% IF summary.seealso.size %]
-                            <div class="authstanza seealso">
-                                <div class="authstanzaheading">See also:</div>
-                                <ul class="seelso">
-                                    [% FOREACH seeals IN summary.seealso %]
-                                        <li class="heading seealso auth[% seeals.field | html %]">
-                                            [% IF seeals.type && seeals.type != 'seealso' %]
-                                                <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
-                                            [% END %]
-                                            <span class="seealso">[% PROCESS authheadingdisplay heading=seeals.heading search=seeals.search authid=seeals.authid %]</span>
-                                        </li>
-                                    [% END %]
-                                    [% PROCESS otherscript headings=summary.otherscript wantcategory='seealso' %]
-                                </ul>
-                            </div>
-                        [% END %]
-
-                        [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
-                            <div class="authstanza">
-                                <div class="authstanzaheading">Other forms:</div>
-                                <ul>
-                                    [% FOREACH otherscrip IN summary.otherscript %]
-                                        <li>
-                                            [% PROCESS language lang=otherscrip.lang | trim %]:
-                                            <span class="otherscript">[% otherscrip.term | html %]</span>
-                                        </li>
-                                    [% END %]
-                                </ul>
-                            </div>
-                        [% END %]
-
-                        [% IF ( MARCURLS ) %]
-                            <div class="authstanza online_resources">
-                                <span class="label">Online resources:</span>
-                                <ul>
-                                    [% FOREACH MARCurl IN MARCURLS %]
-                                        <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
-                                            [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
-                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
-                                            [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
-                                            [% END %]
-                                            [% MARCurl.linktext | html %]</a>
-                                            [% IF ( MARCurl.notes ) %]
-                                                <ul>
-                                                    [% FOREACH note IN MARCurl.notes %]
-                                                        <li>[% note.note | html %]</li>
-                                                    [% END %]
-                                                </ul>
-                                            [% END %]
-                                        </li>
-                                    [% END # /FOREACH MARCURLS %]
-                                </ul>
-                            </div>
-                        [% END # / IF MARCURLS %]
 
                         <div id="authdescriptions" class="toptabs">
                             <ul class="nav nav-tabs" role="tablist">
