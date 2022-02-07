@@ -1598,7 +1598,7 @@
                         'data': aoData,
                         'success': function(json){
                             // redirect if there is only 1 result.
-                            if ( json.aaData.length == 1 ) {
+                            if ( json.iTotalDisplayRecords == 1 ) {
                                 var borrowernumber = json.aaData[0].borrowernumber;
                                 document.location.href = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + borrowernumber + "[% url_biblio_params %]"
                                 return false;
