@@ -25,10 +25,10 @@ use C4::Context;
 use C4::Log qw( cronlogaction );
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Old::Checkouts;
 use Koha::Old::Holds;
 
-use Date::Calc qw( Add_Delta_Days Today );
 use Getopt::Long qw( GetOptions );
 
 sub usage {
@@ -62,10 +62,10 @@ if ( !$days  ) {
 
 cronlogaction();
 
-my ($year,$month,$day) = Today();
-my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
-my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
-$verbose and print "Checkouts and holds before $formatdate will be anonymised.\n";
+my $date = dt_from_string->subtract( days => $days );
+
+print "Checkouts and holds before " . output_pref( { dt => $date, dateformat => 'iso', dateonly => 1 } ) . " will be anonymised.\n"
+  if $verbose;
 
 my $rows = Koha::Old::Checkouts
           ->filter_by_anonymizable
