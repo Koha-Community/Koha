@@ -79,9 +79,9 @@ sub list {
 
         if ( exists $reserved_params->{_order_by} ) {
             # _order_by passed, fix if required
-            for ( my $i = 0; $i < scalar @{$reserved_params->{_order_by}}; $i++ ) {
-                $reserved_params->{_order_by}->[$i] =~ s|biblio\.|biblio\.biblioitem\.|g
-                    if $reserved_params->{_order_by}->[$i] =~ m/.*(isbn|ean|publisher).*/;
+            for my $p ( @{$reserved_params->{_order_by}} ) {
+                $p =~ s|biblio\.|biblio\.biblioitem\.|g
+                    if $p =~ m/.*(isbn|ean|publisher).*/;
             }
         }
 
