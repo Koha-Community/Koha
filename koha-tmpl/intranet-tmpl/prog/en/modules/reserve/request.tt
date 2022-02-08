@@ -305,6 +305,7 @@
                                             <ul>
                                                 <li>
                                                     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]">[% biblioloo.title | html %]</a>
+                                                    [% IF biblioloo.author %] by [% biblioloo.author | html %][% END %]
                                                 </li>
                                                 [% IF ( biblioloo.publicationyear ) %]
                                                     <li>
@@ -818,6 +819,7 @@
                                             <ul>
                                                 <li>
                                                     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]">[% biblioloo.title | html %]</a>
+                                                    [% IF biblioloo.author %] by [% biblioloo.author | html %][% END %]
                                                 </li>
                                                 [% IF ( biblioloo.publicationyear ) %]
                                                     <li>

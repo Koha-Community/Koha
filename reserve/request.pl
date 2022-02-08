@@ -757,7 +757,8 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         );
 
         $biblioloopiter{biblionumber} = $biblionumber;
-        $biblioloopiter{title} = $biblio->title;
+        $biblioloopiter{title}  = $biblio->title;
+        $biblioloopiter{author} = $biblio->author;
         $biblioloopiter{rank} = $fixedRank;
         $biblioloopiter{reserveloop} = \@reserveloop;
 
