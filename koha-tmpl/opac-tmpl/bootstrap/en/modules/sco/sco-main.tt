@@ -521,7 +521,7 @@
                     var confirmStart = Date.now();
                     confirmModal("", _("Would you like to print a receipt?"), _("Print receipt and end session"), _("End session"), function(result) {
                         if ( result && (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
-                            var win = window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber | html %]&amp;print=qslip");
+                            var win = window.open("/cgi-bin/koha/sco/printslip.pl?print=qslip");
                             location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                         } else {
                             location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
