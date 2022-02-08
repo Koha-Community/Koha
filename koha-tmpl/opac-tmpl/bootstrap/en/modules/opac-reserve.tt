@@ -509,7 +509,7 @@
 
         $(".toggle_unholdable").click(function(e){
             e.preventDefault();
-            $(".unholdable").toggle();
+            $(this).parent('div').find(".unholdable").toggle();
         });
 
         $("#hold-request-form").preventDoubleFormSubmit();
