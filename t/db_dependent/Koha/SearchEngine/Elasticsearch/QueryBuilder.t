@@ -499,7 +499,7 @@ subtest 'build_query tests' => sub {
         $query->{aggregations}{'author'}{'terms'},
         {
             field => 'author__facet',
-            order => { '_term' => 'asc' },
+            order => { '_key' => 'asc' },
             include => '[nN][eE][wW].*'
         },
         "scan aggregation request is properly formed"
@@ -517,7 +517,7 @@ subtest 'build_query tests' => sub {
         $query->{aggregations}{'subject'}{'terms'},
         {
             field => 'subject__facet',
-            order => { '_term' => 'asc' },
+            order => { '_key' => 'asc' },
             include => '[nN][eE][wW].*'
         },
         "scan aggregation request is properly formed"

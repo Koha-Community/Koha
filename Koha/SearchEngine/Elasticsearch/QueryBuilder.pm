@@ -543,8 +543,8 @@ sub _build_scan_query {
         $index => {
             terms => {
                 field => $index . '__facet',
-                order => { '_term' => 'asc' },
-                include => $self->_create_regex_filter($self->_clean_search_term($term)) . '.*'
+                order => { '_key' => 'asc' },
+                include => $self->_create_regex_filter($self->clean_search_term($term)) . '.*'
             }
         }
     };
