@@ -402,6 +402,14 @@
         });
 
         $('#payForm').submit(function(e){
+            // first, clear stale sales 'rows' from the payForm
+            if($('input[name="sales"]').length > 0) {
+                $('input[name="sales"]').each(function() {
+                    $(this).remove();
+                });
+            }
+
+            // now, process the current & fresh contents of the sale_table
             if (change != undefined && change.innerHTML > 0.00 && !checked) {
                 e.preventDefault();
                 $("#confirm_change_form").modal("show");
