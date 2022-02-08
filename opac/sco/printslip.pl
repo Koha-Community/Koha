@@ -34,38 +34,61 @@ use C4::Output;
 use C4::Members;
 use C4::Koha;
 
+
 my $input = CGI->new;
-unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
-    print $input->header(status => '403 Forbidden - functionality not available from your location');
+unless (C4::Context->preference('WebBasedSelfCheck')) {
+    # redirect to OPAC home if self-check is not enabled
+    print $input->redirect("/cgi-bin/koha/opac-main.pl");
     exit;
 }
 
-my $sessionID = $input->cookie("CGISESSID");
-my $session = get_session($sessionID);
+unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+    # redirect to OPAC home if self-checkout not permitted from current IP
+    print $input->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
+}
 
-my $print = $input->param('print');
-my $error = $input->param('error');
+if (C4::Context->preference('AutoSelfCheckAllowed'))
+{
+    my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
+    my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
+    $input->param(-name=>'userid',-values=>[$AutoSelfCheckID]);
+    $input->param(-name=>'password',-values=>[$AutoSelfCheckPass]);
+    $input->param(-name=>'koha_login_context',-values=>['sco']);
+}
+$input->param(-name=>'sco_user_login',-values=>[1]);
 
 # patrons still need to be able to print receipts
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "sco/printslip.tt",
+        flagsrequired   => { self_check => "self_checkout_module" },
         query           => $input,
         type            => "opac",
     }
 );
 
-my $borrowernumber = $input->param('borrowernumber');
-my $branch=C4::Context->userenv->{'branch'};
+my $jwt = $input->cookie('JWT');
+my $patronid = $jwt ? Koha::Token->new->decode_jwt({ token => $jwt }) : undef;
+my $patron = $patronid ? Koha::Patrons->find( { cardnumber => $patronid } ) : undef;
+
+unless ( $patron ) {
+    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit;
+}
+
+my $print = $input->param('print');
+my $error = $input->param('error');
+
 my ($slip, $is_html);
-if (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
+if (my $letter = IssueSlip ($patron->branchcode, $patron->borrowernumber, $print eq "qslip")) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }
 
 $template->{VARS}->{slip} = $slip;
 $template->{VARS}->{plain} = !$is_html;
-$template->{VARS}->{borrowernumber} = $borrowernumber;
+$template->{VARS}->{borrowernumber} = $patron->borrowernumber;
 $template->{VARS}->{stylesheet} = C4::Context->preference("SlipCSS");
 $template->{VARS}->{error} = $error;
 
