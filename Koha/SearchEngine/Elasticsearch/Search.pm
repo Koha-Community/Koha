@@ -51,6 +51,7 @@ use Koha::Exceptions::Elasticsearch;
 use MARC::Record;
 use MARC::File::XML;
 use MIME::Base64 qw( decode_base64 );
+use JSON;
 
 Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 
@@ -93,11 +94,15 @@ sub search {
     my $results = eval {
         $elasticsearch->search(
             index => $self->index_name,
+            track_total_hits => JSON::true,
             body => $query
         );
     };
     if ($@) {
         die $self->process_error($@);
+    }
+    if (ref $results->{hits}->{total} eq 'HASH') {
+        $results->{hits}->{total} = $results->{hits}->{total}->{value};
     }
     return $results;
 }
@@ -119,9 +124,13 @@ sub count {
     # and just return number of hits
     my $result = $elasticsearch->search(
         index => $self->index_name,
+        track_total_hits => JSON::true,
         body => $query
     );
 
+    if (ref $result->{hits}->{total} eq 'HASH') {
+        return $result->{hits}->{total}->{value};
+    }
     return $result->{hits}->{total};
 }
 
