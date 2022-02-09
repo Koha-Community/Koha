@@ -23,7 +23,7 @@ use C4::Auth qw( haspermission );
 use Koha::Patrons;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Exceptions;
+use Koha::Exceptions::Virtualshelf;
 use Koha::Virtualshelfshare;
 use Koha::Virtualshelfshares;
 use Koha::Virtualshelfcontent;
@@ -45,11 +45,11 @@ sub store {
     my ( $self ) = @_;
 
     unless ( $self->owner ) {
-        Koha::Exceptions::Virtualshelves::UseDbAdminAccount->throw;
+        Koha::Exceptions::Virtualshelf::UseDbAdminAccount->throw;
     }
 
     unless ( $self->is_shelfname_valid ) {
-        Koha::Exceptions::Virtualshelves::DuplicateObject->throw;
+        Koha::Exceptions::Virtualshelf::DuplicateObject->throw;
     }
 
     $self->allow_change_from_owner( 1 )
@@ -124,7 +124,7 @@ sub get_contents {
 sub share {
     my ( $self, $key ) = @_;
     unless ( $key ) {
-        Koha::Exceptions::Virtualshelves::InvalidKeyOnSharing->throw;
+        Koha::Exceptions::Virtualshelf::InvalidKeyOnSharing->throw;
     }
     Koha::Virtualshelfshare->new(
         {

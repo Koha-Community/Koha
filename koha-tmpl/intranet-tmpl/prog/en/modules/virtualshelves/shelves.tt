@@ -171,9 +171,9 @@
             <span>You do not have permission to add a record to this list.</span>
         [% CASE 'no_biblio_removed' %]
             <span>No record was removed.</span>
-        [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
+        [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
             <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
-        [% CASE 'Koha::Exceptions::Virtualshelves::UseDbAdminAccount' %]
+        [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
             <span>List could not be created. (Do not use the database administrator account.)</span>
         [% CASE 'DBIx::Class::Exception' %]
             [% m.msg | html %]
