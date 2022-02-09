@@ -177,4 +177,28 @@ sub delete {
     };
 }
 
+=head3 list_managers
+
+Return the list of possible suggestions' managers
+
+=cut
+
+sub list_managers {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+
+        my $patrons_rs = Koha::Patrons->search->filter_by_have_subpermission('suggestions.suggestions_manage');
+        my $patrons    = $c->objects->search( $patrons_rs );
+
+        return $c->render(
+            status  => 200,
+            openapi => $patrons
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

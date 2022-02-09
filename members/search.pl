@@ -34,11 +34,16 @@ my ( $template, $loggedinuser, $cookie, $staff_flags ) = get_template_and_user(
 my $referer = $input->referer();
 
 my @columns = split ',', $input->param('columns');
+my $callback = $input->param('callback');
+my $selection_type = $input->param('selection_type') || 'select';
+my $filter = $input->param('filter');
 
 $template->param(
-    view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
-    columns => \@columns,
-    selection_type => 'select',
-    alphabet        => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
+    view           => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
+    callback       => $callback,
+    columns        => \@columns,
+    filter         => $filter,
+    selection_type => $selection_type,
+    alphabet       => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

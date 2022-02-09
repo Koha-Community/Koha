@@ -164,7 +164,12 @@
             };
             patrons_table = $("#memberresultst").kohaTable({
                 "ajax": {
-                    "url": '/api/v1/patrons'
+                    [% SWITCH filter %]
+                    [% CASE 'suggestions_managers' %]
+                        "url": '/api/v1/suggestions/managers'
+                    [% CASE %]
+                        "url": '/api/v1/patrons'
+                    [% END %]
                 },
                 "order": [[ 1, "asc" ]],
                 "iDeferLoading": 0,
