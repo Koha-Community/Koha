@@ -24561,6 +24561,21 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.09 release" );
 }
 
+$DBversion = '21.05.09.001';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "29457", "WARNING: You may have some incorrect manager_id's recorded against account cancellation lines, please see bugzilla for details. NOTE: You may already have this bugfix applied at an earlier upgrade.");
+}
+
+$DBversion = '21.05.09.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+            UPDATE letter
+            SET content=REPLACE(content, "[% ELSIF checkout.auto_renew_error == 'too_unseen' %]\r\nThis item must be renewed at the library.\r\n[% END %]", "[% ELSIF checkout.auto_renew_error == 'too_unseen' %]\r\nThis item must be renewed at the library.\r\n[% ELSIF checkout.auto_renew_error == 'auto_account_expired' %]\r\nYour account has expired.\r\n[% END %]")
+            WHERE code="AUTO_RENEWALS"
+            });
+    NewVersion( $DBversion, "29557", "Add auto_account_expired to AUTO_RENEWALS notice. Please update your AUTO_RENEWALS notice manually if you have changed or translated it." );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
