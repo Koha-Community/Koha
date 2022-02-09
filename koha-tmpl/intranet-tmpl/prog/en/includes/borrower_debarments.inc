@@ -21,7 +21,14 @@
                     [% dtype = d.type %]
                     <tr>
                         <td>
-                            [% restriction_types.$dtype.display_text | html %]
+                            [% ddisplay = restriction_types.$dtype.display_text %]
+                            [% SWITCH ddisplay %]
+                                [% CASE 'Manual' %]Manual
+                                [% CASE 'Overdues' %]Overdues
+                                [% CASE 'Suspension' %]Suspension
+                                [% CASE 'Discharge' %]Discharge
+                                [% CASE %][% ddisplay | html %]
+                            [% END %]
                         </td>
                         <td>
                             [% IF d.comment.search('OVERDUES_PROCESS') %]
