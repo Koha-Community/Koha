@@ -2792,6 +2792,7 @@ CREATE TABLE `illrequests` (
   `illrequest_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ILL request number',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'Patron associated with request',
   `biblio_id` int(11) DEFAULT NULL COMMENT 'Potential bib linked to request',
+  `date_due` datetime DEFAULT NULL COMMENT 'Custom date due specified by backend, leave NULL for default date_due calculation',
   `branchcode` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The branch associated with the request',
   `status` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Current Koha status of request',
   `status_alias` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Foreign key to relevant authorised_values.authorised_value',
