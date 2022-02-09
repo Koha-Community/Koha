@@ -46,7 +46,6 @@ $template->param(
     columns        => \@columns,
     filter         => $filter,
     selection_type => $selection_type,
-    alphabet       => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
     attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
         ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
         : [] ),

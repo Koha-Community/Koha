@@ -14,6 +14,10 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET libraries = Branches.all %]
+[% SET categories = Categories.all.unblessed %]
+[% SET columns = ['name', 'cardnumber', 'dateofbirth', 'category', 'branch', 'address', 'phone'] %]
+[% PROCESS "patron-search.inc" %]
 [% UNLESS ( multi_hold ) %]
     <title>Place a hold on [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; Holds &rsaquo; Circulation &rsaquo; Koha</title>
 [% ELSE %]
@@ -163,30 +167,9 @@
                             [% END %]
                         </ul>
                         <div id="holds_patronsearch_pane">
-                            <form id="holds_patronsearch" method="get">
-                                <div class="hint">Enter patron card number or partial name:</div>
-                                <input type="text" size="40" id="patron" class="focus" autocomplete="off" />
-                                <input type="submit" value="Search" />
-                                [% FOREACH biblionumber IN biblionumbers %]
-                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
-                                [% END %]
-                            </form> <!-- /#holds_patronsearch -->
+                            [% PROCESS patron_search_filters_simple %]
 
-                            <table id="table_borrowers" class="selections-table" style="display: none;">
-                              <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>Address</th>
-                                  <th>Card number</th>
-                                  <th>Date of birth</th>
-                                  <th>Category</th>
-                                  <th>Library</th>
-                                  <th>Primary phone</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody>
-                            </table>
-
+                            [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
                         </div>
                         [% IF clubcount %]
                             <div id="holds_clubsearch_pane">
@@ -1189,7 +1172,6 @@
         }
 
         var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
-        columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
         $.fn.select2.defaults.set("width", "100%" );
         $.fn.select2.defaults.set("dropdownAutoWidth", true );
 
@@ -1571,79 +1553,32 @@
                 }
                 return false;
             });
+        });
+    </script>
 
-            [% FOREACH biblionumber IN biblionumbers %]
-                [% SET url_biblio_params = url_biblio_params _ "&amp;biblionumber=" _ biblionumber | uri %]
-            [% END %]
-            [% IF multi_hold %]
-                [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
-            [% END %]
-            search = 0;
-            dtMemberResults = KohaTable("table_borrowers", {
-                'bServerSide': true,
-                'sAjaxSource': "/cgi-bin/koha/svc/members/search",
-                'fnServerData': function(sSource, aoData, fnCallback) {
-                    if ( ! search ) {
-                        return;
-                    }
-                    aoData.push({
-                        'name': 'searchmember',
-                        'value': $("#patron").val()
-                    },{
-                        'name': 'template_path',
-                        'value': 'reserve/tables/members_results.tt',
-                    });
-                    $.ajax({
-                        'dataType': 'json',
-                        'type': 'POST',
-                        'url': sSource,
-                        'data': aoData,
-                        'success': function(json){
-                            // redirect if there is only 1 result.
-                            if ( json.iTotalDisplayRecords == 1 ) {
-                                var borrowernumber = json.aaData[0].borrowernumber;
-                                document.location.href = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + borrowernumber + "[% url_biblio_params | $raw %]"
-                                return false;
-                            }
-                            fnCallback(json);
-                        }
-                    });
-                },
-                'fnDrawCallback': function (oSettings) {
-                    var data = this.fnGetData();
-                    $.each($(this).find("tbody tr"), function(index, tr) {
-                        let url = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + data[index].borrowernumber + "[% url_biblio_params | $raw %]"
-                        $(tr).off('click').on('click', function() {
-                            document.location.href = url;
-                        }).addClass('clickable');
-                        $(tr).find("a.patron_preview").attr('href', url);
-                    });
-                },
-                'aoColumns':[
-                    { 'mDataProp': 'dt_name' },
-                    { 'mDataProp': 'dt_address' },
-                    { 'mDataProp': 'dt_cardnumber' },
-                    { 'mDataProp': 'dt_dateofbirth' },
-                    { 'mDataProp': 'dt_category' },
-                    { 'mDataProp': 'dt_branch' },
-                    { 'mDataProp': 'dt_phone' },
-                ],
-                'bFilter': false,
-                'bAutoWidth': false,
-                'sPaginationType': 'full_numbers',
-                "bProcessing": true
-            }, columns_settings_borrowers_table );
-            $("#table_borrowers_wrapper").hide();
+    <script>
+        table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
+    </script>
 
-            function filter() {
-                search = 1;
-                $("#table_borrowers").show();
-                $("#table_borrowers_wrapper").show();
-                dtMemberResults.fnDraw();
-                return false;
-            }
+    [% SET url_biblio_params = "biblionumber=" _ biblionumbers.join("&amp;biblionumber=") %]
+    [% IF multi_hold %]
+        [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
+    [% END %]
+
+    [% PROCESS patron_search_js
+        table_id    => 'table_borrowers',
+        categories  => categories,
+        libraries   => libraries,
+        extended_attribute_types => attribute_type_codes,
+        columns     => columns,
+        open_on_row_click => 1,
+        on_click_url      => '/cgi-bin/koha/reserve/request.pl?' _ url_biblio_params,
+        redirect_if_one_result => 1,
+        redirect_url           => '/cgi-bin/koha/reserve/request.pl?' _ url_biblio_params
+    %]
+    <script>
+        $(document).ready(function() {
             $("#holds_patronsearch").on("submit", filter);
-
         });
         $('.printholdslip').click(function(){
                 var reserve_id = $(this).attr('data-reserve_id');

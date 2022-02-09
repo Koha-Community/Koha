@@ -39,7 +39,6 @@ use C4::Koha qw( getitemtypeimagelocation );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use C4::Circulation qw( GetTransfers _GetCircControlBranch GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string output_pref );
-use C4::Utils::DataTables::Members;
 use C4::Search qw( enabled_staff_search_views );
 
 use Koha::Biblios;
@@ -51,6 +50,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Patron::Attribute::Types;
 use Koha::Clubs;
 use Koha::BackgroundJob::BatchCancelHold;
 
@@ -689,6 +689,14 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
     $template->param( biblio => $biblio );
 }
 $template->param( biblionumbers => \@biblionumbers );
+
+$template->param(
+    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : []
+    ),
+);
+
 
 # pass the userenv branch if no pickup location selected
 $template->param( pickup => $pickup || C4::Context->userenv->{branch} );
