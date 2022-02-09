@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 60;
+use Test::More tests => 61;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -2151,6 +2151,42 @@ subtest 'AddIssue | recalls' => sub {
     AddReturn( $item->barcode, $item->homebranch );
 };
 
+subtest 'AddIssue & illrequests.date_due' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'ILLModule', 1 );
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item = $builder->build_sample_item();
+
+    set_userenv($library);
+
+    my $custom_date_due = '9999-12-18 12:34:56';
+    my $expected_date_due = '9999-12-18 23:59:00';
+    my $illrequest = Koha::Illrequest->new({
+        borrowernumber => $patron->borrowernumber,
+        biblio_id => $item->biblionumber,
+        branchcode => $library->{'branchcode'},
+        date_due => $custom_date_due,
+    })->store;
+
+    my $issue = AddIssue( $patron->unblessed, $item->barcode );
+    is( $issue->date_due, $expected_date_due, 'Custom illrequest date due has been set for this issue');
+
+    $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $item = $builder->build_sample_item();
+    $custom_date_due = '9999-12-19';
+    $expected_date_due = '9999-12-19 23:59:00';
+    $illrequest = Koha::Illrequest->new({
+        borrowernumber => $patron->borrowernumber,
+        biblio_id => $item->biblionumber,
+        branchcode => $library->{'branchcode'},
+        date_due => $custom_date_due,
+    })->store;
+
+    $issue = AddIssue( $patron->unblessed, $item->barcode );
+    is( $issue->date_due, $expected_date_due, 'Custom illrequest date due has been set for this issue');
+};
 
 subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     plan tests => 8;
