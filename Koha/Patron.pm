@@ -1223,7 +1223,7 @@ sub get_routing_lists {
 
 =head3 get_age
 
-my $age = $patron->get_age
+    my $age = $patron->get_age
 
 Return the age of the patron
 
@@ -1231,19 +1231,13 @@ Return the age of the patron
 
 sub get_age {
     my ($self)    = @_;
-    my $today_str = dt_from_string->strftime("%Y-%m-%d");
+
     return unless $self->dateofbirth;
-    my $dob_str   = dt_from_string( $self->dateofbirth )->strftime("%Y-%m-%d");
 
-    my ( $dob_y,   $dob_m,   $dob_d )   = split /-/, $dob_str;
-    my ( $today_y, $today_m, $today_d ) = split /-/, $today_str;
+    my $date_of_birth = dt_from_string( $self->dateofbirth );
+    my $today         = dt_from_string->truncate( to => 'day' );
 
-    my $age = $today_y - $dob_y;
-    if ( $dob_m . $dob_d > $today_m . $today_d ) {
-        $age--;
-    }
-
-    return $age;
+    return $today->subtract_datetime( $date_of_birth )->years;
 }
 
 =head3 is_valid_age
