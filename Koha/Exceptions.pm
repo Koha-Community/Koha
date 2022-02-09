@@ -55,27 +55,6 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'Koha is under maintenance.'
     },
-    # Virtualshelves exceptions
-    'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
-        isa => 'Koha::Exceptions::DuplicateObject',
-        description => "Duplicate shelf object",
-    },
-    'Koha::Exceptions::Virtualshelves::InvalidInviteKey' => {
-        isa => 'Koha::Exception',
-        description => 'Invalid key on accepting the share',
-    },
-    'Koha::Exceptions::Virtualshelves::InvalidKeyOnSharing' => {
-        isa => 'Koha::Exception',
-        description=> 'Invalid key on sharing a shelf',
-    },
-    'Koha::Exceptions::Virtualshelves::ShareHasExpired' => {
-        isa => 'Koha::Exception',
-        description=> 'Cannot share this shelf, the share has expired',
-    },
-    'Koha::Exceptions::Virtualshelves::UseDbAdminAccount' => {
-        isa => 'Koha::Exception',
-        description => "Invalid use of database administrator account",
-    }
 );
 
 1;

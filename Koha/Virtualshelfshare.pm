@@ -45,10 +45,10 @@ Koha::Virtualshelfshare - Koha Virtualshelfshare Object class
 sub accept {
     my ( $self, $invitekey, $borrowernumber ) = @_;
     if ( $self->has_expired ) {
-        Koha::Exceptions::Virtualshelves::ShareHasExpired->throw;
+        Koha::Exceptions::Virtualshelf::ShareHasExpired->throw;
     }
     if ( $self->invitekey ne $invitekey ) {
-        Koha::Exceptions::Virtualshelves::InvalidInviteKey->throw;
+        Koha::Exceptions::Virtualshelf::InvalidInviteKey->throw;
     }
 
     # If this borrower already has a share, there is no need to accept twice

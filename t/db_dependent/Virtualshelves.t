@@ -66,7 +66,7 @@ subtest 'CRUD' => sub {
             }
         )->store;
     };
-    is( ref($@), 'Koha::Exceptions::Virtualshelves::DuplicateObject',
+    is( ref($@), 'Koha::Exceptions::Virtualshelf::DuplicateObject',
         'Exception on duplicate name' );
     $number_of_shelves = Koha::Virtualshelves->search->count;
     is( $number_of_shelves, 1, 'To be sure the number of shelves is still 1' );
@@ -122,7 +122,7 @@ subtest 'Sharing' => sub {
     )->store;
 
     my $shared_shelf = eval { $shelf_to_share->share };
-    is ( ref( $@ ), 'Koha::Exceptions::Virtualshelves::InvalidKeyOnSharing', 'Do not share if no key given' );
+    is ( ref( $@ ), 'Koha::Exceptions::Virtualshelf::InvalidKeyOnSharing', 'Do not share if no key given' );
     $shared_shelf = eval { $shelf_to_share->share('valid key') };
     is( ref( $shared_shelf ), 'Koha::Virtualshelfshare', 'On sharing, the method should return a valid Koha::Virtualshelfshare object' );
 
@@ -135,7 +135,7 @@ subtest 'Sharing' => sub {
         $shared_shelf->accept( 'invalid k', $share_with_me->{borrowernumber} );
     };
     is( $is_accepted, undef, 'The share should have not been accepted if the key is invalid' );
-    is( ref( $@ ), 'Koha::Exceptions::Virtualshelves::InvalidInviteKey', 'accept with an invalid key should raise an exception' );
+    is( ref( $@ ), 'Koha::Exceptions::Virtualshelf::InvalidInviteKey', 'accept with an invalid key should raise an exception' );
 
     $is_accepted = $shared_shelf->accept( 'valid key', $share_with_me->{borrowernumber} );
     ok( defined($is_accepted), 'The share should have been accepted if the key valid' );
