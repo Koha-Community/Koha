@@ -212,7 +212,8 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return $patron_to_html(row, { invert_name: 1 });
+                                    let patron_id = encodeURIComponent(row.patron_id);
+                                    return "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_preview\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + $patron_to_html(row, { invert_name: 1 }) + "</a>";
                                 }
                             }
                             [% CASE 'branch' %]
