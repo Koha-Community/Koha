@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -2344,6 +2344,82 @@ subtest 'filter_by_amount_owed' => sub {
 "filter_by_amount_owed({ more_than => 6.00, library => $library2->{branchcode} }) found one patron"
     );
 
+};
+
+subtest 'filter_by_have_subpermission' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1, branchcode => $library->branchcode }
+        }
+    );
+
+    my $patron_2 = $builder->build_object( # 4096 = 1 << 12 for suggestions
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4096, branchcode => $library->branchcode }
+        }
+    );
+
+    my $patron_3 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0, branchcode => $library->branchcode }
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron_3->borrowernumber,
+                module_bit     => 11,
+                code           => 'order_manage',
+            },
+        }
+    );
+
+    is_deeply(
+        [
+            Koha::Patrons->search( { branchcode => $library->branchcode } )
+              ->filter_by_have_subpermission('suggestions.suggestions_manage')
+              ->get_column('borrowernumber')
+        ],
+        [ $patron_1->borrowernumber, $patron_2->borrowernumber ],
+        'Superlibrarian and patron with suggestions.suggestions_manage'
+    );
+
+    is_deeply(
+        [
+            Koha::Patrons->search( { branchcode => $library->branchcode } )
+              ->filter_by_have_subpermission('acquisition.order_manage')
+              ->get_column('borrowernumber')
+        ],
+        [ $patron_1->borrowernumber, $patron_3->borrowernumber ],
+        'Superlibrarian and patron with acquisition.order_manage'
+    );
+
+    is_deeply(
+        [
+            Koha::Patrons->search( { branchcode => $library->branchcode } )
+              ->filter_by_have_subpermission('parameters.manage_cities')
+              ->get_column('borrowernumber')
+        ],
+        [ $patron_1->borrowernumber ],
+        'Only Superlibrarian is returned'
+    );
+
+    throws_ok {
+        Koha::Patrons->search( { branchcode => $library->branchcode } )
+          ->filter_by_have_subpermission('dont_exist.subperm');
+    } 'Koha::Exceptions::ObjectNotFound';
+
+
+    $schema->storage->txn_rollback;
 };
 
 $schema->storage->txn_rollback;
