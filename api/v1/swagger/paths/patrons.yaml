@@ -379,7 +379,8 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        borrowers: "1"
+        - borrowers: "1"
+        - tools: "label_creator"
     x-koha-embed:
       - extended_attributes
   post:
