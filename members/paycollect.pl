@@ -57,7 +57,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $borrower       = $patron->unblessed;
 my $account        = $patron->account;
 my $category       = $patron->category;
 my $user           = $input->remote_user;
@@ -238,8 +237,6 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 } else {
     $total_paid = '0.00';    #TODO not right with pay_individual
 }
-
-$template->param(borrower_data => $borrower);
 
 if ( $input->param('error_over') ) {
     $template->param( error_over => 1, total_due => scalar $input->param('amountoutstanding') );
