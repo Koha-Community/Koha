@@ -77,17 +77,19 @@ sub new {
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
-    my $fines_amount = $flags->{CHARGES}->{amount}; #TODO Replace with $patron->account->non_issues_charges
-    $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
-    if ( C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees') ) {
-        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 0 });
-    } else {
-        my $guarantees_fines_amount = $flags->{CHARGES_GUARANTEES} ? $flags->{CHARGES_GUARANTEES}->{amount} : 0; #TODO: Replace with $patron->relationships_debt
-        $fines_amount += $guarantees_fines_amount;
-    }
-
+    my $fines_amount = ($patron->account->balance > 0) ? $patron->account->non_issues_charges : 0;
     my $fee_limit = _fee_limit();
     my $fine_blocked = $fines_amount > $fee_limit;
+    my $noissueschargeguarantorswithguarantees = C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees');
+    my $noissueschargeguarantees = C4::Context->preference('NoIssuesChargeGuarantees');
+    if ( $noissueschargeguarantorswithguarantees ) {
+        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 0 });
+        $fine_blocked ||= $fines_amount > $noissueschargeguarantorswithguarantees;
+    } elsif ( $noissueschargeguarantees ) {
+        $fines_amount += $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 0, include_this_patron => 0 });
+        $fine_blocked ||= $fines_amount > $noissueschargeguarantees;
+    }
+
     my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
     {
     no warnings;    # any of these $kp->{fields} being concat'd could be undef
