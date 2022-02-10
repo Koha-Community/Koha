@@ -188,7 +188,7 @@
                 "plugins" : [ "types" ]
             }).on('ready.jstree', function(){
                 $(this).jstree('open_all');
-                $("#hier"+[% original_authid %]+"_anchor").on("click",
+                $("#hier"+[% original_authid | html %]+"_anchor").on("click",
                     function(e){e.preventDefault(); return false;}
                 ).css("text-decoration", "none").css("color", "#333");
                 $(".currentauth").css("text-decoration", "none").css("color", "#333");

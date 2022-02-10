@@ -93,7 +93,7 @@
                     "plugins" : [ "types" ]
                 }).on('ready.jstree', function(){
                     $(this).jstree('open_all')
-                    $("#hier"+[% authid %]+"_anchor").on("click",
+                    $("#hier"+[% authid | html %]+"_anchor").on("click",
                         function(e){e.preventDefault(); return false;}
                     ).css("text-decoration", "none").css("color", "#333");
                     $(".currentauth").css("text-decoration", "none").css("color", "#333");
