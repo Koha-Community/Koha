@@ -308,7 +308,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
     if ( $patron && $multi_hold ) {
         my @multi_pickup_locations =
           Koha::Biblios->search( { biblionumber => \@biblionumbers } )
-          ->pickup_locations( { patron => $patron } );
+          ->pickup_locations( { patron => $patron } )->as_list;
         $template->param( multi_pickup_locations => \@multi_pickup_locations );
     }
 
@@ -694,7 +694,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
         if ( $patron ) {
             # Add the valid pickup locations
-            my @pickup_locations = $biblio->pickup_locations({ patron => $patron });
+            my @pickup_locations = $biblio->pickup_locations({ patron => $patron })->as_list;
             $biblioloopiter{pickup_locations} = \@pickup_locations;
             $biblioloopiter{pickup_locations_codes} = [ map { $_->branchcode } @pickup_locations ];
         }
