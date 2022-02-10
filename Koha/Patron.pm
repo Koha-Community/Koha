@@ -2079,6 +2079,33 @@ sub account_balance {
 }
 
 
+=head3 has_messaging_preference
+
+my $bool = $patron->has_messaging_preference({
+    message_name => $message_name, # A value from message_attributes.message_name
+    message_transport_type => $message_transport_type, # email, sms, phone, itiva, etc...
+    wants_digest => $wants_digest, # 1 if you are looking for the digest version, don't pass if you just want either
+});
+
+=cut
+
+sub has_messaging_preference {
+    my ( $self, $params ) = @_;
+
+    my $message_name           = $params->{message_name};
+    my $message_transport_type = $params->{message_transport_type};
+    my $wants_digest           = $params->{wants_digest};
+
+    return $self->_result->search_related_rs(
+        'borrower_message_preferences',
+        $params,
+        {
+            prefetch =>
+              [ 'borrower_message_transport_preferences', 'message_attribute' ]
+        }
+    )->count;
+}
+
 =head2 Internal methods
 
 =head3 _type
