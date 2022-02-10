@@ -9,7 +9,7 @@ return {
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-            ('Edifact', '0', NULL, 'Enables edifact acquisitions functions', 'YesNo')
+            ('Edifact', '1', NULL, 'Enables edifact acquisitions functions', 'YesNo')
         });
     },
 };
