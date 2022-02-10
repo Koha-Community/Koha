@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -274,9 +274,56 @@ subtest "fine_items tests" => sub {
 
 $schema->storage->txn_rollback;
 
+subtest "NoIssuesChargeGuarantees tests" => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $child  = $builder->build_object({ class => 'Koha::Patrons' });
+    $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
+
+    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 1);
+
+    my $fee1 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                amountoutstanding => 11,
+            }
+        }
+    )->store;
+
+    my $fee2 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value  => {
+                borrowernumber => $child->borrowernumber,
+                amountoutstanding => 0.11,
+            }
+        }
+    )->store;
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+
+    is( $sip_patron->fines_amount, 11.11,"Guarantor fines correctly included");
+    ok( !$sip_patron->charge_ok, "Guarantor blocked");
+
+    $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
+
+    is( $sip_patron->fines_amount, 0.11,"Guarantee only fines correctly counted");
+    ok( $sip_patron->charge_ok, "Guarantee not blocked by guarantor fines");
+
+    $schema->storage->txn_rollback;
+};
+
 subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
-    plan tests => 1;
+    plan tests => 4;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
 
@@ -311,6 +358,12 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
     is( $sip_patron->fines_amount, 11.11,"Guarantee fines correctly included");
+    ok( !$sip_patron->charge_ok, "Guarantor blocked");
+
+    $sip_patron = C4::SIP::ILS::Patron->new( $child->cardnumber );
+
+    is( $sip_patron->fines_amount, 11.11,"Guarantor fines correctly included");
+    ok( !$sip_patron->charge_ok, "Guarantee blocked");
 
     $schema->storage->txn_rollback;
 };
