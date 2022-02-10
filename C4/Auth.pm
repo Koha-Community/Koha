@@ -831,6 +831,7 @@ sub checkauth {
           opac-registration-confirmation.tt
           opac-memberentry-update-submitted.tt
           opac-password-recovery.tt
+          opac-reset-password.tt
         );
         $authnotrequired = 0 unless grep { $_ eq $template_name }
           @allowed_scripts_for_private_opac;
