@@ -18,8 +18,10 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
+use Koha::Patron::Attribute::Types;
 
 my $input = CGI->new;
 
@@ -45,5 +47,8 @@ $template->param(
     filter         => $filter,
     selection_type => $selection_type,
     alphabet       => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
+    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : [] ),
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

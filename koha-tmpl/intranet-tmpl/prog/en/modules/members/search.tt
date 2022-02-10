@@ -139,6 +139,10 @@
             map[l.branchcode] = l;
             return map;
         }, {});
+
+        [% IF Koha.Preference('ExtendedPatronAttributes') %]
+            let extended_attribute_types = [% To.json(attribute_type_codes) | $raw %];
+        [% END %]
     </script>
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
@@ -160,7 +164,21 @@
                     let start_with = $("#firstletter_filter").val()
                     if (!start_with) return "";
                     return { "like": start_with + "%" }
-                }
+                },
+                [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                "-or": function(){
+                    let filter = $("#searchmember_filter").val();
+                    if (!filter) return "";
+                    return [
+                        {
+                            "extended_attributes.value": { "like": "%" + filter + "%" }
+                        },
+                        {
+                            "extended_attributes.code": extended_attribute_types
+                        }
+                    ];
+                },
+                [% END %]
             };
             patrons_table = $("#memberresultst").kohaTable({
                 "ajax": {
@@ -177,6 +195,7 @@
                         "url": '/api/v1/patrons'
                     [% END %]
                 },
+                embed: ['extended_attributes'],
                 "order": [[ 1, "asc" ]],
                 "iDeferLoading": 0,
                 "columns": [

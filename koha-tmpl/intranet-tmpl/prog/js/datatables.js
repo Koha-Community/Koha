@@ -604,13 +604,22 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 if ( default_filters ) {
                                     let additional_filters = {};
                                     for ( f in default_filters ) {
+                                        let k; let v;
                                         if ( typeof(default_filters[f]) === 'function' ) {
                                             let val = default_filters[f]();
                                             if ( val != undefined && val != "" ) {
-                                                additional_filters[f] = val;
+                                                k = f; v = val;
                                             }
                                         } else {
-                                            additional_filters[f] = default_filters[f];
+                                            k = f; v = default_filters[f];
+                                        }
+
+                                        // Pass to -or if you want a separate OR clause
+                                        // It's not the usual DBIC notation!
+                                        if ( f == '-or' ) {
+                                            if (v) or_query_parameters.push(v)
+                                        } else if ( v ) {
+                                            additional_filters[k] = v;
                                         }
                                     }
                                     if ( Object.keys(additional_filters).length ) {
