@@ -777,42 +777,42 @@ legend:hover {
                                                     <select id="primary_contact_method" name="primary_contact_method">
                                                         <option value=""></option>
                                                         [% UNLESS nophone %]
-                                                            [% IF ( primary_contact_method == 'phone' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'phone' ) %]
                                                                 <option value="phone" selected="selected">Primary phone</option>
                                                             [% ELSE %]
                                                                 <option value="phone">Primary phone</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% UNLESS nophonepro %]
-                                                            [% IF ( primary_contact_method == 'phonepro' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'phonepro' ) %]
                                                                 <option value="phonepro" selected="selected">Secondary phone</option>
                                                             [% ELSE %]
                                                                 <option value="phonepro">Secondary phone</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% UNLESS nomobile %]
-                                                            [% IF ( primary_contact_method == 'mobile' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'mobile' ) %]
                                                                 <option value="mobile" selected="selected">Other phone</option>
                                                             [% ELSE %]
                                                                 <option value="mobile">Other phone</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% UNLESS noemail %]
-                                                            [% IF ( primary_contact_method == 'email' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'email' ) %]
                                                                 <option value="email" selected="selected">Primary email</option>
                                                             [% ELSE %]
                                                                 <option value="email">Primary email</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% UNLESS noemailpro %]
-                                                            [% IF ( primary_contact_method == 'emailpro' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'emailpro' ) %]
                                                                 <option value="emailpro" selected="selected">Secondary email</option>
                                                             [% ELSE %]
                                                                 <option value="emailpro">Secondary email</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% UNLESS nofax %]
-                                                            [% IF ( primary_contact_method == 'fax' ) %]
+                                                            [% IF ( borrower_data.primary_contact_method == 'fax' ) %]
                                                                 <option value="fax" selected="selected">Fax</option>
                                                             [% ELSE %]
                                                                 <option value="fax">Fax</option>
@@ -944,7 +944,7 @@ legend:hover {
                                                 [% END %]
                                                     Sort 1:
                                                 </label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=sort1, empty=1, size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=borrower_data.sort1, empty=1, size = 20 %]
                                                 [% IF ( mandatorysort1 ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -960,7 +960,7 @@ legend:hover {
                                                 [% END %]
                                                     Sort 2:
                                                 </label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=sort2, empty=1, size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=borrower_data.sort2, empty=1, size = 20 %]
                                                 [% IF ( mandatorysort2 ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -972,7 +972,7 @@ legend:hover {
                                                 <label for="yes-autorenew_checkouts">
                                                     Allow auto-renewal of items:
                                                 </label>
-                                                    [% IF ( autorenew_checkouts || opadd ) %]
+                                                    [% IF ( borrower_data.autorenew_checkouts || opadd ) %]
                                                         <label for="yes-autorenew_checkouts">
                                                             Yes
                                                             <input type="radio" id="yes-autorenew_checkouts" name="autorenew_checkouts" value="1" checked="checked" />
