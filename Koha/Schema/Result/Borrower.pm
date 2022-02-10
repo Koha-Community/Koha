@@ -1908,6 +1908,13 @@ __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9g9WsdsdPINi2NP4H2A+CA
 
+__PACKAGE__->has_many(
+  "extended_attributes",
+  "Koha::Schema::Result::BorrowerAttribute",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
     '+lost'          => { is_boolean => 1 },
