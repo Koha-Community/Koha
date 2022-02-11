@@ -458,31 +458,28 @@ sub CanItemBeReserved {
     my $holds_per_record = $rights->{holds_per_record} // 1;
     my $holds_per_day    = $rights->{holds_per_day};
 
-    my $search_params = {
-        borrowernumber => $patron->borrowernumber,
-        biblionumber   => $item->biblionumber,
-    };
-    $search_params->{found} = undef if $params->{ignore_found_holds};
-
-    my $holds = Koha::Holds->search($search_params);
     if (   defined $holds_per_record && $holds_per_record ne '' ){
         if ( $holds_per_record == 0 ) {
             return { status => "noReservesAllowed" };
         }
-        if ( !$params->{ignore_hold_counts} && $holds->count() >= $holds_per_record ) {
-            return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
+        if ( !$params->{ignore_hold_counts} ) {
+            my $search_params = {
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+            };
+            $search_params->{found} = undef if $params->{ignore_found_holds};
+            my $holds = Koha::Holds->search($search_params);
+            return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record } if $holds->count() >= $holds_per_record;
         }
     }
 
-    my $today_holds = Koha::Holds->search({
-        borrowernumber => $patron->borrowernumber,
-        reservedate    => dt_from_string->date
-    });
-
-    if (!$params->{ignore_hold_counts} && defined $holds_per_day && $holds_per_day ne ''
-        && $today_holds->count() >= $holds_per_day )
+    if (!$params->{ignore_hold_counts} && defined $holds_per_day && $holds_per_day ne '')
     {
-        return { status => 'tooManyReservesToday', limit => $holds_per_day };
+        my $today_holds = Koha::Holds->search({
+            borrowernumber => $patron->borrowernumber,
+            reservedate    => dt_from_string->date
+        });
+        return { status => 'tooManyReservesToday', limit => $holds_per_day } if $today_holds->count() >= $holds_per_day;
     }
 
     # we retrieve count
