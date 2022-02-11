@@ -280,11 +280,9 @@
 [% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %]
-    [% IF ( localimages.count || CAN_user_tools_upload_local_cover_images ) %]
-        <li>
-            <a href="#images">Images ([% localimages.count || 0 | html %])</a>
-        </li>
-    [% END %]
+    <li>
+        <a href="#images">Images ([% localimages.count || 0 | html %])</a>
+    </li>
 [% END %]
 [% IF HTML5MediaEnabled && HTML5MediaSets.size %]<li id="media_tab"><a href="#html5media">Play media</a></li>[% END %]
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
