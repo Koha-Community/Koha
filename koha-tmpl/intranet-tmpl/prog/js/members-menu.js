@@ -168,6 +168,6 @@ function printx_window(print_type) {
 function searchToHold(){
     var date = new Date();
     date.setTime(date.getTime() + (10 * 60 * 1000));
-    Cookies.set("holdfor", borrowernumber, { path: "/", expires: date });
+    Cookies.set("holdfor", borrowernumber, { path: "/", expires: date, sameSite: 'Lax'  });
     location.href="/cgi-bin/koha/catalogue/search.pl";
 }

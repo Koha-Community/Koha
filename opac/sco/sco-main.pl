@@ -376,6 +376,7 @@ $cookie = $query->cookie(
     -expires => $jwt ? '+1d' : '',
     -HttpOnly => 1,
     -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+    -sameSite => 'Lax'
 );
 
 $template->param(patronid => $patronid);

@@ -258,7 +258,7 @@ $(document).ready(function() {
         $('#issues-table-load-immediately').prop('checked', true);
     }
     $('#issues-table-load-immediately').on( "change", function(){
-        Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
+        Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365, sameSite: 'Lax'  });
     });
 
     function RefreshIssuesTable() {

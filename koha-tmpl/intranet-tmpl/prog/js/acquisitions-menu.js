@@ -3,7 +3,7 @@ function searchToOrder( basketno, vendorid ){
     var cookieData = "";
     date.setTime(date.getTime() + (10 * 60 * 1000));
     cookieData += basketno + "/" + vendorid;
-    Cookies.set("searchToOrder", cookieData, { path: "/", expires: date });
+    Cookies.set("searchToOrder", cookieData, { path: "/", expires: date, sameSite: 'Lax'  });
 }
 
 $(document).ready(function() {

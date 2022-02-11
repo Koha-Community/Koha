@@ -349,6 +349,7 @@ sub getlanguagecookie {
         -value   => $language,
         -HttpOnly => 1,
         -expires => '+3y',
+        -sameSite => 'Lax',
         -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
     );
 

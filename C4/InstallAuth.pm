@@ -262,6 +262,7 @@ sub checkauth {
                 -value    => $session->id,
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax'
             );
             $loggedin = 1;
             $userid   = $session->param('cardnumber');
@@ -302,6 +303,7 @@ sub checkauth {
                 -value    => $sessionID,
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax'
             );
             if ( $return == 2 ) {
 
@@ -349,6 +351,7 @@ sub checkauth {
                 -HttpOnly => 1,
                 -expires => '',
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax'
             );
         }
         if ($envcookie) {
@@ -392,6 +395,7 @@ sub checkauth {
         -HttpOnly => 1,
         -expires => '',
         -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+        -sameSite => 'Lax'
     );
     print $query->header(
         -type    => 'text/html; charset=utf-8',

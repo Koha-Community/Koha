@@ -329,7 +329,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
             }));
             $("#select_display").on("change",function(){
                 var checked = $(this).prop("checked") ? 1: 0;
-                Cookies.set("marctagstructure_selectdisplay", checked);
+                Cookies.set("marctagstructure_selectdisplay", checked, { sameSite: 'Lax' });
                 this.form.submit();
             });
         });

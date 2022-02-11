@@ -252,6 +252,7 @@ sub get_template_and_user {
                 -value    => '',
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax',
             ));
 
             $template->param(
@@ -874,6 +875,7 @@ sub checkauth {
             -value    => '',
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+            -sameSite => 'Lax',
         ));
         $loggedin = 1;
     }
@@ -932,6 +934,7 @@ sub checkauth {
                     -value    => $session->id,
                     -HttpOnly => 1,
                     -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                    -sameSite => 'Lax',
                 ));
 
                 $flags = haspermission( $userid, $flagsrequired );
@@ -976,6 +979,7 @@ sub checkauth {
             -value    => $sessionID,
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+            -sameSite => 'Lax',
         ));
         my $pki_field = C4::Context->preference('AllowPKIAuth');
         if ( !defined($pki_field) ) {
@@ -1176,6 +1180,7 @@ sub checkauth {
                                 -value    => '',
                                 -HttpOnly => 1,
                                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                                -sameSite => 'Lax',
                             ));
                             $info{'wrongip'} = 1;
                         }
@@ -1265,6 +1270,7 @@ sub checkauth {
                 -value    => '',
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax',
             ));
         }
 
@@ -1417,7 +1423,8 @@ sub checkauth {
         {   type              => 'text/html',
             charset           => 'utf-8',
             cookie            => $cookie,
-            'X-Frame-Options' => 'SAMEORIGIN'
+            'X-Frame-Options' => 'SAMEORIGIN',
+            -sameSite => 'Lax'
         }
       ),
       $template->output;
@@ -1500,6 +1507,7 @@ sub check_api_auth {
             -value    => $session->id,
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+            -sameSite => 'Lax'
         );
         return ( $return, $cookie, $session ); # return == 'ok' here
 
@@ -1540,6 +1548,7 @@ sub check_api_auth {
                 -value    => $sessionID,
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax'
             );
             if ( $return == 1 ) {
                 my (

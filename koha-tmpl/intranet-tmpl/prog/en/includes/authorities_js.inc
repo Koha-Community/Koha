@@ -12,7 +12,7 @@ function mergeAuth(authid, summary) {
         }
         window.location.href = "/cgi-bin/koha/authorities/merge.pl?authid=" + authid + "&authid=" + alreadySelected.authid + refstring;
     } else {
-        Cookies.set('auth_to_merge', JSON.stringify({ 'authid': authid, 'summary': summary }), { 'path' : '/' });
+        Cookies.set('auth_to_merge', JSON.stringify({ 'authid': authid, 'summary': summary }), { 'path' : '/', sameSite: 'Lax' });
         showMergingInProgress();
     }
 }

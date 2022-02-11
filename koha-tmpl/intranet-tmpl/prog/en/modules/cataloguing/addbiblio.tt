@@ -130,7 +130,7 @@
 
             if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
 
-            Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/' } );
+            Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
 
             var biblionumber = [% biblionumber || "null" | html %];
 
@@ -508,11 +508,11 @@ function PopupMARCFieldDoc(field) {
     function toggleMARCdocLinks(flag){
         if( flag === true ){
             $(".marcdocs").show();
-            Cookies.set("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
+            Cookies.set("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
             $("#marcDocsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
         } else {
             $(".marcdocs").hide();
-            Cookies.set("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
+            Cookies.set("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
             $("#marcDocsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
         }
     }
@@ -521,12 +521,12 @@ function PopupMARCFieldDoc(field) {
         if( flag === true ){
             $(".tagnum").show();
             $(".subfieldcode").show();
-            Cookies.set("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
+            Cookies.set("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365, sameSite: 'Lax'  });
             $("#marcTagsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
         } else {
             $(".tagnum").hide();
             $(".subfieldcode").hide();
-            Cookies.set("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
+            Cookies.set("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365, sameSite: 'Lax'  });
             $("#marcTagsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
         }
     }

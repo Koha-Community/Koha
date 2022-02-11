@@ -220,7 +220,8 @@ if ($op eq "additem") {
                     # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
                     -value   => encode_base64url( freeze( { %{$item->unblessed}, itemnumber => undef } ) ),
                     -HttpOnly => 1,
-                    -expires => ''
+                    -expires => '',
+                    -sameSite => 'Lax'
                 );
 
                 $cookie = [ $cookie, $last_created_item_cookie ];

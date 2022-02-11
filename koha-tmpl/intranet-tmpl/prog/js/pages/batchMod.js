@@ -52,10 +52,10 @@ function hideColumn(num) {
         if (!found) {
             valCookie.push(hide);
             var cookieString = valCookie.join("/");
-            Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
+            Cookies.set("showColumns", cookieString, { expires: date, path: '/', sameSite: 'Lax'  });
         }
     } else {
-        Cookies.set("showColumns", hide, { expires: date, path: '/' });
+        Cookies.set("showColumns", hide, { expires: date, path: '/', sameSite: 'Lax'  });
     }
 }
 
@@ -88,7 +88,7 @@ function showColumn(num) {
         }
         if (found) {
             var cookieString = valCookie.join("/");
-            Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
+            Cookies.set("showColumns", cookieString, { expires: date, path: '/', sameSite: 'Lax'  });
         }
     }
 }
@@ -113,7 +113,7 @@ function hideAllColumns() {
     $("#itemst td:nth-child("+nb_cols+"),#itemst tr th:nth-child("+nb_cols+")").nextAll().hide();
     $("#hideall").prop("checked", true).parent().addClass("selected");
     var cookieString = allColumns.join("/");
-    Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
+    Cookies.set("showColumns", cookieString, { expires: date, path: '/', sameSite: 'Lax'  });
 }
 
 $(document).ready(function () {
