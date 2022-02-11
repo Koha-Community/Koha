@@ -105,6 +105,7 @@
                             [% CASE 'dateexpiry' %]<th>Expires on</td>
                             [% CASE 'borrowernotes' %]<th>Notes</th>
                             [% CASE 'phone' %]<th>Phone</th>
+                            [% CASE 'checkouts' %]<th>Checkouts</th>
                             [% CASE 'action' %]<th>&nbsp;</th>
                         [% END %]
                     [% END %]
@@ -153,8 +154,8 @@
             return map;
         }, {});
 
-        [% IF Koha.Preference('ExtendedPatronAttributes') %]
-            let extended_attribute_types = [% To.json(attribute_type_codes || []) | $raw %];
+        [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
+            let extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
     </script>
@@ -189,7 +190,7 @@
                         [% FOR search_field IN search_fields.split(',') %]
                         {"me.[% search_field | html %]":{"like":"%"+filter+"%"}},
                         [% END %]
-                        [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                        [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
                         {
                             "extended_attributes.value": { "like": "%" + filter + "%" },
                             "extended_attributes.code": extended_attribute_types
@@ -202,6 +203,7 @@
                 [% default_sort_column = "name" %]
             [% END %]
             [% SET order_column_index = 0 %]
+            [% SET embed = ['extended_attributes'] %]
             patrons_table = $("#[% table_id | html %]").kohaTable({
                 "ajax": {
                     [% SWITCH filter %]
@@ -228,7 +230,6 @@
                         return json.data;
                     }
                 },
-                embed: ['extended_attributes'],
                 "drawCallback": function( settings ) {
                     var api = this.api();
                     var data = api.data();
@@ -255,6 +256,17 @@
                             [% order_column_index = loop.count - 1%]
                         [% END %]
                         [% SWITCH column %]
+                            [% CASE 'checkbox' %]
+                            {
+                                "data": "borrowernumber",
+                                "searchable": true,
+                                "orderable": true,
+                                "render": function( data, type, row, meta ) {
+                                    return "<input type=\"checkbox\" name="data ? escape_str($date(data) + " (" + _("%s years").format($get_age(data)) + ")") : "";
+
+                                    return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' id='check" + data + "' class='selection' name='borrowernumber' value='" + data + "' />",
+                                }
+                            }
                             [% CASE 'cardnumber' %]
                             {
                                 "data": "cardnumber",
@@ -373,6 +385,15 @@
                                     return escape_str(data);
                                 }
                             }
+                            [% CASE 'checkouts' %][% embed.push('checkouts+count') %]
+                            {
+                                "data": "",
+                                "searchable": false,
+                                "orderable": false,
+                                "render": function( data, type, row, meta ) {
+                                    return escape_str(row.checkouts_count);
+                                }
+                            }
                             [% CASE 'action' %]
                             {
                                 "data": function( row, type, val, meta ) {
@@ -391,6 +412,7 @@
                         [% UNLESS loop.last %],[% END %]
                     [% END %]
                 ],
+                'embed': [% To.json(embed) | $raw %],
                 "order": [[ [% order_column_index | html %], "asc" ]],
                 'bAutoWidth': false,
                 'sPaginationType': 'full_numbers',

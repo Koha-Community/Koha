@@ -385,6 +385,7 @@
         - acquisition: "order_manage"
     x-koha-embed:
       - extended_attributes
+      - checkouts+count
   post:
     x-mojo-to: Patrons#add
     operationId: addPatron

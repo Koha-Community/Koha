@@ -344,6 +344,11 @@ properties:
     description: patron's extended attributes
     items:
       $ref: "patron_extended_attribute.yaml"
+  checkouts_count:
+    type:
+      - integer
+      - "null"
+    description: Number of checkouts
 additionalProperties: false
 required:
   - surname
