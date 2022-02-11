@@ -385,6 +385,16 @@ sub CanItemBeReserved {
     my $ruleitemtype;    # itemtype of the matching issuing rule
     my $allowedreserves  = 0; # Total number of holds allowed across all records, default to none
 
+    # We check item branch if IndependentBranches is ON
+    # and canreservefromotherbranches is OFF
+    if ( C4::Context->preference('IndependentBranches')
+        and !C4::Context->preference('canreservefromotherbranches') )
+    {
+        if ( $item->homebranch ne $patron->branchcode ) {
+            return { status => 'cannotReserveFromOtherBranches' };
+        }
+    }
+
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
     my $biblio   = $item->biblio;
@@ -551,16 +561,6 @@ sub CanItemBeReserved {
     if ( $branchitemrule->{holdallowed} eq 'from_local_hold_group') {
         if($patron->branchcode ne $item->homebranch && !$item_library->validate_hold_sibling( {branchcode => $patron->branchcode} )) {
             return { status => 'branchNotInHoldGroup' };
-        }
-    }
-
-    # If reservecount is ok, we check item branch if IndependentBranches is ON
-    # and canreservefromotherbranches is OFF
-    if ( C4::Context->preference('IndependentBranches')
-        and !C4::Context->preference('canreservefromotherbranches') )
-    {
-        if ( $item->homebranch ne $patron->branchcode ) {
-            return { status => 'cannotReserveFromOtherBranches' };
         }
     }
 
