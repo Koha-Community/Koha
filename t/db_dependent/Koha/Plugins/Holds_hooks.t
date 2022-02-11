@@ -16,13 +16,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
 use File::Basename;
 
-use C4::Reserves qw(AddReserve);
+use C4::Reserves qw( AddReserve ModReserveFill );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -76,6 +76,69 @@ subtest 'after_hold_create() hook tests' => sub {
                         biblionumber   => $item_1->biblionumber }); }
         qr/after_hold_create called with parameter Koha::Hold/,
           'AddReserve calls the after_hold_create hook';
+
+    $schema->storage->txn_rollback;
+    Koha::Plugins::Methods->delete;
+};
+
+subtest 'Koha::Hold tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my $plugin = Koha::Plugin::Test->new->enable;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Reduce noise
+    t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+    t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+            }
+        }
+    );
+
+    warning_like {
+        ModReserveFill({ reserve_id =>  $hold->id });
+    }
+    qr/after_hold_action called with action: fill, ref: Koha::Old::Hold/,
+      '->fill calls the after_hold_action hook';
+
+    $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+            }
+        }
+    );
+
+    warning_like {
+        $hold->suspend_hold;
+    }
+    qr/after_hold_action called with action: suspend, ref: Koha::Hold/,
+      '->suspend_hold calls the after_hold_action hook';
+
+    warning_like {
+        $hold->resume;
+    }
+    qr/after_hold_action called with action: resume, ref: Koha::Hold/,
+      '->resume calls the after_hold_action hook';
+
+    warning_like {
+        $hold->cancel;
+    }
+    qr/after_hold_action called with action: cancel, ref: Koha::Old::Hold/,
+      '->cancel calls the after_hold_action hook';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;

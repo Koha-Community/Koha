@@ -191,6 +191,16 @@ sub after_circ_action {
     }
 }
 
+sub after_hold_action {
+    my ( $self, $params ) = @_;
+
+    my $action = $params->{action};
+    my $hold   = $params->{payload}->{hold};
+
+    Koha::Exceptions::Exception->throw(
+        "after_hold_action called with action: $action, ref: " . ref($hold) );
+}
+
 sub api_routes {
     my ( $self, $args ) = @_;
 
