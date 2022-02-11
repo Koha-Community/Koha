@@ -618,6 +618,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                         // It's not the usual DBIC notation!
                                         if ( f == '-or' ) {
                                             if (v) or_query_parameters.push(v)
+                                        } else if ( f == '-and' ) {
+                                            if (v) and_query_parameters.push(v)
                                         } else if ( v ) {
                                             additional_filters[k] = v;
                                         }

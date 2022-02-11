@@ -165,20 +165,22 @@
                     if (!start_with) return "";
                     return { "like": start_with + "%" }
                 },
-                [% IF Koha.Preference('ExtendedPatronAttributes') %]
-                "-or": function(){
+                "-and": function(){
                     let filter = $("#searchmember_filter").val();
                     if (!filter) return "";
+                    [% SET search_fields = Koha.Preference('DefaultPatronSearchFields') || 'surname,firstname,othernames,cardnumber,userid' %]
                     return [
+                        [% FOR search_field IN search_fields.split(',') %]
+                        {"me.[% search_field %]":{"like":"%"+filter+"%"}},
+                        [% END %]
+                        [% IF Koha.Preference('ExtendedPatronAttributes') %]
                         {
-                            "extended_attributes.value": { "like": "%" + filter + "%" }
-                        },
-                        {
+                            "extended_attributes.value": { "like": "%" + filter + "%" },
                             "extended_attributes.code": extended_attribute_types
                         }
+                        [% END %]
                     ];
                 },
-                [% END %]
             };
             patrons_table = $("#memberresultst").kohaTable({
                 "ajax": {
@@ -344,7 +346,7 @@
                     table_dt.column([% loop.count - 1 %]).search(category_id);
                 [% END %]
             [% END %]
-            table_dt.search($("#searchmember_filter").val());
+            table_dt.search("");
             table_dt.draw();
             return false;
         }
