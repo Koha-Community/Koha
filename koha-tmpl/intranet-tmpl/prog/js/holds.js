@@ -175,6 +175,15 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             var data = "";
+                            if ( oObj.itemtype ) {
+                                data += oObj.itemtype;
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "mDataProp": function( oObj ) {
+                            var data = "";
                             if ( oObj.barcode ) {
                                 data += " <a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
                                   + oObj.biblionumber
