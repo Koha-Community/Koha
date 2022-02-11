@@ -176,7 +176,7 @@ $(document).ready(function() {
                         "mDataProp": function( oObj ) {
                             var data = "";
                             if ( oObj.itemtype ) {
-                                data += oObj.itemtype;
+                                data += oObj.itemtype_description;
                             }
                             return data;
                         }

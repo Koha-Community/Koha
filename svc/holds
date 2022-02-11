@@ -135,6 +135,7 @@ while ( my $h = $holds_rs->next() ) {
         $hold->{itemnumber}     = $item->itemnumber();
         $hold->{barcode}        = $item->barcode();
         $hold->{itemtype}       = $item->effective_itemtype();
+        $hold->{itemtype_description} = $item->itemtype->description;
         $hold->{enumchron}      = $item->enumchron();
         $hold->{itemcallnumber} = $item->itemcallnumber() || q{};
 
