@@ -141,7 +141,7 @@
         }, {});
 
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
-            let extended_attribute_types = [% To.json(attribute_type_codes) | $raw %];
+            let extended_attribute_types = [% To.json(attribute_type_codes || []) | $raw %];
         [% END %]
     </script>
     [% INCLUDE 'datatables.inc' %]
