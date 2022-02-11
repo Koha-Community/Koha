@@ -412,15 +412,6 @@ sub CanItemBeReserved {
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 
-    my $querycount = q{
-        SELECT count(*) AS count
-          FROM reserves
-     LEFT JOIN items USING (itemnumber)
-     LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
-     LEFT JOIN borrowers USING (borrowernumber)
-         WHERE borrowernumber = ?
-    };
-
     my $reserves_control_branch;
     my $branchfield = "reserves.branchcode";
 
@@ -482,39 +473,46 @@ sub CanItemBeReserved {
         return { status => 'tooManyReservesToday', limit => $holds_per_day } if $today_holds->count() >= $holds_per_day;
     }
 
-    # we retrieve count
-
-    $querycount .= "AND ( $branchfield = ? OR $branchfield IS NULL )";
-
-    # If using item-level itypes, fall back to the record
-    # level itemtype if the hold has no associated item
-    $querycount .=
-      C4::Context->preference('item-level_itypes')
-      ? " AND COALESCE( items.itype, biblioitems.itemtype ) = ?"
-      : " AND biblioitems.itemtype = ?"
-      if defined $ruleitemtype;
-
-    my $sthcount = $dbh->prepare($querycount);
-
-    if ( defined $ruleitemtype ) {
-        $sthcount->execute( $patron->borrowernumber, $reserves_control_branch, $ruleitemtype );
-    }
-    else {
-        $sthcount->execute( $patron->borrowernumber, $reserves_control_branch );
-    }
-
-    my $reservecount = "0";
-    if ( my $rowcount = $sthcount->fetchrow_hashref() ) {
-        $reservecount = $rowcount->{count};
-    }
-
     # we check if it's ok or not
     if ( defined $allowedreserves && $allowedreserves ne '' ){
         if( $allowedreserves == 0 ){
             return { status => 'noReservesAllowed' };
         }
-        if ( !$params->{ignore_hold_counts} && $reservecount >= $allowedreserves ) {
-            return { status => 'tooManyReserves', limit => $allowedreserves };
+        if ( !$params->{ignore_hold_counts} ) {
+            # we retrieve count
+            my $querycount = q{
+                SELECT count(*) AS count
+                  FROM reserves
+             LEFT JOIN items USING (itemnumber)
+             LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
+             LEFT JOIN borrowers USING (borrowernumber)
+                 WHERE borrowernumber = ?
+            };
+            $querycount .= "AND ( $branchfield = ? OR $branchfield IS NULL )";
+
+            # If using item-level itypes, fall back to the record
+            # level itemtype if the hold has no associated item
+            $querycount .=
+              C4::Context->preference('item-level_itypes')
+              ? " AND COALESCE( items.itype, biblioitems.itemtype ) = ?"
+              : " AND biblioitems.itemtype = ?"
+              if defined $ruleitemtype;
+
+            my $sthcount = $dbh->prepare($querycount);
+
+            if ( defined $ruleitemtype ) {
+                $sthcount->execute( $patron->borrowernumber, $reserves_control_branch, $ruleitemtype );
+            }
+            else {
+                $sthcount->execute( $patron->borrowernumber, $reserves_control_branch );
+            }
+
+            my $reservecount = "0";
+            if ( my $rowcount = $sthcount->fetchrow_hashref() ) {
+                $reservecount = $rowcount->{count};
+            }
+
+            return { status => 'tooManyReserves', limit => $allowedreserves } if $reservecount >= $allowedreserves;
         }
     }
 
