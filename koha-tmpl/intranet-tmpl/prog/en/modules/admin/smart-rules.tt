@@ -369,7 +369,7 @@
                             [% FOREACH itemtypeloo IN itemtypeloop %]
                                 [% NEXT IF itemtypeloo.parent_type %]
                                 [% SET children = itemtypeloo.children_with_localization %]
-                                [% IF children %]
+                                [% IF children.count %]
                                     <optgroup label="[% itemtypeloo.translated_description | html %]">
                                         <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %] (All)</option>
                                         [% FOREACH child IN children %]
