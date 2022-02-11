@@ -359,6 +359,13 @@ properties:
       - number
       - "null"
     description: Balance of the patron's account
+  password_expiration_date:
+    type:
+      - string
+      - "null"
+    format: date
+    readOnly: true
+    description: day a patron's password expires and must be changed/reset
 additionalProperties: false
 required:
   - surname

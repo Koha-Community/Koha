@@ -342,6 +342,7 @@ subtest 'add() tests' => sub {
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
         delete $newpatron->{anonymized};
+        delete $newpatron->{password_expiration_date};
 
         # Create a library just to make sure its ID doesn't exist on the DB
         my $library_to_delete = $builder->build_object({ class => 'Koha::Libraries' });
@@ -395,6 +396,7 @@ subtest 'add() tests' => sub {
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
         delete $newpatron->{anonymized};
+        delete $newpatron->{password_expiration_date};
         $patron_to_delete->delete;
 
         # Set a date field
@@ -620,6 +622,7 @@ subtest 'update() tests' => sub {
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
         delete $newpatron->{anonymized};
+        delete $newpatron->{password_expiration_date};
 
         $t->put_ok("//$userid:$password@/api/v1/patrons/-1" => json => $newpatron)
           ->status_is(404)
@@ -698,6 +701,7 @@ subtest 'update() tests' => sub {
         $newpatron->{patron_id} = $unauthorized_patron->to_api->{patron_id};
         $newpatron->{restricted} = $unauthorized_patron->to_api->{restricted};
         $newpatron->{anonymized} = $unauthorized_patron->to_api->{anonymized};
+        $newpatron->{password_expiration_date} = $unauthorized_patron->to_api->{password_expiration_date};
 
         my $got = $result->tx->res->json;
         my $updated_on_got = delete $got->{updated_on};
@@ -729,6 +733,7 @@ subtest 'update() tests' => sub {
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
         delete $newpatron->{anonymized};
+        delete $newpatron->{password_expiration_date};
 
         # attempt to update
         $authorized_patron->flags( 2**4 )->store; # borrowers flag = 4
