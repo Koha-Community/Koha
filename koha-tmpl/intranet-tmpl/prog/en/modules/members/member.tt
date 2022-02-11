@@ -6,6 +6,10 @@
 [% USE Categories %]
 [% SET footerjs = 1 %]
 [% PROCESS 'patronfields.inc' %]
+[% SET libraries = Branches.all %]
+[% SET categories = Categories.all.unblessed %]
+[% SET columns = ['cardnumber', 'name', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
+[% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Patrons[% IF ( searching ) %] &rsaquo; Search results[% END %] &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -53,13 +57,6 @@
           [% INCLUDE 'patron-toolbar.inc' %]
           [% INCLUDE 'noadd-warnings.inc' %]
 
-          <div class="browse">
-            Browse by last name:
-            [% FOREACH letter IN alphabet.split(' ') %]
-                <a href="#" class="filterByLetter">[% letter | html %]</a>
-            [% END %]
-          </div>
-
           [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
             <div class="pending-info" id="patron_updates_pending">
               <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
@@ -67,10 +64,9 @@
             </div>
           [% END %]
 
-          <div id="searchresults">
-            <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember | html %]'[% END %]</span></h3>
+          <div id="patron_search_results">
             [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
-              <div class="searchheader fh-fixedHeader" id="searchheader">
+              <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
                   <div>
                       <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
                       |
@@ -103,26 +99,10 @@
                 </div>
             [% END %]
 
-            <table id="memberresultst">
-              <thead>
-                <tr>
-                [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
-                  <th class="noExport">&nbsp;</th>
-                [% END %]
-                  <th>Card</th>
-                  <th>Name</th>
-                  <th>Date of birth</th>
-                  <th>Category</th>
-                  <th>Library</th>
-                  <th>Expires on</th>
-                  <th>OD/Checkouts</th>
-                  <th>Fines</th>
-                  <th>Circ note</th>
-                  <th class="noExport">&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+            [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
+                [% columns.unshift('checkbox') | html %]
+            [% END %]
+            [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
           </div>
 
             </main>
@@ -130,76 +110,7 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                <form method="get" id="searchform">
-                  <input type="hidden" id="firstletter_filter" value="" />
-                  <fieldset class="brief">
-                    <h3>Search patrons</h3>
-                    <ol>
-                      <li>
-                        <label for="searchmember_filter">Search for:</label>
-                        <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
-                      </li>
-                      <li>
-                        <label for="searchfieldstype_filter">Search field:</label>
-                        <select name="searchfieldstype" id="searchfieldstype_filter">
-                            [% pref_fields = Koha.Preference('DefaultPatronSearchFields').split(',') %]
-                            [% default_fields = [ 'standard', 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
-                            [% search_options = default_fields.merge(pref_fields).unique %]
-                            [% FOREACH s_o IN search_options %]
-                                [% display_name = PROCESS patron_fields name=s_o %]
-                                [% NEXT IF !display_name %]
-                                [% IF searchfieldstype == s_o %]
-                                    <option selected="selected" value=[% s_o | html %]>[% display_name | $raw %]</option>
-                                [% ELSE %]
-                                    <option value=[% s_o | html %]>[% display_name | $raw %]</option>
-                                [% END %]
-                            [% END %]
-                        </select>
-                      </li>
-                      <li>
-                        <label for="searchtype_filter">Search type:</label>
-                        <select name="searchtype" id="searchtype_filter">
-                          [% IF searchtype == "start_with" %]
-                            <option value='start_with' selected="selected">Starts with</option>
-                            <option value="contain">Contains</option>
-                          [% ELSE %]
-                            <option value='start_with'>Starts with</option>
-                            <option value="contain" selected="selected">Contains</option>
-                          [% END %]
-                        </select>
-                      </li>
-                      <li>
-                        <label for="categorycode_filter">Patron category:</label>
-                        [% SET categories = Categories.all() %]
-                        <select id="categorycode_filter">
-                          <option value="">Any</option>
-                          [% FOREACH cat IN categories %]
-                            [% IF cat.categorycode == categorycode_filter %]
-                    <option selected="selected" value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
-                            [% ELSE %]
-                    <option value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
-
-                            [% END %]
-                          [% END %]
-                        </select>
-                      </li>
-                      <li>
-                        <label for="branchcode_filter">Library:</label>
-                        [% SET branches = Branches.all( selected => branchcode_filter, only_from_group => 1 ) %]
-                        <select id="branchcode_filter">
-                          [% IF branches.size != 1 %]
-                            <option value="">Any</option>
-                          [% END %]
-                          [% PROCESS options_for_libraries libraries => branches %]
-                        </select>
-                      </li>
-                    </ol>
-                    <fieldset class="action">
-                      <input type="submit" value="Search" />
-                      <input type="button" value="Clear" id="clear_search" />
-                    </fieldset>
-                  </fieldset>
-                </form>
+                [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->
@@ -234,16 +145,8 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        var singleBranchMode = '[% singleBranchMode | html %]';
-        var dtMemberResults;
-        var search = 1;
-        /* popstate event triggered by forward and back button. Need to refresh search */
-        window.addEventListener('popstate', (event) => {
-            getSearchByLocation( false );
-        });
 
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
@@ -313,10 +216,6 @@
                 patronListAdd();
             });
 
-            $(".filterByLetter").on("click",function(e){
-                e.preventDefault();
-                filterByFirstLetterSurname( $(this).text(), true );
-            });
             $("#select_all").on("click",function(e){
                 e.preventDefault();
                 $(".selection").prop("checked", true).change();
@@ -325,11 +224,6 @@
                 e.preventDefault();
                 $(".selection").prop("checked", false).change();
             });
-            $("#clear_search").on("click",function(e){
-                e.preventDefault();
-                clearFilters(true);
-            });
-            $("#searchform").on("submit", filter);
 
             [% IF searchmember %]
                 $("#searchmember_filter").val("[% searchmember | html %]");
@@ -347,161 +241,16 @@
                 $("#branchcode_filter").val("[% branchcode_filter | html %]");
             [% END %]
 
-            [% IF view != "show_results" %]
-                search = 0;
-            [% ELSE %]
-                $("#searchresults").show();
-            [% END %]
-
-            // Build the aLengthMenu
-            var aLengthMenu = [
-                [% PatronsPerPage | html %], 10, 20, 50, 100, -1
-            ];
-            jQuery.unique(aLengthMenu);
-            aLengthMenu.sort(function( a, b ){
-                // Put "All" at the end
-                if ( a == -1 ) {
-                    return 1;
-                } else if ( b == -1 ) {
-                    return -1;
-                }
-                return parseInt(a) < parseInt(b) ? -1 : 1;}
-            );
-            var aLengthMenuLabel = [];
-            $(aLengthMenu).each(function(){
-                if ( this == -1 ) {
-                    // Label for -1 is "All"
-                    aLengthMenuLabel.push(_("All"));
-                } else {
-                    aLengthMenuLabel.push(this);
-                }
-            });
+            $("#searchheader").hide();
+            $("#patron_search_form").on('submit', function(){$("#searchheader").show();});
+            $("#clear_search").on("click",function(e){$("#searchheader").hide();});
 
             // Apply DataTables on the results table
-            var columns_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
             [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
                 [%# Remove the first column if we do not display the checkbox %]
-                columns_settings.splice(0, 1);
+                table_settings.splice(0, 1);
             [% END %]
-            dtMemberResults = KohaTable("memberresultst", {
-                'bServerSide': true,
-                'sAjaxSource': "/cgi-bin/koha/svc/members/search",
-                'fnServerData': function(sSource, aoData, fnCallback) {
-                    if ( ! search ) {
-                        return;
-                    }
-                    aoData.push({
-                        'name': 'searchmember',
-                        'value': $("#searchmember_filter").val()
-                    },{
-                        'name': 'firstletter',
-                        'value': $("#firstletter_filter").val()
-                    },{
-                        'name': 'searchfieldstype',
-                        'value': $("#searchfieldstype_filter").val()
-                    },{
-                        'name': 'searchtype',
-                        'value': $("#searchtype_filter").val()
-                    },{
-                        'name': 'categorycode',
-                        'value': $("#categorycode_filter").val()
-                    },{
-                        'name': 'branchcode',
-                        'value': $("#branchcode_filter").val()
-                    },{
-                        'name': 'name_sorton',
-                        'value': 'borrowers.surname borrowers.firstname'
-                    },{
-                        'name': 'cardnumber_sorton',
-                        'value': 'borrowers.cardnumber',
-                    },{
-                        'name': 'dateofbirth_sorton',
-                        'value': 'borrowers.dateofbirth',
-                    },{
-                        'name': 'dateexpiry_sorton',
-                        'value': 'borrowers.dateexpiry',
-                    },{
-                        'name': 'category_sorton',
-                        'value': 'categories.description',
-                    },{
-                        'name': 'branch_sorton',
-                        'value': 'branches.branchname'
-                    },{
-                        'name': 'borrowernotes_sorton',
-                        'value': 'borrowers.borrowernotes'
-                    },{
-                        'name': 'template_path',
-                        'value': 'members/tables/members_results.tt',
-                    });
-                    $.ajax({
-                        'dataType': 'json',
-                        'type': 'POST',
-                        'url': sSource,
-                        'data': aoData,
-                        'success': function(json){
-                            // redirect if there is only 1 result.
-                            if ( json.iTotalDisplayRecords == 1 ) {
-                                var borrowernumber = json.aaData[0].borrowernumber;
-                                /* Overwrite history state of firstletter search since only one result was returned; This prevents a loop upon clicking back */
-                                history.replaceState( {}, null, window.location.href.split("?" )[0]);
-                                [% IF circsearch == 1 %]
-                                    [% SET redirect = "circ/circulation" %]
-                                [% ELSE %]
-                                    [% SET redirect = "members/moremember" %]
-                                [% END %]
-                                document.location.href="/cgi-bin/koha/[% redirect | $raw %].pl?borrowernumber="+borrowernumber;
-                                return false;
-                            }
-                            fnCallback(json);
-                        }
-                    });
-                },
-                'aoColumns':[
-                    [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
-                      { 'mDataProp': 'dt_borrowernumber', 'bSortable': false },
-                    [% END %]
-                    { 'mDataProp': 'dt_cardnumber' },
-                    { 'mDataProp': 'dt_name' },
-                    { 'mDataProp': 'dt_dateofbirth' },
-                    { 'mDataProp': 'dt_category' },
-                    {
-                        'mDataProp': function ( oObj ) {
-                            if( !singleBranchMode &&  oObj.dt_branch == "[% Branches.GetLoggedInBranchname | html %]" ){
-                                return "<span class=\"currentlibrary\">" + oObj.dt_branch + "</span>";
-                            } else {
-                                return oObj.dt_branch;
-                            }
-                        }
-                    },
-                    { 'mDataProp': 'dt_dateexpiry' },
-                    { 'mDataProp': 'dt_od_checkouts', 'bSortable': false },
-                    { 'mDataProp': 'dt_fines', 'bSortable': false },
-                    { 'mDataProp': 'dt_borrowernotes' },
-                    { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
-                ],
-                'bFilter': false,
-                'bAutoWidth': false,
-                [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
-                    'aaSorting': [[2, 'asc']],
-                [% ELSE %]
-                    'aaSorting': [[1, 'asc']],
-                [% END %]
-                "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
-                'sPaginationType': 'full_numbers',
-                "iDisplayLength": [% PatronsPerPage | html %],
-                "bProcessing": true,
-                "initComplete": function(settings, json) {
-                    Sticky = $("#searchheader");
-                    Sticky.hcSticky({
-                        stickTo: "#searchresults",
-                        stickyClass: "floating"
-                    });
-                }
-            }, columns_settings);
-            update_searched();
-            /* Initial page load doesn't trigger the popstate event, so we explicitly call this */
-            getSearchByLocation( false );
-
         });
 
         function patronListAdd(){
@@ -536,52 +285,6 @@
             return true;
         }
 
-        function getSearchByLocation( setstate ){
-            /* Check to see if the URL contains a search parameter */
-            if( location.search != ""){
-                var params = new URLSearchParams( location.search );
-                var firstletter = params.get("firstletter");
-                /* Check to see if search is a first letter param */
-                if( firstletter ){
-                    /* Trigger function to return search results by letter */
-                    filterByFirstLetterSurname( firstletter, setstate );
-                }
-            }
-        }
-
-        // Update the string "Results found ..."
-        function update_searched(){
-            var searched = $("#searchfieldstype_filter").find("option:selected").text();
-            if ( $("#searchmember_filter").val() ) {
-                if ( $("#searchtype_filter").val() == 'start_with' ) {
-                    searched += _(" starting with ");
-                } else {
-                    searched += _(" containing ");
-                }
-                searched += "'" + $("#searchmember_filter").val() + "'";
-            }
-            if ( $("#firstletter_filter").val() ) {
-                searched += _(" begins with ") + "'" + $("#firstletter_filter").val() +"'";
-            }
-            if ( $("#categorycode_filter").val() ) {
-                searched += _(" with category ") + "'" + $("#categorycode_filter").find("option:selected").text() + "'";
-            }
-            if ( $("#branchcode_filter").val() ) {
-                searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
-            }
-            $("#searchpattern").text(searched);
-        }
-
-        // Redraw the table
-        function filter() {
-            $("#firstletter_filter").val('');
-            update_searched();
-            search = 1;
-            $("#searchresults").show();
-            dtMemberResults.fnDraw();
-            return false;
-        }
-
         $('#memberresultst tbody').on('click','td',function(e){
             var $checkbox = $(this).find("input[type=checkbox]");
             if (e.target.type != "checkbox") {
@@ -590,34 +293,27 @@
             }
         });
 
-        // User has clicked on the Clear button
-        function clearFilters(redraw) {
-            $("#searchform select").val('');
-            $("#firstletter_filter").val('');
-            $("#searchmember_filter").val('');
-            if(redraw) {
-                /* remove any search string added by firstletter search */
-                history.pushState( {}, null, window.location.href.split("?" )[0]);
-                update_searched();
-                search = 0;
-                $("#searchresults").hide();
-                dtMemberResults.fnDraw();
-            }
-        }
-
-        // User has clicked on a letter
-        function filterByFirstLetterSurname( letter, setstate ) {
-            clearFilters(false);
-            $("#firstletter_filter").val(letter);
-            if( setstate ){
-                history.pushState( null, null, "?firstletter=" + letter );
-            }
-            update_searched();
-            search = 1;
-            $("#searchresults").show();
-            dtMemberResults.fnDraw();
-        }
     </script>
+
+    [% IF circsearch == 1 %]
+        [% SET redirect_url = '/cgi-bin/koha/circ/circulation.pl' %]
+    [% ELSE %]
+        [% SET redirect_url = '/cgi-bin/koha/members/moremember.pl' %]
+    [% END %]
+    [% PROCESS patron_search_js
+        table_id    => 'memberresultst',
+        categories  => categories,
+        libraries   => libraries,
+        extended_attribute_types => attribute_type_codes,
+        columns     => columns,
+        actions     => ['edit', 'checkout'],
+        redirect_if_one_result => 1,
+        redirect_url           => redirect_url,
+        sticky_header => "searchheader",
+        sticky_to     => "patron_search_results",
+    %]
+
+
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

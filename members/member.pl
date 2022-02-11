@@ -29,6 +29,7 @@ use C4::Output qw( output_html_with_http_headers );
 use CGI qw( -utf8 );
 use Koha::List::Patron qw( GetPatronLists );
 use Koha::Patrons;
+use Koha::Patron::Attribute::Types;
 
 my $input = CGI->new;
 
@@ -79,6 +80,9 @@ $template->param(
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     view                => $view,
     circsearch          => $circsearch,
+    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : [] ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

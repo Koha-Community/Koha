@@ -27,6 +27,7 @@ use Koha::Patron::Modifications;
 use Koha::Libraries;
 use Koha::List::Patron qw( GetPatronLists );
 use Koha::Patron::Categories;
+use Koha::Patron::Attribute::Types;
 
 my $query = CGI->new;
 
@@ -72,6 +73,9 @@ $template->param(
     PatronAutoComplete => C4::Context->preference('PatronAutoComplete'),
     patron_lists => [ GetPatronLists() ],
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
+    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : [] ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
