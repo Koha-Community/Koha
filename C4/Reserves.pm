@@ -1122,7 +1122,15 @@ sub ModReserveFill {
         if C4::Context->preference('HoldsLog');
 
     # FIXME Must call Koha::Hold->cancel ? => No, should call ->filled and add the correct log
-    Koha::Old::Hold->new( $hold->unblessed() )->store();
+    my $old_hold = Koha::Old::Hold->new( $hold->unblessed() )->store();
+
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'fill',
+            payload => { hold => $old_hold->get_from_storage }
+        }
+    );
 
     $hold->delete();
 
