@@ -106,6 +106,7 @@
                             [% CASE 'borrowernotes' %]<th>Notes</th>
                             [% CASE 'phone' %]<th>Phone</th>
                             [% CASE 'checkouts' %]<th>Checkouts</th>
+                            [% CASE 'account_balance' %]<th>Fines</th>
                             [% CASE 'action' %]<th>&nbsp;</th>
                         [% END %]
                     [% END %]
@@ -385,15 +386,41 @@
                                     return escape_str(data);
                                 }
                             }
-                            [% CASE 'checkouts' %][% embed.push('checkouts+count') %]
+                            [% CASE 'checkouts' %][% embed.push('checkouts+count', 'overdues+count') %]
                             {
                                 "data": "",
                                 "searchable": false,
                                 "orderable": false,
                                 "render": function( data, type, row, meta ) {
-                                    return escape_str(row.checkouts_count);
+                                    if ( row.overdues_count ) {
+                                        return "<span class='overdue'><strong>"+row.overdues_count + "</strong></span>";
+                                    } else {
+                                        return "0 / " + row.checkouts_count;
+                                    }
                                 }
                             }
+                            [% CASE 'account_balance' %][% embed.push('account_balance') %]
+                            {
+                                "data": "",
+                                "searchable": false,
+                                "orderable": false,
+                                "render": function( data, type, row, meta ) {
+                                    let r = "<span style='text-align: right; display: block;'><a href=\"/cgi-bin/koha/members/boraccount.pl?borrowernumber="+row.patron_id+"\">";
+                                    let balance_str = row.account_balance || 0;
+                                    balance_str = balance_str.escapeHtml().format_price();
+                                    if ( row.account_balance < 0 ) {
+                                        // FIXME Format price here
+                                        r += "<span class='credit'>" + balance_str + "</span>";
+                                    } else if ( row.account_balance > 0 ) {
+                                        r += "<span class='debit'><strong>" + balance_str  + "</strong></span>"
+                                    } else {
+                                        r += balance_str;
+                                    }
+                                    r += "</a></span>";
+                                    return r;
+                                }
+                            }
+
                             [% CASE 'action' %]
                             {
                                 "data": function( row, type, val, meta ) {

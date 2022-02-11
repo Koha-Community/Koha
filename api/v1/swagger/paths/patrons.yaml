@@ -386,6 +386,8 @@
     x-koha-embed:
       - extended_attributes
       - checkouts+count
+      - overdues+count
+      - account_balance
   post:
     x-mojo-to: Patrons#add
     operationId: addPatron

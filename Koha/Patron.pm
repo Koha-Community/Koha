@@ -1207,6 +1207,8 @@ sub get_overdues {
     );
 }
 
+sub overdues { my $self = shift; return $self->get_overdues(@_); }
+
 =head3 get_routing_lists
 
 my $routinglists = $patron->get_routing_lists
@@ -2062,6 +2064,20 @@ sub recalls {
 
     return Koha::Recalls->search({ borrowernumber => $self->borrowernumber });
 }
+
+=head3 account_balance
+
+    my $balance = $patron->account_balance
+
+Return the patron's account balance
+
+=cut
+
+sub account_balance {
+    my ($self) = @_;
+    return $self->account->balance;
+}
+
 
 =head2 Internal methods
 
