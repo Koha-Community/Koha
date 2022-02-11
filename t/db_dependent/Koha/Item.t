@@ -1199,7 +1199,7 @@ subtest 'store() tests' => sub {
         # simulate it was found
         $item->set( { itemlost => 0 } )->store;
 
-        my $messages = $item->messages;
+        my $messages = $item->object_messages;
 
         my $message_1 = $messages->[0];
 

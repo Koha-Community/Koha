@@ -2128,7 +2128,7 @@ sub AddReturn {
     if ($item_was_lost) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            my @object_messages = @{ $updated_item->messages };
+            my @object_messages = @{ $updated_item->object_messages };
             for my $message (@object_messages) {
                 $messages->{'LostItemFeeRefunded'} = 1
                   if $message->message eq 'lost_refunded';
