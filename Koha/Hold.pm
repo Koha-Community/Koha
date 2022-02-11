@@ -34,6 +34,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Holds;
 use Koha::Calendar;
+use Koha::Plugins;
 
 use Koha::Exceptions::Hold;
 
@@ -112,6 +113,14 @@ sub suspend_hold {
     $self->suspend_until($date);
     $self->store();
 
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'suspend',
+            payload => { hold => $self->get_from_storage }
+        }
+    );
+
     logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
 
@@ -131,6 +140,14 @@ sub resume {
     $self->suspend_until( undef );
 
     $self->store();
+
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'resume',
+            payload => { hold => $self->get_from_storage }
+        }
+    );
 
     logaction( 'HOLDS', 'RESUME', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
@@ -553,6 +570,15 @@ sub cancel {
             }
 
             my $old_me = $self->_move_to_old;
+
+            Koha::Plugins->call(
+                'after_hold_action',
+                {
+                    action  => 'cancel',
+                    payload => { hold => $old_me->get_from_storage }
+                }
+            );
+
             # anonymize if required
             $old_me->anonymize
                 if $patron->privacy == 2;
@@ -608,6 +634,15 @@ sub fill {
             );
 
             my $old_me = $self->_move_to_old;
+
+            Koha::Plugins->call(
+                'after_hold_action',
+                {
+                    action  => 'fill',
+                    payload => { hold => $old_me->get_from_storage }
+                }
+            );
+
             # anonymize if required
             $old_me->anonymize
                 if $patron->privacy == 2;
