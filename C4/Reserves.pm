@@ -421,16 +421,16 @@ sub CanItemBeReserved {
          WHERE borrowernumber = ?
     };
 
-    my $branchcode  = "";
+    my $reserves_control_branch;
     my $branchfield = "reserves.branchcode";
 
     if ( $controlbranch eq "ItemHomeLibrary" ) {
         $branchfield = "items.homebranch";
-        $branchcode  = $item->homebranch;
+        $reserves_control_branch  = $item->homebranch;
     }
     elsif ( $controlbranch eq "PatronLibrary" ) {
         $branchfield = "borrowers.branchcode";
-        $branchcode  = $borrower->{branchcode};
+        $reserves_control_branch  = $borrower->{branchcode};
     }
 
     # we retrieve rights
@@ -438,7 +438,7 @@ sub CanItemBeReserved {
         my $reservesallowed = Koha::CirculationRules->get_effective_rule({
                 itemtype     => $item->effective_itemtype,
                 categorycode => $borrower->{categorycode},
-                branchcode   => $branchcode,
+                branchcode   => $reserves_control_branch,
                 rule_name    => 'reservesallowed',
         })
     ) {
@@ -452,7 +452,7 @@ sub CanItemBeReserved {
     my $rights = Koha::CirculationRules->get_effective_rules({
         categorycode => $borrower->{'categorycode'},
         itemtype     => $item->effective_itemtype,
-        branchcode   => $branchcode,
+        branchcode   => $reserves_control_branch,
         rules        => ['holds_per_record','holds_per_day']
     });
     my $holds_per_record = $rights->{holds_per_record} // 1;
@@ -497,10 +497,10 @@ sub CanItemBeReserved {
     my $sthcount = $dbh->prepare($querycount);
 
     if ( defined $ruleitemtype ) {
-        $sthcount->execute( $patron->borrowernumber, $branchcode, $ruleitemtype );
+        $sthcount->execute( $patron->borrowernumber, $reserves_control_branch, $ruleitemtype );
     }
     else {
-        $sthcount->execute( $patron->borrowernumber, $branchcode );
+        $sthcount->execute( $patron->borrowernumber, $reserves_control_branch );
     }
 
     my $reservecount = "0";
@@ -522,7 +522,7 @@ sub CanItemBeReserved {
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $patron->categorycode,
-            branchcode   => $branchcode,
+            branchcode   => $reserves_control_branch,
             rule_name    => 'max_holds',
         }
     );
@@ -536,8 +536,6 @@ sub CanItemBeReserved {
         return { status => 'tooManyReserves', limit => $rule->rule_value} if $total_holds_count >= $rule->rule_value;
     }
 
-    my $reserves_control_branch =
-      GetReservesControlBranch( $item->unblessed(), $patron->unblessed );
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->effective_itemtype );
 
