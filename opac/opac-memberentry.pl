@@ -162,7 +162,7 @@ if ( $action eq 'create' ) {
             borrower       => \%borrower
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
-    } elsif ( $libraries->find($borrower{branchcode}) ) {
+    } elsif ( !$libraries->find($borrower{branchcode}) ) {
         die "Branchcode not allowed"; # They hack the form
     }
     else {
