@@ -1758,7 +1758,28 @@ possibly records the fact that something happened
 sub store {
     my ( $self, $attrs ) = @_;
 
+    my %updated_columns = $self->_result->get_dirty_columns;
+
+    my @holds;
+    if( defined $updated_columns{'borrowernumber'} and
+        Koha::Patrons->find( $updated_columns{'borrowernumber'} ) )
+    {
+        # borrowernumber has changed
+        my $old_illreq = $self->get_from_storage;
+        @holds = Koha::Holds->search( {
+            borrowernumber => $old_illreq->borrowernumber,
+            biblionumber   => $self->biblio_id,
+        } )->as_list;
+    }
+
     my $ret = $self->SUPER::store;
+
+    if ( scalar @holds ) {
+        # move holds to the changed borrowernumber
+        foreach my $hold ( @holds ) {
+            $hold->borrowernumber( $updated_columns{'borrowernumber'} )->store;
+        }
+    }
 
     $attrs->{log_origin} = 'core';
 
