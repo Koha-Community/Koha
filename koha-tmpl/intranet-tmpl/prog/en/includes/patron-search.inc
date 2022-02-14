@@ -5,6 +5,7 @@
 [% USE Asset %]
 [% USE To %]
 
+[%# Display a simple form %]
 [% BLOCK patron_search_filters_simple  %]
     <form id="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
@@ -13,6 +14,13 @@
     </form>
 [% END %]
 
+[%# Display a complex patron search form %]
+[%# - Search: <input> %]
+[%# You can then pass a list of filters %]
+[%# - branch: <select library list> %]
+[%# - category: <select patron category list> %]
+[%# - search_field: <select patron field list> %]
+[%# - search_type: <select "contain" or "start with"> %]
 [% BLOCK patron_search_filters %]
     <form id="patron_search_form">
         <fieldset class="brief">
@@ -90,6 +98,15 @@
     </form>
 [% END %]
 
+[%# Display the table with: %]
+[%# - At the top a hint about a possible filter %]
+[%# - Browse by last name %]
+[%# - The table %]
+[%# Get the following parameters: %]
+[%# - filter: can be 'suggestions_managers', 'orders_managers', 'funds_owners' or 'funds_users' to filter patrons on their permissions %]
+[%# - table_id: the ID of the table %]
+[%# open_on_row_click: See patron_search_js %]
+[%# columns: See patron_search_js %]
 [% BLOCK patron_search_table %]
 
     [% IF filter == 'suggestions_managers' %]
@@ -174,6 +191,17 @@
 
 [% END %]
 
+[%# Integrate all the JS code, outside of a script tag %]
+[%# Get the following parameters: %]
+[%# - redirect_if_one_result: Redirect to the patron if the search returns only one result, note that it will not redirect if filters of the DT are used (this is a feature) %]
+[%# - redirect_url: The URL to use, the borrowernumber parameter will be added %]
+[%# filter: Same as patron_search_table %]
+[%# open_on_row_click: boolean, default off. Will allow to select a patron by clicking on the whole tr element %]
+[%# columns: list of columns that will be displayed. Possible values are: 'checkbox', 'cardnumber', 'dateofbirth', 'address', 'name', 'name-address', 'branch', 'category', 'dateexpiry', 'borrowernotes, 'phone', 'checkouts', 'account_balance', 'action' %]
+[%# preview_on_name_click: Open a modal window with patron's info when the name is clicked %]
+[%# actions: list of buttons to display in the action column. Possible values are: 'select', 'add', 'edit', 'checkout' %]
+[%# sticky_header and sticky_to: If we need a sticky header %]
+[%# callback: name of the JS function that will be called when a patron is selected. Only work with action=select %]
 [% BLOCK patron_search_js %]
 
     [% IF redirect_if_one_result && !redirect_url %]
