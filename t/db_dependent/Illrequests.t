@@ -125,6 +125,55 @@ subtest 'Basic object tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'store borrowernumber change also updates holds' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    Koha::Illrequests->search->delete;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $other_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+
+    my $request = $builder->build_object({
+        class => 'Koha::Illrequests',
+        value => {
+            borrowernumber => $patron->borrowernumber,
+            biblio_id => $biblio->biblionumber,
+        }
+    });
+    $builder->build({
+        source => 'Reserve',
+        value => {
+            borrowernumber => $patron->borrowernumber,
+            biblionumber => $request->biblio_id
+        }
+    });
+
+    my $hold = Koha::Holds->find({
+        biblionumber => $request->biblio_id,
+        borrowernumber => $request->borrowernumber,
+    });
+
+    is( $hold->borrowernumber, $request->borrowernumber,
+       'before change, original borrowernumber found' );
+
+    $request->borrowernumber( $other_patron->borrowernumber )->store;
+
+    # reload changes
+    $hold->discard_changes;
+
+    is( $hold->borrowernumber, $other_patron->borrowernumber,
+       'after change, changed borrowernumber found in holds' );
+
+    is( $request->borrowernumber, $other_patron->borrowernumber,
+       'after change, changed borrowernumber found in illrequests' );
+
+    $schema->storage->txn_rollback;
+
+};
+
 subtest 'Working with related objects' => sub {
 
     plan tests => 7;
