@@ -3,6 +3,7 @@
 [% USE Context %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Categories %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% USE Price %]
@@ -10,6 +11,10 @@
 [% SET article_requests_view = 1 %]
 [% SET biblionumber = biblio.biblionumber %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET libraries = Branches.all %]
+[% SET categories = Categories.all.unblessed %]
+[% SET columns = ['name', 'address', 'cardnumber', 'dateofbirth', 'category', 'branch', 'phone'] %]
+[% PROCESS "patron-search.inc" %]
 <title>Request article &rsaquo; Circulation &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -96,52 +101,12 @@
                         [% END %]
                         </div>
                     [% END %]
-                    [% IF no_patrons_found %]
-                        <div class="dialog alert">
-                            <h3>Patron not found</h3>
-                            <p>No patron with this name, please, try another</p>
-                        </div>
-                    [% ELSIF patrons %]
-                        <form id="article_request_patron_results" method="post">
-                            <fieldset>
-                                <table id="table_borrowers">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Name</th>
-                                            <th>Cardnumber</th>
-                                            <th>Category</th>
-                                            <th>Library</th>
-                                            <th>Address</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH patron IN patrons %]
-                                            <tr>
-                                                <td><input type="radio" name="patron_id" value="[% patron.borrowernumber | html %]"/></td>
-                                                <td>[% patron.surname | html %], [% patron.firstname | html %]</td>
-                                                <td>[% patron.cardnumber | html %]</td>
-                                                <td>[% patron.categorycode | html %]</td>
-                                                <td>[% patron.branchcode | html %]</td>
-                                                <td>[% patron.address | html %]</td>
-                                            </tr>
-                                        [% END %]
-                                    </tbody>
-                                </table>
-                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                <fieldset class="action"><input type="submit" value="Select" /></fieldset>
-                            </fieldset>
-                        </form>
-                    [% ELSIF !patron %]
-                        <form id="article_requests_patronsearch" action="request-article.pl" method="post">
-                            <fieldset class="brief">
-                                <label for="patron">Patron: </label>
-                                <div class="hint">Enter patron card number or partial name:</div>
-                                <input type="text" size="40" id="patron" class="focus" name="patron_cardnumber" />
-                                <input type="submit" value="Search" />
-                                <input type="hidden" name="biblionumber" value="[% biblio.id | html %]" />
-                            </fieldset>
-                        </form>
+                    [% UNLESS patron %]
+                        <fieldset class="brief">
+                            <label>Search patrons</label>
+                            [% PROCESS patron_search_filters_simple %]
+                            [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
+                        </fieldset>
                     [% ELSE %]
                         [% IF biblio.can_article_request( patron ) %]
                             [% IF article_request_fee > 0 %]
@@ -396,39 +361,6 @@
         });
 
         $(document).ready(function() {
-            if ( $( "#patron" ).size() ){
-                $( "#patron" ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        $( "#patron" ).val( ui.item.cardnumber );
-                        $( "#holds_patronsearch" ).submit();
-                        return false;
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append(
-                        "<a>"
-                            + ( item.surname ? item.surname.escapeHtml() : "" )
-                            + ", "
-                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
-                            + " "
-                            + "<small>"
-                                + ( item.address ? item.address.escapeHtml() : "" )
-                                + " "
-                                + ( item.city ? item.city.escapeHtml() : "" )
-                                + " "
-                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
-                                + " "
-                                + ( item.country ? item.country.escapeHtml() : "" )
-                            + "</small>"
-                        + "</a>" )
-                    .appendTo( ul );
-                };
-            }
 
             $( ".ar-update-branchcode" ).on('focus', function(){
                 previous_branchcode = this.value;
@@ -503,6 +435,19 @@
             }
         });
     </script>
+
+    [% PROCESS patron_search_js
+        table_id    => 'table_borrowers',
+        categories  => categories,
+        libraries   => libraries,
+        extended_attribute_types => attribute_type_codes,
+        columns     => columns,
+        open_on_row_click => 1,
+        on_click_url      => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber,
+        redirect_if_one_result => 1,
+        redirect_url           => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber,
+    %]
+
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

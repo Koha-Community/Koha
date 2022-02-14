@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Utils::DataTables::Members;
 use C4::Search qw( enabled_staff_search_views );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use Koha::Biblios;
@@ -46,7 +45,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 my $action            = $cgi->param('action') || q{};
 my $biblionumber      = $cgi->param('biblionumber');
 my $patron_cardnumber = $cgi->param('patron_cardnumber');
-my $patron_id         = $cgi->param('patron_id');
+my $patron_id         = $cgi->param('borrowernumber');
 
 my $biblio = Koha::Biblios->find($biblionumber);
 output_and_exit( $cgi, $cookie, $template, 'unknown_biblio')
@@ -105,28 +104,7 @@ if ( $action eq 'create' ) {
             );
         }
     };
-
-}
-
-if ( !$patron && $patron_cardnumber ) {
-    my $results = C4::Utils::DataTables::Members::search(
-        {
-            searchmember => $patron_cardnumber,
-            dt_params    => { iDisplayLength => -1 },
-        }
-    );
-
-    my $patrons = $results->{patrons};
-
-    if ( scalar @$patrons == 1 ) {
-        $patron = Koha::Patrons->find( $patrons->[0]->{borrowernumber} );
-    }
-    elsif (@$patrons) {
-        $template->param( patrons => $patrons );
-    }
-    else {
-        $template->param( no_patrons_found => $patron_cardnumber );
-    }
+    undef $patron;
 }
 
 if ( $patron && !$patron->can_request_article ) {
@@ -145,6 +123,11 @@ $template->param(
     patron => $patron,
     subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
     C4::Search::enabled_staff_search_views,
+    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
+        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
+        : []
+    ),
 );
+
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
