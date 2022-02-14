@@ -520,16 +520,18 @@ if ( $patron ) {
             forceallow => $force_allow_issue,
         );
     }
-}
 
-my $patron_messages = $patron->messages->search(
-    {},
-    {
-       join => 'manager',
-       '+select' => ['manager.surname', 'manager.firstname' ],
-       '+as' => ['manager_surname', 'manager_firstname'],
-    }
-);
+    my $patron_messages = $patron->messages->search(
+        {},
+        {
+           join => 'manager',
+           '+select' => ['manager.surname', 'manager.firstname' ],
+           '+as' => ['manager_surname', 'manager_firstname'],
+        }
+    );
+    $template->param( patron_messages => $patron_messages );
+
+}
 
 my $fast_cataloging = 0;
 if ( Koha::BiblioFrameworks->find('FA') ) {
@@ -576,7 +578,6 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
-    patron_messages   => $patron_messages,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,
