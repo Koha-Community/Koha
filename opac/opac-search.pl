@@ -216,7 +216,7 @@ if ($cgi->cookie("search_path_code")) {
     }
 }
 
-my @search_groups = Koha::Library::Groups->get_search_groups();
+my @search_groups = Koha::Library::Groups->get_search_groups( { interface => 'opac' } )->as_list;
 $template->param( search_groups => \@search_groups );
 
 # load the language limits (for search)
