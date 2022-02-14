@@ -8,7 +8,7 @@
 [% PROCESS 'patronfields.inc' %]
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
-[% SET columns = ['cardnumber', 'name', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
+[% SET columns = ['cardnumber', 'name-address', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Patrons[% IF ( searching ) %] &rsaquo; Search results[% END %] &rsaquo; Koha</title>
@@ -64,7 +64,7 @@
             </div>
           [% END %]
 
-          <div id="patron_search_results">
+          <div id="searchresults">
             [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
               <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
                   <div>
@@ -310,7 +310,8 @@
         redirect_if_one_result => 1,
         redirect_url           => redirect_url,
         sticky_header => "searchheader",
-        sticky_to     => "patron_search_results",
+        sticky_to     => "searchresults",
+        default_sort_column => 'name-address',
     %]
 
 
