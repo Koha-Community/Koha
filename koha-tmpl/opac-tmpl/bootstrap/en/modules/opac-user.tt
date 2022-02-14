@@ -767,13 +767,7 @@
                                         [% FOREACH RECALL IN RECALLS %]
                                         <tr>
                                             <td class="title">
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblionumber | html %]">
-                                                    [% RECALL.biblio.title | html %]
-                                                    [% FOREACH s IN RECALL.biblio.subtitle %]
-                                                        [% s | html %]
-                                                    [% END %]
-                                                </a>
-                                                [% RECALL.biblio.author | html %]
+                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=RECALL.biblio %]</a> [% IF RECALL.item_level_recall %]<p class="hint">Item recalled: [% RECALL.item.barcode | html %]</p>[% END %]
                                             </td>
                                             <td class="recalldate">
                                                 <span title="[% RECALL.recalldate | html %]">

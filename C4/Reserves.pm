@@ -423,7 +423,7 @@ sub CanItemBeReserved {
 
     # check if a recall exists on this item from this borrower
     return { status => 'recall' }
-      if Koha::Recalls->search({ borrowernumber => $borrowernumber, itemnumber => $itemnumber, old => undef })->count;
+      if Koha::Recalls->search({ borrowernumber => $patron->borrowernumber, itemnumber => $item->itemnumber, old => undef })->count;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 

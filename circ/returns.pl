@@ -178,7 +178,6 @@ if ( $query->param('recall_id') ) {
     my $itemnumber = $query->param('itemnumber');
     my $return_branch = $query->param('returnbranch');
 
-    my $expirationdate = $recall->calc_expirationdate;
     my $item;
     if ( !$recall->item_level_recall ) {
         $item = Koha::Items->find( $itemnumber );
@@ -187,7 +186,8 @@ if ( $query->param('recall_id') ) {
     if ( $recall->branchcode ne $return_branch ) {
         $recall->start_transfer({ item => $item }) if !$recall->in_transit;
     } else {
-        $recall->set_waiting({ item => $item }) if !$recall->waiting;
+        my $expirationdate = $recall->calc_expirationdate;
+        $recall->set_waiting({ item => $item, expirationdate => $expirationdate }) if !$recall->waiting;
     }
 }
 

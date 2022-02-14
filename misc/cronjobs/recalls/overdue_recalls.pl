@@ -36,7 +36,7 @@ use C4::Log;
 
 cronlogaction();
 
-my @recalls = Koha::Recalls->search({ status => 'R' });
+my @recalls = Koha::Recalls->search({ status => 'R' })->as_list;
 foreach my $recall (@recalls){
     if ( $recall->should_be_overdue ){
         $recall->set_overdue({ interface => 'COMMANDLINE' });

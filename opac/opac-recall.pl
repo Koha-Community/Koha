@@ -43,10 +43,10 @@ if ( C4::Context->preference('UseRecalls') ) {
 
     unless ( $biblio->can_be_recalled({ patron => $patron }) ) { $error = 'unavailable'; }
 
-    my $items = Koha::Items->search({ biblionumber => $biblionumber });
+    my $items = Koha::Items->search({ biblionumber => $biblionumber })->as_list;
 
     # check if already recalled
-    my $recalled = scalar $biblio->recalls({ borrowernumber => $borrowernumber });
+    my $recalled = $biblio->recalls({ borrowernumber => $borrowernumber })->count;
     if ( defined $recalled and $recalled > 0 ) {
         my $recalls_per_record = Koha::CirculationRules->get_effective_rule({
             categorycode => $patron->categorycode,

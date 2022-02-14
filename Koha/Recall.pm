@@ -110,7 +110,7 @@ sub checkout {
 
     unless ( $self->item_level_recall ) {
         # Only look at checkouts of items that are allowed to be recalled, and get the oldest one
-        my @items = Koha::Items->search({ biblionumber => $self->biblionumber });
+        my @items = Koha::Items->search({ biblionumber => $self->biblionumber })->as_list;
         my @itemnumbers;
         foreach (@items) {
             my $recalls_allowed = Koha::CirculationRules->get_effective_rule({

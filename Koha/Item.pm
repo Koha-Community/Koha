@@ -1461,7 +1461,7 @@ Return the relevant recall for this item
 
 sub recall {
     my ( $self ) = @_;
-    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } });
+    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } })->as_list;
     foreach my $recall (@recalls) {
         if ( $recall->item_level_recall and $recall->itemnumber == $self->itemnumber ){
             return $recall;
@@ -1534,7 +1534,7 @@ sub can_be_recalled {
 
     # check item availability
     # items are unavailable for recall if they are lost, withdrawn or notforloan
-    my @items = Koha::Items->search({ biblionumber => $self->biblionumber, itemlost => 0, withdrawn => 0, notforloan => 0 });
+    my @items = Koha::Items->search({ biblionumber => $self->biblionumber, itemlost => 0, withdrawn => 0, notforloan => 0 })->as_list;
 
     # if there are no available items at all, no recall can be placed
     return 0 if ( scalar @items == 0 );
@@ -1608,7 +1608,7 @@ Get the most relevant recall for this item.
 sub check_recalls {
     my ( $self ) = @_;
 
-    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'R','O','W','T' ] }, { order_by => { -asc => 'recalldate' } });
+    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'R','O','W','T' ] }, { order_by => { -asc => 'recalldate' } })->as_list;
 
     my $recall;
     # iterate through relevant recalls to find the best one.

@@ -1172,12 +1172,15 @@ Return all active recalls attached to this biblio, sorted by oldest first
 
 sub recalls {
     my ( $self, $params ) = @_;
-    if ( $params->{borrowernumber} ) {
-        my @recalls_rs = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef, borrowernumber => $params->{borrowernumber} }, { order_by => { -asc => 'recalldate' } });
-        return @recalls_rs;
-    }
-    my @recalls_rs = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } });
-    return @recalls_rs;
+
+    my $args = {
+        biblionumber => $self->biblionumber,
+        old => undef,
+    };
+    $args->{ borrowernumber } = $params->{ borrowernumber } if $params->{ borrowernumber };
+
+    my $recalls_rs = $self->_result->recalls->search( $args, { order_by => { -asc => 'recalldate' } });
+    return Koha::Recalls->_new_from_dbic( $recalls_rs );
 }
 
 =head3 can_be_recalled
@@ -1200,7 +1203,7 @@ sub can_be_recalled {
         $branchcode = $patron->branchcode;
     }
 
-    my @all_items = Koha::Items->search({ biblionumber => $self->biblionumber });
+    my @all_items = Koha::Items->search({ biblionumber => $self->biblionumber })->as_list;
 
     # if there are no available items at all, no recall can be placed
     return 0 if ( scalar @all_items == 0 );
