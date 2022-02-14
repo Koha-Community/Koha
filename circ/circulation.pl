@@ -34,7 +34,6 @@ use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_htt
 use C4::Auth qw( get_session get_template_and_user );
 use C4::Koha;
 use C4::Circulation qw( barcodedecode CanBookBeIssued AddIssue );
-use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Biblio qw( TransformMarcToKoha );
 use C4::Search qw( new_record_from_zebra );
