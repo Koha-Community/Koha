@@ -193,7 +193,7 @@ Functions for handling import/export.
 
 =head2 ExportFramework
 
-Export all the information of a MARC or Authority Type Framework to an excel "xml" file, comma separated values "csv" file or OpenDocument SpreadSheet "ods" file.
+Export all information of a bibliographic or authority MARC framework to an Excel "xml" file, comma separated values "csv" or OpenDocument SpreadSheet "ods".
 
 return :
 succes
@@ -647,6 +647,7 @@ sub ImportFramework
     my $tempdir;
     my $ok = -1;
     my $dbh = C4::Context->dbh;
+    $frameworktype ||= '';
     if (-r $filename && $dbh) {
         my $extension = '';
         if ($filename =~ /\.(csv|ods|xml)$/i) {
@@ -821,6 +822,7 @@ sub _import_table
     my %fields2Delete;
     my $query;
     my @fields;
+    $frameworktype ||= '';
     # Create hash with all elements defined by primary key to know which ones to delete after parsing the spreadsheet
     eval {
         @fields = @$PKArray;
@@ -1115,6 +1117,7 @@ sub _getDataFields
 
     my $dataFields = {};
     my @dataFieldsA = ();
+    $frameworktype ||= '';
     if ($node && $node->hasChildNodes()) {
         my $node2 = $node->firstChild;
         my ($data, $repeated);

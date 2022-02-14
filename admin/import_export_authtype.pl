@@ -33,7 +33,7 @@ if (exists $cookies{'CGISESSID'}) {
     );
 }
 
-my $input = new CGI;
+my $input = CGI->new;
 
 unless ($auth_status eq 'ok') {
     print $input->header(-type => 'text/plain', -status => '403 Forbidden');

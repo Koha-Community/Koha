@@ -34,7 +34,7 @@ $(document).ready(function() {
 
     var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
     if (matches && matches.length > 1) {
-        alert(_("Error importing the authority type %s").format(decodeURIComponent(matches[1])));
+        alert(__("Error importing the authority type %s").format(decodeURIComponent(matches[1])));
     }
 
     $('input.input_import').change( function() {
