@@ -51,6 +51,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
+$template->param( CanUpdatePasswordExpiration => 1 ) if $logged_in_user->is_superlibrarian;
+
 my $dbh       = C4::Context->dbh;
 
 # Show borrower informations
@@ -330,6 +332,8 @@ if ( $op eq 'show' ) {
         },
     );
 
+    push @fields, { name => "password_expiration_date", type => "date" } if $logged_in_user->is_superlibrarian;
+
     $template->param('patron_attributes_codes', \@patron_attributes_codes);
     $template->param('patron_attributes_values', \@patron_attributes_values);
 
@@ -341,15 +345,17 @@ if ( $op eq 'do' ) {
 
     my @disabled = $input->multi_param('disable_input');
     my $infos;
-    for my $field ( qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote debarred debarredcomment/ ) {
+    for my $field ( qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { $_ eq $field } @disabled;
     }
 
-    for my $field ( qw( dateenrolled dateexpiry debarred ) ) {
+    for my $field ( qw( dateenrolled dateexpiry debarred password_expiration_date ) ) {
         $infos->{$field} = dt_from_string($infos->{$field}) if $infos->{$field};
     }
+
+    delete $infos->{password_expiration_date} unless $logged_in_user->is_superlibrarian;
 
     my @attributes = $input->multi_param('patron_attributes');
     my @attr_values = $input->multi_param('patron_attributes_value');

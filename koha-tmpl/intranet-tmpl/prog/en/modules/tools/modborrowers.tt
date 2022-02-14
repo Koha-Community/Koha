@@ -229,6 +229,9 @@
                                                 <th>Mobile</th>
                                                 <th>Registration date</th>
                                                 <th>Expiry date</th>
+                                                [% IF CanUpdatePasswordExpiration %]
+                                                    <th>Password expiration date</th>
+                                                [% END %]
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
                                                 <th>Restriction expiration</th>
@@ -265,6 +268,15 @@
                                                     <td>[% borrower.mobile | html %]</td>
                                                     <td data-order="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</td>
                                                     <td data-order="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</td>
+                                                    [% IF CanUpdatePasswordExpiration %]
+                                                        [% IF borrower.password_expiration_date  %]
+                                                            <td data-order="[% borrower.password_expiration_date | html %]">
+                                                                [% borrower.password_expiration_date | $KohaDates %]
+                                                            </td>
+                                                        [% ELSE %]
+                                                            <td data-order="9999-99-99">Never</td>
+                                                        [% END %]
+                                                    [% END %]
                                                     <td>[% borrower.borrowernotes | html %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
                                                     <td data-order="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</td>
@@ -320,6 +332,7 @@
                                                 [% CASE 'opacnote' %]<span>OPAC note:</span>
                                                 [% CASE 'debarred' %]<span>Restriction expiration:</span>
                                                 [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
+                                                [% CASE 'password_expiration_date' %]<span>Password expiration date:</span>
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
