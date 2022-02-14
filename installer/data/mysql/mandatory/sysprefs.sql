@@ -390,6 +390,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacAddMastheadLibraryPulldown','0','','Adds a pulldown menu to select the library to search on the opac masthead.','YesNo'),
 ('OpacAdvSearchMoreOptions','pubdate,itemtype,language,subtype,sorting,location','Show search options for the expanded view (More options)','pubdate|itemtype|language|subtype|sorting|location','multiple'),
 ('OpacAdvSearchOptions','pubdate,itemtype,language,sorting,location','Show search options','pubdate|itemtype|language|subtype|sorting|location','multiple'),
+('OpacAdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields are available as limits on the OPAC advanced search page','Choice'),
 ('OPACAllowHoldDateInFuture','0','','If set, along with the AllowHoldDateInFuture system preference, OPAC users can set the date of a hold to be in the future.','YesNo'),
 ('OpacAllowPublicListCreation','1',NULL,'If set, allows opac users to create public lists','YesNo'),
 ('OpacAllowSharingPrivateLists','0',NULL,'If set, allows opac users to share private lists with other patrons','YesNo'),

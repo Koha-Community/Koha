@@ -25,8 +25,8 @@
                             </select></li>
                 [% END %]
 
-                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') %]
-                [% IF AdvancedSearchTypes.grep('^itemtypes$').size %]
+                [% OpacAdvancedSearchTypes = Koha.Preference('OpacAdvancedSearchTypes').split('\|') %]
+                [% IF OpacAdvancedSearchTypes.grep('^itemtypes$').size %]
                     <li>
                         <label for="itemtype">Limit to: </label>
                         <select name="itemtype" id="itemtype">
@@ -44,7 +44,7 @@
                     </li>
                 [% END %]
 
-                [% IF AdvancedSearchTypes.grep('^ccode$').size %]
+                [% IF OpacAdvancedSearchTypes.grep('^ccode$').size %]
                     <li>
                         <label for="ccode">Limit to:</label>
                         <select name="ccode" id="ccode">

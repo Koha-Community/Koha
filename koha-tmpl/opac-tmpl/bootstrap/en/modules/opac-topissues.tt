@@ -65,9 +65,10 @@
                 <div class="col-10 order-first order-md-first order-lg-2">
                     <div id="topissues" class="maincontent">
 
-                        <h1>Top issues</h1>
+                        <h1>Most popular</h1>
 
                         [% IF ( results ) %]
+                            [% OpacAdvancedSearchTypes = Koha.Preference('OpacAdvancedSearchTypes').split('\|') %]
                             <table id="topissuest" class="table table-bordered table-striped">
                                 <caption>
                                     The [% limit | html %] most checked-out
@@ -87,7 +88,8 @@
                                 <thead>
                                     <tr>
                                         <th class="anti-the">Title</th>
-                                        <th>[% IF ( ccodesearch ) %]Collection[% ELSE %]Item type[% END %]</th>
+                                        <th>Item type</th>
+                                        <th>Collection</th>
                                         <th>Checkouts</th>
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                             <th class="NoSort">&nbsp;</th>
@@ -110,13 +112,12 @@
                                                     [% IF ( result.item('size') ) %][% result.item('size') | html %][% END %]</p>
                                             </td>
                                             <td>
-                                                [% IF Koha.Preference('AdvancedSearchTypes') == 'ccode' %]
-                                                    <span class="tdlabel">Collection</span>
-                                                    [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
-                                                [% ELSE %]
-                                                    <span class="tdlabel">Item type</span>
-                                                    [% ItemTypes.GetDescription(result.itemtype) | html %]
-                                                [% END %]
+                                                <span class="tdlabel">Item type</span>
+                                                [% ItemTypes.GetDescription(result.itemtype) | html %]
+                                            </td>
+                                            <td>
+                                                <span class="tdlabel">Collection</span>
+                                                [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
                                             </td>
                                             <td data-order="[% result.count | html %]">
                                                 <span class="tdlabel">Checkouts: </span>
@@ -150,7 +151,7 @@
     <script>
         $(function() {
             $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sorting": [[2, "desc"]],
+                "sorting": [[3, "desc"]],
                 "columnDefs": [
                     { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
                     { "type": "anti-the", "targets" : [ "anti-the" ] }

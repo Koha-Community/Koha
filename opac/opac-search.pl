@@ -239,7 +239,7 @@ foreach my $itemtype ( keys %{$itemtypes} ) {
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
 my $cnt;
-my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
+my $advanced_search_types = C4::Context->preference("OpacAdvancedSearchTypes") || "itemtypes";
 my @advanced_search_types = split(/\|/, $advanced_search_types);
 
 my $hidingrules = C4::Context->yaml_preference('OpacHiddenItems') // {};

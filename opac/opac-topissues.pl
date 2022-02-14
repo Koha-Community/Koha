@@ -64,7 +64,7 @@ if (!$do_it && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
 }
 my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
-my $advanced_search_types = C4::Context->preference('AdvancedSearchTypes');
+my $advanced_search_types = C4::Context->preference('OpacAdvancedSearchTypes');
 my @advanced_search_types = split /\|/, $advanced_search_types;
 
 my $params = {
