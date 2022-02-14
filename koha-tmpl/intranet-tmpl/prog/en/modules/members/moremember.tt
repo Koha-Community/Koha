@@ -448,6 +448,16 @@
                                                 <i class="fa fa-exclamation-circle problem" aria-hidden="true"></i> <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a>
                                             [% END %]
                                         </li>
+                                        [% IF CAN_user_superlibrarian %]
+                                            <li id="patron-password_expiration_date">
+                                                <span class="label">Password expires:</span>
+                                                [% IF ( patron.password_expiration_date ) %]
+                                                    [% patron.password_expiration_date | $KohaDates %]
+                                                [% ELSE %]
+                                                    Never
+                                                [% END %]
+                                            </li>
+                                        [% END %]
 
                                         [% IF ( patron.borrowernotes ) %]
                                             <li id="patron-borrowernotes">

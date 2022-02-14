@@ -176,6 +176,9 @@ legend:hover {
                                     [% IF ( ERROR_password_mismatch ) %]
                                         <li id="ERROR_password_mismatch">Passwords do not match.</li>
                                     [% END %]
+                                    [% IF ( ERROR_password_expiration_date ) %]
+                                        <li id="ERROR_dateexpiry">Password expiration date is invalid.</li>
+                                    [% END %]
                                     [% IF ( ERROR_extended_unique_id_failed ) %]
                                         <li id="ERROR_extended_unique_id_failed"><strong>[% ERROR_extended_unique_id_failed_description | html %]:</strong> Attribute value "[% ERROR_extended_unique_id_failed_value | html %]" is already in use by another patron record.</li>
                                     [% END %]
@@ -1129,7 +1132,7 @@ legend:hover {
                                     </fieldset> <!-- /#memberentry_subscription -->
                                 [% END # hide fieldset %]
 
-                                [% UNLESS nouserid && nopassword %]
+                                [% UNLESS nouserid && nopassword && !CanUpdatePasswordExpiration %]
                                     <fieldset class="rows" id="memberentry_userid">
                                         <legend id="opac_staff_login_lgd">OPAC/Staff interface login</legend>
                                         <ol>
@@ -1274,9 +1277,15 @@ legend:hover {
                                                     [% END %]
                                                 </li>
                                             [% END # /UNLESS nopassword %]
+                                            [% UNLESS ( !CanUpdatePasswordExpiration ) %]
+                                                <li>
+                                                    <label for="password_expiration_date">Password expiration date:</label>
+                                                    <input type="text" id="password_expiration_date" name="password_expiration_date" maxlength="10" size="10" value="[% password_expiration_date | html %]" class="flatpickr" />
+                                                </li>
+                                            [% END %]
                                         </ol>
                                     </fieldset> <!-- /#memberentry_userid -->
-                                [% END # UNLESS nouserid && nopassword %]
+                                [% END # UNLESS nouserid && nopassword && !CanUpdatePasswordExpiration %]
 
                                 <!--this zones are not necessary in modif mode -->
                                 [% UNLESS ( opadd || opduplicate ) %]

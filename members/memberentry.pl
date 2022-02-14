@@ -92,6 +92,7 @@ my @errors;
 my $borrower_data;
 my $NoUpdateLogin;
 my $NoUpdateEmail;
+my $CanUpdatePasswordExpiration;
 my $userenv = C4::Context->userenv;
 my @messages;
 
@@ -166,6 +167,9 @@ if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
     if ( $patron->is_superlibrarian && !$logged_in_user->is_superlibrarian ) {
         $NoUpdateEmail = 1;
     }
+    if ($logged_in_user->is_superlibrarian) {
+        $CanUpdatePasswordExpiration = 1;
+    }
 
     $borrower_data = $patron->unblessed;
     $borrower_data->{category_type} = $patron->category->category_type;
@@ -194,7 +198,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         }
     }
 
-    foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+    foreach (qw(dateenrolled dateexpiry dateofbirth password_expiration_date)) {
         next unless exists $newdata{$_};
         my $userdate = $newdata{$_} or next;
 
@@ -244,6 +248,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^delete_guarantor$/,
     );
     push @keys_to_delete, map { qr/^$_$/ } split( /\s*\|\s*/, C4::Context->preference('BorrowerUnwantedField') || q{} );
+    push @keys_to_delete, qr/^password_expiration_date$/ unless $CanUpdatePasswordExpiration;
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
             delete($newdata{$_}) if /$regexp/;
@@ -792,7 +797,7 @@ if (C4::Context->preference('uppercasesurnames')) {
     $data{'contactname'} &&= uc( $data{'contactname'} );
 }
 
-foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+foreach (qw(dateenrolled dateexpiry dateofbirth password_expiration_date)) {
     if ( $data{$_} ) {
        $data{$_} = eval { output_pref({ dt => dt_from_string( $data{$_} ), dateonly => 1 } ); };  # back to syspref for display
     }
@@ -839,6 +844,7 @@ $template->param(
   nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin,
   NoUpdateEmail =>  $NoUpdateEmail,
+  CanUpdatePasswordExpiration => $CanUpdatePasswordExpiration,
   );
 
 # Generate CSRF token
