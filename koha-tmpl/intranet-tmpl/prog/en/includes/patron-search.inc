@@ -609,6 +609,7 @@
                 "pageLength": [% Koha.Preference('PatronsPerPage') | html %],
                 [% IF sticky_header %]
                 "initComplete": function(settings, json) {
+                    $("#[% sticky_header %]").show();
                     Sticky = $("#[% sticky_header | html %]");
                     Sticky.hcSticky({
                         stickTo: "#[% sticky_to | html %]",
