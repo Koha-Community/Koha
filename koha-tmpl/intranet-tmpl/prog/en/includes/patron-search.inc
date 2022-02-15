@@ -202,6 +202,7 @@
 [%# actions: list of buttons to display in the action column. Possible values are: 'select', 'add', 'edit', 'checkout' %]
 [%# sticky_header and sticky_to: If we need a sticky header %]
 [%# callback: name of the JS function that will be called when a patron is selected. Only work with action=select %]
+[%# display_search_description: boolean, default off. Display the description of the search %]
 [% BLOCK patron_search_js %]
 
     [% IF redirect_if_one_result && !redirect_url %]
@@ -720,7 +721,9 @@
             table_dt.search("");
             first_draw = 1; // Only redirect if we are coming from here
             table_dt.draw();
-            update_search_description();
+            [% IF display_search_description %]
+                update_search_description();
+            [% END %]
             return false;
         }
 
@@ -734,7 +737,9 @@
             /* remove any search string added by firstletter search */
             history.pushState( {}, null, window.location.href.split("?" )[0]);
             $("#[% table_id | html %]_search_results").hide();
-            update_search_description();
+            [% IF display_search_description %]
+                update_search_description();
+            [% END %]
         }
 
         // User has clicked on a letter
@@ -748,7 +753,9 @@
             }
 
             patrons_table.DataTable().draw();
-            update_search_description();
+            [% IF display_search_description %]
+                update_search_description();
+            [% END %]
         }
 
         // modify parent window owner element
