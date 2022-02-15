@@ -193,7 +193,7 @@ my $holds = Koha::Holds->search(
 my @biblionumbers = $holds->get_column('biblionumber');
 
 my $all_items;
-foreach my $item ( $holds->get_items_that_can_fill ) {
+foreach my $item ( $holds->get_items_that_can_fill->as_list ) {
     push @{$all_items->{$item->biblionumber}}, $item;
 }
 
