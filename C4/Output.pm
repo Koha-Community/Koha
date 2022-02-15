@@ -108,7 +108,7 @@ sub pagination_bar {
 	$base_url =~ s/$delim$//;		# remove trailing delim
 
     my $url = $base_url . (($base_url =~ m/$delim/ or $base_url =~ m/\?/) ? '&amp;' : '?' ) . $startfrom_name . '=';
-    my $url_suffix;
+    my $url_suffix = '';
     while ( my ( $k, $v ) = each %$additional_parameters ) {
         $url_suffix .= '&amp;' . URI::Escape::uri_escape_utf8($k) . '=' . URI::Escape::uri_escape_utf8($v);
     }
