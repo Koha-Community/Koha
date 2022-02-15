@@ -238,7 +238,7 @@
                     [% END %]
 
                     [% IF ( SyndeticsCovers ) %]
-                        [% IF ( nomarlized_isbn || normalized_upc || normalized_oclc ) %]
+                        [% IF ( content_identifier_exists ) %]
                         <div class="cover-image" id="syndetics-bookcoverimg">
                             <a title="Syndetics cover image">
                                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% Koha.Preference('SyndeticsCoverImageSize') | html %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" alt="" class="thumbnail" />

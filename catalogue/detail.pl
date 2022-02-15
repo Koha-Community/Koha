@@ -138,12 +138,17 @@ my $upc = GetNormalizedUPC($record,$marcflavour);
 my $ean = GetNormalizedEAN($record,$marcflavour);
 my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
 my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+my $content_identifier_exists;
+if ( $isbn or $ean or $oclc or $upc ) {
+    $content_identifier_exists = 1;
+}
 
 $template->param(
     normalized_upc => $upc,
     normalized_ean => $ean,
     normalized_oclc => $oclc,
     normalized_isbn => $isbn,
+    content_identifier_exists =>  $content_identifier_exists,
 );
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
