@@ -3948,7 +3948,7 @@ sub ProcessOfflineIssue {
             $patron->unblessed,
             $operation->{'barcode'},
             undef,
-            1,
+            undef,
             $operation->{timestamp},
             undef,
         );
