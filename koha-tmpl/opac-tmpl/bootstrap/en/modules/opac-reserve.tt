@@ -283,7 +283,7 @@
                                                 [% IF ( reserve_in_future ) %]
                                                     <li>
                                                         <label for="from[% bibitemloo.biblionumber | html %]">Hold starts on date:</label>
-                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr" />
+                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr holddatefrom" />
                                                         <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                     </li>
                                                 [% END %]
@@ -498,6 +498,7 @@
 [% INCLUDE 'datatables.inc' %]
 <script>
     var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
+    var MSG_EMPTY_DATE = _("Date should be filled.");
 
     $(document).ready(function() {
 
@@ -513,7 +514,12 @@
 
         $(".toggle-hold-options").show();
         $(".hold-options").hide();
-        $(".holddatefrom,.holddateto").prop("readOnly", true);
+        var OPACMandatoryHoldDates = "[% Koha.Preference('OPACMandatoryHoldDates') | html %]";
+        if( OPACMandatoryHoldDates ) {
+            if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) $(".holddatefrom").prop( 'required', true );
+            if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) $(".futuredate").prop( 'required', true );
+        }
+        $(".holddatefrom,.futuredate").prop("readOnly", true);
 
         $(".checkitem").parent().click(function(e){
             if(e.target.tagName.toLowerCase() == 'td'){
@@ -541,13 +547,15 @@
                 toggleLink.text($(this).is(':visible') ? _("Hide options") : _("Show more options"));
             });
         });
+        if( $(".holddatefrom").prop('required') || $(".futuredate").prop('required') ) $(".toggle-hold-options").click();
 
         // Hides all 'specific copy' table rows on load.
         $(".copiesrow").hide();
 
         [% FOREACH bibitemloo IN bibitemloop %]
           [% IF bibitemloo.force_hold %]
-            $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").click();
+            if( $("#to[% bibitemloo.biblionumber | html %]:hidden").length )
+                $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").click();
             $("#reqspecific_[% bibitemloo.biblionumber | html %]").click();
             $("#copiesrow_[% bibitemloo.biblionumber | html %]").show();
           [% END %]
@@ -650,6 +658,20 @@
                     if( !$("#hold-options-"+biblioNum).is(':visible')) {
                         $("#toggle-hold-options-"+biblioNum).click();
                     }
+                }
+
+                if( $(".holddatefrom").prop('required') && $("#from"+ biblioNum).val() == '' ) {
+                    alert(MSG_EMPTY_DATE);
+                    badBib = biblioNum;
+                    if( $("#from"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
+                    $("#from"+ biblioNum).focus();
+                    return false;
+                } else if( $(".futuredate").prop('required') && $("#to"+ biblioNum).val() == '' ) {
+                    alert(MSG_EMPTY_DATE);
+                    badBib = biblioNum;
+                    if( $("#to"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
+                    $("#to"+ biblioNum).focus();
+                    return false;
                 }
 
                 // If the 'specific copy' radio button is checked
