@@ -302,7 +302,7 @@ KOHA.OverDriveCirculation = new function() {
                     if( confirm( __("Are you sure you want to return this item?") ) ) {
                         item_action({action: "return", id: id}, el, copies_available + 1);
                     }
-                }) );
+                }, "checkin") );
 
                 return item;
             }
@@ -343,12 +343,12 @@ KOHA.OverDriveCirculation = new function() {
                             }
                         });
                     }
-                }) );
+                }, "checkout") );
             }
             else if (!item) {
                 $(el).append( ajax_button( __("Place hold"), function() {
                     item_action({action: "place-hold", id: id}, el, copies_available);
-                }) );
+                }, "placehold") );
             }
 
             if (item) {
@@ -356,27 +356,28 @@ KOHA.OverDriveCirculation = new function() {
                     if( confirm( __("Are you sure you want to cancel this hold?") ) ) {
                         item_action({action: "remove-hold", id: id}, el, copies_available);
                     }
-                }) );
+                }, "cancelhold") );
             }
             return item;
         }
     }
 
-    function ajax_button(label, on_click) {
+    function ajax_button(label, on_click, uniqueName) {
         var button = $('<a href="#">')
             .click(function(e) {
                 e.preventDefault();
                 on_click();
             });
-        decorate_button(button, label);
+        decorate_button(button, label, uniqueName);
         return button;
     }
 
-    function decorate_button(button, label) {
+    function decorate_button(button, label, uniqueName) {
         $(button)
             .addClass("btn btn-primary btn-sm")
             .css("color","white")
-            .text(label);
+            .text(label)
+            .addClass(uniqueName);
     }
 
     function checkout_format(el, id, formats, copies_available) {
