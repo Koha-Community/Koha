@@ -102,10 +102,11 @@ subtest 'Search patrons' => sub {
     is( scalar @adv_options, 12, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
     is( scalar @filter_options, 12, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
     C4::Context->set_preference('DefaultPatronSearchFields',"");
-    $s->fill_form( { searchmember_filter => 'test_patron' } );
+    $s->fill_form( { search_patron_filter => 'test_patron' } );
     $s->submit_form;
     my $first_patron = $patrons[0];
 
+    $s->wait_for_datatable_visible('//table[@id="memberresultst"]');
     my @td = $driver->find_elements('//table[@id="memberresultst"]/tbody/tr/td');
     like ($td[2]->get_text, qr[\Q$firstname\E],
         'Column "Name" should be the 3rd and contain the firstname correctly filtered'
@@ -116,7 +117,7 @@ subtest 'Search patrons' => sub {
     like ($td[2]->get_text, qr[\Q$email\E],
         'Column "Name" should be the 3rd and contain the email address correctly filtered'
     );
-    is( $td[5]->get_text, $branchname,
+    is( $td[4]->get_text, $branchname,
         'Column "Library" should be the 6th and contain the html tags - they have been html filtered'
     );
     is( $td[9]->get_text, $borrowernotes_displayed,

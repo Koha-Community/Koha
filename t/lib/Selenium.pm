@@ -193,6 +193,25 @@ sub wait_for_element_visible {
     return $elt;
 }
 
+sub wait_for_datatable_visible {
+    my ( $self, $xpath_selector ) = @_;
+
+    my ($visible, $elt);
+    $self->remove_error_handler;
+    my $max_retries = $self->max_retries;
+    my $i;
+    while ( not $visible ) {
+        $elt = eval {$self->driver->find_element($xpath_selector . '//td[class="dataTables_empty"]')};
+        $visible = $elt && $elt->get_text ne 'No data available in table';
+        $self->driver->pause(1000) unless $visible;
+
+        die "Cannot wait more for element '$xpath_selector' to be visible"
+            if $max_retries <= ++$i
+    }
+    $self->add_error_handler;
+    return $elt;
+}
+
 sub show_all_entries {
     my ( $self, $xpath_selector ) = @_;
 
