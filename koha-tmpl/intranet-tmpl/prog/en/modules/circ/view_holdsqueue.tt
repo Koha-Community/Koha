@@ -199,7 +199,7 @@
                  <p>[% itemsloo.patron.phone | html %]</p>
               [% END %]
             </td>
-            <td class="hq-patron-category">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
+            <td class="hq-patroncategory">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
             <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
             <td class="hq-date" data-order="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</td>
             <td class="hq-notes">[% itemsloo.notes | html %]</td>
