@@ -20,6 +20,7 @@
 [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
 [% CoceProviders   = Koha.Preference('CoceProviders') %]
 [% CoceHost        = Koha.Preference('CoceHost') %]
+[% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
@@ -416,7 +417,7 @@
                                 <!-- TABLE RESULTS START -->
                                 <table>
                                     <tr>
-                                        [% IF ( AmazonCoverImages  || LocalCoverImages || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                                        [% IF ( AmazonCoverImages  || LocalCoverImages || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
                                             <th>&nbsp;</th>
                                         [% END %]
                                         <th colspan="2">Results</th>
@@ -426,7 +427,7 @@
                                     [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr id="row[% SEARCH_RESULT.biblionumber | html %]">
-                                            [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                                            [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
     <td class="bookcoverimg">
         <div id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]" class="cover-slides" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]">
             [% IF ( LocalCoverImages ) %][% SEARCH_RESULT.localimage | html %]
@@ -446,6 +447,17 @@
                     <div class="hint">Amazon cover image</div>
                 </div>
             [% END # /IF AmazonCoverImages %]
+
+            [% IF ( SyndeticsCovers ) %]
+                    [% IF ( SEARCH_RESULT.normalized_isbn || SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_oclc ) %]
+                        <div id="syndetics-bookcoverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image syndetics-bookcoverimg">
+                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="Cover from Syndetics" />
+                            </a>
+                            <div class="hint">Syndetics cover image</div>
+                        </div>
+                    [% END %]
+            [% END %]
 
             [% IF ( IntranetCoce && CoceProviders && SEARCH_RESULT.normalized_isbn ) %]
                 [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]

@@ -90,6 +90,7 @@
 [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
 [% CoceProviders   = Koha.Preference('CoceProviders') %]
 [% CoceHost        = Koha.Preference('CoceHost') %]
+[% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
 [% INCLUDE 'cat-toolbar.inc' %]
     [% IF decoding_error %]
@@ -110,7 +111,7 @@
         <span class="Z3988" title="[% ocoins | html %]"></span>
     [% END %]
 
-    [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+    [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
         <div id="catalogue_detail_biblio" class="col-xs-9">
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
@@ -198,7 +199,7 @@
             </span>
         [% END %]
 
-        [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+        [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
             </div>
             <div class="col-xs-3 bookcoverimg">
                 <div id="biblio-cover-slider" class="cover-slider">
@@ -234,6 +235,19 @@
                             [% END %]
                             <div class="hint">Image from Coce</div>
                         </div>
+                    [% END %]
+
+                    [% IF ( SyndeticsCovers ) %]
+                        [% IF ( nomarlized_isbn || normalized_upc || normalized_oclc ) %]
+                        <div class="cover-image" id="syndetics-bookcoverimg">
+                            <a title="Syndetics cover image">
+                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% Koha.Preference('SyndeticsCoverImageSize') | html %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" alt="" class="thumbnail" />
+                            </a>
+                            <div class="hint">Image from Syndetics</div>
+                        </div>
+                            [% ELSE %]
+                                <span class="no-image">No cover image available</span>
+                            [% END %]
                     [% END %]
 
                     [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
