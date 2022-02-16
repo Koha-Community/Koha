@@ -66,7 +66,7 @@ __PACKAGE__->table("marc_tag_structure");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 32
 
 =head2 ind1_defaultvalue
 
@@ -105,7 +105,7 @@ __PACKAGE__->add_columns(
   "important",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "authorised_value",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "ind1_defaultvalue",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 1 },
   "ind2_defaultvalue",
@@ -129,8 +129,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("frameworkcode", "tagfield");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-11 14:36:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JdpVv7CUrY61kqmMYDE4AA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-16 16:57:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MZlGsvvcvLq5SasLbauVEA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

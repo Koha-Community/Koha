@@ -54,7 +54,7 @@ name of the field
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 16
+  size: 32
 
 is an authorised value category
 
@@ -85,7 +85,7 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "authorised_value_category",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 16 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
   "marcfield",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 16 },
   "searchable",
@@ -138,8 +138,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KwAIcvo1IWRRRb/Mb9LyRA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-16 16:57:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/hpm2ou6a0Tu6yE+7PhE1A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

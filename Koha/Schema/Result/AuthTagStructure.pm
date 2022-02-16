@@ -68,7 +68,7 @@ __PACKAGE__->table("auth_tag_structure");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 32
 
 =cut
 
@@ -92,7 +92,7 @@ __PACKAGE__->add_columns(
   "mandatory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "authorised_value",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -127,8 +127,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4ulaQnDuxrwYgCKJ/Qygaw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-16 16:57:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FqxLmKX4tpdya3dhYUYg6Q
 
 sub koha_object_class {
     'Koha::Authority::Tag';

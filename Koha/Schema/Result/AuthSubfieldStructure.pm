@@ -80,7 +80,7 @@ __PACKAGE__->table("auth_subfield_structure");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 32
 
 =head2 value_builder
 
@@ -162,7 +162,7 @@ __PACKAGE__->add_columns(
   "tab",
   { data_type => "tinyint", is_nullable => 1 },
   "authorised_value",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "value_builder",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "seealso",
@@ -217,8 +217,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-12-10 09:06:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QaSzsLBl3m/n+8u8nXuOeQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-16 16:57:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rZCuihl1vlF7boQHi/iUXQ
 
 sub koha_object_class {
     'Koha::Authority::Subfield';
