@@ -52,7 +52,8 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 17;
+
+        plan tests => 19;
 
         $schema->storage->txn_begin;
 
@@ -89,6 +90,11 @@ subtest 'list() tests' => sub {
           ->json_has('/0/restricted')
           ->json_is( '/0/restricted' => Mojo::JSON->true )
           ->json_hasnt('/1');
+
+        $t->get_ok( "//$userid:$password@/api/v1/patrons?"
+              . 'q={"extended_attributes.type":"CODE"}' =>
+              { 'x-koha-embed' => 'extended_attributes' } )
+          ->status_is( 200, "Works, doesn't explode" );
 
         subtest 'searching date and date-time fields' => sub {
 
