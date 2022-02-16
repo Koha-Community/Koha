@@ -240,7 +240,7 @@
                     [% IF ( SyndeticsCovers ) %]
                         [% IF ( content_identifier_exists ) %]
                         <div class="cover-image" id="syndetics-bookcoverimg">
-                            <a title="Syndetics cover image">
+                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" title="Syndetics cover image">
                                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% Koha.Preference('SyndeticsCoverImageSize') | html %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" alt="" class="thumbnail" />
                             </a>
                             <div class="hint">Image from Syndetics</div>
@@ -1100,7 +1100,10 @@ Note that permanent location is a code, and location may be an authval.
                                 } else {
                                     lightbox_descriptions.push("Custom cover image");
                                 }
-                            } else if( div.attr("id") == "coce-coverimg" ){
+                            } else if ( div.attr("id") == "syndetics-bookcoverimg" ){
+                                    lightbox_descriptions.push(_("Syndetics cover image (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            }
+                            else if( div.attr("id") == "coce-coverimg" ){
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;
                                 if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
