@@ -593,7 +593,6 @@ sub execute_query {
 
     $dbh->do( 'UPDATE saved_sql SET last_run = NOW() WHERE id = ?', undef, $report_id ) if $report_id;
 
-    $sql = "-- saved_sql.id=$report_id\n" . $sql;
     my $sth = $dbh->prepare($sql);
     eval {
         $sth->execute(@$sql_params, $offset, $limit);
