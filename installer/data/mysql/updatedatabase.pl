@@ -24581,6 +24581,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 21.05.10 release" );
 }
 
+$DBversion = '21.05.10.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|ALTER TABLE additional_fields CHANGE authorised_value_category authorised_value_category varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''|);
+    $dbh->do(q|ALTER TABLE auth_subfield_structure CHANGE authorised_value authorised_value varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL|);
+    $dbh->do(q|ALTER TABLE auth_tag_structure CHANGE authorised_value authorised_value varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL|);
+    $dbh->do(q|ALTER TABLE club_template_enrollment_fields CHANGE authorised_value_category authorised_value_category varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL|);
+    $dbh->do(q|ALTER TABLE club_template_fields CHANGE authorised_value_category authorised_value_category varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL|);
+    $dbh->do(q|ALTER TABLE marc_tag_structure CHANGE authorised_value authorised_value varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL|);
+    NewVersion( $DBversion, 29336, "Resize authorised value category fields to 32 chars");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
