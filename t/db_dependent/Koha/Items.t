@@ -351,7 +351,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, undef, 'No LOST_FOUND account line added' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 0, 'No LOST_FOUND account line added' );
 
             $lost_fee_line->discard_changes;    # reload from DB
             is( $lost_fee_line->amountoutstanding + 0,
@@ -434,7 +434,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -524,7 +524,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -704,7 +704,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -842,7 +842,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
 
             my $credit_return = Koha::Account::Lines->search(
                 {
@@ -917,7 +917,7 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, undef, 'No refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 0, 'No refund triggered' );
 
         };
 
@@ -1009,8 +1009,8 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
-            is( $item->{_restored}, undef, 'Restore not triggered when there is no overdue fine found' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 0, 'Restore not triggered when there is no overdue fine found' );
         };
 
         subtest 'restore fine | unforgiven overdue' => sub {
@@ -1116,8 +1116,8 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
-            is( $item->{_restored}, undef, 'Restore not triggered when overdue was not forgiven' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 0, 'Restore not triggered when overdue was not forgiven' );
             $overdue->discard_changes;
             is( $overdue->status, 'FOUND',
                 'Overdue status updated to FOUND' );
@@ -1240,8 +1240,8 @@ subtest 'store' => sub {
 
             # Simulate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'Refund triggered' );
-            is( $item->{_restored}, 1, 'Restore triggered when overdue was forgiven' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_restored' } @{$item->object_messages} ), 1, 'Restore triggered when overdue was forgiven' );
             $overdue->discard_changes;
             is( $overdue->status, 'FOUND', 'Overdue status updated to FOUND' );
             is( $overdue->amountoutstanding, $overdue->amount, 'Overdue outstanding has been restored' );
@@ -1292,7 +1292,7 @@ subtest 'store' => sub {
 
             # Simluate item marked as found
             $item->itemlost(0)->store;
-            is( $item->{_refunded}, 1, 'No refund triggered' );
+            is( scalar ( grep { $_->message eq 'lost_refunded' } @{$item->object_messages} ), 1, 'Refund triggered' );
 
         };
     };
