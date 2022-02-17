@@ -102,6 +102,8 @@
     x-koha-authorization:
       permissions:
         acquisition: budget_modify
+    x-koha-embed:
+      - extended_attributes
 /acquisitions/funds/users:
   get:
     x-mojo-to: Acquisitions::Funds#list_users
@@ -145,3 +147,5 @@
     x-koha-authorization:
       permissions:
         acquisition: budget_modify
+    x-koha-embed:
+      - extended_attributes
