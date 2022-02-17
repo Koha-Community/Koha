@@ -182,6 +182,8 @@
                     ];
                 },
             };
+            [% SET default_sort_column = "name" %]
+            [% SET order_column_index = 0 %]
             patrons_table = $("#memberresultst").kohaTable({
                 "ajax": {
                     [% SWITCH filter %]
@@ -198,10 +200,12 @@
                     [% END %]
                 },
                 embed: ['extended_attributes'],
-                "order": [[ 1, "asc" ]],
                 "iDeferLoading": 0,
                 "columns": [
                     [% FOR column IN columns %]
+                        [% IF default_sort_column == column %]
+                            [% order_column_index = loop.count - 1%]
+                        [% END %]
                         [% SWITCH column %]
                             [% CASE 'cardnumber' %]
                             {
@@ -289,6 +293,7 @@
                         [% UNLESS loop.last %],[% END %]
                     [% END %]
                 ],
+                "order": [[ [% order_column_index %], "asc" ]],
                 'bAutoWidth': false,
                 'sPaginationType': 'full_numbers',
                 "iDisplayLength": [% Koha.Preference('PatronsPerPage') | html %],
