@@ -23757,6 +23757,17 @@ if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "29457", "WARNING: You may have some incorrect manager_id's recorded against account cancellation lines, please see bugzilla for details. NOTE: You may already have this bugfix applied at an earlier upgrade.");
 }
 
+$DBversion = '20.11.14.002';
+if ( CheckVersion( $DBversion ) ) {
+    if ( foreign_key_exists( 'return_claims', 'issue_id' ) ) {
+        $dbh->do(q{
+            ALTER TABLE return_claims DROP FOREIGN KEY issue_id
+        });
+    }
+
+    NewVersion( $DBversion, 29495, "Issue link is lost in return claims when using 'MarkLostItemsAsReturned'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
