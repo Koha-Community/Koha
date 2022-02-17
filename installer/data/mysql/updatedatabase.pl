@@ -24592,6 +24592,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 29336, "Resize authorised value category fields to 32 chars");
 }
 
+$DBversion = '21.05.10.002'; # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    if ( foreign_key_exists( 'return_claims', 'issue_id' ) ) {
+        $dbh->do(q{
+            ALTER TABLE return_claims DROP FOREIGN KEY issue_id
+        });
+    }
+
+    NewVersion( $DBversion, 29495, "Issue link is lost in return claims when using 'MarkLostItemsAsReturned'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
