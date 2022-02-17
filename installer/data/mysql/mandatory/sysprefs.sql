@@ -438,6 +438,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACLocalCoverImages','0','1','Display local cover images on OPAC search and details pages.','YesNo'),
 ('OpacLocationBranchToDisplay','holding','holding|home|both','In the OPAC, under location show which branch for Location in the record details.','Choice'),
 ('OpacLocationOnDetail','holding','holding|home|both|column','In the OPAC detail, display the shelving location on its own column or under a library columns.',  'Choice'),
+('OPACMandatoryHoldDates', '', '|start|end|both', 'Define which hold dates are required on OPAC reserve form', 'Choice'),
 ('OpacMaintenance','0','','If ON, enables maintenance warning in OPAC','YesNo'),
 ('OpacMaintenanceNotice','','','A user-defined block of HTML to appear on screen when OpacMaintenace is enabled','Textarea'),
 ('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer'),
