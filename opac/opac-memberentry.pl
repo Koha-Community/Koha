@@ -190,6 +190,7 @@ if ( $action eq 'create' ) {
             $borrower{password}          = Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode})) unless $borrower{password};
             $borrower{verification_token} = $verification_token;
 
+            $borrower{extended_attributes} = to_json($attributes);
             Koha::Patron::Modification->new( \%borrower )->store();
 
             #Send verification email

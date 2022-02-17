@@ -67,12 +67,19 @@ if (
     delete $patron_attrs->{timestamp};
     delete $patron_attrs->{verification_token};
     delete $patron_attrs->{changed_fields};
+    delete $patron_attrs->{extended_attributes};
     my $patron = Koha::Patron->new( $patron_attrs )->store;
 
     Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
 
     if ($patron) {
-        $m->delete();
+        if( $m->extended_attributes ){
+            $m->borrowernumber( $patron->borrowernumber);
+            $m->changed_fields(['extended_attributes']);
+            $m->approve();
+        } else {
+            $m->delete();
+        }
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $patron->plain_text_password );
