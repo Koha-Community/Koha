@@ -566,9 +566,14 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     for (var i=0;i<attributes.length;i++){
                                         var part = {};
                                         var attr = attributes[i];
-                                        part[!attr.includes('.')?'me.'+attr:attr] = options.criteria === 'exact'
+                                        let criteria = options.criteria;
+                                        if ( value.match(/^\^(.*)\$$/) ) {
+                                            value = value.replace(/^\^/, '').replace(/\$$/, '');
+                                            criteria = "exact";
+                                        }
+                                        part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
                                             ? value
-                                            : {like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
+                                            : {like: (['contains', 'ends_with'].indexOf(criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(criteria) !== -1?'%':'')};
                                         parts.push(part);
                                     }
                                     return parts;
@@ -847,10 +852,17 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
                     $( input_type, this ).on( 'keyup change', function () {
                         if ( table_dt.column(i).search() !== this.value ) {
-                            table_dt
-                                .column(i)
-                                .search( this.value )
-                                .draw();
+                            if ( input_type == "input" ) {
+                                table_dt
+                                    .column(i)
+                                    .search( this.value )
+                                    .draw();
+                            } else {
+                                table_dt
+                                    .column(i)
+                                    .search( '^'+this.value+'$', true, false )
+                                    .draw();
+                            }
                         }
                     } );
                 } else {

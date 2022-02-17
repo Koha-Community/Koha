@@ -344,11 +344,11 @@
                 [% CASE 'branch' %]
                     let library_id = $("#branchcode_filter").val();
                     patrons_table.find('thead tr:eq(1) th[data-filter="libraries"] select').val(library_id);
-                    table_dt.column([% loop.count - 1 %]).search(library_id);
+                    table_dt.column([% loop.count - 1 %]).search(library_id ? '^'+library_id+'$' : '');
                 [% CASE 'category' %]
                     let category_id = $("#categorycode_filter").val();
                     patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val(category_id);
-                    table_dt.column([% loop.count - 1 %]).search(category_id);
+                    table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
                 [% END %]
             [% END %]
             table_dt.search("");
