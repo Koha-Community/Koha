@@ -56,7 +56,10 @@ use Koha::Patron::Attribute::Types;
 sub protected_letters {
     my $dbh = C4::Context->dbh;
     my $codes = $dbh->selectall_arrayref(q{SELECT DISTINCT letter_code FROM message_transports});
-    return { map { $_->[0] => 1 } @{$codes} };
+    return {
+        OVERDUE_FINE_DESC => 1,
+        map { $_->[0] => 1 } @{$codes}
+    };
 }
 
 our $input       = CGI->new;

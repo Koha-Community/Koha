@@ -27,13 +27,14 @@ use POSIX qw( ceil floor );
 use Locale::Currency::Format 1.28 qw( currency_format FMT_SYMBOL );
 use Carp qw( carp );
 
-use C4::Context;
 use C4::Accounts;
-use Koha::Logger;
+use C4::Context;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Libraries;
 use Koha::Recalls;
+use Koha::Logger;
+use Koha::Patrons;
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -597,12 +598,18 @@ sub UpdateFine {
         }
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
-            my $sth4 = $dbh->prepare(
-                "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
-            );
-            $sth4->execute($itemnum);
-            my $title = $sth4->fetchrow;
-            my $desc = "$title $due";
+            my $patron = Koha::Patrons->find( $borrowernumber );
+            my $desc = C4::Letters::GetPreparedLetter(
+                module                 => 'circulation',
+                letter_code            => 'OVERDUE_FINE_DESC',
+                message_transport_type => 'print',
+                lang                   => $patron->lang,
+                tables                 => {
+                    issues    => $itemnum,
+                    borrowers => $borrowernumber,
+                    items     => $itemnum,
+                },
+            )->{content};
 
             my $account = Koha::Account->new({ patron_id => $borrowernumber });
             $accountline = $account->add_debit(

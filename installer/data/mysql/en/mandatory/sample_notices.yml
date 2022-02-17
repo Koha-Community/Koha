@@ -1566,6 +1566,17 @@ tables:
             - "[% END %]"
 
         - module: circulation
+          code: OVERDUE_FINE_DESC
+          branchcode: ""
+          name: "Overdue Item Fine Description"
+          is_html: 0
+          title: "Overdue Item Fine Description"
+          message_transport_type: print
+          lang: default
+          content:
+            - "[% item.biblio.title %] [% checkout.date_due | $KohaDates %]"
+
+        - module: circulation
           code: AUTO_RENEWALS_DGST
           branchcode: ""
           name: "Notification on auto renewals"
