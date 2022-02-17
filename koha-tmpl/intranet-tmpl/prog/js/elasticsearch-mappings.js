@@ -84,9 +84,9 @@ $(document).ready(function () {
     });
 
     $("#es_mappings").on("submit", function(e){
-        $("#search_fields_table").DataTable().search('').draw();
-        $("#mapping_biblios_table").DataTable().search('').draw();
-        $("#mapping_authorities_table").DataTable().search('').draw();
+        $("#search_fields_table").DataTable({ paging: false }).search('').draw();
+        $("#mapping_biblios_table").DataTable({ paging: false }).search('').draw();
+        $("#mapping_authorities_table").DataTable({ paging: false }).search('').draw();
         return true;
     });
 });
