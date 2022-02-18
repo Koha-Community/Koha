@@ -173,7 +173,7 @@ if($findclub) {
         my @clubs = Koha::Clubs->search( [
             { name => { like => '%'.$findclub.'%' } },
             { description => { like => '%'.$findclub.'%' } }
-        ] );
+        ] )->as_list;
         if( scalar @clubs == 1 ) {
             $club_hold = $clubs[0]->id;
         } elsif ( @clubs ) {
