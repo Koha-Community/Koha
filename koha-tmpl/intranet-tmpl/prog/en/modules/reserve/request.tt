@@ -1492,7 +1492,7 @@
                 let link;
                 if(cancel_link.data('bulk')) {
                     [% SET data_url = 'biblionumber=' _ biblionumbers.join('&biblionumber=') %]
-                    link = `request.pl?[% data_url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
+                    link = `request.pl?[% data_url | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
                 } else {
                     let borrowernumber = cancel_link.data('borrowernumber');
                     let biblionumber = cancel_link.data('biblionumber');
