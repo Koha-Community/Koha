@@ -75,7 +75,7 @@ subtest 'list() pagination tests' => sub {
 
     t::lib::Mocks::mock_preference( 'RESTdefaultPageSize', 20 );
 
-    my $libraries =
+    my $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)
       ->header_is( 'X-Total-Count', '10' )
       ->header_is( 'X-Base-Total-Count', '10' )
@@ -87,9 +87,9 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 10, '10 libraries retrieved' );
+    is( scalar @{$cities}, 10, '10 cities retrieved' );
 
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities?q={\"name\":{\"-like\":\"\%A\"}}")->status_is(200)
       ->header_is( 'X-Total-Count', '5', 'The resultset has 5 items' )
       ->header_is( 'X-Base-Total-Count', '10', 'The resultset, without the filter, has 10' )
@@ -101,12 +101,12 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=20.*\&_page=1.*|_page=1.*\&_per_page=20.*)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 5, '5 libraries retrieved' );
+    is( scalar @{$cities}, 5, '5 cities retrieved' );
 
     t::lib::Mocks::mock_preference( 'RESTdefaultPageSize', 3 );
 
     # _per_page overrides RESTdefaultPageSize
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=20")
       ->status_is(200)
       ->header_is( 'X-Total-Count', '10' )
@@ -119,10 +119,10 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=20\&_page=1|_page=1\&_per_page=20)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 10, '10 libraries retrieved' );
+    is( scalar @{$cities}, 10, '10 cities retrieved' );
 
     # page 1
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities")->status_is(200)
       ->header_is( 'X-Total-Count', '10' )
       ->header_is( 'X-Base-Total-Count', '10' )
@@ -135,11 +135,11 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=3\&_page=4|_page=4\&_per_page=3)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 3, '3 libraries retrieved' );
+    is( scalar @{$cities}, 3, '3 cities retrieved' );
 
     # This tests X-Base-Total-Count, .* is used for q=, as we don't want
     # to add all combinations to the regex
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=2&_page=2&q={\"name\":{\"-like\":\"\%A\"}}")->status_is(200)
       ->header_is( 'X-Total-Count', '5' )
       ->header_is( 'X-Base-Total-Count', '10' )
@@ -153,10 +153,10 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=2.*\&_page=3.*|_page=3.*\&_per_page=2.*)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 2, '2 libraries retrieved' );
+    is( scalar @{$cities}, 2, '2 cities retrieved' );
 
     # last page, with only one result
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities?_page=4")->status_is(200)
       ->header_is( 'X-Total-Count', '10' )
       ->header_is( 'X-Base-Total-Count', '10' )
@@ -169,9 +169,9 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=3\&_page=4|_page=4\&_per_page=3)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 1, '1 library retrieved' );
+    is( scalar @{$cities}, 1, '1 city retrieved' );
 
-    $libraries =
+    $cities =
       $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=-1")
       ->status_is(200)
       ->header_is( 'X-Total-Count', '10' )
@@ -184,7 +184,7 @@ subtest 'list() pagination tests' => sub {
         qr#(_per_page=-1\&_page=1|_page=1\&_per_page=-1)>\; rel="last"# )
       ->tx->res->json;
 
-    is( scalar @{$libraries}, 10, '10 libraries retrieved, -1 means all' );
+    is( scalar @{$cities}, 10, '10 cities retrieved, -1 means all' );
 
     $schema->storage->txn_rollback;
 };
