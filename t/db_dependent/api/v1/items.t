@@ -144,7 +144,7 @@ subtest 'get() tests' => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -236,6 +236,48 @@ subtest 'pickup_locations() tests' => sub {
           . "/pickup_locations?"
           . "patron_id=" . $patron->id . "&_order_by=marc_org_code" )
       ->json_is( [ $library_1_api, $library_2_api, $library_3_api, $library_5_api ] );
+
+    subtest 'Pagination and AllowHoldPolicyOverride tests' => sub {
+
+        plan tests => 27;
+
+        t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+
+        $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id . "&_order_by=marc_org_code" . "&_per_page=1" )
+          ->json_is( [$library_1_api] )
+          ->header_is( 'X-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+          ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+          ->header_unlike( 'Link', qr|rel="prev"| )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
+
+        $t->get_ok( "//$userid:$password@/api/v1/items/"
+              . $item->id
+              . "/pickup_locations?"
+              . "patron_id="
+              . $patron->id
+              . "&_order_by=marc_org_code"
+              . "&_per_page=1&_page=3" )    # force the needs_override=1 check
+          ->json_is( [$library_3_api] )
+          ->header_is( 'X-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+          ->header_is( 'X-Base-Total-Count', '4', '4 is the count for libraries with pickup_location=1' )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="prev"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1.*)>\; rel="next"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=4.*|_page=4.*\&_per_page=1).*>\; rel="last"# );
+
+        t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+        $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->id . "/pickup_locations?" . "patron_id=" . $patron->id . "&_order_by=marc_org_code" . "&_per_page=1" )
+          ->json_is( [$library_1_api] )
+          ->header_is( 'X-Total-Count', '2' )
+          ->header_is( 'X-Base-Total-Count', '2' )
+          ->header_unlike( 'Link', qr|rel="prev"| )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1.*)>\; rel="next"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=1.*|_page=1.*\&_per_page=1).*>\; rel="first"# )
+          ->header_like( 'Link', qr#(_per_page=1.*\&_page=2.*|_page=2.*\&_per_page=1).*>\; rel="last"# );
+    };
 
     my $deleted_patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $deleted_patron_id = $deleted_patron->id;
