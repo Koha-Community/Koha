@@ -45,75 +45,75 @@ overdue_notices.pl - prepare messages to be sent to patrons for overdue items
 =head1 SYNOPSIS
 
 overdue_notices.pl
-  [ -n ][ -library <branchcode> ][ -library <branchcode> ... ]
-  [ -max <number of days> ][ -csv [<filename>] ][ -itemscontent <field list> ]
-  [ -email <email_type> ... ]
+  [ -n ][ --library <branchcode> ][ --library <branchcode> ... ]
+  [ --max <number of days> ][ --csv [<filename>] ][ --itemscontent <field list> ]
+  [ --email <email_type> ... ]
 
  Options:
-   -help                          Brief help message.
-   -man                           Full documentation.
-   -v                             Verbose mode.
-   -n                             No email will be sent.
-   -max          <days>           Maximum days overdue to deal with.
-   -library      <branchcode>     Only deal with overdues from this library.
-                                  (repeatable : several libraries can be given)
-   -csv          <filename>       Populate CSV file.
-   -html         <directory>      Output html to a file in the given directory.
-   -text         <directory>      Output plain text to a file in the given directory.
-   -itemscontent <list of fields> Item information in templates.
-   -borcat       <categorycode>   Category code that must be included.
-   -borcatout    <categorycode>   Category code that must be excluded.
-   -t                             Only include triggered overdues.
-   --test                         Run in test mode. No changes will be made on the DB.
-   -list-all                      List all overdues.
-   -date         <yyyy-mm-dd>     Emulate overdues run for this date.
-   -email        <email_type>     Type of email that will be used.
-                                  Can be 'email', 'emailpro' or 'B_email'. Repeatable.
-   --frombranch                   Set the from address for the notice to one of 'item-homebranch' or 'item-issuebranch'.
+   --help                          Brief help message.
+   --man                           Full documentation.
+   --verbose | -v                  Verbose mode.
+   --nomail | -n                   No email will be sent.
+   --max          <days>           Maximum days overdue to deal with.
+   --library      <branchcode>     Only deal with overdues from this library.
+                                   (repeatable : several libraries can be given)
+   --csv          <filename>       Populate CSV file.
+   --html         <directory>      Output html to a file in the given directory.
+   --text         <directory>      Output plain text to a file in the given directory.
+   --itemscontent <list of fields> Item information in templates.
+   --borcat       <categorycode>   Category code that must be included.
+   --borcatout    <categorycode>   Category code that must be excluded.
+   --triggered | -t                Only include triggered overdues.
+   --test                          Run in test mode. No changes will be made on the DB.
+   --list-all                      List all overdues.
+   --date         <yyyy-mm-dd>     Emulate overdues run for this date.
+   --email        <email_type>     Type of email that will be used.
+                                   Can be 'email', 'emailpro' or 'B_email'. Repeatable.
+   --frombranch                    Set the from address for the notice to one of 'item-homebranch' or 'item-issuebranch'.
 
 =head1 OPTIONS
 
 =over 8
 
-=item B<-help>
+=item B<--help>
 
 Print a brief help message and exits.
 
-=item B<-man>
+=item B<--man>
 
 Prints the manual page and exits.
 
-=item B<-v>
+=item B<-v> | B<--verbose>
 
 Verbose. Without this flag set, only fatal errors are reported.
 
-=item B<-n>
+=item B<-n> | B<--nomail>
 
 Do not send any email. Overdue notices that would have been sent to
 the patrons or to the admin are printed to standard out. CSV data (if
-the -csv flag is set) is written to standard out or to any csv
+the --csv flag is set) is written to standard out or to any csv
 filename given.
 
-=item B<-max>
+=item B<--max>
 
 Items older than max days are assumed to be handled somewhere else,
 probably the F<longoverdues.pl> script. They are therefore ignored by
 this program. No notices are sent for them, and they are not added to
 any CSV files. Defaults to 90 to match F<longoverdues.pl>.
 
-=item B<-library>
+=item B<--library>
 
 select overdues for one specific library. Use the value in the
 branches.branchcode table. This option can be repeated in order 
 to select overdues for a group of libraries.
 
-=item B<-csv>
+=item B<--csv>
 
 Produces CSV data. if -n (no mail) flag is set, then this CSV data is
 sent to standard out or to a filename if provided. Otherwise, only
 overdues that could not be emailed are sent in CSV format to the admin.
 
-=item B<-html>
+=item B<--html>
 
 Produces html data. If patron does not have an email address or
 -n (no mail) flag is set, an HTML file is generated in the specified
@@ -121,7 +121,7 @@ directory. This can be downloaded or further processed by library staff.
 The file will be called notices-YYYY-MM-DD.html and placed in the directory
 specified.
 
-=item B<-text>
+=item B<--text>
 
 Produces plain text data. If patron does not have an email address or
 -n (no mail) flag is set, a text file is generated in the specified
@@ -129,7 +129,7 @@ directory. This can be downloaded or further processed by library staff.
 The file will be called notices-YYYY-MM-DD.txt and placed in the directory
 specified.
 
-=item B<-itemscontent>
+=item B<--itemscontent>
 
 comma separated list of fields that get substituted into templates in
 places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
@@ -138,11 +138,11 @@ defaults to due date,title,barcode,author
 Other possible values come from fields in the biblios, items and
 issues tables.
 
-=item B<-borcat>
+=item B<--borcat>
 
 Repeatable field, that permits to select only some patron categories.
 
-=item B<-borcatout>
+=item B<--borcatout>
 
 Repeatable field, that permits to exclude some patron categories.
 
@@ -157,24 +157,24 @@ the  cron schedule to ensure proper behavior.
 Add the --triggered option for daily cron, at the risk of no notice 
 being generated if the cron fails to run on time.
 
-=item B<-test>
+=item B<--test>
 
 This option makes the script run in test mode.
 
 In test mode, the script won't make any changes on the DB. This is useful
 for debugging configuration.
 
-=item B<-list-all>
+=item B<--list-all>
 
 Default items.content lists only those items that fall in the 
 range of the currently processing notice.
-Choose list-all to include all overdue items in the list (limited by B<-max> setting).
+Choose --list-all to include all overdue items in the list (limited by B<--max> setting).
 
-=item B<-date>
+=item B<--date>
 
 use it in order to send overdues on a specific date and not Now. Format: YYYY-MM-DD.
 
-=item B<-email>
+=item B<--email>
 
 Allows to specify which type of email will be used. Can be email, emailpro or B_email. Repeatable.
 
@@ -269,11 +269,11 @@ address are sent in a single attachment to the library administrator's
 email address, or to the address in the KohaAdminEmailAddress system
 preference.
 
-C<overdue_notices.pl -n -csv /tmp/overdues.csv> - sends no email and
+C<overdue_notices.pl -n --csv /tmp/overdues.csv> - sends no email and
 populates F</tmp/overdues.csv> with information about all overdue
 items.
 
-C<overdue_notices.pl -library MAIN max 14> - prepare notices of
+C<overdue_notices.pl --library MAIN max 14> - prepare notices of
 overdues in the last 2 weeks for the MAIN library.
 
 =head1 SEE ALSO
@@ -310,8 +310,8 @@ my ( $date_input, $today );
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
-    'v'              => \$verbose,
-    'n'              => \$nomail,
+    'v|verbose'      => \$verbose,
+    'n|nomail'       => \$nomail,
     'max=s'          => \$MAX,
     'library=s'      => \@branchcodes,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
