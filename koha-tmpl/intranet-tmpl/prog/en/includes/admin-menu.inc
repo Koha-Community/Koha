@@ -106,7 +106,7 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_acquisition_currencies_manage || CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || ( Koha.Preference('Edifact') && CAN_user_acquisition_edi_manage ) ) %]
+    [% IF ( CAN_user_acquisition_currencies_manage || CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage ) ) %]
         <h5>Acquisition parameters</h5>
 
         <ul>
@@ -119,7 +119,7 @@
             [% IF ( CAN_user_acquisition_budget_manage ) %]
                 <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
             [% END %]
-            [% IF ( Koha.Preference('Edifact') && CAN_user_acquisition_edi_manage ) %]
+            [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage ) %]
                 <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                 <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
             [% END %]

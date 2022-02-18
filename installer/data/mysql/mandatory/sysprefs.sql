@@ -187,7 +187,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DumpTemplateVarsIntranet',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the staff intranet.',  'YesNo'),
 ('DumpTemplateVarsOpac',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the opac.',  'YesNo'),
 ('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),
-('Edifact','0',NULL,'Enables edifact acquisitions functions','YesNo'),
+('EDIFACT','0',NULL,'Enables EDIFACT acquisitions functions','YesNo'),
 ('EdifactInvoiceImport', 'automatic', 'automatic|manual', "If on, don't auto-import EDI invoices, just keep them in the database with the status 'new'", 'Choice'),
 ('ElasticsearchIndexStatus_authorities', '0', 'Authorities index status', NULL, NULL),
 ('ElasticsearchIndexStatus_biblios', '0', 'Biblios index status', NULL, NULL),

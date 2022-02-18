@@ -38,7 +38,7 @@ use Koha::Edifact::Transport;
 use Koha::Plugins::Handler;
 use Fcntl qw( LOCK_EX O_CREAT O_RDWR SEEK_SET );
 
-die "Syspref 'Edifact' is disabled" unless C4::Context->preference('Edifact');
+die "Syspref 'EDIFACT' is disabled" unless C4::Context->preference('EDIFACT');
 
 my $logdir = C4::Context->config('logdir');
 

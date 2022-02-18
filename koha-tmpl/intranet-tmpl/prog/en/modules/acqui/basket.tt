@@ -99,7 +99,7 @@
 
                     [% PROCESS csv_export %]
 
-                        [% IF Koha.Preference('Edifact') && ediaccount %]
+                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
 
@@ -448,7 +448,7 @@
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
-                        [% IF Koha.Preference('Edifact') && ediaccount %]
+                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>Supplier report</th>
                         [% END %]
                         [% IF ( active ) %]
@@ -477,7 +477,7 @@
                         <th>&nbsp;</th>
                         <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
-                        [% IF Koha.Preference('Edifact') && ediaccount %]
+                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>&nbsp;</th>
                         [% END %]
                         [% IF ( active ) %]
@@ -504,7 +504,7 @@
                     <th>&nbsp;</th>
                     <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
-                    [% IF Koha.Preference('Edifact') && ediaccount %]
+                    [% IF Koha.Preference('EDIFACT') && ediaccount %]
                     <th>&nbsp;</th>
                     [% END %]
                     [% IF ( active ) %]
@@ -590,7 +590,7 @@
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
-                        [% IF Koha.Preference('Edifact') && ediaccount %]
+                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <td>[% books_loo.suppliers_report | html %]</td>
                         [% END %]
                         [% IF ( active ) %]
