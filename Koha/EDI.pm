@@ -869,8 +869,6 @@ sub quote_item {
                     my $new_item = {
                         itype =>
                           $item->girfield( 'stock_category', $occurrence ),
-                        location =>
-                          $item->girfield( 'collection_code', $occurrence ),
                         itemcallnumber =>
                           $item->girfield( 'shelfmark', $occurrence )
                           || $item->girfield( 'classification', $occurrence )
@@ -879,11 +877,15 @@ sub quote_item {
                           $item->girfield( 'branch', $occurrence ),
                         homebranch => $item->girfield( 'branch', $occurrence ),
                     };
+
+                    my $lsq_field = C4::Context->preference('EdifactLSQ');
+                    $new_item->{$lsq_field} = $item->girfield( 'sequence_code', $occurrence );
+
                     if ( $new_item->{itype} ) {
                         $item_hash->{itype} = $new_item->{itype};
                     }
-                    if ( $new_item->{location} ) {
-                        $item_hash->{location} = $new_item->{location};
+                    if ( $new_item->{$lsq_field} ) {
+                        $item_hash->{$lsq_field} = $new_item->{$lsq_field};
                     }
                     if ( $new_item->{itemcallnumber} ) {
                         $item_hash->{itemcallnumber} =
@@ -957,8 +959,6 @@ sub quote_item {
                         replacementprice => $price,
                         itype =>
                           $item->girfield( 'stock_category', $occurrence ),
-                        location =>
-                          $item->girfield( 'collection_code', $occurrence ),
                         itemcallnumber =>
                           $item->girfield( 'shelfmark', $occurrence )
                           || $item->girfield( 'classification', $occurrence )
@@ -967,6 +967,8 @@ sub quote_item {
                           $item->girfield( 'branch', $occurrence ),
                         homebranch => $item->girfield( 'branch', $occurrence ),
                     };
+                    my $lsq_field = C4::Context->preference('EdifactLSQ');
+                    $new_item->{$lsq_field} = $item->girfield( 'sequence_code', $occurrence );
                     $new_item->{biblionumber} = $bib->{biblionumber};
                     $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
                     my $kitem = Koha::Item->new( $new_item )->store;
@@ -1173,7 +1175,8 @@ sub _create_item_from_quote {
     $item_hash->{booksellerid} = $quote->vendor_id;
     $item_hash->{price}        = $item_hash->{replacementprice} = $item->price;
     $item_hash->{itype}        = $item->girfield('stock_category');
-    $item_hash->{location}     = $item->girfield('collection_code');
+    my $lsq_field = C4::Context->preference('EdifactLSQ');
+    $item_hash->{$lsq_field}     = $item->girfield('sequence_code');
 
     my $note = {};
 

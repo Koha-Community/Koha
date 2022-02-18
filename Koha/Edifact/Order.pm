@@ -373,17 +373,18 @@ sub order_line {
     # DTM Optional date constraints on delivery
     #     we dont currently support this in koha
     # GIR copy-related data
+    my $lsq_field = C4::Context->preference('EdifactLSQ');
     my @items;
     if ( $basket->effective_create_items eq 'ordering' ) {
-        my @linked_itemnumbers = $orderline->aqorders_items;
 
+        my @linked_itemnumbers = $orderline->aqorders_items;
         foreach my $item (@linked_itemnumbers) {
             my $i_obj = $schema->resultset('Item')->find( $item->itemnumber );
             if ( defined $i_obj ) {
                 push @items, {
                     branchcode     => $i_obj->get_column('homebranch'),
                     itype          => $i_obj->effective_itemtype,
-                    location       => $i_obj->location,
+                    $lsq_field     => $i_obj->$lsq_field,
                     itemcallnumber => $i_obj->itemcallnumber,
                 };
             }
@@ -411,7 +412,7 @@ sub order_line {
           {
             branchcode     => $item->{branchcode},
             itype          => $item->{itype},
-            location       => $item->{location},
+            $lsq_field     => $item->{$lsq_field},
             itemcallnumber => $item->{itemcallnumber},
           };
     }
@@ -543,6 +544,7 @@ sub gir_segments {
     my $budget_code = $orderfields->{budget_code};
     my @segments;
     my $sequence_no = 1;
+    my $lsq_field = C4::Context->preference('EdifactLSQ');
     foreach my $item (@onorderitems) {
         my $elements_added = 0;
         my @gir_elements;
@@ -558,9 +560,9 @@ sub gir_segments {
             push @gir_elements,
               { identity_number => 'LST', data => $item->{itype} };
         }
-        if ( $item->{location} ) {
+        if ( $item->{$lsq_field} ) {
             push @gir_elements,
-              { identity_number => 'LSQ', data => $item->{location} };
+              { identity_number => 'LSQ', data => $item->{$lsq_field} };
         }
         if ( $item->{itemcallnumber} ) {
             push @gir_elements,

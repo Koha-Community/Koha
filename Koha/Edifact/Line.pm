@@ -686,7 +686,7 @@ sub extract_gir {
         LQT => 'part_order_quantity',
         LRS => 'record_sublocation',
         LSM => 'shelfmark',
-        LSQ => 'collection_code',
+        LSQ => 'sequence_code',
         LST => 'stock_category',
         LSZ => 'size_code',
         LVC => 'coded_servicing_instruction',
