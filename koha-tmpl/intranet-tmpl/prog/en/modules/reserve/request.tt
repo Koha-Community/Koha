@@ -1571,7 +1571,7 @@
             });
 
             [% FOREACH biblionumber IN biblionumbers %]
-                [% SET url_biblio_params = url_biblio_params _ "&amp;biblionumber=" _ biblionumber %]
+                [% SET url_biblio_params = url_biblio_params _ "&amp;biblionumber=" _ biblionumber | uri %]
             [% END %]
             [% IF multi_hold %]
                 [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
@@ -1600,7 +1600,7 @@
                             // redirect if there is only 1 result.
                             if ( json.iTotalDisplayRecords == 1 ) {
                                 var borrowernumber = json.aaData[0].borrowernumber;
-                                document.location.href = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + borrowernumber + "[% url_biblio_params %]"
+                                document.location.href = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + borrowernumber + "[% url_biblio_params | $raw %]"
                                 return false;
                             }
                             fnCallback(json);
@@ -1610,7 +1610,7 @@
                 'fnDrawCallback': function (oSettings) {
                     var data = this.fnGetData();
                     $.each($(this).find("tbody tr"), function(index, tr) {
-                        let url = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + data[index].borrowernumber + "[% url_biblio_params %]"
+                        let url = '/cgi-bin/koha/reserve/request.pl?borrowernumber=' + data[index].borrowernumber + "[% url_biblio_params | $raw %]"
                         $(tr).off('click').on('click', function() {
                             document.location.href = url;
                         }).addClass('clickable');
