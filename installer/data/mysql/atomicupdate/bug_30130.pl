@@ -12,7 +12,7 @@ return {
             });
 
             $dbh->do(q{
-                UPDATE vendor_edi_accounts SET standard = 'BIC' WHERE san IN ( '5013546025065', '9377779308820' )
+                UPDATE vendor_edi_accounts SET standard = 'BIC' WHERE san IN ( '5013546025065', '9377779308820', '5013546031839' )
             });
         }
     },
