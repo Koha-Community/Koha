@@ -3275,7 +3275,7 @@ DROP TABLE IF EXISTS `language_subtag_registry`;
 CREATE TABLE `language_subtag_registry` (
   `subtag` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `type` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'language-script-region-variant-extension-privateuse',
-  `description` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'only one of the possible descriptions for ease of reference, see language_descriptions for the complete list',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'only one of the possible descriptions for ease of reference, see language_descriptions for the complete list',
   `added` date DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
