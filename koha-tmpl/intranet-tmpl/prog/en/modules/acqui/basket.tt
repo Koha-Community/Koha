@@ -448,7 +448,9 @@
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
+                        [% IF Koha.Preference('Edifact') && ediaccount %]
                         <th>Supplier report</th>
+                        [% END %]
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th class="NoSort">Modify</th>
@@ -475,7 +477,9 @@
                         <th>&nbsp;</th>
                         <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
+                        [% IF Koha.Preference('Edifact') && ediaccount %]
                         <th>&nbsp;</th>
+                        [% END %]
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th>&nbsp;</th>
@@ -500,7 +504,9 @@
                     <th>&nbsp;</th>
                     <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
+                    [% IF Koha.Preference('Edifact') && ediaccount %]
                     <th>&nbsp;</th>
+                    [% END %]
                     [% IF ( active ) %]
                         [% UNLESS ( closedate ) %]
                             <th>&nbsp;</th>
@@ -584,7 +590,9 @@
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
+                        [% IF Koha.Preference('Edifact') && ediaccount %]
                         <td>[% books_loo.suppliers_report | html %]</td>
+                        [% END %]
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                             <td>
