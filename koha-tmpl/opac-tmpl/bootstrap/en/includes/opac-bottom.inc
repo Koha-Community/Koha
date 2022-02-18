@@ -213,6 +213,20 @@
         return confirmDelete(MSG_DELETE_SEARCH_HISTORY);
     });
 
+    $("body").append('<button id="backtotop" class="btn btn-primary"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
+    $("#backtotop").hide();
+    $(window).scroll(function(){
+        if ( $(window).scrollTop() < 300 ) {
+            $("#backtotop").fadeOut();
+        } else {
+            $("#backtotop").fadeIn();
+        }
+    });
+    $("#backtotop").click(function(e) {
+        e.preventDefault();
+        $("html,body").animate({scrollTop: 0}, "slow");
+    });
+
 </script>
 
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
