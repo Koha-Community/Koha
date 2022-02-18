@@ -113,7 +113,7 @@ sub pickup_locations {
 
     return try {
 
-        my $ps_set = $item->pickup_locations( { patron => $patron } );
+        my $pl_set = $item->pickup_locations( { patron => $patron } );
 
         my @response = ();
         if ( C4::Context->preference('AllowHoldPolicyOverride') ) {
@@ -124,23 +124,19 @@ sub pickup_locations {
             @response = map {
                 my $library = $_;
                 $library->{needs_override} = (
-                    any { $_->{library_id} eq $library->{library_id} }
-                    @{$ps_set->as_list}
+                    any { $_->branchcode eq $library->{library_id} }
+                    @{ $pl_set->as_list }
                   )
                   ? Mojo::JSON->false
                   : Mojo::JSON->true;
                 $library;
             } @{$libraries};
-
-            return $c->render(
-                status  => 200,
-                openapi => \@response
-            );
         }
+        else {
 
-        my $pickup_locations = $c->objects->search( $ps_set );
-
-        @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
+            my $pickup_locations = $c->objects->search($pl_set);
+            @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
+        }
 
         return $c->render(
             status  => 200,
