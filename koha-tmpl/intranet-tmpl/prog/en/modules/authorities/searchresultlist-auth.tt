@@ -50,7 +50,7 @@
                 </tr>
                 [% FOREACH resul IN result %]
                     <tr>
-                        <td>[% PROCESS authresult summary=resul.summary authid=resul.authid %]</td>
+                        <td>[% PROCESS authresult summary=resul.summary authid=resul.authid auth_preview=1 %]</td>
                         <td>[% resul.summary.label | html %]</td>
                         <td>[% resul.used | html %] times</td>
                         <td>

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $(".authorizedheading a").on("click", function(e){
+    $(".authority_preview a").on("click", function(e){
         e.preventDefault();
         var authid = $(this).data("authid");
 

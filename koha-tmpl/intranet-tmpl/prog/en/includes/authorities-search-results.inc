@@ -64,7 +64,7 @@
     [% UNLESS ( summary.summaryonly ) %]
         <div class="authorizedheading">
           [% FOREACH authorize IN summary.authorized %]
-            <span class="authorizedheading">
+            <span class="authorizedheading [% IF auth_preview %]authority_preview[% END %]">
                 <a data-authid="[% authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | uri %]">[% authorize.heading | html %]</a>
             </span>
             [% UNLESS loop.last %] | [% END %]

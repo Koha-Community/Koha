@@ -79,7 +79,7 @@
           [% UNLESS ( resul.used ) %]
             <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash"></i> Delete</a></li>
           [% END %]
-          <li class="authorizedheading">
+          <li class="authority_preview">
             <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa fa-eye"></i> MARC preview</a>
           </li>
         </ul>
