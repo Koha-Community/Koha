@@ -47,7 +47,7 @@ $template->param(
     casAuthentication   => $casAuthentication,
 );
 
-my $homebranch;
+my $homebranch = $ENV{OPAC_BRANCH_DEFAULT};
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
