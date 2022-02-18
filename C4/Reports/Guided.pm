@@ -735,7 +735,7 @@ sub get_saved_reports {
             $date = eval { output_pref( { dt => dt_from_string( $date ), dateonly => 1, dateformat => 'iso' }); };
             push @cond, "DATE(last_modified) = ? OR
                          DATE(last_run) = ?";
-            push @args, $date, $date, $date;
+            push @args, $date, $date;
         }
         if (my $author = $filter->{author}) {
             $author = "%$author%";
