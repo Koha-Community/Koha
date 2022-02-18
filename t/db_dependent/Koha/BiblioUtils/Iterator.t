@@ -17,14 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 7;
 
 use_ok('Koha::BiblioUtils');
 use_ok('Koha::BiblioUtils::Iterator');
 
-use C4::Items;
-use C4::Biblio;
-use DBI;
+use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -59,5 +57,14 @@ my $expected_tags = [ 100, 245, 942, 952, 999 ];
 my @result_tags = map { $_->tag() } $record->field('...');
 my @sorted_tags = sort @result_tags;
 is_deeply(\@sorted_tags,$expected_tags, "Got the same tags as expected");
+
+
+my $biblio_2 = $builder->build_sample_biblio();
+my $biblio_3 = $builder->build_sample_biblio();
+my $records = Koha::BiblioUtils->get_all_biblios_iterator();
+is( $records->next->id, $biblio->biblionumber );
+is( $records->next->id, $biblio_2->biblionumber );
+is( $records->next->id, $biblio_3->biblionumber );
+is( $records->next, undef, 'no more record' );
 
 $schema->storage->txn_rollback();
