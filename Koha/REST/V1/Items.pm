@@ -115,9 +115,7 @@ sub pickup_locations {
 
         my $ps_set = $item->pickup_locations( { patron => $patron } );
 
-        my $pickup_locations = $c->objects->search( $ps_set );
         my @response = ();
-
         if ( C4::Context->preference('AllowHoldPolicyOverride') ) {
 
             my $libraries_rs = Koha::Libraries->search( { pickup_location => 1 } );
@@ -127,7 +125,7 @@ sub pickup_locations {
                 my $library = $_;
                 $library->{needs_override} = (
                     any { $_->{library_id} eq $library->{library_id} }
-                    @{$pickup_locations}
+                    @{$ps_set->as_list}
                   )
                   ? Mojo::JSON->false
                   : Mojo::JSON->true;
@@ -139,6 +137,8 @@ sub pickup_locations {
                 openapi => \@response
             );
         }
+
+        my $pickup_locations = $c->objects->search( $ps_set );
 
         @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
 
