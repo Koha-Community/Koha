@@ -207,7 +207,7 @@ sub checkpw_ldap {
     my $patron;
     if (( $borrowernumber and $config{update}   ) or
         (!$borrowernumber and $config{replicate})   ) {
-        %borrower = ldap_entry_2_hash($userldapentry,$userid);
+        %borrower = ldap_entry_2_hash($userldapentry,$cardnumber);
         #warn "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
     }
 
