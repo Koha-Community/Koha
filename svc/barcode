@@ -110,7 +110,7 @@ eval {
     if( $type eq "QRcode" ){
         $image = GD::Barcode->new('QRcode', $barcode, { Ecc => "M", ModuleSize => $qrcode_modulesize } )->plot->png();
     } else {
-        $image = GD::Barcode->new( $type, $barcode )->plot( NoText => $notext, Height => $height )->png();
+        $image = GD::Barcode->new( $type, '*' . $barcode . '*' )->plot( NoText => $notext, Height => $height )->png();
     }
 };
 
