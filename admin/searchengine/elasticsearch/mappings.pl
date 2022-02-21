@@ -158,7 +158,10 @@ if ( $op eq 'edit' ) {
             my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
             $mandatory_after++ if $search_field->mandatory && !defined $seen_fields{$search_field_name};
             $seen_fields{$search_field_name} = 1;
+
             # TODO Check mapping format
+            $mapping_marc_field =~ s/\s//g;
+
             my $marc_field = Koha::SearchMarcMaps->find_or_create({
                 index_name => $index_name,
                 marc_type => $marc_type,
