@@ -38,7 +38,7 @@ BEGIN {
     }
     my $test_num = 1;
     foreach (keys(%$ccns)) {
-        my $split_num += scalar(@{$ccns->{$_}});
+        my $split_num = scalar(@{$ccns->{$_}});
         $test_num += 2 * $split_num;
         $test_num += 4;
     }

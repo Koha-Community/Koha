@@ -143,7 +143,7 @@ sub dt_from_string {
     }
 
     # Add the facultative time part including time zone offset; ISO8601 allows +02 or +0200 too
-    my $time_re .= qr{
+    my $time_re = qr{
             (
                 [Tt]?
                 \s*

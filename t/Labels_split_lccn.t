@@ -40,7 +40,7 @@ BEGIN {
     }
     my $test_num = 1;
     foreach (keys(%$lccns)) {
-        my $split_num += scalar(@{$lccns->{$_}});
+        my $split_num = scalar(@{$lccns->{$_}});
         $test_num += 2 * $split_num;
         $test_num += 4;
     }
