@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Edifact::Order;
 
@@ -28,6 +28,32 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'beggining_of_message tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $basketno = sprintf '%011d', '123456';
+    my $edi_vendor = $builder->build(
+        {
+            source => 'VendorEdiAccount',
+            value  => {
+                standard => 'EUR',
+            }
+        }
+    );
+    my $dbic_edi_vendor = $schema->resultset('VendorEdiAccount')->find($edi_vendor->{id});
+
+    my $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor, 1);
+    is( $bgm, qq{BGM+220+$basketno+9'}, "When vendor is set to EDItEUR standard we use 220 in BGM segment");
+
+    $dbic_edi_vendor->update({ standard => 'BIC'});
+    $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor, 1);
+    is( $bgm, qq{BGM+220+$basketno+9'}, "When vendor is set to BiC standard we use 22V in BGM segment");
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'order_line() tests' => sub {
     # TODO: Split up order_line() to smaller methods in order
