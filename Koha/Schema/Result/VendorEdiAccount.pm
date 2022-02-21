@@ -80,6 +80,13 @@ __PACKAGE__->table("vendor_edi_accounts");
   is_nullable: 1
   size: 20
 
+=head2 standard
+
+  data_type: 'varchar'
+  default_value: 'EUR'
+  is_nullable: 1
+  size: 3
+
 =head2 id_code_qualifier
 
   data_type: 'varchar'
@@ -160,6 +167,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "san",
   { data_type => "varchar", is_nullable => 1, size => 20 },
+  "standard",
+  { data_type => "varchar", default_value => "EUR", is_nullable => 1, size => 3 },
   "id_code_qualifier",
   { data_type => "varchar", default_value => 14, is_nullable => 1, size => 3 },
   "transport",
@@ -250,8 +259,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TtWuTpP4Ac6/+T6OPMSsRA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-18 14:08:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yDbPFtwV40n3o+fFoxR99g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
