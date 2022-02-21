@@ -143,7 +143,7 @@ sub dt_from_string {
     }
 
     # Add the faculative time part [hh:mm[:ss]]
-    my $time_re .= qr|
+    my $time_re = qr|
             (
                 \s*
                 (?<hour>\d{2})

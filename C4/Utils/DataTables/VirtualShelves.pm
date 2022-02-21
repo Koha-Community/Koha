@@ -44,7 +44,7 @@ sub search {
     my @args;
     # private
     if ( !$public ) {
-        my $join_vs .= q|
+        my $join_vs = q|
             LEFT JOIN virtualshelfshares sh ON sh.shelfnumber = vs.shelfnumber
             AND sh.borrowernumber = ?
         |;

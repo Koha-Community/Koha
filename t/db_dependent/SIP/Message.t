@@ -124,7 +124,7 @@ subtest 'hold_patron_name() tests' => sub {
 
     is( $sip_item->hold_patron_name, q{}, "SIP item with no hold returns empty string for patron name" );
 
-    my $resp .= C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_name, $server );
+    my $resp = C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_name, $server );
     is( $resp, q{}, "maybe_add returns empty string for SIP item with no hold returns empty string" );
 
     $schema->storage->txn_rollback;
@@ -837,7 +837,7 @@ sub test_hold_patron_bcode {
 
     is( $sip_item->hold_patron_bcode, q{}, "SIP item with no hold returns empty string" );
 
-    my $resp .= C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_bcode, $server );
+    my $resp = C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_bcode, $server );
     is( $resp, q{}, "maybe_add returns empty string for SIP item with no hold returns empty string" );
 }
 
