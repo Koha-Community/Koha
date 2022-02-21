@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2021-11-10 06:50+0000\n"
+"PO-Revision-Date: 2022-02-16 12:05+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1636527013.508823\n"
+"X-POOTLE-MTIME: 1645013127.137100\n"
 "X-Pootle-Path: /tr/21.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2612,14 +2612,13 @@ msgid "cataloguing.pref#CreateAVFromCataloguing# Don't allow"
 msgstr "İzin verme"
 
 # Cataloging > Interface > CreateAVFromCataloguing
-#, fuzzy
 msgid ""
 "cataloguing.pref#CreateAVFromCataloguing# authorized values to be created "
 "within the cataloguing module. Librarian will need the manage_auth_values "
 "subpermission."
 msgstr ""
-"kataloglama modülü içinde oluşturulacak yetkili değerler. Kütüphanecinin "
-"manage_auth_values alt iznine ihtiyacı olacaktır."
+"kataloglama modülü içinde oluşturulacak yetkili değerler. Kütüphaneci, "
+"manager_auth_values alt iznine ihtiyaç duyacaktır."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -5899,9 +5898,15 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "saniyeler."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr " ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
+"</br>NOT: 'Kart numarası' ve AutoSelfCheckAllowed kullanıyorsanız, kütüphane "
+"dışında kullanıcı bilgilerini elde etmek için kaba kuvvet saldırılarını "
+"önlemek için SelfCheckAllowByIPranges'i ayarlamalısınız."
 
 # Circulation > Self check-out module
 msgid ""
@@ -7166,11 +7171,10 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr "Görüntüleme"
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# For control fields you can use just "
 "{field}, like {001}."
-msgstr "personel istemcisinde özel uzak URL görüntüleri.<br/>"
+msgstr "Kontrol alanları için yalnızca {001} gibi {alan} kullanabilirsiniz."
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -13842,8 +13846,12 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Varsayılan olarak, göster"
 
 # Tools > Reports
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
-msgstr "kaydedilen raporlar sayfasındaki raporlar."
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
+msgstr ""
+"kaydedilen raporlar sayfasındaki raporlar. 20 değeri önerilir. Boşsa, tüm "
+"raporlar gösterilecektir."
 
 # Tools > Upload
 msgid ""
@@ -14263,6 +14271,10 @@ msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(Boru işareti '|' ile ayrılan kullanıcı kategorileri listesi)"
+
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr " ."
 
 # I18N/L10N
 #~ msgid ""

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2022-01-20 11:23+0000\n"
-"Last-Translator: CamilleC <camille.carette@chartes.psl.eu>\n"
+"PO-Revision-Date: 2022-02-17 10:43+0000\n"
+"Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
 "Language-Team: French (France) "
 "(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1642677827.283432\n"
+"X-POOTLE-MTIME: 1645094619.683369\n"
 "X-Pootle-Path: /fr/21.05/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -729,7 +729,7 @@ msgid ""
 "is faster and takes less space, whereas array format makes the full MARC "
 "record searchable."
 msgstr ""
-"<br>le format ISO2709 est recommandé car il est plus rapide et nécessite "
+"<br>Le format ISO2709 est recommandé car il est plus rapide et nécessite "
 "moins de place, tandis que le format en tableau rend la notice MARC "
 "entièrement interrogeable."
 
@@ -5982,9 +5982,16 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "secondes."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr " ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
+".</br>NOTE : En cas d'utilisation du 'numéro de carte' et de "
+"AutoSelfCheckAllowed, vous devriez configurer SelfCheckAllowByIPRanges pour "
+"vous prémunir d'une attaque par force qui obtiendrait les données des "
+"adhérents."
 
 # Circulation > Self check-out module
 msgid ""
@@ -14050,7 +14057,10 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Par défaut, afficher"
 
 # Tools > Reports
-msgid "tools.pref#NumSavedReports# reports on the saved reports page."
+#, fuzzy
+msgid ""
+"tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
+"is recommended. If empty, all reports will be shown."
 msgstr "rapports sur la page des rapports sauvegardés."
 
 # Tools > Upload
@@ -14491,6 +14501,10 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(liste des catégories d'adhérents séparées par un pipe '|')"
+
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr " ."
 
 # I18N/L10N
 #~ msgid ""
