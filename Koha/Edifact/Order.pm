@@ -263,7 +263,7 @@ sub order_msg_header {
     push @header,
       beginning_of_message(
         $self->{basket}->basketno,
-        $self->{recipient}->san,
+        $self->{recipient}->standard,
         $self->{is_response}
       );
 
@@ -297,29 +297,21 @@ sub order_msg_header {
 
 sub beginning_of_message {
     my $basketno            = shift;
-    my $supplier_san        = shift;
+    my $standard            = shift;
     my $response            = shift;
     my $document_message_no = sprintf '%011d', $basketno;
 
-  # Peters & Bolinda use the BIC recommendation to use 22V a code not in Edifact
-  # If the order is in response to a quote
-    my %bic_sans = (
-        '5013546025065' => 'Peters',
-        '9377779308820' => 'Bolinda',
-    );
-
     #    my $message_function = 9;    # original 7 = retransmission
     # message_code values
-    #      220 prder
+    #      220 order
     #      224 rush order
     #      228 sample order :: order for approval / inspection copies
     #      22C continuation  order for volumes in a set etc.
     #    my $message_code = '220';
-    if ( exists $bic_sans{$supplier_san} && $response ) {
-        return "BGM+22V+$document_message_no+9$seg_terminator";
-    }
 
-    return "BGM+220+$document_message_no+9$seg_terminator";
+    # If the order is in response to a quote and we're dealing with a BIC supplier
+    my $code = ( $response && ( $standard eq 'BIC' ) ) ? '22V' : '220';
+    return "BGM+$code+$document_message_no+9$seg_terminator";
 }
 
 sub name_and_address {

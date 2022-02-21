@@ -76,6 +76,7 @@ else {
             upload_directory   => scalar $input->param('upload_directory'),
             download_directory => scalar $input->param('download_directory'),
             san                => scalar $input->param('san'),
+            standard           => scalar $input->param('standard'),
             transport          => scalar $input->param('transport'),
             quotes_enabled     => $input->param('quotes_enabled') ? 1 : 0,
             invoices_enabled   => $input->param('invoices_enabled') ? 1 : 0,
@@ -133,7 +134,8 @@ $template->param(
             code        => '92',
             description => 'Assigned by buyer',
         },
-    ]
+    ],
+    standards => [ 'BIC', 'EUR' ]
 );
 
 output_html_with_http_headers( $input, $cookie, $template->output );

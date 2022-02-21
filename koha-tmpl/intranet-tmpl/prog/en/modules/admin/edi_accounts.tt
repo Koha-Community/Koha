@@ -194,6 +194,27 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
      <input type="text" name="san" id="san" size="20" maxlength="20" value="[% account.san | html %]" />
   </li>
   <li>
+     <label for="standard">Standard:</label>
+     <select name="standard" id="standard">
+     [% FOREACH standard IN standards %]
+        [% IF standard == 'BIC' %]
+        [% SET description = 'BiC' %]
+        [% ELSE %]
+        [% SET description = 'EDItEUR' %]
+        [% END %]
+        [% IF standard == account.standard %]
+           <option value="[% standard | html %]" selected="selected">
+               [% description | html %]
+           </option>
+        [% ELSE %]
+           <option value="[% standard | html %]">
+              [% description | html %]
+           </option>
+        [% END %]
+     [% END %]
+   </select>
+  </li>
+  <li>
      <label for="quotes_enabled">Quotes enabled: </label>
       [% IF account.quotes_enabled %]
      <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="1" checked="checked" />
@@ -292,6 +313,7 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
        <th>Upload directory</th>
        <th>Qualifier</th>
        <th>SAN</th>
+       <th>Standard</th>
        <th>Quotes</th>
        <th>Orders</th>
        <th>Invoices</th>
@@ -319,6 +341,7 @@ EDI accounts &rsaquo; Administration &rsaquo; Koha
          ([% account.id_code_qualifier | html %])
      </td>
       <td>[% account.san | html %]</td>
+      <td>[% IF account.standard == 'BIC' %]BiC[% ELSE %]EDItEUR[% END %]</td>
       [% IF account.quotes_enabled %]
          <td>Yes</td>
       [% ELSE %]
