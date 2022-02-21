@@ -24,6 +24,7 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Reports;
 use Koha::Notice::Messages;
@@ -182,7 +183,7 @@ subtest 'GetParametersFromSQL+ValidateSQLParameters' => sub  {
 };
 
 subtest 'get_saved_reports' => sub {
-    plan tests => 17;
+    plan tests => 18;
     my $dbh = C4::Context->dbh;
     $dbh->do(q|DELETE FROM saved_sql|);
     $dbh->do(q|DELETE FROM saved_reports|);
@@ -216,6 +217,8 @@ subtest 'get_saved_reports' => sub {
         $count, "$count reports have been added" );
 
     ok( 0 < scalar @{ get_saved_reports( $report_ids[0] ) }, "filter takes report id" );
+
+    ok( 0 < scalar @{ get_saved_reports({date => dt_from_string->ymd }) }, "filter takes date" );
 
     my $r1 = Koha::Reports->find($report_ids[0]);
     $r1 = update_sql($r1->id, { %{$r1->unblessed}, borrowernumber => $r1->borrowernumber, name => 'Just another report' });
