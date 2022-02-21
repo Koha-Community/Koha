@@ -1145,6 +1145,12 @@
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw%]
+
+    [% SET url_biblio_params = "biblionumber=" _ biblionumbers.join("&amp;biblionumber=") %]
+    [% IF multi_hold %]
+        [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
+    [% END %]
+
     <script>
         var Sticky;
         var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
@@ -1503,6 +1509,40 @@
                 return false;
             });
 
+            [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
+                [% IF ( PatronAutoComplete ) %]
+                $( "#search_patron_filter" ).autocomplete({
+                    source: "/cgi-bin/koha/circ/ysearch.pl",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        document.location.href = '/cgi-bin/koha/reserve/request.pl?[% url_biblio_params | url %]&borrowernumber=' + ui.item.borrowernumber;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append(
+                        "<a>"
+                            + ( item.surname ? item.surname.escapeHtml() : "" )
+                            + ", "
+                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
+                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
+                            + " "
+                            + "<small>"
+                                + ( item.address ? item.address.escapeHtml() : "" )
+                                + " "
+                                + ( item.city ? item.city.escapeHtml() : "" )
+                                + " "
+                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
+                                + " "
+                                + ( item.country ? item.country.escapeHtml() : "" )
+                            + "</small>"
+                        + "</a>" )
+                    .appendTo( ul );
+                };
+                [% END %]
+            [% END %]
+
             Sticky = $("#toolbar");
             Sticky.hcSticky({
                 stickTo: "#existing_holds",
@@ -1559,11 +1599,6 @@
     <script>
         table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
     </script>
-
-    [% SET url_biblio_params = "biblionumber=" _ biblionumbers.join("&amp;biblionumber=") %]
-    [% IF multi_hold %]
-        [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
-    [% END %]
 
     [% PROCESS patron_search_js
         table_id    => 'table_borrowers',
