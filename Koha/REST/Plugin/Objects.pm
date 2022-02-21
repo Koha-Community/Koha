@@ -80,6 +80,9 @@ Performs a database search using given Koha::Objects object and query parameters
 Returns an arrayref of the hashrefs representing the resulting objects
 for API rendering.
 
+Warning: this helper adds pagination headers to the calling controller, and thus
+shouldn't be called twice in it.
+
 =cut
 
     $app->helper(
