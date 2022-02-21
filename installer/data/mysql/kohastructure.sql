@@ -5263,6 +5263,7 @@ CREATE TABLE `vendor_edi_accounts` (
   `download_directory` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `upload_directory` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `san` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `standard` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT 'EUR',
   `id_code_qualifier` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT '14',
   `transport` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT 'FTP',
   `quotes_enabled` tinyint(1) NOT NULL DEFAULT 0,
