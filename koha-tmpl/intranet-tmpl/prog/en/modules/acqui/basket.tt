@@ -983,6 +983,9 @@
     [% END %]
     <script>
         var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
+        [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
+        columns_settings.splice(13,1);
+        [% END %]
         [% SET table_settings = TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders' ) %];
         $(document).ready(function() {
             KohaTable("orders", {
