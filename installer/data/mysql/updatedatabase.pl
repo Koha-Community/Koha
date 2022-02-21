@@ -24603,6 +24603,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 29495, "Issue link is lost in return claims when using 'MarkLostItemsAsReturned'");
 }
 
+$DBversion = '21.05.10.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+             UPDATE letter SET content = REPLACE(content, '[% borrowers.', '[% borrower.')
+WHERE code = 'NOTIFY_MANAGER'
+           });
+    NewVersion( $DBversion, "29943", "Fix typo in NOTIFY_MANAGER notice" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
