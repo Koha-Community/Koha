@@ -305,10 +305,16 @@ sub build_query_compat {
         # would be to pass them separately into build_query and let it build
         # them into a structured ES query itself. Maybe later, though that'd be
         # more robust.
-        $search_param_query_str = join( ' ', $self->_create_query_string(@search_params) );
+        my @search_param_query_array = $self->_create_query_string(@search_params);
+        $search_param_query_str = join( ' ', @search_param_query_array );
+        my $search_param_limit_str =
+          $self->_join_queries( $self->_convert_index_strings(@$limits) );
+        if ( @search_param_query_array > 1 && $search_param_limit_str ) {
+            $search_param_query_str = "($search_param_query_str)";
+        }
         $query_str = join( ' AND ',
             $search_param_query_str || (),
-            $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
+            $search_param_limit_str || () );
 
         # If there's no query on the left, let's remove the junk left behind
         $query_str =~ s/^ AND //;

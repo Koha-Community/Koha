@@ -215,7 +215,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 57;
+    plan tests => 59;
 
     my $qb;
 
@@ -492,6 +492,20 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         '(title:"donald duck") AND (author:("Dillinger Escaplan")) AND itype:(("BOOK") OR ("CD"))',
         "Limits quoted correctly when passed as phrase"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( ['OR'], ['title:"donald duck"', 'author:"Dillinger Escaplan"'], undef, ['itype:BOOK'] );
+    is(
+        $query->{query}{query_string}{query},
+        '((title:"donald duck") OR (author:"Dillinger Escaplan")) AND itype:("BOOK")',
+        "OR query with limit"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, ['itype:BOOK'] );
+    is(
+        $query->{query}{query_string}{query},
+        'itype:("BOOK")',
+        "Limit only"
     );
 
     # Scan queries
