@@ -968,7 +968,7 @@ subtest 'FindDuplicate' => sub {
         t::lib::Mocks::mock_preference('searchEngine', $engine );
 
         warning_is { C4::Search::FindDuplicate($record_1);}
-            q/ti,ext:"The night circus \/" and au,ext:"Morgenstern, Erin"/,"Term correctly formed and passed to $engine";
+            q/ti,ext:"The night circus \/" AND au,ext:"Morgenstern, Erin"/,"Term correctly formed and passed to $engine";
 
         warning_is { C4::Search::FindDuplicate($record_2);}
             q/ti,ext:"The book of nothing \/"/,"Term correctly formed and passed to $engine";
