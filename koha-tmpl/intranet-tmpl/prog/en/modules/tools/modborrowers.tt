@@ -60,6 +60,7 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
+
                 [% IF ( op == 'show_form' ) %]
                     <h1>Batch patron modification</h1>
                     <form id="patron_batchmod_form" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
@@ -262,6 +263,7 @@
                                                 [% END %]
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
+                                                <th>Message</th>
                                                 <th>Restriction expiration</th>
                                                 <th>Restriction comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
@@ -308,6 +310,18 @@
                                                     [% END %]
                                                     <td>[% borrower.borrowernotes | $raw | html_line_break %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
+                                                    <td>
+                                                        [% FOREACH patron_message IN borrower.patron_messages %]
+                                                            [% patron_message.message | html %] <br>
+                                                            <strong>
+                                                            [% IF (patron_message.message_type == 'B') %]
+                                                                ( OPAC )
+                                                            [% ELSE %]
+                                                                ( Staff )
+                                                            [% END %]
+                                                            </strong><br><br>
+                                                        [% END %]
+                                                    </td>
                                                     <td data-order="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</td>
                                                     <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
@@ -360,6 +374,7 @@
                                                 [% CASE 'dateexpiry' %]<span>Expiry date:</span>
                                                 [% CASE 'borrowernotes' %]<span>Circulation note:</span>
                                                 [% CASE 'opacnote' %]<span>OPAC note:</span>
+                                                [% CASE "message" %]<span>Message:</span>
                                                 [% CASE 'debarred' %]<span>Restriction expiration:</span>
                                                 [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
                                                 [% CASE 'password_expiration_date' %]<span>Password expiration date:</span>
@@ -367,6 +382,13 @@
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
                                                 <input type="text" id="[%field.name | html %]" name="[% field.name | html %]" value="" />
+                                            [% END %]
+                                            [% IF ( field.type == 'message_type' ) %]
+                                                <input type="text" name="[% field.name | html %]" value="" />
+                                                <select name="add_message_type" id="message_type">
+                                                    <option value="L">Staff - Internal note</option>
+                                                    <option value="B">OPAC</option>
+                                                </select>
                                             [% END %]
                                             [% IF ( field.type == 'select' ) %]
                                                 [% IF field.option.size %]

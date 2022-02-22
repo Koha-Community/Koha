@@ -31,6 +31,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Members;
 use C4::Output qw( output_html_with_http_headers );
+use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron qw( GetPatronLists );
 use Koha::Libraries;
@@ -38,6 +39,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::Debarments qw( AddDebarment DelDebarment );
 use Koha::Patrons;
 use List::MoreUtils qw(uniq);
+use Koha::Patron::Messages;
 
 my $input = CGI->new;
 my $op = $input->param('op') || 'show_form';
@@ -111,6 +113,12 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
             if ( $logged_in_user->can_see_patron_infos( $patron ) ) {
                 my $borrower = $patron->unblessed;
                 my $attributes = $patron->extended_attributes;
+                my $patron_messages = Koha::Patron::Messages->search(
+                    {
+                        'me.borrowernumber' => $patron->borrowernumber,
+                    }
+                );
+                $borrower->{patron_messages} = $patron_messages->as_list;
                 $borrower->{patron_attributes} = $attributes->as_list;
                 $borrower->{patron_attributes_count} = $attributes->count;
                 $max_nb_attr = $borrower->{patron_attributes_count} if $borrower->{patron_attributes_count} > $max_nb_attr;
@@ -323,6 +331,12 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
         }
         ,
         {
+            name => "message",
+            type => "message_type",
+            mandatory => ( grep /message/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
             name => "debarred",
             type => "date",
             mandatory => ( grep /debarred/, @mandatoryFields ) ? 1 : 0,
@@ -392,7 +406,11 @@ if ( $op eq 'cud-do' ) {
                    }
                 };
             }
-
+            # If 'message' or 'add_message_type' is defined then delete both at the same time
+            if ( grep { $_ eq 'message' } @disabled) {
+                my $patron = Koha::Patrons->find( $borrowernumber );
+                $patron->messages()->delete();
+            }
             $infos->{borrowernumber} = $borrowernumber;
             eval { $patron->set($infos)->store; };
             if ( $@ ) { # FIXME We could provide better error handling here
@@ -433,7 +451,22 @@ if ( $op eq 'cud-do' ) {
                 push @errors, { error => $@ } if $@;
             }
         }
+
+        # Handle patron messages
+        my $message          = $input->param('message');
+        my $branchcode       = C4::Context::mybranch;
+        my $message_type     = $input->param('add_message_type');
+
+        Koha::Patron::Message->new(
+            {
+                borrowernumber => $borrowernumber,
+                branchcode     => $branchcode,
+                message_type   => $message_type,
+                message        => $message,
+            }
+        )->store;
     }
+
     $op = "show_results"; # We have process modifications, the user want to view its
 
     # Construct the results list
@@ -444,6 +477,12 @@ if ( $op eq 'cud-do' ) {
         if ( $patron ) {
             my $category_description = $patron->category->description;
             my $borrower = $patron->unblessed;
+            my $patron_messages = Koha::Patron::Messages->search(
+                    {
+                        'me.borrowernumber' => $patron->borrowernumber,
+                    }
+                );
+            $borrower->{patron_messages} = $patron_messages->as_list;
             $borrower->{category_description} = $category_description;
             my $attributes = $patron->extended_attributes;
             $borrower->{patron_attributes} = $attributes->as_list;
