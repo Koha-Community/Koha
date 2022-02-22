@@ -289,6 +289,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 edifact_messages_2s
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::EdifactMessage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "edifact_messages_2s",
+  "Koha::Schema::Result::EdifactMessage",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 invoiceprice
 
 Type: belongs_to
@@ -344,9 +359,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 vendor_edi_accounts_2s
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-17 08:54:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1lSFcy25po9EBzkNkjL5UA
+Type: has_many
+
+Related object: L<Koha::Schema::Result::VendorEdiAccount>
+
+=cut
+
+__PACKAGE__->has_many(
+  "vendor_edi_accounts_2s",
+  "Koha::Schema::Result::VendorEdiAccount",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+RLDWNQcqEm1TmE0L9i++w
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },

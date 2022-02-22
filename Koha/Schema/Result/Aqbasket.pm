@@ -298,6 +298,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 edifact_messages_2s
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::EdifactMessage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "edifact_messages_2s",
+  "Koha::Schema::Result::EdifactMessage",
+  { "foreign.basketno" => "self.basketno" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowernumbers
 
 Type: many_to_many
@@ -309,8 +324,8 @@ Composing rels: L</aqbasketusers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbasketusers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gSw/f4JmMBzEssEFRg2fAQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:x4mg2lLQrfUdE3LnGSgr0g
 
 __PACKAGE__->has_many(
   "additional_field_values",

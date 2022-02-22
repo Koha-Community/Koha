@@ -104,9 +104,29 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 branchcode_2
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 11:29:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9CSEvOmfmy52+QAYAgrybA
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branchcode_2",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fTDDpPM5k8xP6UXo3YmIYA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

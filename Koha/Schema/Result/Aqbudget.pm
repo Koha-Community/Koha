@@ -308,6 +308,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 vendor_edi_accounts_2s
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::VendorEdiAccount>
+
+=cut
+
+__PACKAGE__->has_many(
+  "vendor_edi_accounts_2s",
+  "Koha::Schema::Result::VendorEdiAccount",
+  { "foreign.shipment_budget" => "self.budget_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowernumbers
 
 Type: many_to_many
@@ -319,8 +334,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-09-13 23:03:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kmzXRyD6aNqPr5C6u9GBHA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:79woPPrp25KW0ndxVWXQQQ
 
 __PACKAGE__->belongs_to(
   "budget",

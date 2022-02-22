@@ -570,6 +570,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 edifact_eans_2s
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::EdifactEan>
+
+=cut
+
+__PACKAGE__->has_many(
+  "edifact_eans_2s",
+  "Koha::Schema::Result::EdifactEan",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 hold_fill_targets
 
 Type: has_many
@@ -811,8 +826,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07048 @ 2021-11-20 03:03:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mir1TkkAHCxat1P/rgJGfg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZcEwQFxe+ICwGRSfdGDhlA
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

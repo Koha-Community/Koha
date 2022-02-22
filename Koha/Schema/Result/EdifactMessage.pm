@@ -149,6 +149,26 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
+=head2 basketno_2
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbasket>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "basketno_2",
+  "Koha::Schema::Result::Aqbasket",
+  { basketno => "basketno" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
   },
@@ -164,6 +184,26 @@ Related object: L<Koha::Schema::Result::VendorEdiAccount>
 
 __PACKAGE__->belongs_to(
   "edi_acct",
+  "Koha::Schema::Result::VendorEdiAccount",
+  { id => "edi_acct" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
+=head2 edi_acct_2
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::VendorEdiAccount>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "edi_acct_2",
   "Koha::Schema::Result::VendorEdiAccount",
   { id => "edi_acct" },
   {
@@ -189,14 +229,34 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
+=head2 vendor_2
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbookseller>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "vendor_2",
+  "Koha::Schema::Result::Aqbookseller",
+  { id => "vendor_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
   },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JHUEsQ+kXjGTRxxc2FFSjQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-22 14:08:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A/Si6z6lih7nS39P5jTffA
 
 __PACKAGE__->add_columns(
     '+deleted' => { is_boolean => 1 },
