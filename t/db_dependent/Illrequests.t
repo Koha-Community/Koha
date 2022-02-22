@@ -126,7 +126,7 @@ subtest 'Basic object tests' => sub {
 };
 
 subtest 'store borrowernumber change also updates holds' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -169,6 +169,21 @@ subtest 'store borrowernumber change also updates holds' => sub {
 
     is( $request->borrowernumber, $other_patron->borrowernumber,
        'after change, changed borrowernumber found in illrequests' );
+
+    my $new_request = Koha::Illrequest->new({
+        biblio_id => $biblio->biblionumber,
+        branchcode => $patron->branchcode,
+    })->borrowernumber( $patron->borrowernumber )->store;
+
+    is( $new_request->borrowernumber, $patron->borrowernumber,
+       'Koha::Illrequest->new()->store() works as expected');
+
+    my $new_holds_found = Koha::Holds->search({
+        biblionumber => $new_request->biblio_id,
+        borrowernumber => $new_request->borrowernumber,
+    })->count;
+
+    is( $new_holds_found, 0, 'no holds found with new()->store()' );
 
     $schema->storage->txn_rollback;
 
