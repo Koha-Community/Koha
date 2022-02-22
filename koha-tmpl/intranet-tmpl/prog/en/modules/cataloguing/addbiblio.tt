@@ -711,8 +711,12 @@ function PopupMARCFieldDoc(field) {
         if( ! StrAlert ){
             var StrWarning = AreFieldsNotOk(false);
             if (StrWarning){
-                StrWarning += "\n" + _("Are you sure you want to save?");
-                var r=confirm(StrWarning);
+
+                // Check important fields
+                $("#check_errors").html( AreFieldsNotOk(false) );
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
+
+                var r=confirm("Important fields(s) are not filled. Are you sure you want to save?");
                 if (! r){
                     return false;
                 }
@@ -720,7 +724,9 @@ function PopupMARCFieldDoc(field) {
             document.f.submit();
             return true;
         } else {
-            $("#check_errors").html( StrAlert );
+
+            // Call AreFieldsNotOk() twice to check both mandatory and important fields
+            $("#check_errors").html( AreFieldsNotOk() + AreFieldsNotOk(false) );
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             Sticky.hcSticky('refresh');
             return false;
