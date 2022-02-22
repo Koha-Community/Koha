@@ -1761,7 +1761,7 @@ sub store {
     my %updated_columns = $self->_result->get_dirty_columns;
 
     my @holds;
-    if( defined $updated_columns{'borrowernumber'} and
+    if( $self->in_storage and defined $updated_columns{'borrowernumber'} and
         Koha::Patrons->find( $updated_columns{'borrowernumber'} ) )
     {
         # borrowernumber has changed
@@ -1769,7 +1769,7 @@ sub store {
         @holds = Koha::Holds->search( {
             borrowernumber => $old_illreq->borrowernumber,
             biblionumber   => $self->biblio_id,
-        } )->as_list;
+        } )->as_list if $old_illreq;
     }
 
     my $ret = $self->SUPER::store;
