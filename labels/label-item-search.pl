@@ -70,7 +70,7 @@ if ( $op eq "do_search" ) {
         $datefrom = eval { dt_from_string ( $datefrom ) };
         if ($datefrom) {
             $datefrom = output_pref( { dt => $datefrom, dateonly => 1, dateformat => 'iso' } );
-            $ccl_query .= ' and ' if $ccl_textbox;
+            $ccl_query .= ' AND ' if $ccl_textbox;
             $ccl_query .= "acqdate,ge,st-date-normalized=" . $datefrom;
         }
     }
@@ -79,7 +79,7 @@ if ( $op eq "do_search" ) {
         $dateto = eval { dt_from_string ( $dateto ) };
         if ($dateto) {
            $dateto = output_pref( { dt => $dateto, dateonly => 1, dateformat => 'iso' } );
-            $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
+            $ccl_query .= ' AND ' if ( $ccl_textbox || $datefrom );
             $ccl_query .= "acqdate,le,st-date-normalized=" . $dateto;
         }
     }
