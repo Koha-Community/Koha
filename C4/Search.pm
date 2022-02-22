@@ -98,7 +98,7 @@ sub FindDuplicate {
 
         my $titleindex = 'ti,ext';
         my $authorindex = 'au,ext';
-        my $op = 'and';
+        my $op = 'AND';
 
         $result->{title} =~ s /\\//g;
         $result->{title} =~ s /\"//g;
