@@ -111,6 +111,9 @@ Items that are not:
 sub get_items_that_can_fill {
     my ( $self ) = @_;
 
+    return Koha::Items->new->empty()
+      unless $self->count() > 0;
+
     my @itemnumbers = $self->search({ 'me.itemnumber' => { '!=' => undef } })->get_column('itemnumber');
     my @biblionumbers = $self->search({ 'me.itemnumber' => undef })->get_column('biblionumber');
     my @bibs_or_items;
