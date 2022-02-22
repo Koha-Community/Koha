@@ -410,7 +410,7 @@ subtest 'Desks' => sub {
 };
 
 subtest 'get_items_that_can_fill' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     my $biblio = $builder->build_sample_biblio;
     my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' }); # For 1, 2, 3, 4
@@ -501,6 +501,11 @@ subtest 'get_items_that_can_fill' => sub {
     $items = $holds->get_items_that_can_fill;
     is_deeply( [ map { $_->itemnumber } $items->as_list ],
         [ $item_2->itemnumber ], 'Only item 2 is available for filling the hold' );
+
+    my $no_holds = Koha::Holds->new->empty();
+    my $no_items = $no_holds->get_items_that_can_fill();
+    is( ref $no_items, "Koha::Items", "Routine returns a Koha::Items object");
+    is( $no_items->count, 0, "Object is empty when called on no holds");
 
 };
 

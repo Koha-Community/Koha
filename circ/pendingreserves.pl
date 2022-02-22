@@ -193,8 +193,10 @@ my $holds = Koha::Holds->search(
 my @biblionumbers = $holds->get_column('biblionumber');
 
 my $all_items;
-foreach my $item ( $holds->get_items_that_can_fill ) {
-    push @{$all_items->{$item->biblionumber}}, $item;
+if ( $holds->count ) {
+    foreach my $item ( $holds->get_items_that_can_fill ) {
+        push @{ $all_items->{ $item->biblionumber } }, $item;
+    }
 }
 
 # patrons count per biblio
