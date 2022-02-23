@@ -629,7 +629,10 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     and_query_parameters.push(default_filters);
                                 }
                                 query_parameters = and_query_parameters;
-                                query_parameters.push(or_query_parameters);
+                                if ( or_query_parameters.length) {
+                                    query_parameters.push(or_query_parameters);
+                                }
+
                                 if(query_parameters.length) {
                                     query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:{"-and": query_parameters});
                                     if(options.header_filter) {
