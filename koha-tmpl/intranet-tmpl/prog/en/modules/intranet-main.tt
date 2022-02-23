@@ -111,6 +111,13 @@
                                 <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl"><i class="fa fa-fw fa-retweet"></i>ILL requests</a>
                             </li>
                             [% END %]
+
+                            [% IF Koha.Preference('ERMModule') && CAN_user_erm %]
+                            <li>
+                                <a class="icon_general icon_erm" href="/cgi-bin/koha/erm/erm-home.pl"><i class="fa fa-fw fa-newspaper-o"></i>Electronic resources management</a>
+                            </li>
+                            [% END %]
+
                         </ul>
                     </div> <!-- /.col-sm-6 -->
                     <div class="col-sm-6">
