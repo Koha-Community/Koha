@@ -38,7 +38,6 @@ __PACKAGE__->table("return_claims");
 =head2 issue_id
 
   data_type: 'integer'
-  is_foreign_key: 1
   is_nullable: 1
 
 =head2 borrowernumber
@@ -102,7 +101,7 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "issue_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "notes",
@@ -198,26 +197,6 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 issue
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Issue>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "issue",
-  "Koha::Schema::Result::Issue",
-  { issue_id => "issue_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "SET NULL",
-    on_update     => "CASCADE",
-  },
-);
-
 =head2 itemnumber
 
 Type: belongs_to
@@ -274,8 +253,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-31 12:18:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1MJxAPCP8yuYvzkXp5q8w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-23 19:37:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3V5bUmu5W3+XS0fa8uR04w
 
 sub koha_objects_class {
     'Koha::Checkouts::ReturnClaims';
