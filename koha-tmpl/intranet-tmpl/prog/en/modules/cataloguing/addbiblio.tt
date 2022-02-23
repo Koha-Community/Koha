@@ -559,7 +559,7 @@ function PopupMARCFieldDoc(field) {
                     [% END %]
                 [% END %]
             [% END %]
-            StrAlert += "<h4>" + _("The following subfields aren't filled:") + "</h4>";
+            StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
         } else {
             [% FOREACH BIG_LOO IN BIG_LOOP %]
                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
@@ -574,7 +574,7 @@ function PopupMARCFieldDoc(field) {
                     [% END %]
                 [% END %]
             [% END %]
-            StrAlert += "<h4>" + _("A few important fields are not filled:") + "</h4>";
+            StrAlert += "<h4>" + _("The following important subfields aren’t filled:") + "</h4>";
             notFilledClass = "important_subfield_not_filled";
         }
         StrAlert += "<ul>";
