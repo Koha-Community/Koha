@@ -30,7 +30,7 @@ foreach my $tag ( sort keys %$tagslib ) {
 my $schema = Koha::Database->new->schema;
 my $authorised_values = {};
 
-my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search_filtered };
+my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search_filtered->as_list };
 $authorised_values->{branches} = [];
 foreach my $thisbranch ( sort keys %$branches ) {
     push @{ $authorised_values->{branches} }, { value => $thisbranch, lib => $branches->{$thisbranch} };
