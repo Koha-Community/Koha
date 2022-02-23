@@ -5620,7 +5620,7 @@ subtest "GetSoonestRenewDate tests" => sub {
     # Test 'exact time' setting for syspref NoRenewalBeforePrecision
     t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'exact_time' );
     is(
-        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        GetSoonestRenewDate( $issue ),
         $datedue->clone->add( days => -7 ),
         'Bug 14395: Renewals permitted 7 days before due date, as expected'
     );
@@ -5629,7 +5629,7 @@ subtest "GetSoonestRenewDate tests" => sub {
     # Test 'date' setting for syspref NoRenewalBeforePrecision
     t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
     is(
-        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        GetSoonestRenewDate( $issue ),
         $datedue->clone->add( days => -7 )->truncate( to => 'day' ),
         'Bug 14395: Renewals permitted 7 days before due date, as expected'
     );
@@ -5646,7 +5646,7 @@ subtest "GetSoonestRenewDate tests" => sub {
     );
 
     is(
-        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        GetSoonestRenewDate( $issue ),
         dt_from_string,
         'Checkouts without auto-renewal can be renewed immediately if no norenewalbefore'
     );
@@ -5654,13 +5654,13 @@ subtest "GetSoonestRenewDate tests" => sub {
     t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
     $issue->auto_renew(1)->store;
     is(
-        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        GetSoonestRenewDate( $issue ),
         $datedue->clone->truncate( to => 'day' ),
         'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
     );
     t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'exact' );
     is(
-        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        GetSoonestRenewDate( $issue ),
         $datedue,
         'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
     );
