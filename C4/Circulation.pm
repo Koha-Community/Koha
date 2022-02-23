@@ -2818,7 +2818,7 @@ sub GetUpcomingDueIssues {
 
 =head2 CanBookBeRenewed
 
-  ($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
+  ($ok,$error,$info) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
 
 Find out whether a borrowed item may be renewed.
 
@@ -2836,7 +2836,9 @@ that are automatically renewed.
 C<$CanBookBeRenewed> returns a true value if the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
-already renewed the loan. $error will contain the reason the renewal can not proceed
+already renewed the loan.
+    $error will contain the reason the renewal can not proceed
+    $info will contain the soonest renewal date if the error is 'too soon'
 
 =cut
 
@@ -2844,6 +2846,7 @@ sub CanBookBeRenewed {
     my ( $borrowernumber, $itemnumber, $override_limit, $cron ) = @_;
 
     my $auto_renew = "no";
+    my $soonest;
 
     my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
     my $issue = $item->checkout or return ( 0, 'no_checkout' );
@@ -2888,13 +2891,13 @@ sub CanBookBeRenewed {
             return ( 0, 'overdue');
         }
 
-        $auto_renew = _CanBookBeAutoRenewed({
+        ( $auto_renew, $soonest ) = _CanBookBeAutoRenewed({
             patron     => $patron,
             item       => $item,
             branchcode => $branchcode,
             issue      => $issue
         });
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_soon' && $cron;
+        return ( 0, $auto_renew, $soonest ) if $auto_renew =~ 'auto_too_soon' && $cron;
         # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
         # extra notices being sent. Cron also implies no override
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
@@ -2997,9 +3000,10 @@ sub CanBookBeRenewed {
     }
 
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
-    return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
-    if ( GetSoonestRenewDate($borrowernumber, $itemnumber) > dt_from_string() ){
-        return (0, "too_soon") unless $override_limit;
+    return ( 0, $auto_renew, $soonest ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
+    $soonest = GetSoonestRenewDate($borrowernumber, $itemnumber);
+    if ( $soonest > dt_from_string() ){
+        return (0, "too_soon", $soonest ) unless $override_limit;
     }
 
     return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed
@@ -4457,9 +4461,10 @@ sub _CanBookBeAutoRenewed {
         }
     }
 
-    if ( GetSoonestRenewDate( $patron->id, $item->id ) > dt_from_string() )
+    my $soonest = GetSoonestRenewDate($patron->id, $item->id);
+    if ( $soonest > dt_from_string() )
     {
-        return "auto_too_soon";
+        return ( "auto_too_soon", $soonest );
     }
 
     return "ok";
