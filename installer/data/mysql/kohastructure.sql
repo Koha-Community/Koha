@@ -2775,6 +2775,25 @@ CREATE TABLE `edifact_messages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `erm_agreements`
+--
+
+DROP TABLE IF EXISTS `erm_agreements`;
+CREATE TABLE `erm_agreements` (
+    `agreement_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `vendor_id` INT(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
+    `name` VARCHAR(255) NOT NULL COMMENT 'name of the agreement',
+    `description` LONGTEXT DEFAULT NULL COMMENT 'description of the agreement',
+    `status` VARCHAR(80) NOT NULL COMMENT 'current status of the agreement',
+    `closure_reason` VARCHAR(80) DEFAULT NULL COMMENT 'reason of the closure',
+    `is_perpetual` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'is the agreement perpetual',
+    `renewal_priority` VARCHAR(80) DEFAULT NULL COMMENT 'priority of the renewal',
+    `license_info` VARCHAR(80) DEFAULT NULL COMMENT 'info about the license',
+    CONSTRAINT `erm_agreements_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+    PRIMARY KEY(`agreement_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `export_format`
 --
 

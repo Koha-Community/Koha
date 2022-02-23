@@ -69,6 +69,16 @@
         [% END %]
         </li>
 
+        [% IF ( erm ) %]
+            <li class="active">
+                <a title="Electronic resources management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">Electronic resources management</a>
+                [% PROCESS subtabs  %]
+        [% ELSE %]
+            <li>
+                <a title="Electronic resources management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">Electronic resources management</a>
+        [% END %]
+        </li>
+
         [% IF ( i18n_l10n ) %]
             <li class="active">
                 <a title="Internationalization and localization" href="/cgi-bin/koha/admin/preferences.pl?tab=i18n_l10n">I18N/L10N</a>

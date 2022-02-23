@@ -221,6 +221,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnableItemGroupHolds','0','','Enable item groups holds feature','YesNo'),
 ('EnhancedMessagingPreferences','1','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
+('ERMModule', '0', NULL, 'Enable the E-Resource management module', 'YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesAutoFill','0',NULL,'Automatically fill the next hold with a automatically canceled expired waiting hold.','YesNo'),
 ('ExpireReservesAutoFillEmail','', NULL,'Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply-to address','Free'),

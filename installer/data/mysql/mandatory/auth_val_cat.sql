@@ -72,3 +72,23 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
 -- For file uploads
 INSERT IGNORE INTO authorised_value_categories(  category_name, is_system  ) VALUES
     ('UPLOAD', 1);
+
+-- For ERM
+INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+VALUES
+    ('ERM_AGREEMENT_STATUS', 1),
+    ('ERM_AGREEMENT_CLOSURE_REASON', 1),
+    ('ERM_AGREEMENT_RENEWAL_PRIORITY', 1),
+    ('ERM_AGREEMENT_USER_ROLES', 1);
+INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
+VALUES
+    ('ERM_AGREEMENT_STATUS', 'active', 'Active'),
+    ('ERM_AGREEMENT_STATUS', 'in_negotiation', 'In negotiation'),
+    ('ERM_AGREEMENT_STATUS', 'closed', 'Closed'),
+    ('ERM_AGREEMENT_CLOSURE_REASON', 'expired', 'Expired'),
+    ('ERM_AGREEMENT_CLOSURE_REASON', 'cancelled', 'Cancelled'),
+    ('ERM_AGREEMENT_RENEWAL_PRIORITY', 'for_review', 'For review'),
+    ('ERM_AGREEMENT_RENEWAL_PRIORITY', 'renew', 'Renew'),
+    ('ERM_AGREEMENT_RENEWAL_PRIORITY', 'cancel', 'Cancel'),
+    ('ERM_AGREEMENT_USER_ROLES', 'librarian', 'ERM librarian'),
+    ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist');
