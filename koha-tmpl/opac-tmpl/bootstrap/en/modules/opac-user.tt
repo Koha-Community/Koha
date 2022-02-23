@@ -407,7 +407,7 @@
                                                                 [% END %]
                                                             )</span>
                                                         [% ELSIF ( ISSUE.too_soon ) %]
-                                                            <span class="usr-msg no-renewal-before">No renewal before [% ISSUE.soonestrenewdate | html %]</span>
+                                                            <span class="usr-msg no-renewal-before">No renewal before [% ISSUE.soonestrenewdate | $KohaDates  as_due_date => 1 %]</span>
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]

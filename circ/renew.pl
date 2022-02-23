@@ -23,7 +23,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Circulation qw( barcodedecode CanBookBeRenewed GetSoonestRenewDate GetLatestAutoRenewDate AddRenewal );
+use C4::Circulation qw( barcodedecode CanBookBeRenewed GetLatestAutoRenewDate AddRenewal );
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::BiblioFrameworks;
@@ -67,7 +67,8 @@ if ($barcode) {
             
             if ( ( $borrower->debarred() || q{} ) lt dt_from_string()->ymd() ) {
                 my $can_renew;
-                ( $can_renew, $error ) =
+                my $info;
+                ( $can_renew, $error, $info ) =
                   CanBookBeRenewed( $borrower->borrowernumber(),
                     $item->itemnumber(), $override_limit );
 
@@ -82,10 +83,7 @@ if ($barcode) {
                 }
 
                 if ( $error && ($error eq 'too_soon' or $error eq 'auto_too_soon') ) {
-                    $soonest_renew_date = C4::Circulation::GetSoonestRenewDate(
-                        $borrower->borrowernumber(),
-                        $item->itemnumber(),
-                    );
+                    $soonest_renew_date = $info;
                 }
                 if ( $error && ( $error eq 'auto_too_late' ) ) {
                     $latest_auto_renew_date = C4::Circulation::GetLatestAutoRenewDate(

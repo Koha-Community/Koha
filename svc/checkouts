@@ -23,7 +23,7 @@ use CGI;
 use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth haspermission);
-use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
+use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount );
 use C4::Overdues qw(GetFine);
 use C4::Context;
 
@@ -154,13 +154,13 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ($charge) = GetIssuingCharges( $c->{itemnumber}, $c->{borrowernumber} );
     my $fine = GetFine( $c->{itemnumber}, $c->{borrowernumber} );
 
-    my ( $can_renew, $can_renew_error ) =
+    my ( $can_renew, $can_renew_error, $info ) =
       CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
     my $can_renew_date =
       $can_renew_error && $can_renew_error eq 'too_soon'
       ? output_pref(
         {
-            dt => GetSoonestRenewDate( $c->{borrowernumber}, $c->{itemnumber} ),
+            dt => $info,
             as_due_date => 1
         }
       )

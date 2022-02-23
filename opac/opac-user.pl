@@ -27,7 +27,7 @@ use C4::Koha qw(
     GetNormalizedISBN
     GetNormalizedUPC
 );
-use C4::Circulation qw( CanBookBeRenewed GetRenewCount GetIssuingCharges GetSoonestRenewDate );
+use C4::Circulation qw( CanBookBeRenewed GetRenewCount GetIssuingCharges );
 use C4::External::BakerTaylor qw( image_url link_url );
 use C4::Reserves qw( GetReserveStatus );
 use C4::Members;
@@ -223,7 +223,7 @@ if ( $pending_checkouts->count ) { # Useless test
         $issue->{rentalfines} = $rental_fines->total_outstanding;
 
         # check if item is renewable
-        my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
+        my ($status,$renewerror,$info) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         (
             $issue->{'renewcount'},
             $issue->{'renewsallowed'},
@@ -254,12 +254,7 @@ if ( $pending_checkouts->count ) { # Useless test
 
             if ( $renewerror eq 'too_soon' ) {
                 $issue->{'too_soon'}         = 1;
-                $issue->{'soonestrenewdate'} = output_pref(
-                    C4::Circulation::GetSoonestRenewDate(
-                        $issue->{borrowernumber},
-                        $issue->{itemnumber}
-                    )
-                );
+                $issue->{'soonestrenewdate'} = $info;
             }
         }
 
