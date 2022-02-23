@@ -271,7 +271,6 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'z3950_search.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
-    [% INCLUDE 'z3950_search.inc' %]
     <script>
         $(document).ready(function(){
             var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
