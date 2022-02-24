@@ -78,6 +78,9 @@
     [%- CASE 'recalls' -%]
         <span class="main_permission recalls_permission">Recalls</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'erm' -%]
+        <span class="main_permission erm_permission">Manage the electronic resources module</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
