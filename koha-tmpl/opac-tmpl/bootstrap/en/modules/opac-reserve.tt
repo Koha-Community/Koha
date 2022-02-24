@@ -346,7 +346,7 @@
 
                                             [% IF bibitemloo.itemholdable %]
                                                 <div id="copiesrow_[% bibitemloo.biblionumber | html %]" class="copiesrow">
-                                                <table class="table table-bordered table-striped">
+                                                <table class="table table-bordered table-striped itemstable">
                                                     <caption>Select a specific item:</caption>
                                                     <thead>
                                                         <tr>
@@ -380,7 +380,7 @@
                                                             [% ELSE %]
                                                                 <tr class="holdable">
                                                             [% END %]
-                                                                    <td class="copynumber">
+                                                                    <td class="copynumber" data-order="[% itemLoo.copynumber | html %]">
                                                                         <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
                                                         [% ELSE %]
                                                             [% SET unholdable_items = 1 %]
@@ -495,20 +495,9 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% INCLUDE 'calendar.inc' %]
+[% INCLUDE 'datatables.inc' %]
 <script>
     var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
-
-        // Clear the contents of an input field
-        $(".clearfield").on("click",function(e){
-            $(this).closest("td").find("input").val("");
-            e.preventDefault();
-        });
-
-    // Select the first item available
-    function select_first_available(id){
-        var radios = $("input:radio[name='checkitem_" + id + "']");
-        $(radios).first().attr("checked", "checked");
-    }
 
     $(document).ready(function() {
 
@@ -602,12 +591,6 @@
         // onload, selectany is checked
         $(".selectany").attr("checked", "checked");
 
-        // If the user is *allowed* to choose a specific item
-        // The first one is preselected
-        $(".copiesrow table").each(function(){
-            var id = suffixOf($(this).closest('div').attr("id"), "_");
-            select_first_available(id);
-        });
 
         // On confirmsjs change
         $(".confirmjs").change(function(){
@@ -701,7 +684,14 @@
 
             return true;
         });
-
+        $(".itemstable").each(function(){
+            $(this).DataTable({
+                dom: "t",
+                initComplete: function() {
+                    this.find("input:radio").first().prop("checked", true );
+                }
+            });
+        });
     });
 </script>
 [% END %]
