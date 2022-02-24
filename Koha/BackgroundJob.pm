@@ -100,44 +100,39 @@ sub enqueue {
 
     my $borrowernumber = C4::Context->userenv->{number}; # FIXME Handle non GUI calls
     my $json_args = encode_json $job_args;
-    my $job_id;
-    $self->_result->result_source->schema->txn_do(
-        sub {
-            $self->set(
-                {
-                    status         => 'new',
-                    type           => $job_type,
-                    size           => $job_size,
-                    data           => $json_args,
-                    enqueued_on    => dt_from_string,
-                    borrowernumber => $borrowernumber,
-                }
-            )->store;
-
-            $job_id = $self->id;
-            $job_args->{job_id} = $job_id;
-            $json_args = encode_json $job_args;
-
-            try {
-                my $conn = $self->connect;
-                # This namespace is wrong, it must be a vhost instead.
-                # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
-                # Also, here we just want the Koha instance's name, but it's not in the config...
-                # Picking a random id (memcached_namespace) from the config
-                my $namespace = C4::Context->config('memcached_namespace');
-                $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_type), body => $json_args } )
-                  or Koha::Exception->throw('Job has not been enqueued');
-            } catch {
-                if ( ref($_) eq 'Koha::Exception' ) {
-                    $_->rethrow;
-                } else {
-                    warn sprintf "The job has not been sent to the message broker: (%s)", $_;
-                }
-            };
+    $self->set(
+        {
+            status         => 'new',
+            type           => $job_type,
+            size           => $job_size,
+            data           => $json_args,
+            enqueued_on    => dt_from_string,
+            borrowernumber => $borrowernumber,
         }
-    );
+    )->store;
 
-    return $job_id;
+    $job_args->{job_id} = $self->id;
+    $json_args = encode_json $job_args;
+
+    try {
+        my $conn = $self->connect;
+        # This namespace is wrong, it must be a vhost instead.
+        # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
+        # Also, here we just want the Koha instance's name, but it's not in the config...
+        # Picking a random id (memcached_namespace) from the config
+        my $namespace = C4::Context->config('memcached_namespace');
+        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_type), body => $json_args } )
+          or Koha::Exceptions::Exception->throw('Job has not been enqueued');
+    } catch {
+        $self->status('failed')->store;
+        if ( ref($_) eq 'Koha::Exceptions::Exception' ) {
+            $_->rethrow;
+        } else {
+            warn sprintf "The job has not been sent to the message broker: (%s)", $_;
+        }
+    };
+
+    return $self->id;
 }
 
 =head3 process
