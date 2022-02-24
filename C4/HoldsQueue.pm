@@ -44,6 +44,8 @@ BEGIN {
         TransportCostMatrix
         UpdateTransportCostMatrix
         GetPendingHoldRequestsForBib
+        load_branches_to_pull_from
+        update_queue_for_biblio
      );
 }
 
@@ -204,27 +206,19 @@ sub CreateQueue {
     my $bibs_with_pending_requests = GetBibsWithPendingHoldRequests();
 
     foreach my $biblionumber (@$bibs_with_pending_requests) {
+
         $total_bibs++;
-        my $hold_requests   = GetPendingHoldRequestsForBib($biblionumber);
-        my $available_items = GetItemsAvailableToFillHoldRequestsForBib($biblionumber, $branches_to_use);
-        $total_requests        += scalar(@$hold_requests);
-        $total_available_items += scalar(@$available_items);
 
-        my $item_map = MapItemsToHoldRequests($hold_requests, $available_items, $branches_to_use, $transport_cost_matrix);
-        $item_map  or next;
-        my $item_map_size = scalar(keys %$item_map)
-          or next;
+        my $result = update_queue_for_biblio(
+            {   biblio_id             => $biblionumber,
+                branches_to_use       => $branches_to_use,
+                transport_cost_matrix => $transport_cost_matrix,
+            }
+        );
 
-        $num_items_mapped += $item_map_size;
-        CreatePicklistFromItemMap($item_map);
-        AddToHoldTargetMap($item_map);
-        if (($item_map_size < scalar(@$hold_requests  )) and
-            ($item_map_size < scalar(@$available_items))) {
-            # DOUBLE CHECK, but this is probably OK - unfilled item-level requests
-            # FIXME
-            #warn "unfilled requests for $biblionumber";
-            #warn Dumper($hold_requests), Dumper($available_items), Dumper($item_map);
-        }
+        $total_requests        += $result->{requests};
+        $total_available_items += $result->{available_items};
+        $num_items_mapped      += $result->{mapped_items};
     }
 }
 
@@ -855,5 +849,90 @@ sub least_cost_branch {
     # return $branch[0] if @branch == 1;
 }
 
+=head3 update_queue_for_biblio
+
+    my $result = update_queue_for_biblio(
+        {
+            biblio_id             => $biblio_id,
+          [ branches_to_use       => $branches_to_use,
+            transport_cost_matrix => $transport_cost_matrix,
+            delete                => $delete, ]
+        }
+    );
+
+Given a I<biblio_id>, this method calculates and sets the holds queue entries
+for the biblio's holds, and the hold fill targets (items).
+
+=head4 Return value
+
+It return a hashref containing:
+
+=over
+
+=item I<requests>: the pending holds count for the biblio.
+
+=item I<available_items> the count of items that are available to fill holds for the biblio.
+
+=item I<mapped_items> the total items that got mapped.
+
+=back
+
+=head4 Optional parameters
+
+=over
+
+=item I<branches_to_use> a list of branchcodes to be used to restrict which items can be used.
+
+=item I<transport_cost_matrix> is the output of C<TransportCostMatrix>.
+
+=item I<delete> tells the method to delete prior entries on the related tables for the biblio_id.
+
+=back
+
+Note: All the optional parameters will be calculated in the method if omitted. They
+are allowed to be passed to avoid calculating them many times inside loops.
+
+=cut
+
+sub update_queue_for_biblio {
+    my ($args) = @_;
+
+    my $biblio_id = $args->{biblio_id};
+
+    my $branches_to_use = $args->{branches_to_use} // load_branches_to_pull_from( C4::Context->preference('UseTransportCostMatrix') );
+    my $transport_cost_matrix;
+
+    if ( !exists $args->{transport_cost_matrix}
+        && C4::Context->preference('UseTransportCostMatrix') ) {
+        $transport_cost_matrix = TransportCostMatrix();
+    } else {
+        $transport_cost_matrix = $args->{transport_cost_matrix};
+    }
+
+    if ( $args->{delete} ) {
+        my $dbh = C4::Context->dbh;
+
+        $dbh->do("DELETE FROM tmp_holdsqueue WHERE biblionumber=$biblio_id");
+        $dbh->do("DELETE FROM hold_fill_targets WHERE biblionumber=$biblio_id");
+    }
+
+    my $hold_requests   = GetPendingHoldRequestsForBib($biblio_id);
+    my $available_items = GetItemsAvailableToFillHoldRequestsForBib( $biblio_id, $branches_to_use );
+
+    my $result = {
+        requests        => scalar( @{$hold_requests} ),
+        available_items => scalar( @{$available_items} ),
+    };
+
+    my $item_map = MapItemsToHoldRequests( $hold_requests, $available_items, $branches_to_use, $transport_cost_matrix );
+    $result->{mapped_items} = scalar( keys %{$item_map} );
+
+    if ($item_map) {
+        CreatePicklistFromItemMap($item_map);
+        AddToHoldTargetMap($item_map);
+    }
+
+    return $result;
+}
 
 1;
