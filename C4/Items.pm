@@ -1294,6 +1294,7 @@ sub _SearchItems_build_where_fragment {
         my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
+        push @columns, Koha::Database->new()->schema()->resultset('Issue')->result_source->columns;
         my @operators = qw(= != > < >= <= is like);
         push @operators, 'not like';
         my $field = $filter->{field} // q{};
