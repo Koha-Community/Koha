@@ -80,7 +80,7 @@
           </thead>
           <tbody>
                 [% FOREACH item IN items %]
-                    [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchcode() ) %]
+                    [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
                     [% IF item.itemnumber == itemnumber%]
                         [% UNLESS can_be_edited %]
                            <tr id="row[% item.itemnumber | html %]" class="active">
