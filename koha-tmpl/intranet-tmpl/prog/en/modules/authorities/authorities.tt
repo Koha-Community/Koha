@@ -352,7 +352,13 @@
                             </ul>
                         </div>
                     </div> <!-- /#toolbar -->
-
+                    <div id="action">
+                        [% IF count %]
+                                Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid | uri %]">[% count | html %] record(s)</a>
+                        [% ELSE %]
+                                This authority is not used in any records.
+                        [% END %]
+                    </div>
                     <div id="authoritytabs" class="toptabs numbered">
                         <ul>
                             [% FOREACH BIG_LOO IN BIG_LOOP %]

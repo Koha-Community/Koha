@@ -557,13 +557,16 @@ if(!$authtypecode) {
     $authtypecode = $authid ? Koha::Authorities->find($authid)->authtypecode : '';
 }
 
+my $authobj = Koha::Authorities->find($authid);
+my $count = $authobj ? $authobj->get_usage_count : 0;
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tt",
                             query => $input,
                             type => "intranet",
                             flagsrequired => {editauthorities => 1},
                             });
-$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid);
+$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid, count=>$count);
 
 $tagslib = GetTagsLabels(1,$authtypecode);
 $mandatory_z3950 = GetMandatoryFieldZ3950($authtypecode);
