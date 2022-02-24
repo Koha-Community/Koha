@@ -1,0 +1,87 @@
+---
+/erm/agreements:
+  get:
+    x-mojo-to: ERM::Agreements#list
+    operationId: listErmAgreements
+    tags:
+      - agreement
+    summary: List erm_agreements
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on agreement agreement_id
+        in: query
+        name: agreement_id
+        required: false
+        type: integer
+      - description: Case insensitive search on agreement vendor_id
+        in: query
+        name: vendor_id
+        required: false
+        type: integer
+      - description: Case insensitive search on agreement name
+        in: query
+        name: name
+        required: false
+        type: string
+      - description: Case insensitive search on agreement description
+        in: query
+        name: description
+        required: false
+        type: string
+      - description: Case insensitive search on agreement status
+        in: query
+        name: status
+        required: false
+        type: string
+      - description: Case insensitive search on agreement closure_reason
+        in: query
+        name: closure_reason
+        required: false
+        type: string
+      - description: Case insensitive search on agreement is_perpetual
+        in: query
+        name: is_perpetual
+        required: false
+        type: boolean
+      - description: Case insensitive search on agreement renewal_priority
+        in: query
+        name: renewal_priority
+        required: false
+        type: string
+      - description: Case insensitive search on agreement license_info
+        in: query
+        name: license_info
+        required: false
+        type: string
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
+    responses:
+      200:
+        description: A list of agreement
+        schema:
+          items:
+            $ref: ../definitions.yaml#/erm_agreement
+          type: array
+      403:
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      503:
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1

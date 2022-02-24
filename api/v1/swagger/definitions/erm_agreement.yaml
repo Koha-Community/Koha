@@ -1,0 +1,47 @@
+---
+type: object
+properties:
+  agreement_id:
+    type: integer
+    description: internally assigned agreement identifier
+    readOnly: true
+  vendor_id:
+    description: foreign key to aqbooksellers
+    type:
+      - integer
+      - "null"
+  name:
+    description: name of the agreement
+    type: string
+  description:
+    description: description of the agreement
+    type:
+      - string
+      - "null"
+  status:
+    description: current status of the agreement
+    type: string
+  closure_reason:
+    description: reason of the closure
+    type:
+      - string
+      - "null"
+  is_perpetual:
+    description: is the agreement perpetual
+    type: boolean
+  renewal_priority:
+    description: priority of the renewal
+    type:
+      - string
+      - "null"
+  license_info:
+    description: info about the license
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - agreement_id
+  - name
+  - status
+  - is_perpetual
