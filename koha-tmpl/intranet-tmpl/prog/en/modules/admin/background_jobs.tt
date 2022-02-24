@@ -14,6 +14,8 @@
             Started
         [% CASE "running" %]
             Running
+        [% CASE "failed" %]
+            Failed
         [% CASE # Default case %]
             [% job.status | html %]
     [% END -%]
