@@ -30,8 +30,10 @@ $(document).ready(function(){
                     $.each(transports, function(j, transport) {
                         if (item['transports_' + transport] == 1) {
                             $('#' + transport + attrid).prop('checked', true);
+                            toggle_digest(attrid);
                         } else {
                             $('#' + transport + attrid).prop('checked', false);
+                            toggle_digest(attrid);
                         }
                     });
                     if (item.digest && item.digest != ' ') {
