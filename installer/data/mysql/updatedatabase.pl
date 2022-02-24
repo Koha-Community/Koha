@@ -23768,6 +23768,12 @@ if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 29495, "Issue link is lost in return claims when using 'MarkLostItemsAsReturned'");
 }
 
+$DBversion = '20.11.15.000';
+if ( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.15 release" );
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
