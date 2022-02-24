@@ -27,4 +27,4 @@ return {
             say $out "Added a primary key on user_permissions on borrowernumber, module_bit, code";
         }
     },
-}
+};
