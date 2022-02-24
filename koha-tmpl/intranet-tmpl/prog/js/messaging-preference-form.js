@@ -6,6 +6,10 @@ $(document).ready(function(){
         message_prefs_dirty = true;
     });
 
+    if ( window.location.href.indexOf("op=add") === -1 ) {
+        message_prefs_dirty = true; // unless op=add consider the message prefs dirty
+    }
+
     if( $("#messaging_prefs_loading").length ){ // This element only appears in the template if op=add
         $('#categorycode_entry').change(function() {
             var messaging_prefs_loading = $("#messaging_prefs_loading");
