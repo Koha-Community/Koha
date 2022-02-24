@@ -383,6 +383,7 @@ sub core_types_to_classes {
         batch_item_record_modification      => 'Koha::BackgroundJob::BatchUpdateItem',
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
         update_elastic_index                => 'Koha::BackgroundJob::UpdateElasticIndex',
+        update_holds_queue_for_biblios      => 'Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue',
     };
 }
 
