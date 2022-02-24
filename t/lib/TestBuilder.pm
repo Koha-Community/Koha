@@ -451,7 +451,7 @@ sub _should_be_fk {
 
 sub _gen_type {
     return {
-        tinyint   => \&_gen_int,
+        tinyint   => \&_gen_bool,
         smallint  => \&_gen_int,
         mediumint => \&_gen_int,
         integer   => \&_gen_int,
@@ -481,6 +481,11 @@ sub _gen_type {
         longblob   => \&_gen_blob,
     };
 };
+
+sub _gen_bool {
+    my ($self, $params) = @_;
+    return int( rand(2) );
+}
 
 sub _gen_int {
     my ($self, $params) = @_;
