@@ -1708,19 +1708,17 @@
             </xsl:if>
         </a>
         <xsl:if test="marc:subfield[@code=9]">
-        <xsl:text> </xsl:text>
-         <a class='authlink'>
-         <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-         <xsl:element name="img">
-         <xsl:attribute name="src">/intranet-tmpl/prog/img/filefind.png</xsl:attribute>
-         <xsl:attribute name="alt"></xsl:attribute>
-         <xsl:attribute name="height">15</xsl:attribute>
-         <xsl:attribute name="width">15</xsl:attribute>
-         </xsl:element>
-         </a>
+                <xsl:text> </xsl:text>
+                <a class='authlink'>
+                    <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                    <xsl:element name="i">
+                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
+                        <xsl:attribute name="aria-label">View authority record</xsl:attribute>
+                    </xsl:element>
+                </a>
         </xsl:if>
         <xsl:choose>
-            <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
+          <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
         </xsl:choose>
         </xsl:for-each>
         </h5>
