@@ -5799,8 +5799,11 @@ msgstr "讀者登出自助借出系統，當經過"
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "秒。"
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
 msgstr ""
 
 # Circulation > Self check-out module
@@ -6565,12 +6568,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] 罰款。"
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "讀者最多可以預約"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "最多的預約數。"
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9667,13 +9673,6 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-"加入以下列的 HTML (空白則停用)，可在 OPAC 的 \"其他搜尋\" 列加入額外的元素："
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "顯示"
@@ -10029,21 +10028,27 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "做為經由 OPAC 註冊讀者的預設讀者類型。"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "使用讀者類型代碼"
 
 # OPAC > Self registration and modification
@@ -10070,11 +10075,13 @@ msgstr ""
 "子郵件帳號。"
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/"
 "cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
@@ -11313,9 +11320,10 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# City"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
+msgstr "啟用"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -11337,13 +11345,15 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# Enable"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+# Cataloging > Display
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr "持有圖書館"
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
+msgstr "停用"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -13491,6 +13501,10 @@ msgstr "經由報表頁面服務指定報表的列數。"
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(讀者類型以直線 '|' 區隔)"
 
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "最多的預約數。"
+
 # Enhanced content > Adlibris
 #~ msgid "enhanced_content.pref Adlibris"
 #~ msgstr "Adlibris"
@@ -13634,6 +13648,14 @@ msgstr "經由報表頁面服務指定報表的列數。"
 # OPAC > Policy
 #~ msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
 #~ msgstr "題名"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches"
+#~ "\" bar on the OPAC, with the following HTML (leave blank to disable):"
+#~ msgstr ""
+#~ "加入以下列的 HTML (空白則停用)，可在 OPAC 的 \"其他搜尋\" 列加入額外的元"
+#~ "素："
 
 # OPAC > Appearance
 #~ msgid ""

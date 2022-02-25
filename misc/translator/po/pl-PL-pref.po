@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-12-03 06:43+0000\n"
-"Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
+"PO-Revision-Date: 2022-02-21 09:16+0000\n"
+"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1638513823.756535\n"
+"X-POOTLE-MTIME: 1645434998.591938\n"
 "X-Pootle-Path: /pl/21.05/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -6010,9 +6010,15 @@ msgstr "Sesja zalogowanego użytkownika opcji Samoobsługowej wygasa po"
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "sekundach."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr "."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
+".</br>UWAGA: Jeśli używasz 'cardnumber i AutoSelfCheckAllowed musisz ustawić "
+"SelfCheckAllowByIPRanges, aby zapobiec atakom typu brute force w celu "
+"zdobycia informacji o użytkownikach."
 
 # Circulation > Self check-out module
 msgid ""
@@ -6855,12 +6861,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] PLN."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Użytkownicy mogą mieć"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "zamówionych egzemplarzy."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -10126,14 +10135,6 @@ msgid ""
 "results (160 characters)."
 msgstr "Opis, który pojawi się w wynikach wyszukiwania (160 znaków)."
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-"Wstaw dodatkowe elementy w formacie HTML do paska \"Więcej wyszukiwań\" w "
-"OPAC (pozostaw puste, aby wyłączyć):"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "Wyświetlaj"
@@ -10507,16 +10508,24 @@ msgid ""
 msgstr ""
 "od użytkowników, w celu potwierdzenia, ponownego wprowadzenia adresu email."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+" <br><strong>UWAGA: Używaj osobnej kategorii dla samodzielnej rejestracji. "
+"</strong>"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "<br><strong>OSTRZEŻENIE: Nie używaj do samodzielnej rejestracji zwykłej "
 "kategorii użytkownika.</strong> Jeśli skrypt <code>misc/cronjobs/"
@@ -10529,8 +10538,8 @@ msgstr ""
 "a>."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Użyj kodu kategorii użytkownika"
 
 # OPAC > Self registration and modification
@@ -10557,11 +10566,13 @@ msgstr ""
 "rejestracji. E-mail nie zostanie zaakceptowany, jeśli istnieje już w bazie."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>UWAGA:</strong> Opcja wymaga pracy skryptu <code>misc/cronjobs/"
 "cleanup_database.pl</code> . Poproś administratora systemu o jego włączenie."
@@ -11876,7 +11887,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "Miejscowość"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
 msgstr "Kod kolekcji"
 
 # Patrons > Security
@@ -11900,11 +11912,13 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "Włącz"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
 msgstr "Obecna biblioteka"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
 msgstr "Macierzysta biblioteka"
 
 # Patrons > Security
@@ -14240,6 +14254,14 @@ msgstr "."
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(lista kategorii użytkownika oddzielona separatorem '|')"
 
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr "."
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "zamówionych egzemplarzy."
+
 # Enhanced content > Adlibris
 #~ msgid "enhanced_content.pref Adlibris"
 #~ msgstr "Adlibris"
@@ -14572,6 +14594,14 @@ msgstr "."
 #~ "egzemplarza</li></ul>W przypadku wielu arkuszy stylów dla różnych "
 #~ "języków, zmienna {langcode} zostanie zastąpiona językiem obecnie używanym "
 #~ "w interfejsie."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches"
+#~ "\" bar on the OPAC, with the following HTML (leave blank to disable):"
+#~ msgstr ""
+#~ "Wstaw dodatkowe elementy w formacie HTML do paska \"Więcej wyszukiwań\" w "
+#~ "OPAC (pozostaw puste, aby wyłączyć):"
 
 # OPAC > Appearance
 #~ msgid ""

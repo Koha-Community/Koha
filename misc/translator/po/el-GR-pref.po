@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-01-20 11:04+0000\n"
+"PO-Revision-Date: 2022-02-15 16:37+0000\n"
 "Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1642676699.401184\n"
+"X-POOTLE-MTIME: 1644943033.132358\n"
 "X-Pootle-Path: /el/21.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3023,9 +3023,8 @@ msgid ""
 "code>, <code>biblioitems</code> or <code>items</code> tables, surrounded by "
 "&lt; and &gt;.)"
 msgstr ""
-"(εισαγωγή σε στήλες από τους πίνακες <code>biblio</code>, "
-"<code>biblioitems</code> ή <code>items</code>, περικλειώμενα από &lt; και "
-"&gt;.)"
+"(εισαγωγή σε στήλες από τους πίνακες <code>biblio</code>, <code>biblioitems</"
+"code> ή <code>items</code>, περικλειώμενα από &lt; και &gt;.)"
 
 # Cataloging > Spine labels
 msgid ""
@@ -5456,17 +5455,19 @@ msgstr "στην παλιά ημερομηνία λήξης του δανεισ�
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Don't send"
-msgstr ""
+msgstr "να μην αποστέλλεται"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Send"
-msgstr ""
+msgstr "να αποστέλλεται"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
 msgstr ""
+"ένα σημείωμα ανανέωσης συσχετισμένο με τις προτιμήσεις μηνυμάτων του μέλους "
+"για 'δανεισμένα αντίτυπα'."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5703,8 +5704,11 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "δευτερόλεπτα."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
 msgstr ""
 
 # Circulation > Self check-out module
@@ -6475,12 +6479,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "σε πρόστιμα."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Τα μέλη μπορούν να έχουν κάνει μόνο"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "κρατήσεις ταυτόχρονα."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -8248,7 +8255,7 @@ msgstr "OPAC"
 
 # OPAC > Advanced search options
 msgid "opac.pref Advanced search options"
-msgstr ""
+msgstr "Επιλογές σύνθετης αναζήτησης"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -9634,12 +9641,6 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "Προβολή"
@@ -9989,19 +9990,24 @@ msgstr ""
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
-msgstr ""
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
+msgstr "Να μην επιτρέπεται"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10029,12 +10035,13 @@ msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
-"opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
-"<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί το "
-"χρονοπρογραμματισμό <code>misc/cronjobs/cleanup_database.pl</code> Ζητήστε "
-"από τον διαχειριστή συστήματός σας να το ενεργοποιήσει."
+"<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί τον "
+"χρονοπρογραμματισμό <code>misc/cronjobs/cleanup_database.pl</code>. Ζητήστε "
+"από τον διαχειριστή συστήματός σας να το ενεργοποιήσει.<br>κανένα μέλος δε "
+"θα διαγραφεί εάν ορίσετε την προτίμηση σε μηδέν ή την αφήσετε κενή."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -10549,21 +10556,20 @@ msgstr "της δουλειάς το"
 msgid ""
 "patrons.pref#AutoRenewalNotices# (Deprecated) according to --send-notices "
 "cron switch"
-msgstr ""
+msgstr "σύμφωνα με την επιλογή --send-notices στο cron (Παρωχημένο)"
 
 # Patrons > Notices and notifications > AutoRenewalNotices
 msgid "patrons.pref#AutoRenewalNotices# Send automatic renewal notices: "
-msgstr ""
+msgstr "Αποστολή αυτόματων ειδοποιήσεων ανανέωσης: "
 
 # Patrons > Notices and notifications > AutoRenewalNotices
 msgid ""
 "patrons.pref#AutoRenewalNotices# according to patron messaging preferences"
-msgstr ""
+msgstr "σύμφωνα με τις ρυθμίσεις μηνυμάτων του μέλους"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoRenewalNotices# never"
-msgstr "Ενεργοποίηση"
+msgstr "ποτέ"
 
 # Patrons > Patron forms > BorrowerMandatoryField
 msgid ""
@@ -11258,9 +11264,10 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# City"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
+msgstr "Ενεργοποίηση"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -11282,13 +11289,15 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# Enable"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+# Cataloging > Display
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr "η βιβλιοθήκη στην οποία ανήκει"
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
+msgstr "Απενεργοποίηση"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -11646,18 +11655,22 @@ msgid ""
 "searching.pref#AdvancedSearchLanguages# For example, to limit listing to "
 "French and Italian, enter <em>ita|fre</em>."
 msgstr ""
+"για παράδειγμα, για να περιοριστεί η αναζήτηση σε Γαλλικά και Ιταλικά, "
+"εισάγετε <em>ita|fre</em>."
 
 # Searching > Search form
 msgid ""
 "searching.pref#AdvancedSearchLanguages# ISO 639-2 language codes (separate "
 "values with | or ,)."
-msgstr ""
+msgstr "κωδικοί γλώσσας ISO 639-2 (διαχωρίστε τις τιμές με | ή ,)."
 
 # Searching > Search form
 msgid ""
 "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the "
 "advanced search drop-down to the"
 msgstr ""
+"περιορίστε τις γλώσσες που προσφέρονται στο πτυσσόμενο μενού της σύνθετης "
+"αναζήτησης στις"
 
 # Searching > Search form
 msgid ""
@@ -11674,14 +11687,16 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the OPAC and staff "
 "interface advanced search for limiting searches on the"
 msgstr ""
+"προβολή καρτελών στη σύνθετη αναζήτηση του και της διεπαφής προσωπικού για "
+"περιορισμένη αναζήτηση στο"
 
 # Searching > Search form
 msgid ""
 "searching.pref#AdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
 msgstr ""
-"searching.pref#AdvancedSearchTypes# (séparer les valeurs par |). Les onglets "
-"s'affichent dans l'ordre de la liste.<br/>"
+"πεδία (διαχωρίστε τις τιμές με |). Οι καρτέλες εμφανίζονται με τη σειρά που "
+"αναφέρονται.<br/>"
 
 # Searching > Results display > BiblioItemtypeInfo
 msgid ""
@@ -12281,6 +12296,8 @@ msgid ""
 "searching.pref#expandedSearchOption# \"More options\" on the OPAC and staff "
 "interface advanced search pages."
 msgstr ""
+"το \"Περισσότερες επιλογές\" στις σελίδες σύνθετης αναζήτησης του OPAC και "
+"της διεπαφής προσωπικού."
 
 # Searching > Search form
 msgid "searching.pref#expandedSearchOption# By default,"
@@ -13406,6 +13423,10 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(κατάλογος των κατηγοριών μελών χωρισμένες με κάθετο '|')"
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "κρατήσεις ταυτόχρονα."
 
 # I18N/L10N
 #~ msgid ""

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 08:32-0300\n"
-"PO-Revision-Date: 2021-11-02 13:29+0000\n"
+"POT-Creation-Date: 2022-02-19 16:51-0300\n"
+"PO-Revision-Date: 2022-02-15 11:35+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: none\n"
 "Language: tr\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1635859756.512551\n"
+"X-POOTLE-MTIME: 1644924924.150681\n"
 "X-Pootle-Path: /tr/21.05/tr-TR-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:203
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (geçerli)"
 
@@ -121,13 +121,13 @@ msgstr ""
 "izinlerine ihtiyacınız var."
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "%s subscription(s) are attached to this record. You must delete all "
 "subscription before deleting this record."
 msgstr ""
-"%s materyal(ler) bu kayıta eklenmiştir. Bu kaydı silmeden önce tüm "
-"materyalleri silmeniz gerekmektedir."
+"%s abonelik(ler) bu kayda eklenmiş. Bu kaydı silmeden önce tüm aboneliği "
+"silmelisiniz."
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:18
 msgid "(filtered from _MAX_ total entries)"
@@ -165,10 +165,6 @@ msgstr "AJAX etiketi onaylayamadı: %s"
 #, javascript-format
 msgid "AJAX failed to reject tag: %s"
 msgstr "AJAX etiketi reddedemedi:%s"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:310
-msgid "Access online"
-msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Actions"
@@ -230,15 +226,13 @@ msgstr "Nisan"
 msgid "April"
 msgstr "Nisan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:356
 msgid "Are you sure you want to cancel this hold?"
-msgstr "Bu alanı silmek istediğinizden emin misiniz?"
+msgstr "Bu ayırtma işlemini iptal etmek istediğinizden emin misiniz?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:348
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:320
 msgid "Are you sure you want to check out this item?"
-msgstr "Bu alanı silmek istediğinizden emin misiniz?"
+msgstr "Bu materyali ödünç almak istediğinizden emin misiniz?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:4
 msgid "Are you sure you want to close this subscription?"
@@ -309,10 +303,9 @@ msgstr ""
 "emin misiniz? Mevcut yapının üzerine yazılacak! Güvenlik nedenleriyle, önce "
 "bir yedekleme yapmak için dışa aktarma seçeneğinin kullanılması önerilir."
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:330
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:302
 msgid "Are you sure you want to return this item?"
-msgstr "Bu alanı silmek istediğinizden emin misiniz?"
+msgstr "Bu materyali iade etmek istediğinizden emin misiniz?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:131
 msgid ""
@@ -353,12 +346,16 @@ msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr ""
 "Otomatik süre uzatma başarısız oldu, kullanıcının ödenmemiş cezaları var"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+msgid "Bibliographic record does not exist!"
+msgstr "Bibliyografik kayıt mevcut değil!"
+
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:17
 msgid "Both subfield values should be filled or empty."
 msgstr "Her iki alt alan değerlerinin dolu veya boş olması gerekir. "
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:714
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:687
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "CSV"
 msgstr "CSV"
 
@@ -369,14 +366,18 @@ msgstr ""
 "aşıldı"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:395
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "İptal et"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:383
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:355
 msgid "Cancel hold"
-msgstr "Ayırt"
+msgstr "Ayırma işlemini iptal et"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#, javascript-format
+msgid "Cannot test prediction pattern for the following reason(s): %s"
+msgstr "Tahmin örüntüsü aşağıdaki neden(ler)den dolayı test edilemiyor: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:10
 msgid ""
@@ -385,15 +386,13 @@ msgid ""
 msgstr ""
 "Kategori kodu yalnızca şu karakterleri içerebilir: harfler, sayılar,- ve _."
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:329
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:301
 msgid "Check in"
-msgstr "İade alındı "
+msgstr "İade Et"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:347
-#, fuzzy
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:319
 msgid "Check out"
-msgstr "ödünç alınmamış"
+msgstr "Ödünç Ver"
 
 #: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:66
 msgid "Check the box next to the alert you want to delete."
@@ -405,14 +404,12 @@ msgid "Checked in"
 msgstr "İade alındı "
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:290
-#, fuzzy
 msgid "Checked out until: "
-msgstr "İade alındı "
+msgstr "Şu tarihe kadar ödünç verildi:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:145
-#, fuzzy
 msgid "Checkouts"
-msgstr "Bugün ödünç verilenler"
+msgstr "Ödünç alınanlar"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:612
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:614
@@ -427,16 +424,16 @@ msgstr "Temizle"
 msgid "Clear all"
 msgstr "Tümünü temizle"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:389
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:397
 msgid "Clear date to suspend indefinitely"
 msgstr "Süresiz olarak askıya almak için tarihi silin"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:742
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:744
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:314
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:316
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:715
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:717
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
 msgid "Clear filter"
 msgstr "Filtreyi temizle"
 
@@ -450,13 +447,13 @@ msgstr "Bu bölümü daraltmak için tıklayınız"
 msgid "Click to expand this section"
 msgstr "Bu alanı genişletmek için tıklayınız"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:760
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:332
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:733
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
 msgid "Columns"
 msgstr "Sütunlar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:759
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:331
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:732
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
 msgid "Columns settings"
 msgstr "Sütun ayarları"
 
@@ -473,8 +470,8 @@ msgstr "%d satırları panoya kopyalandı "
 msgid "Copied one row to clipboard"
 msgstr "Bir satır panoya kopyalandı"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:722
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:695
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Copy"
 msgstr "Kopyala"
 
@@ -526,14 +523,6 @@ msgstr "Tamamlandı"
 msgid "Double click to edit"
 msgstr "Düzenlemek için çift tıklayın"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:296
-msgid "Download"
-msgstr ""
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:321
-msgid "Download as:"
-msgstr ""
-
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:7
 msgid ""
 "ERROR: Price is not a valid number, please check the price and try again!"
@@ -578,18 +567,18 @@ msgstr "Hata, veriniz kaydedilmemiş olabilir"
 msgid "Every"
 msgstr "Her"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:706
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:278
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:679
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "Excel"
 msgstr "Excel"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:775
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:347
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:774
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:346
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:747
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
 msgid "Export or print"
 msgstr "Dışa aktar veya yazdır"
 
@@ -607,9 +596,25 @@ msgstr "Şubat"
 msgid "First"
 msgstr "Birinci"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+msgid "First publication date is not defined"
+msgstr "İlk yayın tarihi tanımlı değil"
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Fr"
 msgstr "Cu"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:19
+msgid ""
+"Frequency and subscription length provided doesn't combine well. Please "
+"consider entering an issue count rather than a time period."
+msgstr ""
+"Çıkış aralığı ve sağlanmış abonelik süresi birbiriyle uyuşmuyor. Zaman "
+"aralığı girmektense lütfen yayın sayısı girmeyi tercih edin."
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+msgid "Frequency is not defined"
+msgstr "Yayın aralığı tanımlı değil"
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
@@ -629,11 +634,16 @@ msgstr "Fon miktarı ana ödeneği aşıyor"
 msgid "Fund amount exceeds period allocation"
 msgstr "Fon miktarı dönem ödeneğini aşıyor"
 
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:295
+#, fuzzy
+msgid "Get item"
+msgstr "Materyali kaldır"
+
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
 msgid "Go back to the results"
 msgstr "Sonuçlara geri dön"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:262
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:270
 msgid "Hold is <strong>suspended</strong>"
 msgstr "Ayırma <strong>askıya alındı</strong>"
 
@@ -644,6 +654,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
 msgid "If the field is a control field, the subfield should be empty"
 msgstr "Eğer alan bir denetim alanı ise, alt alan boş olmalıdır"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:51
+msgid ""
+"If you wish to claim late or missing issues you must link this subscription "
+"to a vendor. Click OK to ignore or Cancel to return and enter a vendor"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
@@ -661,27 +677,27 @@ msgstr "Sepetinizde"
 msgid "Internal Server Error, please reload the page"
 msgstr "Dahili Sunucu Hatası, lütfen sayfayı yeniden yükleyin"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:412
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
 msgid "Item cannot be checked out. There are no available formats"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:302
 #, javascript-format
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Bu materyal %s kütüphanesinden henüz aktarılmamıştır"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:300
 #, javascript-format
 msgid "Item is <strong>in transit</strong> from %s since %s"
 msgstr ""
 "Materyal %s tarihinden itibaren %s konumundan <strong>nakil durumunda</"
 "strong>"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:278
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
 msgid "Item is <strong>waiting here</strong>"
 msgstr "Materyal <strong>burada bekliyor</strong>"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:283
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:291
 msgid "Item is <strong>waiting</strong>"
 msgstr "Materyal <strong>bekliyor</strong>"
 
@@ -806,12 +822,16 @@ msgstr "Yeni bütçe, ana bütçenin altındadır"
 msgid "Next"
 msgstr "Bir sonraki"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:270
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:278
 #, javascript-format
 msgid "Next available %s item"
 msgstr "Bir sonraki kullanılabilir %s materyal"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:232
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+msgid "Next issue publication date is not defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:240
 msgid "No"
 msgstr "Hayır"
 
@@ -823,7 +843,7 @@ msgid "No cover image available"
 msgstr "Kullanılabilir kapak resmi yok"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:550
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:523
 msgid "No data available in table"
 msgstr "Tabloda kullanılabilir veri yok"
 
@@ -876,6 +896,10 @@ msgstr "%s tarihinden önce süresi uzatılamaz"
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:24
 msgid "No results found"
 msgstr "Sonuç bulunamadı"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+msgid "No subscription found on Mana Knowledge Base"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:494
@@ -935,7 +959,7 @@ msgstr "Ekim"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:466
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:595
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:341
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
 msgid "On hold"
 msgstr "Beklemede"
 
@@ -954,7 +978,7 @@ msgstr "Kullanıcı notu"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:86
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:354
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:377
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:349
 msgid "Place hold"
 msgstr "Ayırt"
 
@@ -968,6 +992,10 @@ msgstr "Lütfen ay YA DA tarihe göre bir kayıt süresi seçin. "
 msgid "Please choose at least one external target"
 msgstr "Lütfen en az bir harici hedef seçin "
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+msgid "Please click on 'Test prediction pattern' before saving subscription."
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:11
 #, javascript-format
 msgid "Please delete %s character(s)"
@@ -978,10 +1006,20 @@ msgstr "Lütfen %s karakter(ler)ini silin"
 msgid "Please enter %s or more characters"
 msgstr "Lütfen %s veya daha fazla karakter girin"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+msgid "Please enter a name for this pattern"
+msgstr "Lütfen bu örüntü için bir ad giriniz"
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:3
 #, javascript-format
 msgid "Please enter a valid date (should match %s)."
 msgstr "Lütfen geçerli bir tarih giriniz (%s ile eşleşmeli)."
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+msgid ""
+"Please feel free to share your pattern with all others librarians once you "
+"are done"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:96
 msgid "Please fill at least one template."
@@ -1028,9 +1066,9 @@ msgstr "Önceki"
 msgid "Previous checkouts"
 msgstr "Önceki ödünç alınanlar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:703
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:302
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
 msgid "Print"
 msgstr "Yazdır"
 
@@ -1079,7 +1117,11 @@ msgstr "Çözümle"
 msgid "Results"
 msgstr "Sonuçlar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:250
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+msgid "Results from Mana Knowledge Base"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:258
 msgid "Resume"
 msgstr "Sürdür"
 
@@ -1114,6 +1156,10 @@ msgstr "Süresinin otomatik olarak uzatılması için programlanmış"
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:22
 msgid "Search:"
 msgstr "Arama:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+msgid "Searching for subscription in Mana Knowledge Base"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
 msgid "Searching…"
@@ -1153,6 +1199,10 @@ msgid_plural "Show {count} unresolved claims"
 msgstr[0] ""
 msgstr[1] ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+msgid "Show Mana results"
+msgstr "Mana sonuçlarını göster"
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:19
 msgid "Show _MENU_ entries"
 msgstr "_MENU_ girişlerini göster"
@@ -1174,9 +1224,17 @@ msgstr "Bazı bütçeler materyal kayıtları içinde tanımlı değil"
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+msgid "Something went wrong. Unable to create a new numbering pattern."
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Su"
 msgstr "Pz"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+msgid "Subscription found on Mana Knowledge Base:"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
@@ -1188,16 +1246,16 @@ msgstr "Paz"
 msgid "Sunday"
 msgstr "Pazar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:253
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:261
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:402
 msgid "Suspend"
 msgstr "Askıya Al"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:380
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:388
 msgid "Suspend hold on"
 msgstr "Ayırma işlemini askıya al"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:386
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
 msgid "Suspend until:"
 msgstr "Şu tarihe kadar askıya al:"
 
@@ -1298,6 +1356,11 @@ msgstr "Sağlayıcı mevcut değil"
 msgid "There is no record selected"
 msgstr "Seçilen kayıt yok"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#, fuzzy
+msgid "This bibliographic record does not exist"
+msgstr "Sağlayıcı mevcut değil"
+
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:53
 msgid "This field is mandatory and must have at least one mapping"
 msgstr "Bu alan zorunludur ve en az bir eşleme içermelidir"
@@ -1309,6 +1372,10 @@ msgstr "Materyal sepetinize eklendi "
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
 msgid "This item is already in your cart"
 msgstr "Materyal zaten sepetinizdedir "
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+msgid "This pattern name already exists. Do you want to modify it?"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:6
 msgid "This pickup location is not allowed according to circulation rules"
@@ -1359,11 +1426,11 @@ msgstr "İade alınamadı"
 msgid "Unable to claim as returned"
 msgstr "İade edildi olarak taleplendirilemiyor"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:330
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:338
 msgid "Unable to resume, hold not found"
 msgstr "Devam edilemiyor, ayırtma bulunamadı"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:416
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:424
 #, fuzzy
 msgid "Unable to suspend, hold not found"
 msgstr "Ayırtma askıya alınamıyor, ayırtma bulunamadı"
@@ -1385,6 +1452,12 @@ msgstr "Materyali güncelle"
 msgid "View comparison"
 msgstr "Karşılaştırmayı görüntüle"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+msgid ""
+"Warning! Present pattern has planned irregularities. Click on 'Test "
+"prediction pattern' to check if it's still valid"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:35
 #, javascript-format
 msgid ""
@@ -1394,6 +1467,12 @@ msgstr ""
 "Uyarı: Bu kayıt %s sipariş(ler) içerisinde kullanılıyor. Bunu silmek sağlama "
 "modülü üzerinde ciddi sorunlara neden olabilir. Bu kaydı silmek "
 "istediğinizden emin misiniz?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+msgid ""
+"Warning: This will modify the pattern for all subscriptions that are using "
+"it."
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "We"
@@ -1413,7 +1492,7 @@ msgstr "Çarşamba"
 msgid "Wk"
 msgstr "Hafta"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:233
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:241
 msgid "Yes"
 msgstr "Evet"
 
@@ -1433,6 +1512,25 @@ msgstr "Daha fazla materyal alamazsınız"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:63
 msgid "You have made changes to system preferences."
 msgstr "Sistem tercihlerinde değişiklik yaptınız."
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+msgid ""
+"You have modified the advanced prediction pattern. Please save your work or "
+"cancel modifications."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+msgid "You must choose a first publication date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+msgid "You must choose a subscription length or an end date."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:65
+#, fuzzy
+msgid "You must choose or create a bibliographic record"
+msgstr "En az bir kayıt seçmelisiniz"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:424
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:435
@@ -1456,12 +1554,12 @@ msgstr "Yeniden giriş yapmanız gerekiyor. Oturumunuz zaman aşımına uğradı
 msgid "Your cart is currently empty"
 msgstr "Sepetiniz şu anda boş"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:333
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:427
 msgid "Your request could not be processed. Check the logs"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:359
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:332
 msgid "a an the"
 msgstr "a an the"
 
@@ -1474,16 +1572,16 @@ msgstr "zaten veri tabanında var"
 msgid "already in your cart"
 msgstr "zaten sepetinizde"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:280
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:284
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:288
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
 #, javascript-format
 msgid "at %s"
 msgstr "%s konumunda"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:738
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:157
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:156
 msgid "by _AUTHOR_"
 msgstr "by _AUTHOR_"
 
@@ -1519,10 +1617,13 @@ msgstr "kütüphane tarafından görülmeden çok fazla ardışık süre uzatma 
 msgid "too many renewals"
 msgstr "çok fazla süre uzatma"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:264
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:272
 #, javascript-format
 msgid "until %s"
 msgstr "%s tarihine kadar"
+
+#~ msgid "Access online"
+#~ msgstr "Çevrimiçi erişim"
 
 #~ msgctxt "Bibliographic records"
 #~ msgid "Are you sure you want to remove the selected items?"

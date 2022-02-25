@@ -5736,8 +5736,11 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "sekunder."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
 msgstr ""
 
 # Circulation > Self check-out module
@@ -6505,12 +6508,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] i gebyrer."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Lånere kan kun ha"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "reservasjoner til enhver tid."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9662,12 +9668,6 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "Vis"
@@ -10021,21 +10021,29 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"som standard lånerkategori for lånere som er registrert via "
+"publikumskatalogen."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Bruk lånerkategorikoden"
 
 # OPAC > Self registration and modification
@@ -10063,13 +10071,18 @@ msgstr ""
 "lånetakerens e-post (borrowers.email) som unik ved egenregistrering. En e-"
 "post godtas ikke hvis den allerede finnes i databasen."
 
-# OPAC > Self registration and modification
+# Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
+"<br><strong>NB!</strong> Denne innstillingen forutsetter at cron-jobben misc/"
+"cronjobs/longoverdue.pl kjører. Be systemadministratoren din om å sette den "
+"opp."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -11285,9 +11298,10 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# City"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
+msgstr "Aktiver"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -11309,13 +11323,15 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# Enable"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+# Cataloging > Display
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr "biblioteket som har et eksemplar"
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
+msgstr "Deaktiver"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -13440,6 +13456,10 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(liste over lånerkategorier adskilt med en strek «|»)"
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "reservasjoner til enhver tid."
 
 # I18N/L10N
 #~ msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 08:09-0300\n"
+"POT-Creation-Date: 2022-02-19 16:32-0300\n"
 "PO-Revision-Date: 2022-01-21 23:21+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: none\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Pootle-Path: /it/21.05/it-IT-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:203
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (attuale) "
 
@@ -165,10 +165,6 @@ msgstr "AJAX ha fallito nell'approvare il tag: %s"
 msgid "AJAX failed to reject tag: %s"
 msgstr "AJAX ha fallito nel rigettare il tag: %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:310
-msgid "Access online"
-msgstr "Accesso online"
-
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Actions"
 msgstr "Azioni"
@@ -229,11 +225,11 @@ msgstr "Apr"
 msgid "April"
 msgstr "Aprile"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:356
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Sei sicuro di voler cancellare questa prenotazione?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:348
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:320
 msgid "Are you sure you want to check out this item?"
 msgstr "Sei sicuro di voler prestare questa copia?"
 
@@ -306,7 +302,7 @@ msgstr ""
 "L'attuale struttura verrà completamente sovrascritta. Per sicurezza di "
 "raccomandimao di fare pima un export come backup."
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:330
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:302
 msgid "Are you sure you want to return this item?"
 msgstr "Sei sicuro di voler fare rientrare questa copia?"
 
@@ -348,12 +344,17 @@ msgstr "Il rinnovo automatico non è riuscito, l'account è scaduto"
 msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr "Il rinnovo automatico non è riuscito, l'utente ha multe non pagate"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#, fuzzy
+msgid "Bibliographic record does not exist!"
+msgstr "Il fornitore non esiste"
+
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:17
 msgid "Both subfield values should be filled or empty."
 msgstr "Entrambi i sottocampi devono essere compilati o vuoti."
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:714
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:687
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:259
 msgid "CSV"
 msgstr "CSV"
 
@@ -364,13 +365,18 @@ msgstr ""
 "superato"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:395
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Cancella"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:383
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:355
 msgid "Cancel hold"
 msgstr "Cancella prenotazione"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#, javascript-format
+msgid "Cannot test prediction pattern for the following reason(s): %s"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:10
 msgid ""
@@ -378,11 +384,11 @@ msgid ""
 "and _."
 msgstr "Il codice di categoria può contenere solo: lettere, numeri, - e _."
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:329
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:301
 msgid "Check in"
 msgstr "Restituisci"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:347
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:319
 msgid "Check out"
 msgstr "Presta"
 
@@ -416,16 +422,16 @@ msgstr "Cancella"
 msgid "Clear all"
 msgstr "Cancella tutto"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:389
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:397
 msgid "Clear date to suspend indefinitely"
 msgstr "Cancella la data per sospendere a tempo indefinito"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:742
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:744
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:314
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:316
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:715
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:717
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:287
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:289
 msgid "Clear filter"
 msgstr "Cancella il filtro"
 
@@ -439,13 +445,13 @@ msgstr "Clicca per compattare questa sezione"
 msgid "Click to expand this section"
 msgstr "Clicca per espandere questa sezione"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:760
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:332
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:733
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:305
 msgid "Columns"
 msgstr "Colonne"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:759
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:331
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:732
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:304
 msgid "Columns settings"
 msgstr "Impostazione delle colonne"
 
@@ -462,8 +468,8 @@ msgstr "Copiate %d righe negli appunti"
 msgid "Copied one row to clipboard"
 msgstr "Copiata una riga negli appunti"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:722
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:695
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:267
 msgid "Copy"
 msgstr "Copia"
 
@@ -515,14 +521,6 @@ msgstr "Fatto"
 msgid "Double click to edit"
 msgstr "Doppio click per modificare"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:296
-msgid "Download"
-msgstr "Scarica"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:321
-msgid "Download as:"
-msgstr "Scarica come:"
-
 #: koha-tmpl/intranet-tmpl/prog/js/acq.js:7
 msgid ""
 "ERROR: Price is not a valid number, please check the price and try again!"
@@ -567,18 +565,18 @@ msgstr "Errore; i tuoi dati non dovrebbero essere stati salvati, controlla."
 msgid "Every"
 msgstr "Ogni"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:706
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:278
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:679
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:251
 msgid "Excel"
 msgstr "Excel"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:775
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:347
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:748
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:320
 msgid "Export"
 msgstr "Esporta"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:774
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:346
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:747
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:319
 msgid "Export or print"
 msgstr "Esporta o stampa"
 
@@ -596,9 +594,23 @@ msgstr "Febbraio"
 msgid "First"
 msgstr "Primo"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+msgid "First publication date is not defined"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Fr"
 msgstr "Ve"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:19
+msgid ""
+"Frequency and subscription length provided doesn't combine well. Please "
+"consider entering an issue count rather than a time period."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+msgid "Frequency is not defined"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
@@ -622,11 +634,16 @@ msgstr ""
 "La somma iniserita nel fondo supera la disponibilità presente nel periodo "
 "temporale di riferimento"
 
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:295
+#, fuzzy
+msgid "Get item"
+msgstr "Rimuovi la copia"
+
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
 msgid "Go back to the results"
 msgstr "Ritorna ai risultati"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:262
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:270
 msgid "Hold is <strong>suspended</strong>"
 msgstr "La prenotazione è <strong>sospesa</strong>"
 
@@ -637,6 +654,12 @@ msgstr "Prenotazioni"
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
 msgid "If the field is a control field, the subfield should be empty"
 msgstr "Se il campo è un controlfield, il sottocampo deve essere vuoto"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:51
+msgid ""
+"If you wish to claim late or missing issues you must link this subscription "
+"to a vendor. Click OK to ignore or Cancel to return and enter a vendor"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
@@ -654,25 +677,25 @@ msgstr "Nel tuo carrello"
 msgid "Internal Server Error, please reload the page"
 msgstr "Errore interno al server, ricarica la pagina"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:412
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
 msgid "Item cannot be checked out. There are no available formats"
 msgstr "La copia non può essere prestata. Non ci sono formati disponibili"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:302
 #, javascript-format
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Copia non ancora trasferita da %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:300
 #, javascript-format
 msgid "Item is <strong>in transit</strong> from %s since %s"
 msgstr "La copia è <strong>in transito</strong> da %s sino a %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:278
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
 msgid "Item is <strong>waiting here</strong>"
 msgstr "La copia è <strong>in attesa qui</strong>"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:283
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:291
 msgid "Item is <strong>waiting</strong>"
 msgstr "La copia è <strong>in attesa</strong>"
 
@@ -797,12 +820,16 @@ msgstr "Il nuovo budget superiore è in realtà un budget inferiore"
 msgid "Next"
 msgstr "Successivo"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:270
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:278
 #, javascript-format
 msgid "Next available %s item"
 msgstr "Prossima copia disponibile %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:232
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+msgid "Next issue publication date is not defined"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:240
 msgid "No"
 msgstr "No"
 
@@ -814,7 +841,7 @@ msgid "No cover image available"
 msgstr "Nessuna copertina disponibile"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:550
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:523
 msgid "No data available in table"
 msgstr "Non ci sono dati nella tabella"
 
@@ -867,6 +894,10 @@ msgstr "Non rinnovare prima di %s"
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:24
 msgid "No results found"
 msgstr "Nessun risultato trovato"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+msgid "No subscription found on Mana Knowledge Base"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:494
@@ -926,7 +957,7 @@ msgstr "Ottobre"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:466
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:595
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:341
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
 msgid "On hold"
 msgstr "In attesa"
 
@@ -945,7 +976,7 @@ msgstr "Note utente"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:86
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:354
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:377
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:349
 msgid "Place hold"
 msgstr "Prenota"
 
@@ -959,6 +990,10 @@ msgstr "Scegli un solo periodo di iscrizione in mesi O per data."
 msgid "Please choose at least one external target"
 msgstr "Seleziona almeno un server esterno"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+msgid "Please click on 'Test prediction pattern' before saving subscription."
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:11
 #, javascript-format
 msgid "Please delete %s character(s)"
@@ -969,10 +1004,21 @@ msgstr "Per favore cancella %s caratteri."
 msgid "Please enter %s or more characters"
 msgstr "Per favore inserisci %s o più caratteri."
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#, fuzzy
+msgid "Please enter a name for this pattern"
+msgstr "Per favore inserisci %s o più caratteri."
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:3
 #, javascript-format
 msgid "Please enter a valid date (should match %s)."
 msgstr "Per favore inserisci una data valida (deve corrispondere a %s)."
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+msgid ""
+"Please feel free to share your pattern with all others librarians once you "
+"are done"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:96
 msgid "Please fill at least one template."
@@ -1019,9 +1065,9 @@ msgstr "Precedente"
 msgid "Previous checkouts"
 msgstr "Prestiti precedenti"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:703
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:302
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:275
 msgid "Print"
 msgstr "Stampa"
 
@@ -1070,7 +1116,11 @@ msgstr "Risolvi"
 msgid "Results"
 msgstr "Risultati"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:250
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+msgid "Results from Mana Knowledge Base"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:258
 msgid "Resume"
 msgstr "Riprendi"
 
@@ -1105,6 +1155,10 @@ msgstr "Schedulato per rinnovo automatico"
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:22
 msgid "Search:"
 msgstr "Cerca:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+msgid "Searching for subscription in Mana Knowledge Base"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
 msgid "Searching…"
@@ -1144,6 +1198,11 @@ msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Mostra 1 avviso non sistemato "
 msgstr[1] "Mostra {count} avvisi non sistemati"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#, fuzzy
+msgid "Show Mana results"
+msgstr "Risultati per %s"
+
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:19
 msgid "Show _MENU_ entries"
 msgstr "Mostra i valori di _MENU_"
@@ -1165,9 +1224,18 @@ msgstr "Alcuni budget non sono definiti nei record di copia"
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Qualocas è andato male. Forse il valore esiste già?"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#, fuzzy
+msgid "Something went wrong. Unable to create a new numbering pattern."
+msgstr "Qualocas è andato male. Forse il valore esiste già?"
+
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "Su"
 msgstr "Do"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+msgid "Subscription found on Mana Knowledge Base:"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
@@ -1179,16 +1247,16 @@ msgstr "Dom"
 msgid "Sunday"
 msgstr "Domenica"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:253
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:261
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:402
 msgid "Suspend"
 msgstr "Sospendere"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:380
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:388
 msgid "Suspend hold on"
 msgstr "Sospendti la prenotazione su"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:386
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:394
 msgid "Suspend until:"
 msgstr "Sospendi fino a:"
 
@@ -1290,6 +1358,11 @@ msgstr "Il fornitore non esiste"
 msgid "There is no record selected"
 msgstr "Non ci sono record selezionati"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#, fuzzy
+msgid "This bibliographic record does not exist"
+msgstr "Il fornitore non esiste"
+
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:53
 msgid "This field is mandatory and must have at least one mapping"
 msgstr "Questo campo è obbligatorio e deve avera almeno un valore"
@@ -1301,6 +1374,10 @@ msgstr "Questa copia è stata aggiunta al tuo carrello"
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
 msgid "This item is already in your cart"
 msgstr "La copia è già presente nel tuo carrello"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+msgid "This pattern name already exists. Do you want to modify it?"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:6
 msgid "This pickup location is not allowed according to circulation rules"
@@ -1352,11 +1429,11 @@ msgstr "Impossibile restituire"
 msgid "Unable to claim as returned"
 msgstr "Non possibile definirla come rientrata"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:330
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:338
 msgid "Unable to resume, hold not found"
 msgstr "Incapace di riprendere, prenotazione non trovata"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:416
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:424
 msgid "Unable to suspend, hold not found"
 msgstr "Impossibile sospendere, prenotazione non trovata"
 
@@ -1377,6 +1454,12 @@ msgstr "Aggiorna copia"
 msgid "View comparison"
 msgstr "Vista confronto"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+msgid ""
+"Warning! Present pattern has planned irregularities. Click on 'Test "
+"prediction pattern' to check if it's still valid"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:35
 #, javascript-format
 msgid ""
@@ -1386,6 +1469,12 @@ msgstr ""
 "Attenzione: Il record è usato in questo/i %s ordine/i. Cancellandolo "
 "causerai sei problemi al modulo di acquisizione. Sei sicuro di voler "
 "cancellare il record ?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+msgid ""
+"Warning: This will modify the pattern for all subscriptions that are using "
+"it."
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
 msgid "We"
@@ -1405,7 +1494,7 @@ msgstr "Mercoledì"
 msgid "Wk"
 msgstr "Sett"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:233
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:241
 msgid "Yes"
 msgstr "Sì"
 
@@ -1425,6 +1514,25 @@ msgstr "Non puoi ricevere ulteriori copia"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:63
 msgid "You have made changes to system preferences."
 msgstr "Hai fatto cambiamenti sulle preferenze di sistema"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+msgid ""
+"You have modified the advanced prediction pattern. Please save your work or "
+"cancel modifications."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+msgid "You must choose a first publication date"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+msgid "You must choose a subscription length or an end date."
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:65
+#, fuzzy
+msgid "You must choose or create a bibliographic record"
+msgstr "Devi scegliere almeno un record"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:424
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:435
@@ -1448,12 +1556,12 @@ msgstr "Devi loggarti di nuovo, la tua sessione è scaduta"
 msgid "Your cart is currently empty"
 msgstr "Il tuo carrello è vuoto"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:333
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:427
 msgid "Your request could not be processed. Check the logs"
 msgstr "La tua richiesta non può essere lavorata. Controlla i logs"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:359
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:332
 msgid "a an the"
 msgstr "a an the il la lo le un uno una gli i"
 
@@ -1466,16 +1574,16 @@ msgstr "esiste di già nel database"
 msgid "already in your cart"
 msgstr "già nel tuo carrello"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:280
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:284
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:288
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:294
 #, javascript-format
 msgid "at %s"
 msgstr "presso %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:738
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:157
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:156
 msgid "by _AUTHOR_"
 msgstr "per _AUTHOR_"
 
@@ -1511,14 +1619,23 @@ msgstr "troppi rinnovi consecutivi senza essere rientrato in biblioteca"
 msgid "too many renewals"
 msgstr "troppi rinnovi"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:264
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:272
 #, javascript-format
 msgid "until %s"
 msgstr "fino a %s"
 
+#~ msgid "Access online"
+#~ msgstr "Accesso online"
+
 #~ msgctxt "Bibliographic records"
 #~ msgid "Are you sure you want to remove the selected items?"
 #~ msgstr "Sei sicuro di voler rimuovere queste copie?"
+
+#~ msgid "Download"
+#~ msgstr "Scarica"
+
+#~ msgid "Download as:"
+#~ msgstr "Scarica come:"
 
 #~ msgid "One or more selected items cannot be placed on hold."
 #~ msgstr "Uno o più copie selezionate non possono essere prenotate."
