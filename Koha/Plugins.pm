@@ -78,6 +78,9 @@ sub call {
     if (C4::Context->config('enable_plugins')) {
         my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
         @plugins = grep { $_->can($method) } @plugins;
+        # TODO: Remove warn when after_hold_create is removed from the codebase
+        warn "after_hold_create is deprecated and will be removed soon. Contact the following plugin's authors: " . join( ', ', map {$_->{metadata}->{name}} @plugins)
+            if $method eq 'after_hold_create' and @plugins;
         foreach my $plugin (@plugins) {
             my $response = eval { $plugin->$method(@args) };
             if ($@) {

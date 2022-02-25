@@ -72,12 +72,13 @@ subtest 'after_hold_create() hook tests' => sub {
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    warning_like { AddReserve({
+    warnings_like { AddReserve({
                         branchcode     => $patron->branchcode,
                         borrowernumber => $patron->borrowernumber,
                         biblionumber   => $item_1->biblionumber }); }
-        qr/after_hold_create called with parameter Koha::Hold/,
-          'AddReserve calls the after_hold_create hook';
+        [ qr/after_hold_create is deprecated and will be removed soon/,
+          qr/after_hold_create called with parameter Koha::Hold/ ],
+          'AddReserve calls the after_hold_create hook, deprecation warning found';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
@@ -113,7 +114,7 @@ subtest 'after_hold_action (placed) hook tests' => sub {
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    warning_like {
+    warnings_like {
         AddReserve(
             {   branchcode     => $patron->branchcode,
                 borrowernumber => $patron->borrowernumber,
@@ -121,7 +122,7 @@ subtest 'after_hold_action (placed) hook tests' => sub {
             }
         );
     }
-    qr/after_hold_action called with action: place, ref: Koha::Hold/, 'AddReserve calls the after_hold_action hook';
+    [ qr/after_hold_create is deprecated and will be removed soon/, qr/after_hold_action called with action: place, ref: Koha::Hold/,  ], 'AddReserve calls the after_hold_action hook';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
