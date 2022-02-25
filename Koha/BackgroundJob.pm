@@ -240,7 +240,7 @@ sub _derived_class {
         unless $class;
 
     eval "require $class";
-    return $class->new;
+    return $class->_new_from_dbic( $self->_result );
 }
 
 =head3 type_to_class_mapping
