@@ -32,7 +32,7 @@ use C4::Koha qw(
     GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
-use C4::Search qw( new_record_from_zebra );
+use C4::Search qw( new_record_from_zebra searchResults getRecords );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Output qw( parametrized_url output_html_with_http_headers );
 use C4::Biblio qw(
