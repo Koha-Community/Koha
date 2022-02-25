@@ -27,6 +27,7 @@ use t::lib::Mocks;
 use t::lib::Dates;
 
 use C4::Auth;
+use C4::Members::Messaging;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Exceptions::Patron;
@@ -295,7 +296,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 24;
+        plan tests => 25;
 
         $schema->storage->txn_begin;
 
@@ -531,6 +532,43 @@ subtest 'add() tests' => sub {
             )->status_is(201, 'Patron added')->tx->res->json->{patron_id};
             my $extended_attributes = join( ' ', sort map {$_->attribute} Koha::Patrons->find($patron_id)->extended_attributes->as_list);
             is( $extended_attributes, 'a b c d e', 'Extended attributes are stored correctly');
+        };
+
+        subtest 'default patron messaging preferences handling' => sub {
+
+            plan tests => 3;
+
+            t::lib::Mocks::mock_preference( 'EnhancedMessagingPreferences', 1 );
+
+            C4::Members::Messaging::SetMessagingPreference({
+                categorycode => 'ST',
+                message_attribute_id => 1,
+                message_transport_types => ['email'],
+                wants_digest => 1
+            });
+
+            my $patron_id = $t->post_ok(
+                "//$userid:$password@/api/v1/patrons" => json => {
+                    "firstname"   => "Nick",
+                    "surname"     => "Clemens",
+                    "address"     => "Somewhere",
+                    "category_id" => "ST",
+                    "city"        => "Smallville",
+                    "library_id"  => "MPL",
+                }
+            )->status_is(201, 'Patron added')->tx->res->json->{patron_id};
+
+            my $messaging_preferences = C4::Members::Messaging::GetMessagingPreferences({ borrowernumber => $patron_id, message_name => 'Item_Due' });
+
+            is_deeply(
+                $messaging_preferences,
+                {
+                    letter_code => 'DUEDGST',
+                    wants_digest => 1,
+                    transports => { email => 'DUEDGST' }
+                } ,
+                'Default messaging preferences set correctly'
+            );
         };
 
         $schema->storage->txn_rollback;
