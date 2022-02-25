@@ -118,6 +118,14 @@ sub add {
                           @$extended_attributes
                     ]
                 );
+                if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
+                    C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+                        {
+                            borrowernumber => $patron->borrowernumber,
+                            categorycode   => $patron->categorycode,
+                        }
+                    );
+                }
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $patron->borrowernumber);
                 return $c->render(
