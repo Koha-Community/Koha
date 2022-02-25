@@ -26,7 +26,6 @@ use JSON qw( encode_json decode_json );
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 
@@ -75,11 +74,7 @@ The generated report will be:
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job_type = $args->{job_type};
-
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+    if ( $self->status eq 'cancelled' ) {
         return;
     }
 
@@ -87,7 +82,7 @@ sub process {
     # Then we will start from scratch and so double delete the same records
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)->progress($job_progress)
+    $self->started_on(dt_from_string)->progress($job_progress)
       ->status('started')->store;
 
     my @record_ids     = @{ $args->{record_ids} };
@@ -109,7 +104,7 @@ sub process {
                 my (@biblionumbers);
                 for my $record_id ( sort { $a <=> $b } @record_ids ) {
 
-                    last if $job->get_from_storage->status eq 'cancelled';
+                    last if $self->get_from_storage->status eq 'cancelled';
 
                     my $item = Koha::Items->find($record_id) || next;
 
@@ -136,7 +131,7 @@ sub process {
                     push @biblionumbers,       $item->biblionumber;
 
                     $report->{total_success}++;
-                    $job->progress( ++$job_progress )->store;
+                    $self->progress( ++$job_progress )->store;
                 }
 
                 # If there are no items left, delete the biblio
@@ -183,13 +178,13 @@ sub process {
     $report->{not_deleted_itemnumbers} = \@not_deleted_itemnumbers;
     $report->{deleted_biblionumbers}   = \@deleted_biblionumbers;
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;
     $job_data->{report}   = $report;
 
-    $job->ended_on(dt_from_string)->data( encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->ended_on(dt_from_string)->data( encode_json $job_data);
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 }
 
 =head3 enqueue

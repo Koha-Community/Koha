@@ -27,7 +27,6 @@ use MARC::Field;
 use C4::Biblio;
 use C4::Items;
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::SearchEngine::Indexer;
 use Koha::Items;
@@ -85,9 +84,7 @@ regex_mod allows to modify existing subfield's values using a regular expression
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+    if ( $self->status eq 'cancelled' ) {
         return;
     }
 
@@ -95,7 +92,7 @@ sub process {
     # Then we will start from scratch and so double process the same records
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)->progress($job_progress)
+    $self->started_on(dt_from_string)->progress($job_progress)
       ->status('started')->store;
 
     my @record_ids = @{ $args->{record_ids} };
@@ -120,7 +117,7 @@ sub process {
                   $exclude_from_local_holds_priority,
                 callback => sub {
                     my ($progress) = @_;
-                    $job->progress($progress)->store;
+                    $self->progress($progress)->store;
                 },
             }
           );
@@ -133,13 +130,13 @@ sub process {
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
-    $job->discard_changes;
-    my $job_data = decode_json encode_utf8 $job->data;
+    $self->discard_changes;
+    my $job_data = decode_json encode_utf8 $self->data;
     $job_data->{report} = $report;
 
-    $job->ended_on(dt_from_string)->data( encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->ended_on(dt_from_string)->data( encode_json $job_data);
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 }
 
 =head3 enqueue
@@ -173,9 +170,7 @@ Sent the infos to generate the table containing the details of the modified item
 sub additional_report {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    my $itemnumbers = $job->report->{modified_itemnumbers};
+    my $itemnumbers = $self->report->{modified_itemnumbers};
     if ( scalar(@$itemnumbers) > C4::Context->preference('MaxItemsToDisplayForBatchMod') ) {
         return { too_many_items_display => 1 };
     } else {

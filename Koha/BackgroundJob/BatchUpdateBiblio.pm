@@ -18,7 +18,6 @@ package Koha::BackgroundJob::BatchUpdateBiblio;
 use Modern::Perl;
 use JSON qw( decode_json encode_json );
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Virtualshelves;
 
@@ -57,9 +56,7 @@ Process the modification.
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+    if ( $self->status eq 'cancelled' ) {
         return;
     }
 
@@ -67,7 +64,7 @@ sub process {
     # Then we will start from scratch and so double process the same records
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)
+    $self->started_on(dt_from_string)
         ->progress($job_progress)
         ->status('started')
         ->store;
@@ -82,7 +79,7 @@ sub process {
     my @messages;
     RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
-        last if $job->get_from_storage->status eq 'cancelled';
+        last if $self->get_from_storage->status eq 'cancelled';
 
         next unless $biblionumber;
 
@@ -110,17 +107,17 @@ sub process {
             };
             $report->{total_success}++;
         }
-        $job->progress( ++$job_progress )->store;
+        $self->progress( ++$job_progress )->store;
     }
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;
 
-    $job->ended_on(dt_from_string)
+    $self->ended_on(dt_from_string)
         ->data(encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 }
 
 =head3 enqueue

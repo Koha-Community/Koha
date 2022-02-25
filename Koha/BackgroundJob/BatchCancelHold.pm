@@ -18,7 +18,6 @@ package Koha::BackgroundJob::BatchCancelHold;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::Patrons;
@@ -55,14 +54,12 @@ Process the modification.
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+    if ( $self->status eq 'cancelled' ) {
         return;
     }
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)->progress($job_progress)
+    $self->started_on(dt_from_string)->progress($job_progress)
       ->status('started')->store;
 
     my @hold_ids = @{ $args->{hold_ids} };
@@ -109,16 +106,16 @@ sub process {
               };
             $report->{total_success}++;
         }
-        $job->progress( ++$job_progress )->store;
+        $self->progress( ++$job_progress )->store;
     }
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;
     $job_data->{report}   = $report;
 
-    $job->ended_on(dt_from_string)->data( encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->ended_on(dt_from_string)->data( encode_json $job_data);
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 
 }
 
@@ -153,8 +150,7 @@ Pass the biblio's title and patron's name
 sub additional_report {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-    my $messages = $job->messages;
+    my $messages = $self->messages;
     for my $m ( @$messages ) {
         $m->{patron} = Koha::Patrons->find($m->{patron_id});
         $m->{biblio} = Koha::Biblios->find($m->{biblio_id});

@@ -3,7 +3,6 @@ package Koha::BackgroundJob::BatchDeleteBiblio;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use C4::Biblio;
 
@@ -38,11 +37,7 @@ Process the job.
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job_type = $args->{job_type};
-
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+    if ( $self->status eq 'cancelled' ) {
         return;
     }
 
@@ -50,7 +45,7 @@ sub process {
     # Then we will start from scratch and so double delete the same records
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)
+    $self->started_on(dt_from_string)
         ->progress($job_progress)
         ->status('started')
         ->store;
@@ -66,7 +61,7 @@ sub process {
     my $schema = Koha::Database->new->schema;
     RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
 
-        last if $job->get_from_storage->status eq 'cancelled';
+        last if $self->get_from_storage->status eq 'cancelled';
 
         next unless $record_id;
 
@@ -85,7 +80,7 @@ sub process {
                 biblionumber => $biblionumber,
             };
             $schema->storage->txn_rollback;
-            $job->progress( ++$job_progress )->store;
+            $self->progress( ++$job_progress )->store;
             next;
         }
 
@@ -104,7 +99,7 @@ sub process {
                     error => "$@",
                 };
                 $schema->storage->txn_rollback;
-                $job->progress( ++$job_progress )->store;
+                $self->progress( ++$job_progress )->store;
                 next RECORD_IDS;
             }
         }
@@ -122,7 +117,7 @@ sub process {
                     error => @{$deleted->messages}[0]->message,
                 };
                 $schema->storage->txn_rollback;
-                $job->progress( ++$job_progress )->store;
+                $self->progress( ++$job_progress )->store;
                 next RECORD_IDS;
             }
         }
@@ -139,7 +134,7 @@ sub process {
                 error => ($@ ? $@ : $error),
             };
             $schema->storage->txn_rollback;
-            $job->progress( ++$job_progress )->store;
+            $self->progress( ++$job_progress )->store;
             next;
         }
 
@@ -150,17 +145,17 @@ sub process {
         };
         $report->{total_success}++;
         $schema->storage->txn_commit;
-        $job->progress( ++$job_progress )->store;
+        $self->progress( ++$job_progress )->store;
     }
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;
 
-    $job->ended_on(dt_from_string)
+    $self->ended_on(dt_from_string)
         ->data(encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 }
 
 =head3 enqueue
