@@ -1904,9 +1904,19 @@ Composing rels: L</aqorder_users> -> ordernumber
 
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
+=head2 permissions
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-09-20 12:00:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9g9WsdsdPINi2NP4H2A+CA
+Type: many_to_many
+
+Composing rels: L</user_permissions> -> permission
+
+=cut
+
+__PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-25 00:33:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qPGKczsaKaLxxiNzZS5zdQ
 
 __PACKAGE__->has_many(
   "extended_attributes",

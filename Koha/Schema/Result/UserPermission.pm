@@ -41,7 +41,7 @@ __PACKAGE__->table("user_permissions");
 
   data_type: 'varchar'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
   size: 64
 
 =cut
@@ -62,8 +62,24 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
   "code",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 64 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 64 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</borrowernumber>
+
+=item * L</module_bit>
+
+=item * L</code>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("borrowernumber", "module_bit", "code");
 
 =head1 RELATIONS
 
@@ -94,17 +110,12 @@ __PACKAGE__->belongs_to(
   "permission",
   "Koha::Schema::Result::Permission",
   { code => "code", module_bit => "module_bit" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9dMAYxSmVQ1cVKxmnMiMkg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-25 00:33:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sp3t39eo8WmHNKGljRXyEw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

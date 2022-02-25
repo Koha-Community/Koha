@@ -108,9 +108,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 borrowernumbers
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ut3lzlxoPPoIIwmhJViV1Q
+Type: many_to_many
+
+Composing rels: L</user_permissions> -> borrowernumber
+
+=cut
+
+__PACKAGE__->many_to_many("borrowernumbers", "user_permissions", "borrowernumber");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-25 00:33:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L0ySPlaEt7Ax62xqBMIZpQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
