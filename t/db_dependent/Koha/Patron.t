@@ -1054,6 +1054,7 @@ subtest 'messages' => sub {
 subtest 'recalls() tests' => sub {
 
     plan tests => 2;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
     my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber } });
     my $biblio2 = $builder->build_object({ class => 'Koha::Biblios' });

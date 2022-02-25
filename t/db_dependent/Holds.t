@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::Exception;
 
 use MARC::Record;
@@ -1574,7 +1574,7 @@ subtest 'CanItemBeReserved / recall' => sub {
         recalldate => '2020-05-04 10:10:10',
         item_level_recall => 1,
     })->store;
-    is( CanItemBeReserved( $patron1->borrowernumber, $item1->itemnumber, $library1->branchcode )->{status}, 'recall', "Can't reserve an item that they have already recalled" );
+    is( CanItemBeReserved( $patron1, $item1, $library1->branchcode )->{status}, 'recall', "Can't reserve an item that they have already recalled" );
 
     $schema->storage->txn_rollback;
 };

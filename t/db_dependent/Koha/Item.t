@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
