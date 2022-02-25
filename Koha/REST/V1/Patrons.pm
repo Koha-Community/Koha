@@ -136,6 +136,15 @@ sub add {
 
         my $patron = Koha::Patron->new_from_api( $c->validation->param('body') )->store;
 
+        if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
+            C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+                {
+                    borrowernumber => $patron->borrowernumber,
+                    categorycode   => $patron->categorycode,
+                }
+            );
+        }
+
         $c->res->headers->location( $c->req->url->to_string . '/' . $patron->borrowernumber );
         return $c->render(
             status  => 201,
