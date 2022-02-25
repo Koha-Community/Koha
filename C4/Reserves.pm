@@ -306,6 +306,13 @@ sub AddReserve {
     }
 
     Koha::Plugins->call('after_hold_create', $hold);
+    Koha::Plugins->call(
+        'after_hold_action',
+        {
+            action  => 'place',
+            payload => { hold => $hold->get_from_storage }
+        }
+    );
 
     return $reserve_id;
 }
