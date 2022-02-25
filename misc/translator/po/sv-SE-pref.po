@@ -5843,9 +5843,12 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "sekunder."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr "."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
 
 # Circulation > Self check-out module
 msgid ""
@@ -6655,12 +6658,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] i avgift."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Låntagare kan endast ha "
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "reservationer samtidigt. "
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9816,14 +9822,6 @@ msgstr ""
 "Den här beskrivningen kommer att synas i sökmotorernas söklistor (160 "
 "tecken)."
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-"Lägg till ytterligare element till \"Fler sökningar\" i OPAC, med följande "
-"HTML (lämna tomt för att inaktivera):"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "Visa"
@@ -10178,21 +10176,27 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "som standardkategori för låntagare som registreras via OPAC."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Använd koden för låntagarkategorin"
 
 # OPAC > Self registration and modification
@@ -10220,12 +10224,17 @@ msgstr ""
 "existerar i databasen."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
+"<br><strong>OBS!</strong> Denna systeminställning kräver att följande "
+"cronjobb körs: <code>misc/cronjobs/cleanup_database.pl</code>Be din "
+"systemadministratör att schemalägga det."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -11495,7 +11504,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "Ort"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
 msgstr "Avdelning"
 
 # Patrons > Security
@@ -11519,12 +11529,14 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "Aktivera"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr "Låntagares bibliotek"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
+msgstr "Låntagares bibliotek"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -13757,6 +13769,14 @@ msgstr "rader av en rapport som begärts via webbtjänsten för rapporter."
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (lista över "
 #~ "låntagarkategorier separerade med '|')"
 
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr "."
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "reservationer samtidigt. "
+
 # Enhanced content > Adlibris
 #~ msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 #~ msgstr "Visa inte"
@@ -13824,6 +13844,14 @@ msgstr "rader av en rapport som begärts via webbtjänsten för rapporter."
 # OPAC > Policy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
 #~ msgstr "Kvantitet"
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches"
+#~ "\" bar on the OPAC, with the following HTML (leave blank to disable):"
+#~ msgstr ""
+#~ "Lägg till ytterligare element till \"Fler sökningar\" i OPAC, med "
+#~ "följande HTML (lämna tomt för att inaktivera):"
 
 # OPAC > Appearance
 #~ msgid ""

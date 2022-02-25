@@ -5868,9 +5868,12 @@ msgstr ""
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr " ثواني."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr ". "
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
 
 # Circulation > Self check-out module
 msgid ""
@@ -6671,12 +6674,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] في الغرامات."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "للمستفيدين فقط"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "الحجوزات مرة واحدة."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9893,14 +9899,6 @@ msgid ""
 "results (160 characters)."
 msgstr "سيظهر هذا الوصف في نتائج محرك البحث ( 160 حرفاً)."
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-"قم بإضافة عناصر إضافية إلى شريط \"مزيد من البحث\" في الأوباك، بالـ HTML "
-"التالي (اتركه خاليًا للتعطيل):"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "عرض"
@@ -10264,17 +10262,23 @@ msgid ""
 msgstr ""
 "المستفيدين بتأكيد عناوين البريد الإلكتروني الخاصة بهم عن طريق إدخالها مرتين."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
 #, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "كفئة المستفيد الافتراضية للمستفيدين المسجلين عبر الأوباك"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "<br><strong>تحذير: لا تستخدم فئة مستفيد منتظمة للتسجيل الذاتي.</strong> إذا "
 "تم تنصيب كرون <code>misc/cronjobs/cleanup_database.pl</code> لحذف التسجيلات "
@@ -10283,8 +10287,8 @@ msgstr ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay يوماً بلا رجعة."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "استخدم رمز فئة المستفيد"
 
 # OPAC > Self registration and modification
@@ -10311,11 +10315,13 @@ msgstr ""
 "قبول البريد الالكتروني إذا كان موجودا بالفعل في قاعدة البيانات."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>ملاحظة:</strong>يتطلب هذا التفضيل الكرون <code>misc/cronjobs/"
 "cleanup_database.pl</code> اطلب من مدير نظامك جدولته."
@@ -11590,7 +11596,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "المدينة"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
 msgstr "رمز المجموعة"
 
 # Patrons > Security
@@ -11614,11 +11621,13 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "تفعيل"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
 msgstr "الفرع المقتني"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
 msgstr "الفرع الرئيسي"
 
 # Patrons > Security
@@ -13881,6 +13890,14 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(قائمة بفئات المستفيد المفصولة بعلامة العمود  '|')"
 
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr ". "
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "الحجوزات مرة واحدة."
+
 # Enhanced content > Adlibris
 #~ msgid "enhanced_content.pref Adlibris"
 #~ msgstr "Adlibris"
@@ -14195,6 +14212,14 @@ msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير و�
 #~ "syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">الافتراضي</a> "
 #~ "للإعداد الافتراضي</li><li> ضع مساراً لتحدد ملفxslt </li><li> ضع عنوان URL "
 #~ "لنمط خارجي محدد.</li></ul> {langcode} سيتم استبدالها بلغة الواجهة الحالية."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches"
+#~ "\" bar on the OPAC, with the following HTML (leave blank to disable):"
+#~ msgstr ""
+#~ "قم بإضافة عناصر إضافية إلى شريط \"مزيد من البحث\" في الأوباك، بالـ HTML "
+#~ "التالي (اتركه خاليًا للتعطيل):"
 
 # OPAC > Appearance
 #~ msgid ""

@@ -5587,8 +5587,11 @@ msgstr "Setze den Timeout des Selbstausleihsystems auf"
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "Sekunden."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
 msgstr ""
 
 # Circulation > Self check-out module
@@ -6339,12 +6342,14 @@ msgstr ""
 msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr ""
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+# Circulation > Holds policy > maxreserves
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr ""
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
 msgstr ""
 
 # Circulation > Checkout policy
@@ -9440,12 +9445,6 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr ""
@@ -9780,18 +9779,22 @@ msgstr ""
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
-# OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr ""
 
 # OPAC > Self registration and modification
@@ -9815,13 +9818,18 @@ msgid ""
 "already exists in the database."
 msgstr ""
 
-# OPAC > Self registration and modification
+# Acquisitions > Policy
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
+"acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> "
+"System preference ini memerlukan <code>misc/cronjobs/purge_suggestions.pl</"
+"code> cronjob. Minta pentadbir sistem untuk membuat skedulan."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -11003,8 +11011,8 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# City"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
+# Patrons > Security > Pseudonymization
+msgid "patrons.pref#Pseudonymization# Collection"
 msgstr ""
 
 # Patrons > Security
@@ -11027,12 +11035,13 @@ msgstr ""
 msgid "patrons.pref#Pseudonymization# Enable"
 msgstr ""
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+# Searching > Results display
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr "Zeige keine"
 
-# Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
+# Patrons > Security > Pseudonymization
+msgid "patrons.pref#Pseudonymization# Home library"
 msgstr ""
 
 # Patrons > Security

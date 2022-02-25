@@ -5634,8 +5634,11 @@ msgstr " Time out the current user's web-based self issue system login after"
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr ""
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
 msgstr ""
 
 # Circulation > Self check-out module
@@ -6435,12 +6438,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr " Users can only have"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr " reservations at once."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9512,12 +9518,6 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr ""
@@ -9875,16 +9875,23 @@ msgid ""
 "address by entering it twice."
 msgstr " users to confirm their email address by entering it twice."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr " as the default user category for users registered via the OPAC."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 " <br><strong>WARNING: Do not use a regular user category for self "
 "registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> "
@@ -9895,8 +9902,8 @@ msgstr ""
 "a> days ago."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr " Use the user category code"
 
 # OPAC > Self registration and modification
@@ -9922,12 +9929,13 @@ msgstr ""
 " users email (borrowers.email) as unique on self registering. An email won't "
 "be accepted if it already exists in the database."
 
-# OPAC > Self registration and modification
+# OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 
 # OPAC > Self registration and modification
@@ -11155,8 +11163,9 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr ""
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
+msgstr " Postcode"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -11179,12 +11188,14 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr ""
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
-msgstr ""
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
+msgstr " User's library"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
-msgstr ""
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
+msgstr " User's library"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -13276,6 +13287,10 @@ msgstr ""
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr " (list of user categories separated with a pipe '|')"
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr " reservations at once."
 
 # OPAC > Payments
 #~ msgid ""

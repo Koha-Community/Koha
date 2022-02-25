@@ -5864,9 +5864,12 @@ msgstr "ప్రస్తుత పోషకుడి వెబ్-ఆధార
 msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr "సెకన్లు."
 
-# Circulation > Self check-out module
-msgid "circulation.pref#SelfCheckoutByLogin# ."
-msgstr "circulation.pref#SelfCheckoutByLogin# ."
+# Circulation > Self check-out module > SelfCheckoutByLogin
+msgid ""
+"circulation.pref#SelfCheckoutByLogin# .</br>NOTE: If using 'cardnumber' and "
+"AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
+"brute force attacks to gain patron information outside the library."
+msgstr ""
 
 # Circulation > Self check-out module
 msgid ""
@@ -6665,12 +6668,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "జరిమానాల్లో [% local_currency%]."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "పోషకులు మాత్రమే కలిగి ఉంటారు"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "ఒకేసారి కలిగి ఉంటుంది."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9850,14 +9856,6 @@ msgid ""
 "results (160 characters)."
 msgstr "ఈ వివరణ సెర్చ్ ఇంజన్ ఫలితాల్లో చూపబడుతుంది (160 అక్షరాలు)."
 
-# OPAC > Appearance
-msgid ""
-"opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
-"bar on the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
-"కింది HTML తో, ఒపాక్‌లోని \"మరిన్ని శోధనలు\" బార్‌కు అదనపు అంశాలను జోడించండి (నిలిపివేయడానికి ఖాళీగా "
-"ఉంచండి):"
-
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
 msgstr "ప్రదర్శన"
@@ -10220,16 +10218,23 @@ msgid ""
 "address by entering it twice."
 msgstr "వారి ఇమెయిల్ చిరునామాను రెండుసార్లు నమోదు చేయడం ద్వారా ధృవీకరించడానికి పోషకులు."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "ఒపాక్ ద్వారా నమోదు చేయబడిన పోషకుల కోసం డిఫాల్ట్ పోషక వర్గంగా."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>హెచ్చరిక: స్వీయ నమోదు "
 "కోసం సాధారణ పోషక వర్గాన్ని ఉపయోగించవద్దు.</strong> ఉంటే <code>misc/cronjobs/"
@@ -10240,8 +10245,8 @@ msgstr ""
 "a> రోజుల క్రితం."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "పోషక వర్గం కోడ్‌ను ఉపయోగించండి"
 
 # OPAC > Self registration and modification
@@ -10268,11 +10273,13 @@ msgstr ""
 "అంగీకరించబడదు."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>గమనిక:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/"
 "cleanup_database.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."
@@ -11548,7 +11555,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "నగరం"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Collection code"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Collection"
 msgstr "సేకరణ కోడ్"
 
 # Patrons > Security
@@ -11572,11 +11580,13 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "ప్రారంభించండి"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Holding branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Holding library"
 msgstr "శాఖను పట్టుకోవడం"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Home branch"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Home library"
 msgstr "ఇంటి శాఖ"
 
 # Patrons > Security
@@ -13816,6 +13826,14 @@ msgstr "నివేదికల వెబ్ సేవ ద్వారా అ�
 #~ "categories separated with a pipe '|')"
 #~ msgstr "('|' పైపుతో వేరు చేయబడిన పోషక వర్గాల జాబితా)"
 
+# Circulation > Self check-out module
+#~ msgid "circulation.pref#SelfCheckoutByLogin# ."
+#~ msgstr "circulation.pref#SelfCheckoutByLogin# ."
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "ఒకేసారి కలిగి ఉంటుంది."
+
 # Enhanced content > Adlibris
 #~ msgid "enhanced_content.pref Adlibris"
 #~ msgstr "enhanced_content.pref అడ్లిబ్రిస్"
@@ -14137,6 +14155,14 @@ msgstr "నివేదికల వెబ్ సేవ ద్వారా అ�
 #~ "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet "
 #~ "utilizes data in the item fields</li></ul>మీరు వివిధ భాషల కోసం బహుళ స్టైల్‌షీట్‌లను "
 #~ "కలిగి ఉంటే ప్లేస్‌హోల్డర్ {langcode} ప్రస్తుత ఇంటర్‌ఫేస్ భాషతో భర్తీ చేయబడుతుంది."
+
+# OPAC > Appearance
+#~ msgid ""
+#~ "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches"
+#~ "\" bar on the OPAC, with the following HTML (leave blank to disable):"
+#~ msgstr ""
+#~ "కింది HTML తో, ఒపాక్‌లోని \"మరిన్ని శోధనలు\" బార్‌కు అదనపు అంశాలను జోడించండి (నిలిపివేయడానికి ఖాళీగా "
+#~ "ఉంచండి):"
 
 # OPAC > Appearance
 #~ msgid ""
