@@ -112,7 +112,7 @@
                                                 [% UNLESS ( resul.isEDITORS ) %]
                                                     <td>
                                                          [% IF resul.used > 0 %]
-                                                            <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an:[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
+                                                            <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an,phr:[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
                                                         [% ELSE %]
                                                             0 records
                                                         [% END %]
