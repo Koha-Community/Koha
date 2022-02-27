@@ -35,8 +35,8 @@
                                     <thead>
                                         <tr>
                                             <th class="anti-the">Title</th>
-                                            <th class="psort title-string">Placed on</th>
-                                            <th class="title-string">Expires on</th>
+                                            <th class="psort">Placed on</th>
+                                            <th>Expires on</th>
                                             <th>Pickup location</th>
                                             <th>Status</th>
                                             <th>Due date</th>
@@ -55,13 +55,13 @@
                                                     </a>
                                                     [% RECALL.biblio.author | html %]
                                                 </td>
-                                                <td class="recalldate">
+                                                <td class="recalldate" data-order="[% RECALL.recalldate | html %]">
                                                     <span title="[% RECALL.recalldate | html %]">
                                                         <span class="tdlabel">Recall date:</span>
                                                             [% RECALL.recalldate | $KohaDates %]
                                                     </span>
                                                 </td>
-                                                <td class="expirationdate">
+                                                <td class="expirationdate" data-order="[% RECALL.expirationdate | html %]">
                                                         [% IF ( RECALL.expirationdate ) %]
                                                             <span title="[% RECALL.expirationdate | html %]">
                                                                 <span class="tdlabel">Expiration:</span>

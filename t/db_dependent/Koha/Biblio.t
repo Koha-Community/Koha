@@ -928,13 +928,13 @@ subtest 'Recalls tests' => sub {
         item_level_recall => 1
     })->store;
 
-    my $recalls_count = scalar $biblio->recalls;
+    my $recalls_count = $biblio->recalls->count;
     is( $recalls_count, 3, 'Correctly get number of active recalls for biblio' );
 
     $recall1->set_cancelled;
     $recall2->set_expired({ interface => 'COMMANDLINE' });
 
-    $recalls_count = scalar $biblio->recalls;
+    $recalls_count = $biblio->recalls->count;
     is( $recalls_count, 1, 'Correctly get number of active recalls for biblio' );
 
     t::lib::Mocks::mock_preference('UseRecalls', 0);
