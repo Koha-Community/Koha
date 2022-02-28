@@ -481,14 +481,29 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                 $newdata{emailaddr} = $emailaddr;
                 my $err;
                 eval {
-                    $err = SendAlerts ( 'members', \%newdata, "ACCTDETAILS" );
+                    my $letter = GetPreparedLetter(
+                        module      => 'members',
+                        letter_code => 'ACCTDETAILS',
+                        branchcode  => $patron->branchcode,,
+                        lang        => $patron->lang || 'default',
+                        tables      => {
+                            'branches'  => $patron->branchcode,
+                            'borrowers' => $patron->borrowernumber,
+                        },
+                        want_librarian => 1,
+                    ) or return;
+
+                    my $success = EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $patron->id,
+                            to_address             => $emailaddr,
+                            message_transport_type => 'email'
+                        }
+                    );
                 };
-                if ( $@ ) {
-                    $template->param(error_alert => $@);
-                } elsif ( ref($err) eq "HASH" && defined $err->{error} and $err->{error} eq "no_email" ) {
-                    $template->{VARS}->{'error_alert'} = "no_email";
-                } else {
-                    $template->{VARS}->{'info_alert'} = 1;
+                if ($@) {
+                    $template->param( error_alert => $@ );
                 }
             }
         }
