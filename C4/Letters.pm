@@ -529,56 +529,6 @@ sub SendAlerts {
                 . $letter->{content}
         ) if C4::Context->preference("ClaimsLog");
     }
-   # send an "account details" notice to a newly created user
-    elsif ( $type eq 'members' ) {
-        my $library = Koha::Libraries->find( $externalid->{branchcode} );
-        my $letter = GetPreparedLetter (
-            module => 'members',
-            letter_code => $letter_code,
-            branchcode => $externalid->{'branchcode'},
-            lang       => $externalid->{lang} || 'default',
-            tables => {
-                'branches'    => $library->unblessed,
-                'borrowers' => $externalid->{'borrowernumber'},
-            },
-            substitute => { 'borrowers.password' => $externalid->{'password'} },
-            want_librarian => 1,
-        ) or return;
-        return { error => "no_email" } unless $externalid->{'emailaddr'};
-
-        my $success = try {
-
-            # FIXME: This 'default' behaviour should be moved to Koha::Email
-            my $mail = Koha::Email->create(
-                {
-                    to       => $externalid->{'emailaddr'},
-                    from     => $library->branchemail,
-                    reply_to => $library->branchreplyto,
-                    sender   => $library->branchreturnpath,
-                    subject  => "" . $letter->{'title'},
-                }
-            );
-
-            if ( $letter->{is_html} ) {
-                $mail->html_body( _wrap_html( $letter->{content}, "" . $letter->{title} ) );
-            }
-            else {
-                $mail->text_body( $letter->{content} );
-            }
-
-            $mail->send_or_die({ transport => $library->smtp_server->transport });
-        }
-        catch {
-            # We expect ref($_) eq 'Email::Sender::Failure'
-            $error = $_->message;
-
-            carp "$_";
-            return;
-        };
-
-        return { error => $error }
-            unless $success;
-    }
 
     # If we come here, return an OK status
     return 1;
