@@ -51,7 +51,7 @@ if ( $op eq 'modify' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @recalls = Koha::Recalls->search({ status => 'W' });
+    my @recalls = Koha::Recalls->search({ status => 'W' })->as_list;
     my $borrower = Koha::Patrons->find( $loggedinuser );
     my @over;
     my $maxdelay = C4::Context->preference('RecallsMaxPickUpDelay') || 7;

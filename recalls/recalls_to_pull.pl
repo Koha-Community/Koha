@@ -45,7 +45,7 @@ if ( $op eq 'cancel' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @recalls = Koha::Recalls->search({ status => [ 'R','O','T' ] });
+    my @recalls = Koha::Recalls->search({ status => [ 'R','O','T' ] })->as_list;
     my @pull_list;
     my %seen_bib;
     foreach my $recall ( @recalls ) {
@@ -57,7 +57,7 @@ if ( $op eq 'list' ) {
             $seen_bib{$recall->biblionumber}++;
 
             # get recall data about this biblio
-            my @this_bib_recalls = Koha::Recalls->search({ biblionumber => $recall->biblionumber, status => [ 'R','O','T' ] }, { order_by => { -asc => 'recalldate' } });
+            my @this_bib_recalls = Koha::Recalls->search({ biblionumber => $recall->biblionumber, status => [ 'R','O','T' ] }, { order_by => { -asc => 'recalldate' } })->as_list;
             my $recalls_count = scalar @this_bib_recalls;
             my @unique_patrons = do { my %seen; grep { !$seen{$_->borrowernumber}++ } @this_bib_recalls };
             my $patrons_count = scalar @unique_patrons;

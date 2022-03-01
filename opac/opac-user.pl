@@ -307,8 +307,8 @@ if ( $pending_checkouts->count ) { # Useless test
                     $issue->{MySummaryHTML} = $my_summary_html;
                 }
 
-        my @maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
-        foreach my $recall ( @maybe_recalls ) {
+        my $maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
+        while( my $recall = $maybe_recalls->next ) {
             if ( $recall->checkout and $recall->checkout->issue_id == $issue->{issue_id} ) {
                 $issue->{recall} = 1;
                 last;
