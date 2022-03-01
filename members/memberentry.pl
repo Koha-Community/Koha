@@ -462,24 +462,9 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailOpacUser") ) {
             #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
-            my $emailaddr;
-            if  (C4::Context->preference("AutoEmailPrimaryAddress") ne 'OFF'  && 
-                $newdata{C4::Context->preference("AutoEmailPrimaryAddress")} =~  /\w\@\w/ ) {
-                $emailaddr =   $newdata{C4::Context->preference("AutoEmailPrimaryAddress")} 
-            } 
-            elsif ($newdata{email} =~ /\w\@\w/) {
-                $emailaddr = $newdata{email} 
-            }
-            elsif ($newdata{emailpro} =~ /\w\@\w/) {
-                $emailaddr = $newdata{emailpro} 
-            }
-            elsif ($newdata{B_email} =~ /\w\@\w/) {
-                $emailaddr = $newdata{B_email} 
-            }
+            my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice 
             if ($emailaddr) {
-                $newdata{emailaddr} = $emailaddr;
-                my $err;
                 eval {
                     my $letter = GetPreparedLetter(
                         module      => 'members',
