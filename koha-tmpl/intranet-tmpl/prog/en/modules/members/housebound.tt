@@ -107,7 +107,6 @@
 
             <!-- Create or edit housebound_profile -->
             [% IF ( method == 'update_or_create' ) %]
-              <h4>Manage housebound profile</h4>
               <form id="editform" method="post" name="editform"
                     action="/cgi-bin/koha/members/housebound.pl">
                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -117,7 +116,7 @@
                   <input type="hidden" name="method" value="createconfirm" />
                 [% END %]
                 <fieldset id="houseboundentry" class="rows">
-                  <legend>Housebound details</legend>
+                  <legend>Manage housebound profile</legend>
                   <ol>
                     <li>
                       <label for="day" class="required">Delivery day:</label>

@@ -85,13 +85,6 @@
 
                     <div class="row">
 
-                        <h3>
-                            [% UNLESS ( I ) %]
-                                [% patron.title | html %] [% patron.firstname | html %]
-                            [% END %]
-                            [% patron.surname | html %] ([% patron.cardnumber | html %])
-                        </h3>
-
                         [% IF ( was_renewed ) %]
                             <div class="dialog message">
                                 Patron's account has been renewed until [% patron.dateexpiry | $KohaDates %]
