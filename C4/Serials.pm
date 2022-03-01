@@ -545,6 +545,7 @@ sub SearchSubscriptions {
             subscription.*,
             biblio.notes AS biblionotes,
             biblio.title,
+            biblio.subtitle,
             biblio.author,
             biblio.biblionumber,
             aqbooksellers.name AS vendorname,
