@@ -30,7 +30,7 @@ use C4::Context;
 use C4::Output qw( output_and_exit output_and_exit_if_error output_html_with_http_headers );
 use C4::Members qw( checkcardnumber get_cardnumber_length );
 use C4::Koha qw( GetAuthorisedValues );
-use C4::Letters qw( SendAlerts );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::AuthorisedValues;
@@ -478,7 +478,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                         want_librarian => 1,
                     ) or return;
 
-                    my $success = EnqueueLetter(
+                    my $message_id = EnqueueLetter(
                         {
                             letter                 => $letter,
                             borrowernumber         => $patron->id,
@@ -486,6 +486,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                             message_transport_type => 'email'
                         }
                     );
+                    SendQueuedMessages({ message_id => $message_id });
                 };
                 if ($@) {
                     $template->param( error_alert => $@ );
