@@ -50,7 +50,7 @@
                 [% INCLUDE 'serials-toolbar.inc' %]
                 [% INCLUDE 'mana/mana-comment-status.inc' %]
 
-                <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
+                <h1>Subscription for [% bibliotitle | html %] [% bibliosubtitle | html %] [% IF closed %](closed)[% END %]</h1>
 
                 [% IF ( abouttoexpire ) %]
                     [% UNLESS closed %]
@@ -111,7 +111,7 @@
                                         <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
                                         <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
                                         <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
-                                        <li><span class="label">Biblio:</span>  <a href="[% PROCESS biblio_a_href biblionumber => bibnum %]">[% bibliotitle | html %]</a> <em>([% bibnum | html %])</em></li>
+                                        <li><span class="label">Biblio:</span>  <a href="[% PROCESS biblio_a_href biblionumber => bibnum %]">[% bibliotitle | html %] [% bibliosubtitle | html %]</a> <em>([% bibnum | html %])</em></li>
                                         [% IF ( OPACBaseURL ) %]
                                             <li>
                                                 <span class="label">OPAC view:</span>

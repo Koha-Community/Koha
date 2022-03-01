@@ -269,6 +269,7 @@ sub GetSubscription {
                 subscriptionhistory.*,
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,
+                biblio.subtitle AS bibliosubtitle,
                 subscription.biblionumber as bibnum
        FROM subscription
        LEFT JOIN subscriptionhistory ON subscription.subscriptionid=subscriptionhistory.subscriptionid
