@@ -166,18 +166,20 @@ subtest 'fill() tests' => sub {
 
     subtest 'anonymization behavior tests' => sub {
 
-        plan tests => 4;
+        plan tests => 5;
 
         # reduce the tests noise
         t::lib::Mocks::mock_preference( 'HoldsLog',    0 );
         t::lib::Mocks::mock_preference( 'HoldFeeMode', 'not_always' );
+        # unset AnonymousPatron
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
 
         # 0 == keep forever
         $patron->privacy(0)->store;
         my $hold = $builder->build_object(
             {
                 class => 'Koha::Holds',
-                value => { borrowernumber => $patron->id, status => undef }
+                value => { borrowernumber => $patron->id, found => undef }
             }
         );
         $hold->fill();
@@ -189,7 +191,7 @@ subtest 'fill() tests' => sub {
         $hold = $builder->build_object(
             {
                 class => 'Koha::Holds',
-                value => { borrowernumber => $patron->id, status => undef }
+                value => { borrowernumber => $patron->id, found => undef }
             }
         );
         $hold->fill();
@@ -201,12 +203,18 @@ subtest 'fill() tests' => sub {
         $hold = $builder->build_object(
             {
                 class => 'Koha::Holds',
-                value => { borrowernumber => $patron->id, status => undef }
+                value => { borrowernumber => $patron->id, found => undef }
             }
         );
-        $hold->fill();
-        is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-            undef, 'Patron link is deleted immediately' );
+
+        throws_ok
+            { $hold->fill(); }
+            'Koha::Exception',
+            'AnonymousPatron not set, exception thrown';
+
+        $hold->discard_changes; # refresh from DB
+
+        ok( !$hold->is_found, 'Hold is not filled' );
 
         my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
         t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
@@ -214,10 +222,10 @@ subtest 'fill() tests' => sub {
         $hold = $builder->build_object(
             {
                 class => 'Koha::Holds',
-                value => { borrowernumber => $patron->id, status => undef }
+                value => { borrowernumber => $patron->id, found => undef }
             }
         );
-        $hold->cancel();
+        $hold->fill();
         is(
             Koha::Old::Holds->find( $hold->id )->borrowernumber,
             $anonymous_patron->id,
@@ -337,7 +345,7 @@ subtest 'set_pickup_location() tests' => sub {
         'Koha::Exceptions::MissingParameter',
         'Exception thrown if missing parameter';
 
-    is( "$@", 'The library_id parameter is mandatory', 'Exception message is clear' );
+    like( "$@", qr/The library_id parameter is mandatory/, 'Exception message is clear' );
 
     $schema->storage->txn_rollback;
 };
@@ -448,7 +456,7 @@ subtest 'is_pickup_location_valid() tests' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -466,7 +474,7 @@ subtest 'cancel() tests' => sub {
     my $hold = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => { borrowernumber => $patron->id, status => undef }
+            value => { borrowernumber => $patron->id, found => undef }
         }
     );
     $hold->cancel();
@@ -478,7 +486,7 @@ subtest 'cancel() tests' => sub {
     $hold = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => { borrowernumber => $patron->id, status => undef }
+            value => { borrowernumber => $patron->id, found => undef }
         }
     );
     $hold->cancel();
@@ -490,12 +498,17 @@ subtest 'cancel() tests' => sub {
     $hold = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => { borrowernumber => $patron->id, status => undef }
+            value => { borrowernumber => $patron->id, found => undef }
         }
     );
-    $hold->cancel();
-    is( Koha::Old::Holds->find( $hold->id )->borrowernumber,
-        undef, 'Patron link is deleted immediately' );
+    throws_ok
+        { $hold->cancel(); }
+        'Koha::Exception',
+        'AnonymousPatron not set, exception thrown';
+
+    $hold->discard_changes;
+
+    ok( !$hold->is_found, 'Hold is not cancelled' );
 
     my $anonymous_patron = $builder->build_object({ class => 'Koha::Patrons' });
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron->id );
@@ -503,7 +516,7 @@ subtest 'cancel() tests' => sub {
     $hold = $builder->build_object(
         {
             class => 'Koha::Holds',
-            value => { borrowernumber => $patron->id, status => undef }
+            value => { borrowernumber => $patron->id, found => undef }
         }
     );
     $hold->cancel();
