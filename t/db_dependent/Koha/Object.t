@@ -333,7 +333,7 @@ subtest "to_api() tests" => sub {
 "An exception is thrown if a blessed object to embed doesn't implement to_api";
 
     is(
-        "$@",
+        $@->message,
         "Asked to embed items but its return value doesn't implement to_api",
         "Exception message correct"
     );
