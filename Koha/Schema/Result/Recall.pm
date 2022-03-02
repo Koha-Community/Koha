@@ -273,4 +273,42 @@ __PACKAGE__->add_columns(
     '+item_level_recall' => { is_boolean => 1 },
 );
 
+__PACKAGE__->belongs_to(
+  "biblio",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+  "item",
+  "Koha::Schema::Result::Item",
+  { itemnumber => "itemnumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "borrower",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+  "branch",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 1;
