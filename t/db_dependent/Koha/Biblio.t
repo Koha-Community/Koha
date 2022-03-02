@@ -544,7 +544,7 @@ subtest 'get_marc_components() tests' => sub {
         sub { Koha::Exception->throw("error searching analytics") }
     );
     warning_like { $components = $host_biblio->get_marc_components }
-        qr{^Warning from simple_search_compat: 'error searching analytics'};
+        qr{Warning from simple_search_compat: .* 'error searching analytics'};
 
     is_deeply(
         $host_biblio->object_messages,
@@ -552,7 +552,7 @@ subtest 'get_marc_components() tests' => sub {
             {
                 type    => 'error',
                 message => 'component_search',
-                payload => "error searching analytics"
+                payload => "Exception 'Koha::Exception' thrown 'error searching analytics'\n"
             }
         ]
     );
