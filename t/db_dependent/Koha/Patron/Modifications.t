@@ -77,8 +77,8 @@ subtest 'new() tests' => sub {
     }
     'Koha::Exceptions::Patron::Modification::DuplicateVerificationToken',
         'Attempting to add a duplicate verification raises the correct exception';
-    is( $@,
-        'Duplicate verification token 1234567890',
+    like( "$@",
+        qr/Duplicate verification token 1234567890/,
         'Exception carries the right message'
     );
 
@@ -132,7 +132,7 @@ subtest 'store( extended_attributes ) tests' => sub {
     'Koha::Exceptions::Patron::Modification::InvalidData',
         'Trying to store invalid JSON in extended_attributes field raises exception';
 
-    is( $@, 'The passed extended_attributes is not valid JSON' );
+    like( "$@", qr/The passed extended_attributes is not valid JSON/ );
 
     $schema->storage->txn_rollback;
 };
