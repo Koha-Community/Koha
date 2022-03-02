@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 173;
+use Test::More tests => 174;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
@@ -1141,6 +1141,32 @@ subtest 'patron_attributes' => sub {
 
     };
 
+};
+
+subtest 'welcome_email' => sub {
+
+    plan tests => 3;
+
+    #Setup our info
+    my $branchcode = $builder->build({ source => "Branch"})->{branchcode};
+    my $categorycode = $builder->build({ source => "Category", value => { category_type => 'A'  } })->{categorycode};
+    my $staff_categorycode = $builder->build({ source => "Category", value => { category_type => 'S'  } })->{categorycode};
+    my $csv_headers  = 'surname,userid,branchcode,categorycode,password,email';
+    my $csv_new      = "Spagobi,EldridgeS,$branchcode,$categorycode,H4ckR".',me@myemail.com';
+    my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
+
+    #Make the test files for importing
+    my $filename_1 = make_csv($temp_dir, $csv_headers, $csv_new);
+    open(my $handle_1, "<", $filename_1) or die "cannot open < $filename_1: $!";
+
+    my $params_1 = { file => $handle_1, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1, send_welcome => 1};
+
+    my $result = $patrons_import->import_patrons($params_1, $defaults);
+    is($result->{already_in_db}, 0, 'New borrower imported as expected');
+    is($result->{feedback}->[3]->{name}, 'welcome_sent', 'Email send reported');
+    my $eldridge = Koha::Patrons->find({ userid => 'EldridgeS'});
+    my $notices = Koha::Notice::Messages->search({ borrowernumber => $eldridge->borrowernumber });
+    is($notices->count, 1, 'Notice was queued');
 };
 
 # got is { code => $code, attribute => $attribute }
