@@ -87,11 +87,11 @@ subtest "_build_initial_query tests" => sub {
 
     ($query,$query_cgi,$query_desc,$previous_operand) =
         C4::Search::_build_initial_query($params);
-    is( $query, "query and parsed_operand",
+    is( $query, "query AND parsed_operand",
         "\$query built correctly (no operator)");
-    is( $query_cgi, "query_cgi&op=%20and%20&idx=index&q=original_operand",
+    is( $query_cgi, "query_cgi&op=%20AND%20&idx=index&q=original_operand",
         "\$query_cgi built correctly (no operator)");
-    is( $query_desc, "query_desc and index_plus original_operand",
+    is( $query_desc, "query_desc AND index_plus original_operand",
         "\$query_desc build correctly (no operator)");
     is( $previous_operand, "previous_operand",
         "\$query build correctly (no operator)");
