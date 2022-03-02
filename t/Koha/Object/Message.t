@@ -52,5 +52,5 @@ subtest 'new() tests' => sub {
         'Koha::Exceptions::MissingParameter',
         'Exception thrown if required parameter missing';
 
-    is( "$@", "Mandatory parameter missing: 'message'", 'Expected exception message' );
+    like( "$@", qr/Mandatory parameter missing: 'message'/, 'Expected exception message' );
 };
