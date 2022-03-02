@@ -64,7 +64,6 @@ requires 'Lingua::Stem::Snowball', '0.952';
 requires 'List::MoreUtils', '0.21';
 requires 'List::Util', '1.18';
 requires 'Locale::Currency::Format', '1.28';
-requires 'Locale::Language', '2.07';
 requires 'Locale::Messages', '1.20';
 requires 'Locale::PO', '0.24';
 requires 'Log::Log4perl', '1.29';
