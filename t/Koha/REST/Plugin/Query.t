@@ -486,7 +486,7 @@ subtest 'stash_embed() tests' => sub {
       ->status_is(400)
       ->json_is(
         {
-            error => 'Embeding patron is not authorised. Check your x-koha-embed headers or remove it.'
+            error => qq{Exception 'Koha::Exceptions::BadParameter' thrown 'Embeding patron is not authorised. Check your x-koha-embed headers or remove it.'\n}
         }
       );
 
@@ -494,7 +494,7 @@ subtest 'stash_embed() tests' => sub {
       ->status_is(400)
       ->json_is(
         {
-            error => 'Embedding objects is not allowed on this endpoint.'
+            error => qq{Exception 'Koha::Exceptions::BadParameter' thrown 'Embedding objects is not allowed on this endpoint.'\n}
         }
       );
 
