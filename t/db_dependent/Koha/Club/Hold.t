@@ -56,7 +56,7 @@ subtest 'add' => sub {
     'Koha::Exceptions::MissingParameter',
       'Exception thrown when biblio_id is passed';
 
-    is( "$@", 'The biblio_id parameter is mandatory' );
+    like( "$@", qr/The biblio_id parameter is mandatory/ );
 
     throws_ok {
         Koha::Club::Hold::add(
@@ -68,7 +68,7 @@ subtest 'add' => sub {
     'Koha::Exceptions::MissingParameter',
       'Exception thrown when club_id is passed';
 
-    is( "$@", 'The club_id parameter is mandatory' );
+    like( "$@", qr/The club_id parameter is mandatory/ );
 
     throws_ok {
         Koha::Club::Hold::add(
