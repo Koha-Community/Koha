@@ -65,7 +65,7 @@ subtest "Exceptions must be stringified" => sub {
         {
             biblionumber => $biblio->biblionumber,
             code         => 'biblio_not_modified',
-            error        => "It didn't work",
+            error        => qq{Exception 'Koha::Exception' thrown 'It didn't work'\n},
             type         => "error"
         }
     );
