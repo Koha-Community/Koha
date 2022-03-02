@@ -29,9 +29,9 @@ subtest 'new() tests' => sub {
     'Koha::Exceptions::MissingParameter',
       'Exception is thrown on missing content';
 
-    is(
+    like(
         "$@",
-        "Mandatory parameter 'content' missing",
+        qr/Mandatory parameter 'content' missing/,
         'Exception message is correct'
     );
 
@@ -39,9 +39,9 @@ subtest 'new() tests' => sub {
     'Koha::Exceptions::MissingParameter',
       'Exception is thrown on missing title';
 
-    is(
+    like(
         "$@",
-        "Mandatory parameter 'title' missing",
+        qr/Mandatory parameter 'title' missing/,
         'Exception message is correct'
     );
 
