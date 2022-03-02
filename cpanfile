@@ -134,7 +134,7 @@ recommends 'AnyEvent::HTTP', '2.13';
 recommends 'Archive::Extract', '0.60';
 recommends 'Archive::Zip', '1.30';
 recommends 'CGI::Session::Driver::memcached', '0.04';
-recommends 'DBD::SQLite2', '0.33';
+recommends 'DBD::SQLite', '1.54';
 recommends 'Devel::Cover', '0.89';
 recommends 'File::Copy', '2.08';
 recommends 'File::Path', '2.07';
