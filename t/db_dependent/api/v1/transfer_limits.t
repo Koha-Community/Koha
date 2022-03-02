@@ -113,7 +113,7 @@ subtest 'add() tests' => sub {
       ->status_is( 409, 'Conflict creating the resource' )
       ->json_is(
         {
-            error => "[A transfer limit with the given parameters already exists!]"
+            error => qq{Exception 'Koha::Exceptions::TransferLimit::Duplicate' thrown 'A transfer limit with the given parameters already exists!'\n}
         }
       );
 
