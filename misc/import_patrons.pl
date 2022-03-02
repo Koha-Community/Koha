@@ -30,6 +30,7 @@ my $csv_file;
 my $matchpoint;
 my $overwrite_cardnumber;
 my $overwrite_passwords;
+my $welcome_new = 0;
 my %defaults;
 my $ext_preserve = 0;
 my $confirm;
@@ -44,6 +45,7 @@ GetOptions(
     'd|default=s'                    => \%defaults,
     'o|overwrite'                    => \$overwrite_cardnumber,
     'op|overwrite_passwords'         => \$overwrite_passwords,
+    'en|email-new'                   => \$welcome_new,
     'p|preserve-extended-attributes' => \$ext_preserve,
     'pf|preserve-field=s'            => \@preserve_fields,
     'v|verbose+'                     => \$verbose,
@@ -68,6 +70,7 @@ my $return = $Import->import_patrons(
         overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
         preserve_fields              => \@preserve_fields,
+        send_welcome                 => $welcome_new,
         dry_run                      => !$confirm,
     }
 );
@@ -144,6 +147,10 @@ Overwrite existing patrons with new data if a match is found
 =item B<-p|--preserve-extended-attributes>
 
 Retain extended patron attributes for existing patrons being overwritten
+
+=item B<-en|--email-new>
+
+Send the ACCTDETAILS welcome email to new users
 
 =item B<-v|--verbose>
 
