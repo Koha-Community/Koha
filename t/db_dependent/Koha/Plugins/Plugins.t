@@ -108,15 +108,15 @@ subtest 'more call() tests' => sub {
     my $bc = 1;
     warnings_are
         { Koha::Plugins->call('item_barcode_transform', \$bc); }
-        [ 'Plugin error (Test Plugin): item_barcode_transform called with parameter: 1',
-          'Plugin error (Test Plugin for item_barcode_transform): item_barcode_transform called with parameter: 2' ];
+        [ qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 1'\n},
+          qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 2'\n} ];
     is( $bc, 8, "Got expected response" );
 
     my $cn = 'abcd';
     warnings_are
         { Koha::Plugins->call('item_barcode_transform', \$bc); }
-        [ 'Plugin error (Test Plugin): item_barcode_transform called with parameter: 8',
-          'Plugin error (Test Plugin for item_barcode_transform): item_barcode_transform called with parameter: 16' ];
+        [ qq{Plugin error (Test Plugin): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 8'\n},
+          qq{Plugin error (Test Plugin for item_barcode_transform): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: 16'\n} ];
     is( $cn, 'abcd', "Got expected response" );
 
     t::lib::Mocks::mock_config('enable_plugins', 0);
