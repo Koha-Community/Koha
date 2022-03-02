@@ -5,6 +5,7 @@
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% PROCESS 'opac-authorities.inc' %]
 [% PROCESS 'authorities-search-results.inc' %]
+[% PROCESS 'i18n.inc' %]
 [% BLOCK pagination %]
     <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
         <ul class="pagination">
@@ -98,7 +99,7 @@
                                             <th colspan="2">Authorized headings</th>
                                             <th>Type of heading</th>
                                             [% UNLESS ( isEDITORS ) %]
-                                                <th>Biblio records</th>
+                                                <th>Records</th>
                                             [% END %]
                                         </tr>
                                     </thead>
@@ -110,7 +111,11 @@
                                                 <td>[% resul.authtype | html %]</td>
                                                 [% UNLESS ( resul.isEDITORS ) %]
                                                     <td>
-                                                         [% IF resul.used > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid | uri %]">[% resul.used | html %] biblios</a>[% ELSE %]0 biblios[% END %]
+                                                         [% IF resul.used > 0 %]
+                                                            <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid | uri %]">[% resul.used | html %] [% tn('record', 'records', resul.used ) | html %]</a>
+                                                        [% ELSE %]
+                                                            0 records
+                                                        [% END %]
                                                     </td>
                                                 [% END %]
                                             </tr>
