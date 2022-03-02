@@ -1172,7 +1172,8 @@ subtest 'search_patrons_to_anonymise' => sub {
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
 
     subtest 'AnonymousPatron is not defined' => sub {
-        plan tests => 3;
+
+        plan tests => 2;
 
         t::lib::Mocks::mock_preference('IndependentBranches', 0);
         my $patron = $builder->build(
@@ -1192,22 +1193,9 @@ subtest 'search_patrons_to_anonymise' => sub {
 
         my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
-        my $rows_affected = Koha::Old::Checkouts->search(
-            {
-                borrowernumber => [
-                    Koha::Patrons->search_patrons_to_anonymise(
-                        { before => '2010-10-11' }
-                    )->get_column('borrowernumber')
-                ]
-            }
-        )->anonymize;
-        ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
+        my $patrons_to_anonymize = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } );
+        ok( $patrons_to_anonymize->count > 0, 'search_patrons_to_anonymize' );
 
-        my $dbh = C4::Context->dbh;
-        my ($borrowernumber_used_to_anonymised) = $dbh->selectrow_array(q|
-            SELECT borrowernumber FROM old_issues where itemnumber = ?
-        |, undef, $item->itemnumber);
-        is( $borrowernumber_used_to_anonymised, undef, 'With AnonymousPatron is not defined, the issue should have been anonymised anyway' );
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
 
