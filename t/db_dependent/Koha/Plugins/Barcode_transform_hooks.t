@@ -90,13 +90,13 @@ subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => 
 
     my $item;
     warning_like { $item = $builder->build_sample_item(); }
-        qr/Plugin error \(Test Plugin\): item_barcode_transform called with parameter: /,
+        qr/Plugin error \(Test Plugin\): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: /,
         'Koha::Item->store calls the item_barcode_transform hook';
 
     $item->barcode('THISISATEST');
 
-    warning_is { $item->store(); }
-        'Plugin error (Test Plugin): item_barcode_transform called with parameter: THISISATEST',
+    warning_like { $item->store(); }
+        qr/Plugin error \(Test Plugin\): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: THISISATEST'/,
         'Koha::Item->store calls the item_barcode_transform hook';
 
     $schema->storage->txn_rollback;
