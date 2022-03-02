@@ -107,7 +107,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'from' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'from' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'not_an_email' );
 
@@ -116,7 +116,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'from' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'from' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'tomasito@mail.com' );
         t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
@@ -126,7 +126,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'to' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'to' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'not_an_email' );
 
@@ -135,7 +135,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'to' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'to' parameter: not_an_email/, 'Exception message correct' );
 
         t::lib::Mocks::mock_preference( 'SendAllEmailsTo', undef );
 
@@ -149,7 +149,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'reply_to' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'reply_to' parameter: not_an_email/, 'Exception message correct' );
 
         throws_ok
             { Koha::Email->create(
@@ -161,7 +161,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'sender' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'sender' parameter: not_an_email/, 'Exception message correct' );
 
         throws_ok
             { Koha::Email->create(
@@ -173,7 +173,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'cc' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'cc' parameter: not_an_email/, 'Exception message correct' );
 
         throws_ok
             { Koha::Email->create(
@@ -185,7 +185,7 @@ subtest 'create() tests' => sub {
             'Koha::Exceptions::BadParameter',
             'Exception thrown correctly';
 
-        is( "$@", q{Invalid 'bcc' parameter: not_an_email}, 'Exception message correct' );
+        like( "$@", qr/Invalid 'bcc' parameter: not_an_email/, 'Exception message correct' );
     };
 };
 
