@@ -284,7 +284,7 @@
                                         </ul>
 
                                         [% IF pickup_delays %]
-                                            <p id="pickup_delay" style="display:none;">When your item is ready for pickup, you will have <span id="pickup_delay_days"></span> days to pick it up from this library.</p>
+                                            <p class="pickup_delay" style="display:none;">When your item is ready for pickup, you will have <span id="pickup_delay_days_[% bibitemloo.biblionumber | html %]"></span> days to pick it up from this library.</p>
                                         [% END %]
 
                                         <a class="toggle-hold-options" id="toggle-hold-options-[% bibitemloo.biblionumber | html %]" style="display:none;" href="#">Show more options</a>
@@ -511,13 +511,17 @@
     var MSG_EMPTY_END_DATE   = _("Hold expiration date should be filled.");
 
     function calculate_delay_days(){
-        var selected_branch = $("#branch_1").val();
-        [% FOREACH branchcode IN pickup_delays.keys %]
-            var branchcode = "[% branchcode | html %]";
-            if ( branchcode == selected_branch ) {
-                $("#pickup_delay_days").text([% pickup_delays.$branchcode | html %]);
-            }
-        [% END %]
+        $(".branch > select").each(function(){
+            var selected_branch = $(this).val();
+            var branch_biblionumber = $(this).attr('id');
+            var biblionumber = branch_biblionumber.slice( branch_biblionumber.indexOf('_')+1 );
+            [% FOREACH branchcode IN pickup_delays.keys %]
+                var branchcode = "[% branchcode | html %]";
+                if ( branchcode == selected_branch ) {
+                    $("#pickup_delay_days_" + biblionumber).text([% pickup_delays.$branchcode | html %]);
+                }
+            [% END %]
+        });
     }
 
     $(document).ready(function() {
@@ -528,8 +532,8 @@
         });
 
         calculate_delay_days();
-        $("#pickup_delay").show();
-        $("#branch_1").change(function(){
+        $(".pickup_delay").show();
+        $(".branch > select").change(function(){
             calculate_delay_days();
         });
 

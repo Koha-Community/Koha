@@ -298,7 +298,7 @@ elsif ($op eq 'add') {
     my $recall_due_date_interval = $input->param('recall_due_date_interval');
     my $recall_overdue_fine = $input->param('recall_overdue_fine');
     my $recall_shelf_time = $input->param('recall_shelf_time');
-    my $holds_pickup_period = strip_non_numeric($input->param('holds_pickup_period'));
+    my $holds_pickup_period = strip_non_numeric( scalar $input->param('holds_pickup_period') );
 
     my $rules = {
         maxissueqty                          => $maxissueqty,

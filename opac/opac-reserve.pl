@@ -626,7 +626,7 @@ if (
     );
 }
 
-my @branches = Koha::Libraries->search();
+my @branches = Koha::Libraries->search->as_list;
 my %hold_pickup_delay_by_branch = ();
 
 foreach my $branch ( @branches ) {
@@ -636,7 +636,11 @@ foreach my $branch ( @branches ) {
         itemtype => undef,
         rule_name => 'holds_pickup_period',
     });
-    $hold_pickup_delay_by_branch{$branch->branchcode} = $rule->rule_value if ( $rule and $rule->rule_value );
+    if ( $rule and $rule->rule_value ) {
+        $hold_pickup_delay_by_branch{$branch->branchcode} = $rule->rule_value;
+    } else {
+        $hold_pickup_delay_by_branch{$branch->branchcode} = C4::Context->preference('ReservesMaxPickUpDelay');
+    }
 }
 
 $template->param( pickup_delays => \%hold_pickup_delay_by_branch );
