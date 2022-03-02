@@ -26,6 +26,7 @@ use String::Random qw( random_string );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members qw( checkcardnumber );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
@@ -241,6 +242,38 @@ if ( $action eq 'create' ) {
 
                 $template->param( password_cleartext => $patron->plain_text_password );
                 $template->param( borrower => $patron->unblessed );
+
+                # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
+                if ( C4::Context->preference("AutoEmailOpacUser") ) {
+                    #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
+                    my $emailaddr = $patron->notice_email_address;
+                    # if we manage to find a valid email address, send notice
+                    if ($emailaddr) {
+                        eval {
+                            my $letter = GetPreparedLetter(
+                                module      => 'members',
+                                letter_code => 'ACCTDETAILS',
+                                branchcode  => $patron->branchcode,,
+                                lang        => $patron->lang || 'default',
+                                tables      => {
+                                    'branches'  => $patron->branchcode,
+                                    'borrowers' => $patron->borrowernumber,
+                                },
+                                want_librarian => 1,
+                            ) or return;
+
+                            my $message_id = EnqueueLetter(
+                                {
+                                    letter                 => $letter,
+                                    borrowernumber         => $patron->id,
+                                    to_address             => $emailaddr,
+                                    message_transport_type => 'email'
+                                }
+                            );
+                            SendQueuedMessages({ message_id => $message_id });
+                        };
+                    }
+                }
             } else {
                 # FIXME Handle possible errors here
             }
