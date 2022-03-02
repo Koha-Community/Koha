@@ -63,7 +63,9 @@
                 //field.$target.val("");
                 field.$target.trigger('autofill-undo');
             }
-            $("#isbn").val("");
+            $(":input[type='text']").each(function(){
+                $(this).val("");
+            });
             self.$undo.hide();
         });
 
