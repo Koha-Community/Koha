@@ -37,8 +37,8 @@ use C4::Log;
 
 cronlogaction();
 
-my @recalls = Koha::Recalls->search({ old => undef })->as_list;
-foreach my $recall (@recalls) {
+my $recalls = Koha::Recalls->search({ old => undef });
+while( my $recall = $recalls->next ) {
     if ( ( $recall->requested or $recall->overdue ) and $recall->expirationdate and dt_from_string( $recall->expirationdate ) < dt_from_string() ){
         # recall is requested or overdue and has surpassed the specified expiration date
         $recall->set_expired({ interface => 'COMMANDLINE' });
