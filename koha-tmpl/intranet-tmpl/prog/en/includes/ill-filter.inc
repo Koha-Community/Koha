@@ -19,7 +19,7 @@
             </li>
             <li>
                 <label for="illfilter_status">Status:</label>
-                <select name="illfilter_status" id="illfilter_status"> </select>
+                <select name="illfilter_status" id="illfilter_status" multiple="multiple"> </select>
             </li>
             <li>
                 <label for="illfilter_dateplaced_start">Date placed between:</label>

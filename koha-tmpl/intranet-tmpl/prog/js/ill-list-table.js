@@ -17,6 +17,26 @@ $(document).ready(function () {
         $("#addcomment").toggleClass("content_hidden");
     });
 
+    $("div#ill-list-tabs a[id^='ill-list-tab'").on("click", function (e) {
+        e.preventDefault();
+        var select_status_el = $("form#illfilter_form select#illfilter_status");
+        var tab_statuses = $(this).children('span').attr("data-statuses");
+        if (tab_statuses) {
+            tab_statuses.split('|').forEach((select_status_option) => {
+                if ($("#illfilter_status option[value='"+select_status_option+"']").length === 0) {
+                    select_status_el.append($('<option>', {
+                        value: select_status_option,
+                        text: select_status_option // how to access status.str when no ILL requests with that status exist?
+                    }));
+                }
+            })
+            select_status_el.val(tab_statuses.split('|')).trigger("change");
+        } else {
+            select_status_el.val("").trigger("change");
+        }
+        filter();
+    });
+
     // Filter partner list
     // Record the list of all options
     var ill_partner_options = $("#partners > option");
@@ -116,7 +136,7 @@ $(document).ready(function () {
                 subquery_and.push(patronquery);
             }
 
-            if (status) {
+            if (status && status.length > 0) {
                 subquery_and.push({ "me.status": { "=": status } });
             }
             if (status_alias) {
@@ -544,9 +564,6 @@ $(document).ready(function () {
 
     function addStatusOptions(statuses) {
         $("#illfilter_status").children().remove();
-        $("#illfilter_status").append(
-            '<option value="">' + ill_all_statuses + "</option>"
-        );
         statuses
             .sort((a, b) => a.str.localeCompare(b.str))
             .forEach(function (status) {
@@ -558,6 +575,13 @@ $(document).ready(function () {
                         "</option>"
                 );
             });
+        $("select#illfilter_status").multipleSelect( {
+            placeholder: _("Please select ..."),
+            selectAllText: _("Select all"),
+            allSelected: _("All selected"),
+            countSelected: _("# of % selected"),
+            noMatchesFound: _("No matches found"),
+        } );
     }
 
     function addStatusAliasOptions(status_aliases) {

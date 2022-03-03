@@ -16,6 +16,8 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/ill-requests.css") | $raw %]
+[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 </head>
 
 <body id="illrequests" class="ill">
@@ -835,6 +837,18 @@
                     [% END %]
                 </h1>
                 <div id="results" class="page-section">
+                    [% WRAPPER tabs id= "ill-list-tabs" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "ill-list-tab-all" bt_active= 1 %]
+                                <span>All</span>
+                            [% END %]
+                            [% FOREACH illreq_tab IN illreq_tabs %]
+                                [% WRAPPER tab_item tabname= "ill-list-tab-${loop.index}" %]
+                                    <span data-statuses="[% illreq_tab.status.join('|') | html %]">[% illreq_tab.name | html %]</span>
+                                [% END %]
+                            [% END %]
+                        [% END # /WRAPPER tabs_nav %]
+                    [% END %]
                     <h2>Details for all requests</h2>
                     [% INCLUDE 'ill-list-table.inc' %]
                 </div>
@@ -1132,6 +1146,7 @@
     [% IF op == 'generic_confirm' && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability-partner.js") | $raw %]
     [% END %]
+    [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
 [% END %]
 <!-- prettier-ignore-start -->
 [% TRY %]
