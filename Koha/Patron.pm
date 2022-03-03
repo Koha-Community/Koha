@@ -1787,13 +1787,8 @@ sub can_see_things_from {
         $can = 1;
     } elsif ( $self->has_permission( { $permission => $subpermission } ) ) {
         $can = 1;
-    } elsif ( my $library_groups = $self->library->library_groups ) {
-        while ( my $library_group = $library_groups->next ) {
-            if ( $library_group->parent->has_child( $branchcode ) ) {
-                $can = 1;
-                last;
-            }
-        }
+    } elsif ( my @branches = $self->libraries_where_can_see_patrons ) {
+        $can = ( any { $_ eq $branchcode } @branches ) ? 1 : 0;
     }
     return $can;
 }
@@ -1844,6 +1839,9 @@ sub libraries_where_can_see_things {
     my $subpermission = $params->{subpermission};
     my $group_feature = $params->{group_feature};
 
+    return $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"}
+        if exists( $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} );
+
     my $userenv = C4::Context->userenv;
 
     return () unless $userenv; # For tests, but userenv should be defined in tests...
@@ -1877,7 +1875,9 @@ sub libraries_where_can_see_things {
     @restricted_branchcodes = grep { defined $_ } @restricted_branchcodes;
     @restricted_branchcodes = uniq(@restricted_branchcodes);
     @restricted_branchcodes = sort(@restricted_branchcodes);
-    return @restricted_branchcodes;
+
+    $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} = \@restricted_branchcodes;
+    return @{ $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} };
 }
 
 =head3 has_permission

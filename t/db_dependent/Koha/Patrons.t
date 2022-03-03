@@ -1350,11 +1350,13 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
         plan tests => 6;
 
         t::lib::Mocks::mock_userenv({ patron => $patron_11_1 });
+        $patron_11_1 = Koha::Patrons->find( $patron_11_1->borrowernumber );
         is( $patron_11_1->can_see_patron_infos( $patron_11_2 ), 1, q|patron_11_1 can see patron_11_2, from its library| );
         is( $patron_11_1->can_see_patron_infos( $patron_12 ),   1, q|patron_11_1 can see patron_12, from its group| );
         is( $patron_11_1->can_see_patron_infos( $patron_21 ),   1, q|patron_11_1 can see patron_11_2, from another group| );
 
         t::lib::Mocks::mock_userenv({ patron => $patron_11_2 });
+        $patron_11_2 = Koha::Patrons->find( $patron_11_2->borrowernumber );
         is( $patron_11_2->can_see_patron_infos( $patron_11_1 ), 1, q|patron_11_2 can see patron_11_1, from its library| );
         is( $patron_11_2->can_see_patron_infos( $patron_12 ),   1, q|patron_11_2 can see patron_12, from its group| );
         is( $patron_11_2->can_see_patron_infos( $patron_21 ),   0, q|patron_11_2 can NOT see patron_21, from another group| );
@@ -1363,15 +1365,18 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
         plan tests => 6;
 
         t::lib::Mocks::mock_userenv({ patron => $patron_11_1 });
+        $patron_11_1 = Koha::Patrons->find( $patron_11_1->borrowernumber );
         my $total_number_of_patrons = $nb_of_patrons + 4; #we added four in these tests
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons' );
         is( Koha::Patrons->search_limited->count, $total_number_of_patrons, 'patron_11_1 is allowed to see all patrons' );
 
         t::lib::Mocks::mock_userenv({ patron => $patron_11_2 });
+        $patron_11_2 = Koha::Patrons->find( $patron_11_2->borrowernumber );
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons');
         is( Koha::Patrons->search_limited->count, 3, 'patron_12_1 is not allowed to see patrons from other groups, only patron_11_1, patron_11_2 and patron_12' );
 
         t::lib::Mocks::mock_userenv({ patron => $patron_21 });
+        $patron_21 = Koha::Patrons->find( $patron_21->borrowernumber );
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons');
         is( Koha::Patrons->search_limited->count, 1, 'patron_21 is not allowed to see patrons from other groups, only himself' );
     };
