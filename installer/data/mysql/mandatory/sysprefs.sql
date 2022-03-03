@@ -387,6 +387,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NoticeCSS','',NULL,'Notices CSS url.','free'),
 ('NoticesLog','0',NULL,'If enabled, log changes to notice templates','YesNo'),
 ('NotifyBorrowerDeparture','30',NULL,'Define number of days before expiry where circulation is warned about patron account expiry','Integer'),
+('NotifyPasswordChange','0',NULL,'Notify patrons whenever their password is changed.','YesNo'),
 ('NovelistSelectEnabled','0',NULL,'Enable Novelist Select content.  Requires Novelist Profile and Password','YesNo'),
 ('NovelistSelectPassword','',NULL,'Novelist select user Password','free'),
 ('NovelistSelectProfile','',NULL,'Novelist Select user Profile','free'),

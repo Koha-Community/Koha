@@ -1077,6 +1077,21 @@ tables:
             - "If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly."
 
         - module: members
+          code: PASSCHANGE
+          branchcode: ""
+          name: "Notification of password change"
+          is_html: 1
+          title: "Library account password change notification for [% patron.firstname %] [% patron.surname %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% patron.firstname %] [% patron.surname %],"
+            - ""
+            - "Someone has changed your library user account password."
+            - ""
+            - "If this is unexpected, please contact the library"
+
+        - module: members
           code: PASSWORD_RESET
           branchcode: ""
           name: "Online password reset"

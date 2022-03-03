@@ -26,10 +26,11 @@ use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
 
 use C4::Context;
+use C4::Auth qw( checkpw_hash );
 use C4::Log qw( logaction );
 use Koha::Account;
 use Koha::ArticleRequests;
-use C4::Letters;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::CirculationRules;
@@ -885,6 +886,39 @@ sub set_password {
             # check skip_validation afterwards.
             if ( $ret->{'error'} == 1 && !$args->{skip_validation} ) {
                 Koha::Exceptions::Password::Plugin->throw();
+            }
+        }
+    }
+
+    if ( C4::Context->preference('NotifyPasswordChange') ) {
+        my $self_from_storage = $self->get_from_storage;
+        if ( !C4::Auth::checkpw_hash( $password, $self_from_storage->password ) ) {
+            my $emailaddr = $self_from_storage->notice_email_address;
+
+            # if we manage to find a valid email address, send notice
+            if ($emailaddr) {
+                my $letter = C4::Letters::GetPreparedLetter(
+                    module      => 'members',
+                    letter_code => 'PASSWORD_CHANGE',
+                    branchcode  => $self_from_storage->branchcode,
+                    ,
+                    lang   => $self_from_storage->lang || 'default',
+                    tables => {
+                        'branches'  => $self_from_storage->branchcode,
+                        'borrowers' => $self_from_storage->borrowernumber,
+                    },
+                    want_librarian => 1,
+                ) or return;
+
+                my $message_id = C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        borrowernumber         => $self_from_storage->id,
+                        to_address             => $emailaddr,
+                        message_transport_type => 'email'
+                    }
+                );
+                C4::Letters::SendQueuedMessages( { message_id => $message_id } );
             }
         }
     }
