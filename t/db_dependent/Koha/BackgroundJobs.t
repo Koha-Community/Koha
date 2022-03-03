@@ -41,8 +41,12 @@ my $net_stomp = Test::MockModule->new('Net::Stomp');
 $net_stomp->mock( 'send_with_receipt', sub { return 1 } );
 
 my $background_job_module = Test::MockModule->new('Koha::BackgroundJob');
-$background_job_module->mock( '_derived_class',
-    sub { t::lib::Koha::BackgroundJob::BatchTest->new } );
+$background_job_module->mock(
+    'type_to_class_mapping',
+    sub {
+        return { batch_test => 't::lib::Koha::BackgroundJob::BatchTest' };
+    }
+);
 
 my $data     = { a => 'aaa', b => 'bbb' };
 my $job_size = 10;
@@ -64,18 +68,19 @@ is( $new_job->size,   $job_size,    'job size retrieved correctly' );
 is( $new_job->status, "new",        'job has not started yet, status is new' );
 is( $new_job->type,   "batch_test", 'job type retrieved from ->job_type' );
 
+# FIXME: This behavior doesn't seem correct. It shouldn't be the background job's
+#        responsibility to return 'undef'. Some higher-level check should raise a
+#        proper exception.
 # Test cancelled job
 $new_job->status('cancelled')->store;
-my $processed_job =
-  t::lib::Koha::BackgroundJob::BatchTest->process( { job_id => $new_job->id } );
+my $processed_job = $new_job->process;
 is( $processed_job, undef );
 $new_job->discard_changes;
 is( $new_job->status, "cancelled", "A cancelled job has not been processed" );
 
 # Test new job to process
 $new_job->status('new')->store;
-$new_job =
-  t::lib::Koha::BackgroundJob::BatchTest->process( { job_id => $new_job->id } );
+$new_job = $new_job->process;
 is( $new_job->status,             "finished", 'job is new finished!' );
 is( scalar( @{ $new_job->messages } ), 10,    '10 messages generated' );
 is_deeply(
