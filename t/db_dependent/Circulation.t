@@ -4905,6 +4905,11 @@ subtest "updateWrongTransfer tests" => sub {
 subtest "SendCirculationAlert" => sub {
     plan tests => 2;
 
+    # When you would unsuspectingly call this unit test (with perl, not prove), you will be bitten by LOCK.
+    # LOCK will commit changes and ruin your data
+    # In order to prevent that, we will add KOHA_TESTING to $ENV; see further Circulation.pm
+    $ENV{KOHA_TESTING} = 1;
+
     # Setup branch, borrowr, and notice
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
     set_userenv( $library->unblessed);
