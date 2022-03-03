@@ -1,0 +1,257 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="cat_unimarc_field_181b" class="cat" style="padding:1em;">
+
+<h3>UNIMARC field 181b builder</h3>
+
+<form name="f_pop" action="">
+<table>
+    <tr>
+        <td><label for="f1">Specification of Type </label></td>
+        <td>
+            <select name="f1" id="f1">
+            [% IF ( f1 == "a" ) %]
+                <option value="a" selected="selected">a - notated</option>
+            [% ELSE %]
+                <option value="a">a - notated</option>
+            [% END %]
+
+            [% IF ( f1 == "b" ) %]
+                <option value="b" selected="selected">b - performed</option>
+            [% ELSE %]
+                <option value="b">b - performed</option>
+            [% END %]
+
+            [% IF ( f1 == "c" ) %]
+                <option value="c" selected="selected">c - cartographic</option>
+            [% ELSE %]
+                <option value="c">c - cartographic</option>
+            [% END %]
+
+            [% IF ( f1 == "x" ) %]
+                <option value="x" selected="selected">x - not applicable</option>
+            [% ELSE %]
+                <option value="x">x - not applicable</option>
+            [% END %]
+
+            [% IF ( f1 == " " ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f2">Specification of Motion </label></td>
+        <td>
+            <select name="f2" id="f2">
+            [% IF ( f2 == "a" ) %]
+                <option value="a" selected="selected">a - moving</option>
+            [% ELSE %]
+                <option value="a">a - moving</option>
+            [% END %]
+
+            [% IF ( f2 == "b" ) %]
+                <option value="b" selected="selected">b - still</option>
+            [% ELSE %]
+                <option value="b">b - still</option>
+            [% END %]
+
+            [% IF ( f2 == "x" ) %]
+                <option value="x" selected="selected">x - not applicable (resource is not an image)</option>
+            [% ELSE %]
+                <option value="x">x - not applicable (resource is not an image)</option>
+            [% END %]
+
+            [% IF ( f2 == " " ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f3">Specification of Dimensionality </label></td>
+        <td>
+            <select name="f3" id="f3">
+            [% IF ( f3 == "a" ) %]
+                <option value="a" selected="selected">a - two-dimensional</option>
+            [% ELSE %]
+                <option value="a">a - two-dimensional</option>
+            [% END %]
+
+            [% IF ( f3 == "b" ) %]
+                <option value="b" selected="selected">b - three-dimensional</option>
+            [% ELSE %]
+                <option value="b">b - three-dimensional</option>
+            [% END %]
+
+            [% IF ( f3 == "x" ) %]
+                <option value="x" selected="selected">x - not applicable (resource is not an image)</option>
+            [% ELSE %]
+                <option value="x">x - not applicable (resource is not an image)</option>
+            [% END %]
+
+            [% IF ( f3 == " " ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f4">Sensory Specification 1 </label></td>
+        <td>
+
+            <select name="f4" id="f4">
+            [% IF ( f4 == "a" ) %]
+                <option value="a" selected="selected">a - aural</option>
+            [% ELSE %]
+                <option value="a">a - aural</option>
+            [% END %]
+
+            [% IF ( f4 == "b" ) %]
+                <option value="b" selected="selected">b - gustatory</option>
+            [% ELSE %]
+                <option value="b">b - gustatory</option>
+            [% END %]
+
+            [% IF ( f4 == "c" ) %]
+                <option value="c" selected="selected">c - olfactory</option>
+            [% ELSE %]
+                <option value="c">c - olfactory</option>
+            [% END %]
+
+            [% IF ( f4 == "d" ) %]
+                <option value="d" selected="selected">d - tactile</option>
+            [% ELSE %]
+                <option value="d">d - tactile</option>
+            [% END %]
+
+            [% IF ( f4 == "e" ) %]
+                <option value="e" selected="selected">e - visual</option>
+            [% ELSE %]
+                <option value="e">e - visual</option>
+            [% END %]
+
+            [% IF ( f4 == "" ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f5">Sensory Specification 2 </label></td>
+        <td>
+            <select name="f5" id="f5">
+            [% IF ( f5 == "a" ) %]
+                <option value="a" selected="selected">a - aural</option>
+            [% ELSE %]
+                <option value="a">a - aural</option>
+            [% END %]
+
+            [% IF ( f5 == "b" ) %]
+                <option value="b" selected="selected">b - gustatory</option>
+            [% ELSE %]
+                <option value="b">b - gustatory</option>
+            [% END %]
+
+            [% IF ( f5 == "c" ) %]
+                <option value="c" selected="selected">c - olfactory</option>
+            [% ELSE %]
+                <option value="c">c - olfactory</option>
+            [% END %]
+
+            [% IF ( f5 == "d" ) %]
+                <option value="d" selected="selected">d - tactile</option>
+            [% ELSE %]
+                <option value="d">d - tactile</option>
+            [% END %]
+
+            [% IF ( f5 == "e" ) %]
+                <option value="e" selected="selected">e - visual</option>
+            [% ELSE %]
+                <option value="e">e - visual</option>
+            [% END %]
+
+            [% IF ( f5 == "" ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f6">Sensory Specification 3 </label></td>
+        <td>
+            <select name="f6" id="f6">
+            [% IF ( f6 == "a" ) %]
+                <option value="a" selected="selected">a - aural</option>
+            [% ELSE %]
+                <option value="a">a - aural</option>
+            [% END %]
+
+            [% IF ( f6 == "b" ) %]
+                <option value="b" selected="selected">b - gustatory</option>
+            [% ELSE %]
+                <option value="b">b - gustatory</option>
+            [% END %]
+
+            [% IF ( f6 == "c" ) %]
+                <option value="c" selected="selected">c - olfactory</option>
+            [% ELSE %]
+                <option value="c">c - olfactory</option>
+            [% END %]
+
+            [% IF ( f6 == "d" ) %]
+                <option value="d" selected="selected">d - tactile</option>
+            [% ELSE %]
+                <option value="d">d - tactile</option>
+            [% END %]
+
+            [% IF ( f6 == "e" ) %]
+                <option value="e" selected="selected">e - visual</option>
+            [% ELSE %]
+                <option value="e">e - visual</option>
+            [% END %]
+
+            [% IF ( f6 == "" ) %]
+                <option value=" " selected="selected"># - position not used</option>
+            [% ELSE %]
+                <option value=" "># - position not used</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+
+</table>
+<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+</form>
+
+<script>
+    // The following function just puts back the value of the input #return
+    // into the caller's field, referenced by index. And closes the popup.
+    function submitMyForm() {
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
+        field.value = document.f_pop.f1.value+
+                      document.f_pop.f2.value+
+                      document.f_pop.f3.value+
+                      document.f_pop.f4.value+
+                      document.f_pop.f5.value+
+                      document.f_pop.f6.value;
+        window.close();
+        return false;
+    }
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

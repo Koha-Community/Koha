@@ -1,0 +1,195 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="cat_unimarc_field_181c" class="cat" style="padding:1em;">
+
+<h3>UNIMARC field 181c builder</h3>
+
+<form name="f_pop" action="">
+<table>
+    <tr>
+        <td><label for="f1">Content Type </label></td>
+        <td>
+            <select name="f1" id="f1">
+
+            [% IF ( f1 == "cri" ) %]
+                <option value=" " selected="selected">cri - cartographic image</option>
+            [% ELSE %]
+                <option value=" ">cri - cartographic image</option>
+            [% END %]
+
+            [% IF ( f1 == "crm" ) %]
+                <option value="crm" selected="selected">crm - cartographic moving image</option>
+            [% ELSE %]
+                <option value="a">crm - cartographic moving image</option>
+            [% END %]
+
+            [% IF ( f1 == "crt" ) %]
+                <option value="crt" selected="selected">crt - cartographic tactile image</option>
+            [% ELSE %]
+                <option value="crt">crt - cartographic tactile image</option>
+            [% END %]
+
+            [% IF ( f1 == "crn" ) %]
+                <option value="crn" selected="selected">crn - cartographic tactile three-dimensional form</option>
+            [% ELSE %]
+                <option value="crn">crn - cartographic tactile three-dimensional form</option>
+            [% END %]
+
+            [% IF ( f1 == "cod" ) %]
+                <option value="d" selected="selected">cod - computer dataset</option>
+            [% ELSE %]
+                <option value="cod">cod - computer dataset</option>
+            [% END %]
+
+            [% IF ( f1 == "crd" ) %]
+                <option value="crd" selected="selected">crd - cartographic dataset</option>
+            [% ELSE %]
+                <option value="crd">crd - cartographic dataset</option>
+            [% END %]
+
+            [% IF ( f1 == "crf" ) %]
+                <option value="crf" selected="selected">crf - cartographic three-dimensional form</option>
+            [% ELSE %]
+                <option value="crf">crf - cartographic three-dimensional form</option>
+            [% END %]
+
+            [% IF ( f1 == "tdi" ) %]
+                <option value="tdi" selected="selected">tdi - two-dimensional moving image</option>
+            [% ELSE %]
+                <option value="tdi">tdi - two-dimensional moving image</option>
+            [% END %]
+
+            [% IF ( f1 == "tdm" ) %]
+                <option value="tdm" selected="selected">tdm - three-dimensional moving image</option>
+            [% ELSE %]
+                <option value="tdm">tdm - three-dimensional moving image</option>
+            [% END %]
+
+            [% IF ( f1 == "sti" ) %]
+                <option value="sti" selected="selected">sti - still image</option>
+            [% ELSE %]
+                <option value="sti">sti - still image</option>
+            [% END %]
+
+            [% IF ( f1 == "tci" ) %]
+                <option value="tci" selected="selected">tci - tactile image</option>
+            [% ELSE %]
+                <option value="tci">tci - tactile image</option>
+            [% END %]
+
+            [% IF ( f1 == "prm" ) %]
+                <option value="prm" selected="selected">prm - performed music</option>
+            [% ELSE %]
+                <option value="prm">prm - performed music</option>
+            [% END %]
+
+            [% IF ( f1 == "ntv" ) %]
+                <option value="ntv" selected="selected">ntv - notated movement</option>
+            [% ELSE %]
+                <option value="ntv">ntv - notated movement</option>
+            [% END %]
+
+            [% IF ( f1 == "tcn" ) %]
+                <option value="tcn" selected="selected">tcn - tactile notated movement</option>
+            [% ELSE %]
+                <option value="tcn">tcn - tactile notated movement</option>
+            [% END %]
+
+            [% IF ( f1 == "tdf" ) %]
+                <option value="tdf" selected="selected">tdf - three-dimensional form</option>
+            [% ELSE %]
+                <option value="tdf">tdf - three-dimensional form</option>
+            [% END %]
+
+            [% IF ( f1 == "tcf" ) %]
+                <option value="tcf" selected="selected">tcf - tactile three-dimensional form</option>
+            [% ELSE %]
+                <option value="tcf">tcf - tactile three-dimensional form</option>
+            [% END %]
+
+            [% IF ( f1 == "ntm" ) %]
+                <option value="ntm" selected="selected">ntm - notated music</option>
+            [% ELSE %]
+                <option value="ntm">ntm - notated music</option>
+            [% END %]
+
+            [% IF ( f1 == "tcm" ) %]
+                <option value="tcm" selected="selected">tcm - tactical notated music</option>
+            [% ELSE %]
+                <option value="tcm">tcm - tactical notated music</option>
+            [% END %]
+
+            [% IF ( f1 == "cop" ) %]
+                <option value="cop" selected="selected">cop - computer program</option>
+            [% ELSE %]
+                <option value="cop">cop - computer program</option>
+            [% END %]
+
+            [% IF ( f1 == "snd" ) %]
+                <option value="snd" selected="selected">snd - sounds</option>
+            [% ELSE %]
+                <option value="snd">snd - sounds</option>
+            [% END %]
+
+            [% IF ( f1 == "txt" ) %]
+                <option value="txt" selected="selected">txt - text</option>
+            [% ELSE %]
+                <option value="txt">txt - text</option>
+            [% END %]
+
+            [% IF ( f1 == "tct" ) %]
+                <option value="tct" selected="selected">tct - tactile text</option>
+            [% ELSE %]
+                <option value="tct">tct - tactile text</option>
+            [% END %]
+
+            [% IF ( f1 == "spw" ) %]
+                <option value="spw" selected="selected">spw - spoken word</option>
+            [% ELSE %]
+                <option value="spw">spw - spoken word</option>
+            [% END %]
+
+            [% IF ( f1 == "xxx" ) %]
+                <option value="xxx" selected="selected">xxx - other</option>
+            [% ELSE %]
+                <option value="xxx">xxx - other</option>
+            [% END %]
+
+            [% IF ( f1 == "zzz" ) %]
+                <option value="zzz" selected="selected">zzz - unspecified</option>
+            [% ELSE %]
+                <option value="zzz">zzz - unspecified</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+
+</table>
+<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+</form>
+
+<script>
+
+    function submitMyForm() {
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
+        subfield();
+
+        function subfield() {
+            const tag = $(field).closest('.tag');
+            const sub = tag.find('[id*="tag_181_subfield_2_"]');
+            if ( field != 'undefined' ) {
+                sub[0].value = "RDAcontent";
+            }
+            return subfield;
+        }
+        field.value = document.f_pop.f1.value;
+        window.close();
+        return false;
+    }
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]
