@@ -776,17 +776,19 @@ sub marc_records_to_documents {
         if ($self->index eq $BIBLIOS_INDEX) {
             my ($tag, $code) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
             my $field = $record->field($tag);
-            my $biblionumber = $field->is_control_field ? $field->data : $field->subfield($code);
-            my $avail_items = Koha::Items->search({
-                biblionumber => $biblionumber,
-                onloan       => undef,
-                notforloan   => 0,
-                withdrawn    => 0,
-                itemlost     => 0,
-                damaged      => 0
-            })->count;
+            if ($field) {
+                my $biblionumber = $field->is_control_field ? $field->data : $field->subfield($code);
+                my $avail_items = Koha::Items->search({
+                    biblionumber => $biblionumber,
+                    onloan       => undef,
+                    notforloan   => 0,
+                    withdrawn    => 0,
+                    itemlost     => 0,
+                    damaged      => 0
+                })->count;
 
-            $record_document->{available} = $avail_items ? \1 : \0;
+                $record_document->{available} = $avail_items ? \1 : \0;
+            }
         }
 
         push @record_documents, $record_document;
