@@ -79,7 +79,7 @@ my $bib_heading_fields = {
     },
     '150' => {
         auth_type => 'TOPIC_TERM',
-        subfields => 'abvxyz68',
+        subfields => 'abgvxyz68',
         main_entry => 1
     },
     '151' => {
@@ -197,7 +197,7 @@ my $auth_heading_fields = {
     },
     '150' => {
         auth_type  => 'TOPIC_TERM',
-        subfields  => 'abvxyz68',
+        subfields  => 'abgvxyz68',
         main_entry => 1
     },
     '151' => {
