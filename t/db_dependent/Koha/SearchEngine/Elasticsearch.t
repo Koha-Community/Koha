@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -30,6 +30,7 @@ use Try::Tiny;
 use List::Util qw( any );
 
 use C4::AuthoritiesMarc qw( AddAuthority );
+use C4::Biblio;
 
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Search;
@@ -970,6 +971,64 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents with Inclu
     is_deeply($docs->[0]->{subject__facet}, ['Foo'], 'subject__facet should not include "See from"');
     is_deeply($docs->[0]->{subject__suggestion}, [{ input => 'Foo' }], 'subject__suggestion should not include "See from"');
     is_deeply($docs->[0]->{subject__sort}, ['Foo'], 'subject__sort should not include "See from"');
+};
+
+subtest 'marc_records_to_documents should set the "available" field' => sub {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    my $dbh = C4::Context->dbh;
+
+    my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+    $se->noop('_foreach_mapping');
+
+    my $see = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
+
+    # sort_fields will call this and use the actual db values unless we call it first
+    $see->get_elasticsearch_mappings();
+
+    my $marc_record_1 = MARC::Record->new();
+    $marc_record_1->leader('     cam  22      a 4500');
+    $marc_record_1->append_fields(
+        MARC::Field->new('245', '', '', a => 'Title'),
+    );
+    my ($biblionumber) = C4::Biblio::AddBiblio($marc_record_1, '', { defer_marc_save => 1 });
+
+    my $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio without items is not available');
+
+    my $item = Koha::Item->new({
+        biblionumber => $biblionumber,
+    })->store();
+
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \1, 'a biblio with one item that has no particular status is available');
+
+    $item->notforloan(1)->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio with one item that is "notforloan" is not available');
+
+    $item->set({ notforloan => 0, onloan => '2022-03-03' })->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio with one item that is on loan is not available');
+
+    $item->set({ onloan => undef, withdrawn => 1 })->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio with one item that is withdrawn is not available');
+
+    $item->set({ withdrawn => 0, itemlost => 1 })->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio with one item that is lost is not available');
+
+    $item->set({ itemlost => 0, damaged => 1 })->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \0, 'a biblio with one item that is damaged is not available');
+
+    my $item2 = Koha::Item->new({
+        biblionumber => $biblionumber,
+    })->store();
+    $docs = $see->marc_records_to_documents([$marc_record_1]);
+    is_deeply($docs->[0]->{available}, \1, 'a biblio with at least one item that has no particular status is available');
 };
 
 $schema->storage->txn_rollback;
