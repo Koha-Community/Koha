@@ -4,11 +4,9 @@
 <table class="holds_table">
     <tr>
         <th><input type="checkbox" class="select_hold_all"/></th>
+        <th>Priority</th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th>Priority</th>
             <th>&nbsp;</th>
-        [% ELSE %]
-            <th>Delete?</th>
         [% END %]
         <th>Patron</th>
         <th>Notes</th>
@@ -57,30 +55,35 @@
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
                 <input type="hidden" name="biblionumber" value="[% hold.biblionumber | html %]" />
-                [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
-                    <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id | html %]">
-                    [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                        [% PROCESS priority_dropdown %]
+                [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                    [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
+                        <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id | html %]">
+                        [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
+                            [% PROCESS priority_dropdown %]
+                        [% ELSE %]
+                            <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
+                        [% END %]
+                            <option value="del">del</option>
+                        </select>
                     [% ELSE %]
-                        <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
+                        <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]">
+                        <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id | html %]">
+                        [% IF ( hold.found ) %]
+                            [% IF ( hold.intransit ) %]
+                                <option value="T" selected="selected">In transit</option>
+                            [% ELSIF (hold.inprocessing) %]
+                                <option value="P" selected="selected">In processing</option>
+                            [% ELSE %]
+                                <option value="W" selected="selected">Waiting</option>
+                            [% END %]
+                        [% ELSE %]
+                            <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
+                        [% END %]
+                        </select>
                     [% END %]
-                        <option value="del">del</option>
-                    </select>
                 [% ELSE %]
                     <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]">
-                    <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id | html %]">
-                    [% IF ( hold.found ) %]
-                        [% IF ( hold.intransit ) %]
-                            <option value="T" selected="selected">In transit</option>
-                        [% ELSIF (hold.inprocessing) %]
-                            <option value="P" selected="selected">In processing</option>
-                        [% ELSE %]
-                            <option value="W" selected="selected">Waiting</option>
-                        [% END %]
-                    [% ELSE %]
-                        <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
-                    [% END %]
-                    </select>
+                    [% hold.priority | html %]
                 [% END %]
             </td>
             [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
