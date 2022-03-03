@@ -341,12 +341,10 @@
                          <xsl:text> </xsl:text>
                      </xsl:if>
                      <xsl:if test="@code='b'">
-                         <span property="publisher" typeof="Organization">
                         <span property="name" class="publisher_name">
                             <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
                                 <xsl:value-of select="current()"/>
                             </a>
-                        </span>
                         </span>
                         <xsl:text> </xsl:text>
                      </xsl:if>
