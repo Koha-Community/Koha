@@ -668,31 +668,33 @@
                                                 [% END %]
 
                                                 [% UNLESS ( noissues ) %]
-                                                    <div id="set-automatic-renewal" class="circ-setting">
-                                                        [% IF NEEDSCONFIRMATION %]
-                                                            [% IF auto_renew %]
-                                                                [% IF patron.autorenew_checkouts %]
-                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
-                                                                    title="Patron has opted out of auto-renewal"/>
+                                                    [% IF Koha.Preference('AllowSetAutomaticRenewal') %]
+                                                        <div id="set-automatic-renewal" class="circ-setting">
+                                                            [% IF NEEDSCONFIRMATION %]
+                                                                [% IF auto_renew %]
+                                                                    [% IF patron.autorenew_checkouts %]
+                                                                        <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
+                                                                        title="Patron has opted out of auto-renewal"/>
+                                                                    [% ELSE %]
+                                                                        <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" checked="checked" />
+                                                                    [% END %]
                                                                 [% ELSE %]
-                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" checked="checked" />
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
                                                                 [% END %]
                                                             [% ELSE %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+                                                                [% IF ( auto_renew && patron.autorenew_checkouts ) %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" checked="checked" />
+                                                                [% ELSIF patron.autorenew_checkouts %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
+                                                                [% ELSE %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
+                                                                    title="Patron has opted out of auto-renewal"/>
+                                                                [% END %]
                                                             [% END %]
-                                                        [% ELSE %]
-                                                            [% IF ( auto_renew && patron.autorenew_checkouts ) %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" checked="checked" />
-                                                            [% ELSIF patron.autorenew_checkouts %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
-                                                            [% ELSE %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
-                                                                title="Patron has opted out of auto-renewal"/>
-                                                            [% END %]
-                                                        [% END %]
 
-                                                        <label for="auto_renew">Automatic renewal</label>
-                                                    </div>
+                                                            <label for="auto_renew">Automatic renewal</label>
+                                                        </div>
+                                                    [% END %]
                                                     [% IF Koha.Preference('decreaseLoanHighHolds') %]
                                                         <div id="set_high_holds_overrride" class="circ-setting">
                                                             [% IF NEEDSCONFIRMATION %]

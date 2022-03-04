@@ -43,6 +43,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowRenewalLimitOverride','0',NULL,'if ON, allows renewal limits to be overridden on the circulation screen','YesNo'),
 ('AllowRenewalOnHoldOverride','0',NULL,'If ON, allow items on hold to be renewed with a specified due date','YesNo'),
 ('AllowReturnToBranch','anywhere','anywhere|homebranch|holdingbranch|homeorholdingbranch','Where an item may be returned','Choice'),
+('AllowSetAutomaticRenewal','1',NULL,'If ON, allows staff to set items for automatic renewal on the check out page','YesNo'),
 ('AllowStaffToSetCheckoutsVisibilityForGuarantor','0',NULL,'If enabled, library staff can set a patron''s checkouts to be visible to linked patrons from the opac.',  'YesNo'),
 ('AllowStaffToSetFinesVisibilityForGuarantor','0',NULL,'If enabled, library staff can set a patron''s fines to be visible to linked patrons from the opac.',  'YesNo'),
 ('AllowTooManyOverride','1','','If on, allow staff to override and check out items when the patron has reached the maximum number of allowed checkouts','YesNo'),
