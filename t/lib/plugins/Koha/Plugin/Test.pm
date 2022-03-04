@@ -212,7 +212,7 @@ sub after_hold_action {
     my $action = $params->{action};
     my $hold   = $params->{payload}->{hold};
 
-    Koha::Exceptions::Exception->throw(
+    Koha::Exception->throw(
         "after_hold_action called with action: $action, ref: " . ref($hold) );
 }
 
