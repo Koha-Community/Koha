@@ -1,0 +1,105 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="cat_unimarc_field_181c" class="cat" style="padding:1em;">
+
+<h3>UNIMARC field 182c builder</h3>
+
+<form name="f_pop" action="">
+<table>
+    <tr>
+        <td><label for="f1">Media Type </label></td>
+        <td>
+            <select name="f1" id="f1">
+            [% IF ( f1 == "s" ) %]
+                <option value="s" selected="selected">s - audio</option>
+            [% ELSE %]
+                <option value="s">s - audio</option>
+            [% END %]
+
+            [% IF ( f1 == "c" ) %]
+                <option value="c" selected="selected">c - computer</option>
+            [% ELSE %]
+                <option value="c">c - computer</option>
+            [% END %]
+
+            [% IF ( f1 == "h" ) %]
+                <option value="h" selected="selected">h - microform</option>
+            [% ELSE %]
+                <option value="h">h - microform</option>
+            [% END %]
+
+            [% IF ( f1 == "p" ) %]
+                <option value="p" selected="selected">p - microscopic</option>
+            [% ELSE %]
+                <option value="p">p - microscopic</option>
+            [% END %]
+
+            [% IF ( f1 == "g" ) %]
+                <option value="g" selected="selected">g - projected</option>
+            [% ELSE %]
+                <option value="g">g - projected</option>
+            [% END %]
+
+            [% IF ( f1 == "e" ) %]
+                <option value="e" selected="selected">e - stereographic</option>
+            [% ELSE %]
+                <option value="e">e - stereographic</option>
+            [% END %]
+
+            [% IF ( f1 == "n" ) %]
+                <option value="n" selected="selected">n - unmediated</option>
+            [% ELSE %]
+                <option value="n">n - unmediated</option>
+            [% END %]
+
+            [% IF ( f1 == "v" ) %]
+                <option value="v" selected="selected">v - video</option>
+            [% ELSE %]
+                <option value="v">v - video</option>
+            [% END %]
+
+            [% IF ( f1 == "x" ) %]
+                <option value="x" selected="selected">x - other</option>
+            [% ELSE %]
+                <option value="x">x - other</option>
+            [% END %]
+
+            [% IF ( f1 == "z" ) %]
+                <option value="z" selected="selected">z - unspecified</option>
+            [% ELSE %]
+                <option value="z">z - unspecified</option>
+            [% END %]
+            </select>
+        </td>
+    </tr>
+
+</table>
+<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+</form>
+
+<script>
+
+    function submitMyForm() {
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
+        subfield();
+
+        function subfield() {
+            const tag = $(field).closest('.tag');
+            const sub = tag.find('[id*="tag_182_subfield_2_"]');
+            if ( field !== undefined ) {
+                sub[0].value = "RDAmedia";
+            }
+            return subfield;
+        }
+
+        field.value = document.f_pop.f1.value;
+        window.close();
+        return false;
+    }
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]
