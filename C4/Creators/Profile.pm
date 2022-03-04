@@ -59,7 +59,7 @@ sub new {
     my $type = ref($invocant) || $invocant;
     my $self = {
         printer_name    => 'Default Printer',
-        template_id     => '',
+        template_id     => 0,
         paper_bin       => 'Tray 1',
         offset_horz     => 0,
         offset_vert     => 0,
