@@ -375,7 +375,7 @@
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
         <span class="results_summary series"><span class="label">Series: </span>
         <!-- 440 -->
-        <xsl:for-each select="marc:datafield[@tag=440]">
+        <xsl:for-each select="marc:datafield[@tag=440 and @ind1!='z']">
             <a><xsl:attribute name="href"><xsl:value-of select="$searchurl"/>?q=se,phr:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
                 <xsl:call-template name="chopPunctuation">
                     <xsl:with-param name="chopString">
@@ -425,7 +425,7 @@
         </xsl:for-each>
         <!-- 490 Series traced, Ind1 = 1 -->
         <xsl:if test="marc:datafield[@tag=490][@ind1=1]">
-            <xsl:for-each select="marc:datafield[@tag=800 or @tag=810 or @tag=811]">
+            <xsl:for-each select="marc:datafield[(@tag=800 or @tag=810 or @tag=811) and @ind1!='z']">
                 <xsl:choose>
                     <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
                         <a><xsl:attribute name="href"><xsl:value-of select="$searchurl"/>?q=rcn:<xsl:value-of select="str:encode-uri(marc:subfield[@code='w'], true())"/></xsl:attribute>
@@ -467,7 +467,7 @@
             <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"> | </span></xsl:otherwise></xsl:choose>
             </xsl:for-each>
 
-            <xsl:for-each select="marc:datafield[@tag=830]">
+            <xsl:for-each select="marc:datafield[@tag=830 and @ind1!='z']">
                 <xsl:choose>
                     <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
                         <a href="/cgi-bin/koha/catalogue/search.pl?q=rcn:{marc:subfield[@code='w']}">
