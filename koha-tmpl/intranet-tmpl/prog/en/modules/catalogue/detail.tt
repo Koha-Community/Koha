@@ -253,41 +253,45 @@
         </div> <!-- /.col-xs-* -->
         [% END # /IF ( AmazonCoverImages, etc ) %]
 </div>
+
 <div id="bibliodetails" class="toptabs">
 
-<ul>
+<ul class="nav nav-tabs" role="tablist">
     [% IF (SeparateHoldings) %]
-        <li>
-            <a href="#holdings">[% Branches.GetLoggedInBranchname | html %] holdings ([% itemloop.size() || 0 | html %])</a>
+        <li role="presentation">
+            <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
-        <li>
-            <a href="#otherholdings">Other holdings ([% otheritemloop.size() || 0 | html %])</a>
+        <li role="presentation">
+            <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% otheritemloop.size() || 0 | html %])</a>
         </li>
     [% ELSE %]
-        <li>
-            <a href="#holdings">Holdings ([% itemloop.size() || 0 | html %])</a>
+        <li role="presentation">
+            <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
     [% END %]
-[% IF ( MARCNOTES ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
-[% IF ComponentParts && ComponentParts.size %]<li id="components_tab"><a href="#components">Components ([% ComponentParts.size | html %])</a></li>[% END %]
-[% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
-[% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
-[% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
-[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
+[% IF ( MARCNOTES ) %]<li role="presentation"><a href="#description"  aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
+[% IF ComponentParts && ComponentParts.size %]<li id="components_tab" role="presentation"><a href="#components"  aria-controls="components" role="tab" data-toggle="tab">Components ([% ComponentParts.size | html %])</a></li>[% END %]
+[% IF ( subscriptionsnumber ) %]<li role="presentation"><a href="#subscriptions"  aria-controls="subscriptions" role="tab" data-toggle="tab">Subscriptions</a></li>[% END %]
+[% IF Koha.Preference('AcquisitionDetails') %]<li role="presentation"><a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a></li>[% END %]
+[% IF suggestions.count %]<li role="presentation"><a href="#suggestion_details"  aria-controls="suggestion_details" role="tab" data-toggle="tab">Suggestion details</a></li>[% END %]
+[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li role="presentation"><a href="#editions"  aria-controls="editions" role="tab" data-toggle="tab">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %]
-    <li>
-        <a href="#images">Images ([% localimages.count || 0 | html %])</a>
+    <li role="presentation">
+        <a href="#images"  aria-controls="images" role="tab" data-toggle="tab">Images ([% localimages.count || 0 | html %])</a>
     </li>
 [% END %]
-[% IF HTML5MediaEnabled && HTML5MediaSets.size %]<li id="media_tab"><a href="#html5media">Play media</a></li>[% END %]
+[% IF HTML5MediaEnabled && HTML5MediaSets.size %]
+    <li id="media_tab" role="presentation"><a href="#html5media"  aria-controls="html5media" role="tab" data-toggle="tab">Play media</a></li>
+[% END %]
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-    <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
+    <li class="NovelistSelect" style="display:none;" role="presentation"><a href="#NovelistSelect"  aria-controls="NovelistSelect" role="tab" data-toggle="tab">NoveList Select</a></li>
 [% END %]
 [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-    <li><a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]">[% plugins_intranet_catalog_biblio_tab.title | html %]</a></li>
+    <li role="presentation"><a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]"  aria-controls="[% plugins_intranet_catalog_biblio_tab.id | uri %]" role="tab" data-toggle="tab">[% plugins_intranet_catalog_biblio_tab.title | html %]</a></li>
 [% END %]
 </ul>
 
+<div class="tab-content">
 [% items_table_block_iter = 0 %]
 [% BLOCK items_table %]
     [% items_table_block_iter = items_table_block_iter + 1 %]
@@ -604,7 +608,7 @@ Note that permanent location is a code, and location may be an authval.
 
 [% END %][%# end of block items_table %]
 
-<div id="holdings">
+<div role="tabpanel" class="tab-pane" id="holdings">
 
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
     <span class="results_summary NovelistSelect" style="display:none;">
@@ -647,7 +651,7 @@ Note that permanent location is a code, and location may be an authval.
     </div>
 
 [% IF (SeparateHoldings) %]
-    <div id="otherholdings">
+    <div role="tabpanel" class="tab-pane" id="otherholdings">
         [% IF (otheritemloop.size) %]
             [% PROCESS items_table tab="otherholdings" items=otheritemloop %]
         [% ELSE %]
@@ -658,7 +662,7 @@ Note that permanent location is a code, and location may be an authval.
 
 [% IF ( MARCNOTES ) %]
 
-<div id="description">
+<div role="tabpanel" class="tab-pane" id="description">
 <div class="content_set">
 
     [% FOREACH MARCNOTE IN MARCNOTES %]
@@ -676,7 +680,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF ComponentParts && ComponentParts.size %]
-<div id="components">
+<div role="tabpanel" class="tab-pane" id="components">
     <div class="content_set">
         <table>
             [% FOR PART IN ComponentParts %]
@@ -695,7 +699,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF ( subscriptionsnumber ) %]
-<div id="subscriptions">
+<div role="tabpanel" class="tab-pane" id="subscriptions">
 <div id="catalogue_detail_subscriptions">
     <h2>This is a serial subscription</h2>
     <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p> 
@@ -750,7 +754,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF Koha.Preference('AcquisitionDetails') %]
-<div id="acq_details">
+<div role="tabpanel" class="tab-pane" id="acq_details">
   [% IF orders.count %]
     <table id="orders">
       <thead>
@@ -840,7 +844,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF suggestions.count %]
-    <div id="suggestion_details">
+    <div role="tabpanel" class="tab-pane" id="suggestion_details">
         [% IF nb_archived_suggestions > 0 %]
             <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
         [% END %]
@@ -910,7 +914,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
-<div id="editions"><h4>Editions</h4>
+<div role="tabpanel" class="tab-pane" id="editions"><h4>Editions</h4>
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
@@ -927,7 +931,7 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF ( LocalCoverImages ) %]
-    <div id="images">
+    <div role="tabpanel" class="tab-pane" id="images">
         [% IF localimages.count %]
             <p>Click on an image to view it in the image viewer</p>
             <ul class="thumbnails">
@@ -955,12 +959,11 @@ Note that permanent location is a code, and location may be an authval.
 [% END %]
 
 [% IF ( HTML5MediaEnabled ) %]
-<div id="html5media">
+<div role="tabpanel" class="tab-pane" id="html5media">
           [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
             <p>
                 [% IF HTML5MediaSet.is_youtube %]
-                    <iframe id="player" type="text/html" width="640" height="360"
-                        src="[% HTML5MediaSet.srcblock | url %]" frameborder="0"></iframe>
+                    <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
                 [% ELSE %]
                   <[% HTML5MediaParent | html %] controls preload=none>
                     <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
@@ -974,17 +977,18 @@ Note that permanent location is a code, and location may be an authval.
 
 
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-    <div id="NovelistSelect" class="novelistSelect">
+    <div role="tabpanel" class="tab-pane" id="NovelistSelect" class="novelistSelect">
         <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
     </div>
 [% END %]
 
 [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-    <div id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
+    <div role="tabpanel" class="tab-pane" id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
         [% plugins_intranet_catalog_biblio_tab.content | $raw %]
     </div>
 [% END %]
 
+</div><!-- /tab-content -->
 </div><!-- /bibliodetails -->
 
 <div id="export" style="margin-top: 1em;">
@@ -1260,14 +1264,17 @@ Note that permanent location is a code, and location may be an authval.
         [% END %]
 
         $(document).ready(function() {
-            $('#bibliodetails').tabs();
             // Pick details tab to display by default
             [% IF count == 0 %]
                 [% IF ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) && HTML5MediaSets.size %]
-                    $('#bibliodetails').tabs("option", "active", $('#media_tab').index() );
+                    $(".nav-tabs a[href='#html5media']").tab("show");
                 [% ELSIF ComponentParts && ComponentParts.size %]
-                    $('#bibliodetails').tabs("option", "active", $('#components_tab').index() );
+                    $(".nav-tabs a[href='#components']").tab("show");
+                [% ELSE %]
+                    $(".nav-tabs a[href='#holdings']").tab("show");
                 [% END %]
+            [% ELSE %]
+                $(".nav-tabs a[href='#holdings']").tab("show");
             [% END %]
             $('#search-form').focus();
             $('.thumbnails > li > .remove').click(function() {
