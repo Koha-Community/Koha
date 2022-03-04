@@ -498,7 +498,8 @@
 [% INCLUDE 'datatables.inc' %]
 <script>
     var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
-    var MSG_EMPTY_DATE = _("Date should be filled.");
+    var MSG_EMPTY_START_DATE = _("Hold start date should be filled.");
+    var MSG_EMPTY_END_DATE   = _("Hold expiration date should be filled.");
 
     $(document).ready(function() {
 
@@ -516,8 +517,14 @@
         $(".hold-options").hide();
         var OPACMandatoryHoldDates = "[% Koha.Preference('OPACMandatoryHoldDates') | html %]";
         if( OPACMandatoryHoldDates ) {
-            if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) $(".holddatefrom").prop( 'required', true );
-            if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) $(".futuredate").prop( 'required', true );
+            if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) {
+                $(".holddatefrom").prop( 'required', true );
+                $(".holddatefrom").parent().append('<div class="required_label required">Required</div>');
+            }
+            if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) {
+                $(".futuredate").prop( 'required', true );
+                $(".futuredate").parent().append('<div class="required_label required">Required</div>');
+            }
         }
         $(".holddatefrom,.futuredate").prop("readOnly", true);
 
@@ -661,13 +668,13 @@
                 }
 
                 if( $(".holddatefrom").prop('required') && $("#from"+ biblioNum).val() == '' ) {
-                    alert(MSG_EMPTY_DATE);
+                    alert(MSG_EMPTY_START_DATE);
                     badBib = biblioNum;
                     if( $("#from"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
                     $("#from"+ biblioNum).focus();
                     return false;
                 } else if( $(".futuredate").prop('required') && $("#to"+ biblioNum).val() == '' ) {
-                    alert(MSG_EMPTY_DATE);
+                    alert(MSG_EMPTY_END_DATE);
                     badBib = biblioNum;
                     if( $("#to"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
                     $("#to"+ biblioNum).focus();
