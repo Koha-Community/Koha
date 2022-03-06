@@ -80,7 +80,7 @@ if (
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailOpacUser") ) {
-            #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
+            # Look up correct email address taking AutoEmailPrimaryAddress into account
             my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice
             if ($emailaddr) {
