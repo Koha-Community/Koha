@@ -24658,6 +24658,7 @@ if( CheckVersion( $DBversion ) ) {
             INSERT IGNORE INTO language_script_mapping(language_subtag,script_subtag)
             VALUES ( 'yi', 'Hebr');
         });
+    NewVersion( $DBversion, "29596", "Add Yiddish language" );
 }
 
 # SEE bug 13068
