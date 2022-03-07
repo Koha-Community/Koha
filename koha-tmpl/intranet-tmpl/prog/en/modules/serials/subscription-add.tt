@@ -200,10 +200,11 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="ccode">Collection code:</label>
+                                    <label for="ccode">Collection:</label>
                                     <select name="ccode" id="ccode">
+                                        <option value="">None</option>
                                         [% FOREACH ccode_loo IN ccodes_loop %]
-                                            [% IF (ccode_loo.selected) %]
+                                            [% IF ccode_loo.authorised_value == ccode %]
                                                 <option value="[% ccode_loo.authorised_value | html %]" selected="selected">[% ccode_loo.lib | html %]</option>
                                             [% ELSE %]
                                                 <option value="[% ccode_loo.authorised_value | html %]">[% ccode_loo.lib | html %]</option>
