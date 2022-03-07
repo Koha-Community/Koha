@@ -1152,7 +1152,8 @@ Note that permanent location is a code, and location may be an authval.
                     });
                 }
 
-                if( $(coverSlide).find(".cover-image:visible").length < 1 ){
+                if( $(coverSlide).attr('id') == 'biblio-cover-slider' // Hide if not visible, but only for the biblio images. Images for items are only local cover images
+                    && $(coverSlide).find(".cover-image:visible").length < 1 ){
                     $(coverSlide).remove();
                 } else {
                     $(coverSlide).addClass("cover-slides");
