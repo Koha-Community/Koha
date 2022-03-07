@@ -2810,6 +2810,19 @@ CREATE TABLE `erm_agreement_periods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `erm_agreement_user_roles`
+--
+
+DROP TABLE IF EXISTS `erm_agreement_user_roles`;
+CREATE TABLE `erm_agreement_user_roles` (
+    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+    `user_id` INT(11) NOT NULL COMMENT 'link to the user',
+    `role` VARCHAR(80) NOT NULL COMMENT 'role of the user',
+    CONSTRAINT `erm_agreement_users_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `erm_agreement_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `export_format`
 --
 

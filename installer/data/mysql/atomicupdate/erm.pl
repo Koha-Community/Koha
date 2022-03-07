@@ -69,5 +69,29 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
+
+        unless ( TableExists('erm_agreement_user_roles') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_agreement_user_roles` (
+                    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    `user_id` INT(11) NOT NULL COMMENT 'link to the user',
+                    `role` VARCHAR(80) NOT NULL COMMENT 'role of the user',
+                    CONSTRAINT `erm_agreement_users_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_agreement_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+            VALUES
+                ('ERM_AGREEMENT_USER_ROLES', 1)
+        });
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
+            VALUES
+                ('ERM_AGREEMENT_USER_ROLES', 'librarian', 'ERM librarian'),
+                ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist')
+        });
+
     },
 };
