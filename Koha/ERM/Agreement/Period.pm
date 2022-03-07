@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement;
+package Koha::ERM::Agreement::Period;
 
 # This file is part of Koha.
 #
@@ -21,30 +21,15 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-use Koha::ERM::Agreement::Periods;
-
 =head1 NAME
 
-Koha::ERM::Agreement - Koha ErmAgreement Object class
+Koha::ERM::Agreement::Period - Koha Agreement Period Object class
 
 =head1 API
 
 =head2 Class Methods
 
 =cut
-
-=head3 periods
-
-Returns the periods for this agreement
-
-=cut
-
-sub periods {
-    my ( $self ) = @_;
-
-    my $periods_rs = $self->_result->erm_agreement_periods;
-    return Koha::ERM::Agreement::Periods->_new_from_dbic($periods_rs);
-}
 
 =head2 Internal methods
 
@@ -53,7 +38,7 @@ sub periods {
 =cut
 
 sub _type {
-    return 'ErmAgreement';
+    return 'ErmAgreementPeriod';
 }
 
 1;

@@ -1,9 +1,10 @@
 [% USE raw %]
 [% USE To %]
 [% USE Asset %]
-[% SET footerjs = 1 %]
+[% USE KohaDates %]
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op =='add_form' %]
@@ -176,6 +177,50 @@
             </ol>
         </fieldset>
 
+[% BLOCK agreement_period %]
+    <fieldset class="agreement_period">
+    <legend>
+        Agreement period <span class="period_count">[% id | html %]</span>
+        <a href="#" class="remove_period"><i class="fa fa-trash"></i> Remove this period</a>
+    </legend>
+    <input type="hidden" name="period_unique_id" value="[% id | html %]" />
+    <ol>
+        <li>
+            <label for="started_on" class="required">Start date: </label>
+            <input type="text" id="started_on_[% id | html %]" class="started_on" name="started_on_[% id | html %]" value="[% p.started_on | $KohaDates %]" class="flatpickr" data-date_to="ended_on_[% id | html %]" />
+            <span class="required">Required</span>
+            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        </li>
+        <li>
+            <label for="ended_on">End date: </label>
+            <input type="text" id="ended_on_[% id | html %]" class="ended_on" name="ended_on_[% id | html %]" value="[% p.ended_on | $KohaDates %]" class="flatpickr" />
+            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        </li>
+        <li>
+            <label>Cancellation deadline: </label>
+            <input type="text" class="cancellation_deadline" name="cancellation_deadline_[% id | html %]" value="[% p.cancellation_deadline | $KohaDates %]" class="flatpickr" />
+            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        </li>
+        <li>
+            <label>Notes: </label>
+            <input type="text" class="notes" name="notes_[% id | html %]" value="[% p.notes | html %]" />
+        </li>
+    </ol>
+    </fieldset>
+[% END %]
+
+        <fieldset class="rows" id="agreement_periods">
+            <legend>Periods</legend>
+            [% IF agreement.periods.count %]
+                [% FOR p IN agreement.periods %]
+                    [% PROCESS agreement_period period => p, id => loop.count %]
+                [% END %]
+            [% ELSE %]
+                [% PROCESS agreement_period id => 1 %]
+            [% END %]
+            <button class="add_new_period" type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>Add new period</button>
+        </fieldset>
+
         <fieldset class="action">
             <input type="submit" value="Submit" />
             <a class="cancel" href="/cgi-bin/koha/erm/agreements.pl">Cancel</a>
@@ -273,6 +318,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/erm-menu.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
@@ -380,7 +426,51 @@
                 ]
             }, columns_settings, 1);
 
+            $(".add_new_period").on("click", function(e){
+                e.preventDefault();
+                let new_period_block = $("fieldset.agreement_period:first").clone(1);
+                new_period_block.find("input").val("");
+                $(new_period_block).insertBefore(this);
+                update_period_count();
+            });
+            $(".remove_period").on("click", function(e){
+                e.preventDefault();
+                $(this).parent().parent().remove();
+                update_period_count();
+            });
+            update_period_count();
         });
+
+        function update_period_count(){
+            $("fieldset.agreement_period").each(function(i, period){
+                let id = i + 1;
+                let remove_period_link = $(this).find(".remove_period");
+                if ( id == 1 ) {
+                    $(remove_period_link).hide();
+                } else {
+                    $(remove_period_link).show();
+                }
+                $(period).find(".period_count").text(id);
+                $(period).find("input[name='period_unique_id']").val(id);
+
+                let ended_on_input = $(period).find("input.ended_on");
+                $(ended_on_input).attr("id", "ended_on_" + id);
+                $(ended_on_input).attr("name", "ended_on_" + id);
+                $(ended_on_input).flatpickr();
+
+                let started_on_input = $(period).find("input.started_on");
+                $(started_on_input).attr("name", "started_on_" + id);
+                $(started_on_input).data("date_to", "ended_on_" + id);
+                $(started_on_input).flatpickr();
+
+                let cancellation_deadline_input = $(period).find("input.cancellation_deadline");
+                $(cancellation_deadline_input).attr("name", "cancellation_deadline_" + id);
+                $(cancellation_deadline_input).flatpickr();
+
+                $(period).find(".notes").attr("name", "notes_" + id);
+            });
+        }
+
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

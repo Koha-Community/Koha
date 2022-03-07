@@ -21,6 +21,7 @@ use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Booksellers;
 use Koha::ERM::Agreements;
 
@@ -57,46 +58,79 @@ elsif ( $op eq 'add_validate' ) {
     my $renewal_priority = $input->param('renewal_priority');
     my $license_info     = $input->param('license_info');
 
-    if ($agreement_id) {
-        my $agreement = Koha::ERM::Agreements->find($agreement_id);
-        $agreement->vendor_id($vendor_id);
-        $agreement->name($name);
-        $agreement->description($description);
-        $agreement->status($status);
-        $agreement->closure_reason($closure_reason);
-        $agreement->is_perpetual($is_perpetual);
-        $agreement->renewal_priority($renewal_priority);
-        $agreement->license_info($license_info);
+    my $schema = Koha::Database->new->schema;
+    $schema->txn_do(sub{
+        my ( $stored, $agreement );
+        if ($agreement_id) {
+            $agreement = Koha::ERM::Agreements->find($agreement_id);
+            $agreement->vendor_id($vendor_id);
+            $agreement->name($name);
+            $agreement->description($description);
+            $agreement->status($status);
+            $agreement->closure_reason($closure_reason);
+            $agreement->is_perpetual($is_perpetual);
+            $agreement->renewal_priority($renewal_priority);
+            $agreement->license_info($license_info);
 
-        eval { $agreement->store; };
-        if ($@) {
-            push @messages, { type => 'error', code => 'error_on_update' };
-        }
-        else {
-            push @messages, { type => 'message', code => 'success_on_update' };
-        }
-    }
-    else {
-        my $agreement = Koha::ERM::Agreement->new(
-            {
-                vendor_id        => $vendor_id,
-                name             => $name,
-                description      => $description,
-                status           => $status,
-                closure_reason   => $closure_reason,
-                is_perpetual     => $is_perpetual,
-                renewal_priority => $renewal_priority,
-                license_info     => $license_info,
+            eval { $agreement->store; };
+            if ($@) {
+                push @messages, { type => 'error', code => 'error_on_update' };
             }
-        );
-        eval { $agreement->store; };
-        if ($@) {
-            push @messages, { type => 'error', code => 'error_on_insert' };
+            else {
+                $stored = 1;
+                push @messages, { type => 'message', code => 'success_on_update' };
+            }
         }
         else {
-            push @messages, { type => 'message', code => 'success_on_insert' };
+            $agreement = Koha::ERM::Agreement->new(
+                {
+                    vendor_id        => $vendor_id,
+                    name             => $name,
+                    description      => $description,
+                    status           => $status,
+                    closure_reason   => $closure_reason,
+                    is_perpetual     => $is_perpetual,
+                    renewal_priority => $renewal_priority,
+                    license_info     => $license_info,
+                }
+            );
+            eval { $agreement->store; };
+            if ($@) {
+                push @messages, { type => 'error', code => 'error_on_insert' };
+            }
+            else {
+                $stored = 1;
+                push @messages, { type => 'message', code => 'success_on_insert' };
+            }
         }
-    }
+
+        if ( $stored ) {
+            if ( $agreement_id ) {
+                $agreement->periods->delete;
+            }
+            for my $unique_id ( $input->multi_param('period_unique_id') ) {
+                my $started_on = $input->param( 'started_on_' . $unique_id );
+                next unless $started_on;
+                my $ended_on = $input->param( 'ended_on_' . $unique_id );
+                my $cancellation_deadline = $input->param( 'cancellation_deadline_' . $unique_id );
+                my $notes = $input->param( 'notes_' . $unique_id );
+
+                $started_on = dt_from_string($started_on);
+                $ended_on &&= dt_from_string($ended_on);
+                $cancellation_deadline &&= dt_from_string($cancellation_deadline);
+
+                Koha::ERM::Agreement::Period->new(
+                    {
+                        agreement_id          => $agreement->agreement_id,
+                        started_on            => $started_on,
+                        ended_on              => $ended_on,
+                        cancellation_deadline => $cancellation_deadline,
+                        notes                 => $notes,
+                    }
+                )->store;
+            }
+        }
+    });
     $op = 'list';
 }
 elsif ( $op eq 'delete_confirm' ) {
