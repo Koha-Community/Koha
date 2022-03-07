@@ -2794,6 +2794,22 @@ CREATE TABLE `erm_agreements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `erm_agreement_periods`
+--
+
+DROP TABLE IF EXISTS `erm_agreement_periods`;
+CREATE TABLE `erm_agreement_periods` (
+    `agreement_period_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+    `started_on` DATE NOT NULL COMMENT 'start of the agreement period',
+    `ended_on` DATE COMMENT 'end of the agreement period',
+    `cancellation_deadline` DATE DEFAULT NULL COMMENT 'Deadline for the cancellation',
+    `notes` mediumtext DEFAULT NULL COMMENT 'notes about this period',
+    CONSTRAINT `erm_agreement_periods_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(`agreement_period_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `export_format`
 --
 
