@@ -138,6 +138,10 @@ subtest 'Permissions and access to plugin routes tests' => sub {
     # enable BASIC auth
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
+    # Silence warnings from unrelated plugins feature
+    my $plugin_mock = Test::MockModule->new('Koha::Plugin::Test');
+    $plugin_mock->mock( 'patron_barcode_transform', undef );
+
     # remove any existing plugins that might interfere
     Koha::Plugins::Methods->search->delete;
     my $plugins = Koha::Plugins->new;
