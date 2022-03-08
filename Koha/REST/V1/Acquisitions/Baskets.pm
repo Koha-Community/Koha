@@ -46,7 +46,7 @@ sub list_managers {
 
     return try {
 
-        my $patrons_rs = Koha::Patrons->search->filter_by_have_subpermission('acquisition.order_manage');
+        my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.order_manage');
         my $patrons    = $c->objects->search( $patrons_rs );
 
         return $c->render(

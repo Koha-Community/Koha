@@ -2463,8 +2463,8 @@ subtest 'filter_by_amount_owed' => sub {
 
 };
 
-subtest 'filter_by_have_subpermission' => sub {
-    plan tests => 4;
+subtest 'filter_by_have_permission' => sub {
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -2503,7 +2503,7 @@ subtest 'filter_by_have_subpermission' => sub {
     is_deeply(
         [
             Koha::Patrons->search( { branchcode => $library->branchcode } )
-              ->filter_by_have_subpermission('suggestions.suggestions_manage')
+              ->filter_by_have_permission('suggestions.suggestions_manage')
               ->get_column('borrowernumber')
         ],
         [ $patron_1->borrowernumber, $patron_2->borrowernumber ],
@@ -2513,7 +2513,7 @@ subtest 'filter_by_have_subpermission' => sub {
     is_deeply(
         [
             Koha::Patrons->search( { branchcode => $library->branchcode } )
-              ->filter_by_have_subpermission('acquisition.order_manage')
+              ->filter_by_have_permission('acquisition.order_manage')
               ->get_column('borrowernumber')
         ],
         [ $patron_1->borrowernumber, $patron_3->borrowernumber ],
@@ -2523,16 +2523,26 @@ subtest 'filter_by_have_subpermission' => sub {
     is_deeply(
         [
             Koha::Patrons->search( { branchcode => $library->branchcode } )
-              ->filter_by_have_subpermission('parameters.manage_cities')
+              ->filter_by_have_permission('parameters.manage_cities')
               ->get_column('borrowernumber')
         ],
         [ $patron_1->borrowernumber ],
         'Only Superlibrarian is returned'
     );
 
+    is_deeply(
+        [
+            Koha::Patrons->search( { branchcode => $library->branchcode } )
+              ->filter_by_have_permission('suggestions')
+              ->get_column('borrowernumber')
+        ],
+        [ $patron_1->borrowernumber, $patron_2->borrowernumber ],
+        'Superlibrarian and patron with suggestions'
+    );
+
     throws_ok {
         Koha::Patrons->search( { branchcode => $library->branchcode } )
-          ->filter_by_have_subpermission('dont_exist.subperm');
+          ->filter_by_have_permission('dont_exist.subperm');
     } 'Koha::Exceptions::ObjectNotFound';
 
 

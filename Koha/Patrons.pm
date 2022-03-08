@@ -520,15 +520,17 @@ sub filter_by_amount_owed {
     return $self->search( $where, $attrs );
 }
 
-=head3 filter_by_have_subpermission
+=head3 filter_by_have_permission
 
-    my $patrons = Koha::Patrons->search->filter_by_have_subpermission('suggestions.suggestions_manage');
+    my $patrons = Koha::Patrons->search->filter_by_have_permission('suggestions.suggestions_manage');
 
-Filter patrons who have a given subpermission
+    my $patrons = Koha::Patrons->search->filter_by_have_permission('suggestions');
+
+Filter patrons who have a given subpermission or the whole permission.
 
 =cut
 
-sub filter_by_have_subpermission {
+sub filter_by_have_permission {
     my ($self, $subpermission) = @_;
 
     my ($p, $sp) = split '\.', $subpermission;
@@ -546,12 +548,16 @@ sub filter_by_have_subpermission {
                 -or => [
                     \"me.flags & (1 << $bit)",
                     { 'me.flags' => 1 },
-                    {
-                        -and => [
-                            { 'user_permissions.module_bit' => $bit },
-                            { 'user_permissions.code'       => $sp }
-                        ]
-                    }
+                    (
+                        $sp
+                        ? {
+                            -and => [
+                                { 'user_permissions.module_bit' => $bit },
+                                { 'user_permissions.code'       => $sp }
+                            ]
+                          }
+                        : ()
+                    )
                 ]
             ]
         },

@@ -66,7 +66,7 @@ sub list_owners {
 
     return try {
 
-        my $patrons_rs = Koha::Patrons->search->filter_by_have_subpermission('acquisition.budget_modify');
+        my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.budget_modify');
         my $patrons    = $c->objects->search( $patrons_rs );
 
         return $c->render(
@@ -90,7 +90,7 @@ sub list_users {
 
     return try {
 
-        my $patrons_rs = Koha::Patrons->search->filter_by_have_subpermission('acquisition.budget_modify');
+        my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.budget_modify');
         my $patrons    = $c->objects->search( $patrons_rs );
 
         return $c->render(

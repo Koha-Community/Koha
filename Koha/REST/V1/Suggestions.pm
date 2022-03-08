@@ -237,7 +237,7 @@ sub list_managers {
 
     return try {
 
-        my $patrons_rs = Koha::Patrons->search->filter_by_have_subpermission('suggestions.suggestions_manage');
+        my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('suggestions.suggestions_manage');
         my $patrons    = $c->objects->search( $patrons_rs );
 
         return $c->render(
