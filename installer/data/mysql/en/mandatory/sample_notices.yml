@@ -949,29 +949,6 @@ tables:
             - "[% branch.branchemail %]"
 
         - module: members
-          code: ACCTDETAILS
-          branchcode: ""
-          name: "Account details template - DEFAULT"
-          is_html: 0
-          title: "Your new Koha account details."
-          message_transport_type: email
-          lang: default
-          content:
-            - "Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>."
-            - ""
-            - "Your new Koha account details are:"
-            - ""
-            - "User:  <<borrowers.userid>>"
-            - ""
-            - "If you have any problems or questions regarding your account, please contact your Koha Administrator."
-            - ""
-            - "If you do not have your account password, please contact your Koha Administrator."
-            - ""
-            - "Thank you,"
-            - "Koha Administrator"
-            - "kohaadmin@yoursite.org"
-
-        - module: members
           code: DISCHARGE
           branchcode: ""
           name: "Discharge confirmation"
@@ -1085,6 +1062,26 @@ tables:
             - "Thank you."
             - ""
             - "Your library."
+
+        - module: members
+          code: WELCOME
+          branchcode: ""
+          name: "Welcome notice "
+          is_html: 1
+          title: "[% USE Koha %]Welcome to [% Koha.Preference('LibraryName') %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[% USE Koha %]"
+            - "Hello [% borrower.title %] [% borrower.firstname %] [% borrower.surname %]."
+            - ""
+            - "Thankyou for joining [% Koha.Preference('LibraryName') %]"
+            - ""
+            - "The library's catalog can be found <a href='[% Koha.Preference('OPACBaseURL') %]'>here</a>."
+            - ""
+            - "Your library card number is [% borrower.cardnumber %]"
+            - ""
+            - "If you have any problems or questions regarding your account, please contact your Koha Administrator."
 
         - module: orderacquisition
           code: ACQORDER
