@@ -64,6 +64,10 @@
                     [% END %]
                 [% END %]
 
+                [% IF CAN_user_borrowers_edit_borrowers %]
+                    <li><a id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome email</a></li>
+                [% END %]
+
                 [% IF CAN_user_borrowers_delete_borrowers %]
                     <li><a id="deletepatron" href="#">Delete</a></li>
                 [% ELSE %]
