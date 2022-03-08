@@ -85,8 +85,8 @@ if (
         $template->param( password_cleartext => $patron->plain_text_password );
         $template->param( borrower => $patron );
 
-        # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
-        if ( C4::Context->preference("AutoEmailOpacUser") ) {
+        # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
+        if ( C4::Context->preference("AutoEmailNewUser") ) {
             # Look up correct email address taking AutoEmailPrimaryAddress into account
             my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice

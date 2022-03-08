@@ -324,7 +324,7 @@ sub _shared_preferences {
         TrackClicks
         PatronSelfRegistration
         OPACShelfBrowser
-        AutoEmailOpacUser
+        AutoEmailNewUser
         AutoEmailPrimaryAddress
         autoMemberNum
         BorrowerRenewalPeriodBase

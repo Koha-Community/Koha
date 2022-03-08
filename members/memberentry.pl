@@ -459,8 +459,8 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             delete $newdata{password};
         }
 
-        # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
-        if ( C4::Context->preference("AutoEmailOpacUser") ) {
+        # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
+        if ( C4::Context->preference("AutoEmailNewUser") ) {
             #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
             my $emailaddr = $patron->notice_email_address;
             # if we manage to find a valid email address, send notice 
