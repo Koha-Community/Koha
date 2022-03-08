@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21; # +1
+use Test::More tests => 22; # +1
 use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
@@ -1022,6 +1022,33 @@ subtest 'Recalls tests' => sub {
 
     $item1->update({ withdrawn => 1 });
     is( $biblio->can_be_recalled({ patron => $patron1 }), 1, "Can recall one item" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item_groups() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my @item_groups = $biblio->item_groups->as_list;
+    is( scalar(@item_groups), 0, 'Got zero item groups');
+
+    my $item_group_1 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+
+    @item_groups = $biblio->item_groups->as_list;
+    is( scalar(@item_groups), 1, 'Got one item group');
+    is( $item_groups[0]->id, $item_group_1->id, 'Got correct item group');
+
+    my $item_group_2 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+
+    @item_groups = $biblio->item_groups->as_list;
+    is( scalar(@item_groups), 2, 'Got two item groups');
+    is( $item_groups[0]->id, $item_group_1->id, 'Got correct item group 1');
+    is( $item_groups[1]->id, $item_group_2->id, 'Got correct item group 2');
 
     $schema->storage->txn_rollback;
 };
