@@ -66,7 +66,7 @@ foreach my $p (@parts) {
     );
 }
 
-push( @params, { branchcode => C4::Context->userenv->{branch} } ) if $limit_on_branch;
+push( @params, { 'me.branchcode' => C4::Context->userenv->{branch} } ) if $limit_on_branch;
 
 my $borrowers_rs = Koha::Patrons->search_limited(
     { -and => \@params },
