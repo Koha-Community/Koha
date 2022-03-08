@@ -1,0 +1,388 @@
+---
+"/biblios/{biblio_id}/item_groups":
+  get:
+    x-mojo-to: Biblios::ItemGroups#list
+    operationId: listItemGroups
+    tags:
+    - item_groups
+    summary: List item_groups
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - "$ref": "../swagger.yaml#/parameters/match"
+    - "$ref": "../swagger.yaml#/parameters/order_by"
+    - "$ref": "../swagger.yaml#/parameters/page"
+    - "$ref": "../swagger.yaml#/parameters/per_page"
+    - "$ref": "../swagger.yaml#/parameters/q_param"
+    - "$ref": "../swagger.yaml#/parameters/q_body"
+    - "$ref": "../swagger.yaml#/parameters/q_header"
+    produces:
+    - application/yaml
+    responses:
+      '200':
+        description: A list of item_groups
+        schema:
+          type: array
+          items:
+            "$ref": "../swagger.yaml#/definitions/item_group"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal server error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+    x-koha-embed:
+    - items
+  post:
+    x-mojo-to: Biblios::ItemGroups#add
+    operationId: addItemGroup
+    tags:
+    - item_groups
+    summary: Add item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: body
+      in: body
+      description: A JSON object representing an item group
+      required: true
+      schema:
+        type: object
+        properties:
+          description:
+            type: string
+            description: ItemGroup description
+          display_order:
+            type: integer
+            description: Position in waiting queue
+    produces:
+    - application/yaml
+    responses:
+      '201':
+        description: A successfully created item group
+        schema:
+          "$ref": "../swagger.yaml#/definitions/item_group"
+      '400':
+        description: Bad parameter
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: Resource not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '409':
+        description: Conflict in creating resource
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal server error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+"/biblios/{biblio_id}/item_groups/{item_group_id}":
+  get:
+    x-mojo-to: Biblios::ItemGroups#get
+    operationId: getItemGroup
+    tags:
+    - item_groups
+    summary: Get item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: item_group_id
+      in: path
+      description: Internal identifier for the item_group
+      required: true
+      type: string
+    produces:
+    - application/yaml
+    responses:
+      '200':
+        description: An item group
+        schema:
+          "$ref": "../swagger.yaml#/definitions/item_group"
+      '400':
+        description: Missing or wrong parameters
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: ItemGroup not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal server error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-embed:
+    - items
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+  put:
+    x-mojo-to: Biblios::ItemGroups#update
+    operationId: updateItemGroup
+    tags:
+    - item_groups
+    summary: Update item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: item_group_id
+      in: path
+      description: Internal identifier for the item group
+      required: true
+      type: string
+    - name: body
+      in: body
+      description: A JSON object with the new values for the item group
+      required: true
+      schema:
+        type: object
+        properties:
+          description:
+            type: string
+            description: ItemGroup description
+          display_order:
+            type: integer
+            description: Position in waiting queue
+    produces:
+    - application/yaml
+    responses:
+      '200':
+        description: The updated item group
+        schema:
+          "$ref": "../swagger.yaml#/definitions/item_group"
+      '400':
+        description: Bad request
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: ItemGroup not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+    x-koha-embed:
+    - items
+  delete:
+    x-mojo-to: Biblios::ItemGroups#delete
+    operationId: deleteItemGroup
+    tags:
+    - item_groups
+    summary: Delete item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: item_group_id
+      in: path
+      description: Internal identifier for the item group
+      required: true
+      type: string
+    produces:
+    - application/yaml
+    responses:
+      '204':
+        description: ItemGroup deleted
+        schema:
+          type: string
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: ItemGroup not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+"/biblios/{biblio_id}/item_groups/{item_group_id}/items":
+  post:
+    x-mojo-to: Biblios::ItemGroups::Items#add
+    operationId: addItemGroupItem
+    tags:
+    - item_groups
+    summary: Add item to item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: item_group_id
+      in: path
+      description: Internal identifier for the item group
+      required: true
+      type: string
+    - name: body
+      in: body
+      description: A JSON object containing an item_id
+      required: true
+      schema:
+        type: object
+        properties:
+          item_id:
+            type: integer
+            description: Internal identifier for an item to be linked
+    produces:
+    - application/yaml
+    responses:
+      '201':
+        description: Item linked to item group
+      '400':
+        description: Bad request
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '409':
+        description: Request conflicts
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"
+    x-koha-embed:
+    - items
+"/biblios/{biblio_id}/item_groups/{item_group_id}/items/{item_id}":
+  delete:
+    x-mojo-to: Biblios::ItemGroups::Items#delete
+    operationId: deleteItemGroupItems
+    tags:
+    - item_groups
+    summary: Delete item from item group
+    parameters:
+    - name: biblio_id
+      in: path
+      description: Internal identifier for the parent bibliographic record
+      required: true
+      type: string
+    - name: item_group_id
+      in: path
+      description: Internal identifier for the item group
+      required: true
+      type: string
+    - name: item_id
+      in: path
+      description: Internal identifier for the item
+      required: true
+      type: string
+    produces:
+    - application/yaml
+    responses:
+      '204':
+        description: Item unlinked from item group
+        schema:
+          type: string
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '404':
+        description: Item not linked to item group
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "manage_item_groups"

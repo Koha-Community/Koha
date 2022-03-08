@@ -42,6 +42,8 @@ definitions:
     $ref: ./definitions/invoice.yaml
   item:
     $ref: ./definitions/item.yaml
+  item_group:
+    $ref: ./definitions/item_group.yaml
   library:
     $ref: ./definitions/library.yaml
   order:
@@ -105,6 +107,14 @@ paths:
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1items"
   "/biblios/{biblio_id}/pickup_locations":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}~1pickup_locations"
+  "/biblios/{biblio_id}/item_groups":
+    $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups"
+  "/biblios/{biblio_id}/item_groups/{item_group_id}":
+    $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups~1{item_group_id}"
+  "/biblios/{biblio_id}/item_groups/{item_group_id}/items":
+    $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups~1{item_group_id}~1items"
+  "/biblios/{biblio_id}/item_groups/{item_group_id}/items/{item_id}":
+    $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups~1{item_group_id}~1items~1{item_id}"
   "/cash_registers/{cash_register_id}/cashups":
     $ref: "./paths/cash_registers.yaml#/~1cash_registers~1{cash_register_id}~1cashups"
   "/cashups/{cashup_id}":
