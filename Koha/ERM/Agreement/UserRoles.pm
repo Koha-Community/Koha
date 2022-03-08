@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement;
+package Koha::ERM::Agreement::UserRoles;
 
 # This file is part of Koha.
 #
@@ -17,16 +17,16 @@ package Koha::ERM::Agreement;
 
 use Modern::Perl;
 
+
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::ERM::Agreement::UserRole;
 
-use Koha::ERM::Agreement::Periods;
-use Koha::ERM::Agreement::UserRoles;
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::ERM::Agreement - Koha ErmAgreement Object class
+Koha::ERM::Agreement::UserRoles- Koha Agreement UserRole Object set class
 
 =head1 API
 
@@ -34,40 +34,20 @@ Koha::ERM::Agreement - Koha ErmAgreement Object class
 
 =cut
 
-=head3 periods
-
-Returns the periods for this agreement
-
-=cut
-
-sub periods {
-    my ( $self ) = @_;
-
-    my $periods_rs = $self->_result->erm_agreement_periods;
-    return Koha::ERM::Agreement::Periods->_new_from_dbic($periods_rs);
-}
-
-=head3 user_roles
-
-Returns the user roles for this agreement
-
-=cut
-
-sub user_roles {
-    my ( $self ) = @_;
-
-    my $user_roles_rs = $self->_result->erm_agreement_user_roles;
-    return Koha::ERM::Agreement::UserRoles->_new_from_dbic($user_roles_rs);
-}
-
-=head2 Internal methods
-
-=head3 _type
+=head3 type
 
 =cut
 
 sub _type {
-    return 'ErmAgreement';
+    return 'ErmAgreementUserRole';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::ERM::Agreement::UserRole';
 }
 
 1;

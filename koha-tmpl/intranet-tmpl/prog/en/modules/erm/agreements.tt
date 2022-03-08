@@ -218,7 +218,53 @@
             [% ELSE %]
                 [% PROCESS agreement_period id => 1 %]
             [% END %]
-            <button class="add_new_period" type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>Add new period</button>
+            <button class="add_new_period" type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add new period</button>
+        </fieldset>
+
+[% BLOCK agreement_user %]
+    <fieldset class="agreement_user">
+        <legend>
+            User <span class="user_count">[% id | html %]</span>
+            <a href="#" class="remove_user"><i class="fa fa-trash"></i> Remove this user</a>
+        </legend>
+        <input type="hidden" name="user_unique_id" value="[% id | html %]" />
+
+        <ol>
+            <li>
+                <label for="user" class="required">User: </label>
+                <span class="user">
+                    [% IF u %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% u.user_id| uri %]">
+                            [% INCLUDE 'patron-title.inc' patron = u.patron %]
+                        </a>
+                        <input type="hidden" class="user_id" name="user_id_[% id | html %]" value="[% u.user_id %]" />
+                    [% END %]
+                </span>
+                (<a href="#" class="pick_user" class="btn btn-default">Select user</a>)
+            </li>
+
+            <li>
+                <label>Role: </label>
+                <select class="user_role" name="user_role_[% id | html %]">
+                    <option value=""></option>
+                    [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'ERM_AGREEMENT_USER_ROLES' ), selected_av => u.role %]
+                </select>
+            </li>
+        </ol>
+    </fieldset>
+[% END %]
+
+        <fieldset class="rows">
+            <legend>Users</legend>
+            [% IF agreement.user_roles.count %]
+                [% FOR u IN agreement.user_roles %]
+                    [% PROCESS agreement_user user => u, id => loop.count %]
+                [% END %]
+            [% ELSE %]
+                [% PROCESS agreement_user, id => 1 %]
+            [% END %]
+
+            <button class="add_new_user_block" type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add new user</button>
         </fieldset>
 
         <fieldset class="action">
@@ -321,6 +367,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     <script>
 
         const agreement_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_STATUS')) | $raw %];
@@ -340,7 +387,7 @@
         }, {});
 
 
-
+        let current_user_node;
         var columns_settings = [% TablesSettings.GetColumns( 'erm', 'agreements', 'table_agreements', 'json' ) | $raw %];
         $(document).ready(function() {
             var agreements_table_url = '/api/v1/erm/agreements?';
@@ -428,28 +475,77 @@
 
             $(".add_new_period").on("click", function(e){
                 e.preventDefault();
-                let new_period_block = $("fieldset.agreement_period:first").clone(1);
-                new_period_block.find("input").val("");
-                $(new_period_block).insertBefore(this);
+                let first_period_block = $("fieldset.agreement_period:first");
+                if ( first_period_block.is(":visible") ) {
+                    let new_period_block = first_period_block.clone(1);
+                    new_period_block.find("input").val("");
+                    $(new_period_block).insertBefore(this);
+                } else {
+                    first_period_block.show();
+                }
                 update_period_count();
             });
             $(".remove_period").on("click", function(e){
                 e.preventDefault();
-                $(this).parent().parent().remove();
+                let fieldset = $(this).parent().parent();
+                if ( $("fieldset.agreement_period").length == 1 ) {
+                    clear_block(fieldset);
+                    fieldset.hide();
+                } else {
+                    fieldset.remove();
+                }
                 update_period_count();
             });
+
+            $(".add_new_user_block").on("click",function(e){
+                e.preventDefault();
+                let first_user_block = $("fieldset.agreement_user:first");
+                if ( first_user_block.is(":visible") ) {
+                    let new_user_block = $("fieldset.agreement_user:first").clone(1);
+                    new_user_block.find("span.user").empty();
+                    clear_block(new_user_block);
+                    $(new_user_block).insertBefore(this);
+                } else {
+                    first_user_block.show();
+                }
+
+                update_user_count();
+            });
+            $(".remove_user").on("click", function(e){
+                e.preventDefault();
+                let fieldset = $(this).parent().parent();
+                if ( $("fieldset.agreement_user").length == 1 ) {
+                    fieldset.find("span.user").empty();
+                    clear_block(fieldset);
+                    fieldset.hide();
+                } else {
+                    fieldset.remove();
+                }
+
+                update_user_count();
+            });
+
+            $(".pick_user").on("click", function(e){
+                e.preventDefault();
+                current_user_node = $(this).closest("fieldset");
+                window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=select&filter=erm_users",
+                    'PatronPopup',
+                    'width=740,height=450,location=yes,toolbar=no,'
+                    + 'scrollbars=yes,resize=yes'
+                );
+            });
+
             update_period_count();
+            update_user_count();
         });
 
+        function clear_block(block){
+            $(block).find('input').val("");
+            $(block).find("select option:first-child").attr("selected", "selected");
+        }
         function update_period_count(){
             $("fieldset.agreement_period").each(function(i, period){
                 let id = i + 1;
-                let remove_period_link = $(this).find(".remove_period");
-                if ( id == 1 ) {
-                    $(remove_period_link).hide();
-                } else {
-                    $(remove_period_link).show();
-                }
                 $(period).find(".period_count").text(id);
                 $(period).find("input[name='period_unique_id']").val(id);
 
@@ -468,8 +564,31 @@
                 $(cancellation_deadline_input).flatpickr();
 
                 $(period).find(".notes").attr("name", "notes_" + id);
+                $(period).attr('id', 'agreement_period_' + id);
             });
         }
+
+        function update_user_count(){
+            $("fieldset.agreement_user").each(function(i, user){
+                let id = i + 1;
+                let remove_user_link = $(this).find(".remove_user");
+                $(user).find(".user_count").text(id);
+                $(user).find("input[name='user_unique_id']").val(id);
+
+                $(user).find(".user_id").attr("name", "user_id_" + id);
+                $(user).find(".user_role").attr("name", "user_role_" + id);
+            });
+        }
+
+        function select_user(borrowernumber, patron) {
+            patron['patron_id'] = borrowernumber;
+            let unique_id = $(current_user_node).find("input[name='user_unique_id']").val();
+            let a = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
+                + borrowernumber + '">' + $patron_to_html(patron) + '</a> '
+                + '<input type="hidden" class="user_id" name="user_id_' + unique_id + '" value="' + borrowernumber + '" />';
+            $(current_user_node).find("span.user").html(a);
+        }
+
 
     </script>
 [% END %]

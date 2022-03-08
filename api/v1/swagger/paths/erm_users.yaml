@@ -1,0 +1,47 @@
+---
+/erm/users:
+  get:
+    x-mojo-to: ERM#list_users
+    operationId: listERMUsers
+    description: This resource returns a list of patron allowed to be users of the ERM module
+    summary: List possibe users for ERM
+    tags:
+      - ERM
+    parameters:
+      - $ref: ../parameters.yaml#/match
+      - $ref: ../parameters.yaml#/order_by
+      - $ref: ../parameters.yaml#/page
+      - $ref: ../parameters.yaml#/per_page
+      - $ref: ../parameters.yaml#/q_param
+      - $ref: ../parameters.yaml#/q_body
+      - $ref: ../parameters.yaml#/q_header
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of ERM' users
+        schema:
+          type: array
+          items:
+            $ref: ../definitions.yaml#/patron
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - extended_attributes
+

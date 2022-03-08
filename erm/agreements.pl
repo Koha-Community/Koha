@@ -107,6 +107,7 @@ elsif ( $op eq 'add_validate' ) {
         if ( $stored ) {
             if ( $agreement_id ) {
                 $agreement->periods->delete;
+                $agreement->user_roles->delete;
             }
             for my $unique_id ( $input->multi_param('period_unique_id') ) {
                 my $started_on = $input->param( 'started_on_' . $unique_id );
@@ -129,6 +130,20 @@ elsif ( $op eq 'add_validate' ) {
                     }
                 )->store;
             }
+
+            for my $unique_id ( $input->multi_param('user_unique_id') ) {
+                my $user_id = $input->param('user_id_' . $unique_id);
+                next unless $user_id;
+                my $role = $input->param('user_role_' . $unique_id);
+                Koha::ERM::Agreement::UserRole->new(
+                    {
+                        agreement_id => $agreement->agreement_id,
+                        user_id      => $user_id,
+                        role         => $role,
+                    }
+                )->store;
+            }
+
         }
     });
     $op = 'list';
