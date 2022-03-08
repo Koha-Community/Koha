@@ -69,6 +69,33 @@ $(document).ready(function(){
         multiCopyControl.toggle();
     });
 
+    // Add new item to an item group
+    if ( has_item_groups ) {
+        $('#item-group-add-or-create-form-description-block').hide();
+        $('#item-group-add-or-create-form-no-add').attr('selected', 'selected' );
+
+        $('#item-group-add-or-create-form-select').on('change', function(){
+            if ( $(this).val() == 'create' ) {
+                $('#item-group-add-or-create-form-description')
+                    .addClass('required')
+                    .attr( 'required', 'required' );
+                $('#item-group-add-or-create-form-description-block').show();
+            } else {
+                $('#item-group-add-or-create-form-description')
+                    .removeClass('required')
+                    .removeAttr('required');
+                $('#item-group-add-or-create-form-description-block').hide();
+            }
+        });
+    }
+
+    $('#item-group-add-or-create-form-select').on('change', function() {
+        if ( ! $('input.items-enumchron').val() ) {
+            let item_group_selector = '#item-group-' + $(this).val();
+            let enumchron = $(item_group_selector).val();
+            $('input.items-enumchron').val( enumchron );
+        }
+    });
 });
 
 function Check(f) {

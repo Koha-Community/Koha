@@ -23,6 +23,9 @@
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'str/cataloging_additem.inc' %]
 [% Asset.js("js/cataloging_additem.js") | $raw %]
+    <script>
+      var has_item_groups = "[% item_groups.size | html %]";
+    </script>
 </head>
 
 <body id="cat_additem" class="cat">
@@ -159,6 +162,35 @@
         <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     [% END %]
 
+[% IF item_groups.size && op != 'saveitem' && CAN_user_editcatalogue_manage_item_groups %]
+    <fieldset class="rows">
+        <legend><i class="fa fa-plus"></i> Add to item group</legend>
+        [% FOREACH ig IN item_groups %]
+            <input type="hidden" id="item-group-[% ig.id | html %]" value="[% ig.description | html %]" />
+        [% END %]
+        <p>
+            <label for="select_item_group">Options: </label>
+            <select name="item_group" id="item-group-add-or-create-form-select">
+                <optgroup label="Use existing item group">
+                    [% FOREACH ig IN item_groups %]
+                        <option value="[% ig.id | html %]">Use: [% ig.description | html %]</option>
+                    [% END %]
+                </optgroup>
+                <optgroup label="Other options">
+                    <option id="item-group-add-or-create-form-no-add" value="">Do not add to item group</option>
+                    <option value="create">Create new item group</option>
+                </optgroup>
+            </select>
+        </p>
+
+        <p id="item-group-add-or-create-form-description-block">
+            <label for="item_group_description" class="required">Name: </label>
+            <input name="item_group_description" id="item-group-add-or-create-form-description" type="text" size="30" class="required" />
+            <span class="required">Required</span>
+        </p>
+    </fieldset>
+[% END %]
+
 <fieldset class="action">    [% IF op != 'saveitem' %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
     <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe they validated the adding of multiple items
@@ -207,5 +239,8 @@
             </main>
         </div> <!-- /.col-sm-12 -->
     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

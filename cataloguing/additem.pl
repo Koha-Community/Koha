@@ -39,6 +39,7 @@ use C4::Barcodes::ValueBuilder;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::SearchEngine::Indexer;
@@ -56,6 +57,34 @@ use List::Util qw( first );
 use List::MoreUtils qw( any uniq );
 
 our $dbh = C4::Context->dbh;
+
+sub add_item_to_item_group {
+    my ( $biblionumber, $itemnumber, $item_group, $item_group_description ) = @_;
+
+    return unless $item_group;
+
+    my $item_group_id;
+    if ( $item_group eq 'create' ) {
+        my $item_group = Koha::Biblio::ItemGroup->new(
+            {
+                biblionumber => $biblionumber,
+                description  => $item_group_description,
+            }
+        )->store();
+
+        $item_group_id = $item_group->id;
+    }
+    else {
+        $item_group_id = $item_group;
+    }
+
+    my $item_group_item = Koha::Biblio::ItemGroup::Item->new(
+        {
+            itemnumber => $itemnumber,
+            item_group_id  => $item_group_id,
+        }
+    )->store();
+}
 
 sub get_item_from_cookie {
     my ( $input ) = @_;
@@ -102,6 +131,8 @@ my $fa_barcode            = $input->param('barcode');
 my $fa_branch             = $input->param('branch');
 my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
+my $volume                = $input->param('volume');
+my $volume_description    = $input->param('volume_description');
 
 our $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -206,6 +237,7 @@ if ($op eq "additem") {
         }
         else {
             $item->store->discard_changes;
+            add_item_to_item_group( $item->biblionumber, $item->biblioitemnumber, $volume, $volume_description );
 
             # This is a bit tricky : if there is a cookie for the last created item and
             # we just added an item, the cookie value is not correct yet (it will be updated
@@ -316,6 +348,7 @@ if ($op eq "additem") {
                         { skip_record_index => 1 } );
                     $current_item->discard_changes; # Cannot chain discard_changes
                     $current_item = $current_item->unblessed;
+                    add_item_to_item_group( $item->biblionumber, $item->biblioitemnumber, $volume, $volume_description );
 
 # We count the item only if it was really added
 # That way, all items are added, even if there was some already existing barcodes
@@ -606,10 +639,12 @@ if( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) 
     $location_field->{marc_value}->{value} ||= $default_location;
 }
 
+my @ig = Koha::Biblio::ItemGroups->search({ biblio_id => $biblionumber })->as_list();
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
     biblio       => $biblio,
     items        => \@items,
+    item_groups      => \@ig,
     item_header_loop => \@header_value_loop,
     subfields        => $subfields,
     itemnumber       => $itemnumber,
