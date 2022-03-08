@@ -150,7 +150,7 @@ Retain extended patron attributes for existing patrons being overwritten
 
 =item B<-en|--email-new>
 
-Send the ACCTDETAILS welcome email to new users
+Send the WELCOME notice email to new users
 
 =item B<-v|--verbose>
 

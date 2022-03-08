@@ -442,7 +442,7 @@ sub import_patrons {
 
         next LINE unless $success;
 
-        # Send ACCTDETAILS welcome email is the user is new and we're set to send mail
+        # Send WELCOME welcome email is the user is new and we're set to send mail
         if ($send_welcome && $is_new) {
             my $emailaddr = $patron->notice_email_address;
 
@@ -451,7 +451,7 @@ sub import_patrons {
                 eval {
                     my $letter = GetPreparedLetter(
                         module      => 'members',
-                        letter_code => 'ACCTDETAILS',
+                        letter_code => 'WELCOME',
                         branchcode  => $patron->branchcode,,
                         lang        => $patron->lang || 'default',
                         tables      => {

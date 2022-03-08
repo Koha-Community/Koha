@@ -253,7 +253,7 @@ if ( $action eq 'create' ) {
                         eval {
                             my $letter = GetPreparedLetter(
                                 module      => 'members',
-                                letter_code => 'ACCTDETAILS',
+                                letter_code => 'WELCOME',
                                 branchcode  => $patron->branchcode,,
                                 lang        => $patron->lang || 'default',
                                 tables      => {

@@ -468,7 +468,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                 eval {
                     my $letter = GetPreparedLetter(
                         module      => 'members',
-                        letter_code => 'ACCTDETAILS',
+                        letter_code => 'WELCOME',
                         branchcode  => $patron->branchcode,,
                         lang        => $patron->lang || 'default',
                         tables      => {
