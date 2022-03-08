@@ -283,7 +283,12 @@
             <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
     [% END %]
-[% IF ( MARCNOTES ) %]<li role="presentation"><a href="#description"  aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
+    [% IF Koha.Preference('EnableItemGroups') %]
+        <li role="presentation">
+            <a href="#item_groups" aria-controls="item_groups" role="tab" data-toggle="tab">Item groups</a>
+        </li>
+    [% END %]
+[% IF ( MARCNOTES || notes ) %]<li role="presentation"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
 [% IF ComponentParts && ComponentParts.size %]<li id="components_tab" role="presentation"><a href="#components"  aria-controls="components" role="tab" data-toggle="tab">Components ([% ComponentParts.size | html %])</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li role="presentation"><a href="#subscriptions"  aria-controls="subscriptions" role="tab" data-toggle="tab">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li role="presentation"><a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a></li>[% END %]
@@ -321,6 +326,10 @@
               [% IF CAN_user_tools_items_batchmod %]
                 <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected items</a>
               [% END %]
+              [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
+                <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
+                <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>
+              [% END %]
             </span>
         [% END %]
     </div>
@@ -335,6 +344,9 @@
                 <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
                 [% IF ( itemdata_ccode ) %]<th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>[% END %]
+                [% IF Koha.Preference('EnableItemGroups') %]
+                    <th id="[% tab | html %]_item_group" data-colname="[% tab | html %]_item_group">Item group</th>
+                [% END %]
                 <th id="[% tab | html %]_itemcallnumber" data-colname="[% tab | html %]_itemcallnumber">Call number</th>
                 [% IF volinfo %]
                     <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
@@ -411,6 +423,7 @@ Note that permanent location is a code, and location may be an authval.
                         </span>
                     </td>
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
+                    [% IF Koha.Preference('EnableItemGroups') %]<td class="item_group">[% item.object.item_group.description | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
                         [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting %]
@@ -626,6 +639,26 @@ Note that permanent location is a code, and location may be an authval.
     </table>
 
 [% END %][%# end of block items_table %]
+
+[% IF Koha.Preference('EnableItemGroups') %]
+    <div role="tabpanel" class="tab-pane" id="item_groups">
+        [% IF CAN_user_editcatalogue_manage_item_groups %]
+            <div class="item_groups_table_table_controls">
+                <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
+            </div>
+        [% END %]
+        <table class="items-group-table" id="items-group-table">
+            <thead>
+                <tr>
+                    <td>Display Order</td>
+                    <td>Description</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+[% END %]
+
 
 <div role="tabpanel" class="tab-pane" id="holdings">
 
@@ -1059,6 +1092,136 @@ Note that permanent location is a code, and location may be an authval.
 
 [% END %]
 
+<div class="modal fade" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="modal-item-group-create-label"><i class="fa fa-plus"></i> Create a new item group</h3>
+            </div>
+            <form id="modal-item-group-create-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="item_group_description" class="required">Name: </label>
+                            <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
+                            <span class="required">Required</span>
+                        </p>
+                        <p>
+                            <label for="item_group_display_order" class="required">Display order: </label>
+                            <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
+                            <span class="required">Required</span>
+                            <br/>
+                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-create-submit" class="btn btn-default"><i class="fa fa-plus"></i> Submit</button>
+                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="modal-item-group-edit-label"><i class='fa fa-edit'></i> Edit item group</h3>
+            </div>
+            <form id="modal-item-group-edit-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="item_group_description" class="required">Name: </label>
+                            <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
+                            <span class="required">Required</span>
+                        </p>
+                        <p>
+                            <label for="item_group_display_order" class="required">Sort order: </label>
+                            <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
+                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-edit-submit" class="btn btn-default"><i class='fa fa-edit'></i> Submit</button>
+                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="modal-item-group-delete-label"><i class='fa fa-trash'></i> Delete item group</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item group?
+            </div>
+            <div class="modal-footer">
+                <button id="modal-item-group-delete-submit" class="btn btn-danger"><i class='fa fa-trash'></i> Delete</button>
+                <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="modal-item-group-set-label"><i class='fa fa-book'></i> Set item group for items</h3>
+            </div>
+            <form id="modal-item-group-set-form" class="validated">
+                <div class="modal-body">
+                    <fieldset>
+                        <p>
+                            <label for="item_group" class="required">Item group: </label>
+                            <select name="item_group" id="item-group-add-form-select">
+                                [% FOREACH ig IN biblio.item_groups %]
+                                    <option value="[% ig.id | html %]">[% ig.description | html %]</option>
+                                [% END %]
+                            </select>
+                            <span class="required">Required</span>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-set-submit" class="btn btn-default"><i class='fa fa-book'></i> Set item group</button>
+                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="modal-item-group-unset-label"><i class='fa fa-unlink'></i> Remove item from item group</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove these item(s) from their item group(s)?
+            </div>
+            <div class="modal-footer">
+                <button id="modal-item-group-unset-submit" class="btn btn-danger"><i class='fa fa-unlink'></i> Remove</button>
+                <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
@@ -1417,6 +1580,251 @@ Note that permanent location is a code, and location may be an authval.
                 var search_value = localStorage.getItem("searchbox_value");
                 if ( search_index ){ $('#cat-search-block select.advsearch').val(search_index)};
                 if ( search_value ){ $('#cat-search-block #search-form').val(search_value)};
+            });
+        [% END %]
+
+        [% IF Koha.Preference('EnableItemGroups') %]
+            // Load item groups table
+            var itemGroupsTable = KohaTable("items-group-table", {
+                "bAutoWidth": false,
+                'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
+                "aoColumns": [
+                    {
+                        "mDataProp": function( oObj ) {
+                            return oObj.display_order;
+                        },
+                    },
+                    {
+                        "mDataProp": function( oObj ) {
+                            return oObj.description;
+                        },
+                    },
+                    {
+                        "mDataProp": function( oObj ) {
+                            [% IF CAN_user_editcatalogue_manage_item_groups %]
+                                return `<button class='item-group-edit btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>
+                                    <i class='fa fa-edit'></i> ${_("Edit")}
+                                </button>`
+                                + '&nbsp'
+                                + `<button class='item-group-delete btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>
+                                    <i class='fa fa-trash'></i> ${('Delete')}
+                                </button>`;
+                            [% ELSE %]
+                                return "";
+                            [% END %]
+                        },
+                    },
+                ],
+                "bPaginate": false,
+                "bProcessing": true,
+                "bServerSide": false,
+                "sAjaxSource": `/api/v1/biblios/${biblionumber}/item_groups?_per_page=-1`,
+                "sAjaxDataProp": "",
+                "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    $.getJSON( sSource, aoData, function (json) {
+                        fnCallback(json)
+                    } );
+                },
+            });
+
+            // Create new item groups
+            $('.item-group-create').on('click', function(){
+                $('#modal-item-group-create-form-description').val("");
+                $('#modal-item-group-create-submit').removeAttr('disabled');
+                $('#modal-item-group-create').modal('show');
+            });
+
+            $("#modal-item-group-create-form").validate({
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: `/api/v1/biblios/${biblionumber}/item_groups`,
+                        headers: { "x-koha-embed": "items" },
+                        success: function(item_groups){
+                            $('#modal-item-group-create-submit').attr('disabled', 'disabled');
+
+                            var settings = {
+                              "url": `/api/v1/biblios/${biblionumber}/item_groups`,
+                              "method": "POST",
+                              "headers": {
+                                "Content-Type": "application/json"
+                              },
+                              "data": JSON.stringify(
+                                  {
+                                      "description": $("#modal-item-group-create-form-description").val(),
+                                      "display_order": $("#modal-item-group-create-form-display_order").val(),
+                                  }
+                              ),
+                            };
+
+                            $.ajax(settings)
+                            .done(function (response) {
+                                $('#item-group-add-form-select').append($('<option>', {
+                                    value: response.item_group_id,
+                                    text: response.description
+                                }));
+
+                                $('#modal-item-group-create').modal('hide');
+                                if ( item_groups.length == 0 ) {
+                                    // This bib has no previous item groups, reload the page
+                                    window.location.replace(`/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`);
+                                } else {
+                                    // Has other item groups, just reload the table
+                                    itemGroupsTable.api().ajax.reload();
+                                }
+                            })
+                            .fail(function(err) {
+                                var message = err.responseJSON.error;
+                                alert(message);
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#modal-item-group-create').on('shown.bs.modal', function () {
+                $('#modal-item-group-create-form-description').focus();
+            })
+
+            // Edit existing item groups
+            $('body').on( 'click', '.item-group-edit', function(){
+                const item_group_id = $(this).data('item-group-id');
+                const url = `/api/v1/biblios/${biblionumber}/item_groups/${item_group_id}`;
+                $.get( url, function( data ) {
+                    $('#modal-item-group-edit-form-description').val( data.description );
+                    $('#modal-item-group-edit-form-display_order').val( data.display_order );
+                    $('#modal-item-group-edit-submit').data('item-group-id', item_group_id );
+                    $('#modal-item-group-edit-submit').removeAttr('disabled');
+                    $('#modal-item-group-edit').modal('show');
+                });
+            });
+
+            $("#modal-item-group-edit-form").validate({
+                submitHandler: function(form) {
+                    $('#modal-item-group-edit-submit').attr('disabled', 'disabled');
+
+                    const item_group_id = $('#modal-item-group-edit-submit').data('item-group-id');
+                    const url = `/api/v1/biblios/${biblionumber}/item_groups/${item_group_id}`;
+
+                    var settings = {
+                      "url": url,
+                      "method": "PUT",
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "data": JSON.stringify(
+                          {
+                              "description": $("#modal-item-group-edit-form-description").val(),
+                              "display_order": $("#modal-item-group-edit-form-display_order").val(),
+                          }
+                      ),
+                    };
+
+                    $.ajax(settings)
+                    .done(function (response) {
+                        $('#modal-item-group-edit').modal('hide');
+                        itemGroupsTable.api().ajax.reload();
+                    })
+                    .fail(function(err) {
+                        var message = err.responseJSON.error;
+                        alert(message);
+                    });
+                }
+            });
+
+            $('#modal-item-group-edit').on('shown.bs.modal', function () {
+                $('#modal-item-group-edit-form-description').focus();
+            })
+
+            // Delete existing item groups
+            $('body').on( 'click', '.item-group-delete', function(){
+                const item_group_id = $(this).data('item-group-id');
+                $('#modal-item-group-delete-submit').data('item-group-id', item_group_id );
+                $('#modal-item-group-delete-submit').removeAttr('disabled');
+                $('#modal-item-group-delete').modal('show');
+            });
+            $("#modal-item-group-delete-submit").on('click', function(){
+                $('#modal-item-group-delete-submit').attr('disabled', 'disabled');
+                const item_group_id = $("#modal-item-group-delete-submit").data('item-group-id');
+
+                $.ajax({
+                    url: `/api/v1/biblios/${biblionumber}/item_groups/${item_group_id}`,
+                    headers: { "x-koha-embed": "items" },
+                    success: function(item_group_data){
+                        $.ajax({
+                          "url": `/api/v1/biblios/${biblionumber}/item_groups/${item_group_id}`,
+                          "method": "DELETE",
+                        })
+                        .done(function (response) {
+                            $('#modal-item-group-delete').modal('hide');
+                            $(`#item-group-add-form-select option[value='${item_group_id}']`).remove();
+                            if ( item_group_data.items === null ) {
+                                // No items for this item group, we can just refresh the table
+                                itemGroupsTable.api().ajax.reload();
+                            } else {
+                                // This item group had items attached to it, we need to reload the page
+                                window.location.replace(`/cgi-bin/koha/catalogue/detail.pl?biblionumber=${biblionumber}`);
+                            }
+                        })
+                        .fail(function(err) {
+                            var message = err.responseJSON.error;
+                            alert(message);
+                        });
+                    }
+                });
+            });
+
+            // Add item(s) to a item group
+            $('.itemselection_action_item_group_set').on('click', function(){
+                $('#modal-item-group-set').modal('show');
+            });
+
+            $("#modal-item-group-set-form").validate({
+                submitHandler: function(form) {
+                    $('#modal-item-group-set-submit').attr('disabled', 'disabled');
+
+                    const item_group_id = $('#item-group-add-form-select').val();
+
+                    let itemnumbers = new Array();
+                    $("input[name='itemnumber'][type='checkbox']:checked").each(function() {
+                        const itemnumber = $(this).val();
+                        itemnumbers.push( itemnumber );
+                    });
+                    if (itemnumbers.length > 0) {
+                        let url = '/cgi-bin/koha/catalogue/detail.pl?op=set_item_group';
+                        url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                        url += '&biblionumber=[% biblionumber | uri %]';
+                        url += `&item_group_id=${item_group_id}`;
+
+                        window.location.replace(url);
+                    }
+
+                    $('#modal-item-group-set').modal('hide');
+                }
+            });
+
+            // Remove item(s) from an item group
+            $('.itemselection_action_item_group_unset').on('click', function(){
+                $('#modal-item-group-unset').modal('show');
+            });
+
+            $("#modal-item-group-unset-submit").on('click', function(){
+                $('#modal-item-group-unset-submit').attr('disabled', 'disabled');
+
+                let itemnumbers = new Array();
+                $("input[name='itemnumber'][type='checkbox']:checked").each(function() {
+                    const itemnumber = $(this).val();
+                    itemnumbers.push( itemnumber );
+                });
+                if (itemnumbers.length > 0) {
+                    let url = '/cgi-bin/koha/catalogue/detail.pl?op=unset_item_group';
+                    url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                    url += '&biblionumber=[% biblionumber | uri %]';
+
+                    window.location.replace(url);
+                }
+
+                $('#modal-item-group-unset').modal('hide');
+
             });
         [% END %]
     </script>

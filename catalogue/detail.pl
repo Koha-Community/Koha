@@ -47,7 +47,10 @@ use C4::HTML5Media;
 use C4::CourseReserves qw( GetItemCourseReservesInfo );
 use Koha::AuthorisedValues;
 use Koha::Biblios;
+use Koha::Biblio::ItemGroup::Items;
+use Koha::Biblio::ItemGroups;
 use Koha::CoverImages;
+use Koha::DateUtils;
 use Koha::Illrequests;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -98,6 +101,39 @@ if ( not defined $record ) {
 
 my $marc_record = eval { $biblio->metadata->record };
 $template->param( decoding_error => $@ );
+
+my $op = $query->param('op') || q{};
+if ( $op eq 'set_item_group' ) {
+    my $item_group_id = $query->param('item_group_id');
+    my @itemnumbers   = $query->multi_param('itemnumber');
+
+    foreach my $item_id (@itemnumbers) {
+        my $item_group_item = Koha::Biblio::ItemGroup::Items->find( { item_id => $item_id } );
+
+        if ($item_group_item) {
+            $item_group_item->item_group_id($item_group_id);
+        }
+        else {
+            $item_group_item = Koha::Biblio::ItemGroup::Item->new(
+                {
+                    item_id        => $item_id,
+                    item_group_id  => $item_group_id,
+                }
+            );
+        }
+
+        $item_group_item->store();
+    }
+}
+elsif ( $op eq 'unset_item_group' ) {
+    my $item_group_id   = $query->param('item_group_id');
+    my @itemnumbers = $query->multi_param('itemnumber');
+
+    foreach my $item_id (@itemnumbers) {
+        my $item_group_item = Koha::Biblio::ItemGroup::Items->find( { item_id => $item_id } );
+        $item_group_item->delete() if $item_group_item;
+    }
+}
 
 if($query->cookie("holdfor")){
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
@@ -340,6 +376,7 @@ foreach my $item (@items) {
 
     # checking for holds
     my $item_object = Koha::Items->find( $item->{itemnumber} );
+    $item->{object} = $item_object;
     my $holds = $item_object->current_holds;
     if ( my $first_hold = $holds->next ) {
         $item->{first_hold} = $first_hold;
