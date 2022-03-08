@@ -36,7 +36,7 @@ t::lib::Mocks::mock_preference('EnableItemGroups', 1);
 
 subtest 'add_item() and items() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -65,6 +65,13 @@ subtest 'add_item() and items() tests' => sub {
     @items = $item_group->items->as_list();
     is( scalar(@items), 1, 'Item group now has only one item');
     is( $items[0]->id, $item_2->id, 'Item 2 is correct' );
+
+    # Remove last item
+    $item_2->delete;
+    @items = $item_group->items->as_list();
+    is( scalar(@items), 0, "Item group now has no items");
+    $item_group = Koha::Biblio::ItemGroups->find( $item_group->id );
+    is( $item_group, undef, 'ItemGroup is deleted when last item is deleted' );
 
     $schema->storage->txn_rollback;
 };

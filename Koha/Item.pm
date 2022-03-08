@@ -230,7 +230,13 @@ sub delete {
     # FIXME check the item has no current issues
     # i.e. raise the appropriate exception
 
+    # Get the item group so we can delete it later if it has no items left
+    my $item_group = C4::Context->preference('EnableItemGroups') ? $self->item_group : undef;
+
     my $result = $self->SUPER::delete;
+
+    # Delete the item gorup if it has no items left
+    $item_group->delete if ( $item_group && $item_group->items->count == 0 );
 
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
