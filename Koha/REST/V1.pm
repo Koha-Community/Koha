@@ -22,7 +22,8 @@ use Mojo::Base 'Mojolicious';
 use C4::Context;
 use Koha::Logger;
 
-use JSON::Validator::OpenAPI::Mojolicious;
+use JSON::Validator::Schema::OpenAPIv2;
+
 use Try::Tiny qw( catch try );
 
 =head1 NAME
@@ -68,25 +69,23 @@ sub startup {
         $self->secrets([$secret_passphrase]);
     }
 
-    my $validator = JSON::Validator::OpenAPI::Mojolicious->new;
+    my $spec_file = $self->home->rel_file("api/v1/swagger/swagger.yaml");
 
     push @{$self->routes->namespaces}, 'Koha::Plugin';
 
     # Try to load and merge all schemas first and validate the result just once.
-    my $spec;
-    my $swagger_schema = $self->home->rel_file("api/swagger-v2-schema.json");
     try {
-        $spec = $validator->bundle(
-            {
-                replace => 1,
-                schema => $self->home->rel_file("api/v1/swagger/swagger.yaml")
-            }
-        );
+
+        my $schema = JSON::Validator::Schema::OpenAPIv2->new;
+
+        $schema->resolve( $spec_file );
+
+        my $spec = $schema->bundle->data;
 
         $self->plugin(
             'Koha::REST::Plugin::PluginRoutes' => {
-                spec               => $spec,
-                validator          => undef
+                spec     => $spec,
+                validate => 0,
             }
         ) unless C4::Context->needs_install; # load only if Koha is installed
 
@@ -94,11 +93,6 @@ sub startup {
             OpenAPI => {
                 spec  => $spec,
                 route => $self->routes->under('/api/v1')->to('Auth#under'),
-                schema => ( $swagger_schema ) ? $swagger_schema : undef,
-                allow_invalid_ref =>
-                1,    # required by our spec because $ref directly under
-                        # Paths-, Parameters-, Definitions- & Info-object
-                        # is not allowed by the OpenAPI specification.
             }
         );
     }
@@ -111,19 +105,16 @@ sub startup {
         $logger->error("Warning: Could not load REST API spec bundle: " . $_);
 
         try {
-            $validator->load_and_validate_schema(
-                $self->home->rel_file("api/v1/swagger/swagger.yaml"),
-                {
-                    allow_invalid_ref  => 1,
-                    schema => ( $swagger_schema ) ? $swagger_schema : undef,
-                }
-            );
 
-            $spec = $validator->schema->data;
+            my $schema = JSON::Validator::Schema::OpenAPIv2->new;
+            $schema->resolve( $spec_file );
+
+            my $spec = $schema->bundle->data;
+
             $self->plugin(
                 'Koha::REST::Plugin::PluginRoutes' => {
-                    spec      => $spec,
-                    validator => $validator
+                    spec     => $spec,
+                    validate => 1
                 }
             )  unless C4::Context->needs_install; # load only if Koha is installed
 
@@ -131,10 +122,6 @@ sub startup {
                 OpenAPI => {
                     spec  => $spec,
                     route => $self->routes->under('/api/v1')->to('Auth#under'),
-                    allow_invalid_ref =>
-                    1,    # required by our spec because $ref directly under
-                            # Paths-, Parameters-, Definitions- & Info-object
-                            # is not allowed by the OpenAPI specification.
                 }
             );
         }

@@ -24,6 +24,7 @@ use Koha::Plugins;
 use Koha::Logger;
 
 use Clone qw( clone );
+use JSON::Validator::Schema::OpenAPIv2;
 use Try::Tiny qw( catch try );
 
 =head1 NAME
@@ -41,8 +42,8 @@ Koha::REST::Plugin::PluginRoutes
 sub register {
     my ( $self, $app, $config ) = @_;
 
-    my $spec      = $config->{spec};
-    my $validator = $config->{validator};
+    my $spec     = $config->{spec};
+    my $validate = $config->{validate};
 
     my @plugins;
 
@@ -58,7 +59,7 @@ sub register {
         );
 
         foreach my $plugin ( @plugins ) {
-            $spec = $self->inject_routes( $spec, $plugin, $validator );
+            $spec = $self->inject_routes( $spec, $plugin, $validate );
         }
 
     }
@@ -71,14 +72,14 @@ sub register {
 =cut
 
 sub inject_routes {
-    my ( $self, $spec, $plugin, $validator ) = @_;
+    my ( $self, $spec, $plugin, $validate ) = @_;
 
-    return merge_spec( $spec, $plugin ) unless $validator;
+    return merge_spec( $spec, $plugin ) unless $validate;
 
     return try {
 
         my $backup_spec = merge_spec( clone($spec), $plugin );
-        if ( $self->spec_ok( $backup_spec, $validator ) ) {
+        if ( $self->spec_ok( $backup_spec, $validate ) ) {
             $spec = merge_spec( $spec, $plugin );
         }
         else {
@@ -145,23 +146,15 @@ sub merge_spec {
 =cut
 
 sub spec_ok {
-    my ( $self, $spec, $validator ) = @_;
+    my ( $self, $spec ) = @_;
 
-    my $schema = $self->{'swagger-v2-schema'};
+    my $schema = JSON::Validator::Schema::OpenAPIv2->new( $spec );
 
-    return try {
-        $validator->load_and_validate_schema(
-            $spec,
-            {
-                allow_invalid_ref => 1,
-                schema => ( $schema ) ? $schema : undef,
-            }
-        );
-        return 1;
+    if ($schema->is_invalid) {
+        warn $schema->errors->[0];
     }
-    catch {
-        return 0;
-    }
+
+    return !$schema->is_invalid;
 }
 
 1;

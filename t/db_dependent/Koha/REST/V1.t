@@ -21,8 +21,6 @@ use Test::More tests => 1;
 use Test::Mojo;
 use Test::Warn;
 
-use JSON::Validator::OpenAPI::Mojolicious;
-
 subtest 'Type definition tests' => sub {
 
     plan tests => 4;
