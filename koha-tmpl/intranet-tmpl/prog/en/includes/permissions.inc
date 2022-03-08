@@ -338,6 +338,11 @@
             Fast cataloging
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_item_groups' -%]
+        <span class="sub_permission manage_item_groups_subpermission">
+            Create, update and delete item groups, add or remove items from an item group
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'remaining_permissions' -%]
         <span class="sub_permission remaining_permissions_subpermission">
             Remaining permissions for managing fines and fees

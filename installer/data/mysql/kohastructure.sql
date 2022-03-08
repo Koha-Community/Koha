@@ -1880,6 +1880,37 @@ CREATE TABLE `club_fields` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `item_groups`
+--
+
+DROP TABLE IF EXISTS `item_groups`;
+CREATE TABLE `item_groups` (
+  `item_group_id` INT(11) NOT NULL auto_increment COMMENT "id for the items group",
+  `biblio_id` INT(11) NOT NULL DEFAULT 0 COMMENT "id for the bibliographic record the group belongs to",
+  `display_order` INT(4) NOT NULL DEFAULT 0 COMMENT "The 'sort order' for item_groups",
+  `description` MEDIUMTEXT default NULL COMMENT "A group description",
+  `created_on` TIMESTAMP NULL COMMENT "Time and date the group was created",
+  `updated_on` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT "Time and date of the latest change on the group",
+  PRIMARY KEY  (`item_group_id`),
+  CONSTRAINT `item_groups_ibfk_1` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `item_group_items`
+--
+
+DROP TABLE IF EXISTS `item_group_items`;
+CREATE TABLE `item_group_items` (
+  `item_group_items_id` int(11) NOT NULL auto_increment COMMENT "id for the group/item link",
+  `item_group_id` INT(11) NOT NULL DEFAULT 0 COMMENT "foreign key making this table a 1 to 1 join from items to item groups",
+  `item_id` INT(11) NOT NULL DEFAULT 0 COMMENT "foreign key linking this table to the items table",
+  PRIMARY KEY  (`item_group_items_id`),
+  UNIQUE KEY (`item_id`),
+  CONSTRAINT `item_group_items_iifk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `item_group_items_gifk_1` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `club_holds`
 --
 
