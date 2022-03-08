@@ -517,10 +517,6 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
     $.fn.kohaTable = function(options, table_settings, add_filters, default_filters) {
         var settings = null;
 
-        if ( add_filters ) {
-            $(this).find('thead tr').clone(true).appendTo( $(this).find('thead') );
-        }
-
         if(options) {
             if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
             options.criteria = options.criteria.toLowerCase();
@@ -852,8 +848,12 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         if ( add_filters ) {
             var table_dt = table.DataTable();
+
+            $(this).find('thead tr').clone(true).appendTo( $(this).find('thead') );
+
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
+                $(this).removeClass('sorting');
                 if ( is_searchable ) {
                     let input_type = 'input';
                     if ( $(this).data('filter') ) {
