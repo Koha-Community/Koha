@@ -71,6 +71,14 @@ $(document).ready(function() {
             return false;
         }
 
+        if (0 < CheckMandatorySubfields(this.form)) {
+            // Open the item tab
+            $('#tabs').tabs('option', 'active', 1);
+
+            alert(__('Some required item subfields are not set'));
+            return false;
+        }
+
         disableUnchecked($(this.form));
 
         $(this.form).submit();
