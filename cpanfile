@@ -144,7 +144,7 @@ recommends 'Gravatar::URL', '1.03';
 recommends 'HTTPD::Bench::ApacheBench', '0.73';
 recommends 'LWP::Protocol::https', '5.836';
 recommends 'Lingua::Ispell', '0.07';
-recommends 'Locale::XGettext::TT2', '0.7';
+recommends 'Locale::XGettext::TT2', '0.6';
 recommends 'Module::Bundled::Files', '0.03';
 recommends 'Module::Load::Conditional', '0.38';
 recommends 'Module::Pluggable', '3.9';
