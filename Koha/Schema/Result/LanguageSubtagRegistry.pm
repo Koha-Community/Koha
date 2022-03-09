@@ -41,7 +41,7 @@ language-script-region-variant-extension-privateuse
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 25
+  size: 255
 
 only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
 
@@ -65,7 +65,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 1, size => 25 },
   "description",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "added",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "id",
@@ -101,8 +101,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("uniq_lang", ["subtag", "type"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-02 07:13:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8VCaLbL67TbZrsPI3OSwkg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-09 07:52:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZeDY9hf5cnovkdtPQRe2Aw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
