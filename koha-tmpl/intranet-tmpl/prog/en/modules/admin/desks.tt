@@ -118,10 +118,15 @@
                     <select id="branchcode" name="branchcode" required="required">
                       <option value=""></option>
                       [% FOREACH branch IN branches %]
-                        [% IF (Branches.GetLoggedInBranchcode == branch.branchcode) %]
-                        <option value="[% branch.branchcode|html %]" selected="selected">[% branch.branchname|html %]</option>
+                        [% IF desk %]
+                            [% IF (desk.branchcode == branch.branchcode) %]
+                                <option value="[% branch.branchcode|html %]" selected="selected">[% branch.branchname|html %]</option>
+                            [% END%]
                         [% ELSE %]
-                        <option value="[% branch.branchcode|html %]">[% branch.branchname|html %]</option>
+                            [% IF (Branches.GetLoggedInBranchcode == branch.branchcode) %]
+                                <option value="[% branch.branchcode|html %]" selected="selected">[% branch.branchname|html %]</option>
+                            [% END%]
+                                <option value="[% branch.branchcode|html %]">[% branch.branchname|html %]</option>
                         [% END %]
                       [% END %]
                      </select>
