@@ -54,6 +54,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AmazonLocale','US','US|CA|DE|FR|IN|JP|UK','Use to set the Locale of your Amazon.com Web Services','Choice'),
 ('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
 ('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for suggestion and checkout history privacy',''),
+('ApplyFrameworkDefaults', 'new', 'new|duplicate|changed', 'Configure when to apply framework default values - when cataloguing a new record, or when editing a record as new (duplicating), or when changing framework', 'multiple'),
 ('ArticleRequests', '0', NULL, 'Enables the article request feature', 'YesNo'),
 ('ArticleRequestsOpacHostRedirection', '0', NULL, 'Enables redirection from child to host when requesting articles on the Opac', 'YesNo'),
 ('ArticleRequestsLinkControl', 'calc', 'always|calc', 'Control display of article request link on search results', 'Choice'),
