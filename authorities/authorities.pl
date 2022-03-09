@@ -112,9 +112,16 @@ sub create_input {
         $max_length = 40;
     }
 
-    # if there is no value provided but a default value in parameters, get it
-    if ($value eq '') {
-        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} if !$cgi->param('authid'); # only for new records
+    # Apply optional framework default value when it is a new record,
+    # or when editing as new (duplicating a record),
+    # based on the ApplyFrameworkDefaults setting.
+    # Substitute date parts, user name
+    my $applydefaults = C4::Context->preference('ApplyFrameworkDefaults');
+    if ( $value eq '' && (
+        ( $applydefaults =~ /new/ && !$cgi->param('authid') ) ||
+        ( $applydefaults =~ /duplicate/ && $cgi->param('op') eq 'duplicate' )
+    ) ) {
+        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
         if (!defined $value) {
             $value = q{};
         }

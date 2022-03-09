@@ -288,9 +288,17 @@ sub create_input {
     
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
-    # Apply optional framework default value when it is a new record
+    # Apply optional framework default value when it is a new record,
+    # or when editing as new (duplicating a record),
+    # or when changing a record's framework,
+    # based on the ApplyFrameworkDefaults setting.
     # Substitute date parts, user name
-    if ( $value eq '' && !$cgi->param('biblionumber') ) {
+    my $applydefaults = C4::Context->preference('ApplyFrameworkDefaults');
+    if ( $value eq '' && (
+        ( $applydefaults =~ /new/ && !$cgi->param('biblionumber') ) ||
+        ( $applydefaults =~ /duplicate/ && $cgi->param('op') eq 'duplicate' ) ||
+        ( $applydefaults =~ /changed/ && $cgi->param('changed_framework') )
+    ) ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} // q{};
 
         # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
