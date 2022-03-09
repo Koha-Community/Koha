@@ -7,15 +7,10 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
-        # Add PASSCHANGE notice
+        # Add PASSWORD_CHANGE notice
         $dbh->do( q{
-            INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('members', 'PASSCHANGE', 'Notification of password change', 'Library account password change notification',
-            "Dear [% borrower.firstname %] [% borrower.surname %],
-
-            Someone has changed your library user account password.
-
-            If this is unexpected, please contact the library.
-            ", 'email');
+            INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('members', 'PASSWORD_CHANGE', 'Notification of password change', 'Library account password change notification',
+            "Dear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nSomeone has changed your library user account password.\r\n\r\nIf this is unexpected, please contact the library.", 'email');
         });
 
         # Add systempreference
