@@ -165,6 +165,13 @@ Cataloging:
             - and record's last modifier name in MARC subfield
             - pref: MarcFieldForModifierName
             - ". <br/><strong>NOTE:</strong> Use a dollar sign between field and subfield like 123$a."
+        -
+            - Apply framework default values
+            - pref: ApplyFrameworkDefaults
+              multiple:
+                new: "when cataloguing new records"
+                duplicate: "when editing records as new (duplicating)"
+                changed: "when changing the framework while editing the existing record"
     Display:
         -
             - 'Separate main entry and subdivisions with '
