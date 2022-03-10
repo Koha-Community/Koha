@@ -50,9 +50,10 @@ sub do_checkin {
     my $return_date = shift;
     my $account = shift;
 
-    my $checked_in_ok     = $account->{checked_in_ok};
-    my $cv_triggers_alert = $account->{cv_triggers_alert};
-    my $holds_block_checkin  = $account->{holds_block_checkin};
+    my $checked_in_ok       = $account->{checked_in_ok};
+    my $cv_triggers_alert   = $account->{cv_triggers_alert};
+    my $holds_block_checkin = $account->{holds_block_checkin};
+    my $holds_get_captured  = $account->{holds_get_captured} // 1;
 
     if (!$branch) {
         $branch = 'SIP2';
@@ -148,20 +149,22 @@ sub do_checkin {
         } elsif ($branch eq $messages->{ResFound}->{branchcode}) {
             $self->hold($messages->{ResFound});
             $self->alert_type('01');
-            ModReserveAffect( $messages->{ResFound}->{itemnumber},
-                $messages->{ResFound}->{borrowernumber}, 0, $messages->{ResFound}->{reserve_id});
+            ModReserveAffect(
+                $messages->{ResFound}->{itemnumber},
+                $messages->{ResFound}->{borrowernumber},
+                0, $messages->{ResFound}->{reserve_id}
+            ) if $holds_get_captured;
 
         } else {
             $self->hold($messages->{ResFound});
             $self->alert_type('02');
-            ModReserveAffect( $item->itemnumber,
-                $messages->{ResFound}->{borrowernumber}, 1, $messages->{ResFound}->{reserve_id});
-            ModItemTransfer( $item->itemnumber,
-                $branch,
-                $messages->{ResFound}->{branchcode},
-                'Reserve',
-            );
-
+            if ($holds_get_captured) {
+                ModReserveAffect( $item->itemnumber,
+                    $messages->{ResFound}->{borrowernumber},
+                    1, $messages->{ResFound}->{reserve_id} );
+                ModItemTransfer( $item->itemnumber, $branch,
+                    $messages->{ResFound}->{branchcode}, 'Reserve', );
+            }
         }
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
