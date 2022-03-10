@@ -37,7 +37,7 @@ $uri =~ s/^\s+|\s+$//g if $uri;    # trim
 
 my $tracking_method = C4::Context->preference('TrackClicks');
 unless ($tracking_method) {
-    output_error( $cgi, '404' );
+    output_error( $cgi, '404', { interface => 'opac' } );
     exit;
 }
 my $tracker = Koha::Linktracker->new( { trackingmethod => $tracking_method } );
@@ -85,5 +85,5 @@ if ( $uri && ( $biblionumber || $itemnumber ) ) {
     }
 }
 
-output_error( $cgi, '404' );
+output_error( $cgi, '404', { interface => 'opac' } );
 exit;

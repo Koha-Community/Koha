@@ -392,16 +392,19 @@ Missing POD for output_error.
 =cut
 
 sub output_error {
-    my ( $query, $error ) = @_;
+    my ( $query, $error, $params ) = @_;
 
     if ( !$error || $error =~ /\D/ ) {
         Koha::Exceptions::WrongParameter->throw('output_error requires $error to be an integer');
     }
+    my $interface = 'intranet';
+    $interface = 'opac' if ( $params && $params->{interface} eq 'opac' );
+
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => 'errors/errorpage.tt',
             query           => $query,
-            type            => 'intranet',
+            type            => $interface,
             authnotrequired => 1,
         }
     );
