@@ -98,7 +98,7 @@ subtest 'Test renew desensitize' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 35;
+    plan tests => 39;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -831,11 +831,23 @@ sub test_checkin_v2 {
     $msg->handle_checkin( $server );
     is( substr($response,2,1), '0', 'OK flag is false when we check in an item on hold and we do not allow it' );
     is( substr($response,5,1), 'Y', 'Alert flag is set' );
-    check_field( $respcode, $response, FID_SCREEN_MSG, 'Item is on hold, please return to circulation desk', 'Screen message is correct' );
     is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 1, "Item was not checked in");
-    $hold->delete();
+    $hold->discard_changes;
+    is( $hold->found, undef, "Hold was not marked as found by SIP when holds_block_checkin enabled");
     $server->{account}->{holds_block_checkin} = 0;
 
+    # Test account option holds_get_captured that automatically sets the hold as found for a hold and possibly sets it to in transit
+    $server->{account}->{holds_get_captured} = 0;
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    is( substr($response,2,1), '1', 'OK flag is true when we check in an item on hold and we allow it but do not capture it' );
+    is( substr($response,5,1), 'Y', 'Alert flag is set' );
+    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 0, "Item was checked in");
+    $hold->discard_changes;
+    is( $hold->found, undef, "Hold was not marked as found by SIP when holds_get_captured disabled");
+    $hold->delete();
+    $server->{account}->{holds_get_captured} = 1;
 }
 
 sub test_hold_patron_bcode {
