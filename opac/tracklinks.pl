@@ -32,6 +32,7 @@ my $cgi = CGI->new;
 my $uri = $cgi->param('uri') || '';
 my $biblionumber = $cgi->param('biblionumber');;
 my $itemnumber   = $cgi->param('itemnumber');
+$uri =~ s/^\s+|\s+$//g if $uri; # trim
 
 my $tracking_method = C4::Context->preference('TrackClicks');
 unless ( $tracking_method ) {
