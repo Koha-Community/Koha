@@ -140,11 +140,26 @@ my %report;
 while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
-    my $borrower_preferences;
-    $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $auto_renew->borrowernumber,
-                                                                                   message_name   => 'auto_renewals' } ) if $send_notices_pref eq 'preferences';
+    my ( $borrower_preferences, $wants_email, $wants_digest );
+    if ( $send_notices_pref eq 'preferences' ){
+        $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences(
+            {
+                borrowernumber => $auto_renew->borrowernumber,
+                message_name   => 'auto_renewals'
+            }
+        );
+        $wants_email = 1
+            if $borrower_preferences
+            && $borrower_preferences->{transports}
+            && $borrower_preferences->{transports}->{email};
+        $wants_digest = 1
+            if $wants_email
+            && $borrower_preferences->{wants_digest};
+    }
 
-    $send_notices = 1 if !$send_notices && $send_notices_pref eq 'preferences' && $borrower_preferences && $borrower_preferences->{transports} && $borrower_preferences->{transports}->{email};
+    $send_notices = 1
+      if !$send_notices
+      && $wants_email;
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
@@ -159,7 +174,8 @@ while ( my $auto_renew = $auto_renews->next ) {
             my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode, undef, undef, undef, 0 );
             $auto_renew->auto_renew_error(undef)->store;
         }
-        push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew unless $send_notices_pref ne 'cron' && (!$borrower_preferences || !$borrower_preferences->{transports} || !$borrower_preferences->{transports}->{email} || $borrower_preferences->{'wants_digest'});
+        push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
+            if $send_notices && !$wants_digest;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
         or $error eq 'restriction'
@@ -178,11 +194,11 @@ while ( my $auto_renew = $auto_renews->next ) {
         if ( not $auto_renew->auto_renew_error or $updated ) {
             $auto_renew->auto_renew_error($error)->store if $confirm;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-              if $error ne 'auto_too_soon' && ($send_notices_pref eq 'cron' || ($borrower_preferences && $borrower_preferences->{transports} && $borrower_preferences->{transports}->{email} && !$borrower_preferences->{'wants_digest'}));    # Do not notify if it's too soon
+              if $error ne 'auto_too_soon' && ( $send_notices && !$wants_digest );    # Do not notify if it's too soon
         }
     }
 
-    if ( $borrower_preferences && $borrower_preferences->{transports} && $borrower_preferences->{transports}->{email} && $borrower_preferences->{'wants_digest'} ) {
+    if ( $wants_digest ) {
         # cache this one to process after we've run through all of the items.
         if ($digest_per_branch) {
             $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{success}++ if $error eq 'auto_renew';
