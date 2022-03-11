@@ -149,6 +149,44 @@
       permissions:
         circulate: circulate_remaining_permissions
 "/checkouts/{checkout_id}/renewals":
+  post:
+    x-mojo-to: Checkouts#renew
+    operationId: renewsCheckout
+    tags:
+      - checkouts
+    summary: Renew a checkout
+    parameters:
+      - $ref: ../parameters.yaml#/checkout_id_pp
+      - $ref: ../parameters.yaml#/seen_pp
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Updated borrower's checkout
+        schema:
+          $ref: ../definitions.yaml#/checkout
+      "403":
+        description: Cannot renew checkout
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Checkout not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
   get:
     x-mojo-to: Checkouts#get_renewals
     operationId: getRenewals
@@ -163,7 +201,7 @@
       "200":
         description: List of checkouts renewals
         schema:
-          $ref: ../definitions.yaml#/renewal
+          $ref: ../definitions.yaml#/renewals
       "403":
         description: Access forbidden
         schema:
