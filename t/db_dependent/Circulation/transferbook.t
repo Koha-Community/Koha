@@ -157,27 +157,27 @@ subtest 'transfer already at destination' => sub {
 
     # recalls
     t::lib::Mocks::mock_preference('UseRecalls', 1);
-    my $recall = Koha::Recall->new({
-        biblionumber => $item->biblionumber,
-        itemnumber => $item->itemnumber,
-        item_level_recall => 1,
-        borrowernumber => $patron->borrowernumber,
-        branchcode => $library->branchcode,
-        status => 'R',
-    })->store;
+    my $recall = Koha::Recall->new(
+        {   biblionumber      => $item->biblionumber,
+            itemnumber        => $item->itemnumber,
+            item_level_recall => 1,
+            borrowernumber    => $patron->borrowernumber,
+            branchcode        => $library->branchcode,
+        }
+    )->store;
     ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
     is( $dotransfer, 0, 'Do not transfer recalled item, it has already arrived' );
     is( $messages->{RecallPlacedAtHoldingBranch}, 1, "We found the recall");
 
     my $item2 = $builder->build_object({ class => 'Koha::Items' }); # this item will have a different holding branch to the pickup branch
-    $recall = Koha::Recall->new({
-        biblionumber => $item2->biblionumber,
-        itemnumber => $item2->itemnumber,
-        item_level_recall => 1,
-        borrowernumber => $patron->borrowernumber,
-        branchcode => $library->branchcode,
-        status => 'R',
-    })->store;
+    $recall = Koha::Recall->new(
+        {   biblionumber      => $item2->biblionumber,
+            itemnumber        => $item2->itemnumber,
+            item_level_recall => 1,
+            borrowernumber    => $patron->borrowernumber,
+            branchcode        => $library->branchcode,
+        }
+    )->store;
     ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
     is( $dotransfer, 1, 'Transfer of recalled item succeeded' );
     is( $messages->{RecallFound}->recall_id, $recall->recall_id, "We found the recall");

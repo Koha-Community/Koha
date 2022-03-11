@@ -142,8 +142,7 @@ Return true if recall status is requested.
 
 sub requested {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'R';
+    return $self->status eq 'requested';
 }
 
 =head3 waiting
@@ -158,8 +157,7 @@ Return true if recall is awaiting pickup.
 
 sub waiting {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'W';
+    return $self->status eq 'waiting';
 }
 
 =head3 overdue
@@ -174,8 +172,7 @@ Return true if recall is overdue to be returned.
 
 sub overdue {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'O';
+    return $self->status eq 'overdue';
 }
 
 =head3 in_transit
@@ -190,8 +187,7 @@ Return true if recall is in transit.
 
 sub in_transit {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'T';
+    return $self->status eq 'in_transit';
 }
 
 =head3 expired
@@ -206,8 +202,7 @@ Return true if recall has expired.
 
 sub expired {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'E';
+    return $self->status eq 'expired';
 }
 
 =head3 cancelled
@@ -222,24 +217,22 @@ Return true if recall has been cancelled.
 
 sub cancelled {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'C';
+    return $self->status eq 'cancelled';
 }
 
-=head3 finished
+=head3 fulfilled
 
-    if ( $recall->finished )
+    if ( $recall->fulfilled )
 
-    [% IF recall.finished %]
+    [% IF recall.fulfilled %]
 
-Return true if recall is finished and has been fulfilled.
+Return true if the recall has been fulfilled.
 
 =cut
 
-sub finished {
+sub fulfilled {
     my ( $self ) = @_;
-    my $status = $self->status;
-    return $status && $status eq 'F';
+    return $self->status eq 'fulfilled';
 }
 
 =head3 calc_expirationdate
@@ -292,10 +285,10 @@ sub start_transfer {
 
     if ( $self->item_level_recall ) {
         # already has an itemnumber
-        $self->update({ status => 'T' });
+        $self->update({ status => 'in_transit' });
     } else {
         my $itemnumber = $params->{item}->itemnumber;
-        $self->update({ status => 'T', itemnumber => $itemnumber });
+        $self->update({ status => 'in_transit', itemnumber => $itemnumber });
     }
 
     my ( $dotransfer, $messages ) = C4::Circulation::transferbook({ to_branch => $self->branchcode, from_branch => $self->item->holdingbranch, barcode => $self->item->barcode, trigger => 'Recall' });
@@ -315,9 +308,9 @@ sub revert_transfer {
     my ( $self ) = @_;
 
     if ( $self->item_level_recall ) {
-        $self->update({ status => 'R' });
+        $self->update({ status => 'requested' });
     } else {
-        $self->update({ status => 'R', itemnumber => undef });
+        $self->update({ status => 'requested', itemnumber => undef });
     }
 
     return $self;
@@ -325,10 +318,11 @@ sub revert_transfer {
 
 =head3 set_waiting
 
-    $recall->set_waiting({
-        expirationdate => $expirationdate,
-        item => $item_object
-    });
+    $recall->set_waiting(
+        {   expirationdate => $expirationdate,
+            item           => $item_object
+        }
+    );
 
 Set the recall as waiting and update expiration date.
 Notify the recall requester.
@@ -341,11 +335,11 @@ sub set_waiting {
     my $itemnumber;
     if ( $self->item_level_recall ) {
         $itemnumber = $self->itemnumber;
-        $self->update({ status => 'W', waitingdate => dt_from_string, expirationdate => $params->{expirationdate} });
+        $self->update({ status => 'waiting', waitingdate => dt_from_string, expirationdate => $params->{expirationdate} });
     } else {
         # biblio-level recall with no itemnumber. need to set itemnumber
         $itemnumber = $params->{item}->itemnumber;
-        $self->update({ status => 'W', waitingdate => dt_from_string, expirationdate => $params->{expirationdate}, itemnumber => $itemnumber });
+        $self->update({ status => 'waiting', waitingdate => dt_from_string, expirationdate => $params->{expirationdate}, itemnumber => $itemnumber });
     }
 
     # send notice to recaller to pick up item
@@ -378,9 +372,9 @@ Revert recall waiting status.
 sub revert_waiting {
     my ( $self ) = @_;
     if ( $self->item_level_recall ){
-        $self->update({ status => 'R', waitingdate => undef });
+        $self->update({ status => 'requested', waitingdate => undef });
     } else {
-        $self->update({ status => 'R', waitingdate => undef, itemnumber => undef });
+        $self->update({ status => 'requested', waitingdate => undef, itemnumber => undef });
     }
     return $self;
 }
@@ -414,7 +408,7 @@ Set a recall as overdue when the recall has been requested and the borrower who 
 sub set_overdue {
     my ( $self, $params ) = @_;
     my $interface = $params->{interface} || 'COMMANDLINE';
-    $self->update({ status => 'O' });
+    $self->update({ status => 'overdue' });
     C4::Log::logaction( 'RECALLS', 'OVERDUE', $self->recall_id, "Recall status set to overdue", $interface ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
@@ -430,7 +424,7 @@ Set a recall as expired. This may be done manually or by a cronjob, either when 
 sub set_expired {
     my ( $self, $params ) = @_;
     my $interface = $params->{interface} || 'COMMANDLINE';
-    $self->update({ status => 'E', old => 1, expirationdate => dt_from_string });
+    $self->update({ status => 'expired', old => 1, expirationdate => dt_from_string });
     C4::Log::logaction( 'RECALLS', 'EXPIRE', $self->recall_id, "Recall expired", $interface ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
@@ -445,22 +439,22 @@ Set a recall as cancelled. This may be done manually, either by the borrower tha
 
 sub set_cancelled {
     my ( $self ) = @_;
-    $self->update({ status => 'C', old => 1, cancellationdate => dt_from_string });
+    $self->update({ status => 'cancelled', old => 1, cancellationdate => dt_from_string });
     C4::Log::logaction( 'RECALLS', 'CANCEL', $self->recall_id, "Recall cancelled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
-=head3 set_finished
+=head3 set_fulfilled
 
-    $recall->set_finished;
+    $recall->set_fulfilled;
 
 Set a recall as finished. This should only be called when the item allocated to a recall is checked out to the borrower who requested the recall.
 
 =cut
 
-sub set_finished {
+sub set_fulfilled {
     my ( $self ) = @_;
-    $self->update({ status => 'F', old => 1 });
+    $self->update({ status => 'fulfilled', old => 1 });
     C4::Log::logaction( 'RECALLS', 'FULFILL', $self->recall_id, "Recall fulfilled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }

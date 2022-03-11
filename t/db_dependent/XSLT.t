@@ -147,7 +147,6 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         biblionumber    => $item->biblionumber,
         itemnumber      => $item->itemnumber,
         branchcode      => $item->holdingbranch,
-        status          => 'R',
     }});
     $recall->set_waiting;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);

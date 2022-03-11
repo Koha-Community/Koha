@@ -232,7 +232,6 @@ subtest 'Recall overdue fines' => sub {
         recalldate => dt_from_string,
         biblionumber => $item->biblionumber,
         branchcode => $branch->{branchcode},
-        status => 'R',
         itemnumber => $item->itemnumber,
         expirationdate => undef,
         item_level_recall => 1
@@ -242,7 +241,7 @@ subtest 'Recall overdue fines' => sub {
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 25, 'Use recall fine amount specified in circulation rules' );
 
-    $recall->set_finished;
+    $recall->set_fulfilled;
     ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 5, 'With no recall, use normal fine amount' );
 

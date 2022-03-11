@@ -1608,7 +1608,9 @@ Get the most relevant recall for this item.
 sub check_recalls {
     my ( $self ) = @_;
 
-    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'R','O','W','T' ] }, { order_by => { -asc => 'recalldate' } })->as_list;
+    my @recalls =
+      Koha::Recalls->search( { biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'requested', 'overdue', 'waiting', 'in_transit' ] },
+        { order_by => { -asc => 'recalldate' } } )->as_list;
 
     my $recall;
     # iterate through relevant recalls to find the best one.

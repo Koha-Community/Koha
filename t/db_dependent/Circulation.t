@@ -1455,7 +1455,6 @@ subtest "CanBookBeRenewed tests" => sub {
         borrowernumber => $recall_borrower->borrowernumber,
         branchcode => $recall_borrower->branchcode,
         item_level_recall => 1,
-        status => 'R',
     })->store;
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $recall_item1->itemnumber );
     is( $error, 'recalled', 'Cannot renew item that has been recalled' );
@@ -1468,7 +1467,6 @@ subtest "CanBookBeRenewed tests" => sub {
         borrowernumber => $recall_borrower->borrowernumber,
         branchcode => $recall_borrower->branchcode,
         item_level_recall => 0,
-        status => 'R',
     })->store;
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $recall_item1->itemnumber );
     is( $error, 'recalled', 'Cannot renew item if biblio is recalled and has no item allocated' );
@@ -1481,7 +1479,6 @@ subtest "CanBookBeRenewed tests" => sub {
         borrowernumber => $recall_borrower->borrowernumber,
         branchcode => $recall_borrower->branchcode,
         item_level_recall => 1,
-        status => 'R',
     })->store;
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $recall_item1->itemnumber );
     is( $renewokay, 1, 'Can renew item if item-level recall on biblio is not on this item' );
@@ -1494,7 +1491,6 @@ subtest "CanBookBeRenewed tests" => sub {
         borrowernumber => $recall_borrower->borrowernumber,
         branchcode => $recall_borrower->branchcode,
         item_level_recall => 0,
-        status => 'R',
     })->store;
     $recall->set_waiting({ item => $recall_item1 });
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $recall_item1->itemnumber );
@@ -1998,42 +1994,42 @@ subtest 'AddIssue | recalls' => sub {
     });
 
     # checking out item that they have recalled
-    my $recall1 = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => $item->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron1->branchcode,
-        status => 'R',
-    })->store;
+    my $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => $item->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron1->branchcode,
+        }
+    )->store;
     AddIssue( $patron1->unblessed, $item->barcode, undef, undef, undef, undef, { recall_id => $recall1->recall_id } );
     $recall1 = Koha::Recalls->find( $recall1->recall_id );
-    is( $recall1->finished, 1, 'Recall was fulfilled when patron checked out item' );
+    is( $recall1->fulfilled, 1, 'Recall was fulfilled when patron checked out item' );
     AddReturn( $item->barcode, $item->homebranch );
 
     # this item is has a recall request. cancel recall
-    my $recall2 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => $item->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron2->branchcode,
-        status => 'R',
-    })->store;
+    my $recall2 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => $item->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron2->branchcode,
+        }
+    )->store;
     AddIssue( $patron1->unblessed, $item->barcode, undef, undef, undef, undef, { recall_id => $recall2->recall_id, cancel_recall => 'cancel' } );
     $recall2 = Koha::Recalls->find( $recall2->recall_id );
     is( $recall2->cancelled, 1, 'Recall was cancelled when patron checked out item' );
     AddReturn( $item->barcode, $item->homebranch );
 
     # this item is waiting to fulfill a recall. revert recall
-    my $recall3 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => $item->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron2->branchcode,
-        status => 'R',
-    })->store;
+    my $recall3 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => $item->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron2->branchcode,
+        }
+    )->store;
     $recall3->set_waiting;
     AddIssue( $patron1->unblessed, $item->barcode, undef, undef, undef, undef, { recall_id => $recall3->recall_id, cancel_recall => 'revert' } );
     $recall3 = Koha::Recalls->find( $recall3->recall_id );
@@ -3978,14 +3974,14 @@ subtest 'CanBookBeIssued | recalls' => sub {
     });
 
     # item-level recall
-    my $recall = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => $item->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron1->branchcode,
-        status => 'R',
-    })->store;
+    my $recall = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => $item->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron1->branchcode,
+        }
+    )->store;
 
     my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron2, $item->barcode, undef, undef, undef, undef );
     is( $needsconfirmation->{RECALLED}->recall_id, $recall->recall_id, "Another patron has placed an item-level recall on this item" );
@@ -3993,14 +3989,14 @@ subtest 'CanBookBeIssued | recalls' => sub {
     $recall->set_cancelled;
 
     # biblio-level recall
-    $recall = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => undef,
-        item_level_recall => 0,
-        branchcode => $patron1->branchcode,
-        status => 'R',
-    })->store;
+    $recall = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => undef,
+            item_level_recall => 0,
+            branchcode        => $patron1->branchcode,
+        }
+    )->store;
 
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron2, $item->barcode, undef, undef, undef, undef );
     is( $needsconfirmation->{RECALLED}->recall_id, $recall->recall_id, "Another patron has placed a biblio-level recall and this item is eligible to fill it" );
@@ -4008,15 +4004,15 @@ subtest 'CanBookBeIssued | recalls' => sub {
     $recall->set_cancelled;
 
     # biblio-level recall
-    $recall = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        biblionumber => $item->biblionumber,
-        itemnumber => undef,
-        item_level_recall => 0,
-        branchcode => $patron1->branchcode,
-        status => 'R',
-    })->store;
-    $recall->set_waiting({ item => $item, expirationdate => dt_from_string() });
+    $recall = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            biblionumber      => $item->biblionumber,
+            itemnumber        => undef,
+            item_level_recall => 0,
+            branchcode        => $patron1->branchcode,
+        }
+    )->store;
+    $recall->set_waiting( { item => $item, expirationdate => dt_from_string() } );
 
     my ( undef, undef, undef, $messages ) = CanBookBeIssued( $patron1, $item->barcode, undef, undef, undef, undef );
     is( $messages->{RECALLED}, $recall->recall_id, "This book can be issued by this patron and they have placed a recall" );
@@ -4058,42 +4054,42 @@ subtest 'AddReturn | recalls' => sub {
 
     # this item can fill a recall with pickup at this branch
     AddIssue( $patron1->unblessed, $item1->barcode );
-    my $recall1 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        biblionumber => $item1->biblionumber,
-        itemnumber => $item1->itemnumber,
-        item_level_recall => 1,
-        branchcode => $item1->homebranch,
-        status => 'R',
-    })->store;
+    my $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            biblionumber      => $item1->biblionumber,
+            itemnumber        => $item1->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $item1->homebranch,
+        }
+    )->store;
     my ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item1->barcode, $item1->homebranch );
     is( $messages->{RecallFound}->recall_id, $recall1->recall_id, "Recall found" );
     $recall1->set_cancelled;
 
     # this item can fill a recall but needs transfer
     AddIssue( $patron1->unblessed, $item1->barcode );
-    $recall1 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        biblionumber => $item1->biblionumber,
-        itemnumber => $item1->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron2->branchcode,
-        status => 'R',
-    })->store;
+    $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            biblionumber      => $item1->biblionumber,
+            itemnumber        => $item1->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron2->branchcode,
+        }
+    )->store;
     ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item1->barcode, $item1->homebranch );
     is( $messages->{RecallNeedsTransfer}, $item1->homebranch, "Recall requiring transfer found" );
     $recall1->set_cancelled;
 
     # this item is already in transit, do not ask to transfer
     AddIssue( $patron1->unblessed, $item1->barcode );
-    $recall1 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        biblionumber => $item1->biblionumber,
-        itemnumber => $item1->itemnumber,
-        item_level_recall => 1,
-        branchcode => $patron2->branchcode,
-        status => 'R',
-    })->store;
+    $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            biblionumber      => $item1->biblionumber,
+            itemnumber        => $item1->itemnumber,
+            item_level_recall => 1,
+            branchcode        => $patron2->branchcode,
+        }
+    )->store;
     $recall1->start_transfer;
     ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item1->barcode, $patron2->branchcode );
     is( $messages->{TransferredRecall}->recall_id, $recall1->recall_id, "In transit recall found" );

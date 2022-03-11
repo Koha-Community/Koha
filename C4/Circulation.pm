@@ -381,7 +381,7 @@ sub transferbook {
     }
 
     # find recall
-    my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
+    my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
     if ( defined $recall and C4::Context->preference('UseRecalls') ) {
         # do a transfer if the recall branch is different to the item holding branch
         if ( $recall->branchcode eq $fbr ) {
@@ -2354,7 +2354,7 @@ sub AddReturn {
         $request->status('RET') if $request;
     }
 
-    my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'T' }); # all recalls that have triggered a transfer will have an allocated itemnumber
+    my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'in_transit' }); # all recalls that have triggered a transfer will have an allocated itemnumber
     if ( $transfer_recall and
          $transfer_recall->branchcode eq $branch and
          C4::Context->preference('UseRecalls') ) {

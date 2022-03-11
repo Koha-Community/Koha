@@ -888,6 +888,7 @@ subtest 'Recalls tests' => sub {
     plan tests => 12;
 
     $schema->storage->txn_begin;
+
     my $item1 = $builder->build_sample_item;
     my $biblio = $item1->biblio;
     my $branchcode = $item1->holdingbranch;
@@ -897,36 +898,36 @@ subtest 'Recalls tests' => sub {
     my $item2 = $builder->build_object({ class => 'Koha::Items', value => { holdingbranch => $branchcode, homebranch => $branchcode, biblionumber => $biblio->biblionumber, itype => $item1->effective_itemtype } });
     t::lib::Mocks::mock_userenv({ patron => $patron1 });
 
-    my $recall1 = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => $item1->itemnumber,
-        expirationdate => undef,
-        item_level_recall => 1
-    })->store;
-    my $recall2 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => undef,
-        expirationdate => undef,
-        item_level_recall => 0
-    })->store;
-    my $recall3 = Koha::Recall->new({
-        borrowernumber => $patron3->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => $item1->itemnumber,
-        expirationdate => undef,
-        item_level_recall => 1
-    })->store;
+    my $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => $item1->itemnumber,
+            expirationdate    => undef,
+            item_level_recall => 1
+        }
+    )->store;
+    my $recall2 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => undef,
+            expirationdate    => undef,
+            item_level_recall => 0
+        }
+    )->store;
+    my $recall3 = Koha::Recall->new(
+        {   borrowernumber    => $patron3->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => $item1->itemnumber,
+            expirationdate    => undef,
+            item_level_recall => 1
+        }
+    )->store;
 
     my $recalls_count = $biblio->recalls->count;
     is( $recalls_count, 3, 'Correctly get number of active recalls for biblio' );

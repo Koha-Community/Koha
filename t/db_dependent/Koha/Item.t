@@ -1179,29 +1179,34 @@ subtest 'Recalls tests' => sub {
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
     my $patron3 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
-    my $item2 = $builder->build_object({ class => 'Koha::Items', value => { holdingbranch => $branchcode, homebranch => $branchcode, biblionumber => $biblio->biblionumber, itype => $item1->effective_itemtype } });
-    t::lib::Mocks::mock_userenv({ patron => $patron1 });
+    my $item2 = $builder->build_object(
+        {   class => 'Koha::Items',
+            value => { holdingbranch => $branchcode, homebranch => $branchcode, biblionumber => $biblio->biblionumber, itype => $item1->effective_itemtype }
+        }
+    );
 
-    my $recall1 = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => $item1->itemnumber,
-        expirationdate => undef,
-        item_level_recall => 1
-    })->store;
-    my $recall2 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => $item1->itemnumber,
-        expirationdate => undef,
-        item_level_recall =>1
-    })->store;
+    t::lib::Mocks::mock_userenv( { patron => $patron1 } );
+
+    my $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => $item1->itemnumber,
+            expirationdate    => undef,
+            item_level_recall => 1
+        }
+    )->store;
+    my $recall2 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => $item1->itemnumber,
+            expirationdate    => undef,
+            item_level_recall => 1
+        }
+    )->store;
 
     is( $item1->recall->borrowernumber, $patron1->borrowernumber, 'Correctly returns most relevant recall' );
 
@@ -1274,16 +1279,16 @@ subtest 'Recalls tests' => sub {
     C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
     is( $item1->can_be_recalled({ patron => $patron1 }), 1, "Can recall item" );
 
-    $recall1 = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => undef,
-        expirationdate => undef,
-        item_level_recall => 0
-    })->store;
+    $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => undef,
+            expirationdate    => undef,
+            item_level_recall => 0
+        }
+    )->store;
 
     # Patron2 has Item1 checked out. Patron1 has placed a biblio-level recall on Biblio1, so check if Item1 can fulfill Patron1's recall.
 
@@ -1313,27 +1318,27 @@ subtest 'Recalls tests' => sub {
 
     # check_recalls tests
 
-    $recall1 = Koha::Recall->new({
-        borrowernumber => $patron2->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => $item1->itemnumber,
-        expirationdate => undef,
-        item_level_recall => 1
-    })->store;
-    $recall2 = Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        recalldate => Koha::DateUtils::dt_from_string,
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
-        status => 'R',
-        itemnumber => undef,
-        expirationdate => undef,
-        item_level_recall => 0
-    })->store;
-    $recall2->set_waiting({ item => $item1 });
+    $recall1 = Koha::Recall->new(
+        {   borrowernumber    => $patron2->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => $item1->itemnumber,
+            expirationdate    => undef,
+            item_level_recall => 1
+        }
+    )->store;
+    $recall2 = Koha::Recall->new(
+        {   borrowernumber    => $patron1->borrowernumber,
+            recalldate        => \'NOW()',
+            biblionumber      => $biblio->biblionumber,
+            branchcode        => $branchcode,
+            itemnumber        => undef,
+            expirationdate    => undef,
+            item_level_recall => 0
+        }
+    )->store;
+    $recall2->set_waiting( { item => $item1 } );
 
     # return a waiting recall
     my $check_recall = $item1->check_recalls;

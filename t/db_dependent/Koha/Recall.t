@@ -71,7 +71,7 @@ my $recall1 = Koha::Recall->new({
     recalldate => dt_from_string,
     biblionumber => $biblio1->biblionumber,
     branchcode => $branch1,
-    status => 'R',
+    status => 'requested',
     itemnumber => $item1->itemnumber,
     expirationdate => undef,
     item_level_recall => 1
@@ -82,21 +82,20 @@ is( $recall1->item->homebranch, $item1->homebranch, "Recall item relationship co
 is( $recall1->patron->categorycode, $category1, "Recall patron relationship correctly linked" );
 is( $recall1->library->branchname, Koha::Libraries->find( $branch1 )->branchname, "Recall library relationship correctly linked" );
 is( $recall1->checkout->itemnumber, $item1->itemnumber, "Recall checkout relationship correctly linked" );
-is( $recall1->requested, 1, "Recall has been requested" );
+ok( $recall1->requested, "Recall has been requested" );
 
 is( $recall1->should_be_overdue, 1, "Correctly calculated that recall should be marked overdue" );
 $recall1->set_overdue({ interface => 'COMMANDLINE' });
-is( $recall1->overdue, 1, "Recall is overdue" );
+ok( $recall1->overdue, "Recall is overdue" );
 
 $recall1->set_cancelled;
-is( $recall1->cancelled, 1, "Recall is cancelled" );
+ok( $recall1->cancelled, "Recall is cancelled" );
 
 my $recall2 = Koha::Recall->new({
     borrowernumber => $patron1->borrowernumber,
     recalldate => dt_from_string,
     biblionumber => $biblio1->biblionumber,
     branchcode => $branch1,
-    status => 'R',
     itemnumber => $item1->itemnumber,
     expirationdate => undef,
     item_level_recall => 1
@@ -143,7 +142,6 @@ my $recall3 = Koha::Recall->new({
     recalldate => dt_from_string,
     biblionumber => $biblio1->biblionumber,
     branchcode => $branch1,
-    status => 'R',
     itemnumber => $item1->itemnumber,
     expirationdate => undef,
     item_level_recall => 1
@@ -151,15 +149,15 @@ my $recall3 = Koha::Recall->new({
 
 # test that recall gets T status
 $recall3->start_transfer;
-is( $recall3->in_transit, 1, "Recall is in transit" );
+ok( $recall3->in_transit, "Recall is in transit" );
 
 $recall3->revert_transfer;
-is( $recall3->requested, 1, "Recall transfer has been cancelled and the status reverted" );
+ok( $recall3->requested, "Recall transfer has been cancelled and the status reverted" );
 is( $recall3->itemnumber, $item1->itemnumber, "Item persists for item-level recall" );
 
 # for testing purposes, pretend the item gets checked out
-$recall3->set_finished;
-is( $recall3->finished, 1, "Recall has been fulfilled" );
+$recall3->set_fulfilled;
+ok( $recall3->fulfilled, "Recall has been fulfilled" );
 
 C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
 my $recall4 = Koha::Recall->new({
@@ -167,7 +165,6 @@ my $recall4 = Koha::Recall->new({
     recalldate => dt_from_string,
     biblionumber => $biblio1->biblionumber,
     branchcode => $branch1,
-    status => 'R',
     itemnumber => undef,
     expirationdate => undef,
     item_level_recall => 0,

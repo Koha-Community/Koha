@@ -170,6 +170,6 @@ ok( $recall->cancelled, "Recall cancelled with move_recall" );
 });
 $message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, item => $item2, borrowernumber => $patron1->borrowernumber });
 $recall = Koha::Recalls->find( $recall->recall_id );
-ok( $recall->finished, "Recall fulfilled with move_recall" );
+ok( $recall->fulfilled, "Recall fulfilled with move_recall" );
 
 $schema->storage->txn_rollback();

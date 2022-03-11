@@ -33,9 +33,7 @@ Koha::Recalls - Koha Recalls Object set class
 
 =head1 API
 
-=head2 Internal methods
-
-=cut
+=head2 Class methods
 
 =head3 add_recall
 
@@ -79,7 +77,7 @@ sub add_recall {
         recalldate => dt_from_string(),
         biblionumber => $biblio->biblionumber,
         branchcode => $branchcode,
-        status => 'R',
+        status => 'requested',
         itemnumber => defined $itemnumber ? $itemnumber : undef,
         expirationdate => $expirationdate,
         item_level_recall => defined $itemnumber ? 1 : 0,
@@ -149,7 +147,9 @@ sub add_recall {
         borrowernumber => $borrowernumber,
     });
 
-A patron is attempting to check out an item that has been recalled by another patron. If the recall is requested/overdue, they have the option of cancelling the recall. If the recall is waiting, they also have the option of reverting the waiting status.
+A patron is attempting to check out an item that has been recalled by another patron.
+If the recall is requested/overdue, they have the option of cancelling the recall.
+If the recall is waiting, they also have the option of reverting the waiting status.
 
 We can also fulfill the recall here if the recall is placed by this borrower.
 
@@ -183,15 +183,25 @@ sub move_recall {
 
     if ( $message eq 'no action provided' and $item and $item->biblionumber and $borrowernumber ) {
         # move_recall was not called to revert or cancel, but was called to fulfill
-        my $recall = Koha::Recalls->search({ borrowernumber => $borrowernumber, biblionumber => $item->biblionumber, itemnumber => [ $item->itemnumber, undef ], old => undef }, { order_by => { -asc => 'recalldate' } })->next;
+        my $recall = Koha::Recalls->search(
+            {
+                borrowernumber => $borrowernumber,
+                biblionumber   => $item->biblionumber,
+                itemnumber     => [ $item->itemnumber, undef ],
+                old            => undef
+            },
+            { order_by => { -asc => 'recalldate' } }
+        )->next;
         if ( $recall ) {
-            $recall->set_finished;
+            $recall->set_fulfilled;
             $message = 'fulfilled';
         }
     }
 
     return $message;
 }
+
+=head2 Internal methods
 
 =head3 _type
 
