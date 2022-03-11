@@ -87,7 +87,7 @@ date the item was returned, will be NULL until moved to old_issues
 
 date the item was last renewed
 
-=head2 renewals
+=head2 renewals_count
 
   data_type: 'tinyint'
   default_value: 0
@@ -197,7 +197,7 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "renewals",
+  "renewals_count",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "unseen_renewals",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
@@ -321,8 +321,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-17 10:01:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDcP8DNMT8sLUmzBFfz3fg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-11 15:10:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TERiBbm+B4jMEuNM2dVbfQ
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
