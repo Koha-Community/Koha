@@ -1806,6 +1806,7 @@ sub searchResults {
             if ($is_opac) {
                 # hidden because lost
                 if ($hidelostitems && $item->{itemlost}) {
+                    push @hiddenitems, $item->{itemnumber};
                     $hideatopac_count++;
                     next;
                 }
