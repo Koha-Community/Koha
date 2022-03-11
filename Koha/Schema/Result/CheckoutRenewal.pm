@@ -129,6 +129,51 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-11 16:33:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:agLgLnVeKYB5wdWS06xD0A
 
+=head2 checkout
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Issue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "checkout",
+    "Koha::Schema::Result::Issue",
+    { issue_id => "issue_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+    },
+);
+
+=head2 old_checkout
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::OldIssue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "old_checkout",
+    "Koha::Schema::Result::OldIssue",
+    { issue_id => "issue_id" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+    },
+);
+
+__PACKAGE__->add_columns(
+    '+seen' => { is_boolean => 1 }
+);
+
+sub koha_objects_class {
+    'Koha::Checkouts::Renewals';
+}
+sub koha_object_class {
+    'Koha::Checkouts::Renewal';
+}
+
 1;
