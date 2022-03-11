@@ -1053,7 +1053,10 @@ subtest 'messages' => sub {
 
 subtest 'recalls() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
     my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber } });
@@ -1098,8 +1101,9 @@ subtest 'recalls() tests' => sub {
     )->store;
     $recall->set_cancelled;
 
-    is( $patron->recalls->count, 3, "Correctly gets this patron's active recalls" );
-    is( $patron->recalls({ biblionumber => $biblio1->biblionumber })->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
+    is( $patron->recalls->count,                                                                          4, "Correctly gets this patron's recalls" );
+    is( $patron->recalls->filter_by_current->count,                                                       3, "Correctly gets this patron's active recalls" );
+    is( $patron->recalls->filter_by_current->search( { biblionumber => $biblio1->biblionumber } )->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
 
     $schema->storage->txn_rollback;
 };

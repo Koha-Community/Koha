@@ -273,7 +273,7 @@ $template->param(
     files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
     #debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     has_modifications         => $has_modifications,
-    recalls         => $patron->recalls,
+    recalls         => $patron->recalls({},{ order_by => { -asc => 'recalldate' } })->filter_by_current,
     specific_patron => 1,
 );
 

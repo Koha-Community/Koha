@@ -2058,24 +2058,14 @@ sub safe_to_delete {
 
     my $recalls = $patron->recalls;
 
-    my $recalls = $patron->recalls({ biblionumber => $biblionumber });
-
-Return the patron's active recalls - total, or on a specific biblio
+Return the patron's recalls.
 
 =cut
 
 sub recalls {
-    my ( $self, $params ) = @_;
+    my ( $self ) = @_;
 
-    my $biblionumber = $params->{biblionumber};
-
-    my $recalls_rs = Koha::Recalls->search({ borrowernumber => $self->borrowernumber, old => undef });
-
-    if ( $biblionumber ) {
-        $recalls_rs = Koha::Recalls->search({ borrowernumber => $self->borrowernumber, old => undef, biblionumber => $biblionumber });
-    }
-
-    return $recalls_rs;
+    return Koha::Recalls->search({ borrowernumber => $self->borrowernumber });
 }
 
 =head2 Internal methods

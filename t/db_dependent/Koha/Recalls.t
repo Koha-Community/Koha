@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -173,3 +173,52 @@ $recall = Koha::Recalls->find( $recall->recall_id );
 ok( $recall->fulfilled, "Recall fulfilled with move_recall" );
 
 $schema->storage->txn_rollback();
+
+subtest 'filter_by_current() and filter_by_finished() tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $in_transit = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'in_transit' } } );
+    my $overdue    = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'overdue' } } );
+    my $requested  = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'requested' } } );
+    my $waiting    = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'waiting' } } );
+    my $cancelled  = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'cancelled' } } );
+    my $expired    = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'expired' } } );
+    my $fulfilled  = $builder->build_object( { class => 'Koha::Recalls', value => { status => 'fulfilled' } } );
+
+    my $recalls = Koha::Recalls->search(
+        {
+            recall_id => [
+                $in_transit->id,
+                $overdue->id,
+                $requested->id,
+                $waiting->id,
+                $cancelled->id,
+                $expired->id,
+                $fulfilled->id,
+            ]
+        },
+        { order_by => [ 'recall_id' ] }
+    );
+
+    is( $recalls->count, 7, 'Resultset count is correct' );
+
+    my $current_recalls = $recalls->filter_by_current;
+    is( $current_recalls->count, 4, 'Current recalls count correct' );
+
+    is( $current_recalls->next->status, 'in_transit', 'Resultset correctly includes in_transit recall');
+    is( $current_recalls->next->status, 'overdue', 'Resultset correctly includes overdue recall');
+    is( $current_recalls->next->status, 'requested', 'Resultset correctly includes requested recall');
+    is( $current_recalls->next->status, 'waiting', 'Resultset correctly includes waiting recall');
+
+    my $finished_recalls = $recalls->filter_by_finished;
+    is( $finished_recalls->count, 3, 'Finished recalls count correct' );
+
+    is( $finished_recalls->next->status, 'cancelled', 'Resultset correctly includes cancelled recall');
+    is( $finished_recalls->next->status, 'expired', 'Resultset correctly includes expired recall');
+    is( $finished_recalls->next->status, 'fulfilled', 'Resultset correctly includes fulfilled recall');
+
+    $schema->storage->txn_rollback;
+};

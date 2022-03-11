@@ -35,6 +35,51 @@ Koha::Recalls - Koha Recalls Object set class
 
 =head2 Class methods
 
+=head3 filter_by_current
+
+    my $current_recalls = $recalls->filter_by_current;
+
+Returns a new resultset, filtering out finished recalls.
+
+=cut
+
+sub filter_by_current {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            status => [
+                'in_transit',
+                'overdue',
+                'requested',
+                'waiting',
+            ]
+        }
+    );
+}
+
+=head3 filter_by_finished
+
+    my $finished_recalls = $recalls->filter_by_finished;
+
+Returns a new resultset, filtering out current recalls.
+
+=cut
+
+sub filter_by_finished {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            status => [
+                'cancelled',
+                'expired',
+                'fulfilled',
+            ]
+        }
+    );
+}
+
 =head3 add_recall
 
     my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({

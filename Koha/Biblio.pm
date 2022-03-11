@@ -1166,21 +1166,13 @@ sub get_marc_host {
 
     my @recalls = $biblio->recalls;
 
-Return all active recalls attached to this biblio, sorted by oldest first
+Return recalls linked to this biblio
 
 =cut
 
 sub recalls {
-    my ( $self, $params ) = @_;
-
-    my $args = {
-        biblionumber => $self->biblionumber,
-        old => undef,
-    };
-    $args->{ borrowernumber } = $params->{ borrowernumber } if $params->{ borrowernumber };
-
-    my $recalls_rs = $self->_result->recalls->search( $args, { order_by => { -asc => 'recalldate' } });
-    return Koha::Recalls->_new_from_dbic( $recalls_rs );
+    my ( $self ) = @_;
+    return Koha::Recalls->_new_from_dbic( scalar $self->_result->recalls );
 }
 
 =head3 can_be_recalled
@@ -1254,10 +1246,10 @@ sub can_be_recalled {
 
     if ( $patron ) {
         # check borrower has not reached open recalls allowed limit
-        return 0 if ( $patron->recalls->count >= $recalls_allowed );
+        return 0 if ( $patron->recalls->filter_by_current->count >= $recalls_allowed );
 
         # check borrower has not reached open recalls allowed per record limit
-        return 0 if ( $patron->recalls({ biblionumber => $self->biblionumber })->count >= $recalls_per_record );
+        return 0 if ( $patron->recalls->filter_by_current->search({ biblionumber => $self->biblionumber })->count >= $recalls_per_record );
 
         # check if any of the items under this biblio are already checked out by this borrower
         return 0 if ( Koha::Checkouts->search({ itemnumber => [ @all_itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );

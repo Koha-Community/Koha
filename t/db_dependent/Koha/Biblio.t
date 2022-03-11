@@ -885,7 +885,7 @@ subtest 'get_marc_authors() tests' => sub {
 
 subtest 'Recalls tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -929,14 +929,14 @@ subtest 'Recalls tests' => sub {
         }
     )->store;
 
-    my $recalls_count = $biblio->recalls->count;
-    is( $recalls_count, 3, 'Correctly get number of active recalls for biblio' );
+    my $recalls = $biblio->recalls;
+    is( $recalls->count, 3, 'Correctly get number of recalls for biblio' );
 
     $recall1->set_cancelled;
     $recall2->set_expired({ interface => 'COMMANDLINE' });
 
-    $recalls_count = $biblio->recalls->count;
-    is( $recalls_count, 1, 'Correctly get number of active recalls for biblio' );
+    is( $recalls->count, 3, 'Correctly get number of recalls for biblio' );
+    is( $recalls->filter_by_current->count, 1, 'Correctly get number of active recalls for biblio' );
 
     t::lib::Mocks::mock_preference('UseRecalls', 0);
     is( $biblio->can_be_recalled({ patron => $patron1 }), 0, "Can't recall with UseRecalls disabled" );

@@ -1517,13 +1517,13 @@ sub can_be_recalled {
 
     if ( $patron ) {
         # check borrower has not reached open recalls allowed limit
-        return 0 if ( $patron->recalls->count >= $rule->{recalls_allowed} );
+        return 0 if ( $patron->recalls->filter_by_current->count >= $rule->{recalls_allowed} );
 
         # check borrower has not reach open recalls allowed per record limit
-        return 0 if ( $patron->recalls({ biblionumber => $self->biblionumber })->count >= $rule->{recalls_per_record} );
+        return 0 if ( $patron->recalls->filter_by_current->search({ biblionumber => $self->biblionumber })->count >= $rule->{recalls_per_record} );
 
         # check if this patron has already recalled this item
-        return 0 if ( Koha::Recalls->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber, old => undef })->count > 0 );
+        return 0 if ( Koha::Recalls->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->filter_by_current->count > 0 );
 
         # check if this patron has already checked out this item
         return 0 if ( Koha::Checkouts->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
@@ -1608,9 +1608,12 @@ Get the most relevant recall for this item.
 sub check_recalls {
     my ( $self ) = @_;
 
-    my @recalls =
-      Koha::Recalls->search( { biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'requested', 'overdue', 'waiting', 'in_transit' ] },
-        { order_by => { -asc => 'recalldate' } } )->as_list;
+    my @recalls = Koha::Recalls->search(
+        {   biblionumber => $self->biblionumber,
+            itemnumber   => [ $self->itemnumber, undef ]
+        },
+        { order_by => { -asc => 'recalldate' } }
+    )->filter_by_current->as_list;
 
     my $recall;
     # iterate through relevant recalls to find the best one.

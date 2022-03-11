@@ -46,7 +46,7 @@ if ( C4::Context->preference('UseRecalls') ) {
     my $items = Koha::Items->search({ biblionumber => $biblionumber })->as_list;
 
     # check if already recalled
-    my $recalled = $biblio->recalls({ borrowernumber => $borrowernumber })->count;
+    my $recalled = $biblio->recalls->filter_by_current->search({ borrowernumber => $borrowernumber })->count;
     if ( defined $recalled and $recalled > 0 ) {
         my $recalls_per_record = Koha::CirculationRules->get_effective_rule({
             categorycode => $patron->categorycode,

@@ -1125,7 +1125,7 @@ sub CanBookBeIssued {
     # Only bother doing this if UseRecalls is enabled and the item is recallable
     # Don't look at recalls that are in transit
     if ( C4::Context->preference('UseRecalls') and $item_object->can_be_waiting_recall ) {
-        my @recalls = $biblio->recalls->as_list;
+        my @recalls = $biblio->recalls({},{ order_by => { -asc => 'recalldate' } })->filter_by_current->as_list;
 
         foreach my $r ( @recalls ) {
             if ( $r->itemnumber and
