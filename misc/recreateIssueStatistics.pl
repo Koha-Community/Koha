@@ -60,7 +60,7 @@ if ($issues == 1) {
     foreach my $table ('issues', 'old_issues') {
 	# Getting issues
 	print "looking for missing issues from $table\n";
-	my $query = "SELECT borrowernumber, branchcode, itemnumber, issuedate, renewals, lastreneweddate from $table where itemnumber is not null";
+    my $query = "SELECT borrowernumber, branchcode, itemnumber, issuedate, renewals_count, lastreneweddate from $table where itemnumber is not null";
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
 	# Looking for missing issues
@@ -92,7 +92,7 @@ if ($issues == 1) {
 		}
 
 		# Looking for missing renewals
-		if ($hashref->{'renewals'} && $hashref->{'renewals'} > 0 ) {
+        if ($hashref->{'renewals_count'} && $hashref->{'renewals_count'} > 0 ) {
 		    # This is the not-so accurate part :
 		    # We assume that there are missing renewals, based on the last renewal date
 		    # Maybe should this be deactivated by default ?
@@ -100,7 +100,7 @@ if ($issues == 1) {
 		    my $substh = $dbh->prepare($ctnquery);
 		    $substh->execute($hashref->{'borrowernumber'}, $hashref->{'itemnumber'}, $hashref->{'lastreneweddate'});
 
-		    my $missingrenewalscount = $hashref->{'renewals'} - $substh->fetchrow_hashref->{'cnt'};
+            my $missingrenewalscount = $hashref->{'renewals_count'} - $substh->fetchrow_hashref->{'cnt'};
 		    print "We assume $missingrenewalscount renewals are missing. Creating them\n" if ($missingrenewalscount > 0);
 		    for (my $i = 0; $i < $missingrenewalscount; $i++) {
 

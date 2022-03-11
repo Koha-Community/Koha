@@ -266,7 +266,7 @@ sub GetAllIssues {
 
     my $dbh = C4::Context->dbh;
     my $query =
-'SELECT issues.*, items.*, biblio.*, biblioitems.*, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
+'SELECT issues.*, items.*, biblio.*, biblioitems.*, issues.timestamp as issuestimestamp, issues.renewals_count AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
   FROM issues
   LEFT JOIN items on items.itemnumber=issues.itemnumber
   LEFT JOIN borrowers on borrowers.borrowernumber=issues.issuer_id
@@ -274,7 +274,7 @@ sub GetAllIssues {
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
   WHERE issues.borrowernumber=?
   UNION ALL
-  SELECT old_issues.*, items.*, biblio.*, biblioitems.*, old_issues.timestamp as issuestimestamp, old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
+  SELECT old_issues.*, items.*, biblio.*, biblioitems.*, old_issues.timestamp as issuestimestamp, old_issues.renewals_count AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
   FROM old_issues
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
   LEFT JOIN borrowers on borrowers.borrowernumber=old_issues.issuer_id

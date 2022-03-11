@@ -21,6 +21,12 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
             say $out "Added new table 'checkout_renewals'";
+
+            $dbh->do(q{ ALTER TABLE `issues` CHANGE `renewals` `renewals_count` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'lists the number of times the item was renewed' });
+            say $out "Renamed `issues.renewals` to `issues.renewals_count`";
+
+            $dbh->do(q{ ALTER TABLE `old_issues` CHANGE `renewals` `renewals_count` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'lists the number of times the item was renewed' });
+            say $out "Renamed `old_issues.renewals` to `old_issues.renewals_count`";
         }
     },
 }

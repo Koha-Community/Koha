@@ -66,7 +66,7 @@ my $issues_query = q{SELECT
     items.itemcallnumber AS callnumber,
     issues.date_due AS date_due,
     issues.issuedate AS issuedate,
-    issues.renewals AS renewals,
+    issues.renewals_count AS renewals,
     issues.unseen_renewals AS unseen_renewals,
     borrowers.cardnumber AS cardnumber,
     CONCAT(borrowers.surname, ', ', borrowers.firstname) AS borrower_name

@@ -193,7 +193,7 @@ sub allows_renewal {
             openapi => {
                 allows_renewal => $renewable,
                 max_renewals => $rule->rule_value,
-                current_renewals => $checkout->renewals,
+                current_renewals => $checkout->renewals_count,
                 unseen_renewals => $checkout->unseen_renewals,
                 error => $error
             }

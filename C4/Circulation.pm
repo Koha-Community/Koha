@@ -2896,7 +2896,7 @@ sub CanBookBeRenewed {
         );
 
         return ( 0, "too_many" )
-          if not $issuing_rule->{renewalsallowed} or $issuing_rule->{renewalsallowed} <= $issue->renewals;
+          if not $issuing_rule->{renewalsallowed} or $issuing_rule->{renewalsallowed} <= $issue->renewals_count;
 
         return ( 0, "too_unseen" )
           if C4::Context->preference('UnseenRenewals') &&
@@ -3153,8 +3153,8 @@ sub AddRenewal {
 
         # Update the issues record to have the new due date, and a new count
         # of how many times it has been renewed.
-        my $renews = ( $issue->renewals || 0 ) + 1;
-        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, unseen_renewals = ?, lastreneweddate = ? WHERE issue_id = ?");
+        my $renews = ( $issue->renewals_count || 0 ) + 1;
+        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals_count = ?, unseen_renewals = ?, lastreneweddate = ? WHERE issue_id = ?");
 
         eval{
             $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $issue->issue_id );
@@ -3282,7 +3282,7 @@ sub GetRenewCount {
     );
     $sth->execute( $bornum, $itemno );
     my $data = $sth->fetchrow_hashref;
-    $renewcount = $data->{'renewals'} if $data->{'renewals'};
+    $renewcount = $data->{'renewals_count'} if $data->{'renewals_count'};
     $unseencount = $data->{'unseen_renewals'} if $data->{'unseen_renewals'};
     # $item and $borrower should be calculated
     my $branchcode = _GetCircControlBranch($item->unblessed, $patron->unblessed);
@@ -4076,7 +4076,7 @@ sub ProcessOfflineReturn {
                 $itemnumber,
                 $operation->{timestamp},
             );
-            $item->renewals(0);
+            $item->renewals_count(0);
             $item->onloan(undef);
             $item->store({ log_action => 0 });
             return "Success.";

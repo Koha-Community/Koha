@@ -90,7 +90,7 @@
                     [% INCLUDE 'patron-title.inc' patron=checkout.issuer %]
                     </a>
                     [% END %]</td>
-                <td>[% IF checkout.renewals %]
+                <td>[% IF checkout.renewals_count %]
                         Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
                             [% END %]
                     [% ELSE %]
