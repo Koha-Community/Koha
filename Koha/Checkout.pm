@@ -24,6 +24,7 @@ use DateTime;
 use Try::Tiny qw( catch try );
 
 use C4::Circulation qw( LostItem MarkIssueReturned );
+use Koha::Checkouts::Renewals;
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -119,6 +120,21 @@ sub issuer {
     my $issuer_rs = $self->_result->issuer;
     return unless $issuer_rs;
     return Koha::Patron->_new_from_dbic( $issuer_rs );
+}
+
+=head3 renewals
+
+  my $renewals = $checkout->renewals;
+
+Return a Koha::Checkouts::Renewals set attached to this checkout
+
+=cut
+
+sub renewals {
+    my ( $self ) = @_;
+    my $renewals_rs = $self->_result->renewals;
+    return unless $renewals_rs;
+    return Koha::Checkouts::Renewals->_new_from_dbic( $renewals_rs );
 }
 
 =head3 to_api_mapping
