@@ -1183,6 +1183,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 checkout_renewals
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CheckoutRenewal>
+
+=cut
+
+__PACKAGE__->has_many(
+  "checkout_renewals",
+  "Koha::Schema::Result::CheckoutRenewal",
+  { "foreign.renewer_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_enrollments
 
 Type: has_many
