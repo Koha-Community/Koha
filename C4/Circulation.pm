@@ -3217,6 +3217,16 @@ sub AddRenewal {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
 
+        # Add renewal record
+        my $renewal = Koha::Checkouts::Renewal->new(
+            {
+                issue_id   => $issue->issue_id,
+                renewer_id => C4::Context->userenv->{'number'},
+                seen       => $seen,
+                interface  => C4::Context->interface
+            }
+        )->store();
+
         # Add the renewal to stats
         C4::Stats::UpdateStats(
             {
