@@ -21,9 +21,10 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Patron;
-use Koha::Biblio;
-use Koha::Item;
+use Koha::Biblios;
+use Koha::Items;
+use Koha::Libraries;
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -33,7 +34,7 @@ Koha::Recall - Koha Recall Object class
 
 =head1 API
 
-=head2 Internal methods
+=head2 Class methods
 
 =cut
 
@@ -92,8 +93,9 @@ Returns the related Koha::Library object for this recall.
 
 sub library {
     my ( $self ) = @_;
-    $self->{_library} = Koha::Libraries->find( $self->branchcode );
-    return $self->{_library};
+    my $library_rs = $self->_result->branch;
+    return unless $library_rs;
+    return Koha::Library->_new_from_dbic( $library_rs );
 }
 
 =head3 checkout
@@ -458,6 +460,8 @@ sub set_fulfilled {
     C4::Log::logaction( 'RECALLS', 'FULFILL', $self->recall_id, "Recall fulfilled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
+
+=head2 Internal methods
 
 =head3 _type
 

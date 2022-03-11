@@ -1164,7 +1164,7 @@ sub get_marc_host {
 
 =head3 recalls
 
-    my @recalls = $biblio->recalls;
+    my $recalls = $biblio->recalls;
 
 Return recalls linked to this biblio
 
