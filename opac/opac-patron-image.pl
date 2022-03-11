@@ -32,13 +32,14 @@ unless (C4::Context->preference('OPACpatronimages')) {
     exit;
 }
 
-my $needed_flags;
-my %cookies = CGI::Cookie->fetch;
-my $sessid = $cookies{'CGISESSID'}->value;
-my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
-my $borrowernumber = C4::Context->userenv->{'number'};
+my ($auth_status) = check_cookie_auth( $query->cookie('CGISESSID') );
+if( $auth_status ne 'ok' ) {
+    print CGI::header( '-status' => '401' );
+    exit 0;
+}
 
-my $patron_image = Koha::Patron::Images->find($borrowernumber);
+my $userenv = C4::Context->userenv;
+my $patron_image = $userenv ? Koha::Patron::Images->find( $userenv->{number} ) : undef;
 
 if ($patron_image) {
     print $query->header(
