@@ -99,6 +99,42 @@ sub get {
     };
 }
 
+=head3 get_renewals
+
+List Koha::Checkout::Renewals
+
+=cut
+
+sub get_renewals {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $checkout_id = $c->validation->param('checkout_id');
+        my $checkout    = Koha::Checkouts->find($checkout_id);
+        $checkout = Koha::Old::Checkouts->find($checkout_id)
+          unless ($checkout);
+
+        unless ($checkout) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Checkout doesn't exist" }
+            );
+        }
+
+        my $renewals_rs = $checkout->renewals;
+        my $renewals = $c->objects->search( $renewals_rs );
+
+        return $c->render(
+            status  => 200,
+            openapi => $renewals
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+
 =head3 renew
 
 Renew a checkout

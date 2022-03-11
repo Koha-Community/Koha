@@ -78,6 +78,7 @@
           type: string
           enum:
             - issuer
+            - renewals
         collectionFormat: csv
     produces:
       - application/json
@@ -147,6 +148,46 @@
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
+"/checkouts/{checkout_id}/renewals":
+  get:
+    x-mojo-to: Checkouts#get_renewals
+    operationId: getRenewals
+    tags:
+      - checkouts
+    summary: List renewals for a checkout
+    parameters:
+      - $ref: ../parameters.yaml#/checkout_id_pp
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: List of checkouts renewals
+        schema:
+          $ref: ../definitions.yaml#/renewal
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      "404":
+        description: Checkout not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        circulate: circulate_remaining_permissions
+    x-koha-embed:
+        - renewer
 "/checkouts/{checkout_id}/allows_renewal":
   get:
     x-mojo-to: Checkouts#allows_renewal
