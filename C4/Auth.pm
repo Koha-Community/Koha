@@ -48,6 +48,7 @@ use Encode;
 use C4::Auth_with_shibboleth qw( shib_ok get_login_shib login_shib_url logout_shib checkpw_shib );
 use Net::CIDR;
 use C4::Log qw( logaction );
+use Koha::CookieManager;
 
 # use utf8;
 
@@ -803,15 +804,6 @@ sub _timeout_syspref {
     return $timeout;
 }
 
-sub clear_all_cookies {
-    my ( $query ) = shift;
-    my @cookies;
-    for my $cookie_name ( $query->cookie ) {
-        push @cookies, $query->cookie( -name => $cookie_name, -value => '', -expires => '', -HttpOnly => 1 );
-    }
-    return \@cookies;
-}
-
 sub checkauth {
     my $query = shift;
 
@@ -841,6 +833,8 @@ sub checkauth {
 
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
+
+    my $cookie_mgr = Koha::CookieManager->new;
 
     _version_check( $type, $query );
 
@@ -917,7 +911,7 @@ sub checkauth {
                 my $shibSuccess = C4::Context->userenv->{'shibboleth'};
                 $session->delete();
                 $session->flush;
-                $cookie = clear_all_cookies($query);
+                $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
                 C4::Context::_unset_userenv($sessionID);
                 $sessionID = undef;
 
