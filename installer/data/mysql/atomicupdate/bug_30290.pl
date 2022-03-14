@@ -12,5 +12,14 @@ SET content=REPLACE(content, '\nPages:', '\nTOC: [% IF article_request.toc_reque
 WHERE code RLIKE '^AR_'  AND module='circulation' AND content NOT RLIKE '\nTOC:';
         |;
         $dbh->do( $sql );
+
+        # Warn if we find translated notices (educated guess with word Pages)
+        $sql=q|
+SELECT COUNT(*)
+FROM letter
+WHERE code RLIKE '^AR_'  AND module='circulation' AND content NOT RLIKE '\nPages:';
+        |;
+        my ( $count ) = $dbh->selectrow_array( $sql );
+        say $out "WARNING: If you have translated AR notices, please add TOC lines yourself." if $count;
     },
 };
