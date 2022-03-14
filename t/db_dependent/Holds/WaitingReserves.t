@@ -235,6 +235,7 @@ my $reserve5 = $builder->build({
         branchcode => 'LIB2',
         priority => 1,
         found => '',
+        patron_expiration_date => undef,
     },
 });
 
@@ -257,6 +258,7 @@ my $reserve6 = $builder->build({
         branchcode => 'LIB1',
         priority => 1,
         found => '',
+        patron_expiration_date => undef,
     },
 });
 
