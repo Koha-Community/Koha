@@ -446,7 +446,7 @@ if ($patron) {
     $template->param(
         holds_count  => $holds->count(),
         WaitingHolds => $waiting_holds,
-        recalls => $patron->recalls->filter_by_current->search({},->search({},{ order_by => { -asc => 'recalldate' } })),
+        recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'recalldate' } }),
         specific_patron => 1,
     );
 }
