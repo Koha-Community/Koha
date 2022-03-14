@@ -498,10 +498,10 @@ $(document).ready(function() {
 
             // Custom date range filtering
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                var placedStart = illfilter_dateplaced_start.selectedDates[0];
-                var placedEnd = illfilter_dateplaced_end.selectedDates[0];
-                var modifiedStart = illfilter_datemodified_start.selectedDates[0];
-                var modifiedEnd = illfilter_datemodified_end.selectedDates[0];
+                var placedStart = $('#illfilter_dateplaced_start').get(0)._flatpickr.selectedDates[0];
+                var placedEnd = $('#illfilter_dateplaced_end').get(0)._flatpickr.selectedDates[0];
+                var modifiedStart = $('#illfilter_datemodified_start').get(0)._flatpickr.selectedDates[0];
+                var modifiedEnd = $('#illfilter_datemodified_end').get(0)._flatpickr.selectedDates[0];
                 var rowPlaced = data[14] ? new Date(data[14]) : null;
                 var rowModified = data[16] ? new Date(data[16]) : null;
                 var placedPassed = true;
