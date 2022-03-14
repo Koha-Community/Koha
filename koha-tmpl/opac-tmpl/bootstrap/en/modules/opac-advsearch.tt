@@ -9,7 +9,7 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='advsearch' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
-<form action="/cgi-bin/koha/opac-search.pl" method="get">
+<form id="advsearch_form" action="/cgi-bin/koha/opac-search.pl" method="get">
     <input type="hidden" name="advsearch" value="1"/>
     <div class="main">
         <ul class="breadcrumb">
@@ -446,7 +446,19 @@ $(document).ready(function() {
         jQuery.removeCookie("form_serialized_limits", { path: '/'});
         jQuery.removeCookie("search_path_code", { path: '/'});
     [% END %]
-    $('#advsearch form').submit(function() {
+    $('#advsearch_form').submit(function() {
+        $('[name^="limit"]').each(function(){
+            if( $(this).val() == '' ){
+                $(this).prop("disabled","disabled");
+            }
+        });
+        $(".search-term-row").each(function(){
+            if( $(this).find('input[name="q"]').val() == "" ){
+                $(this).find('input[name="q"]').prop("disabled","disabled");
+                $(this).find('select[name="op"]').prop("disabled","disabled");
+                $(this).find('select[name="idx"]').prop("disabled","disabled");
+            }
+        });
         form_serialized = $(this).serialize();
         jQuery.cookie("form_serialized", form_serialized,{ path: '/'});
         form_serialized_limits = [
