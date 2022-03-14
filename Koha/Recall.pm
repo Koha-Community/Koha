@@ -78,7 +78,7 @@ Returns the related Koha::Patron object for this recall.
 
 sub patron {
     my ( $self ) = @_;
-    my $patron_rs = $self->_result->borrower;
+    my $patron_rs = $self->_result->patron;
     return unless $patron_rs;
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
@@ -93,7 +93,7 @@ Returns the related Koha::Library object for this recall.
 
 sub library {
     my ( $self ) = @_;
-    my $library_rs = $self->_result->branch;
+    my $library_rs = $self->_result->library;
     return unless $library_rs;
     return Koha::Library->_new_from_dbic( $library_rs );
 }

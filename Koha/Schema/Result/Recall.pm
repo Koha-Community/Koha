@@ -310,14 +310,14 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->belongs_to(
-  "borrower",
+  "patron",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 __PACKAGE__->belongs_to(
-  "branch",
+  "library",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
   {
