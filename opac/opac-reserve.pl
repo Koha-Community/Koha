@@ -626,23 +626,4 @@ if (
     );
 }
 
-my @branches = Koha::Libraries->search->as_list;
-my %hold_pickup_delay_by_branch = ();
-
-foreach my $branch ( @branches ) {
-    my $rule = Koha::CirculationRules->get_effective_rule({
-        categorycode => $patron->categorycode,
-        branchcode => $branch->branchcode,
-        itemtype => undef,
-        rule_name => 'holds_pickup_period',
-    });
-    if ( $rule and $rule->rule_value ) {
-        $hold_pickup_delay_by_branch{$branch->branchcode} = $rule->rule_value;
-    } else {
-        $hold_pickup_delay_by_branch{$branch->branchcode} = C4::Context->preference('ReservesMaxPickUpDelay');
-    }
-}
-
-$template->param( pickup_delays => \%hold_pickup_delay_by_branch );
-
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
