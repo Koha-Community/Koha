@@ -124,8 +124,7 @@ $(document).ready(function() {
     $("#deletebiblio").tooltip();
     $("#batchedit-disabled,#batchdelete-disabled,#deleteallitems-disabled")
         .on("click",function(e){
-            e.preventDefault();
-            alertNoItems();
+            e.stopPropagation();
         })
         .tooltip();
 
