@@ -300,6 +300,10 @@
     [% ELSE %]
         See <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
     [% END %]
+    [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+        | <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
+        | <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
+    [% END %]
 
     [% IF additional_contents.count %]
         <form id="del_form" method="post" action="/cgi-bin/koha/tools/additional-contents.pl">
