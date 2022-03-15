@@ -400,7 +400,7 @@ if (@$barcodes) {
                         biblionumber   => $item->biblionumber,
                         itemnumber     => [ undef, $item->itemnumber ],
                         status         => [ 'requested', 'waiting' ],
-                        old            => undef,
+                        old            => 0,
                         borrowernumber => $patron->borrowernumber,
                     }
                 );

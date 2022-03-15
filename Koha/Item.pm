@@ -1461,7 +1461,13 @@ Return the relevant recall for this item
 
 sub recall {
     my ( $self ) = @_;
-    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } })->as_list;
+    my @recalls = Koha::Recalls->search(
+        {
+            biblionumber => $self->biblionumber,
+            old          => 0,
+        },
+        { order_by => { -asc => 'recalldate' } }
+    )->as_list;
     foreach my $recall (@recalls) {
         if ( $recall->item_level_recall and $recall->itemnumber == $self->itemnumber ){
             return $recall;

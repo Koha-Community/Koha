@@ -403,7 +403,7 @@ foreach my $item (@items) {
     }
 
     if ( C4::Context->preference('UseRecalls') ) {
-        my $recall = Koha::Recalls->find({ itemnumber => $item->{itemnumber}, old => undef });
+        my $recall = Koha::Recalls->find({ itemnumber => $item->{itemnumber}, old => 0 });
         if ( defined $recall ) {
             $item->{recalled} = 1;
             $item->{recall} = $recall;

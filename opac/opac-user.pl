@@ -309,7 +309,7 @@ if ( $pending_checkouts->count ) { # Useless test
                 }
 
         if ( C4::Context->preference('UseRecalls') ) {
-            my $maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
+            my $maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => 0 });
             while( my $recall = $maybe_recalls->next ) {
                 if ( $recall->checkout and $recall->checkout->issue_id == $issue->{issue_id} ) {
                     $issue->{recall} = 1;
@@ -345,7 +345,7 @@ $template->param(
 );
 
 if ( C4::Context->preference('UseRecalls') ) {
-    my $recalls = Koha::Recalls->search( { borrowernumber => $borrowernumber, old => undef } );
+    my $recalls = Koha::Recalls->search( { borrowernumber => $borrowernumber, old => 0 } );
     $template->param( RECALLS => $recalls );
 }
 

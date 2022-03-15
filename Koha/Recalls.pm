@@ -233,7 +233,7 @@ sub move_recall {
                 borrowernumber => $borrowernumber,
                 biblionumber   => $item->biblionumber,
                 itemnumber     => [ $item->itemnumber, undef ],
-                old            => undef
+                old            => 0,
             },
             { order_by => { -asc => 'recalldate' } }
         )->next;

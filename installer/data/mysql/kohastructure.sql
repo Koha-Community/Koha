@@ -4291,12 +4291,12 @@ CREATE TABLE recalls ( -- information related to recalls in Koha
     cancellationdate datetime DEFAULT NULL, -- the date this recall was cancelled
     recallnotes mediumtext, -- notes related to this recall
     priority smallint(6) DEFAULT NULL, -- where in the queue the patron sits
-    status ENUM('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') DEFAULT 'requested' COMMENT "Request status",
+    status ENUM('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') DEFAULT 'requested', -- request status
     timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- the date and time this recall was last updated
     itemnumber int(11) DEFAULT NULL, -- foreign key from the items table defining the specific item the recall request was placed on
     waitingdate datetime DEFAULT NULL, -- the date the item was marked as waiting for the patron at the library
     expirationdate datetime DEFAULT NULL, -- the date the recall expires
-    old TINYINT(1) DEFAULT 0, -- flag if the recall is old and no longer active, i.e. expired, cancelled or completed
+    old TINYINT(1) NOT NULL DEFAULT 0, -- flag if the recall is old and no longer active, i.e. expired, cancelled or completed
     item_level_recall TINYINT(1) NOT NULL DEFAULT 0, -- flag if item-level recall
      PRIMARY KEY (recall_id),
      KEY borrowernumber (borrowernumber),

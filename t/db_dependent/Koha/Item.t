@@ -1165,6 +1165,64 @@ subtest 'columns_to_str' => sub {
     $cache->clear_from_cache("MarcSubfieldStructure-");
 
     $schema->storage->txn_rollback;
+
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 1;
+
+    subtest '_set_found_trigger() tests' => sub {
+
+        plan tests => 6;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $item   = $builder->build_sample_item({ itemlost => 1, itemlost_on => dt_from_string() });
+
+        # Add a lost item debit
+        my $debit = $patron->account->add_debit(
+            {
+                amount    => 10,
+                type      => 'LOST',
+                item_id   => $item->id,
+                interface => 'intranet',
+            }
+        );
+
+        my $lostreturn_policy = 'charge';
+
+        my $mocked_circ_rules = Test::MockModule->new('Koha::CirculationRules');
+        $mocked_circ_rules->mock( 'get_lostreturn_policy', sub { return $lostreturn_policy; } );
+
+        # simulate it was found
+        $item->set( { itemlost => 0 } )->store;
+
+        my $messages = $item->object_messages;
+
+        my $message_1 = $messages->[0];
+
+        is( $message_1->type,    'info',          'type is correct' );
+        is( $message_1->message, 'lost_refunded', 'message is correct' );
+
+        # Find the refund credit
+        my $credit = $debit->credits->next;
+
+        is_deeply(
+            $message_1->payload,
+            { credit_id => $credit->id },
+            'type is correct'
+        );
+
+        my $message_2 = $messages->[1];
+
+        is( $message_2->type,    'info',        'type is correct' );
+        is( $message_2->message, 'lost_charge', 'message is correct' );
+        is( $message_2->payload, undef,         'no payload' );
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'Recalls tests' => sub {
@@ -1362,59 +1420,3 @@ subtest 'Recalls tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'store() tests' => sub {
-
-    plan tests => 1;
-
-    subtest '_set_found_trigger() tests' => sub {
-
-        plan tests => 6;
-
-        $schema->storage->txn_begin;
-
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-        my $item   = $builder->build_sample_item({ itemlost => 1, itemlost_on => dt_from_string() });
-
-        # Add a lost item debit
-        my $debit = $patron->account->add_debit(
-            {
-                amount    => 10,
-                type      => 'LOST',
-                item_id   => $item->id,
-                interface => 'intranet',
-            }
-        );
-
-        my $lostreturn_policy = 'charge';
-
-        my $mocked_circ_rules = Test::MockModule->new('Koha::CirculationRules');
-        $mocked_circ_rules->mock( 'get_lostreturn_policy', sub { return $lostreturn_policy; } );
-
-        # simulate it was found
-        $item->set( { itemlost => 0 } )->store;
-
-        my $messages = $item->object_messages;
-
-        my $message_1 = $messages->[0];
-
-        is( $message_1->type,    'info',          'type is correct' );
-        is( $message_1->message, 'lost_refunded', 'message is correct' );
-
-        # Find the refund credit
-        my $credit = $debit->credits->next;
-
-        is_deeply(
-            $message_1->payload,
-            { credit_id => $credit->id },
-            'type is correct'
-        );
-
-        my $message_2 = $messages->[1];
-
-        is( $message_2->type,    'info',        'type is correct' );
-        is( $message_2->message, 'lost_charge', 'message is correct' );
-        is( $message_2->payload, undef,         'no payload' );
-
-        $schema->storage->txn_rollback;
-    };
-};
