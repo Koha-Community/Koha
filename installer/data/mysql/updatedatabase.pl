@@ -24659,6 +24659,10 @@ if( CheckVersion( $DBversion ) ) {
             VALUES ( 'yi', 'Hebr');
         });
     NewVersion( $DBversion, "29596", "Add Yiddish language" );
+
+$DBversion = '21.05.12.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 21.05.12 release" );
 }
 
 # SEE bug 13068
