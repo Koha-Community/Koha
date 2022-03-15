@@ -138,18 +138,36 @@ shouldn't be called twice in it.
                 $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
             }
 
-            if( defined $reserved_params->{q} || defined $reserved_params->{query} || defined $reserved_params->{'x-koha-query'}) {
-                $filtered_params //={};
-                my @query_params_array;
-                my $query_params;
-                push @query_params_array, $reserved_params->{query} if defined $reserved_params->{query};
-                my $json = JSON->new;
-                push @query_params_array, $json->decode($reserved_params->{q}) if defined $reserved_params->{q};
-                push @query_params_array, $json->decode($reserved_params->{'x-koha-query'}) if defined $reserved_params->{'x-koha-query'};
+            if (   defined $reserved_params->{q}
+                || defined $reserved_params->{query}
+                || defined $reserved_params->{'x-koha-query'} )
+            {
+                $filtered_params //= {};
 
-                if(scalar(@query_params_array) > 1) {
-                    $query_params = {'-and' => \@query_params_array};
-                } else {
+                my @query_params_array;
+
+                # query in request body, JSON::Validator already decoded it
+                push @query_params_array, $reserved_params->{query}
+                  if defined $reserved_params->{query};
+
+                my $json = JSON->new;
+
+                # q is defined as multi => JSON::Validator generates an array
+                foreach my $q ( @{ $reserved_params->{q} } ) {
+                    push @query_params_array, $json->decode($q)
+                    if $q; # skip if exists but is empty
+                }
+
+                push @query_params_array,
+                  $json->decode( $reserved_params->{'x-koha-query'} )
+                  if defined $reserved_params->{'x-koha-query'};
+
+                my $query_params;
+
+                if ( scalar(@query_params_array) > 1 ) {
+                    $query_params = { '-and' => \@query_params_array };
+                }
+                else {
                     $query_params = $query_params_array[0];
                 }
 

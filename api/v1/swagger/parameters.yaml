@@ -75,7 +75,10 @@ q_param:
   in: query
   required: false
   description: Query filter sent as a request parameter
-  type: string
+  type: array
+  items:
+    type: string
+  collectionFormat: multi
 q_header:
   name: x-koha-query
   in: header
