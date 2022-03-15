@@ -132,6 +132,7 @@ if ( $op =~ /save/i ) {
             title => $suggestion_only->{title},
             author => $suggestion_only->{author},
             itemtype => $suggestion_only->{itemtype},
+            isbn => $suggestion_only->{isbn},
     });
 
     my $manager = Koha::Patrons->find( $suggestion_only->{managedby} );

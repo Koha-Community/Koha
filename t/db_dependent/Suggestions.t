@@ -648,4 +648,26 @@ subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
     is( $suggestion->{note}, "Test note", "ModSuggestion works on suggestions without a suggester" );
 };
 
+subtest 'Suggestion with ISBN' => sub {
+    my $suggestion_with_isbn = {
+        isbn     => '1940997232',
+        title    => "The Clouds",
+        author   => "Aristophanes",
+    };
+    my $record = MarcRecordFromNewSuggestion( $suggestion_with_isbn );
+    is("MARC::Record", ref($record), "MarcRecordFromNewSuggestion should return a MARC::Record object");
+
+    my ($isbn_tag, $isbn_subfield) = C4::Biblio::GetMarcFromKohaField('biblioitems.isbn', '');
+    is($record->field( $isbn_tag )->subfield( $isbn_subfield ), "1940997232", "ISBN Record from suggestion ISBN should be '1940997232'");
+
+    my ($issn_tag, $issn_subfield) = C4::Biblio::GetMarcFromKohaField('biblioitems.issn', '');
+    is($record->field( $issn_tag )->subfield( $issn_subfield ), "1940997232", "ISSN Record from suggestion ISBN should also be '1940997232'");
+
+    my ($title_tag, $title_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.title', '');
+    is($record->field( $title_tag), undef, "Record from suggestion title should be empty");
+
+    my ($author_tag, $author_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.author', '');
+    is($record->field( $author_tag), undef, "Record from suggestion author should be emtpy");
+}
+
 $schema->storage->txn_rollback;
