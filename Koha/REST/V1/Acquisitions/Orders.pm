@@ -22,6 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Acquisition::Orders;
 
 use Clone qw( clone );
+use JSON;
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 
@@ -78,8 +79,7 @@ sub list {
         if ( exists $reserved_params->{_order_by} ) {
             # _order_by passed, fix if required
             for my $p ( @{$reserved_params->{_order_by}} ) {
-                $p =~ s|biblio\.|biblio\.biblioitem\.|g
-                    if $p =~ m/.*(isbn|ean|publisher).*/;
+                $p = $c->table_name_fixer($p);
             }
         }
 
@@ -132,24 +132,43 @@ sub list {
             }
         }
 
-        if ( defined $reserved_params->{q} || defined $reserved_params->{query} || defined $reserved_params->{'x-koha-query'}) {
-            $filtered_params //={};
-            my @query_params_array;
-            my $query_params;
+        if (   defined $reserved_params->{q}
+            || defined $reserved_params->{query}
+            || defined $reserved_params->{'x-koha-query'} )
+        {
 
-            # FIXME The following lines are an ugly fix to deal with isbn and ean searches
-            # This must NOT be reused or extended
-            # Instead we need a better and global solution in a Koha::*Biblio method
-            for my $q ( qw( q query x-koha-query ) ) {
-                next unless $reserved_params->{$q};
-                for my $f ( qw( isbn ean publisher ) ) {
-                    $reserved_params->{$q} =~ s|"biblio.$f":|"biblio.biblioitem.$f":|g;
-                }
-                push @query_params_array, $reserved_params->{$q};
+            $filtered_params //={};
+
+            my @query_params_array;
+
+            my $json = JSON->new;
+
+            # q is defined as multi => JSON::Validator generates an array
+            # containing the string
+            foreach my $q ( @{ $reserved_params->{q} } ) {
+                push @query_params_array,
+                  $json->decode( $c->table_name_fixer($q) )
+                  if $q;    # skip if exists but is empty
             }
 
-            if(scalar(@query_params_array) > 1) {
-                $query_params = {'-and' => \@query_params_array};
+            # x-koha-query contains a string
+            push @query_params_array,
+              $json->decode(
+                $c->table_name_fixer( $reserved_params->{'x-koha-query'} ) )
+              if $reserved_params->{'x-koha-query'};
+
+            # query is already decoded by JSON::Validator at this point
+            push @query_params_array,
+              $json->decode(
+                $c->table_name_fixer(
+                    $json->encode( $reserved_params->{query} )
+                )
+              ) if $reserved_params->{query};
+
+            my $query_params;
+
+            if ( scalar(@query_params_array) > 1 ) {
+                $query_params = { '-and' => \@query_params_array };
             }
             else {
                 $query_params = $query_params_array[0];
@@ -307,6 +326,28 @@ sub delete {
     catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head2 Internal methods
+
+=head3 table_name_fixer
+
+    $q = $c->table_name_fixer( $q );
+
+The Koha::Biblio representation includes the biblioitem.* attributes. This is handy
+for API consumers but as they are different tables, converting the queries that mention
+biblioitem columns can be tricky. This method renames known column names as used on Koha's
+UI.
+
+=cut
+
+sub table_name_fixer {
+    my ( $self, $q ) = @_;
+
+    $q =~ s|biblio\.|biblio\.biblioitem\.|g
+      if $q =~ m/.*(isbn|ean|publisher).*/;
+
+    return $q;
 }
 
 1;
