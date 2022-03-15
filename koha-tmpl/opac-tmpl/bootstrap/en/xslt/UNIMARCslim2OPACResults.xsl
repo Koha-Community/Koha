@@ -390,10 +390,10 @@
         <xsl:text>). </xsl:text>
       </span>
     </xsl:if>
-    <xsl:if test="count(key('item-by-status', 'Waiting'))>0">
+    <xsl:if test="count(key('item-by-status', 'Hold waiting'))>0">
       <span class="unavailable">
         <xsl:text>On hold (</xsl:text>
-        <xsl:value-of select="count(key('item-by-status', 'Waiting'))"/>
+        <xsl:value-of select="count(key('item-by-status', 'Hold waiting'))"/>
         <xsl:text>). </xsl:text>
       </span>
     </xsl:if>
