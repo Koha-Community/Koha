@@ -74,9 +74,12 @@ __PACKAGE__->table("recalls");
 
 =head2 status
 
-  data_type: 'varchar'
+  data_type: 'enum'
+  default_value: 'requested'
+  extra: {list => ["requested","overdue","waiting","in_transit","cancelled","expired","fulfilled"]}
   is_nullable: 1
-  size: 1
+
+Request status
 
 =head2 timestamp
 
@@ -106,6 +109,7 @@ __PACKAGE__->table("recalls");
 =head2 old
 
   data_type: 'tinyint'
+  default_value: 0
   is_nullable: 1
 
 =head2 item_level_recall
@@ -152,7 +156,22 @@ __PACKAGE__->add_columns(
   "priority",
   { data_type => "smallint", is_nullable => 1 },
   "status",
-  { data_type => "varchar", is_nullable => 1, size => 1 },
+  {
+    data_type => "enum",
+    default_value => "requested",
+    extra => {
+      list => [
+        "requested",
+        "overdue",
+        "waiting",
+        "in_transit",
+        "cancelled",
+        "expired",
+        "fulfilled",
+      ],
+    },
+    is_nullable => 1,
+  },
   "timestamp",
   {
     data_type => "timestamp",
@@ -175,7 +194,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "old",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "item_level_recall",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -265,8 +284,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-10-14 15:07:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3OJBkRJzqxZpuRp0GYGixw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-15 06:51:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nG6sAMWzjgfD+r6aUsITzA
 
 __PACKAGE__->add_columns(
     '+old' => { is_boolean => 1 },
