@@ -1,37 +1,25 @@
 <template>
     <h2>Delete agreement</h2>
     <div>
-        <b-form @submit="onSubmit">
-            <b-form-group
-                id="agreement_name"
-                label="Agreement name:"
-                label-for="agreement_name"
-                label-cols="4"
-                label-cols-lg="2"
-            >
-                {{ agreement.name }}
-            </b-form-group>
-            <b-form-group
-                id="agreement_vendor"
-                label="Vendor:"
-                label-for="agreement_vendor"
-                label-cols="4"
-                label-cols-lg="2"
-            >
-                {{ agreement.vendor_id }}
-            </b-form-group>
-            <b-form-group
-                id="agreement_description"
-                label="Description:"
-                label-for="agreement_description"
-                label-cols="4"
-                label-cols-lg="2"
-            >
-                {{ agreement.description }}
-            </b-form-group>
-            <b-button type="submit" variant="primary">Submit</b-button>
-            <a href="#" @click="$emit('switch-view', 'list')">Cancel</a>
-        </b-form>
+        <form @submit="onSubmit($event)">
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        Agreement name:
+                        {{ agreement.name }}
+                    </li>
+                    <li>Vendor:{{ agreement.vendor_id }}</li>
+                    <li>
+                        Description:
+                        {{ agreement.description }}
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" variant="primary" value="Yes, delete" />
+                <a href="#" class="cancel" @click="$emit('switch-view', 'list')">No, do not delete</a>
+            </fieldset>
+        </form>
     </div>
 </template>
 
@@ -59,7 +47,8 @@ export default {
             )
     },
     methods: {
-        onSubmit() {
+        onSubmit(e) {
+            e.preventDefault()
 
             let apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
 

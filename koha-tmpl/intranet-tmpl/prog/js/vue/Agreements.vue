@@ -1,7 +1,7 @@
 <template>
     <Toolbar v-if="op == 'list'" @switch-view="switchView" />
-    <b-alert v-if="message" variant="success" show>{{ message }}</b-alert>
-    <b-alert v-if="error" variant="warning" show>{{ error }}</b-alert>
+    <div class="dialog message" v-if="message">{{ message }}</div>
+    <div class="dialog alert" v-if="error">{{ error }}</div>
     <List
         v-if="op == 'list'"
         :vendors="vendors"

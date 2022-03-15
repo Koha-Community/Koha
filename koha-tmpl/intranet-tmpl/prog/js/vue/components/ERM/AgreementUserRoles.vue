@@ -27,9 +27,9 @@
                 </li>
                 <li>
                     <label :for="`user_role_${counter}`">Role: </label>
-                    <b-form-select v-model="user_role.role" required>
-                        <b-form-select-option value=""></b-form-select-option>
-                        <b-form-select-option
+                    <select v-model="user_role.role" required>
+                        <option value=""></option>
+                        <option
                             v-for="r in av_user_roles"
                             :key="r.authorised_values"
                             :value="r.authorised_value"
@@ -38,9 +38,10 @@
                                     ? true
                                     : false
                             "
-                            >{{ r.lib }}</b-form-select-option
                         >
-                    </b-form-select>
+                            {{ r.lib }}
+                        </option>
+                    </select>
                     <span class="required">Required</span>
                 </li>
             </ol>
@@ -50,9 +51,9 @@
             name="selected_patron_id"
             id="selected_patron_id"
         />
-        <button @click="addUser" type="button" class="btn btn-primary">
-            <i class="fa fa-plus" aria-hidden="true"></i> Add new user
-        </button>
+        <a class="btn btn-default" @click="addUser"
+            ><font-awesome-icon icon="plus" /> Add new user</a
+        >
     </fieldset>
 </template>
 

@@ -54,9 +54,9 @@
                 </li>
             </ol>
         </fieldset>
-        <button @click="addPeriod" type="button" class="btn btn-primary">
-            <i class="fa fa-plus" aria-hidden="true"></i> Add new period
-        </button>
+        <a class="btn btn-default" @click="addPeriod"
+            ><font-awesome-icon icon="plus" /> Add new period</a
+        >
     </fieldset>
 </template>
 
