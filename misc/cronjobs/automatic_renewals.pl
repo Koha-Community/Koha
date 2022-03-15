@@ -108,8 +108,9 @@ to 'Never send emails' or 'Follow patron messaging preferences'
 
 END_WARN
 } else {
-    # If not following cron then we should not send if set to never
-    # and always send any generated according to preferences if following those
+    # If not following cron then:
+    # - we should not send if set to never
+    # - we will send any notice generated according to preferences if following those
     $send_notices = $send_notices_pref eq 'never' ? 0 : 1;
 }
 
@@ -140,7 +141,7 @@ my %report;
 while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
-    my ( $borrower_preferences, $wants_email, $wants_digest );
+    my ( $borrower_preferences, $wants_email, $wants_digest ) = ( undef, 0, 0 );
     if ( $send_notices_pref eq 'preferences' ){
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences(
             {
@@ -155,11 +156,10 @@ while ( my $auto_renew = $auto_renews->next ) {
         $wants_digest = 1
             if $wants_email
             && $borrower_preferences->{wants_digest};
+    } else { # Preference is never or cron
+        $wants_email = $send_notices;
+        $wants_digest = 0;
     }
-
-    $send_notices = 1
-      if !$send_notices
-      && $wants_email;
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
@@ -175,7 +175,7 @@ while ( my $auto_renew = $auto_renews->next ) {
             $auto_renew->auto_renew_error(undef)->store;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-            if $send_notices && !$wants_digest;
+            if ( $wants_email ) && !$wants_digest;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
         or $error eq 'restriction'
@@ -194,7 +194,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         if ( not $auto_renew->auto_renew_error or $updated ) {
             $auto_renew->auto_renew_error($error)->store if $confirm;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-              if $error ne 'auto_too_soon' && ( $send_notices && !$wants_digest );    # Do not notify if it's too soon
+              if $error ne 'auto_too_soon' && ( $wants_email  && !$wants_digest );    # Do not notify if it's too soon
         }
     }
 
