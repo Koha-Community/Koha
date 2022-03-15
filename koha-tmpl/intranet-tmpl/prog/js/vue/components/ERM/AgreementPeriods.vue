@@ -2,6 +2,7 @@
     <fieldset class="rows" id="agreement_periods">
         <legend>Periods</legend>
         <fieldset
+            :id="`agreement_period_${counter}`"
             class="rows"
             v-for="(period, counter) in periods"
             v-bind:key="counter"
@@ -18,6 +19,7 @@
                         >Start date:
                     </label>
                     <flat-pickr
+                        :id="`started_on_${counter}`"
                         v-model="period.started_on"
                         required
                         :config="fp_config"
@@ -46,6 +48,7 @@
                 <li>
                     <label :for="`notes_${counter}`">Notes: </label>
                     <input
+                        :id="`notes_${counter}`"
                         type="text"
                         class="notes"
                         :name="`notes_${counter}`"
@@ -74,6 +77,8 @@ export default {
         if (!this.dates_fixed) {
             this.periods.forEach(p => {
                 p.started_on = $date(p.started_on)
+                p.ended_on = $date(p.ended_on)
+                p.cancellation_deadline = $date(p.cancellation_deadline)
             })
             this.dates_fixed = 1
         }
