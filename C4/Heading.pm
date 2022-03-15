@@ -194,6 +194,8 @@ sub _search {
     my $self         = shift;
     my $index        = shift || undef;
     my $skipmetadata = shift || undef;
+    my $ind2         = $self->{field}->{_ind2};
+    my $subject_heading_thesaurus = '';
     my @marclist;
     my @and_or;
     my @excluding = [];
@@ -207,13 +209,38 @@ sub _search {
         push @value,    $self->{'search_form'};
     }
 
-    #    if ($self->{'thesaurus'}) {
-    #        push @marclist, 'thesaurus';
-    #        push @and_or, 'AND';
-    #        push @excluding, '';
-    #        push @operator, 'is';
-    #        push @value, $self->{'thesaurus'};
-    #    }
+    if ($self->{'thesaurus'}) {
+        if ($ind2 eq '0') {
+           $subject_heading_thesaurus = 'a';
+	    } elsif ($ind2 eq '1') {
+            $subject_heading_thesaurus = 'b';
+        } elsif ($ind2 eq '2') {
+            $subject_heading_thesaurus = 'c';
+        } elsif ($ind2 eq '3') {
+            $subject_heading_thesaurus = 'd';
+        } elsif ($ind2 eq '4') {
+            $subject_heading_thesaurus = 'n';
+        } elsif ($ind2 eq '5') {
+            $subject_heading_thesaurus = 'k';
+        } elsif ($ind2 eq '6') {
+            $subject_heading_thesaurus = 'v';
+        } else {
+            $subject_heading_thesaurus = 'z';
+        }
+        push @marclist, 'thesaurus';
+        push @and_or, 'and';
+        push @excluding, '';
+        push @operator, 'is';
+        push @value, $subject_heading_thesaurus;
+    }
+
+    if ($ind2 eq '7') {
+        push @marclist, 'thesaurus-conventions';
+        push @and_or, 'and';
+        push @excluding, '';
+        push @operator, 'is';
+        push @value, $self->{'thesaurus'};
+    }
 
     require Koha::SearchEngine::QueryBuilder;
     require Koha::SearchEngine::Search;

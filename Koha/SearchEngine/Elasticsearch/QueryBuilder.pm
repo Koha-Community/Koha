@@ -559,6 +559,7 @@ our $koha_to_index_name = {
     'match-heading' => 'match-heading',
     'see-from'      => 'match-heading-see-from',
     thesaurus       => 'subject-heading-thesaurus',
+    'thesaurus-conventions' => 'subject-heading-thesaurus-conventions',
     any             => '',
     all             => ''
 };

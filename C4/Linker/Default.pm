@@ -30,14 +30,15 @@ sub get_link {
     my $behavior    = shift || 'default';
     my $search_form = $heading->search_form();
     my $auth_type = $heading->auth_type();
+    my $thesaurus   = $heading->{thesaurus} || 'notdefined';
     my $authid;
     my $fuzzy = 0;
     my $match_count;
 
-    if ( $self->{'cache'}->{$search_form.$auth_type}->{'cached'} ) {
-        $authid = $self->{'cache'}->{$search_form.$auth_type}->{'authid'};
-        $fuzzy  = $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'};
-        $match_count = $self->{'cache'}->{$search_form.$auth_type}->{'match_count'};
+    if ( $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} ) {
+        $authid = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'};
+        $fuzzy  = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'};
+        $match_count = $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'match_count'};
     }
     else {
 
@@ -75,10 +76,10 @@ sub get_link {
             }
         }
 
-        $self->{'cache'}->{$search_form.$auth_type}->{'cached'} = 1;
-        $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
-        $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
-        $self->{'cache'}->{$search_form.$auth_type}->{'match_count'} = $match_count;
+        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} = 1;
+        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'} = $authid;
+        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'}  = $fuzzy;
+        $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'match_count'} = $match_count;
     }
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy, $match_count;
 }
@@ -89,11 +90,12 @@ sub update_cache {
     my $authid      = shift;
     my $search_form = $heading->search_form();
     my $auth_type = $heading->auth_type();
+    my $thesaurus   = $heading->{thesaurus} || 'notdefined';
     my $fuzzy = 0;
 
-    $self->{'cache'}->{$search_form.$auth_type}->{'cached'} = 1;
-    $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
-    $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
+    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} = 1;
+    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'authid'} = $authid;
+    $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'fuzzy'}  = $fuzzy;
 }
 
 sub flip_heading {
