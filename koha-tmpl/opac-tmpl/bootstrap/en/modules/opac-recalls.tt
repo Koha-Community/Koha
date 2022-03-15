@@ -92,7 +92,7 @@
                                                             Expired on [% RECALL.expirationdate | $KohaDates %]
                                                         [% ELSIF ( RECALL.cancelled ) %]
                                                             Cancelled on [% RECALL.cancellationdate | $KohaDates %]
-                                                        [% ELSIF ( RECALL.finished ) %]
+                                                        [% ELSIF ( RECALL.fulfilled ) %]
                                                             Fulfilled
                                                         [% ELSE %]
                                                             Requested

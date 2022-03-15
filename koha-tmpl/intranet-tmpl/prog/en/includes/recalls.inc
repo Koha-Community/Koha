@@ -76,7 +76,7 @@
                             Cancelled on [% recall.cancellationdate | $KohaDates %]
                         [% ELSIF ( recall.overdue ) %]
                             Overdue to be returned
-                        [% ELSIF ( recall.finished ) %]
+                        [% ELSIF ( recall.fulfilled ) %]
                             Fulfilled
                         [% ELSE %]
                             Requested
