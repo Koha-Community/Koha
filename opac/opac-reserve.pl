@@ -633,7 +633,7 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{holdable} &&= $status eq 'OK';
     $biblioLoopIter{already_patron_possession} = $status eq 'alreadypossession';
 
-    if ( CanBookBeReserved( $borrowernumber, $biblioNum )->{status} eq 'recall' ){
+    if ( $status eq 'recall' ) {
         $biblioLoopIter{recall} = 1;
     }
 

@@ -41,6 +41,7 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Checkouts;
+use Koha::Recalls;
 use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;

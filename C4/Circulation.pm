@@ -62,6 +62,7 @@ use Koha::Checkouts::ReturnClaims;
 use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Checkout;
 use Koha::Plugins;
+use Koha::Recalls;
 use Carp qw( carp );
 use List::MoreUtils qw( any );
 use Scalar::Util qw( looks_like_number );
@@ -381,15 +382,17 @@ sub transferbook {
     }
 
     # find recall
-    my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
-    if ( defined $recall and C4::Context->preference('UseRecalls') ) {
-        # do a transfer if the recall branch is different to the item holding branch
-        if ( $recall->branchcode eq $fbr ) {
-            $dotransfer = 0;
-            $messages->{'RecallPlacedAtHoldingBranch'} = 1;
-        } else {
-            $dotransfer = 1;
-            $messages->{'RecallFound'} = $recall;
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+        if ( defined $recall ) {
+            # do a transfer if the recall branch is different to the item holding branch
+            if ( $recall->branchcode eq $fbr ) {
+                $dotransfer = 0;
+                $messages->{'RecallPlacedAtHoldingBranch'} = 1;
+            } else {
+                $dotransfer = 1;
+                $messages->{'RecallFound'} = $recall;
+            }
         }
     }
 
@@ -1570,7 +1573,16 @@ sub AddIssue {
                 $item_object->discard_changes;
             }
 
-            Koha::Recalls->move_recall({ action => $cancel_recall, recall_id => $recall_id, item => $item_object, borrowernumber => $borrower->{borrowernumber} }) if C4::Context->preference('UseRecalls');
+            if ( C4::Context->preference('UseRecalls') ) {
+                Koha::Recalls->move_recall(
+                    {
+                        action         => $cancel_recall,
+                        recall_id      => $recall_id,
+                        item           => $item_object,
+                        borrowernumber => $borrower->{borrowernumber},
+                    }
+                );
+            }
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
 
@@ -2285,13 +2297,15 @@ sub AddReturn {
     }
 
     # find recalls...
-    # check if this item is recallable first, which includes checking if UseRecalls syspref is enabled
-    my $recall = undef;
-    $recall = $item->check_recalls if $item->can_be_waiting_recall;
-    if ( defined $recall ) {
-        $messages->{RecallFound} = $recall;
-        if ( $recall->branchcode ne $branch ) {
-            $messages->{RecallNeedsTransfer} = $branch;
+    if ( C4::Context->preference('UseRecalls') ) {
+        # check if this item is recallable first, which includes checking if UseRecalls syspref is enabled
+        my $recall = undef;
+        $recall = $item->check_recalls if $item->can_be_waiting_recall;
+        if ( defined $recall ) {
+            $messages->{RecallFound} = $recall;
+            if ( $recall->branchcode ne $branch ) {
+                $messages->{RecallNeedsTransfer} = $branch;
+            }
         }
     }
 
@@ -2354,11 +2368,12 @@ sub AddReturn {
         $request->status('RET') if $request;
     }
 
-    my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'in_transit' }); # all recalls that have triggered a transfer will have an allocated itemnumber
-    if ( $transfer_recall and
-         $transfer_recall->branchcode eq $branch and
-         C4::Context->preference('UseRecalls') ) {
-        $messages->{TransferredRecall} = $transfer_recall;
+    if ( C4::Context->preference('UseRecalls') ) {
+        # all recalls that have triggered a transfer will have an allocated itemnumber
+        my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'in_transit' });
+        if ( $transfer_recall and $transfer_recall->branchcode eq $branch ) {
+            $messages->{TransferredRecall} = $transfer_recall;
+        }
     }
 
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
@@ -2879,15 +2894,17 @@ sub CanBookBeRenewed {
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
     }
 
-    my $recall = undef;
-    $recall = $item->check_recalls if $item->can_be_waiting_recall;
-    if ( defined $recall ) {
-        if ( $recall->item_level_recall ) {
-            # item-level recall. check if this item is the recalled item, otherwise renewal will be allowed
-            return ( 0, 'recalled' ) if ( $recall->itemnumber == $item->itemnumber );
-        } else {
-            # biblio-level recall, so only disallow renewal if the biblio-level recall has been fulfilled by a different item
-            return ( 0, 'recalled' ) unless ( $recall->waiting );
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall = undef;
+        $recall = $item->check_recalls if $item->can_be_waiting_recall;
+        if ( defined $recall ) {
+            if ( $recall->item_level_recall ) {
+                # item-level recall. check if this item is the recalled item, otherwise renewal will be allowed
+                return ( 0, 'recalled' ) if ( $recall->itemnumber == $item->itemnumber );
+            } else {
+                # biblio-level recall, so only disallow renewal if the biblio-level recall has been fulfilled by a different item
+                return ( 0, 'recalled' ) unless ( $recall->waiting );
+            }
         }
     }
 

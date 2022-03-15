@@ -1186,6 +1186,7 @@ subtest 'Recalls tests' => sub {
     );
 
     t::lib::Mocks::mock_userenv( { patron => $patron1 } );
+    t::lib::Mocks::mock_preference('UseRecalls', 1);
 
     my $recall1 = Koha::Recall->new(
         {   borrowernumber    => $patron1->borrowernumber,
@@ -1357,6 +1358,8 @@ subtest 'Recalls tests' => sub {
     is( $check_recall->borrowernumber, $patron1->borrowernumber, "Only remaining recall is returned" );
 
     $recall2->set_cancelled;
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'store() tests' => sub {

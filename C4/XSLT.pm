@@ -30,6 +30,7 @@ use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::XSLT::Base;
 use Koha::Libraries;
+use Koha::Recalls;
 
 my $engine; #XSLT Handler object
 my %authval_per_framework;
@@ -353,10 +354,13 @@ sub buildKohaItemsNamespace {
     while ( my $item = $items->next ) {
         my $status;
         my $substatus = '';
+        my $recalls_count;
 
-        my $recalls = Koha::Recalls->search({ itemnumber => $item->itemnumber, status => 'waiting' });
+        if ( C4::Context->preference('UseRecalls') ) {
+            $recalls_count = Koha::Recalls->search({ itemnumber => $item->itemnumber, status => 'waiting' })->count;
+        }
 
-        if ( $recalls->count ) {
+        if ($recalls_count) {
             # recalls take priority over holds
             $status = 'other';
             $substatus = 'Recall waiting';

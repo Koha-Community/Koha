@@ -46,6 +46,7 @@ use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
 use Koha::Patrons;
 use Koha::Ratings;
+use Koha::Recalls;
 use Koha::Token;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
@@ -307,11 +308,13 @@ if ( $pending_checkouts->count ) { # Useless test
                     $issue->{MySummaryHTML} = $my_summary_html;
                 }
 
-        my $maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
-        while( my $recall = $maybe_recalls->next ) {
-            if ( $recall->checkout and $recall->checkout->issue_id == $issue->{issue_id} ) {
-                $issue->{recall} = 1;
-                last;
+        if ( C4::Context->preference('UseRecalls') ) {
+            my $maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
+            while( my $recall = $maybe_recalls->next ) {
+                if ( $recall->checkout and $recall->checkout->issue_id == $issue->{issue_id} ) {
+                    $issue->{recall} = 1;
+                    last;
+                }
             }
         }
     }
@@ -335,13 +338,16 @@ $template->param( show_barcode => 1 ) if $show_barcode;
 
 # now the reserved items....
 my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
-my $recalls = Koha::Recalls->search({ borrowernumber => $borrowernumber, old => undef });
 
 $template->param(
     RESERVES       => $reserves,
     showpriority   => $show_priority,
-    RECALLS        => $recalls,
 );
+
+if ( C4::Context->preference('UseRecalls') ) {
+    my $recalls = Koha::Recalls->search( { borrowernumber => $borrowernumber, old => undef } );
+    $template->param( RECALLS => $recalls );
+}
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
     $template->param(

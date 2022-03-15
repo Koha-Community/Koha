@@ -31,6 +31,7 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Logger;
 use Koha::Patrons;
+use Koha::Recalls;
 use Koha::RecordProcessor;
 use URI::Escape;
 use Business::ISBN;
@@ -1901,7 +1902,11 @@ sub searchResults {
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
                     $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
-                    $recallstatus = 'Waiting' if Koha::Recalls->search({ itemnumber => $item->{itemnumber}, status => 'W' })->count;
+                    if ( C4::Context->preference('UseRecalls') ) {
+                        if ( Koha::Recalls->search({ itemnumber => $item->{itemnumber}, status => 'waiting' })->count ) {
+                            $recallstatus = 'Waiting';
+                        }
+                    }
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit

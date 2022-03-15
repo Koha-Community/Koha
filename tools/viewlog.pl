@@ -33,6 +33,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
+use Koha::Recalls;
 
 
 =head1 viewlog.pl

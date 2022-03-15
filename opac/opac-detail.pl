@@ -81,6 +81,7 @@ use Koha::Virtualshelves;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Ratings;
+use Koha::Recalls;
 use Koha::Reviews;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
@@ -729,10 +730,19 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
 
-     my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
-     my $recall_status = Koha::Recalls->search({ itemnumber => $itm->{itemnumber}, status => 'W', old => undef });
-      if( $reserve_status eq "Waiting" or $recall_status->count ){ $itm->{'waiting'} = 1; }
-      if( $reserve_status eq "Reserved"){ $itm->{'onhold'} = 1; }
+    my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
+    my $recall_status;
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall_status = Koha::Recalls->search(
+            {
+                itemnumber => $itm->{itemnumber},
+                status     => 'waiting',
+                old        => undef,
+            }
+        )->count;
+    }
+    if ( $reserve_status eq "Waiting" or $recall_status ) { $itm->{'waiting'} = 1; }
+    if ( $reserve_status eq "Reserved" )                  { $itm->{'onhold'}  = 1; }
 
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {

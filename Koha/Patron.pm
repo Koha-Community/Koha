@@ -49,6 +49,7 @@ use Koha::Patron::Modifications;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
 use Koha::Plugins;
+use Koha::Recalls;
 use Koha::Result::Boolean;
 use Koha::Subscription::Routinglists;
 use Koha::Token;

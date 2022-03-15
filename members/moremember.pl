@@ -273,8 +273,13 @@ $template->param(
     files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
     #debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     has_modifications         => $has_modifications,
-    recalls         => $patron->recalls({},{ order_by => { -asc => 'recalldate' } })->filter_by_current,
-    specific_patron => 1,
 );
+
+if ( C4::Context->preference('UseRecalls') ) {
+    $template->param(
+        recalls         => $patron->recalls({},{ order_by => { -asc => 'recalldate' } })->filter_by_current,
+        specific_patron => 1,
+    );
+}
 
 output_html_with_http_headers $input, $cookie, $template->output;

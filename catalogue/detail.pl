@@ -54,6 +54,7 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Plugins;
+use Koha::Recalls;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
@@ -401,10 +402,12 @@ foreach my $item (@items) {
         $item->{cover_images} = $item_object->cover_images;
     }
 
-    my $recall = Koha::Recalls->find({ itemnumber => $item->{itemnumber}, old => undef });
-    if ( defined $recall ) {
-        $item->{recalled} = 1;
-        $item->{recall} = $recall;
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall = Koha::Recalls->find({ itemnumber => $item->{itemnumber}, old => undef });
+        if ( defined $recall ) {
+            $item->{recalled} = 1;
+            $item->{recall} = $recall;
+        }
     }
 
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {

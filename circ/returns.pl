@@ -52,6 +52,7 @@ use Koha::Holds;
 use Koha::Items;
 use Koha::Item::Transfers;
 use Koha::Patrons;
+use Koha::Recalls;
 
 my $query = CGI->new;
 
@@ -178,16 +179,18 @@ if ( $query->param('recall_id') ) {
     my $itemnumber = $query->param('itemnumber');
     my $return_branch = $query->param('returnbranch');
 
-    my $item;
-    if ( !$recall->item_level_recall ) {
-        $item = Koha::Items->find( $itemnumber );
-    }
+    if ($recall) {
+        my $item;
+        if ( !$recall->item_level_recall ) {
+            $item = Koha::Items->find( $itemnumber );
+        }
 
-    if ( $recall->branchcode ne $return_branch ) {
-        $recall->start_transfer({ item => $item }) if !$recall->in_transit;
-    } else {
-        my $expirationdate = $recall->calc_expirationdate;
-        $recall->set_waiting({ item => $item, expirationdate => $expirationdate }) if !$recall->waiting;
+        if ( $recall->branchcode ne $return_branch ) {
+            $recall->start_transfer({ item => $item }) if !$recall->in_transit;
+        } else {
+            my $expirationdate = $recall->calc_expirationdate;
+            $recall->set_waiting({ item => $item, expirationdate => $expirationdate }) if !$recall->waiting;
+        }
     }
 }
 
@@ -250,9 +253,11 @@ if ($transit) {
     my $transfer = Koha::Item::Transfers->find($transit);
     if ( $canceltransfer ) {
         $transfer->cancel({ reason => 'Manual', force => 1});
-        my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
-        if ( defined $recall_transfer_deleted ) {
-            $recall_transfer_deleted->revert_transfer;
+        if ( C4::Context->preference('UseRecalls') ) {
+            my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+            if ( defined $recall_transfer_deleted ) {
+                $recall_transfer_deleted->revert_transfer;
+            }
         }
         $template->param( transfercancelled => 1);
     } else {
@@ -262,9 +267,11 @@ if ($transit) {
     my $item = Koha::Items->find($itemnumber);
     my $transfer = $item->get_transfer;
     $transfer->cancel({ reason => 'Manual', force => 1});
-    my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
-    if ( defined $recall_transfer_deleted ) {
-        $recall_transfer_deleted->revert_transfer;
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+        if ( defined $recall_transfer_deleted ) {
+            $recall_transfer_deleted->revert_transfer;
+        }
     }
     if($dest eq "ttr"){
         print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");

@@ -29,6 +29,7 @@ use C4::Context;
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Items;
 use Koha::ItemTypes;
 
 my $input = CGI->new;
@@ -212,20 +213,22 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 
     my $item = Koha::Items->find( $c->{itemnumber} );
     my $recalled = 0;
-    my $recall = undef;
-    $recall = $item->check_recalls if $item->can_be_waiting_recall;
-    if ( defined $recall ) {
-        if ( $recall->item_level_recall ) {
-            if ( $recall->itemnumber == $c->{itemnumber} ) {
-                # item-level recall on this item
-                $recalled = 1;
+    if ( C4::Context->preference('UseRecalls') ) {
+        my $recall = undef;
+        $recall = $item->check_recalls if $item->can_be_waiting_recall;
+        if ( defined $recall ) {
+            if ( $recall->item_level_recall ) {
+                if ( $recall->itemnumber == $c->{itemnumber} ) {
+                    # item-level recall on this item
+                    $recalled = 1;
+                } else {
+                    $recalled = 0;
+                }
             } else {
-                $recalled = 0;
-            }
-        } else {
-            # biblio-level recall, but don't want to mark recalled if the recall has been allocated a different item
-            if ( !$recall->waiting ) {
-                $recalled = 1;
+                # biblio-level recall, but don't want to mark recalled if the recall has been allocated a different item
+                if ( !$recall->waiting ) {
+                    $recalled = 1;
+                }
             }
         }
     }

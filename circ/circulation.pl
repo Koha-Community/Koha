@@ -394,9 +394,16 @@ if (@$barcodes) {
         }
         unless($confirm_required) {
             my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-            if ( !$recall_id ) {
-                my $item = Koha::Items->find({ barcode => $barcode });
-                my $recall = Koha::Recalls->find({ biblionumber => $item->biblionumber, itemnumber => [ undef, $item->itemnumber ], status => [ 'R','W' ], old => undef, borrowernumber => $patron->borrowernumber });
+            if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
+                my $recall = Koha::Recalls->find(
+                    {
+                        biblionumber   => $item->biblionumber,
+                        itemnumber     => [ undef, $item->itemnumber ],
+                        status         => [ 'requested', 'waiting' ],
+                        old            => undef,
+                        borrowernumber => $patron->borrowernumber,
+                    }
+                );
                 $recall_id = ( $recall and $recall->recall_id ) ? $recall->recall_id : undef;
             }
             my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
@@ -446,9 +453,13 @@ if ($patron) {
     $template->param(
         holds_count  => $holds->count(),
         WaitingHolds => $waiting_holds,
-        recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'recalldate' } }),
-        specific_patron => 1,
     );
+    if ( C4::Context->preference('UseRecalls') ) {
+        $template->param(
+            recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'recalldate' } }),
+            specific_patron => 1,
+        );
+    }
 }
 
 if ( $patron ) {

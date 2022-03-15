@@ -111,9 +111,11 @@ while ( my $library = $libraries->next ) {
             }
 
             # check for a recall for this transfer
-            my $recall = $item->recall;
-            if ( defined $recall ) {
-                $getransf{recall} = $recall;
+            if ( C4::Context->preference('UseRecalls') ) {
+                my $recall = $item->recall;
+                if ( defined $recall ) {
+                    $getransf{recall} = $recall;
+                }
             }
 
             push( @transferloop, \%getransf );
