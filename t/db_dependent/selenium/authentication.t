@@ -249,7 +249,7 @@ SKIP: {
             $driver->get($mainpage . q|?logout.x=1|);
 
             # FIXME This new get should not be needed, but the cookie is not modified right after logout
-            # However it's not the behavour when testing the UI
+            # However it's not the behaviour when testing the UI
             $driver->get($mainpage);
 
             # After logout a new cookie is generated, the previous session has been deleted
