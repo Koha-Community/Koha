@@ -211,8 +211,8 @@ sub _search {
 
     if ($self->{'thesaurus'}) {
         if ($ind2 eq '0') {
-           $subject_heading_thesaurus = 'a';
-	    } elsif ($ind2 eq '1') {
+            $subject_heading_thesaurus = 'a';
+        } elsif ($ind2 eq '1') {
             $subject_heading_thesaurus = 'b';
         } elsif ($ind2 eq '2') {
             $subject_heading_thesaurus = 'c';
