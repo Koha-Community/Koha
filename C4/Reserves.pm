@@ -33,6 +33,7 @@ use C4::Log qw( logaction );
 use C4::Members::Messaging;
 use C4::Members;
 use Koha::Account::Lines;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblios;
 use Koha::Calendar;
 use Koha::CirculationRules;
@@ -311,6 +312,12 @@ sub AddReserve {
         {
             action  => 'place',
             payload => { hold => $hold->get_from_storage }
+        }
+    );
+
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $biblionumber ]
         }
     );
 

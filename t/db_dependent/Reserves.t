@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 69;
+use Test::More tests => 70;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1393,6 +1393,37 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
     ok(
         C4::Reserves::IsAvailableForItemLevelRequest( $item, $patron ),
         "Item not available for item-level hold because no effective item type"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AddReserve() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio  = $builder->build_sample_biblio;
+
+    my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $mock->mock( 'enqueue', sub {
+        my ( $self, $args ) = @_;
+        is_deeply(
+            $args->{biblio_ids},
+            [ $biblio->id ],
+            "AddReserve triggers a holds queue update for the related biblio"
+        );
+    } );
+
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+        }
     );
 
     $schema->storage->txn_rollback;

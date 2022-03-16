@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Test::Exception;
 use Test::MockModule;
@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'fill() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -231,6 +231,32 @@ subtest 'fill() tests' => sub {
             $anonymous_patron->id,
             'Patron link is set to the configured anonymous patron immediately'
         );
+    };
+
+    subtest 'holds_queue update tests' => sub {
+
+        plan tests => 1;
+
+        my $biblio = $builder->build_sample_biblio;
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock( 'enqueue', sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                '->fill triggers a holds queue update for the related biblio'
+            );
+        } );
+
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        )->fill;
     };
 
     $schema->storage->txn_rollback;
@@ -456,7 +482,7 @@ subtest 'is_pickup_location_valid() tests' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -525,6 +551,79 @@ subtest 'cancel() tests' => sub {
         $anonymous_patron->id,
         'Patron link is set to the configured anonymous patron immediately'
     );
+
+    subtest 'holds_queue update tests' => sub {
+
+        plan tests => 1;
+
+        my $biblio = $builder->build_sample_biblio;
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock( 'enqueue', sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                '->cancel triggers a holds queue update for the related biblio'
+            );
+        } );
+
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        )->cancel;
+
+        # If the skip_holds_queue param is not honoured, then test count will fail.
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        )->cancel({ skip_holds_queue => 1 });
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'suspend_hold() and resume() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $action;
+
+    my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $mock->mock( 'enqueue', sub {
+        my ( $self, $args ) = @_;
+        is_deeply(
+            $args->{biblio_ids},
+            [ $biblio->id ],
+            "->$action triggers a holds queue update for the related biblio"
+        );
+    } );
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber => $biblio->id,
+            }
+        }
+    );
+
+    $action = 'suspend_hold';
+    $hold->suspend_hold;
+
+    $action = 'resume';
+    $hold->resume;
 
     $schema->storage->txn_rollback;
 };

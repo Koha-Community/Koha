@@ -36,6 +36,8 @@ use Koha::Old::Holds;
 use Koha::Calendar;
 use Koha::Plugins;
 
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
+
 use Koha::Exceptions::Hold;
 
 use base qw(Koha::Object);
@@ -124,6 +126,12 @@ sub suspend_hold {
     logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
 
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $self->biblionumber ]
+        }
+    );
+
     return $self;
 }
 
@@ -151,6 +159,12 @@ sub resume {
 
     logaction( 'HOLDS', 'RESUME', $self->reserve_id, $self )
         if C4::Context->preference('HoldsLog');
+
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $self->biblionumber ]
+        }
+    );
 
     return $self;
 }
@@ -516,8 +530,9 @@ sub is_suspended {
 
 my $cancel_hold = $hold->cancel(
     {
-        [ charge_cancel_fee => 1||0, ]
+        [ charge_cancel_fee   => 1||0, ]
         [ cancellation_reason => $cancellation_reason, ]
+        [ skip_holds_queue    => 1||0 ]
     }
 );
 
@@ -607,6 +622,12 @@ sub cancel {
 
             C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self )
                 if C4::Context->preference('HoldsLog');
+
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                {
+                    biblio_ids => [ $old_me->biblionumber ]
+                }
+            ) unless $params->{skip_holds_queue};
         }
     );
     return $self;
@@ -671,6 +692,12 @@ sub fill {
 
             C4::Log::logaction( 'HOLDS', 'FILL', $self->id, $self )
                 if C4::Context->preference('HoldsLog');
+
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                {
+                    biblio_ids => [ $old_me->biblionumber ]
+                }
+            );
         }
     );
     return $self;
