@@ -157,6 +157,8 @@ sub get_template_and_user {
     my ( $user, $cookie, $sessionID, $flags );
     $cookie = [];
 
+    my $cookie_mgr = Koha::CookieManager->new;
+
     # Get shibboleth login attribute
     my $shib = C4::Context->config('useshibboleth') && shib_ok();
     my $shib_login = $shib ? get_login_shib() : undef;
@@ -245,13 +247,12 @@ sub get_template_and_user {
         if ($kick_out) {
             $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac',
                 $in->{query} );
-            push @$cookie, $in->{query}->cookie(
+            $cookie = $cookie_mgr->replace_in_list( $cookie, $in->{query}->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
-                -expires  => '',
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-            );
+            ));
 
             $template->param(
                 loginprompt => 1,
@@ -654,7 +655,7 @@ sub get_template_and_user {
         # what to do
         my $language = C4::Languages::getlanguage( $in->{'query'} );
         my $languagecookie = C4::Templates::getlanguagecookie( $in->{'query'}, $language );
-        push @{$cookie}, $languagecookie;
+        $cookie = $cookie_mgr->replace_in_list( $cookie, $languagecookie );
     }
 
     return ( $template, $borrowernumber, $cookie, $flags );
@@ -866,13 +867,12 @@ sub checkauth {
     if ( !$shib and defined( $ENV{'REMOTE_USER'} ) and $ENV{'REMOTE_USER'} ne '' and $userid = $ENV{'REMOTE_USER'} ) {
 
         # Using Basic Authentication, no cookies required
-        push @$cookie, $query->cookie(
+        $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
             -name     => 'CGISESSID',
             -value    => '',
-            -expires  => '',
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-        );
+        ));
         $loggedin = 1;
     }
     elsif ( $emailaddress) {
@@ -925,12 +925,12 @@ sub checkauth {
                 }
             } else {
 
-                push @$cookie, $query->cookie(
+                $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                     -name     => 'CGISESSID',
                     -value    => $session->id,
                     -HttpOnly => 1,
                     -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-                );
+                ));
 
                 $flags = haspermission( $userid, $flagsrequired );
                 if ($flags) {
@@ -967,12 +967,12 @@ sub checkauth {
 
         $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
-        push @$cookie, $query->cookie(
+        $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
             -name     => 'CGISESSID',
             -value    => $sessionID,
             -HttpOnly => 1,
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-        );
+        ));
         my $pki_field = C4::Context->preference('AllowPKIAuth');
         if ( !defined($pki_field) ) {
             print STDERR "ERROR: Missing system preference AllowPKIAuth.\n";
@@ -1167,12 +1167,12 @@ sub checkauth {
                         $domain =~ s|\.\*||g;
                         if ( $ip !~ /^$domain/ ) {
                             $loggedin = 0;
-                            push @$cookie, $query->cookie(
+                            $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                                 -name     => 'CGISESSID',
                                 -value    => '',
                                 -HttpOnly => 1,
                                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-                            );
+                            ));
                             $info{'wrongip'} = 1;
                         }
                     }
@@ -1256,12 +1256,12 @@ sub checkauth {
     {
         # successful login
         unless (@$cookie) {
-            push @$cookie, $query->cookie(
+            $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
                 -HttpOnly => 1,
                 -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-            );
+            ));
         }
 
         track_login_daily( $userid );
