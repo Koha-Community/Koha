@@ -67,6 +67,12 @@
             return m.format(get_time_pattern(timeformat)+(dateformat=='rfc3339'?':ss'+(!m.isUTC()?'Z':''):''))+(dateformat=='rfc3339' && m.isUTC()?'Z':'');
         }
 
+        window.$date_to_rfc3339 = function(value, options) {
+            var dateformat = (options&&options.dateformat)||def_date_format;
+            let m = moment(value, get_date_pattern(dateformat));
+            return m.format("YYYY-MM-DD");
+        }
+
     })();
 </script>
 <!-- / js-date-format.inc -->

@@ -33,7 +33,7 @@
 <script>
     flatpickr.l10ns.default.weekdays = flatpickr_weekdays;
     flatpickr.l10ns.default.months   = flatpickr_months;
-    flatpickr.setDefaults({
+    let flatpickr_defaults = {
         allowInput: true,
         dateFormat: "Y-m-d",
         altInput: true,
@@ -120,7 +120,10 @@
             }
           })
         ]
-    });
+    };
+
+    flatpickr.setDefaults(flatpickr_defaults);
+
     $(document).ready(function(){
         $(".flatpickr").each(function(){
             let options = {};

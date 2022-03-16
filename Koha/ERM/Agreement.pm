@@ -41,7 +41,20 @@ Returns the periods for this agreement
 =cut
 
 sub periods {
-    my ( $self ) = @_;
+    my ( $self, $periods ) = @_;
+
+    if ( $periods ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->periods->delete;
+
+                for my $period (@$periods) {
+                    $self->_result->add_to_erm_agreement_periods($period);
+                }
+            }
+        );
+    }
 
     my $periods_rs = $self->_result->erm_agreement_periods;
     return Koha::ERM::Agreement::Periods->_new_from_dbic($periods_rs);
@@ -54,8 +67,20 @@ Returns the user roles for this agreement
 =cut
 
 sub user_roles {
-    my ( $self ) = @_;
+    my ( $self, $user_roles ) = @_;
 
+    if ( $user_roles ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->user_roles->delete;
+
+                for my $user_role (@$user_roles) {
+                    $self->_result->add_to_erm_agreement_user_roles($user_role);
+                }
+            }
+        );
+    }
     my $user_roles_rs = $self->_result->erm_agreement_user_roles;
     return Koha::ERM::Agreement::UserRoles->_new_from_dbic($user_roles_rs);
 }

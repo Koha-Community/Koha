@@ -843,11 +843,15 @@
         }
         function select_user(borrowernumber, data) {
             var p = window.opener;
-            [%  IF callback %]
-                p.[% callback | html %](borrowernumber, data);
-            [%  ELSE %]
-                p.select_user(borrowernumber, data);
-            [%  END %]
+            if ( p.document.getElementById("selected_patron_id") ) {
+                p.document.getElementById("selected_patron_id").value = borrowernumber;
+            } else {
+                [%  IF callback %]
+                    p.[% callback | html %](borrowernumber, data);
+                [%  ELSE %]
+                    p.select_user(borrowernumber, data);
+                [% END %]
+            }
             window.close();
         }
     </script>

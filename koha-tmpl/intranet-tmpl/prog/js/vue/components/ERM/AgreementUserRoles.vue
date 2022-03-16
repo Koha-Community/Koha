@@ -1,0 +1,112 @@
+<template>
+    <fieldset class="rows" id="agreement_user_roles">
+        <legend>Users</legend>
+        <fieldset
+            class="rows"
+            v-for="(user_role, counter) in user_roles"
+            v-bind:key="counter"
+        >
+            <legend>
+                Agreement user {{ counter + 1 }}
+                <a href="#" @click.prevent="deleteUser(counter)"
+                    ><i class="fa fa-trash"></i> Remove this user</a
+                >
+            </legend>
+            <ol>
+                <li>
+                    <label :for="`user_id_${counter}`">User: </label>
+                    <span class="user">
+                        {{ user_role.patron_str }}
+                    </span>
+                    (<a
+                        href="#"
+                        @click="selectUser(counter)"
+                        class="btn btn-default"
+                        >Select user</a
+                    >)
+                </li>
+                <li>
+                    <label :for="`user_role_${counter}`">Role: </label>
+                    <b-form-select v-model="user_role.role" required>
+                        <b-form-select-option value=""></b-form-select-option>
+                        <b-form-select-option
+                            v-for="r in av_user_roles"
+                            :key="r.authorised_values"
+                            :value="r.authorised_value"
+                            :selected="
+                                r.authorised_value == user_role.role
+                                    ? true
+                                    : false
+                            "
+                            >{{ r.lib }}</b-form-select-option
+                        >
+                    </b-form-select>
+                    <span class="required">Required</span>
+                </li>
+            </ol>
+        </fieldset>
+        <input
+            type="hidden"
+            name="selected_patron_id"
+            id="selected_patron_id"
+        />
+        <button @click="addUser" type="button" class="btn btn-primary">
+            <i class="fa fa-plus" aria-hidden="true"></i> Add new user
+        </button>
+    </fieldset>
+</template>
+
+<script>
+export default {
+    name: 'AgreementUserRoles',
+    props: {
+        av_user_roles: Array,
+        user_roles: Array,
+    },
+    beforeUpdate() {
+        this.user_roles.forEach(u => {
+            u.patron_str = $patron_to_html(u.patron)
+        })
+    },
+    methods: {
+        addUser() {
+            this.user_roles.push({
+                user_id: null,
+                role: null,
+                patron_str: '',
+            })
+        },
+        deleteUser(counter) {
+            this.user_roles.splice(counter, 1)
+        },
+        selectUser(counter) {
+            let select_user_window = window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=select&filter=erm_users",
+                'PatronPopup',
+                'width=740,height=450,location=yes,toolbar=no,'
+                + 'scrollbars=yes,resize=yes'
+            )
+            // This is a bit dirty, the "select user" window should be rewritten and be a Vue component
+            // but that's not for now...
+            select_user_window.addEventListener('beforeunload', this.newUserSelected, false)
+            select_user_window.counter = counter
+        },
+        newUserSelected(e) {
+            let c = e.currentTarget.counter
+            let selected_patron_id = document.getElementById("selected_patron_id").value
+            fetch('/api/v1/patrons/' + selected_patron_id)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.user_roles[c].patron = result
+                        this.user_roles[c].patron_str = $patron_to_html(result)
+                        this.user_roles[c].user_id = result.patron_id
+                    }).catch(
+                        (error) => {
+                            this.$emit('set-error', error)
+                        }
+                )
+
+        }
+    },
+}
+</script>
