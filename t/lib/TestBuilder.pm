@@ -637,6 +637,12 @@ sub _gen_default_values {
             opac => 1,
             staff_client => 1
         },
+        ErmAgreement => {
+            status           => 'active',
+            closure_reason   => undef,
+            renewal_priority => undef,
+            vendor_id        => undef,
+          },
     };
 }
 

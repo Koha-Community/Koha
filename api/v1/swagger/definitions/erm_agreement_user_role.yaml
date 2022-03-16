@@ -1,0 +1,21 @@
+---
+type: object
+properties:
+  agreement_id:
+    type: integer
+    description: Internal agreement identifier
+  user_id:
+    type: integer
+    description: Internal patron identifier
+  role:
+    description: role of the user
+    type:
+      - string
+  patron:
+    type:
+      - object
+      - "null"
+additionalProperties: false
+required:
+  - user_id
+  - role

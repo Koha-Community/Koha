@@ -39,6 +39,16 @@ properties:
     type:
       - string
       - "null"
+  periods:
+    type: array
+    description: periods defined for this agreement
+    items:
+      $ref: erm_agreement_period.yaml
+  user_roles:
+    type: array
+    description: role for users
+    items:
+      $ref: erm_agreement_user_role.yaml
 additionalProperties: false
 required:
   - agreement_id

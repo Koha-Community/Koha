@@ -159,6 +159,8 @@ paths:
     $ref: "./paths/config_smtp_servers.yaml#/~1config~1smtp_servers~1{smtp_server_id}"
   /erm/agreements:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
+  "/erm/agreements/{agreement_id}":
+    $ref: "./paths/erm_agreements.yaml#/~1erm~1agreements~1{agreement_id}"
   /erm/users:
     $ref: ./paths/erm_users.yaml#/~1erm~1users
   /holds:
@@ -272,6 +274,18 @@ parameters:
     description: Advanced editor macro internal identifier
     in: path
     name: advancededitormacro_id
+    required: true
+    type: integer
+  agreement_id_pp:
+    description: Agreement internal identifier
+    in: path
+    name: agreement_id
+    required: true
+    type: integer
+  agreement_period_id_pp:
+    description: Agreement period internal identifier
+    in: path
+    name: agreement_period_id
     required: true
     type: integer
   biblio_id_pp:

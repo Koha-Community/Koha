@@ -1,0 +1,31 @@
+---
+type: object
+properties:
+  agreement_period_id:
+    $ref: ../x-primitives.yaml#/agreement_period_id
+  agreement_id:
+    type: integer
+    description: Internal agreement identifier
+  started_on:
+    type: string
+    format: date
+    description: Start of the agreement period
+  ended_on:
+    type:
+      - string
+      - "null"
+    format: date
+    description: End of the agreemnent period
+  cancellation_deadline:
+    type:
+      - string
+      - "null"
+    format: date
+    description: Deadline for the cancellation
+  notes:
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - started_on

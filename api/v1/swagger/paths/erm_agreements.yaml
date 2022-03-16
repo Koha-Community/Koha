@@ -5,7 +5,7 @@
     operationId: listErmAgreements
     tags:
       - agreement
-    summary: List erm_agreements
+    summary: List agreements
     produces:
       - application/json
     parameters:
@@ -70,6 +70,211 @@
           type: array
       403:
         description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      503:
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  post:
+    x-mojo-to: ERM::Agreements#add
+    operationId: addErmAgreements
+    tags:
+      - agreement
+    summary: Add agreement
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new agreement
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/erm_agreement
+    responses:
+      201:
+        description: A successfully created agreement
+        schema:
+          items:
+            $ref: ../definitions.yaml#/erm_agreement
+      400:
+        description: Bad parameter
+        schema:
+          $ref: ../definitions.yaml#/error
+      401:
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      403:
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      404:
+        description: Ressource not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: ../definitions.yaml#/error
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      503:
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/agreements/{agreement_id}":
+  get:
+    x-mojo-to: ERM::Agreements#get
+    operationId: getErmAgreements
+    tags:
+      - agreement
+    summary: Get agreement
+    produces:
+      - application/json
+    parameters:
+      - $ref: ../parameters.yaml#/agreement_id_pp
+    responses:
+      200:
+        description: An agreement
+        schema:
+          items:
+            $ref: ../definitions.yaml#/erm_agreement
+      401:
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      403:
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      404:
+        description: Ressource not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      503:
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - periods
+      - user_roles
+      - user_roles.patron
+  put:
+    x-mojo-to: ERM::Agreements#update
+    operationId: updateErmAgreements
+    tags:
+      - agreement
+    summary: Update agreement
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: ../parameters.yaml#/agreement_id_pp
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing agreement
+        required: true
+        schema:
+          $ref: ../definitions.yaml#/erm_agreement
+
+    responses:
+      200:
+        description: A successfully updated agreement
+        schema:
+          items:
+            $ref: ../definitions.yaml#/erm_agreement
+      400:
+        description: Bad parameter
+        schema:
+          $ref: ../definitions.yaml#/error
+      403:
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      404:
+        description: Ressource not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: ../definitions.yaml#/error
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: ../definitions.yaml#/error
+      503:
+        description: Under maintenance
+        schema:
+          $ref: ../definitions.yaml#/error
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - periods
+      - user_roles
+  delete:
+    x-mojo-to: ERM::Agreements#delete
+    operationId: deleteErmAgreements
+    tags:
+      - agreement
+    summary: Delete agreement
+    produces:
+      - application/json
+    parameters:
+      - $ref: ../parameters.yaml#/agreement_id_pp
+    responses:
+      204:
+        description: Agreement deleted
+      400:
+        description: Agreement deletion failed
+        schema:
+          $ref: ../definitions.yaml#/error
+      401:
+        description: Authentication required
+        schema:
+          $ref: ../definitions.yaml#/error
+      403:
+        description: Access forbidden
+        schema:
+          $ref: ../definitions.yaml#/error
+      404:
+        description: Ressource not found
+        schema:
+          $ref: ../definitions.yaml#/error
+      409:
+        description: Conflict in deleting resource
         schema:
           $ref: ../definitions.yaml#/error
       500:
