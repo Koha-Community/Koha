@@ -41,6 +41,7 @@ use Algorithm::CheckDigits qw( CheckDigits );
 use Data::Dumper qw( Dumper );
 use Koha::Account;
 use Koha::AuthorisedValues;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblioitems;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Calendar;
@@ -1773,6 +1774,12 @@ sub AddIssue {
                     checkout => $issue->get_from_storage
                 }
             });
+
+            Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                {
+                    biblio_ids => [ $item_object->biblionumber ]
+                }
+            );
         }
     }
     return $issue;
@@ -2433,6 +2440,12 @@ sub AddReturn {
                 checkout=> $checkin
             }
         });
+
+        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+            {
+                biblio_ids => [ $item->biblionumber ]
+            }
+        );
     }
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ));
