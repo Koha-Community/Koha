@@ -189,7 +189,7 @@
                                         <div id="none" role="tabpanel" class="tab-pane">
                                             <div class="authval-icons">
                                                 <label for="noimage">No image:
-                                                    <input type="radio" name="imageurl" id="noimage" value="removeImage" />
+                                                    <input type="radio" name="image" id="noimage" value="removeImage" />
                                                 </label>
                                             </div>
                                         </div> <!-- /.tab-pane -->
@@ -221,7 +221,11 @@
                                             </div> <!-- /.tab-pane -->
                                         [% END # /FOREACH imageset %]
 
-                                        <div id="remote" role="tabpanel" class="tab-pane">
+                                        [% IF av.imageurl.match('^http') %]
+                                            <div id="remote" role="tabpanel" class="tab-pane active">
+                                        [% ELSE %]
+                                            <div id="remote" role="tabpanel" class="tab-pane">
+                                        [% END %]
                                             <label for="remote_image_check"> Remote image:</label>
                                             [% IF av.imageurl.match('^http') %]
                                                 <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
