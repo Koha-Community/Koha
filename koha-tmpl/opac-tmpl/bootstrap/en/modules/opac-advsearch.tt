@@ -512,18 +512,18 @@ $(document).ready(function() {
             }
         });
         form_serialized = $(this).serialize();
-        Cookies.set("form_serialized", JSON.stringify( form_serialized ), { path: '/'});
+        Cookies.set("form_serialized", JSON.stringify( form_serialized ), { path: '/', sameSite: 'Lax' });
         form_serialized_limits = [
             $('#language-limit').val(),   $('#branchloop').val(),
             $('#subtype_audience').val(), $('#subtype_content').val(),
             $('#subtype_format').val(),   $('#subtype_additional').val(),
             $('#locloop').val()
         ];
-        Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/'});
+        Cookies.set("form_serialized_limits", JSON.stringify( form_serialized_limits ),{ path: '/', sameSite: 'Lax' });
         [% IF ( expanded_options ) %]
-            Cookies.set("search_path_code", 'exs', { path: '/'});
+            Cookies.set("search_path_code", 'exs', { path: '/', sameSite: 'Lax' });
         [% ELSE %]
-            Cookies.set("search_path_code", 'ads', { path: '/'});
+            Cookies.set("search_path_code", 'ads', { path: '/', sameSite: 'Lax' });
         [% END %]
     });
 
