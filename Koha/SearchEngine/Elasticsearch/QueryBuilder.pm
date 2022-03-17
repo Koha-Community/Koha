@@ -806,7 +806,7 @@ sub _convert_index_strings_freeform {
     # Lower case field names
     $search =~ s/($field_name_pattern)(?:,[\w-]*)?($multi_field_pattern):/\L$1\E$2:/og;
     # Resolve possible field aliases
-    $search =~ s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1)."$2:"/oge;
+    $search =~ s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1).($1 eq 'kw' ? "$2" : "$2:")/oge;
     return $search;
 }
 
@@ -1068,6 +1068,15 @@ sub _fix_limit_special_cases {
               ( $l =~ /^yr,st-numeric,ge[=:](.*) and yr,st-numeric,le[=:](.*)$/ );
             next unless defined($start) && defined($end);
             push @new_lim, "date-of-publication:[$start TO $end]";
+        }
+        elsif( $l =~ /^search_filter:/ ){
+            my ($filter_id) = ( $l =~ /^search_filter:(.*)$/ );
+            my $search_filter = Koha::SearchFilters->find( $filter_id );
+            next unless $search_filter;
+            my $expanded = $search_filter->expand_filter;
+            foreach my $e ( @{$self->_fix_limit_special_cases($expanded)} ) {
+                push @new_lim, $self->clean_search_term( $e );
+            }
         }
         elsif ( $l =~ /^yr,st-numeric[=:]/ ) {
             my ($date) = ( $l =~ /^yr,st-numeric[=:](.*)$/ );

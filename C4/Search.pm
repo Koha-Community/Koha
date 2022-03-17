@@ -21,6 +21,7 @@ use C4::Biblio qw( TransformMarcToKoha GetMarcFromKohaField GetFrameworkCode Get
 use C4::Koha qw( getFacets GetVariationsOfISBN GetNormalizedUPC GetNormalizedEAN GetNormalizedOCLCNumber GetNormalizedISBN getitemtypeimagelocation );
 use Koha::DateUtils;
 use Koha::Libraries;
+use Koha::SearchEngine::QueryBuilder;
 use Lingua::Stem;
 use XML::Simple;
 use C4::XSLT qw( XSLTParse4Display );
@@ -33,6 +34,7 @@ use Koha::Logger;
 use Koha::Patrons;
 use Koha::Recalls;
 use Koha::RecordProcessor;
+use Koha::SearchFilters;
 use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
@@ -1537,7 +1539,6 @@ sub buildQuery {
         }    # /for
     }
     Koha::Logger->get->debug("QUERY BEFORE LIMITS: >$query<");
-
 
     # Normalize the query and limit strings
     # This is flawed , means we can't search anything with : in it
