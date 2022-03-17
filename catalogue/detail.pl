@@ -198,7 +198,7 @@ foreach my $subscription (@subscriptions) {
 my $showcomp = C4::Context->preference('ShowComponentRecords');
 my $show_analytics;
 if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
-    if ( my $components = $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) ) {
+    if ( my $components = $marc_record ? $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) : undef ) {
         $show_analytics = 1 if @{$components}; # just show link when having results
         $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
         my $parts;
