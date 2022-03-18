@@ -21,7 +21,6 @@ function clone_line(line) {
 }
 
 function tableInit( oldtabid, newtabid ) {
-
     if ( oldtabid ){
         var oldTableId = $("#" + oldtabid + "_table");
         oldTableId.DataTable().destroy();
@@ -42,10 +41,10 @@ $(document).ready(function () {
 
     tableInit( "", "search_fields");
 
-    $("#tabs").tabs({
-        activate: function( event, ui ){
-            tableInit( ui.oldPanel.attr('id'), ui.newPanel.attr('id') );
-        },
+    $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        var oldtabid = $(e.relatedTarget).data("tab");
+        var newtabid = $(e.target).data("tab");
+        tableInit( oldtabid, newtabid );
     });
 
     $('.delete').click(function () {
