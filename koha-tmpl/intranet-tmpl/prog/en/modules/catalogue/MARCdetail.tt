@@ -78,7 +78,7 @@
 
 
 [% BLOCK show_tab_html %]
-    <div id="[% tab_id | html %]">
+    <div role="tabpanel" class="tab-pane" id="[% tab_id | html %]">
         [% FOREACH tab0X IN tab_data %]
             [% IF ( tab0X.tag ) %]
                 <div class="tag">
@@ -115,83 +115,83 @@
     </div>
 [% END %]
 
-
-<div id="bibliotabs" class="toptabs numbered">
-	<ul>
+    <div id="bibliotabs" class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
             [% IF ( tab0XX ) %]
-                <li><a href="#tab0XX">&#48;</a></li>
+                <li role="presentation"><a href="#tab0XX" aria-controls="tab0XX" role="tab" data-toggle="tab">&#48;</a></li>
             [% END %]
             [% IF ( tab1XX ) %]
-                <li><a href="#tab1XX">1</a></li>
+                <li role="presentation"><a href="#tab1XX" aria-controls="tab1XX" role="tab" data-toggle="tab">1</a></li>
             [% END %]
             [% IF ( tab2XX ) %]
-                <li><a href="#tab2XX">2</a></li>
+                <li role="presentation"><a href="#tab2XX" aria-controls="tab2XX" role="tab" data-toggle="tab">2</a></li>
             [% END %]
             [% IF ( tab3XX ) %]
-                <li><a href="#tab3XX">3</a></li>
+                <li role="presentation"><a href="#tab3XX" aria-controls="tab3XX" role="tab" data-toggle="tab">3</a></li>
             [% END %]
             [% IF ( tab4XX ) %]
-                <li><a href="#tab4XX">4</a></li>
+                <li role="presentation"><a href="#tab4XX" aria-controls="tab4XX" role="tab" data-toggle="tab">4</a></li>
             [% END %]
             [% IF ( tab5XX ) %]
-                <li><a href="#tab5XX">5</a></li>
+                <li role="presentation"><a href="#tab5XX" aria-controls="tab5XX" role="tab" data-toggle="tab">5</a></li>
             [% END %]
             [% IF ( tab6XX ) %]
-                <li><a href="#tab6XX">6</a></li>
+                <li role="presentation"><a href="#tab6XX" aria-controls="tab6XX" role="tab" data-toggle="tab">6</a></li>
             [% END %]
             [% IF ( tab7XX ) %]
-                <li><a href="#tab7XX">7</a></li>
+                <li role="presentation"><a href="#tab7XX" aria-controls="tab7XX" role="tab" data-toggle="tab">7</a></li>
             [% END %]
             [% IF ( tab8XX ) %]
-                <li><a href="#tab8XX">8</a></li>
+                <li role="presentation"><a href="#tab8XX" aria-controls="tab8XX" role="tab" data-toggle="tab">8</a></li>
             [% END %]
             [% IF ( tab9XX ) %]
-                <li><a href="#tab9XX">9</a></li>
+                <li role="presentation"><a href="#tab9XX" aria-controls="tab9XX" role="tab" data-toggle="tab">9</a></li>
             [% END %]
             [% IF ( tab10XX ) %]
-                <li><a href="#tab10XX">Item(s)</a></li>
+                <li role="presentation"><a href="#tab10XX" aria-controls="tab10XX" role="tab" data-toggle="tab">Item(s)</a></li>
             [% END %]
         </ul>
-    [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
+        <div class="tab-content">
+            [% PROCESS show_tab_html tab_id="tab0XX" tab_data=tab0XX %]
 
-    [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
+            [% PROCESS show_tab_html tab_id="tab1XX" tab_data=tab1XX %]
 
-    [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
+            [% PROCESS show_tab_html tab_id="tab2XX" tab_data=tab2XX %]
 
-    [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
+            [% PROCESS show_tab_html tab_id="tab3XX" tab_data=tab3XX %]
 
-    [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
+            [% PROCESS show_tab_html tab_id="tab4XX" tab_data=tab4XX %]
 
-    [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
+            [% PROCESS show_tab_html tab_id="tab5XX" tab_data=tab5XX %]
 
-    [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
+            [% PROCESS show_tab_html tab_id="tab6XX" tab_data=tab6XX %]
 
-    [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
+            [% PROCESS show_tab_html tab_id="tab7XX" tab_data=tab7XX %]
 
-    [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
+            [% PROCESS show_tab_html tab_id="tab8XX" tab_data=tab8XX %]
 
-    [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
+            [% PROCESS show_tab_html tab_id="tab9XX" tab_data=tab9XX %]
 
-     [% IF ( tab10XX ) %]
-    <div id="tab10XX">
-        <table>
-                <tr>
-                    [% FOREACH header IN item_header_loop %]
-                        <th>[% header | html %]</th>
-                    [% END %]
-                </tr>
-                [% FOREACH item IN item_loop %]
-                    <tr>
-                        [% FOREACH sf_code IN item_subfield_codes %]
-                            <td>[% item.$sf_code | $raw %]</td>
-                        [% END %]
-                    </tr>
-                [% END %]
-        </table>
-    </div>
-    [% END %]
-
-</div>
+            [% IF ( tab10XX ) %]
+                <div role="tabpanel" class="tab-pane" id="tab10XX">
+                    <table>
+                            <tr>
+                                [% FOREACH header IN item_header_loop %]
+                                    <th>[% header | html %]</th>
+                                [% END %]
+                            </tr>
+                            [% FOREACH item IN item_loop %]
+                                <tr>
+                                    [% FOREACH sf_code IN item_subfield_codes %]
+                                        <td>[% item.$sf_code | $raw %]</td>
+                                    [% END %]
+                                </tr>
+                            [% END %]
+                    </table>
+                </div>
+            [% END %]
+        </div> <!-- /.tab-content -->
+    </div> <!-- /#bibliotabs -->
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -215,11 +215,13 @@
         browser.show();
 
          $(document).ready(function() {
-            $('#bibliotabs').tabs();
             $("#Frameworks").on("change",function(){
                 Changefwk(this);
             });
-         });
+            if( $(".tab-pane.active").length < 1 ){
+                $("#bibliotabs a:first").tab("show");
+            }
+        });
 
         function Changefwk(FwkList) {
             var fwk = FwkList.options[FwkList.selectedIndex].value;
