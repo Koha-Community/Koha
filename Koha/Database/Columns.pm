@@ -15,6 +15,9 @@ package Koha::Database::Columns;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
+use Koha::I18N qw( __ );
+
 =head1 NAME
 
 Koha::Database::Columns
@@ -22,13 +25,36 @@ Koha::Database::Columns
 =head1 SYNOPSIS
 
   use Koha::Database::Columns;
+  my $columns = Koha::Database::Columns->columns;
 
-=head1 FUNCTIONS
+=head1 API
+
+=head2 Methods
+
+=head3 columns
+
+Static method that returns a hashref with mappings from column names
+to descriptions, for several tables. Currently
+
+=over
+
+=item biblio
+
+=item biblioitems
+
+=item borrowers
+
+=item items
+
+=item statistics
+
+=item subscription
+
+=item suggestion
+
+=back
 
 =cut
-
-use Modern::Perl;
-use Koha::I18N qw( __ );
 
 sub columns {
     return {
