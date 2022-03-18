@@ -94,7 +94,6 @@ use C4::Charset qw(
     nsb_clean
     SetMarcUnicodeFlag
     SetUTF8Flag
-    StripNonXmlChars
 );
 use C4::Linker;
 use C4::OAI::Sets;

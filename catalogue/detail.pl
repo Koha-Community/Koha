@@ -88,10 +88,9 @@ if ( C4::Context->config('enable_plugins') ) {
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
 my $biblio = Koha::Biblios->find( $biblionumber );
-my $record = $biblio->metadata->record;
 $template->param( 'biblio', $biblio );
 
-if ( not defined $record ) {
+unless ( $biblio ) {
     # biblionumber invalid -> report and exit
     $template->param( unknownbiblionumber => 1,
                       biblionumber => $biblionumber );
@@ -100,7 +99,16 @@ if ( not defined $record ) {
 }
 
 my $marc_record = eval { $biblio->metadata->record };
-$template->param( decoding_error => $@ );
+my $invalid_marc_record = $@ || !$marc_record;
+if ($invalid_marc_record) {
+    $template->param( decoding_error => $@ );
+    my $marc_xml = C4::Charset::StripNonXmlChars( $biblio->metadata->metadata );
+
+    $marc_record = eval {
+        MARC::Record::new_from_xml( $marc_xml, 'UTF-8',
+            C4::Context->preference('marcflavour') );
+    };
+}
 
 my $op = $query->param('op') || q{};
 if ( $op eq 'set_item_group' ) {
@@ -159,18 +167,15 @@ my $marcflavour  = C4::Context->preference("marcflavour");
 
 $template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );
 
-# Catch the exception as Koha::Biblio::Metadata->record can explode if the MARCXML is invalid
-# Do not propagate it as we already deal with it previously in this script
-my $coins = eval { $biblio->get_coins };
-$template->param( ocoins => $coins );
+$template->param( ocoins => !$invalid_marc_record ? $biblio->get_coins : undef );
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
-my $upc = GetNormalizedUPC($record,$marcflavour);
-my $ean = GetNormalizedEAN($record,$marcflavour);
-my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
-my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+my $upc = GetNormalizedUPC($marc_record,$marcflavour);
+my $ean = GetNormalizedEAN($marc_record,$marcflavour);
+my $oclc = GetNormalizedOCLCNumber($marc_record,$marcflavour);
+my $isbn = GetNormalizedISBN(undef,$marc_record,$marcflavour);
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {
     $content_identifier_exists = 1;
@@ -198,7 +203,7 @@ for my $itm (@all_items) {
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords;
 # adding items linked via host biblios
-my @hostitems = GetHostItemsInfo($record);
+my @hostitems = GetHostItemsInfo($marc_record);
 if (@hostitems){
     $hostrecords =1;
     push (@items,@hostitems);
@@ -207,7 +212,7 @@ if (@hostitems){
 my $dat = &GetBiblioData($biblionumber);
 
 #is biblio a collection and are bundles enabled
-my $leader = $record->leader();
+my $leader = $marc_record->leader();
 $dat->{bundlesEnabled} = ( ( substr( $leader, 7, 1 ) eq 'c' )
       && C4::Context->preference('BundleNotLoanValue') ) ? 1 : 0;
 
@@ -241,7 +246,7 @@ foreach my $subscription (@subscriptions) {
 my $showcomp = C4::Context->preference('ShowComponentRecords');
 my $show_analytics;
 if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
-    if ( my $components = $marc_record ? $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) : undef ) {
+    if ( my $components = !$invalid_marc_record ? $biblio->get_marc_components(C4::Context->preference('MaxComponentRecords')) : undef ) {
         $show_analytics = 1 if @{$components}; # just show link when having results
         $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
         my $parts;
@@ -265,7 +270,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
         $template->param( ComponentPartsQuery => $cpq );
     }
 } else { # check if we should show analytics anyway
-    $show_analytics = 1 if $marc_record && @{$biblio->get_marc_components(1)}; # count matters here, results does not
+    $show_analytics = 1 if !$invalid_marc_record && @{$biblio->get_marc_components(1)}; # count matters here, results does not
     $template->param( analytics_error => 1 ) if grep { $_->message eq 'component_search' } @{$biblio->object_messages};
 }
 
@@ -275,7 +280,7 @@ $template->param(
     XSLTDetailsDisplay => '1',
     XSLTBloc => XSLTParse4Display({
         biblionumber   => $biblionumber,
-        record         => $record,
+        record         => $marc_record,
         xsl_syspref    => "XSLTDetailsDisplay",
         fix_amps       => 1,
         xslt_variables => $xslt_variables,
@@ -518,7 +523,7 @@ $template->param(
 );
 
 $template->param(
-    MARCNOTES               => $marc_record ? $biblio->get_marc_notes() : undef,
+    MARCNOTES               => !$invalid_marc_record ? $biblio->get_marc_notes() : undef,
     itemdata_ccode          => $itemfields{ccode},
     itemdata_enumchron      => $itemfields{enumchron},
     itemdata_uri            => $itemfields{uri},
@@ -540,7 +545,7 @@ if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
     my $subfields = substr $fieldspec, 3;
     my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
     my @alternateholdingsinfo = ();
-    my @holdingsfields = $record->field(substr $fieldspec, 0, 3);
+    my @holdingsfields = $marc_record->field(substr $fieldspec, 0, 3);
 
     for my $field (@holdingsfields) {
         my %holding = ( holding => '' );
@@ -617,7 +622,7 @@ if ( C4::Context->preference("LocalCoverImages") == 1 ) {
 
 # HTML5 Media
 if ( (C4::Context->preference("HTML5MediaEnabled") eq 'both') or (C4::Context->preference("HTML5MediaEnabled") eq 'staff') ) {
-    $template->param( C4::HTML5Media->gethtml5media($record));
+    $template->param( C4::HTML5Media->gethtml5media($marc_record));
 }
 
 # Displaying tags
