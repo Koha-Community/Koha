@@ -134,6 +134,8 @@ if ( $patronid ) {
     $patron = Koha::Patrons->find( { cardnumber => $patronid } );
 }
 
+undef $jwt unless $patron;
+
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
