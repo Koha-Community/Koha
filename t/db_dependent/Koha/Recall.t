@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 27;
+use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -112,7 +113,7 @@ Koha::CirculationRules->set_rule({
 t::lib::Mocks::mock_preference( 'RecallsMaxPickUpDelay', 7 );
 my $expected_expirationdate = dt_from_string->add({ days => 7 });
 my $expirationdate = $recall2->calc_expirationdate;
-is( $expirationdate, $expected_expirationdate, "Expiration date calculated based on system preference as no circulation rules are set" );
+is( t::lib::Dates::compare( $expirationdate, $expected_expirationdate ), 0, "Expiration date calculated based on system preference as no circulation rules are set" );
 
 Koha::CirculationRules->set_rule({
     branchcode => undef,
@@ -123,7 +124,7 @@ Koha::CirculationRules->set_rule({
 });
 $expected_expirationdate = dt_from_string->add({ days => 3 });
 $expirationdate = $recall2->calc_expirationdate;
-is( $expirationdate, $expected_expirationdate, "Expiration date calculated based on circulation rules" );
+is( t::lib::Dates::compare( $expirationdate, $expected_expirationdate ), 0, "Expiration date calculated based on circulation rules" );
 
 $recall2->set_waiting({ expirationdate => $expirationdate });
 is( $recall2->waiting, 1, "Recall is waiting" );

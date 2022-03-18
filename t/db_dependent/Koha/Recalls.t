@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 20;
+use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -136,8 +137,8 @@ is( $due_interval, 3, "Recall due date interval is based on circulation rules" )
 is( $recall->item_level_recall, 0, "No item provided so recall not flagged as item-level" );
 
 my $expected_due_date = dt_from_string->add( days => 3 );
-is( dt_from_string( $recall->checkout->date_due ), $expected_due_date, "Checkout due date has correctly been extended by recall_due_date_interval days" );
-is( $due_date, $expected_due_date, "Due date correctly returned" );
+is( t::lib::Dates::compare( $recall->checkout->date_due, $expected_due_date ), 0, "Checkout due date has correctly been extended by recall_due_date_interval days" );
+is( t::lib::Dates::compare( $due_date, $expected_due_date ), 0, "Due date correctly returned" );
 
 my $messages_count = Koha::Notice::Messages->search({ borrowernumber => $patron3->borrowernumber, letter_code => 'RETURN_RECALLED_ITEM' })->count;
 is( $messages_count, 3, "RETURN_RECALLED_ITEM notice successfully sent to checkout borrower" );
