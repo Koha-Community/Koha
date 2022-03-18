@@ -59,8 +59,6 @@ my $unauth_userid = $patron->userid;
 my $patron_id = $patron->borrowernumber;
 
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
-my $module = Test::MockModule->new('C4::Context');
-$module->mock('userenv', sub { { branch => $branchcode } });
 
 $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id" )
   ->status_is(200)
