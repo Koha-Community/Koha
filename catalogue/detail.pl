@@ -464,7 +464,7 @@ $template->param(
 );
 
 $template->param(
-    MARCNOTES   => $marc_record ? $biblio->get_marc_notes({ marcflavour => $marcflavour }) : (),
+    MARCNOTES   => $marc_record ? $biblio->get_marc_notes({ marcflavour => $marcflavour }) : undef,
     itemdata_ccode      => $itemfields{ccode},
     itemdata_enumchron  => $itemfields{enumchron},
     itemdata_uri        => $itemfields{uri},
