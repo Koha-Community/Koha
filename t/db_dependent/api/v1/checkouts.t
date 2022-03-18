@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 93;
+use Test::More tests => 98;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -186,6 +186,12 @@ $t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/r
   ->status_is(201)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) )
   ->header_is(Location => "/api/v1/checkouts/" . $issue1->issue_id . "/renewal");
+
+$t->get_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewals" )
+  ->status_is(200)
+  ->json_is('/0/checkout_id' => $issue1->issue_id)
+  ->json_is('/0/interface'   => 'api')
+  ->json_is('/0/renewer_id'  => $librarian->borrowernumber );
 
 $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id . "/renewal" )
   ->status_is(403)
