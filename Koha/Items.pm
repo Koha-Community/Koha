@@ -127,7 +127,7 @@ sub filter_by_visible_in_opac {
 
         my $rules_params;
         foreach my $field ( keys %$rules ) {
-            $rules_params->{$field} =
+            $rules_params->{'me.'.$field} =
               [ { '-not_in' => $rules->{$field} }, undef ];
         }
 
