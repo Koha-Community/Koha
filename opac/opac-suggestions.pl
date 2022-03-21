@@ -192,6 +192,17 @@ if ( $op eq "add_confirm" ) {
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
         $suggestion->{STATUS} = 'ASKED';
+        if ( $biblionumber ) {
+            my $biblio = Koha::Biblios->find($biblionumber);
+            $suggestion->{biblionumber} = $biblio->biblionumber;
+            $suggestion->{title} = $biblio->title;
+            $suggestion->{author} = $biblio->author;
+            $suggestion->{copyrightdate} = $biblio->copyrightdate;
+            $suggestion->{isbn} = $biblio->biblioitem->isbn;
+            $suggestion->{publishercode} = $biblio->biblioitem->publishercode;
+            $suggestion->{collectiontitle} = $biblio->biblioitem->collectiontitle;
+            $suggestion->{place} = $biblio->biblioitem->place;
+        }
 
         &NewSuggestion($suggestion);
         $patrons_pending_suggestions_count++;
