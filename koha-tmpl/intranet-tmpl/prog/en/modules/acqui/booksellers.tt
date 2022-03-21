@@ -57,11 +57,11 @@
             [% END %]
         </select>
         </p>
-    [% END %]
-    [% IF ( allbaskets ) %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]">Show active baskets only</a>
-    [% ELSE %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;allbaskets=1">Show all baskets</a>
+        [% IF ( allbaskets ) %]
+            <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]">Show active baskets only</a>
+        [% ELSE %]
+            <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;allbaskets=1">Show all baskets</a>
+        [% END %]
     [% END %]
     [% UNLESS booksellerid %]
         | <a href="#" id="show_active_vendors">Show active vendors only</a><a href="#" id="show_all_vendors">Show all vendors</a>
@@ -73,25 +73,49 @@
             [% ELSE %]
                 <div class="supplier inactive">
             [% END %]
-                <span class="suppliername">
-                    [% IF (supplier.name) %]
-                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">[% supplier.name | html %]</a>
+                [% IF ( supplier.active ) %]
+                    <h2 class="suppliername">
+                [% ELSE %]
+                    <h2 class="suppliername inactive">
+                [% END %]
+                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">
+                            [% IF (supplier.name) %]
+                                [% supplier.name | html %]
+                            [% ELSE %]
+                                NO NAME
+                            [% END %]
+                        </a>
+                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]"></a>
+                    [% IF ( !supplier.active ) %]<span class="vendor_inactive">(inactive)</span>[% END %]
+                </h2>
+                <span class="basketcounts">
+                    [% IF ( count > 1 ) %]
+                        <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% supplier.booksellerid | uri %]">[% supplier.basketcount | html %] [% tn('basket', 'baskets', supplier.basketcount) | $raw %]</a>,
                     [% ELSE %]
-                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">NO NAME</a>
+                        [% supplier.basketcount | html %] [% tn('basket', 'baskets', supplier.basketcount) | $raw %],
+                    [% END %]
+                    [% IF supplier.subscriptioncount > 0 %]
+                        <a href="/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=[% supplier.name | uri %]&searched=1">
+                            [% supplier.subscriptioncount | html %] [% tn('subscription', 'subscriptions', supplier.subscriptioncount) | $raw %]
+                        </a>
+                    [% ELSE %]
+                        [% supplier.subscriptioncount | html %] [% tn('subscription', 'subscriptions', supplier.subscriptioncount) | $raw %]
                     [% END %]
                 </span>
-                <span class="action">
-                    [% IF ( CAN_user_acquisition_order_manage ) %]
-                        [% IF ( supplier.active ) %]
-                            <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid | uri %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
-                        [% ELSE %]
-                            (inactive)
-                        [% END %]
+                [% IF ( count == 1 ) %]
+                    [% IF ( supplier.basketcount > 0 ) %]
+                        <div>
+                            [% IF ( allbaskets ) %]
+                                <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier.booksellerid | uri %]&amp;booksellerid=[% booksellerid | uri %]">Show active baskets only</a>
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier.booksellerid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;allbaskets=1">Show all baskets</a>
+                            [% END %]
+                        </div>
                     [% END %]
-                        [% IF ( supplier.loop_basket.size ) %]
-                    <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid | uri %]"><i class="fa fa-inbox"></i> Receive shipment</a>
-                        [% END %]
-                </span>
+                [% ELSE %]
+                    [% INCLUDE "acquisitions-toolbar.inc" booksellerid=supplier.booksellerid active=supplier.active basketcount=supplier.loop_basket.size basketcount=supplier.basketcount subscriptioncount=supplier.subscriptioncount %]
+                [% END %]
+
                 <div class="baskets">
                     [% IF ( supplier.loop_basket.size ) %]
                         <table class="baskets">
@@ -195,7 +219,13 @@
                         </table>
 
                     [% ELSE %]
-                        <p>No pending baskets</p>
+                        <p>
+                            No pending baskets.
+                            [% IF ( supplier.basketcount > 0 && count > 1 ) %]
+                                <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=1&booksellerid=[% supplier.booksellerid | uri %]&allbaskets=1">View all baskets</a>.
+                            [% END %]
+                        </p>
+
                     [% END %][%# IF ( supplier.loop_basket.size ) %]
                 </div>
             </div>

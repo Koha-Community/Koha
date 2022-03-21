@@ -92,6 +92,7 @@ if ( $supplier_count == 1 ) {
         supplier_name => $suppliers[0]->name,
         booksellerid  => $suppliers[0]->id,
         basketcount   => $suppliers[0]->baskets->count,
+        subscriptionscount => $suppliers[0]->subscriptions->count,
         active        => $suppliers[0]->active,
     );
 }
@@ -149,6 +150,8 @@ for my $vendor (@suppliers) {
         booksellerid  => $vendor->id,
         name        => $vendor->name,
         active      => $vendor->active,
+        basketcount   => $vendor->baskets->count,
+        subscriptioncount => $vendor->subscriptions->count,
       };
 
 }

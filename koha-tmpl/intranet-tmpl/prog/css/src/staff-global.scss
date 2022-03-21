@@ -2714,28 +2714,23 @@ td {
 }
 
 #acqui_order_supplierlist {
-    > div {
-        &.supplier {
-            border: 1px solid #EEEEEE;
-            margin: .5em;
-            padding: 1em;
+    .supplier {
+        &+.supplier {
+            border-top: 1px solid #EEEEEE;
+            margin-top: 1em;
         }
+    }
 
-        > div {
-            > .baskets {
-                margin-top: .5em;
-            }
-        }
+    .suppliername {
+        display: inline-block;
+        margin: .5em 1em .5em 0;
 
-        > span {
-            &.action {
-                margin-left: 5em;
-            }
+        &.inactive {
+            color: #888;
 
-            &.suppliername {
-                display: inline;
-                font-size: 1.7em;
-                margin-bottom: .5em;
+            a:link,
+            a:visited {
+                color: #888;
             }
         }
     }

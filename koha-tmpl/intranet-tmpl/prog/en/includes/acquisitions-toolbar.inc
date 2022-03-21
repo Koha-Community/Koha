@@ -1,12 +1,5 @@
 [% INCLUDE 'blocking_errors.inc' %]
 <!-- acquisitions-toolbar.inc -->
-<script>
-    function confirm_deletion() {
-        if (confirm(_("Are you sure you want to delete this vendor?"))) {
-            window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&op=delete";
-        }
-    }
-</script>
 <div id="toolbar" class="btn-toolbar">
     [% IF ( booksellerid ) %]
         <div class="btn-group">
@@ -26,12 +19,20 @@
         </ul>
         </div>
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
-                <div class="btn-group"><a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&amp;op=enter"><i class="fa fa-pencil"></i> Edit vendor</a></div>
+                <div class="btn-group">
+                    <a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&amp;op=enter"><i class="fa fa-pencil"></i> Edit vendor</a>
+                </div>
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
-                    <div class="btn-group"><a class="btn btn-default" id="deletesupplier" href="javascript:confirm_deletion()"><i class="fa fa-trash"></i> Delete vendor</a></div>
+                    <div class="btn-group">
+                        <form action="/cgi-bin/koha/acqui/supplier.pl" method="post">
+                            <input type="hidden" name="op" value="delete" />
+                            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                            <button class="btn btn-default" id="deletesupplier" type="submit"><i class="fa fa-trash"></i> Delete vendor</button>
+                        </form>
+                    </div>
                 [% END %]
             [% END %]
-            [% IF CAN_user_acquisition_order_receive && basketcount %]
+            [% IF CAN_user_acquisition_order_receive && basketcount && active %]
                 <div class="btn-group"><a class="btn btn-default" id="receive" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | html %]"><i class="fa fa-inbox"></i> Receive shipments</a></div>
             [% END %]
         [% ELSE %]

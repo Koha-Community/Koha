@@ -166,6 +166,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {

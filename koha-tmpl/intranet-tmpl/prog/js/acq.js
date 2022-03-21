@@ -1,3 +1,6 @@
+/* global confirmDelete */
+/* exported uncheckbox isNotNull isNull isNum log calcTotalRow autoFillRow messenger updateCosts calcNewsuggTotal getAuthValueDropbox totalExceedsBudget budgetExceedsParent checkBudgetParent hideColumn showColumn showAllColumns hideAllColumns */
+
 //=======================================================================
 //input validation:
 // acqui/uncertainprice.tmpl uses this
@@ -380,3 +383,9 @@ function hideAllColumns(){
     $("#plan td:nth-child(2),#plan th:nth-child(2)").nextUntil("th:nth-child("+(allCols-1)+"),td:nth-child("+(allCols-1)+")").hide(); // hide all but the last two columns
     $("#hideall").prop("checked", true).parent().addClass("selected");
 }
+
+$(document).ready(function(){
+    $("#deletesupplier").on("click", function(){
+        confirmDelete(__("Are you sure you want to delete this vendor?") );
+    });
+});

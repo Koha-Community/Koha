@@ -89,8 +89,8 @@ if ( $op eq 'display' ) {
     );
 } elsif ( $op eq 'delete' ) {
     # no further message needed for the user
-    # the DELETE button only appears in the template if basketcount == 0
-    if ( $supplier->baskets->count == 0 ) {
+    # the DELETE button only appears in the template if basketcount == 0 AND subscriptioncount == 0
+    if ( $supplier->baskets->count == 0 && $supplier->subscriptions->count == 0) {
         Koha::Acquisition::Booksellers->find($booksellerid)->delete;
     }
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
