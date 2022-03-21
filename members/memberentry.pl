@@ -823,7 +823,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 
 $template->param( borrower_data => \%data );
 $template->param( "show_guarantor" => $categorycode ? Koha::Patron::Categories->find($categorycode)->canbeguarantee : 1); # associate with step to know where you are
-$debug and warn "memberentry step: $step";
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
 $template->param(  step  => $step   ) if $step;	# associate with step to know where u are
 
@@ -831,7 +830,7 @@ $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   category_type => $category_type,#to know the category type of the borrower
   "$category_type"  => 1,# associate with step to know where u are
-  destination   => $destination,#to know wher u come from and wher u must go in redirect
+  destination   => $destination,#to know where u come from and where u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
