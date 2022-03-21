@@ -43,19 +43,25 @@ function startup() {
     camera = document.getElementById("camera");
     uploadfiletext = document.getElementById("uploadfiletext");
 
-    navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false
-    })
-        .then(function (stream) {
-            video.srcObject = stream;
-            video.play();
+    try {
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
         })
-        .catch(function (err) {
-            $("#capture-patron-image").hide();
-            $("#camera-error").css("display", "flex");
-            $("#camera-error-message").text( showMediaErrors( err ) );
-        });
+            .then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(function (err) {
+                $("#capture-patron-image").hide();
+                $("#camera-error").css("display", "flex");
+                $("#camera-error-message").text( showMediaErrors( err ) );
+            });
+    } catch(err) {
+        $("#capture-patron-image").hide();
+        $("#camera-error").css("display", "flex");
+        $("#camera-error-message").text( showMediaErrors( err ) );
+    }
 
     video.addEventListener('canplay', function () {
         if (!streaming) {
@@ -107,6 +113,9 @@ function showMediaErrors( err ){
     case "NotAllowedError":
     case "PermissionDeniedError":
         output = __("Access to camera denied.");
+        break;
+    case "TypeError":
+        output = __("This feature is available only in secure contexts (HTTPS).");
         break;
     default:
         output = __("An unknown error occurred: ") + err;
