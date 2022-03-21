@@ -99,19 +99,8 @@ $(document).ready(function(){
         var borrowernumber = $(this).data("borrowernumber");
         var cardnumber = $(this).data("cardnumber");
         var modalTitle = $(this).attr("title");
-        $.ajax({
-            url: "/cgi-bin/koha/members/moremember-patronimage.pl",
-            type: "GET",
-            data: { borrowernumber: borrowernumber, cardnumber: cardnumber },
-            success: function ( data ) {
-                $("#patronImageEdit .modal-body").html( data );
-                $("#patronImageEdit .modal-title").text(modalTitle);
-                $("#patronImageEdit").modal("show");
-            },
-            error: function () {
-                location.href="/cgi-bin/koha/members/moremember-patronimage.pl?borrowernumber=" + borrowernumber;
-            }
-        });
+        $("#patronImageEdit .modal-title").text(modalTitle);
+        $("#patronImageEdit").modal("show");
         $("#patronImageEdit").on("hidden.bs.modal", function(){
             /* Stop using the user's camera when modal is closed */
             let viewfinder = document.getElementById("viewfinder");
