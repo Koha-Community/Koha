@@ -22,6 +22,7 @@ use C4::Log qw( cronlogaction );
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
 use Koha::Util::OpenDocument qw( generate_ods );
+use Koha::SMTP::Servers;
 
 my (
     $help,
@@ -132,13 +133,19 @@ if ( @emails ) {
         csv  => $csv_filenames,
         ods  => $ods_filenames,
     };
+
+    my $transport = Koha::SMTP::Servers->get_default->transport;
+
     for my $email ( @emails ) {
-        send_files({
-            directory => $output_directory,
-            files => $files,
-            to => $email,
-            from => C4::Context->preference('KohaAdminEmailAddress'), # Should be replaced if bug 8000 is pushed
-        });
+        send_files(
+            {
+                directory => $output_directory,
+                files     => $files,
+                from      => C4::Context->preference('KohaAdminEmailAddress'),    # Should be replaced if bug 8000 is pushed
+                to        => $email,
+                transport => $transport,
+            }
+        );
     }
 }
 
@@ -282,10 +289,12 @@ sub _generate_ods {
 sub send_files {
     my ( $params ) = @_;
     my $directory = $params->{directory};
-    my $files = $params->{files};
-    my $to = $params->{to};
-    my $from = $params->{from};
-    return unless $to and $from;
+    my $files     = $params->{files};
+    my $to        = $params->{to};
+    my $from      = $params->{from};
+    my $transport = $params->{transport};
+
+    return unless $to and $from and $transport;
 
     my $email = Koha::Email->create(
         {
@@ -320,7 +329,8 @@ sub send_files {
         }
     }
 
-    $email->send_or_die;
+    $email->send_or_die( { transport => $transport } );
+
 }
 
 =head1 NAME
