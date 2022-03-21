@@ -440,7 +440,7 @@
                         'data': aoData,
                         'success': function(json){
                             // redirect if there is only 1 result.
-                            if ( json.aaData.length == 1 && aoData.iDisplayStart == 0 ) {
+                            if ( json.iTotalDisplayRecords == 1 ) {
                                 var borrowernumber = json.aaData[0].borrowernumber;
                                 /* Overwrite history state of firstletter search since only one result was returned; This prevents a loop upon clicking back */
                                 history.replaceState( {}, null, window.location.href.split("?" )[0]);
