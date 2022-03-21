@@ -78,7 +78,10 @@
                                 <fieldset class="rows">
                                     <ol>
                                         <li>
-                                            [% IF ( title_required ) %]
+                                            [% IF biblionumber %]
+                                                <label>Title:</label>
+                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">[% title | html %]</a>
+                                            [% ELSIF ( title_required ) %]
                                                 <label for="title" class="required">Title:</label>
                                                 <input type="text" id="title" name="title" class="span6" maxlength="255" value="[% title | html %]" required="required" />
                                                 <span class="required">Required</span>
@@ -89,7 +92,10 @@
                                         </li>
                                         [% UNLESS ( author_hidden ) %]
                                             <li>
-                                                    [% IF ( author_required ) %]
+                                                    [% IF biblionumber %]
+                                                        <label>Author:</label>
+                                                        <span>[% author | html %]</span>
+                                                    [% ELSIF ( author_required ) %]
                                                         <label for="author" class="required">Author:</label>
                                                         <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" required="required" />
                                                         <span class="required">Required</span>
@@ -115,7 +121,10 @@
                                         [% END %]
                                         [% UNLESS ( isbn_hidden )%]
                                             <li>
-                                                [% IF ( isbn_required ) %]
+                                                [% IF biblionumber %]
+                                                    <label>Standard number (ISBN, ISSN or other):</label>
+                                                    <span>[% isbn | html %]</span>
+                                                [% ELSIF ( isbn_required ) %]
                                                     <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
                                                     <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" required="required" />
                                                     <span class="required">Required</span>
@@ -127,7 +136,10 @@
                                         [% END %]
                                         [% UNLESS ( publishercode_hidden ) %]
                                             <li>
-                                                [% IF ( publishercode_required ) %]
+                                                [% IF biblionumber %]
+                                                    <label>Publisher:</label>
+                                                    <span>[% publishercode | html %]</span>
+                                                [% ELSIF ( publishercode_required ) %]
                                                     <label for="publishercode" class="required">Publisher:</label>
                                                     <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" required="required" />
                                                     <span class="required">Required</span>
@@ -139,7 +151,10 @@
                                         [% END %]
                                         [% UNLESS ( collectiontitle_hidden ) %]
                                             <li>
-                                                [% IF ( collectiontitle_required ) %]
+                                                [% IF biblionumber %]
+                                                    <label for="collectiontitle" class="required">Collection title:</label>
+                                                    <span>[% collectiontitle | html %]</span>
+                                                [% ELSIF ( collectiontitle_required ) %]
                                                     <label for="collectiontitle" class="required">Collection title:</label>
                                                     <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" required="required" />
                                                     <span class="required">Required</span>
@@ -151,7 +166,10 @@
                                         [% END %]
                                         [% UNLESS ( place_hidden ) %]
                                             <li>
-                                                [% IF ( place_required ) %]
+                                                [% IF biblionumber %]
+                                                    <label for="place" class="required">Publication place:</label>
+                                                    <span>[% place | html %]</span>
+                                                [% ELSIF ( place_required ) %]
                                                     <label for="place" class="required">Publication place:</label>
                                                     <input type="text" id="place" name="place" required="required" maxlength="80" value="[% place | html %]" />
                                                     <span class="required">Required</span>
