@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 9;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
@@ -77,5 +77,14 @@ ok(length($scr) > 0, 'hbyymmincr javascript');
 is($nextnum, '2012-0035', 'annual barcode');
 is($scr, undef, 'annual javascript');
 
-$schema->storage->txn_rollback;
+$dbh->do(q|DELETE FROM items|);
+my $item_5 = $builder->build_sample_item(
+    {
+        barcode => '978e0143019375'
+    }
+);
+($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
+is($nextnum, '979', 'incremental barcode');
+is($scr, undef, 'incremental javascript');
 
+$schema->storage->txn_rollback;
