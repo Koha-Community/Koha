@@ -156,7 +156,7 @@ unless ( $enddate ) {
 # building query parameters
 my %where = (
     'me.found' => undef,
-    'me.priority' => 1,
+    'me.priority' => { '!=' => 0 },
     'me.suspend' => 0,
     'itembib.itemlost' => 0,
     'itembib.withdrawn' => 0,
@@ -188,7 +188,7 @@ if ( C4::Context->preference('IndependentBranches') ){
 # get all distinct unfulfilled reserves
 my $holds = Koha::Holds->search(
     { %where },
-    { join => 'itembib', distinct  => 1, columns => qw[me.biblionumber] }
+    { join => 'itembib', distinct => 1, columns => qw[me.biblionumber] }
 );
 my @biblionumbers = $holds->get_column('biblionumber');
 
@@ -202,7 +202,7 @@ if ( $holds->count ) {
 # patrons count per biblio
 my $patrons_count = {
     map { $_->{biblionumber} => $_->{patrons_count} } @{ Koha::Holds->search(
-            {},
+            { 'suspend' => 0 },
             {
                 select   => [ 'biblionumber', { count => { distinct => 'borrowernumber' } } ],
                 as       => [qw( biblionumber patrons_count )],
@@ -235,7 +235,11 @@ my $all_holds = {
 
 # make final holds_info array and fill with info
 my @holds_info;
+my $seen = {};
 foreach my $bibnum ( @biblionumbers ){
+    # Skip this record if it's already been handled
+    next if $seen->{$bibnum};
+    $seen->{$bibnum} = 1;
 
     my $hold_info;
     my $items = $all_items->{$bibnum};
