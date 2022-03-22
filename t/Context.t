@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -61,6 +61,23 @@ subtest 'needs_install() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'Version', undef ); # the behaviour when ->preference fails to fetch
     is( C4::Context->needs_install, 1, "->preference(Version) is not defined, need to install" );
+};
+
+subtest 'csv_delimiter() tests' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', undef );
+    is( C4::Context->csv_delimiter, ';', "csv_delimiter returns semicolon if system preference CSVDelimiter is undefined" );
+
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', '' );
+    is( C4::Context->csv_delimiter, ';', "csv_delimiter returns semicolon if system preference CSVDelimiter is empty string" );
+
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', ',' );
+    is( C4::Context->csv_delimiter, ',', "csv_delimiter returns comma if system preference CSVDelimiter is comma" );
+
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', 'tabulation' );
+    is( C4::Context->csv_delimiter, "\t", "csv_delimiter returns '\t' if system preference CSVDelimiter is tabulation" );
 };
 
 my $context = Test::MockModule->new('C4::Context');
