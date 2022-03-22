@@ -119,7 +119,8 @@ sub create_input {
     my $applydefaults = C4::Context->preference('ApplyFrameworkDefaults');
     if ( $value eq '' && (
         ( $applydefaults =~ /new/ && !$cgi->param('authid') ) ||
-        ( $applydefaults =~ /duplicate/ && $cgi->param('op') eq 'duplicate' )
+        ( $applydefaults =~ /duplicate/ && $cgi->param('op') eq 'duplicate' ) ||
+        ( $applydefaults =~ /imported/ && $cgi->param('breedingid') )
     ) ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
         if (!defined $value) {
