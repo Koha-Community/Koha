@@ -11,13 +11,14 @@ return {
             SELECT value FROM systempreferences WHERE variable='OPACMySummaryNote';
         |);
         if( $opacmysummarynote ){
-            # Insert any values found from system preference into additional_contents
-            foreach my $lang ( 'default' ) {
-                $dbh->do( "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacMySummaryNote', 'OpacMySummaryNote', NULL, ?, ?, ?, CAST(NOW() AS date) )", undef, "OpacMySummaryNote $lang", $opacmysummarynote, $lang );
-            }
+            $dbh->do(q{
+                INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on )
+                VALUES ('html_customizations', 'OpacMySummaryNote', 'OpacMySummaryNote', NULL, ?, ?, ?, CAST(NOW() AS date) )
+            }, undef, "OpacMySummaryNote default", $opacmysummarynote, 'default');
             # Remove old system preference
-            $dbh->do("DELETE FROM systempreferences WHERE variable='OPACMySummaryNote'");
-            say $out "Bug 24221 update done";
+            $dbh->do(q{
+                DELETE FROM systempreferences WHERE variable='OPACMySummaryNote'
+            });
         }
     }
 }
