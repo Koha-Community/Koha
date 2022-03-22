@@ -71,13 +71,8 @@ function confirm_items_deletion() {
             return false;
         }
     } else {
-        alertNoItems();
         return false;
     }
-}
-
-function alertNoItems(){
-    alert( __("This record has no items.") );
 }
 
 /* END IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) */
