@@ -285,19 +285,21 @@ sub GetMandatoryFieldZ3950 {
 
 sub create_input {
     my ( $tag, $subfield, $value, $index_tag, $rec, $authorised_values_sth,$cgi ) = @_;
-    
+
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
     # Apply optional framework default value when it is a new record,
     # or when editing as new (duplicating a record),
     # or when changing a record's framework,
+    # or when importing a record,
     # based on the ApplyFrameworkDefaults setting.
     # Substitute date parts, user name
     my $applydefaults = C4::Context->preference('ApplyFrameworkDefaults');
     if ( $value eq '' && (
         ( $applydefaults =~ /new/ && !$cgi->param('biblionumber') ) ||
         ( $applydefaults =~ /duplicate/ && $cgi->param('op') eq 'duplicate' ) ||
-        ( $applydefaults =~ /changed/ && $cgi->param('changed_framework') )
+        ( $applydefaults =~ /changed/ && $cgi->param('changed_framework') ) ||
+        ( $applydefaults =~ /imported/ && $cgi->param('breedingid') )
     ) ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} // q{};
 
