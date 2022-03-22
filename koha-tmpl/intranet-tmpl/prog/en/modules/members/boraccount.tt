@@ -50,10 +50,10 @@
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-    <li class="active"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
-    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
-    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
+    <li class="active transactions"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
+    <li class="makepayment"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
+    <li class="manualinvoice"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
+    <li class="manualcredit"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 [% INCLUDE 'renew_results.inc' renew_results=renew_results %]
