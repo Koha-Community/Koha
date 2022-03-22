@@ -120,7 +120,7 @@
                     <th>Basket group</th>
                     <th>Order line</th>
                     <th>Summary</th>
-                    <th>More</th>
+                    <th>View</th>
                     <th>Replacement price</th>
                     <th>Quantity</th>
                     <th>Unit cost</th>
@@ -297,22 +297,22 @@
     [% ELSE %]There are no received orders.[% END %]
 </div>
 
-<div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="dataPreviewLabel">MARC preview</h3>
-    </div>
-    <div class="modal-body">
-        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-    </div>
-    </div>
-    </div>
-</div>
+<div class="modal" id="dataPreview" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel">
+    <div class="modal-dialog modal-wide" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 id="dataPreviewLabel">MARC previews</h3>
+            </div>
+            <div class="modal-body">
+                <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
 
 [% IF (invoiceclosedate) %]
     <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | uri %]">View invoice</a>
@@ -342,7 +342,6 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
-    <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
     <script>
         dt_overwrite_html_sorting_localeCompare();
         var columns_filter = {};
@@ -518,9 +517,17 @@
                     {
                         "data": "",
                         "render": function(data, type, row, meta) {
-                            var result = '<a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">' + _("Order") + '</a><br>'
-                                + '<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a><br>'
-                                + '<a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a>';
+                            var result = '<div class="btn-group dropup">';
+                            result += '<button id="view' + row.order_id + '" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                                result += ' <i class="fa fa-eye" aria-hidden="true"></i> ' + _("View");
+                                result += ' <span class="caret"></span> ';
+                            result += '</button>';
+                            result += '<ul class="dropdown-menu" aria-labelledby="view' + row.order_id + '">';
+                                result += '<li><a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">' + _("Order") + '</a></li>';
+                                result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a></li>';
+                                result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a></li>';
+                            result += '</ul>';
+                            result += '</div>';
                             return result;
                         },
                         "orderable": false,
@@ -641,7 +648,7 @@
                 var page = $(this).attr("href");
                 $("#dataPreviewLabel").text(ltitle);
                 $("#dataPreview .modal-body").load(page + " div");
-                $('#dataPreview').modal({show:true});
+                $('#dataPreview').modal("show");
             });
 
             $("#dataPreview").on("hidden.bs.modal", function(){
