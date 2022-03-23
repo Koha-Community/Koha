@@ -14,29 +14,49 @@
     [% END %]
 
     [% IF ( showsql || execute || editsql || save_successful ) %]
-        [% IF ( CAN_user_reports_create_reports ) %]
-            [% UNLESS ( editsql ) # Do not show edit button on edit page %]
-                <div class="btn-group">
-                    <a id="editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Edit%20SQL">
-                        <i class="fa fa-pencil"></i> Edit
-                    </a>
-                </div>
-            [% END %]
-            <div class="btn-group">
-                <a class="btn btn-default" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% id | uri %]">
-                    <i class="fa fa-copy"></i> Duplicate
-                </a>
-            </div>
-        [% END %]
-
-        [% IF ( CAN_user_reports_delete_reports ) %]
+        [% IF ( CAN_user_reports_delete_reports && !CAN_user_reports_create_reports ) %]
             <div class="btn-group">
                 <a class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
                     <i class="fa fa-trash"></i> Delete
                 </a>
             </div>
-        [% END %]
+        [% ELSE %]
+            [% IF ( CAN_user_reports_create_reports || CAN_user_reports_delete_reports ) %]
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        [% IF ( CAN_user_reports_create_reports ) %]
+                            [% UNLESS ( editsql ) # Do not show edit button on edit page %]
+                                <li>
+                                    <a id="editreport" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Edit%20SQL">
+                                        Edit
+                                    </a>
+                                </li>
+                            [% END %]
+                            <li>
+                                <a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% id | uri %]">
+                                    Duplicate
+                                </a>
+                            </li>
+                        [% END %]
 
+                        [% IF ( CAN_user_reports_delete_reports ) %]
+                            <li>
+                                <a class="delete" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
+                                    Delete
+                                </a>
+                            </li>
+                        [% END %]
+                    </ul>
+                </div>
+            [% END %]
+        [% END %]
+    [% END %]
+
+    [% IF ( showsql || execute || editsql || save_successful ) %]
         [% UNLESS ( errors ) # Unless there are errors saving a report %]
             <div class="btn-group">
                 <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report">
@@ -103,10 +123,9 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <a class="btn btn-default toggle_sql" id="toggle_sql_hid" href="#"><i class="fa fa-eye"></i> Show SQL code</a>
-            </div>
-            <div class="btn-group">
-                <a class="btn btn-default toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide SQL code</a>
+                <button type="button" id="toggle_sql" class="btn btn-default toggle_sql" data-complete-text="<i class='fa fa-eye-slash'></i> [% t('Hide SQL code') | html %]" data-toggle="button" aria-pressed="false" autocomplete="off">
+                    <i class="fa fa-eye"></i> Show SQL code
+                </button>
             </div>
             <div class="btn-group">
                 [% IF allresults.size %]
