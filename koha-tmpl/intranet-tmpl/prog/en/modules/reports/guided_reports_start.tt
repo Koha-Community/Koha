@@ -5,6 +5,7 @@
 [% USE Koha %]
 [% USE TablesSettings %]
 [% USE JSON.Escape %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 
 [%- BLOCK area_name -%]
@@ -1885,10 +1886,14 @@
                 });
             [% END %]
 
-            $(".toggle_sql").click(function(){
-                $("#sql_output").toggle();
-                $("#toggle_sql_hid").toggle();
-                $("#toggle_sql_vis").toggle();
+            $("#toggle_sql").click(function(){
+                var sql_output = $("#sql_output");
+                sql_output.toggle();
+                if( sql_output.is(":visible") ){
+                    $(this).button('complete');
+                } else {
+                    $(this).button('reset');
+                }
                 if( !showsql ){
                     showsql = CodeMirror.fromTextArea(sql, {
                         lineNumbers: false,
