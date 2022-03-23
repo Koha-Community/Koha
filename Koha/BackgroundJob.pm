@@ -98,7 +98,7 @@ sub enqueue {
     my $job_size = $params->{job_size};
     my $job_args = $params->{job_args};
 
-    my $borrowernumber = C4::Context->userenv->{number}; # FIXME Handle non GUI calls
+    my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
     my $json_args = encode_json $job_args;
 
     $self->set(
