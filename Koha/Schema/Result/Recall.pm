@@ -79,8 +79,6 @@ __PACKAGE__->table("recalls");
   extra: {list => ["requested","overdue","waiting","in_transit","cancelled","expired","fulfilled"]}
   is_nullable: 1
 
-Request status
-
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -110,7 +108,7 @@ Request status
 
   data_type: 'tinyint'
   default_value: 0
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 item_level_recall
 
@@ -194,7 +192,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "old",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "item_level_recall",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -284,8 +282,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-15 06:51:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nG6sAMWzjgfD+r6aUsITzA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-23 19:53:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6DbEjtt5g6QY6VuCqrMleg
 
 __PACKAGE__->add_columns(
     '+old' => { is_boolean => 1 },
