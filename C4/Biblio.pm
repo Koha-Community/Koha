@@ -106,6 +106,7 @@ use Koha::Logger;
 use Koha::Caches;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblio::Metadatas;
 use Koha::Holds;
 use Koha::ItemTypes;
@@ -428,6 +429,12 @@ sub ModBiblio {
         C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
     }
 
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $biblionumber ]
+        }
+    );
+
     return 1;
 }
 
@@ -490,7 +497,8 @@ sub DelBiblio {
     # We delete any existing holds
     my $holds = $biblio->holds;
     while ( my $hold = $holds->next ) {
-        $hold->cancel;
+        # no need to update the holds queue on each step, we'll do it at the end
+        $hold->cancel({ skip_holds_queue => 1 });
     }
 
     unless ( $params->{skip_record_index} ){
@@ -518,6 +526,12 @@ sub DelBiblio {
     _after_biblio_action_hooks({ action => 'delete', biblio_id => $biblionumber });
 
     logaction( "CATALOGUING", "DELETE", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
+
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $biblionumber ]
+        }
+    );
 
     return;
 }

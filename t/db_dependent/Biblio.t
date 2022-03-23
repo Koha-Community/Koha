@@ -251,6 +251,9 @@ sub run_tests {
     # roll back ES index changes.
     t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
 
+    my $bgj_mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $bgj_mock->mock( 'enqueue', undef );
+
     my $isbn = '0590353403';
     my $title = 'Foundation';
     my $subtitle1 = 'Research';
@@ -636,6 +639,9 @@ subtest 'IsMarcStructureInternal' => sub {
 subtest 'deletedbiblio_metadata' => sub {
     plan tests => 2;
 
+    my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $mock->mock( 'enqueue', undef );
+
     my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
     my $biblio_metadata = C4::Biblio::GetXmlBiblio( $biblionumber );
     C4::Biblio::DelBiblio( $biblionumber );
@@ -646,7 +652,11 @@ subtest 'deletedbiblio_metadata' => sub {
 };
 
 subtest 'DelBiblio' => sub {
-    plan tests => 5;
+
+    plan tests => 6;
+
+    my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $mock->mock( 'enqueue', undef );
 
     my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio(MARC::Record->new, '');
     my $deleted = C4::Biblio::DelBiblio( $biblionumber );
@@ -684,6 +694,39 @@ subtest 'DelBiblio' => sub {
     is( $subscription->get_from_storage, undef, 'subscription should be deleted on biblio deletion' );
     is( $serial->get_from_storage, undef, 'serial should be deleted on biblio deletion' );
     is( $subscription_history->get_from_storage, undef, 'subscription history should be deleted on biblio deletion' );
+
+    subtest 'holds_queue update tests' => sub {
+
+        plan tests => 1;
+
+        $schema->storage->txn_begin;
+
+        my $biblio = $builder->build_sample_biblio;
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock( 'enqueue', sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                '->cancel triggers a holds queue update for the related biblio'
+            );
+        } );
+
+        # add a hold
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        );
+
+        C4::Biblio::DelBiblio( $biblio->id );
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'MarcFieldForCreatorAndModifier' => sub {
