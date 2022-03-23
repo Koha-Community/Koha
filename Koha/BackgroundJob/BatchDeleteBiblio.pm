@@ -108,7 +108,7 @@ sub process {
         my $items = Koha::Items->search({ biblionumber => $biblionumber });
         while ( my $item = $items->next ) {
             my $deleted = $item->safe_delete;
-            if( $deleted ) {
+            unless ( $deleted ) {
                 push @messages, {
                     type => 'error',
                     code => 'item_not_deleted',
