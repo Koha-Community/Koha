@@ -30,6 +30,7 @@ use C4::Reserves;
 use C4::ClassSource qw( GetClassSort );
 use C4::Log qw( logaction );
 
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::CoverImages;
@@ -212,6 +213,12 @@ sub store {
         unless $params->{skip_record_index};
     $self->get_from_storage->_after_item_action_hooks({ action => $action });
 
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $self->biblionumber ]
+        }
+    );
+
     return $result;
 }
 
@@ -236,6 +243,12 @@ sub delete {
 
     logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item" )
       if C4::Context->preference("CataloguingLog");
+
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $self->biblionumber ]
+        }
+    );
 
     return $result;
 }

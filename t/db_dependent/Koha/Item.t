@@ -22,6 +22,7 @@ use utf8;
 
 use Test::More tests => 15;
 use Test::Exception;
+use Test::MockModule;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
 use C4::Circulation qw( AddIssue AddReturn );
@@ -1170,7 +1171,7 @@ subtest 'columns_to_str' => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     subtest '_set_found_trigger() tests' => sub {
 
@@ -1220,6 +1221,33 @@ subtest 'store() tests' => sub {
         is( $message_2->type,    'info',        'type is correct' );
         is( $message_2->message, 'lost_charge', 'message is correct' );
         is( $message_2->payload, undef,         'no payload' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'holds_queue update tests' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $biblio = $builder->build_sample_biblio;
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock( 'enqueue', sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $biblio->id ],
+                '->store triggers a holds queue update for the related biblio'
+            );
+        } );
+
+        # new item
+        my $item = $builder->build_sample_item({ biblionumber => $biblio->id });
+
+        # updated item
+        $item->set({ reserves => 1 })->store;
 
         $schema->storage->txn_rollback;
     };
