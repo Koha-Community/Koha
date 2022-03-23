@@ -811,34 +811,18 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                     if ( $(this).data('filter') ) {
                         input_type = 'select'
                         let filter_type = $(this).data('filter');
-                        if ( filter_type == 'libraries' ) {
-                            var existing_search = table_dt.column(i).search();
-                            let select = $('<select><option value=""></option></select');
+                        var existing_search = table_dt.column(i).search();
+                        let select = $('<select><option value=""></option></select');
 
-                            $(libraries).each(function(){
-                                let o = $('<option value="%s">%s</option>'.format(this.branchcode, this.branchname));
-                                if ( existing_search == this.branchcode ) {
-                                    o.prop("selected", "selected");
-                                }
-                                o.appendTo(select);
-                            });
-                            $(this).html( select );
-                        } else if ( filter_type == 'categories' ) {
-                            var existing_search = table_dt.column(i).search();
-                            let select = $('<select><option value=""></option></select');
-
-                            $(categories).each(function(){
-                                let o = $('<option value="%s">%s</option>'.format(this.categorycode, this.description));
-                                if ( existing_search == this.categorycode ) {
-                                    o.prop("selected", "selected");
-                                }
-                                o.appendTo(select);
-                            });
-                            $(this).html( select );
-                        } else {
-                            console.log("Unknown filter " + filter_type);
-                            return;
-                        }
+                        // FIXME eval here is bad and dangerous, how do we workaround that?
+                        $(eval(filter_type)).each(function(){
+                            let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
+                            if ( existing_search == this._id ) {
+                                o.prop("selected", "selected");
+                            }
+                            o.appendTo(select);
+                        });
+                        $(this).html( select );
                     } else {
                         var title = $(this).text();
                         var existing_search = table_dt.column(i).search();

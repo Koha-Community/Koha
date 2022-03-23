@@ -209,14 +209,22 @@
         <script>console.log("Wrong call of patron_searh_js - missing redirect_url");</script>
     [% END %]
     <script>
-        let categories = [% To.json(categories) | $raw %];
-        let categories_map = categories.reduce((map, c) => {
-            map[c.categorycode] = c;
+        let categories = [% To.json(categories) | $raw %].map(e => {
+            e['_id'] = e.categorycode;
+            e['_str'] = e.description;
+            return e;
+        });
+        let categories_map = categories.reduce((map, e) => {
+            map[e._id] = e;
             return map;
         }, {});
-        let libraries  = [% To.json(libraries) | $raw %];
-        let libraries_map = libraries.reduce((map, l) => {
-            map[l.branchcode] = l;
+        let libraries  = [% To.json(libraries) | $raw %].map(e => {
+            e['_id'] = e.branchcode;
+            e['_str'] = e.branchname;
+            return e;
+        });
+        let libraries_map = libraries.reduce((map, e) => {
+            map[e._id] = e;
             return map;
         }, {});
 
