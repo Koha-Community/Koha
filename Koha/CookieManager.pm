@@ -24,7 +24,7 @@ use CGI::Cookie;
 
 use C4::Context;
 
-use constant ALLOW_LIST_VAR => 'removable_cookie';
+use constant DENY_LIST_VAR => 'do_not_remove_cookie';
 
 our $cookies;
 
@@ -40,15 +40,14 @@ Koha::CookieManager - Object for unified handling of cookies in Koha
     # Replace cookies
     $cookie_list = $mgr->replace_in_list( [ $cookie1, $cookie2_old ], $cookie2_new );
 
-    # Clear cookies (governed by koha-conf removable_cookie lines)
-    $cookie_list = $mgr->clear_if_allowed( $cookie1, $cookie2, $cookie3_name );
-
+    # Clear cookies (governed by deny list entries in koha-conf)
+    $cookie_list = $mgr->clear_unless( $cookie1, $cookie2, $cookie3_name );
 
 =head1 DESCRIPTION
 
-The current object allows you to clear cookies in a list based on the allow
-list in koha-conf.xml. It also offers a method to replace the old version of
-a cookie by a new one.
+The current object allows you to clear cookies in a list based on the deny list
+in koha-conf.xml. It also offers a method to replace the old version of a cookie
+by a new one.
 
 It could be extended by (gradually) routing cookie creation through it in order
 to consistently fill cookie parameters like httponly, secure and samesite flag,
@@ -65,28 +64,28 @@ etc. And could serve to register all our cookies in a central location.
 sub new {
     my ( $class, $params ) = @_;
     my $self = bless $params//{}, $class;
-    my $allowed = C4::Context->config(ALLOW_LIST_VAR) || []; # expecting scalar or arrayref
-    $allowed = [ $allowed ] if ref($allowed) eq q{};
-    $self->{_remove_allowed} = { map { $_ => 1 } @$allowed };
+    my $denied = C4::Context->config(DENY_LIST_VAR) || []; # expecting scalar or arrayref
+    $denied = [ $denied ] if ref($denied) eq q{};
+    $self->{_remove_unless} = { map { $_ => 1 } @$denied };
     $self->{_secure} = C4::Context->https_enabled;
     return $self;
 }
 
-=head2 clear_if_allowed
+=head2 clear_unless
 
-    $cookies = $self->clear_if_allowed( $query->cookie, @$cookies );
+    $cookies = $self->clear_unless( $query->cookie, @$cookies );
 
     Arguments: either cookie names or cookie objects (CGI::Cookie).
     Note: in the example above $query->cookie is a list of cookie names as returned
     by the CGI object.
 
     Returns an arrayref of cookie objects: empty, expired cookies for those passed
-    by name or object that are on the allow list, together with the remaining
-    (untouched) cookie objects not on that list.
+    by name or objects that are not on the deny list, together with the remaining
+    (untouched) cookie objects that are on the deny list.
 
 =cut
 
-sub clear_if_allowed {
+sub clear_unless {
     my ( $self, @cookies ) = @_;
     my @rv;
     my $seen = {};
@@ -101,8 +100,8 @@ sub clear_if_allowed {
             $name = $c;
         }
 
-        if( $self->{_remove_allowed}->{$name} ) {
-            next if $seen->{ $name };
+        if( !$self->{_remove_unless}->{$name} ) {
+            next if $seen->{$name};
             push @rv, CGI::Cookie->new(
                 # -expires explicitly omitted to create shortlived 'session' cookie
                 # -HttpOnly explicitly set to 0: not really needed here for the
@@ -110,9 +109,9 @@ sub clear_if_allowed {
                 -name => $name, -value => q{}, -HttpOnly => 0,
                 $self->{_secure} ? ( -secure => 1 ) : (),
             );
-            $seen->{ $name } = 1; # prevent duplicates
-        } elsif( $type eq 'CGI::Cookie' ) {
-            push @rv, $c;
+            $seen->{$name} = 1; # prevent duplicates
+        } elsif( $type eq 'CGI::Cookie' ) { # keep the last occurrence
+            @rv = @{ $self->replace_in_list( \@rv, $c ) };
         }
     }
     return \@rv;

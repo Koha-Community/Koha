@@ -30,59 +30,49 @@ use Koha::CookieManager;
 subtest 'new' => sub {
     plan tests => 3;
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::ALLOW_LIST_VAR, 'just_one' );
+    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, 'just_one' );
     my $cmgr = Koha::CookieManager->new;
-    is( scalar keys %{$cmgr->{_remove_allowed}}, 1, 'one entry' );
+    is( scalar keys %{$cmgr->{_remove_unless}}, 1, 'one entry' );
     is( exists $cmgr->{_secure}, 1, 'secure key found' );
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::ALLOW_LIST_VAR, [ 'two', 'entries' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'two', 'entries' ] );
     $cmgr = Koha::CookieManager->new;
-    is( scalar keys %{$cmgr->{_remove_allowed}}, 2, 'two entries' );
+    is( scalar keys %{$cmgr->{_remove_unless}}, 2, 'two entries' );
 };
 
-subtest 'clear_if_allowed' => sub {
-    plan tests => 13;
+subtest 'clear_unless' => sub {
+    plan tests => 15;
 
-    t::lib::Mocks::mock_config( Koha::CookieManager::ALLOW_LIST_VAR, [ 'aap', 'noot', 'mies' ] );
+    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'aap', 'noot' ] );
 
     my $q = CGI->new;
     my $cmgr = Koha::CookieManager->new;
 
-    my $cookie1 = $q->cookie(
-        -name => 'aap',
-        -value => 'aap',
-        -expires => '+1d',
-        -HttpOnly => 1,
-        -secure => 1,
-    );
-    my $cookie2 = $q->cookie(
-        -name => 'noot',
-        -value => 'noot',
-        -expires => '+1d',
-        -HttpOnly => 1,
-        -secure => 1,
-    );
+    my $cookie1 = $q->cookie( -name => 'aap', -value => 'aap', -expires => '+1d' );
+    my $cookie2 = $q->cookie( -name => 'noot', -value => 'noot' );
     my $cookie3 = $q->cookie( -name => 'wim', -value => q{wim}, -HttpOnly => 1 );
-    my $cookie4 = $q->cookie( -name => 'aap', -value => q{aap2} );
+    my $cookie4 = $q->cookie( -name => 'aap', -value => q{aap2}, -HttpOnly => 1 );
     my $list = [ $cookie1, $cookie2, $cookie3, $cookie4, 'mies', 'zus' ]; # 4 cookies, 2 names
 
     # No results expected
-    is( @{$cmgr->clear_if_allowed}, 0, 'Empty list' );
-    is( @{$cmgr->clear_if_allowed( 'scalar', [], $q )}, 0, 'Empty list for invalid arguments' );
+    is( @{$cmgr->clear_unless}, 0, 'Empty list' );
+    is( @{$cmgr->clear_unless( { hash => 1 }, [ 'array' ], $q )}, 0, 'Empty list for invalid arguments' );
 
-    # Pass list, expect 4 cookies (3 cleared)
-    my @rv = @{$cmgr->clear_if_allowed( @$list )};
-    is( @rv, 4, 'Four expected' );
-    is( $rv[0]->name, 'aap', 'First cookie' );
-    is( $rv[1]->name, 'noot', '2nd cookie' );
-    is( $rv[2]->name, 'wim', '3rd cookie' );
+    # Pass list, expect 5 cookies (3 cleared, last aap kept)
+    my @rv = @{$cmgr->clear_unless( @$list )};
+    is( @rv, 5, '5 expected' );
+    is( $rv[0]->name, 'noot', '1st cookie' );
+    is( $rv[1]->name, 'wim', '2nd cookie' );
+    is( $rv[2]->name, 'aap', '3rd cookie' );
     is( $rv[3]->name, 'mies', '4th cookie' );
-    is( $rv[0]->value, q{}, 'aap should be empty' );
-    is( $rv[1]->value, q{}, 'noot should be empty' );
-    is( $rv[2]->value, 'wim', 'wim not empty' );
+    is( $rv[4]->name, 'zus', '5th cookie' );
+    is( $rv[0]->value, q{noot}, 'noot not empty' );
+    is( $rv[1]->value, q{}, 'wim empty' );
+    is( $rv[2]->value, q{aap2}, 'aap not empty' );
     is( $rv[3]->value, q{}, 'mies empty' );
-    is( $rv[0]->httponly, 0, 'cleared aap isnt httponly' );
-    is( $rv[2]->httponly, 1, 'wim still httponly' );
+    is( $rv[4]->value, q{}, 'zus empty' );
+    is( $rv[1]->httponly, 0, 'cleared wim isnt httponly' );
+    is( $rv[2]->httponly, 1, 'aap httponly' );
 };
 
 subtest 'replace_in_list' => sub {
