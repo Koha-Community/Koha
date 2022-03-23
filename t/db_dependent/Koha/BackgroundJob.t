@@ -17,11 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
+use Koha::BackgroundJob::BatchUpdateItem;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
@@ -53,6 +55,33 @@ subtest '_derived_class() tests' => sub {
     $job->discard_changes;
 
     is_deeply( $job->unblessed, $derived->unblessed, '_derived_class object refers to the same DB object and can be manipulated as expected' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'enqueue() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    # FIXME: This all feels we need to do it better...
+    my $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2 ] } );
+    my $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
+
+    is( $job->size,           2,     'Two steps' );
+    is( $job->status,         'new', 'Initial status set correctly' );
+    is( $job->borrowernumber, undef, 'No userenv, borrowernumber undef' );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2, 3 ] } );
+    $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
+
+    is( $job->size,           3,           'Three steps' );
+    is( $job->status,         'new',       'Initial status set correctly' );
+    is( $job->borrowernumber, $patron->id, 'No userenv, borrowernumber undef' );
 
     $schema->storage->txn_rollback;
 };
