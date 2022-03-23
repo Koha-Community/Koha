@@ -1149,7 +1149,7 @@ sub checkauth {
             }
 
             # $return: 1 = valid user
-            if ($return) {
+            if ($return > 0) {
 
                 if ( $flags = haspermission( $userid, $flagsrequired ) ) {
                     $auth_state = "logged_in";
@@ -1909,8 +1909,8 @@ sub checkpw {
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
 
-    if ( $patron and ( $patron->account_locked || $patron->password_expired )  ) {
-        # Nothing to check, account is locked or password expired
+    if ( $patron and ( $patron->account_locked )  ) {
+        # Nothing to check, account is locked
     } elsif ($ldap && defined($password)) {
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
@@ -1963,6 +1963,9 @@ sub checkpw {
     if( $patron ) {
         if ( $passwd_ok ) {
             $patron->update({ login_attempts => 0 });
+            if( $patron->password_expired ){
+                @return = (-2);
+            }
         } elsif( !$patron->account_locked ) {
             $patron->update({ login_attempts => $patron->login_attempts + 1 });
         }

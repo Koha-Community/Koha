@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -511,6 +511,22 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     is( $patron->login_attempts, -1, 'Still locked out' );
     t::lib::Mocks::mock_preference('FailedLoginAttempts', ''); # disable
     is( $patron->account_locked, 1, 'Check administrative lockout without pref' );
+};
+
+subtest 'Check value of login_attempts in checkpw' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('FailedLoginAttempts', 3);
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron->set_password({ password => '123', skip_validation => 1 });
+
+    my @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    is( $test[0], 1, 'Patron authenticated correctly' );
+
+    $patron->password_expiration_date('2020-01-01')->store;
+    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    is( $test[0], -2, 'Patron returned as expired correctly' );
+
 };
 
 subtest '_timeout_syspref' => sub {

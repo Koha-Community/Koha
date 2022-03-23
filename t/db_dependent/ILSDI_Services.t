@@ -43,7 +43,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'AuthenticatePatron test' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -110,6 +110,13 @@ subtest 'AuthenticatePatron test' => sub {
     $query->param( 'password', $plain_password );
     $reply = C4::ILSDI::Services::AuthenticatePatron($query);
     is( $reply->{code}, 'PatronNotFound', "non-existing cardnumer/userid - PatronNotFound" );
+    is( $reply->{id}, undef, "id undef");
+
+    $query->param( 'username', $borrower->{userid} );
+    $query->param( 'password', $plain_password );
+    $seen_patron->password_expiration_date('2020-01-01')->store;
+    $reply = C4::ILSDI::Services::AuthenticatePatron($query);
+    is( $reply->{code}, 'PasswordExpired', "correct credentials, expired password not authenticated" );
     is( $reply->{id}, undef, "id undef");
 
     $schema->storage->txn_rollback;
