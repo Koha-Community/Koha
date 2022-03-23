@@ -849,7 +849,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         if ( add_filters ) {
             var table_dt = table.DataTable();
 
-            $(this).find('thead tr').clone(true).appendTo( $(this).find('thead') );
+            $(this).find('thead tr').clone().appendTo( $(this).find('thead') );
 
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
