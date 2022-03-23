@@ -40,7 +40,7 @@
                     </li>
                     <li>
                         <label for="agreement_description">Description: </label>
-                        <input
+                        <textarea
                             id="agreement_description"
                             v-model="agreement.description"
                             placeholder="Description"
@@ -149,7 +149,7 @@
                         <label for="agreement_license_info"
                             >License info:
                         </label>
-                        <input
+                        <textarea
                             id="agreement_license_info"
                             v-model="agreement.license_info"
                             placeholder="License info"
