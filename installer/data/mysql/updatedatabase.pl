@@ -23822,6 +23822,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "29596", "Add Yiddish language" );
 }
 
+$DBversion = '20.11.17.000';
+if ( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.17 release" );
+}
+
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
