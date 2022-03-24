@@ -4350,23 +4350,12 @@ sub _CanBookBeAutoRenewed {
         }
     }
 
-    if ( defined $issuing_rule->{norenewalbefore}
-        and $issuing_rule->{norenewalbefore} ne "" ) {
-        if ( GetSoonestRenewDate($patron->id, $item->id) > dt_from_string()) {
-            return "auto_too_soon";
-        } else {
-            return "ok";
-        }
-    }
-
-    # Fallback for automatic renewals:
-    # If norenewalbefore is undef, don't renew before due date.
-    my $now = dt_from_string;
-    if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
-        return "ok";
-    } else {
+    if ( GetSoonestRenewDate( $patron->id, $item->id ) > dt_from_string() )
+    {
         return "auto_too_soon";
     }
+
+    return "ok";
 }
 
 sub _item_denied_renewal {
