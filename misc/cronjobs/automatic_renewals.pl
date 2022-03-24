@@ -328,16 +328,23 @@ sub send_digests {
                     borrowers => $patron->borrowernumber,
                 },
                 message_transport_type => $transport,
-            ) || warn "no letter of type '$params->{letter_code}' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
+            );
 
-            next unless $letter;
+            if ($letter) {
+                C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        borrowernumber         => $borrowernumber,
+                        from_address           => $from_address,
+                        message_transport_type => $transport
+                    }
+                );
+            }
+            else {
+                warn
+"no letter of type '$params->{letter_code}' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
+            }
 
-            C4::Letters::EnqueueLetter({
-                letter                 => $letter,
-                borrowernumber         => $borrowernumber,
-                from_address           => $from_address,
-                message_transport_type => $transport
-            });
         }
     }
 }
