@@ -32,18 +32,38 @@ export default {
     updated() {
         let edit_agreement = this.edit_agreement
         let delete_agreement = this.delete_agreement
+        window['av_vendors'] = this.vendors.map(e => {
+            e['_id'] = e['id']
+            e['_str'] = e['name']
+            return e
+        })
         let vendors_map = this.vendors.reduce((map, e) => {
             map[e.id] = e
             return map
         }, {})
+        window['av_statuses'] = this.av_statuses.map(e => {
+            e['_id'] = e['authorised_value']
+            e['_str'] = e['lib']
+            return e
+        })
         let statuses_map = this.av_statuses.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
+        window['av_closure_reasons'] = this.av_closure_reasons.map(e => {
+            e['_id'] = e['authorised_value']
+            e['_str'] = e['lib']
+            return e
+        })
         let closure_reasons_map = this.av_closure_reasons.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
+        window['av_renewal_priorities'] = this.av_renewal_priorities.map(e => {
+            e['_id'] = e['authorised_value']
+            e['_str'] = e['lib']
+            return e
+        })
         let renewal_priorities_map = this.av_renewal_priorities.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
@@ -154,9 +174,12 @@ export default {
                     render(n, e)
                 })
             },
-            preDrawCallback: function(settings){
+            preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
-                $("#"+table_id).find("thead th").eq(1).attr('data-filter', 'vendors');
+                $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_vendors')
+                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_statuses')
+                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'av_closure_reasons')
+                $("#" + table_id).find("thead th").eq(7).attr('data-filter', 'av_renewal_priorities')
             }
 
         }, columns_settings, 1)
