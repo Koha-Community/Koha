@@ -860,7 +860,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                             } else {
                                 table_dt
                                     .column(i)
-                                    .search( '^'+this.value+'$', true, false )
+                                    .search( this.value.length ? '^'+this.value+'$' : '', true, false )
                                     .draw();
                             }
                         }
