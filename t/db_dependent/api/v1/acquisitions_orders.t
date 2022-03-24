@@ -113,7 +113,7 @@ subtest 'list() tests' => sub {
     my $query = { "biblio.isbn" => { "-like" => "\%SOMETHING\%" } };
 
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?q=" . encode_json($query) => {'x-koha-embed' => 'biblio'} )
-      ->status_is( 200, "Embeddig biblio.isbn doesn't make it explode" )
+      ->status_is( 200, "Embedding biblio and searching on biblio.isbn doesn't make it explode" )
       ->json_has( "/0/biblio", "biblio object correctly embedded" )
       ->json_is( "/0/biblio/isbn", 'SOMETHING', 'Filtering by a biblioitems column works!' );
 
