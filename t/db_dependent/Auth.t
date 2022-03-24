@@ -547,7 +547,14 @@ subtest 'checkauth & check_cookie_auth' => sub {
 
     # Logging out!
     $cgi->param('logout.x', 1);
-    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
+    $cgi->delete( 'userid', 'password' );
+    {
+        local *STDOUT;
+        my $stdout;
+        open STDOUT, '>', \$stdout;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
+        close STDOUT;
+    }
     is( $sessionID, undef );
     is( $ENV{"HTTP_COOKIE"}, "CGISESSID=$first_sessionID", 'HTTP_COOKIE not unset' );
     ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, {catalogue => 1} );
