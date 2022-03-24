@@ -386,6 +386,22 @@ patron/borrower's gender
 
 patron/borrower's Bcrypt encrypted password
 
+=head2 secret
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+Secret for 2FA
+
+=head2 auth_method
+
+  data_type: 'enum'
+  default_value: 'password'
+  extra: {list => ["password","two-factor"]}
+  is_nullable: 0
+
+Authentication method
+
 =head2 flags
 
   data_type: 'integer'
@@ -720,6 +736,15 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
   { data_type => "varchar", is_nullable => 1, size => 60 },
+  "secret",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "auth_method",
+  {
+    data_type => "enum",
+    default_value => "password",
+    extra => { list => ["password", "two-factor"] },
+    is_nullable => 0,
+  },
   "flags",
   { data_type => "integer", is_nullable => 1 },
   "userid",
@@ -1930,8 +1955,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-15 06:51:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ozDOfb67H7/GHLI0o4DdyA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-24 10:20:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:srYT5wjg7Jhy5CpmDjWv/g
 
 __PACKAGE__->has_many(
   "extended_attributes",
