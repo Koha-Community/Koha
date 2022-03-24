@@ -82,12 +82,12 @@ GetOptions(
     'file:s'            => \$input_marc_file,
     'n:f'               => \$number,
     'o|offset:f'        => \$offset,
-    'h'                 => \$version,
-    'd'                 => \$delete,
+    'h|help'            => \$version,
+    'd|delete'          => \$delete,
     't|test'            => \$test_parameter,
     's'                 => \$skip_marc8_conversion,
     'c:s'               => \$char_encoding,
-    'v:+'               => \$verbose,
+    'v|verbose:+'       => \$verbose,
     'fk'                => \$fk_off,
     'm:s'               => \$format,
     'l:s'               => \$logfile,
@@ -844,27 +844,27 @@ will get invalid data.
 
 =over
 
-=item  B<-h>
+=item  B<-h, --help>
 
 This version/help screen
 
-=item B<-b, -biblios>
+=item B<-b, --biblios>
 
 Type of import: bibliographic records
 
-=item B<-a, -authorities>
+=item B<-a, --authorities>
 
 Type of import: authority records
 
-=item B<-file>=I<FILE>
+=item B<--file>=I<FILE>
 
 The I<FILE> to import
 
-=item  B<-v>
+=item  B<-v, --verbose>
 
 Verbose mode. 1 means "some infos", 2 means "MARC dumping"
 
-=item B<-fk>
+=item B<--fk>
 
 Turn off foreign key checks during import.
 
@@ -872,11 +872,11 @@ Turn off foreign key checks during import.
 
 The I<NUMBER> of records to import. If missing, all the file is imported
 
-=item B<-o, -offset>=I<NUMBER>
+=item B<-o, --offset>=I<NUMBER>
 
 File offset before importing, ie I<NUMBER> of records to skip.
 
-=item B<-commit>=I<NUMBER>
+=item B<--commit>=I<NUMBER>
 
 The I<NUMBER> of records to wait before performing a 'commit' operation
 
@@ -884,11 +884,11 @@ The I<NUMBER> of records to wait before performing a 'commit' operation
 
 File logs actions done for each record and their status into file
 
-=item B<-append>
+=item B<--append>
 
 If specified, data will be appended to the logfile. If not, the logfile will be erased for each execution.
 
-=item B<-t, -test>
+=item B<-t, --test>
 
 Test mode: parses the file, saying what it would do, but doing nothing.
 
@@ -911,50 +911,50 @@ biblioitems, items
 
 Input file I<FORMAT>: I<MARCXML> or I<ISO2709> (defaults to ISO2709)
 
-=item B<-authtypes>
+=item B<--authtypes>
 
 file yamlfile with authoritiesTypes and distinguishable record field in order
 to store the correct authtype
 
-=item B<-yaml>
+=item B<--yaml>
 
 yaml file  format a yaml file with ids
 
-=item B<-filter>
+=item B<--filter>
 
 list of fields that will not be imported. Can be any from 000 to 999 or field,
 subfield and subfield's matching value such as 200avalue
 
-=item B<-insert>
+=item B<--insert>
 
 if set, only insert when possible
 
-=item B<-update>
+=item B<--update>
 
 if set, only updates (any biblio should have a matching record)
 
-=item B<-all>
+=item B<--all>
 
 if set, do whatever is required
 
-=item B<-k, -keepids>=<FIELD>
+=item B<-k, --keepids>=<FIELD>
 
 Field store ids in I<FIELD> (useful for authorities, where 001 contains the
 authid for Koha, that can contain a very valuable info for authorities coming
 from LOC or BNF. useless for biblios probably)
 
-=item B<-match>=<FIELD>
+=item B<--match>=<FIELD>
 
 I<FIELD> matchindex,fieldtomatch matchpoint to use to deduplicate fieldtomatch
 can be either 001 to 999 or field and list of subfields as such 100abcde
 
-=item B<-i,-isbn>
+=item B<-i, --isbn>
 
 If set, a search will be done on isbn, and, if the same isbn is found, the
 biblio is not added. It's another method to deduplicate.  B<-match> & B<-isbn>
 can be both set.
 
-=item B<-cleanisbn>
+=item B<--cleanisbn>
 
 Clean ISBN fields from entering biblio records, ie removes hyphens. By default,
 ISBN are cleaned. --nocleanisbn will keep ISBN unchanged.
@@ -967,30 +967,30 @@ Source bib I<TAG> for reporting the source bib number
 
 Source I<SUBFIELD> for reporting the source bib number
 
-=item B<-idmap>=I<FILE>
+=item B<--idmap>=I<FILE>
 
 I<FILE> for the koha bib and source id
 
-=item B<-keepids>
+=item B<--keepids>
 
 Store ids in 009 (useful for authorities, where 001 contains the authid for
 Koha, that can contain a very valuable info for authorities coming from LOC or
 BNF. useless for biblios probably)
 
-=item B<-dedupbarcode>
+=item B<--dedupbarcode>
 
 If set, whenever a duplicate barcode is detected, it is removed and the attempt
 to add the record is retried, thereby giving the record a blank barcode. This
 is useful when something has set barcodes to be a biblio ID, or similar
 (usually other software.)
 
-=item B<-framework>
+=item B<--framework>
 
 This is the code for the framework that the requested records will have attached
 to them when they are created. If not specified, then the default framework
 will be used.
 
-=item B<-custom>=I<MODULE>
+=item B<--custom>=I<MODULE>
 
 This parameter allows you to use a local module with a customize subroutine
 that is called for each MARC record.
@@ -998,7 +998,7 @@ If no filename is passed, LocalChanges.pm is assumed to be in the
 migration_tools subdirectory. You may pass an absolute file name or a file name
 from the migration_tools directory.
 
-=item B<-marcmodtemplate>=I<TEMPLATE>
+=item B<--marcmodtemplate>=I<TEMPLATE>
 
 This parameter allows you to specify the name of an existing MARC
 modification template to apply as the MARC records are imported (these
