@@ -101,6 +101,7 @@ sub enqueue {
 
     my $borrowernumber = C4::Context->userenv->{number}; # FIXME Handle non GUI calls
     my $json_args = encode_json $job_args;
+
     $self->set(
         {
             status         => 'new',
@@ -113,10 +114,17 @@ sub enqueue {
     )->store;
 
     $job_args->{job_id} = $self->id;
-    $json_args = encode_json $job_args;
 
+    my $conn;
     try {
-        my $conn = $self->connect;
+        $conn = $self->connect;
+    } catch {
+        warn "Cannot connect to broker " . $_;
+    };
+    return unless $conn;
+
+    $json_args = encode_json $job_args;
+    try {
         # This namespace is wrong, it must be a vhost instead.
         # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
         # Also, here we just want the Koha instance's name, but it's not in the config...
