@@ -155,7 +155,7 @@ if ( $version || ( $input_marc_file eq '' ) ) {
     exit;
 }
 if ( $update && !( $match || $isbn_check ) ) {
-    warn "Using -update without -match or -isbn seems to be useless.\n";
+    warn "Using --update without --match or --isbn seems to be useless.\n";
 }
 
 if ( defined $localcust ) {    #local customize module
@@ -831,8 +831,8 @@ bulkmarcimport.pl - Import bibliographic/authority records into Koha
 =head1 USAGE
 
  $ export KOHA_CONF=/etc/koha.conf
- $ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 \\
-    -file /home/jmf/koha.mrc -n 3000
+ $ perl misc/migration_tools/bulkmarcimport.pl -d --commit 1000 \\
+    --file /home/jmf/koha.mrc -n 3000
 
 =head1 WARNING
 
