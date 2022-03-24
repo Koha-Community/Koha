@@ -152,10 +152,18 @@ shouldn't be called twice in it.
 
                 my $json = JSON->new;
 
-                # q is defined as multi => JSON::Validator generates an array
-                foreach my $q ( @{ $reserved_params->{q} } ) {
-                    push @query_params_array, $json->decode($q)
-                    if $q; # skip if exists but is empty
+                if ( ref($reserved_params->{q}) eq 'ARRAY' ) {
+                    # q is defined as multi => JSON::Validator generates an array
+                    foreach my $q ( @{ $reserved_params->{q} } ) {
+                        push @query_params_array, $json->decode($q)
+                        if $q; # skip if exists but is empty
+                    }
+                }
+                else {
+                    # objects.search called outside OpenAPI context
+                    # might be a hashref
+                    push @query_params_array, $json->decode($reserved_params->{q})
+                        if $reserved_params->{q};
                 }
 
                 push @query_params_array,
