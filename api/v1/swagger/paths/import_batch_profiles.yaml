@@ -12,13 +12,13 @@
         description: Search on profile's name
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     consumes:
       - application/json
     produces:
@@ -27,26 +27,26 @@
       "200":
         description: A list of import batch profiles
         schema:
-          $ref: ../definitions.yaml#/import_batch_profiles
+          $ref: "../swagger.yaml#/definitions/import_batch_profiles"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         tools: stage_marc_import
@@ -126,34 +126,34 @@
       "201":
         description: Created Profile
         schema:
-          $ref: ../definitions.yaml#/import_batch_profile
+          $ref: "../swagger.yaml#/definitions/import_batch_profile"
       "400":
         description: Missing or wrong parameters
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Hold not allowed
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Borrower not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         tools: stage_marc_import
@@ -165,7 +165,7 @@
       - batch_import_profiles
     summary: Update batch import profile
     parameters:
-      - $ref: ../parameters.yaml#/import_batch_profile_id_pp
+      - $ref: "../swagger.yaml#/parameters/import_batch_profile_id_pp"
       - name: body
         in: body
         description: A JSON object containing a import batch profile
@@ -235,34 +235,34 @@
       "200":
         description: Updated profile
         schema:
-          $ref: ../definitions.yaml#/import_batch_profile
+          $ref: "../swagger.yaml#/definitions/import_batch_profile"
       "400":
         description: Missing or wrong parameters
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Hold not allowed
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Borrower not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         tools: stage_marc_import
@@ -273,7 +273,7 @@
       - batch_import_profiles
     summary: Delete batch import profile
     parameters:
-      - $ref: ../parameters.yaml#/import_batch_profile_id_pp
+      - $ref: "../swagger.yaml#/parameters/import_batch_profile_id_pp"
     produces:
       - application/json
     responses:
@@ -282,26 +282,26 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Hold not allowed
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Hold not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         tools: stage_marc_import

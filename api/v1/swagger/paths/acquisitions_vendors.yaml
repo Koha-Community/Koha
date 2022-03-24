@@ -19,43 +19,43 @@
         description: Case insensitive search on vendor's account number
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       "200":
         description: A list of vendors
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/vendor
+            $ref: "../swagger.yaml#/definitions/vendor"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Vendor not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         acquisition: vendors_manage
@@ -71,37 +71,37 @@
         description: A JSON object representing a vendor
         required: true
         schema:
-          $ref: ../definitions.yaml#/vendor
+          $ref: "../swagger.yaml#/definitions/vendor"
     produces:
       - application/json
     responses:
       "201":
         description: Vendor added
         schema:
-          $ref: ../definitions.yaml#/vendor
+          $ref: "../swagger.yaml#/definitions/vendor"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Vendor not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         acquisition: vendors_manage
@@ -113,37 +113,37 @@
       - vendors
     summary: Get vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendor_id_pp
+      - $ref: "../swagger.yaml#/parameters/vendor_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: A vendor
         schema:
-          $ref: ../definitions.yaml#/vendor
+          $ref: "../swagger.yaml#/definitions/vendor"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Vendor not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         acquisition: vendors_manage
@@ -154,43 +154,43 @@
       - vendors
     summary: Update vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendor_id_pp
+      - $ref: "../swagger.yaml#/parameters/vendor_id_pp"
       - name: body
         in: body
         description: A JSON object representing a vendor
         required: true
         schema:
-          $ref: ../definitions.yaml#/vendor
+          $ref: "../swagger.yaml#/definitions/vendor"
     produces:
       - application/json
     responses:
       "200":
         description: A vendor
         schema:
-          $ref: ../definitions.yaml#/vendor
+          $ref: "../swagger.yaml#/definitions/vendor"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Vendor not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         acquisition: vendors_manage
@@ -201,7 +201,7 @@
       - vendors
     summary: Delete vendor
     parameters:
-      - $ref: ../parameters.yaml#/vendor_id_pp
+      - $ref: "../swagger.yaml#/parameters/vendor_id_pp"
     produces:
       - application/json
     responses:
@@ -210,26 +210,26 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Vendor not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         acquisition: vendors_manage

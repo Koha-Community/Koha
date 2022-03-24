@@ -12,13 +12,13 @@
         description: Search on the item's barcode
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     consumes:
       - application/json
     produces:
@@ -29,26 +29,26 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/item
+            $ref: "../swagger.yaml#/definitions/item"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         catalogue: "1"
@@ -60,7 +60,7 @@
       - items
     summary: Get item
     parameters:
-      - $ref: ../parameters.yaml#/item_id_pp
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
     consumes:
       - application/json
     produces:
@@ -69,26 +69,26 @@
       "200":
         description: An item
         schema:
-          $ref: ../definitions.yaml#/item
+          $ref: "../swagger.yaml#/definitions/item"
       "400":
         description: Missing or wrong parameters
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Item not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         catalogue: "1"
@@ -100,19 +100,19 @@
     tags:
       - items
     parameters:
-      - $ref: ../parameters.yaml#/item_id_pp
+      - $ref: "../swagger.yaml#/parameters/item_id_pp"
       - name: patron_id
         in: query
         description: Internal patron identifier
         required: true
         type: integer
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     consumes:
       - application/json
     produces:
@@ -123,34 +123,34 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/library
+            $ref: "../swagger.yaml#/definitions/library"
       "400":
         description: Missing or wrong parameters
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Biblio not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         reserveforothers: place_holds

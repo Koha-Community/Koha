@@ -2,7 +2,9 @@
 type: object
 properties:
   city_id:
-    $ref: ../x-primitives.yaml#/city_id
+    type: integer
+    description: internally assigned city identifier
+    readOnly: true
   name:
     description: city name
     type: string

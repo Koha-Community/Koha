@@ -2,7 +2,10 @@
 type: object
 properties:
   library_id:
-    $ref: ../x-primitives.yaml#/library_id
+    type: string
+    description: internally assigned library identifier
+    maxLength: 10
+    minLength: 1
   name:
     type: string
     description: Printable name of library

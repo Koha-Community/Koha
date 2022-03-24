@@ -7,37 +7,37 @@
       - patrons
     summary: Get account information for a patron
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: Patron's account balance
         schema:
-          $ref: ../definitions.yaml#/patron_balance
+          $ref: "../swagger.yaml#/definitions/patron_balance"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: edit_borrowers
@@ -50,43 +50,43 @@
       - patrons
     summary: Add credit to a patron's account
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A JSON object containing credit information
         required: true
         schema:
-          $ref: ../definitions.yaml#/patron_account_credit
+          $ref: "../swagger.yaml#/definitions/patron_account_credit"
     produces:
       - application/json
     responses:
       "201":
         description: Credit added
         schema:
-          $ref: ../definitions.yaml#/account_line
+          $ref: "../swagger.yaml#/definitions/account_line"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         updatecharges: remaining_permissions

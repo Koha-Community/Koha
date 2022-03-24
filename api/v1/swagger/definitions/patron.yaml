@@ -2,13 +2,23 @@
 type: object
 properties:
   patron_id:
-    $ref: ../x-primitives.yaml#/patron_id
+    type: integer
+    description: Internal patron identifier
   cardnumber:
-    $ref: ../x-primitives.yaml#/cardnumber
+    type:
+      - string
+      - "null"
+    description: library assigned user identifier
   surname:
-    $ref: ../x-primitives.yaml#/surname
+    type:
+      - string
+      - "null"
+    description: patron's last name
   firstname:
-    $ref: ../x-primitives.yaml#/firstname
+    type:
+      - string
+      - "null"
+    description: patron's first name
   title:
     type:
       - string
@@ -65,9 +75,15 @@ properties:
       - "null"
     description: country of patron's primary address
   email:
-    $ref: ../x-primitives.yaml#/email
+    type:
+      - string
+      - "null"
+    description: primary email address for patron's primary address
   phone:
-    $ref: ../x-primitives.yaml#/phone
+    type:
+      - string
+      - "null"
+    description: primary phone number for patron's primary address
   mobile:
     type:
       - string
@@ -327,7 +343,7 @@ properties:
     type: array
     description: patron's extended attributes
     items:
-      $ref: patron_extended_attribute.yaml
+      $ref: "patron_extended_attribute.yaml"
 additionalProperties: false
 required:
   - surname

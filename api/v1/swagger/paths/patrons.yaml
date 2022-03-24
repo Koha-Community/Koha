@@ -344,39 +344,39 @@
         description: Search on login_attempts
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       "200":
         description: A list of patrons
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/patron
+            $ref: "../swagger.yaml#/definitions/patron"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: "1"
@@ -394,7 +394,7 @@
         description: A JSON object containing information about the new patron
         required: true
         schema:
-          $ref: ../definitions.yaml#/patron
+          $ref: "../swagger.yaml#/definitions/patron"
     consumes:
       - application/json
     produces:
@@ -404,38 +404,38 @@
         description: A successfully created patron
         schema:
           items:
-            $ref: ../definitions.yaml#/patron
+            $ref: "../swagger.yaml#/definitions/patron"
       "400":
         description: Bad parameter
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Resource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: Conflict in creating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: edit_borrowers
@@ -447,37 +447,37 @@
       - patrons
     summary: Get patron
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: A patron
         schema:
-          $ref: ../definitions.yaml#/patron
+          $ref: "../swagger.yaml#/definitions/patron"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: edit_borrowers
@@ -490,13 +490,13 @@
       - patrons
     summary: Update patron
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A JSON object containing new information about existing patron
         required: true
         schema:
-          $ref: ../definitions.yaml#/patron
+          $ref: "../swagger.yaml#/definitions/patron"
     consumes:
       - application/json
     produces:
@@ -506,34 +506,34 @@
         description: A successfully updated patron
         schema:
           items:
-            $ref: ../definitions.yaml#/patron
+            $ref: "../swagger.yaml#/definitions/patron"
       "400":
         description: Bad parameter
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Resource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: Conflict in updating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: "1"
@@ -544,7 +544,7 @@
       - patrons
     summary: Delete patron
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
     produces:
       - application/json
     responses:
@@ -553,19 +553,19 @@
       "400":
         description: Patron deletion failed
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: |
           Conflict. Possible `error_code` attribute values:
@@ -575,18 +575,18 @@
             * `has_guarantees`: The patron has guarantees
             * `is_anonymous_patron`: The system-wide anonymous patron cannot be deleted
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         borrowers: delete_borrowers

@@ -2,7 +2,9 @@
 type: object
 properties:
   fund_id:
-    $ref: ../x-primitives.yaml#/fund_id
+    type: integer
+    description: internally assigned fund identifier
+    readOnly: true
   code:
     type:
       - string

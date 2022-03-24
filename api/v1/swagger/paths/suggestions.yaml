@@ -8,13 +8,13 @@
     tags:
       - suggestions
     parameters:
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     produces:
       - application/json
     responses:
@@ -23,22 +23,22 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/suggestion
+            $ref: "../swagger.yaml#/definitions/suggestion"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         suggestions: suggestions_manage
@@ -55,33 +55,33 @@
         description: A JSON object containing informations about the new suggestion
         required: true
         schema:
-          $ref: ../definitions.yaml#/suggestion
+          $ref: "../swagger.yaml#/definitions/suggestion"
     produces:
       - application/json
     responses:
       "201":
         description: Suggestion added
         schema:
-          $ref: ../definitions.yaml#/suggestion
+          $ref: "../swagger.yaml#/definitions/suggestion"
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         suggestions: suggestions_manage
@@ -94,33 +94,33 @@
     tags:
       - suggestions
     parameters:
-      - $ref: ../parameters.yaml#/suggestion_id_pp
+      - $ref: "../swagger.yaml#/parameters/suggestion_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: A suggestion
         schema:
-          $ref: ../definitions.yaml#/suggestion
+          $ref: "../swagger.yaml#/definitions/suggestion"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Suggestion not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         suggestions: suggestions_manage
@@ -132,43 +132,43 @@
     tags:
       - suggestions
     parameters:
-      - $ref: ../parameters.yaml#/suggestion_id_pp
+      - $ref: "../swagger.yaml#/parameters/suggestion_id_pp"
       - name: body
         in: body
         description: A JSON object containing informations about the new hold
         required: true
         schema:
-          $ref: ../definitions.yaml#/suggestion
+          $ref: "../swagger.yaml#/definitions/suggestion"
     produces:
       - application/json
     responses:
       "200":
         description: A suggestion
         schema:
-          $ref: ../definitions.yaml#/suggestion
+          $ref: "../swagger.yaml#/definitions/suggestion"
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Suggestion not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         suggestions: suggestions_manage
@@ -180,7 +180,7 @@
     tags:
       - suggestions
     parameters:
-      - $ref: ../parameters.yaml#/suggestion_id_pp
+      - $ref: "../swagger.yaml#/parameters/suggestion_id_pp"
     produces:
       - application/json
     responses:
@@ -191,26 +191,26 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Suggestion not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         suggestions: suggestions_manage

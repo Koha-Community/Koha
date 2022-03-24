@@ -92,13 +92,13 @@
         description: Case insensitive 'starts-with' search on OPAC info
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     produces:
       - application/json
     responses:
@@ -107,18 +107,18 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/library
+            $ref: "../swagger.yaml#/definitions/library"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         catalogue: "1"
@@ -136,41 +136,41 @@
         description: A JSON object containing informations about the new library
         required: true
         schema:
-          $ref: ../definitions.yaml#/library
+          $ref: "../swagger.yaml#/definitions/library"
     produces:
       - application/json
     responses:
       "201":
         description: Library added
         schema:
-          $ref: ../definitions.yaml#/library
+          $ref: "../swagger.yaml#/definitions/library"
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: Conflict in creating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_libraries
@@ -182,18 +182,18 @@
       - libraries
     summary: Get library
     parameters:
-      - $ref: ../parameters.yaml#/library_id_pp
+      - $ref: "../swagger.yaml#/parameters/library_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: A library
         schema:
-          $ref: ../definitions.yaml#/library
+          $ref: "../swagger.yaml#/definitions/library"
       "404":
         description: Library not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         catalogue: "1"
@@ -206,13 +206,13 @@
       - libraries
     summary: Update library
     parameters:
-      - $ref: ../parameters.yaml#/library_id_pp
+      - $ref: "../swagger.yaml#/parameters/library_id_pp"
       - name: body
         in: body
         description: A JSON object containing information on the library
         required: true
         schema:
-          $ref: ../definitions.yaml#/library
+          $ref: "../swagger.yaml#/definitions/library"
     consumes:
       - application/json
     produces:
@@ -221,34 +221,34 @@
       "200":
         description: A library
         schema:
-          $ref: ../definitions.yaml#/library
+          $ref: "../swagger.yaml#/definitions/library"
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Library not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_libraries
@@ -259,7 +259,7 @@
       - libraries
     summary: Delete library
     parameters:
-      - $ref: ../parameters.yaml#/library_id_pp
+      - $ref: "../swagger.yaml#/parameters/library_id_pp"
     produces:
       - application/json
     responses:
@@ -270,26 +270,26 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Library not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_libraries
@@ -301,13 +301,13 @@
       - libraries
     summary: List libraries
     parameters:
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     produces:
       - application/json
     responses:
@@ -316,18 +316,18 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/library
+            $ref: "../swagger.yaml#/definitions/library"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
 "/public/libraries/{library_id}":
   get:
     x-mojo-to: Libraries#get
@@ -336,7 +336,7 @@
       - libraries
     summary: Get library (public)
     parameters:
-      - $ref: ../parameters.yaml#/library_id_pp
+      - $ref: "../swagger.yaml#/parameters/library_id_pp"
     produces:
       - application/json
     responses:
@@ -345,15 +345,15 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Library not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "406":
         description: Not acceptable
         schema:
@@ -367,8 +367,8 @@
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"

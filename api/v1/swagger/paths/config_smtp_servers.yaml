@@ -9,35 +9,35 @@
     produces:
       - application/json
     parameters:
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       "200":
         description: A list of SMTP servers
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/smtp_server
+            $ref: "../swagger.yaml#/definitions/smtp_server"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_smtp_servers
@@ -53,37 +53,37 @@
         description: A JSON object representing a new SMTP server configuration
         required: true
         schema:
-          $ref: ../definitions.yaml#/smtp_server
+          $ref: "../swagger.yaml#/definitions/smtp_server"
     produces:
       - application/json
     responses:
       "201":
         description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/smtp_server
+          $ref: "../swagger.yaml#/definitions/smtp_server"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: Conflict in creating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_smtp_servers
@@ -95,33 +95,33 @@
       - smtp_servers
     summary: Get SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/smtp_server_id_pp
+      - $ref: "../swagger.yaml#/parameters/smtp_server_id_pp"
     produces:
       - application/json
     responses:
       "200":
         description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/smtp_server
+          $ref: "../swagger.yaml#/definitions/smtp_server"
       "404":
         description: Object not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "409":
         description: Conflict updating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_smtp_servers
@@ -132,43 +132,43 @@
       - smtp_servers
     summary: Update SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/smtp_server_id_pp
+      - $ref: "../swagger.yaml#/parameters/smtp_server_id_pp"
       - name: body
         in: body
         description: An SMTP server object
         required: true
         schema:
-          $ref: ../definitions.yaml#/smtp_server
+          $ref: "../swagger.yaml#/definitions/smtp_server"
     produces:
       - application/json
     responses:
       "200":
         description: An SMTP server object
         schema:
-          $ref: ../definitions.yaml#/smtp_server
+          $ref: "../swagger.yaml#/definitions/smtp_server"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_smtp_servers
@@ -179,7 +179,7 @@
       - smtp_servers
     summary: Delete SMTP server
     parameters:
-      - $ref: ../parameters.yaml#/smtp_server_id_pp
+      - $ref: "../swagger.yaml#/parameters/smtp_server_id_pp"
     produces:
       - application/json
     responses:
@@ -188,26 +188,26 @@
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         parameters: manage_smtp_servers

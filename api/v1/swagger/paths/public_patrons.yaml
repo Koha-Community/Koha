@@ -7,7 +7,7 @@
       - patrons
     summary: Set password for a patron (public)
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A JSON object containing password information
@@ -36,30 +36,30 @@
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       allow-owner: true
 "/public/patrons/{patron_id}/guarantors/can_see_charges":
@@ -70,7 +70,7 @@
       - patrons
     summary: Set if guarantors can see charges (public)
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A boolean representing if guarantors should be able to see the
@@ -90,30 +90,30 @@
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       allow-owner: true
 "/public/patrons/{patron_id}/guarantors/can_see_checkouts":
@@ -124,7 +124,7 @@
       - patrons
     summary: Set if guarantors can see checkouts
     parameters:
-      - $ref: ../parameters.yaml#/patron_id_pp
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
       - name: body
         in: body
         description: A boolean representing if guarantors should be able to see the
@@ -144,29 +144,29 @@
       "400":
         description: Bad request
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       allow-owner: true
