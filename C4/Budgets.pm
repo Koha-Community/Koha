@@ -485,7 +485,7 @@ sub ModBudgetPeriod {
 
 # -------------------------------------------------------------------
 sub GetBudgetHierarchy {
-    my ( $budget_period_id, $branchcode, $owner ) = @_;
+    my ( $budget_period_id, $branchcode, $owner, $skiptotals ) = @_;
     my @bind_params;
     my $dbh   = C4::Context->dbh;
     my $query = qq|
@@ -550,49 +550,50 @@ sub GetBudgetHierarchy {
     foreach my $first_parent (@first_parents) {
         _add_budget_children(\@sort, $first_parent, 0);
     }
+    if (!$skiptotals) {
+        # Get all the budgets totals in as few queries as possible
+        my $hr_budget_spent = $dbh->selectall_hashref(q|
+            SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
+                SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE(unitprice_tax_included, ecost_tax_included)|) . q| * quantity ) AS budget_spent
+            FROM aqorders JOIN aqbudgets USING (budget_id)
+            WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
+            GROUP BY budget_id, budget_parent_id
+            |, 'budget_id');
+        my $hr_budget_ordered = $dbh->selectall_hashref(q|
+            SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
+                SUM( | . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . q| *  quantity) AS budget_ordered
+            FROM aqorders JOIN aqbudgets USING (budget_id)
+            WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
+            GROUP BY budget_id, budget_parent_id
+            |, 'budget_id');
+        my $hr_budget_spent_shipment = $dbh->selectall_hashref(q|
+            SELECT shipmentcost_budgetid as budget_id,
+                SUM(shipmentcost) as shipmentcost
+            FROM aqinvoices
+            GROUP BY shipmentcost_budgetid
+            |, 'budget_id');
+        my $hr_budget_spent_adjustment = $dbh->selectall_hashref(q|
+            SELECT budget_id,
+                SUM(adjustment) as adjustments
+            FROM aqinvoice_adjustments
+            JOIN aqinvoices USING (invoiceid)
+            WHERE closedate IS NOT NULL
+            GROUP BY budget_id
+            |, 'budget_id');
+        my $hr_budget_ordered_adjustment = $dbh->selectall_hashref(q|
+            SELECT budget_id,
+                SUM(adjustment) as adjustments
+            FROM aqinvoice_adjustments
+            JOIN aqinvoices USING (invoiceid)
+            WHERE closedate IS NULL AND encumber_open = 1
+            GROUP BY budget_id
+            |, 'budget_id');
 
-    # Get all the budgets totals in as few queries as possible
-    my $hr_budget_spent = $dbh->selectall_hashref(q|
-        SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-               SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE(unitprice_tax_included, ecost_tax_included)|) . q| * quantity ) AS budget_spent
-        FROM aqorders JOIN aqbudgets USING (budget_id)
-        WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
-        GROUP BY budget_id, budget_parent_id
-        |, 'budget_id');
-    my $hr_budget_ordered = $dbh->selectall_hashref(q|
-        SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-               SUM( | . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . q| *  quantity) AS budget_ordered
-        FROM aqorders JOIN aqbudgets USING (budget_id)
-        WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
-        GROUP BY budget_id, budget_parent_id
-        |, 'budget_id');
-    my $hr_budget_spent_shipment = $dbh->selectall_hashref(q|
-        SELECT shipmentcost_budgetid as budget_id,
-               SUM(shipmentcost) as shipmentcost
-        FROM aqinvoices
-        GROUP BY shipmentcost_budgetid
-        |, 'budget_id');
-    my $hr_budget_spent_adjustment = $dbh->selectall_hashref(q|
-        SELECT budget_id,
-               SUM(adjustment) as adjustments
-        FROM aqinvoice_adjustments
-        JOIN aqinvoices USING (invoiceid)
-        WHERE closedate IS NOT NULL
-        GROUP BY budget_id
-        |, 'budget_id');
-    my $hr_budget_ordered_adjustment = $dbh->selectall_hashref(q|
-        SELECT budget_id,
-               SUM(adjustment) as adjustments
-        FROM aqinvoice_adjustments
-        JOIN aqinvoices USING (invoiceid)
-        WHERE closedate IS NULL AND encumber_open = 1
-        GROUP BY budget_id
-        |, 'budget_id');
 
-
-    foreach my $budget (@sort) {
-        if ( not defined $budget->{budget_parent_id} ) {
-            _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
+        foreach my $budget (@sort) {
+            if ( not defined $budget->{budget_parent_id} ) {
+                _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
+            }
         }
     }
     return \@sort;
