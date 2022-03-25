@@ -177,7 +177,7 @@ foreach my $period (@$periods) {
         $template->{'VARS'}->{'budget_period_description'} = $period->{'budget_period_description'};
     }
     next if $period->{'budget_period_locked'} || !$period->{'budget_period_description'};
-    my $budget_hierarchy = GetBudgetHierarchy( $period->{'budget_period_id'} );
+    my $budget_hierarchy = GetBudgetHierarchy( $period->{'budget_period_id'}, undef, undef, 1 );
     my @funds;
     foreach my $r ( @{$budget_hierarchy} ) {
         next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
