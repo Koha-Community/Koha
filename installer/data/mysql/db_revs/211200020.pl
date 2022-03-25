@@ -7,9 +7,9 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
         # Get any existing value from the OpacMySummaryNote system preference
-        my ( $opacmysummarynote ) = $dbh->selectrow_array( q|
+        my ( $opacmysummarynote ) = $dbh->selectrow_array(q{
             SELECT value FROM systempreferences WHERE variable='OPACMySummaryNote';
-        |);
+        });
         if( $opacmysummarynote ){
             $dbh->do(q{
                 INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on )
@@ -19,6 +19,8 @@ return {
             $dbh->do(q{
                 DELETE FROM systempreferences WHERE variable='OPACMySummaryNote'
             });
+        } else {
+            say $out "No OpacMySummaryNote preference found. Value was empty or update has already been run.";
         }
-    }
-}
+    },
+};
