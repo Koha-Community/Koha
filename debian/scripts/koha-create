@@ -90,6 +90,8 @@ Options:
   --mb-pass pass            RabbitMQ password (default: guest)
   --mb-vhost vhost          RabbitMQ vhost (default: koha_<instance>)
 
+  --keep-cookie NAME        Do not clear this cookie at logout (can be repeated)
+
   --help,-h                 Show this help.
 
 Note: the instance name cannot be longer that 11 chars.
@@ -104,6 +106,13 @@ generate_config_file() {
     chown "root:$username" "$2"
     # Bug 28364: the z3950 responder needs other permissions
     [ "$1" = "log4perl-site.conf.in" ] && chown "$username:$username" "$2"
+
+    # Handle repeated command line options (KEEP_COOKIE)
+    keep_cookie_lines=""
+    for cookie in "${KEEP_COOKIE[@]}"
+    do
+        keep_cookie_lines="${keep_cookie_lines} <do_not_remove_cookie>${cookie}<\/do_not_remove_cookie>\\n"
+    done
 
     chmod 0640 "$2"
     sed -e "s/__KOHA_CONF_DIR__/\/etc\/koha\/sites\/$name/g" \
@@ -147,6 +156,7 @@ generate_config_file() {
         -e "s/__MESSAGE_BROKER_USER__/$MESSAGE_BROKER_USER/g" \
         -e "s/__MESSAGE_BROKER_PASS__/$MESSAGE_BROKER_PASS/g" \
         -e "s/__MESSAGE_BROKER_VHOST__/$MESSAGE_BROKER_VHOST/g" \
+        -e "s/ <do_not_remove_cookie>__KEEP_COOKIE__<\/do_not_remove_cookie>/$keep_cookie_lines/" \
         "/etc/koha/$1" > "$2"
 
 }
@@ -475,6 +485,8 @@ END_SRU_PUBLICSERVER="-->"
 
 APACHE_CONFIGFILE=""
 
+declare -a KEEP_COOKIE
+
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
@@ -482,7 +494,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,smtp-host:,smtp-port:,smtp-timeout:,smtp-ssl-mode:,smtp-user-name:,smtp-password:,smtp-debug,mb-host:,mb-port:,mb-user:,mb-pass:,mb-vhost:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,smtp-host:,smtp-port:,smtp-timeout:,smtp-ssl-mode:,smtp-user-name:,smtp-password:,smtp-debug,mb-host:,mb-port:,mb-user:,mb-pass:,mb-vhost:,letsencrypt,keep-cookie:, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -549,6 +561,8 @@ while true ; do
             CLO_ADMINUSER="$2" ; shift 2 ;;
         --enable-sru)
             ENABLE_SRU="yes" ; shift ;;
+        --keep-cookie)
+            KEEP_COOKIE+=("$2"); shift 2;;
         --mb-host)
             CLO_MESSAGE_BROKER_HOST="$2" ; shift 2 ;;
         --mb-port)
