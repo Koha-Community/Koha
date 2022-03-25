@@ -164,7 +164,7 @@
 
                     <div class="alert alert-info" id="notesaved" style="display:none;"></div>
                     [% IF ( OpacMySummaryNote ) %]
-                        <div id="opac-my-summary-note">[% PROCESS koha_news_block news => OpacMySummaryNote %]</div>
+                        [% PROCESS koha_news_block news => OpacMySummaryNote %]
                     [% END %]
 
                     [% IF Koha.Preference('AllowPatronToControlAutorenewal') %]
