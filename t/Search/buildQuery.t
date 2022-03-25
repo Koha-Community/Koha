@@ -274,7 +274,7 @@ subtest "kw:one and title:two ccode:REF weighted autotruncated" => sub {
     is($error,undef,"Error is correct");
     is($query,'(rk=(kw,wrdl,rtrn=one )) and (rk=(title,wrdl,rtrn=two )) and ccode=REF','Query is correct with auto truncation, limits, and using indexes and operators');
     is($simple_query,'one',"Simple query is correct?");
-    is($query_cgi,'idx=kw&q=one&op=%20and%20&idx=title&q=two','Query cgi is correct');
+    is($query_cgi,'idx=kw&q=one&op=and&idx=title&q=two','Query cgi is correct');
     is($query_desc,'kw,wrdl: one and title,wrdl: two','Query desc is correct');
     is($limit,'and ccode=REF',"Limit is correct");
     is($limit_cgi,'&limit=ccode%3AREF',"Limit cgi is correct");
