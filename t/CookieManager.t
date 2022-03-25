@@ -71,7 +71,7 @@ subtest 'clear_unless' => sub {
     is( $rv[2]->value, q{aap2}, 'aap not empty' );
     is( $rv[3]->value, q{}, 'mies empty' );
     is( $rv[4]->value, q{}, 'zus empty' );
-    is( $rv[1]->httponly, 0, 'cleared wim isnt httponly' );
+    is( $rv[1]->httponly, 0, 'cleared wim is not httponly' );
     is( $rv[2]->httponly, 1, 'aap httponly' );
 };
 
