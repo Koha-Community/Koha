@@ -636,9 +636,19 @@ subtest 'SearchItems test' => sub {
     AddIssue( $patron_borrower, $item1->barcode );
     # Search item where item is checked out
     $filter = {
-        field => 'onloan',
-        query => 'not null',
-        operator => 'is',
+        conjunction => 'AND',
+        filters => [
+            {
+                field => 'onloan',
+                query => 'not null',
+                operator => 'is',
+            },
+            {
+                field => 'homebranch',
+                query => $item1->homebranch,
+                operator => '=',
+            },
+        ],
     };
     ($items, $total_results) = SearchItems($filter);
     ok(scalar @$items == 1, 'found 1 checked out item');
@@ -648,7 +658,12 @@ subtest 'SearchItems test' => sub {
         sortby => 'availability',
         sortorder => 'DESC',
     };
-    ($items, $total_results) = SearchItems(undef,$params);
+    $filter = {
+        field => 'homebranch',
+        query => $item1->homebranch,
+        operator => '=',
+    };
+    ($items, $total_results) = SearchItems($filter,$params);
     is($items->[0]->{barcode}, $item1->barcode, 'Items sorted as expected by availability');
 
     $schema->storage->txn_rollback;
