@@ -655,8 +655,12 @@ sub AddAuthority {
     $field->update($auth_type_subfield=>$authtypecode);
   }
   else {
-    $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode); 
+    $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode);
   }
+
+    if ( C4::Context->preference('StripWhitespaceChars') ) {
+        $record = Koha::MetadataRecord::stripWhitespaceChars( $record );
+    }
 
     # Save record into auth_header, update 001
     my $action;

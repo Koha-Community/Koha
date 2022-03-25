@@ -114,6 +114,7 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::Libraries;
 use Koha::Util::MARC;
+use Koha::MetadataRecord;
 
 =head1 NAME
 
@@ -2809,6 +2810,10 @@ sub ModBiblioMarc {
         # YY MM DD HH MM SS (update year and month)
       my $f005= $record->field('005');
       $f005->update(sprintf("%4d%02d%02d%02d%02d%04.1f",@a)) if $f005;
+    }
+
+    if ( C4::Context->preference('StripWhitespaceChars') ) {
+        $record = Koha::MetadataRecord::stripWhitespaceChars( $record );
     }
 
     my $metadata = {

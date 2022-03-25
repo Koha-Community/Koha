@@ -205,6 +205,12 @@ Cataloging:
             - pref: ContentWarningField
             - for storing content warnings.
             - "<br/><strong>NOTE:</strong> The field needs to appear in the MARC frameworks to be accessible."
+        -
+            - pref: StripWhitespaceChars
+              choices:
+                  1: Strip
+                  0: "Don't strip"
+            - leading and trailing whitespace characters (including spaces, tabs, line breaks and carriage returns) and inner newlines from data fields when cataloguing bibliographic and authority records. The leader and control fields will not be affected.
     Display:
         -
             - 'Separate main entry and subdivisions with '

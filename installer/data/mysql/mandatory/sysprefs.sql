@@ -699,6 +699,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StatisticsFields','location|itype|ccode', NULL, 'Define Fields (from the items table) used for statistics members','Free'),
 ('StockRotation','0',NULL,'If ON, enables the stock rotation module','YesNo'),
 ('StoreLastBorrower','0','','If ON, the last borrower to return an item will be stored in items.last_returned_by','YesNo'),
+('StripWhitespaceChars','0',NULL,'Strip leading and trailing whitespace characters and inner newlines from input fields when cataloguing bibliographic and authority records.','YesNo'),
 ('SubfieldsToAllowForRestrictedBatchmod','','Define a list of subfields for which edition is authorized when items_batchmod_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
 ('SubfieldsToAllowForRestrictedEditing','','Define a list of subfields for which edition is authorized when edit_items_restricted permission is enabled, separated by spaces. Example: 995\$f 995\$h 995\$j',NULL,'Free'),
 ('SubfieldsToUseWhenPrefill','','','Define a list of subfields to use when prefilling items (separated by space)','Free'),
