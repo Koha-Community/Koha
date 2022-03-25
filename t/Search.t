@@ -64,7 +64,7 @@ subtest "_build_initial_query tests" => sub {
         C4::Search::_build_initial_query($params);
     is( $query, "query operator parsed_operand",
         "\$query built correctly");
-    is( $query_cgi, "query_cgi&op=%20operator%20&idx=index&q=original_operand",
+    is( $query_cgi, "query_cgi&op=operator&idx=index&q=original_operand",
         "\$query_cgi built correctly");
     is( $query_desc, "query_desc operator index_plus original_operand",
         "\$query_desc build correctly");
@@ -89,7 +89,7 @@ subtest "_build_initial_query tests" => sub {
         C4::Search::_build_initial_query($params);
     is( $query, "query AND parsed_operand",
         "\$query built correctly (no operator)");
-    is( $query_cgi, "query_cgi&op=%20AND%20&idx=index&q=original_operand",
+    is( $query_cgi, "query_cgi&op=AND&idx=index&q=original_operand",
         "\$query_cgi built correctly (no operator)");
     is( $query_desc, "query_desc AND index_plus original_operand",
         "\$query_desc build correctly (no operator)");
@@ -112,11 +112,11 @@ subtest "_build_initial_query tests" => sub {
 
     ($query,$query_cgi,$query_desc,$previous_operand) =
         C4::Search::_build_initial_query($params);
-    is( $query, "queryparsed_operand",
+    is( $query, "query  parsed_operand",
         "\$query built correctly (no previous operand)");
     is( $query_cgi, "query_cgi&idx=index&q=original_operand",
         "\$query_cgi built correctly (no previous operand)");
-    is( $query_desc, "query_descindex_plus original_operand",
+    is( $query_desc, "query_desc  index_plus original_operand",
         "\$query_desc build correctly (no previous operand)");
     is( $previous_operand, 1,
         "\$query build correctly (no previous operand)");
@@ -139,7 +139,7 @@ subtest "_build_initial_query tests" => sub {
         C4::Search::_build_initial_query($params);
     is( $query, "query operator parsed_operand",
         "\$query built correctly (no index passed)");
-    is( $query_cgi, "query_cgi&op=%20operator%20&q=original_operand",
+    is( $query_cgi, "query_cgi&op=operator&q=original_operand",
         "\$query_cgi built correctly (no index passed)");
     is( $query_desc, "query_desc operator index_plus original_operand",
         "\$query_desc build correctly (no index passed)");
@@ -164,7 +164,7 @@ subtest "_build_initial_query tests" => sub {
         C4::Search::_build_initial_query($params);
     is( $query, "query operator parsed_operand",
         "\$query built correctly (no index_plus passed)");
-    is( $query_cgi, "query_cgi&op=%20operator%20&idx=index&q=original_operand",
+    is( $query_cgi, "query_cgi&op=operator&idx=index&q=original_operand",
         "\$query_cgi built correctly (no index_plus passed)");
     is( $query_desc, "query_desc operator  original_operand",
         "\$query_desc build correctly (no index_plus passed)");
