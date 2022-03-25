@@ -190,8 +190,8 @@ while ( my $auto_renew = $auto_renews->next ) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s not be renewed. (%s)",
               $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would', $error;
         }
-        $updated = 1 if ($error ne $auto_renew->auto_renew_error);
-        if ( not $auto_renew->auto_renew_error or $updated ) {
+        $updated = 1 if (!$auto_renew->auto_renew_error || $error ne $auto_renew->auto_renew_error);
+        if ( $updated ) {
             $auto_renew->auto_renew_error($error)->store if $confirm;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
               if $error ne 'auto_too_soon' && ( $wants_email  && !$wants_digest );    # Do not notify if it's too soon
