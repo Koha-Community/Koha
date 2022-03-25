@@ -26,6 +26,7 @@ use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Plugins;
+use Koha::Exceptions::BackgroundJob;
 
 use base qw( Koha::Object );
 
@@ -162,6 +163,75 @@ sub process {
     $args ||= {};
 
     return $derived_class->process( $args );
+}
+
+=head3 start
+
+    $self->start;
+
+Marks the job as started.
+
+=cut
+
+sub start {
+    my ($self) = @_;
+
+    Koha::Exceptions::BackgroundJob::InconsistentStatus->throw(
+        current_status  => $self->status,
+        expected_status => 'new'
+    ) unless $self->status eq 'new';
+
+    return $self->set(
+        {
+            started_on => \'NOW()',
+            progress   => 0,
+            status     => 'started',
+        }
+    )->store;
+}
+
+=head3 step
+
+    $self->step;
+
+Makes the job record a step has taken place.
+
+=cut
+
+sub step {
+    my ($self) = @_;
+
+    Koha::Exceptions::BackgroundJob::InconsistentStatus->throw(
+        current_status  => $self->status,
+        expected_status => 'started'
+    ) unless $self->status eq 'started';
+
+    # reached the end of the tasks already
+    Koha::Exceptions::BackgroundJob::StepOutOfBounds->throw()
+        unless $self->progress < $self->size;
+
+    return $self->progress( $self->progress + 1 )->store;
+}
+
+=head3 finish
+
+    $self->finish;
+
+Makes the job record as finished. If the job status is I<cancelled>, it is kept.
+
+=cut
+
+sub finish {
+    my ( $self, $data ) = @_;
+
+    $self->status('finished') unless $self->status eq 'cancelled';
+
+    return $self->set(
+        {
+            ended_on => \'NOW()',
+            data     => encode_json($data),
+        }
+    )->store;
 }
 
 =head3 job_type

@@ -17,11 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::Exception;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateItem;
+
+use JSON qw( decode_json );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -83,6 +86,69 @@ subtest 'enqueue() tests' => sub {
     is( $job->size,           3,           'Three steps' );
     is( $job->status,         'new',       'Initial status set correctly' );
     is( $job->borrowernumber, $patron->id, 'No userenv, borrowernumber undef' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'start(), step() and finish() tests' => sub {
+
+    plan tests => 19;
+
+    $schema->storage->txn_begin;
+
+    # FIXME: This all feels we need to do it better...
+    my $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2 ] } );
+    my $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
+
+    is( $job->started_on, undef, 'started_on not set yet' );
+    is( $job->size, 2, 'Two steps' );
+
+    $job->start;
+
+    isnt( $job->started_on, undef, 'started_on set' );
+    is( $job->status, 'started' );
+    is( $job->progress, 0, 'No progress yet' );
+
+    $job->step;
+    is( $job->progress, 1, 'First step' );
+    $job->step;
+    is( $job->progress, 2, 'Second step' );
+    throws_ok
+        { $job->step; }
+        'Koha::Exceptions::BackgroundJob::StepOutOfBounds',
+        'Tried to make a forbidden extra step';
+
+    is( $job->progress, 2, 'progress remains unchanged' );
+
+    my $data = { some => 'data' };
+
+    $job->status('cancelled')->store;
+    $job->finish( $data );
+
+    is( $job->status, 'cancelled', "'finish' leaves 'cancelled' untouched" );
+    isnt( $job->ended_on, undef, 'ended_on set' );
+    is_deeply( decode_json( $job->data ), $data );
+
+    $job->status('started')->store;
+    $job->finish( $data );
+
+    is( $job->status, 'finished' );
+    isnt( $job->ended_on, undef, 'ended_on set' );
+    is_deeply( decode_json( $job->data ), $data );
+
+    throws_ok
+        { $job->start; }
+        'Koha::Exceptions::BackgroundJob::InconsistentStatus',
+        'Exception thrown trying to start a finished job';
+
+    is( $@->expected_status, 'new' );
+
+    throws_ok
+        { $job->step; }
+        'Koha::Exceptions::BackgroundJob::InconsistentStatus',
+        'Exception thrown trying to start a finished job';
+
+    is( $@->expected_status, 'started' );
 
     $schema->storage->txn_rollback;
 };
