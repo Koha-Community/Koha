@@ -5858,6 +5858,23 @@ subtest "GetSoonestRenewDate tests" => sub {
         $datedue,
         'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
     );
+
+    t::lib::Mocks::mock_preference( 'NoRenewalBeforePrecision', 'date' );
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'norenewalbefore',
+            rule_value   => 1,
+        }
+    );
+    $issue->date_due( dt_from_string )->store;
+    is(
+        GetSoonestRenewDate( $patron->id, $item->itemnumber ),
+        dt_from_string->truncate( to => 'day' ),
+        'Checkouts with auto-renewal can be renewed 1 day before due date if no renewalbefore = 1 and precision = "date"'
+    );
 };
 
 subtest "CanBookBeIssued + needsconfirmation message" => sub {
