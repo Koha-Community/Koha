@@ -10,7 +10,7 @@
     Batch list
 [% END %] &rsaquo; Order staged MARC records &rsaquo; Acquisitions &rsaquo; Koha
 </title>
-<style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
+<style>@media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
 [%# As long as cataloging plugins rely on 'script' tags added inline, JS must be in the header %]
 [% Asset.js("js/acquisitions-menu.js") | $raw %]
@@ -18,6 +18,7 @@
 [% Asset.js("js/acq.js") | $raw %]
 [% Asset.js("js/funds_sorts.js") | $raw %]
 [% Asset.js("js/addorderiso2709.js") | $raw %]
+[% INCLUDE 'calendar.inc' %]
 </head>
 
 <body id="acq_addorderiso2709" class="acq">
@@ -180,11 +181,11 @@
                                                 </li>
                                                 <li class="sort1">
                                                     <label for="sort1_record_[% biblio.import_record_id | html %]">Statistic 1: </label>
-                                                    <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" id="sort1" size="20" name="sort1" value="[% biblio.sort1 | html %]" />
+                                                    <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort1" value="[% biblio.sort1 | html %]" />
                                                 </li>
                                                 <li class="sort2">
                                                     <label for="sort2_record_[% biblio.import_record_id | html %]">Statistic 2: </label>
-                                                    <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" id="sort2" size="20" name="sort2" value="[% biblio.sort2 | html %]" />
+                                                    <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort2" value="[% biblio.sort2 | html %]" />
                                                 </li>
                                             </ol>
                                         </div>
@@ -319,23 +320,24 @@
                                         </div>
                                     </fieldset> <!-- .biblio.unselected.rows -->
 
-                                    <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    <h3 id="dataPreviewLabel">MARC preview</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-                                                </div>
-                                            </div> <!-- /.modal-content -->
-                                        </div> <!-- /modal-dialog -->
-                                    </div> <!-- /#dataPreview -->
                                 [% END # /FOREACH biblio %]
+                                <div class="modal" id="dataPreview" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                                <h4 id="dataPreviewLabel">MARC preview</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                            </div>
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /#dataPreview -->
                             </div> <!-- /#records_to_import -->
 
                             <div id="items_info">
@@ -402,40 +404,40 @@
                                             <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
                                             <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
                                         </li>
-                                        <li>
-                                            [% IF ( close ) %]
+                                        [% IF ( close ) %]
+                                            <li>
                                                 <span class="label">Fund: </span>
                                                 <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
-                                            [% ELSE %]
-                                                <li>
-                                                    <label for="all_currency">Currency:</label>
-                                                    <select name="all_currency" id="all_currency">
-                                                        [% FOREACH currency IN currencies %]
-                                                            [% IF currency.currency == bookseller.listprice %]
-                                                                <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
-                                                            [% ELSIF not currency.archived %]
-                                                                <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
-                                                            [% END %]
+                                            </li>
+                                        [% ELSE %]
+                                            <li>
+                                                <label for="all_currency">Currency:</label>
+                                                <select name="all_currency" id="all_currency">
+                                                    [% FOREACH currency IN currencies %]
+                                                        [% IF currency.currency == bookseller.listprice %]
+                                                            <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
+                                                        [% ELSIF not currency.archived %]
+                                                            <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
                                                         [% END %]
-                                                    </select>
-                                                </li>
-                                                <li>
-                                                    <label for="all_budget_id">Fund: </label>
-                                                    <select id="all_budget_id" name="all_budget_id">
-                                                        <option value="">Select a fund (will populate orders/items if set)</option>
-                                                        [% FOREACH budget_loo IN budget_loop %]
-                                                            [% IF ( budget_loo.b_active ) %]
-                                                                <option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
-                                                            [% ELSE %]
-                                                                <option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
-                                                            [% END %]
+                                                    [% END %]
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <label for="all_budget_id">Fund: </label>
+                                                <select id="all_budget_id" name="all_budget_id">
+                                                    <option value="">Select a fund (will populate orders/items if set)</option>
+                                                    [% FOREACH budget_loo IN budget_loop %]
+                                                        [% IF ( budget_loo.b_active ) %]
+                                                            <option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
+                                                        [% ELSE %]
+                                                            <option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
                                                         [% END %]
-                                                    </select>
-                                                    <label for="all_showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                                                    <input type="checkbox" id="all_showallbudgets" />
-                                                </li>
-                                            [% END #/IF close %]
-                                        </li>
+                                                    [% END %]
+                                                </select>
+                                                <label for="all_showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+                                                <input type="checkbox" id="all_showallbudgets" />
+                                            </li>
+                                        [% END #/IF close %]
                                         <li>
                                             <label for="all_order_internalnote">Internal note: </label>
                                             <textarea id="all_order_internalnote" cols="30" rows="3" name="all_order_internalnote"></textarea>
