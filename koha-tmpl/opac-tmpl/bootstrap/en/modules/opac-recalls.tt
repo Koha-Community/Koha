@@ -47,7 +47,7 @@
                                         [% FOREACH RECALL IN RECALLS %]
                                             <tr>
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblionumber | html %]">
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblio_id | html %]">
                                                          [% RECALL.biblio.title | html %]
                                                          [% FOREACH s IN RECALL.biblio.subtitle %]
                                                             [% s | html %]
@@ -55,19 +55,19 @@
                                                     </a>
                                                     [% RECALL.biblio.author | html %]
                                                 </td>
-                                                <td class="recalldate" data-order="[% RECALL.recalldate | html %]">
-                                                    <span title="[% RECALL.recalldate | html %]">
+                                                <td class="recalldate" data-order="[% RECALL.created_date | html %]">
+                                                    <span title="[% RECALL.created_date | html %]">
                                                         <span class="tdlabel">Recall date:</span>
-                                                            [% RECALL.recalldate | $KohaDates %]
+                                                            [% RECALL.created_date | $KohaDates %]
                                                     </span>
                                                 </td>
-                                                <td class="expirationdate" data-order="[% RECALL.expirationdate | html %]">
-                                                        [% IF ( RECALL.expirationdate ) %]
-                                                            <span title="[% RECALL.expirationdate | html %]">
+                                                <td class="expirationdate" data-order="[% RECALL.expiration_date | html %]">
+                                                        [% IF ( RECALL.expiration_date ) %]
+                                                            <span title="[% RECALL.expiration_date | html %]">
                                                                 <span class="tdlabel">Expiration:</span>
-                                                                [% RECALL.expirationdate | $KohaDates %]
+                                                                [% RECALL.expiration_date | $KohaDates %]
                                                             </span>
-                                                        [% ELSIF ( !RECALL.old ) %]
+                                                        [% ELSIF ( !RECALL.completed ) %]
                                                             <span title="0000-00-00">
                                                                 <span class="tdlabel">Expiration:</span>
                                                                     Never expires
@@ -89,9 +89,9 @@
                                                         [% ELSIF ( RECALL.overdue ) %]
                                                             Overdue to be returned
                                                         [% ELSIF ( RECALL.expired ) %]
-                                                            Expired on [% RECALL.expirationdate | $KohaDates %]
+                                                            Expired on [% RECALL.expiration_date | $KohaDates %]
                                                         [% ELSIF ( RECALL.cancelled ) %]
-                                                            Cancelled on [% RECALL.cancellationdate | $KohaDates %]
+                                                            Cancelled on [% RECALL.completed_date | $KohaDates %]
                                                         [% ELSIF ( RECALL.fulfilled ) %]
                                                             Fulfilled
                                                         [% ELSE %]
@@ -102,8 +102,8 @@
                                                         <span class="tdlabel">Due date</span>
                                                         [% IF ( RECALL.requested ) %]
                                                             Due to be returned by [% RECALL.checkout.date_due | $KohaDates %]
-                                                        [% ELSIF ( RECALL.waiting and RECALL.expirationdate ) %]
-                                                            Pick up by [% RECALL.expirationdate | $KohaDates %]
+                                                        [% ELSIF ( RECALL.waiting and RECALL.expiration_date ) %]
+                                                            Pick up by [% RECALL.expiration_date | $KohaDates %]
                                                         [% ELSE %]
                                                             -
                                                         [% END %]
@@ -113,8 +113,8 @@
                                                         [% IF ( RECALL.requested or RECALL.overdue ) %]
                                                             <form action="/cgi-bin/koha/opac-recall.pl" method="post">
                                                                 <input type="hidden" name="op" value="cancel">
-                                                                <input type="hidden" name="recall_id" value="[% RECALL.recall_id | html %]">
-                                                                <input type="hidden" name="biblionumber" value="[% RECALL.biblionumber | html %]">
+                                                                <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
+                                                                <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
                                                                 <input type="submit" name="submit" class="btn btn-danger cancel_recall" value="Cancel">
                                                             </form>
                                                         [% END %]

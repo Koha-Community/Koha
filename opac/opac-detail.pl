@@ -735,9 +735,9 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     if ( C4::Context->preference('UseRecalls') ) {
         my $recall_status = Koha::Recalls->search(
             {
-                itemnumber => $itm->{itemnumber},
-                status     => 'waiting',
-                old        => undef,
+                item_id   => $itm->{itemnumber},
+                status    => 'waiting',
+                completed => undef,
             }
         )->count;
     }
