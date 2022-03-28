@@ -189,7 +189,7 @@ elsif ( $op eq 'add_validate' ) {
     }
 
     if( $redirect eq "just_save" ){
-        print $cgi->redirect("/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&editmode=$editmode&redirect=done");
+        print $cgi->redirect("/cgi-bin/koha/tools/additional-contents.pl?op=add_form&id=$id&category=$category&editmode=$editmode&redirect=done");
         exit;
     } else {
         $op = 'list';
