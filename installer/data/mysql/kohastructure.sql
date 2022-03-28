@@ -4295,32 +4295,32 @@ CREATE TABLE `ratings` (
 --
 
 DROP TABLE IF EXISTS recalls;
-CREATE TABLE recalls ( -- information related to recalls in Koha
-    recall_id int(11) NOT NULL auto_increment, -- primary key
-    borrowernumber int(11) NOT NULL DEFAULT 0, -- foreign key from the borrowers table defining which patron requested a recall
-    recalldate datetime DEFAULT NULL, -- the date the recall request was placed
-    biblionumber int(11) NOT NULL DEFAULT 0, -- foreign key from the biblio table defining which bib record this request is for
-    branchcode varchar(10) DEFAULT NULL, -- foreign key from the branches table defining which branch the patron wishes to pick up their recall from
-    cancellationdate datetime DEFAULT NULL, -- the date this recall was cancelled
-    recallnotes mediumtext, -- notes related to this recall
-    priority smallint(6) DEFAULT NULL, -- where in the queue the patron sits
-    status ENUM('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') DEFAULT 'requested', -- request status
-    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- the date and time this recall was last updated
-    itemnumber int(11) DEFAULT NULL, -- foreign key from the items table defining the specific item the recall request was placed on
-    waitingdate datetime DEFAULT NULL, -- the date the item was marked as waiting for the patron at the library
-    expirationdate datetime DEFAULT NULL, -- the date the recall expires
-    old TINYINT(1) NOT NULL DEFAULT 0, -- flag if the recall is old and no longer active, i.e. expired, cancelled or completed
-    item_level_recall TINYINT(1) NOT NULL DEFAULT 0, -- flag if item-level recall
-     PRIMARY KEY (recall_id),
-     KEY borrowernumber (borrowernumber),
-     KEY biblionumber (biblionumber),
-     KEY itemnumber (itemnumber),
-     KEY branchcode (branchcode),
-     CONSTRAINT recalls_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
-     CONSTRAINT recalls_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
-     CONSTRAINT recalls_ibfk_3 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE,
-     CONSTRAINT recalls_ibfk_4 FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE recalls (
+    id int(11) NOT NULL AUTO_INCREMENT COMMENT "Unique identifier for this recall",
+    patron_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for patron who requested recall",
+    created_date datetime DEFAULT NULL COMMENT "Date the recall was requested",
+    biblio_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for bibliographic record that has been recalled",
+    pickup_library_id varchar(10) DEFAULT NULL COMMENT "Identifier for recall pickup library",
+    completed_date datetime DEFAULT NULL COMMENT "Date the recall is completed (fulfilled, cancelled or expired)",
+    notes mediumtext COMMENT "Notes related to the recall",
+    priority smallint(6) DEFAULT NULL COMMENT "Where in the queue the patron sits",
+    status ENUM('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') DEFAULT 'requested' COMMENT "Status of recall",
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Date and time the recall was last updated",
+    item_id int(11) DEFAULT NULL COMMENT "Identifier for item record that was recalled, if an item-level recall",
+    waiting_date datetime DEFAULT NULL COMMENT "Date an item was marked as waiting for the patron at the library",
+    expiration_date datetime DEFAULT NULL COMMENT "Date recall is no longer required, or date recall will expire after waiting on shelf for pickup",
+    completed TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is old and no longer active, i.e. expired, cancelled or completed",
+    item_level TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is for a specific item",
+    PRIMARY KEY (id),
+    KEY recalls_ibfk_1 (patron_id),
+    KEY recalls_ibfk_2 (biblio_id),
+    KEY recalls_ibfk_3 (item_id),
+    KEY recalls_ibfk_4 (pickup_library_id),
+    CONSTRAINT recalls_ibfk_1 FOREIGN KEY (patron_id) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT recalls_ibfk_2 FOREIGN KEY (biblio_id) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT recalls_ibfk_3 FOREIGN KEY (item_id) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT recalls_ibfk_4 FOREIGN KEY (pickup_library_id) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT="Information related to recalls in Koha";
 
 --
 -- Table structure for table `repeatable_holidays`
