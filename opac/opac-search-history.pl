@@ -102,7 +102,7 @@ unless ( $loggedinuser ) {
             C4::Search::History::delete(
                 {
                     userid => $loggedinuser,
-                    id     => [ $cgi->param('id') ],
+                    id     => [ @id ],
                 }
             );
         } else {

@@ -59,7 +59,7 @@ my @serialnums=$input->multi_param('serialid');
 if (@serialnums) { # i.e. they have been flagged to generate claims
     my $err;
     eval {
-        $err = SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+        $err = SendAlerts( 'claimissues', \@serialnums, scalar $input->param("letter_code") );
         if ( not ref $err or not exists $err->{error} ) {
             C4::Serials::updateClaim( \@serialnums );
         }
