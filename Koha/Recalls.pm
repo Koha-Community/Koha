@@ -118,18 +118,18 @@ sub add_recall {
     }
 
     my $recall_request = Koha::Recall->new({
-        borrowernumber => $patron->borrowernumber,
-        recalldate => dt_from_string(),
-        biblionumber => $biblio->biblionumber,
-        branchcode => $branchcode,
+        patron_id => $patron->borrowernumber,
+        created_date => dt_from_string(),
+        biblio_id => $biblio->biblionumber,
+        pickup_library_id => $branchcode,
         status => 'requested',
-        itemnumber => defined $itemnumber ? $itemnumber : undef,
-        expirationdate => $expirationdate,
-        item_level_recall => defined $itemnumber ? 1 : 0,
+        item_id => defined $itemnumber ? $itemnumber : undef,
+        expiration_date => $expirationdate,
+        item_level => defined $itemnumber ? 1 : 0,
     })->store;
 
-    if (defined $recall_request->recall_id){ # successful recall
-        my $recall = Koha::Recalls->find( $recall_request->recall_id );
+    if (defined $recall_request->id){ # successful recall
+        my $recall = Koha::Recalls->find( $recall_request->id );
 
         # get checkout and adjust due date based on circulation rules
         my $checkout = $recall->checkout;
@@ -145,13 +145,13 @@ sub add_recall {
         $checkout->update({ date_due => $due_date });
 
         # get itemnumber of most relevant checkout if a biblio-level recall
-        unless ( $recall->item_level_recall ) { $itemnumber = $checkout->itemnumber; }
+        unless ( $recall->item_level ) { $itemnumber = $checkout->itemnumber; }
 
         # send notice to user with recalled item checked out
         my $letter = C4::Letters::GetPreparedLetter (
             module => 'circulation',
             letter_code => 'RETURN_RECALLED_ITEM',
-            branchcode => $recall->branchcode,
+            branchcode => $recall->pickup_library_id,
             tables => {
                 biblio => $biblio->biblionumber,
                 borrowers => $checkout->borrowernumber,
@@ -168,13 +168,13 @@ sub add_recall {
             branch => C4::Context->userenv->{'branch'},
             type => 'recall',
             itemnumber => $itemnumber,
-            borrowernumber => $recall->borrowernumber,
+            borrowernumber => $recall->patron_id,
             itemtype => $item->effective_itemtype,
             ccode => $item->ccode,
         });
 
         # add action log
-        C4::Log::logaction( 'RECALLS', 'CREATE', $recall->recall_id, "Recall requested by borrower #" . $recall->borrowernumber, $interface ) if ( C4::Context->preference('RecallsLog') );
+        C4::Log::logaction( 'RECALLS', 'CREATE', $recall->id, "Recall requested by borrower #" . $recall->patron_id, $interface ) if ( C4::Context->preference('RecallsLog') );
 
         return ( $recall, $due_interval, $due_date );
     }
@@ -230,12 +230,12 @@ sub move_recall {
         # move_recall was not called to revert or cancel, but was called to fulfill
         my $recall = Koha::Recalls->search(
             {
-                borrowernumber => $borrowernumber,
-                biblionumber   => $item->biblionumber,
-                itemnumber     => [ $item->itemnumber, undef ],
-                old            => 0,
+                patron_id => $borrowernumber,
+                biblio_id => $item->biblionumber,
+                item_id   => [ $item->itemnumber, undef ],
+                completed => 0,
             },
-            { order_by => { -asc => 'recalldate' } }
+            { order_by => { -asc => 'created_date' } }
         )->next;
         if ( $recall ) {
             $recall->set_fulfilled;

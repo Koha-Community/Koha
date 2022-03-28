@@ -260,11 +260,11 @@ sub CalcFine {
 
         # check if item has been recalled. recall should have been marked Overdue by cronjob, so only look at overdue recalls
         # only charge using recall_overdue_fine if there is an item-level recall for this particular item, OR a biblio-level recall
-        my @recalls = Koha::Recalls->search({ biblionumber => $item->{biblionumber}, status => 'overdue' })->as_list;
+        my @recalls = Koha::Recalls->search({ biblio_id => $item->{biblionumber}, status => 'overdue' })->as_list;
         my $bib_level_recall = 0;
         $bib_level_recall = 1 if scalar @recalls > 0;
         foreach my $recall ( @recalls ) {
-            if ( $recall->item_level_recall and $recall->itemnumber == $item->{itemnumber} and $issuing_rule->{recall_overdue_fine} ) {
+            if ( $recall->item_level and $recall->item_id == $item->{itemnumber} and $issuing_rule->{recall_overdue_fine} ) {
                 $bib_level_recall = 0;
                 $amount = $charge_periods * $issuing_rule->{recall_overdue_fine};
                 last;

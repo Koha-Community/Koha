@@ -60,7 +60,7 @@ sub CanArticleRequest {
 sub RecallsCount {
     my ( $self, $biblionumber ) = @_;
 
-    my $recalls = Koha::Recalls->search({ biblionumber => $biblionumber, old => 0 });
+    my $recalls = Koha::Recalls->search({ biblio_id => $biblionumber, completed => 0 });
 
     return $recalls->count;
 }

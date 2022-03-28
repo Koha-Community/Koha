@@ -1250,7 +1250,7 @@ sub can_be_recalled {
         return 0 if ( $patron->recalls->filter_by_current->count >= $recalls_allowed );
 
         # check borrower has not reached open recalls allowed per record limit
-        return 0 if ( $patron->recalls->filter_by_current->search({ biblionumber => $self->biblionumber })->count >= $recalls_per_record );
+        return 0 if ( $patron->recalls->filter_by_current->search({ biblio_id => $self->biblionumber })->count >= $recalls_per_record );
 
         # check if any of the items under this biblio are already checked out by this borrower
         return 0 if ( Koha::Checkouts->search({ itemnumber => [ @all_itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );

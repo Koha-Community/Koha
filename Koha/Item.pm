@@ -1476,13 +1476,13 @@ sub recall {
     my ( $self ) = @_;
     my @recalls = Koha::Recalls->search(
         {
-            biblionumber => $self->biblionumber,
-            old          => 0,
+            biblio_id => $self->biblionumber,
+            completed => 0,
         },
-        { order_by => { -asc => 'recalldate' } }
+        { order_by => { -asc => 'created_date' } }
     )->as_list;
     foreach my $recall (@recalls) {
-        if ( $recall->item_level_recall and $recall->itemnumber == $self->itemnumber ){
+        if ( $recall->item_level and $recall->item_id == $self->itemnumber ){
             return $recall;
         }
     }
@@ -1539,10 +1539,10 @@ sub can_be_recalled {
         return 0 if ( $patron->recalls->filter_by_current->count >= $rule->{recalls_allowed} );
 
         # check borrower has not reach open recalls allowed per record limit
-        return 0 if ( $patron->recalls->filter_by_current->search({ biblionumber => $self->biblionumber })->count >= $rule->{recalls_per_record} );
+        return 0 if ( $patron->recalls->filter_by_current->search({ biblio_id => $self->biblionumber })->count >= $rule->{recalls_per_record} );
 
         # check if this patron has already recalled this item
-        return 0 if ( Koha::Recalls->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->filter_by_current->count > 0 );
+        return 0 if ( Koha::Recalls->search({ item_id => $self->itemnumber, patron_id => $patron->borrowernumber })->filter_by_current->count > 0 );
 
         # check if this patron has already checked out this item
         return 0 if ( Koha::Checkouts->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
@@ -1628,10 +1628,10 @@ sub check_recalls {
     my ( $self ) = @_;
 
     my @recalls = Koha::Recalls->search(
-        {   biblionumber => $self->biblionumber,
-            itemnumber   => [ $self->itemnumber, undef ]
+        {   biblio_id => $self->biblionumber,
+            item_id   => [ $self->itemnumber, undef ]
         },
-        { order_by => { -asc => 'recalldate' } }
+        { order_by => { -asc => 'created_date' } }
     )->filter_by_current->as_list;
 
     my $recall;

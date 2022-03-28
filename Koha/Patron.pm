@@ -2072,7 +2072,7 @@ Return the patron's recalls.
 sub recalls {
     my ( $self ) = @_;
 
-    return Koha::Recalls->search({ borrowernumber => $self->borrowernumber });
+    return Koha::Recalls->search({ patron_id => $self->borrowernumber });
 }
 
 =head3 account_balance

@@ -440,7 +440,7 @@ sub CanItemBeReserved {
 
     # check if a recall exists on this item from this borrower
     return { status => 'recall' }
-      if $patron->recalls->filter_by_current->search({ itemnumber => $item->itemnumber })->count;
+      if $patron->recalls->filter_by_current->search({ item_id => $item->itemnumber })->count;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 

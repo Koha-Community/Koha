@@ -384,10 +384,10 @@ sub transferbook {
 
     # find recall
     if ( C4::Context->preference('UseRecalls') ) {
-        my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+        my $recall = Koha::Recalls->find({ item_id => $itemnumber, status => 'in_transit' });
         if ( defined $recall ) {
             # do a transfer if the recall branch is different to the item holding branch
-            if ( $recall->branchcode eq $fbr ) {
+            if ( $recall->pickup_library_id eq $fbr ) {
                 $dotransfer = 0;
                 $messages->{'RecallPlacedAtHoldingBranch'} = 1;
             } else {
@@ -1137,35 +1137,35 @@ sub CanBookBeIssued {
     # Only bother doing this if UseRecalls is enabled and the item is recallable
     # Don't look at recalls that are in transit
     if ( C4::Context->preference('UseRecalls') and $item_object->can_be_waiting_recall ) {
-        my @recalls = $biblio->recalls({},{ order_by => { -asc => 'recalldate' } })->filter_by_current->as_list;
+        my @recalls = $biblio->recalls({},{ order_by => { -asc => 'created_date' } })->filter_by_current->as_list;
 
         foreach my $r ( @recalls ) {
-            if ( $r->itemnumber and
-                $r->itemnumber == $item_object->itemnumber and
-                $r->borrowernumber == $patron->borrowernumber and
+            if ( $r->item_id and
+                $r->item_id == $item_object->itemnumber and
+                $r->patron_id == $patron->borrowernumber and
                 ( $r->waiting or $r->requested ) ) {
-                $messages{RECALLED} = $r->recall_id;
+                $messages{RECALLED} = $r->id;
                 $recall = $r;
                 # this item is recalled by or already waiting for this borrower and the recall can be fulfilled
                 last;
             }
-            elsif ( $r->itemnumber and
-                $r->itemnumber == $item_object->itemnumber and
+            elsif ( $r->item_id and
+                $r->item_id == $item_object->itemnumber and
                 $r->in_transit ) {
                 # recalled item is in transit
-                $issuingimpossible{RECALLED_INTRANSIT} = $r->branchcode;
+                $issuingimpossible{RECALLED_INTRANSIT} = $r->pickup_library_id;
             }
-            elsif ( $r->item_level_recall and
-                $r->itemnumber == $item_object->itemnumber and
-                $r->borrowernumber != $patron->borrowernumber and
+            elsif ( $r->item_level and
+                $r->item_id == $item_object->itemnumber and
+                $r->patron_id != $patron->borrowernumber and
                 !$r->in_transit ) {
                 # this specific item has been recalled by a different patron
                 $needsconfirmation{RECALLED} = $r;
                 $recall = $r;
                 last;
             }
-            elsif ( !$r->item_level_recall and
-                $r->borrowernumber != $patron->borrowernumber and
+            elsif ( !$r->item_level and
+                $r->patron_id != $patron->borrowernumber and
                 !$r->in_transit ) {
                 # a different patron has placed a biblio-level recall and this item is eligible to fill it
                 $needsconfirmation{RECALLED} = $r;
@@ -2318,7 +2318,7 @@ sub AddReturn {
         $recall = $item->check_recalls if $item->can_be_waiting_recall;
         if ( defined $recall ) {
             $messages->{RecallFound} = $recall;
-            if ( $recall->branchcode ne $branch ) {
+            if ( $recall->pickup_library_id ne $branch ) {
                 $messages->{RecallNeedsTransfer} = $branch;
             }
         }
@@ -2385,8 +2385,8 @@ sub AddReturn {
 
     if ( C4::Context->preference('UseRecalls') ) {
         # all recalls that have triggered a transfer will have an allocated itemnumber
-        my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'in_transit' });
-        if ( $transfer_recall and $transfer_recall->branchcode eq $branch ) {
+        my $transfer_recall = Koha::Recalls->find({ item_id => $item->itemnumber, status => 'in_transit' });
+        if ( $transfer_recall and $transfer_recall->pickup_library_id eq $branch ) {
             $messages->{TransferredRecall} = $transfer_recall;
         }
     }
@@ -2928,9 +2928,9 @@ sub CanBookBeRenewed {
         my $recall = undef;
         $recall = $item->check_recalls if $item->can_be_waiting_recall;
         if ( defined $recall ) {
-            if ( $recall->item_level_recall ) {
+            if ( $recall->item_level ) {
                 # item-level recall. check if this item is the recalled item, otherwise renewal will be allowed
-                return ( 0, 'recalled' ) if ( $recall->itemnumber == $item->itemnumber );
+                return ( 0, 'recalled' ) if ( $recall->item_id == $item->itemnumber );
             } else {
                 # biblio-level recall, so only disallow renewal if the biblio-level recall has been fulfilled by a different item
                 return ( 0, 'recalled' ) unless ( $recall->waiting );

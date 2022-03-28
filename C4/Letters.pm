@@ -751,7 +751,7 @@ sub _parseletter_sth {
     ($table eq 'serial') ? "SELECT * FROM $table WHERE serialid = ?" :
     ($table eq 'problem_reports') ? "SELECT * FROM $table WHERE reportid = ?" :
     ($table eq 'additional_contents' || $table eq 'opac_news') ? "SELECT * FROM additional_contents WHERE idnew = ?" :
-    ($table eq 'recalls') ? "SELECT * FROM $table WHERE recall_id = ?" :
+    ($table eq 'recalls') ? "SELECT * FROM $table WHERE id = ?" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";

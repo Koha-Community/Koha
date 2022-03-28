@@ -1904,7 +1904,7 @@ sub searchResults {
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
                     $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
                     if ( C4::Context->preference('UseRecalls') ) {
-                        if ( Koha::Recalls->search({ itemnumber => $item->{itemnumber}, status => 'waiting' })->count ) {
+                        if ( Koha::Recalls->search({ item_id => $item->{itemnumber}, status => 'waiting' })->count ) {
                             $recallstatus = 'Waiting';
                         }
                     }
