@@ -286,8 +286,8 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6DbEjtt5g6QY6VuCqrMleg
 
 __PACKAGE__->add_columns(
-    '+old' => { is_boolean => 1 },
-    '+item_level_recall' => { is_boolean => 1 },
+    '+completed' => { is_boolean => 1 },
+    '+item_level' => { is_boolean => 1 },
 );
 
 __PACKAGE__->belongs_to(
