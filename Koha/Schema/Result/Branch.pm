@@ -772,7 +772,7 @@ Related object: L<Koha::Schema::Result::Recall>
 __PACKAGE__->has_many(
   "recalls",
   "Koha::Schema::Result::Recall",
-  { "foreign.branchcode" => "self.branchcode" },
+  { "foreign.pickup_library_id" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -882,8 +882,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-02-15 02:16:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PR2GOpldAnNtyB2DRLsE9g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-03-28 22:07:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kpv55lV6FRGoxxu5nufXhg
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },

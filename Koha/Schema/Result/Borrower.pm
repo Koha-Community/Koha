@@ -1595,7 +1595,7 @@ Related object: L<Koha::Schema::Result::Recall>
 __PACKAGE__->has_many(
   "recalls",
   "Koha::Schema::Result::Recall",
-  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { "foreign.patron_id" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -1955,8 +1955,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-24 10:20:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:srYT5wjg7Jhy5CpmDjWv/g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-29 11:09:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pQqp6+XsKkDrnO57fQ9dmg
 
 __PACKAGE__->has_many(
   "extended_attributes",

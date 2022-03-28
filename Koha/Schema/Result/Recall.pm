@@ -6,7 +6,7 @@ package Koha::Schema::Result::Recall;
 
 =head1 NAME
 
-Koha::Schema::Result::Recall
+Koha::Schema::Result::Recall - Information related to recalls in Koha
 
 =cut
 
@@ -29,48 +29,64 @@ __PACKAGE__->table("recalls");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 borrowernumber
+Unique identifier for this recall
+
+=head2 patron_id
 
   data_type: 'integer'
   default_value: 0
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 recalldate
+Identifier for patron who requested recall
+
+=head2 created_date
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 biblionumber
+Date the recall was requested
+
+=head2 biblio_id
 
   data_type: 'integer'
   default_value: 0
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 branchcode
+Identifier for bibliographic record that has been recalled
+
+=head2 pickup_library_id
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 1
   size: 10
 
-=head2 cancellationdate
+Identifier for recall pickup library
+
+=head2 completed_date
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 recallnotes
+Date the recall is completed (fulfilled, cancelled or expired)
+
+=head2 notes
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+Notes related to the recall
 
 =head2 priority
 
   data_type: 'smallint'
   is_nullable: 1
+
+Where in the queue the patron sits
 
 =head2 status
 
@@ -79,6 +95,8 @@ __PACKAGE__->table("recalls");
   extra: {list => ["requested","overdue","waiting","in_transit","cancelled","expired","fulfilled"]}
   is_nullable: 1
 
+Status of recall
+
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -86,70 +104,82 @@ __PACKAGE__->table("recalls");
   default_value: current_timestamp
   is_nullable: 0
 
-=head2 itemnumber
+Date and time the recall was last updated
+
+=head2 item_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 waitingdate
+Identifier for item record that was recalled, if an item-level recall
+
+=head2 waiting_date
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 expirationdate
+Date an item was marked as waiting for the patron at the library
+
+=head2 expiration_date
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 old
+Date recall is no longer required, or date recall will expire after waiting on shelf for pickup
+
+=head2 completed
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
-=head2 item_level_recall
+Flag if recall is old and no longer active, i.e. expired, cancelled or completed
+
+=head2 item_level
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+Flag if recall is for a specific item
 
 =cut
 
 __PACKAGE__->add_columns(
   "recall_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "borrowernumber",
+  "patron_id",
   {
     data_type      => "integer",
     default_value  => 0,
     is_foreign_key => 1,
     is_nullable    => 0,
   },
-  "recalldate",
+  "created_date",
   {
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "biblionumber",
+  "biblio_id",
   {
     data_type      => "integer",
     default_value  => 0,
     is_foreign_key => 1,
     is_nullable    => 0,
   },
-  "branchcode",
+  "pickup_library_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
-  "cancellationdate",
+  "completed_date",
   {
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "recallnotes",
+  "notes",
   { data_type => "mediumtext", is_nullable => 1 },
   "priority",
   { data_type => "smallint", is_nullable => 1 },
@@ -177,23 +207,23 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
-  "itemnumber",
+  "item_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "waitingdate",
+  "waiting_date",
   {
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "expirationdate",
+  "expiration_date",
   {
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "old",
+  "completed",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "item_level_recall",
+  "item_level",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -211,7 +241,7 @@ __PACKAGE__->set_primary_key("recall_id");
 
 =head1 RELATIONS
 
-=head2 biblionumber
+=head2 biblio
 
 Type: belongs_to
 
@@ -220,48 +250,13 @@ Related object: L<Koha::Schema::Result::Biblio>
 =cut
 
 __PACKAGE__->belongs_to(
-  "biblionumber",
+  "biblio",
   "Koha::Schema::Result::Biblio",
-  { biblionumber => "biblionumber" },
+  { biblionumber => "biblio_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 borrowernumber
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Borrower>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "borrowernumber",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "borrowernumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 branchcode
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Branch>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "branchcode",
-  "Koha::Schema::Result::Branch",
-  { branchcode => "branchcode" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
-
-=head2 itemnumber
+=head2 item
 
 Type: belongs_to
 
@@ -270,9 +265,44 @@ Related object: L<Koha::Schema::Result::Item>
 =cut
 
 __PACKAGE__->belongs_to(
-  "itemnumber",
+  "item",
   "Koha::Schema::Result::Item",
-  { itemnumber => "itemnumber" },
+  { itemnumber => "item_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 patron
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "patron",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "patron_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 pickup_library
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "pickup_library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "pickup_library_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -282,8 +312,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-23 19:53:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6DbEjtt5g6QY6VuCqrMleg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-29 11:14:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lUgwwMxaStiOS7pHL0UGJA
 
 __PACKAGE__->add_columns(
     '+completed' => { is_boolean => 1 },
@@ -291,35 +321,9 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->belongs_to(
-  "biblio",
-  "Koha::Schema::Result::Biblio",
-  { biblionumber => "biblionumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-__PACKAGE__->belongs_to(
-  "item",
-  "Koha::Schema::Result::Item",
-  { itemnumber => "itemnumber" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
-
-__PACKAGE__->belongs_to(
-  "patron",
-  "Koha::Schema::Result::Borrower",
-  { borrowernumber => "borrowernumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-__PACKAGE__->belongs_to(
   "library",
   "Koha::Schema::Result::Branch",
-  { branchcode => "branchcode" },
+  { branchcode => "pickup_library_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",

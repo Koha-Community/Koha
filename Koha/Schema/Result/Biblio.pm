@@ -386,7 +386,7 @@ Related object: L<Koha::Schema::Result::Recall>
 __PACKAGE__->has_many(
   "recalls",
   "Koha::Schema::Result::Recall",
-  { "foreign.biblionumber" => "self.biblionumber" },
+  { "foreign.biblio_id" => "self.biblionumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -541,8 +541,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-10-14 15:07:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6YO2t5VoWcG/tM+8uOP/wg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-03-28 22:07:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sh8waM4ivuiNao0VV5403Q
 
 __PACKAGE__->has_many(
   "biblioitem",

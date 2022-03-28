@@ -800,7 +800,7 @@ Related object: L<Koha::Schema::Result::Recall>
 __PACKAGE__->has_many(
   "recalls",
   "Koha::Schema::Result::Recall",
-  { "foreign.itemnumber" => "self.itemnumber" },
+  { "foreign.item_id" => "self.itemnumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -880,8 +880,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-10-14 15:07:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yRbholcHil9qRF5t+83jdA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-03-28 22:07:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:28f9/7z3Nq5C4qzBMyceiQ
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
