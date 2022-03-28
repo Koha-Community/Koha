@@ -24,7 +24,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::RestrictionTypes;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op    = $input->param('op') // 'list';
 my $code  = uc $input->param('code');
 my @messages = ();
@@ -35,7 +35,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/restrictions.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_patron_restrictions' },
         debug           => 1,
     }
