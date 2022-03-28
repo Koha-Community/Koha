@@ -240,8 +240,8 @@
                     [% IF ( SyndeticsCovers ) %]
                         [% IF ( content_identifier_exists ) %]
                         <div class="cover-image" id="syndetics-bookcoverimg">
-                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" title="Syndetics cover image">
-                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% Koha.Preference('SyndeticsCoverImageSize') | html %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% normalized_oclc | html %]" alt="" class="thumbnail" />
+                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" title="Syndetics cover image">
+                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/[% Koha.Preference('SyndeticsCoverImageSize') | url %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" alt="" class="thumbnail" />
                             </a>
                             <div class="hint">Image from Syndetics</div>
                         </div>
