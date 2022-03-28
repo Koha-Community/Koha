@@ -84,7 +84,6 @@ $(document).ready(function() {
         $(this.form).submit();
     });
 
-    $('#tabs').tabs();
     $(".previewData").on("click", function(e){
         e.preventDefault();
         var ltitle = $(this).text();
