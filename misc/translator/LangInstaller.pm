@@ -126,7 +126,8 @@ sub new {
     # EN UNIMARC YAML installer files
     push @{$self->{installer}}, {
         name   => "UNIMARC YAML installer files",
-        dirs   => [ 'installer/data/mysql/en/marcflavour/unimarc/mandatory', ],
+        dirs   => [ 'installer/data/mysql/en/marcflavour/unimarc/mandatory',
+                    'installer/data/mysql/en/marcflavour/unimarc/optional'],
         suffix => "-installer-UNIMARC.po",
     };
 
