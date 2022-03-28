@@ -232,7 +232,7 @@ Thank you!','email'),
 A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.branchcode>>. Please pick up your item by <<recalls.expirationdate>>.
 
 Thank you!','email'),
-('circulation','RECALL_REQUESTER_DET','','Details of patron who recalled item',0,'Date: <<today>>
+('circulation','RECALL_REQUESTER_DET','','Details of patron who recalled item',0,'Details of patron who recalled item','Date: <<today>>
 
 Recall for pickup at <<branches.branchname>>
 <<borrowers.surname>>, <<borrowers.firstname>> (<<borrowers.cardnumber>>)
