@@ -21,8 +21,17 @@ return {
             $dbh->do(q{ALTER TABLE user_permissions DROP COLUMN temp});
             say $out "Removed any duplicate rows";
 
+            if ( foreign_key_exists('user_permissions', 'user_permissions_ibfk_2') ) {
+                $dbh->do(q{
+                    ALTER TABLE user_permissions DROP FOREIGN KEY user_permissions_ibfk_2
+                });
+            }
             $dbh->do(q{
                 ALTER TABLE user_permissions ADD CONSTRAINT PK_borrowernumber_module_code PRIMARY KEY (borrowernumber,module_bit,code)
+            });
+            $dbh->do(q{
+                ALTER TABLE user_permissions
+                ADD CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) REFERENCES `permissions` (`module_bit`, `code`) ON DELETE CASCADE ON UPDATE CASCADE;
             });
             say $out "Added a primary key on user_permissions on borrowernumber, module_bit, code";
         }
