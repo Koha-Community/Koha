@@ -208,9 +208,7 @@ outside this context.
 =cut
 
 sub get_script_name {
-    # This is the method about.pl uses to detect Plack; now that two places use it, it MUST be
-    # right.
-    if ( ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
+    if ( ( C4::Context::psgi_env ) && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
         return '/cgi-bin/koha' . $2;
     } else {
         return $ENV{SCRIPT_NAME};

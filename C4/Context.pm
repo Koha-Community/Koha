@@ -999,21 +999,15 @@ sub needs_install {
     return ($self->preference('Version')) ? 0 : 1;
 }
 
-=head3 is_psgi_or_plack
+=head3 psgi_env
 
-is_psgi_or_plack returns true if there is an environmental variable
+psgi_env returns true if there is an environmental variable
 prefixed with "psgi" or "plack". This is useful for detecting whether
 this is a PSGI app or a CGI app, and implementing code as appropriate.
 
 =cut
 
-sub is_psgi_or_plack {
-    my $is_psgi_or_plack = 0;
-    if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
-        $is_psgi_or_plack = 1;
-    }
-    return $is_psgi_or_plack;
-}
+sub psgi_env { any { /(^psgi\.|^plack\.)/i } keys %ENV };
 
 =head3 is_internal_PSGI_request
 
@@ -1026,7 +1020,7 @@ app
 #NOTE: This is not a very robust method but it's the best we have so far
 sub is_internal_PSGI_request {
     my $is_internal = 0;
-    if ( (__PACKAGE__->is_psgi_or_plack) && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ){
+    if ( (__PACKAGE__->psgi_env) && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ){
         $is_internal = 1;
     }
     return $is_internal;

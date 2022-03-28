@@ -55,14 +55,14 @@ use Koha::CookieManager;
 
 use vars qw($ldap $cas $caslogout);
 our (@ISA, @EXPORT_OK);
+
+sub safe_exit {
+    if   (C4::Context::psgi_env) { die 'psgi:exit' }
+    else            { exit }
+}
+
+
 BEGIN {
-    sub psgi_env { any { /^psgi\./ } keys %ENV }
-
-    sub safe_exit {
-        if   (psgi_env) { die 'psgi:exit' }
-        else            { exit }
-    }
-
     C4::Context->set_remote_address;
 
     require Exporter;
