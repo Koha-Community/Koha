@@ -42,10 +42,10 @@ sub delete {
     my ( $self ) = @_;
 
     # Find out what the default is
-    my $default = Koha::RestrictionTypes->find({ dflt => 1 })->code;
+    my $default = Koha::RestrictionTypes->find({ is_system => 1 })->code;
     # Ensure we're not trying to delete a readonly type (this includes
     # the default type)
-    return 0 if $self->ronly == 1;
+    return 0 if $self->readonly == 1;
     # We can't use Koha objects here because Koha::Patron::Debarments
     # is not a Koha object. So we'll do it old skool
     my $rows = C4::Context->dbh->do(
