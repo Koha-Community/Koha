@@ -126,6 +126,11 @@ const poTasks = {
         create: po_create_installer_marc21,
         update: po_update_installer_marc21,
     },
+    'installer-UNIMARC': {
+        extract: po_extract_installer_unimarc,
+        create: po_create_installer_unimarc,
+        update: po_update_installer_unimarc,
+    },
 };
 
 const poTypes = Object.keys(poTasks);
@@ -237,6 +242,8 @@ function po_extract_installer_marc (type) {
 
 function po_extract_installer_marc21 ()  { return po_extract_installer_marc('MARC21') }
 
+function po_extract_installer_unimarc ()  { return po_extract_installer_marc('UNIMARC') }
+
 function po_create_type (type) {
     const access = util.promisify(fs.access);
     const exec = util.promisify(child_process.exec);
@@ -276,6 +283,7 @@ function po_create_messages ()          { return po_create_type('messages') }
 function po_create_messages_js ()       { return po_create_type('messages-js') }
 function po_create_installer ()         { return po_create_type('installer') }
 function po_create_installer_marc21 ()  { return po_create_type('installer-MARC21') }
+function po_create_installer_unimarc () { return po_create_type('installer-UNIMARC') }
 
 function po_update_type (type) {
     const access = util.promisify(fs.access);
@@ -312,6 +320,7 @@ function po_update_messages ()          { return po_update_type('messages') }
 function po_update_messages_js ()       { return po_update_type('messages-js') }
 function po_update_installer ()         { return po_update_type('installer') }
 function po_update_installer_marc21 ()  { return po_update_type('installer-MARC21') }
+function po_update_installer_unimarc () { return po_update_type('installer-UNIMARC') }
 
 /**
  * Gulp plugin that executes xgettext-like command `cmd` on all files given as
