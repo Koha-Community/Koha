@@ -327,7 +327,7 @@ subtest 'Shelf permissions' => sub {
     is( $public_shelf->can_be_deleted( $patron3->{borrowernumber} ), 0, 'Public list should not be deleted by someone with no special permissions' );
     is( $public_shelf->can_be_deleted( $patron4->{borrowernumber} ), 0, 'Public list should not be deleted by someone with the edit_public_lists sub-permission checked' );
 
-    is( $public_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage thier list' );
+    is( $public_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage their list' );
     is( $public_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Public list should not be managed by another staff member' );
     is( $public_shelf->can_be_managed( $patron3->{borrowernumber} ), 0, 'Public list should not be managed by someone with no special permissions' );
     is( $public_shelf->can_be_managed( $patron4->{borrowernumber} ), 1, 'Public list should be managed by someone with the edit_public_lists sub-permission checked' );
