@@ -32,7 +32,7 @@ use C4::Biblio qw(
 );
 use C4::Items qw( AddItemFromMarc ModItemFromMarc );
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag StripNonXmlChars );
-use C4::AuthoritiesMarc qw( AddAuthority GuessAuthTypeCode );
+use C4::AuthoritiesMarc qw( AddAuthority GuessAuthTypeCode GetAuthorityXML ModAuthority DelAuthority );
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use Koha::Items;
 use Koha::Plugins::Handler;
