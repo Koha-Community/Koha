@@ -583,7 +583,7 @@ sub build_authorities_query_compat {
 
         $m = exists $koha_to_index_name->{$m} ? $koha_to_index_name->{$m} : $m;
         push @indexes, $m;
-        warn "Unknown search field $m in marclist" unless (defined $mappings->{data}->{properties}->{$m} || $m eq '' || $m eq 'match-heading');
+        warn "Unknown search field $m in marclist" unless (defined $mappings->{properties}->{$m} || $m eq '' || $m eq 'match-heading');
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
@@ -1132,7 +1132,7 @@ sub _sort_field {
     my ($self, $f) = @_;
 
     my $mappings = $self->get_elasticsearch_mappings();
-    my $textField = defined $mappings->{data}{properties}{$f}{type} && $mappings->{data}{properties}{$f}{type} eq 'text';
+    my $textField = defined $mappings->{properties}{$f}{type} && $mappings->{properties}{$f}{type} eq 'text';
     if (!defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f}) {
         $f .= '__sort';
     } else {
