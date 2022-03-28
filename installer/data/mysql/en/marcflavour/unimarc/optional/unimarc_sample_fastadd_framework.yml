@@ -1,0 +1,48 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+#
+# *************************************************************
+#      FASTADD KOHA UNIMARC BIBLIOGRAPHIC FRAMEWORK
+# *************************************************************
+
+description:
+  - "'FA', a 'Fast Add' minimal UNIMARC framework suitable for ILL or on-the-fly cataloguing."
+
+tables:
+  - biblio_framework:
+      translatable: [ frameworktext ]
+      multiline: []
+      rows:
+        - frameworkcode: FA
+          frameworktext: "Fast Add Framework"
+
+sql_statements:
+  - "INSERT IGNORE INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
+    SELECT tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, 'FA'
+    FROM marc_tag_structure
+    WHERE frameworkcode = '' AND
+    tagfield IN ('000', '001', '090', '099', '100', '200', '205', '210', '225', '995');"
+
+
+  - "INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue)
+    SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, 'FA', seealso, link, defaultvalue
+    FROM marc_subfield_structure
+    WHERE frameworkcode = '' AND
+    tagfield IN ('000', '001', '090', '099', '100', '200', '205', '210', '225', '995');"
