@@ -98,7 +98,7 @@
                                             <input type="checkbox" id="showallbudgets" />
                                         </span>
                                     </div>
-                                </div>
+                                </div> <!-- /#searchheader -->
 
                                 <input type="hidden" name="op" value="import_records"/>
                                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
@@ -315,9 +315,9 @@
                                                         </li>
                                                     </ol>
                                                 </fieldset>
-                                            [% END %]
+                                            [% END # /FOREACH item %]
                                         </div>
-                                    </fieldset>
+                                    </fieldset> <!-- .biblio.unselected.rows -->
 
                                     <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -332,11 +332,11 @@
                                                 <div class="modal-footer">
                                                     <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                [% END %]
-                            </div>
+                                            </div> <!-- /.modal-content -->
+                                        </div> <!-- /modal-dialog -->
+                                    </div> <!-- /#dataPreview -->
+                                [% END # /FOREACH biblio %]
+                            </div> <!-- /#records_to_import -->
 
                             <div id="items_info">
                                 <h2>Item information</h2>
@@ -386,12 +386,12 @@
                                                             </li>
                                                         [% END %]
                                                     </ol>
-                                                </div><!-- /iteminformation -->
-                                            </div>
-                                        [% END %] <!-- /items -->
+                                                </div><!-- /#itemblock -->
+                                            </div> <!-- /#outeritemblock -->
+                                        [% END #/FOREACH item %]
                                     </fieldset>
-                                [% END %] <!-- items -->
-                            </div>
+                                [% END # /IF items %]
+                            </div> <!-- /#items_info -->
 
                             <div id="accounting_details">
                                 <p>Import all the checked items in the basket with the following accounting details (used only if no information is filled for the item):</p>
@@ -434,7 +434,7 @@
                                                     <label for="all_showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive:</label>
                                                     <input type="checkbox" id="all_showallbudgets" />
                                                 </li>
-                                            [% END %]
+                                            [% END #/IF close %]
                                         </li>
                                         <li>
                                             <label for="all_order_internalnote">Internal note: </label>
@@ -454,15 +454,15 @@
                                             <input type="text" id="all_sort2" size="20" name="all_sort2" value="" />
                                         </li>
                                     </ol>
-                                </fieldset>
-                            </div>
-                        </div>
+                                </fieldset> <!-- /.rows -->
+                            </div> <!-- /#accounting_details -->
+                        </div> <!-- /#tabs -->
 
                         <fieldset class="action">
                             <input id="add_order" type="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Cancel</a>
                         </fieldset>
-                    </form>
-                [% ELSE %]
+                    </form> <!-- /#Aform -->
+                [% ELSE # IF ( batch_details ) %]
                     <div>
                         <h1>Choose the file to add to the basket</h1>
                         <table id="files">
@@ -506,11 +506,11 @@
                                             <a href="[% batch_lis.scriptname | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add orders</a>
                                         </td>
                                     </tr>
-                                [% END %]
+                                [% END # /FOREACH batch_lis %]
                             </tbody>
-                        </table>
+                        </table> <!-- /#files -->
                     </div>
-                [% END %]
+                [% END # /IF ( batch_details ) %]
             </div> [% # /div.col-sm-6 %]
         </div> [% # /div.row %]
 
