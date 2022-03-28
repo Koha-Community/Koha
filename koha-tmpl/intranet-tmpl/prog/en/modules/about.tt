@@ -28,17 +28,18 @@
             <h1>About Koha</h1>
 
     <div id="abouttabs" class="toptabs numbered">
-        <ul>
-        <li><a href="#about">Server information</a></li>
-        <li><a href="#perl">Perl modules</a></li>
-        <li><a href="#sysinfo">System information</a></li>
-        <li><a href="#team">Koha team</a></li>
-        <li><a href="#licenses">Licenses</a></li>
-        <li><a href="#translations">Translations</a></li>
-        <li><a href="#history">Timeline</a></li>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">Server information</a></li>
+            <li role="presentation"><a href="#perl" aria-controls="perl" role="tab" data-toggle="tab">Perl modules</a></li>
+            <li role="presentation"><a href="#sysinfo" aria-controls="sysinfo" role="tab" data-toggle="tab">System information</a></li>
+            <li role="presentation"><a href="#team" aria-controls="team" role="tab" data-toggle="tab">Koha team</a></li>
+            <li role="presentation"><a href="#licenses" aria-controls="licenses" role="tab" data-toggle="tab">Licenses</a></li>
+            <li role="presentation"><a href="#translations" aria-controls="translations" role="tab" data-toggle="tab">Translations</a></li>
+            <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">Timeline</a></li>
         </ul>
 
-        <div id="about">
+        <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="about">
 
         <table>
             <caption>Server information</caption>
@@ -171,7 +172,7 @@
             </tr>
         </table>
         </div>
-        <div id="perl">
+        <div role="tabpanel" class="tab-pane" id="perl">
             <table style="cursor:pointer">
                 <caption>Perl modules</caption>
                 [% FOREACH tabl IN table %]
@@ -214,7 +215,7 @@
             </table>
         </div>
 
-        <div id="sysinfo">
+        <div role="tabpanel" class="tab-pane" id="sysinfo">
     [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
@@ -508,7 +509,7 @@
     [% END %]
         </div>
 
-        <div id="team">
+        <div role="tabpanel" class="tab-pane" id="team">
             <h2>Special thanks to the following organizations</h2>
             <ul>
                 <li><a href="http://library.org.nz">Horowhenua Library Trust</a>, New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)</li>
@@ -678,7 +679,7 @@
             </ul>
         </div>
 
-        <div id="licenses">
+        <div role="tabpanel" class="tab-pane" id="licenses">
             <h2>Koha</h2>
             <p>
             <a href="http://www.gnu.org/licenses/gpl-3.0.html">Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</a>
@@ -801,7 +802,7 @@
             <p><a href="https://larsjung.de/kjua/">kjua</a> by Lars Jung is a JavaScript library that generates QR codes, licensed under the <a href="https://github.com/lrsjng/kjua/blob/master/README.md">MIT license</a>.</p>
 
             <h2>Verovio</h2>
-            <p><a href="https://www.verovio.org/index.xhtml">Verovio is developed by the Swiss RISM Office with the support of the Swiss National Science Foundation, licensed under the <a href="http://www.gnu.org/licenses/lgpl-3.0.html">LGPL v3.0</a>.</p>
+            <p><a href="https://www.verovio.org/index.xhtml">Verovio</a> is developed by the Swiss RISM Office with the support of the Swiss National Science Foundation, licensed under the <a href="http://www.gnu.org/licenses/lgpl-3.0.html">LGPL v3.0</a>.</p>
 
             <h2>jquery.cookie</h2>
             <p><a href="https://github.com/carhartl/jquery-cookie">jquery.cookie</a> by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser cookies, licensed under the <a href="https://github.com/carhartl/jquery-cookie/blob/master/MIT-LICENSE.txt">MIT license</a>.</p>
@@ -820,7 +821,7 @@
 
         </div>
 
-        <div id="translations">
+        <div role="tabpanel" class="tab-pane" id="translations">
             <h2>Translation</h2>
             <ul>
 <li>العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare Technologies; Versions 3.6 to 3.14 by Arabic Koha support team: Karam Qubsi, Kouider Bounama, Sham Bajaa, Ghofran Alshami, Chrestian Aboud, Fatema Salem and Duaa Bazzazi.
@@ -872,7 +873,7 @@
 
         </div>
 
-        <div id="history">
+        <div role="tabpanel" class="tab-pane" id="history">
         <h2>Koha history timeline</h2>
     [% IF ! timeline_read_error %]
         <table style="cursor:pointer">
@@ -901,13 +902,17 @@
     </div>
 </div>
 </div>
+</div>
 
 [% MACRO jsinclude BLOCK %]
     <script>
-         $(document).ready(function() {
-            $('#abouttabs').tabs();
-         });
+        $(document).ready(function(){
+            /* Bootstrap doesn't support automatic targeting of tabs by location hash */
+            var activeTab = $("[href='" + location.hash + "']");
+            activeTab && activeTab.tab('show');
+        });
     </script>
 [% END %]
+
 <!-- the main div is closed in intranet-bottom.inc -->
 [% INCLUDE 'intranet-bottom.inc' %]
