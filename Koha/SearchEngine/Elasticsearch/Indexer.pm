@@ -251,24 +251,23 @@ sub update_mappings {
     my $elasticsearch = $self->get_elasticsearch();
     my $mappings = $self->get_elasticsearch_mappings();
 
-    foreach my $type (keys %{$mappings}) {
-        try {
-            my $response = $elasticsearch->indices->put_mapping(
-                index => $self->index_name,
-                type => $type,
-                body => {
-                    $type => $mappings->{$type}
-                }
-            );
-        } catch {
-            $self->set_index_status_recreate_required();
-            my $reason = $_[0]->{vars}->{body}->{error}->{reason};
-            my $index_name = $self->index_name;
-            Koha::Exceptions::Exception->throw(
-                error => "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
-            );
-        };
-    }
+    try {
+        my $response = $elasticsearch->indices->put_mapping(
+            index => $self->index_name,
+            type => 'data',
+            include_type_name => JSON::true(),
+            body => {
+                data => $mappings
+            }
+        );
+    } catch {
+        $self->set_index_status_recreate_required();
+        my $reason = $_[0]->{vars}->{body}->{error}->{reason};
+        my $index_name = $self->index_name;
+        Koha::Exceptions::Exception->throw(
+            error => "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
+        );
+    };
     $self->set_index_status_ok();
 }
 
@@ -350,6 +349,7 @@ sub delete_index {
     my $result = $elasticsearch->bulk(
         index => $self->index_name,
         type => 'data',
+        include_type_name => JSON::true(),
         body => \@body,
     );
     if ($result->{errors}) {
