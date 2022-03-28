@@ -181,11 +181,11 @@ if ( $query->param('recall_id') ) {
 
     if ($recall) {
         my $item;
-        if ( !$recall->item_level_recall ) {
+        if ( !$recall->item_level ) {
             $item = Koha::Items->find( $itemnumber );
         }
 
-        if ( $recall->branchcode ne $return_branch ) {
+        if ( $recall->pickup_library_id ne $return_branch ) {
             $recall->start_transfer({ item => $item }) if !$recall->in_transit;
         } else {
             my $expirationdate = $recall->calc_expirationdate;
@@ -254,7 +254,7 @@ if ($transit) {
     if ( $canceltransfer ) {
         $transfer->cancel({ reason => 'Manual', force => 1});
         if ( C4::Context->preference('UseRecalls') ) {
-            my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+            my $recall_transfer_deleted = Koha::Recalls->find({ item_id => $itemnumber, status => 'in_transit' });
             if ( defined $recall_transfer_deleted ) {
                 $recall_transfer_deleted->revert_transfer;
             }
@@ -268,7 +268,7 @@ if ($transit) {
     my $transfer = $item->get_transfer;
     $transfer->cancel({ reason => 'Manual', force => 1});
     if ( C4::Context->preference('UseRecalls') ) {
-        my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'in_transit' });
+        my $recall_transfer_deleted = Koha::Recalls->find({ item_id => $itemnumber, status => 'in_transit' });
         if ( defined $recall_transfer_deleted ) {
             $recall_transfer_deleted->revert_transfer;
         }
@@ -534,10 +534,10 @@ if ( $messages->{TransferredRecall} ) {
     my $recall = $messages->{TransferredRecall};
 
     # confirm transfer has arrived at the branch
-    my $transfer = Koha::Item::Transfers->search({ datearrived => { '!=' => undef }, itemnumber => $recall->itemnumber }, { order_by => { -desc => 'datearrived' } })->next;
+    my $transfer = Koha::Item::Transfers->search({ datearrived => { '!=' => undef }, itemnumber => $recall->item_id }, { order_by => { -desc => 'datearrived' } })->next;
 
     # if transfer has completed, show popup to confirm as waiting
-    if ( defined $transfer and $transfer->tobranch eq $recall->branchcode ) {
+    if ( defined $transfer and $transfer->tobranch eq $recall->pickup_library_id ) {
         $template->param(
             found => 1,
             recall => $recall,

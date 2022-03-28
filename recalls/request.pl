@@ -38,7 +38,7 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user(
 my $op = $input->param('op') || 'list';
 my @recall_ids = $input->multi_param('recall_ids');
 my $biblionumber = $input->param('biblionumber');
-my $recalls = Koha::Recalls->search({ biblionumber => $biblionumber, old => 0 });
+my $recalls = Koha::Recalls->search({ biblio_id => $biblionumber, completed => 0 });
 my $biblio = Koha::Biblios->find( $biblionumber );
 
 if ( $op eq 'cancel_multiple_recalls' ) {
@@ -49,7 +49,7 @@ if ( $op eq 'cancel_multiple_recalls' ) {
 }
 
 if ( $op eq 'list' ) {
-    $recalls = Koha::Recalls->search({ biblionumber => $biblionumber, old => 0 });
+    $recalls = Koha::Recalls->search({ biblio_id => $biblionumber, completed => 0 });
     $biblio = Koha::Biblios->find( $biblionumber );
 }
 

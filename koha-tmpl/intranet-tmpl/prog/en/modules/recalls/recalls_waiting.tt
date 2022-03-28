@@ -48,9 +48,9 @@
                                 </tr></thead>
                                 <tbody>
                                     [% FOREACH recall IN recalls %]<tr>
-                                        <td class="recall-waitingdate">[% recall.waitingdate | $KohaDates %]</td>
+                                        <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
                                         <td class="recall-title">
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblionumber | uri %]">
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
                                                 [% recall.biblio.title | html %]
                                                 [% FOREACH s IN recall.biblio.subtitle %]
                                                     [% s | html %]
@@ -60,14 +60,14 @@
                                             <br><i>Barcode: [% recall.item.barcode | html %]</i>
                                         </td>
                                         <td class="recall-patron">
-                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.borrowernumber | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
+                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
                                              [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
                                              [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
                                         </td>
                                         <td class="recall-library">[% recall.library.branchname | html %]</td>
                                         <td class="recall-action actions">
                                             <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
-                                                <input type="hidden" name="recall_id" value="[% recall.recall_id | html %]">
+                                                <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                 <input type="hidden" name="op" value="modify">
                                                 <fieldset class="action">
                                                     <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
@@ -96,9 +96,9 @@
                                 </tr></thead>
                                 <tbody>
                                     [% FOREACH recall IN over %]<tr>
-                                        <td class="recall-waitingdate">[% recall.waitingdate | $KohaDates %]</td>
+                                        <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
                                         <td class="recall-title">
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblionumber | uri %]">
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
                                                 [% recall.biblio.title | html %]
                                                 [% FOREACH s IN recall.biblio.subtitles %]
                                                     [% s | html %]
@@ -109,14 +109,14 @@
                                             <br><i>Barcode: [% recall.item.barcode | html %]</i>
                                         </td>
                                         <td class="recall-patron">
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.borrowernumber | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
                                             [% IF ( recall.patron.phone ) %]<br />[% recall.patron.phone | html %][% END %]
                                             [% IF ( recall.patron.email ) %]<br /><a href="mailto:[% recall.patron.email | uri %]?subject=Recall waiting: [% recall.biblio.title | uri %]">[% recall.patron.email | html %]</a>[% END %]
                                         </td>
                                         <td class="recall-library">[% recall.library.branchname | html %]</td>
                                         <td class="recall-action actions">
                                             <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
-                                                <input type="hidden" name="recall_id" value="[% recall.recall_id | html %]">
+                                                <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                 <input type="hidden" name="op" value="modify">
                                                 <fieldset class="action">
                                                     <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">

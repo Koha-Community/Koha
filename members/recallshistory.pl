@@ -33,7 +33,7 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user(
 );
 
 my $borrowernumber = $input->param('borrowernumber');
-my $recalls = Koha::Recalls->search({ borrowernumber => $borrowernumber }, { order_by => { '-desc' => 'recalldate' } });
+my $recalls = Koha::Recalls->search({ patron_id => $borrowernumber }, { order_by => { '-desc' => 'created_date' } });
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 $template->param(

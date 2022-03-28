@@ -42,7 +42,7 @@ if ( $op eq 'cancel_multiple_recalls' ) {
     $op = 'list'
 }
 elsif ( $op eq 'list' ) {
-    my $recalls = Koha::Recalls->search({ old => 0 });
+    my $recalls = Koha::Recalls->search({ completed => 0 });
     $template->param(
         recalls => $recalls,
         checkboxes => 1,

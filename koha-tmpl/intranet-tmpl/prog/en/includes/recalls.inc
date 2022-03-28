@@ -18,20 +18,20 @@
 
         <tbody>
             [% FOREACH recall IN recalls %]
-                [% IF recall.old %]<tr class="old">[% ELSE %]<tr>[% END %]
+                [% IF recall.completed %]<tr class="old">[% ELSE %]<tr>[% END %]
 
                     [% IF checkboxes %]
                         <td class="recall-checkbox">
-                            [% IF recall.old %]
+                            [% IF recall.completed %]
                                 &nbsp;
                             [% ELSE %]
-                                <input type="checkbox" value="[% recall.recall_id | html %]" name="recall_ids">
+                                <input type="checkbox" value="[% recall.id | html %]" name="recall_ids">
                             [% END %]
                         </td>
                     [% END %]
 
                     <td class="recall-title">
-                        <b><a class="recall-title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblionumber | html %]">
+                        <b><a class="recall-title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | html %]">
                             [% recall.biblio.title | html %]
                             [% FOREACH s IN recall.biblio.subtitle %]
                                 [% s | html %]
@@ -48,13 +48,13 @@
                     [% END %]
 
                     <td class="recall-date">
-                        [% recall.recalldate | $KohaDates %]
+                        [% recall.created_date | $KohaDates %]
                     </td>
 
                     <td class="recall-expiry">
-                        [% IF ( recall.expirationdate ) %]
-                            [% recall.expirationdate | $KohaDates %]
-                        [% ELSIF ( !recall.old ) %]
+                        [% IF ( recall.expiration_date ) %]
+                            [% recall.expiration_date | $KohaDates %]
+                        [% ELSIF ( !recall.completed ) %]
                             Never expires
                         [% ELSE %]
                             -
@@ -71,9 +71,9 @@
                         [% ELSIF ( recall.waiting ) %]
                             Ready for pickup
                         [% ELSIF ( recall.expired ) %]
-                            Expired on [% recall.expirationdate | $KohaDates %]
+                            Expired on [% recall.expiration_date | $KohaDates %]
                         [% ELSIF ( recall.cancelled ) %]
-                            Cancelled on [% recall.cancellationdate | $KohaDates %]
+                            Cancelled on [% recall.completed_date | $KohaDates %]
                         [% ELSIF ( recall.overdue ) %]
                             Overdue to be returned
                         [% ELSIF ( recall.fulfilled ) %]
@@ -87,8 +87,8 @@
                     <td class="recall-duedate">
                         [% IF recall.requested and recall.checkout %]
                             Due to be returned by [% recall.checkout.date_due | $KohaDates %]
-                        [% ELSIF recall.waiting and RECALL.expirationdate %]
-                            Pick up by [% RECALL.expirationdate | $KohaDates %]
+                        [% ELSIF recall.waiting and RECALL.expiration_date %]
+                            Pick up by [% RECALL.expiration_date | $KohaDates %]
                         [% ELSE %]
                             -
                         [% END %]
@@ -97,22 +97,22 @@
 
                     [% UNLESS viewing_old %]
                     <td class="recall-cancel actions">
-                        [% IF recall.old %]
+                        [% IF recall.completed %]
                             &nbsp;
                         [% ELSE %]
                             <div class="btn-group">
                                 <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown" href="#"> Actions <span class="caret"></span></a>
                                 <ul class="dropdown-menu pull-right">
                                     [% IF ( recall.requested or recall.overdue ) %]
-                                        <li><a class="cancel_recall" data-id="[% recall.recall_id | html %]" data-action="cancel"><i class="fa fa-times"></i> Cancel</a></li>
+                                        <li><a class="cancel_recall" data-id="[% recall.id | html %]" data-action="cancel"><i class="fa fa-times"></i> Cancel</a></li>
                                         [% IF ( recall.should_be_overdue ) %]
-                                            <li><a class="overdue_recall" data-id="[% recall.recall_id | html %]" data-action="overdue"><i class="fa fa-hourglass-end"></i> Mark as overdue</a></li>
+                                            <li><a class="overdue_recall" data-id="[% recall.id | html %]" data-action="overdue"><i class="fa fa-hourglass-end"></i> Mark as overdue</a></li>
                                         [% END %]
                                     [% ELSIF ( recall.waiting ) %]
-                                        <li><a class="revert_recall" data-id="[% recall.recall_id | html %]" data-action="revert"><i class="fa fa-undo"></i> Revert waiting</a></li>
-                                        <li><a class="expire_recall" data-id="[% recall.recall_id | html %]" data-action="expire"><i class="fa fa-times"></i> Expire</a></li>
+                                        <li><a class="revert_recall" data-id="[% recall.id | html %]" data-action="revert"><i class="fa fa-undo"></i> Revert waiting</a></li>
+                                        <li><a class="expire_recall" data-id="[% recall.id | html %]" data-action="expire"><i class="fa fa-times"></i> Expire</a></li>
                                     [% ELSIF ( recall.in_transit ) %]
-                                        <li><a class="transit_recall" data-id="[% recall.recall_id | html %]" data-action="transit"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.item.homebranch) | html %]</a></li>
+                                        <li><a class="transit_recall" data-id="[% recall.id | html %]" data-action="transit"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.item.homebranch) | html %]</a></li>
                                     [% END %]
                                 </ul>
                             </div>

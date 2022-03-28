@@ -37,9 +37,9 @@ use C4::Log;
 
 cronlogaction();
 
-my $recalls = Koha::Recalls->search({ old => 0 });
+my $recalls = Koha::Recalls->search({ completed => 0 });
 while( my $recall = $recalls->next ) {
-    if ( ( $recall->requested or $recall->overdue ) and $recall->expirationdate and dt_from_string( $recall->expirationdate ) < dt_from_string() ){
+    if ( ( $recall->requested or $recall->overdue ) and $recall->expiration_date and dt_from_string( $recall->expiration_date ) < dt_from_string() ){
         # recall is requested or overdue and has surpassed the specified expiration date
         $recall->set_expired({ interface => 'COMMANDLINE' });
     }
@@ -47,10 +47,10 @@ while( my $recall = $recalls->next ) {
         my $recall_shelf_time = Koha::CirculationRules->get_effective_rule({
             categorycode => $recall->patron->categorycode,
             itemtype => $recall->item->effective_itemtype,
-            branchcode => $recall->branchcode,
+            branchcode => $recall->pickup_library_id,
             rule_name => 'recall_shelf_time',
         });
-        my $waitingdate = dt_from_string( $recall->waitingdate );
+        my $waitingdate = dt_from_string( $recall->waiting_date );
         my $now = dt_from_string();
         my $days_waiting = $now->subtract_datetime( $waitingdate );
         if ( defined $recall_shelf_time and $recall_shelf_time->rule_value > 0 ) {

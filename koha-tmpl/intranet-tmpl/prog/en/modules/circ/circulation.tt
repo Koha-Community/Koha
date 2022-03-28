@@ -238,9 +238,9 @@
 
                                 [% IF RECALLED %]
                                     [% IF RECALLED.waiting %]
-                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> ([% RECALLED.item.barcode | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.borrowernumber | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.branchcode ) | html %] since [% RECALLED.waitingdate | $KohaDates %]</li>
+                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> ([% RECALLED.item.barcode | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.waiting_date | $KohaDates %]</li>
                                     [% ELSIF RECALLED.requested or RECALLED.overdue %]
-                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> [% IF RECALLED.item %]([% RECALLED.item.barcode | html %])[% END %] has been recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.borrowernumber | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.branchcode ) | html %] since [% RECALLED.recalldate | $KohaDates %]</li>
+                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> [% IF RECALLED.item %]([% RECALLED.item.barcode | html %])[% END %] has been recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.created_date | $KohaDates %]</li>
                                     [% END %]
                                 [% END %]
 
@@ -297,13 +297,13 @@
                                         <p>
                                             <label for="cancelrecall">Cancel recall</label>
                                             <input type="radio" value="cancel" name="cancel_recall" id="cancelrecall" />
-                                            <input type="hidden" value="[% RECALLED.recall_id | html %]" name="recall_id" />
+                                            <input type="hidden" value="[% RECALLED.id | html %]" name="recall_id" />
                                         </p>
                                         [% IF RECALLED.waiting %]
                                             <p>
                                                 <label for="revertrecall">Revert waiting status</label>
                                                 <input type="radio" value="revert" name="cancel_recall" id="revertrecall" checked="checked"/>
-                                                <input type="hidden" value="[% RECALLED.recall_id | html %]" name="recall_id" />
+                                                <input type="hidden" value="[% RECALLED.id | html %]" name="recall_id" />
                                             </p>
                                         [% END %]
                                     [% END %]
@@ -350,7 +350,7 @@
 
                             [% IF ( RECALLED ) %]
                                 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
-                                    <button class="print" type="submit" onclick="Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% RECALLED.recall_id | html %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+                                    <button class="print" type="submit" onclick="Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% RECALLED.id | html %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
                                 </form>
                             [% END %]
 

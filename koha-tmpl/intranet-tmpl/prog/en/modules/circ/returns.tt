@@ -749,19 +749,19 @@
                                                     <h3>
                                                         Recall found:
                                                         <br/>
-                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% recall.biblionumber | uri %]">[% recall.biblio.title | html %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% recall.biblio_id | uri %]">[% recall.biblio.title | html %]</a>
                                                         [% IF recall.item %]
                                                             <div class="recall-found-barcode">
-                                                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% recall.biblionumber | uri %]&amp;itemnumber=[% recall.itemnumber | uri %]">[% recall.item.barcode | html %]</a>)
+                                                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% recall.biblio_id | uri %]&amp;itemnumber=[% recall.item_id | uri %]">[% recall.item.barcode | html %]</a>)
                                                             </div>
                                                         [% END %]
                                                     </h3>
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    [% IF ( recall.recallnotes ) %]
+                                                    [% IF ( recall.notes ) %]
                                                         <h4>Notes:</h4>
-                                                        <p>[% recall.recallnotes | html %]</p>
+                                                        <p>[% recall.notes | html %]</p>
                                                         <hr />
                                                     [% END %]
                                                     <h5>Recall placed by:</h5>
@@ -800,12 +800,12 @@
                                                         [% END %]
                                                     </ul>
                                                     [% IF ( transfertodo ) %]
-                                                        <h4><strong>Transfer to:</strong> [% Branches.GetName( recall.branchcode ) | html %]</h4>
+                                                        <h4><strong>Transfer to:</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% ELSE %]
-                                                        <h4><strong>Recall at</strong> [% Branches.GetName( recall.branchcode ) | html %]</h4>
+                                                        <h4><strong>Recall at</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% END %]
 
-                                                    <input type="hidden" name="recall_id" value="[% recall.recall_id | html %]">
+                                                    <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
                                                     <input type="hidden" name="returnbranch" value="[% Branches.GetLoggedInBranchcode | html %]">
                                                     <input type="hidden" name="recall_slip" value="0">
@@ -850,19 +850,19 @@
                                                     <h3>
                                                         Recall found (item is already waiting):
                                                         <br/>
-                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% recall.biblionumber | uri %]">[% recall.biblio.title | html %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% recall.biblio_id | uri %]">[% recall.biblio.title | html %]</a>
                                                         [% IF recall.item %]
                                                             <div class="recall-found-barcode">
-                                                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% recall.biblionumber | uri %]&amp;itemnumber=[% recall.itemnumber | uri %]">[% recall.item.barcode | html %]</a>)
+                                                                (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% recall.biblio_id | uri %]&amp;itemnumber=[% recall.item_id | uri %]">[% recall.item.barcode | html %]</a>)
                                                             </div>
                                                         [% END %]
                                                     </h3>
                                                 </div>
 
                                                 <div class="modal-body">
-                                                    [% IF ( recall.recallnotes ) %]
+                                                    [% IF ( recall.notes ) %]
                                                         <h4>Notes:</h4>
-                                                        <p>[% recall.recallnotes | html %]</p>
+                                                        <p>[% recall.notes | html %]</p>
                                                         <hr />
                                                     [% END %]
                                                     <h5>Recall placed by:</h5>
@@ -901,12 +901,12 @@
                                                         [% END %]
                                                     </ul>
                                                     [% IF ( transfertodo ) %]
-                                                        <h4><strong>Transfer to:</strong> [% Branches.GetName( recall.branchcode ) | html %]</h4>
+                                                        <h4><strong>Transfer to:</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% ELSE %]
-                                                        <h4><strong>Wait for pickup at</strong> [% Branches.GetName( recall.branchcode ) | html %]</h4>
+                                                        <h4><strong>Wait for pickup at</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% END %]
 
-                                                    <input type="hidden" name="recall_id" value="[% recall.recall_id | html %]">
+                                                    <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
                                                     <input type="hidden" name="returnbranch" value="[% Branches.GetLoggedInBranchcode | html %]">
                                                     <input type="hidden" name="recall_slip" value="0">

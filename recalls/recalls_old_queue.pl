@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $recalls = Koha::Recalls->search({ old => 1 });
+my $recalls = Koha::Recalls->search({ completed => 1 });
 $template->param(
     recalls => $recalls,
     viewing_old => 1

@@ -59,7 +59,7 @@
                             <td class="recall-topull"><b>[% recall.pull_count | html %]</b></td>
                             <td class="recall-items">[% recall.items_count | html %]</td>
                             <td class="recall-patrons">[% recall.patrons_count | html %]</td>
-                            <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.borrowernumber | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
+                            <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.patron_id | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
                             <td class="recall-title">
                                 [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio link=1 %]
                                 [% IF recall.first_recall.biblio.author %] by [% recall.first_recall.biblio.author | html %][% END %]
@@ -107,11 +107,11 @@
                                 </ul>
                             </td>
                             <td class="recall-date">
-                                <span title="[% recall.first_recall.recalldate | html %]">[% recall.first_recall.recalldate | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
+                                <span title="[% recall.first_recall.created_date | html %]">[% recall.first_recall.created_date | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
                             </td>
                             <td class="recall-action">
                                 <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
-                                    <input type="hidden" name="recall_id" value="[% recall.first_recall.recall_id | html %]">
+                                    <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
                                     <input type="hidden" name="op" value="cancel">
                                     [% IF recall.first_recall.in_transit %]
                                         <button type="submit" class="btn btn-default cancelreturn"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button>

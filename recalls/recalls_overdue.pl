@@ -45,7 +45,7 @@ if ( $op eq 'cancel_multiple_recalls' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $recalls = Koha::Recalls->search({ status => 'O' });
+    my $recalls = Koha::Recalls->search({ status => 'overdue' });
     # will be set as Overdue by the misc/cronjobs/recall/overdue_recalls.pl cronjob
     $template->param(
         recalls => $recalls,

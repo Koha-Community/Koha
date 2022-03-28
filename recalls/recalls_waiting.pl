@@ -51,13 +51,13 @@ if ( $op eq 'modify' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @recalls = Koha::Recalls->search({ status => 'W' })->as_list;
+    my @recalls = Koha::Recalls->search({ status => 'waiting' })->as_list;
     my $borrower = Koha::Patrons->find( $loggedinuser );
     my @over;
     my $maxdelay = C4::Context->preference('RecallsMaxPickUpDelay') || 7;
     my $today = dt_from_string();
     foreach my $r ( @recalls ){
-        my $lastwaitingday = dt_from_string( $r->waitingdate )->add( days => $maxdelay );
+        my $lastwaitingday = dt_from_string( $r->waiting_date )->add( days => $maxdelay );
         if ( $today > $lastwaitingday ){
             push @over, $r;
         }

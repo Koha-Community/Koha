@@ -396,14 +396,14 @@ if (@$barcodes) {
             if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
                 my $recall = Koha::Recalls->find(
                     {
-                        biblionumber   => $item->biblionumber,
-                        itemnumber     => [ undef, $item->itemnumber ],
-                        status         => [ 'requested', 'waiting' ],
-                        old            => 0,
-                        borrowernumber => $patron->borrowernumber,
+                        biblio_id => $item->biblionumber,
+                        item_id   => [ undef, $item->itemnumber ],
+                        status    => [ 'requested', 'waiting' ],
+                        completed => 0,
+                        patron_id => $patron->borrowernumber,
                     }
                 );
-                $recall_id = ( $recall and $recall->recall_id ) ? $recall->recall_id : undef;
+                $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
             }
             my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
             $template_params->{issue} = $issue;
@@ -455,7 +455,7 @@ if ($patron) {
     );
     if ( C4::Context->preference('UseRecalls') ) {
         $template->param(
-            recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'recalldate' } }),
+            recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'created_date' } }),
             specific_patron => 1,
         );
     }

@@ -38,8 +38,8 @@ my $recallid = $input->param('recall_id');
 my $recall = Koha::Recalls->find($recallid);
 
 my $itemnumber;
-if ( $recall->itemnumber ){
-    $itemnumber = $recall->itemnumber;
+if ( $recall->item_id ){
+    $itemnumber = $recall->item_id;
 } else {
     $itemnumber = $recall->checkout->itemnumber;
 }
@@ -50,11 +50,11 @@ my $letter = C4::Letters::GetPreparedLetter(
     letter_code => 'RECALL_REQUESTER_DET',
     message_transport_type => 'print',
     tables => {
-         'branches' => $recall->branchcode,
-         'borrowers' => $recall->borrowernumber,
-         'biblio'   => $recall->biblionumber,
+         'branches' => $recall->pickup_library_id,
+         'borrowers' => $recall->patron_id,
+         'biblio'   => $recall->biblio_id,
          'items'   => $itemnumber,
-         'recalls'  => $recall->recall_id,
+         'recalls'  => $recall->id,
     }
 );
 

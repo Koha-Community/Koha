@@ -45,21 +45,21 @@ if ( $op eq 'cancel' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @recalls = Koha::Recalls->search({ status => [ 'R','O','T' ] })->as_list;
+    my @recalls = Koha::Recalls->search({ status => [ 'requested','overdue','in_transit' ] })->as_list;
     my @pull_list;
     my %seen_bib;
     foreach my $recall ( @recalls ) {
-        if ( $seen_bib{$recall->biblionumber} ){
+        if ( $seen_bib{$recall->biblio_id} ){
             # we've already looked at the recalls on this biblio
             next;
         } else {
             # this is an unseen biblio
-            $seen_bib{$recall->biblionumber}++;
+            $seen_bib{$recall->biblio_id}++;
 
             # get recall data about this biblio
-            my @this_bib_recalls = Koha::Recalls->search({ biblionumber => $recall->biblionumber, status => [ 'R','O','T' ] }, { order_by => { -asc => 'recalldate' } })->as_list;
+            my @this_bib_recalls = Koha::Recalls->search({ biblio_id => $recall->biblio_id, status => [ 'requested','overdue','in_transit' ] }, { order_by => { -asc => 'created_date' } })->as_list;
             my $recalls_count = scalar @this_bib_recalls;
-            my @unique_patrons = do { my %seen; grep { !$seen{$_->borrowernumber}++ } @this_bib_recalls };
+            my @unique_patrons = do { my %seen; grep { !$seen{$_->patron_id}++ } @this_bib_recalls };
             my $patrons_count = scalar @unique_patrons;
             my $first_recall = $this_bib_recalls[0];
 
@@ -71,7 +71,7 @@ if ( $op eq 'list' ) {
             my @locations;
             my @libraries;
 
-            my @items = Koha::Items->search({ biblionumber => $recall->biblionumber });
+            my @items = Koha::Items->search({ biblio_id => $recall->biblio_id });
             foreach my $item ( @items ) {
                 if ( $item->can_be_waiting_recall and !$item->checkout ) {
                     # if item can be pulled to fulfill recall, collect item data
