@@ -24,8 +24,8 @@ $builder->build({
     value  => {
         code         => 'ONE',
         display_text => 'One',
-        ronly        => 1,
-        dflt         => 0
+        readonly     => 1,
+        is_system    => 0
     }
 });
 $builder->build({
@@ -33,8 +33,8 @@ $builder->build({
     value  => {
         code         => 'TWO',
         display_text => 'Two',
-        ronly        => 1,
-        dflt         => 1
+        readonly     => 1,
+        is_system    => 1
     }
 });
 $builder->build({
@@ -42,8 +42,8 @@ $builder->build({
     value  => {
         code         => 'THREE',
         display_text => 'Three',
-        ronly        => 1,
-        dflt         => 0
+        readonly     => 1,
+        is_system    => 0
     }
 });
 $builder->build({
@@ -51,8 +51,8 @@ $builder->build({
     value  => {
         code         => 'FOUR',
         display_text => 'Four',
-        ronly        => 0,
-        dflt         => 0
+        readonly     => 0,
+        is_system    => 0
     }
 });
 $builder->build({
@@ -60,8 +60,8 @@ $builder->build({
     value  => {
         code         => 'FIVE',
         display_text => 'Five',
-        ronly        => 0,
-        dflt         => 0
+        readonly     => 0,
+        is_system    => 0
     }
 });
 

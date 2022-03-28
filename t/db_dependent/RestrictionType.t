@@ -24,8 +24,8 @@ $builder->build({
     value  => {
         code         => 'ONE',
         display_text => 'One',
-        ronly        => 1,
-        dflt         => 0
+        readonly     => 1,
+        is_system    => 0
     }
 });
 $builder->build({
@@ -33,8 +33,8 @@ $builder->build({
     value  => {
         code         => 'TWO',
         display_text => 'Two',
-        ronly        => 1,
-        dflt         => 1
+        readonly     => 1,
+        is_system    => 1
     }
 });
 
@@ -44,14 +44,14 @@ my $expecting = {
     ONE => {
         code         => 'ONE',
         display_text => 'One',
-        ronly        => 1,
-        dflt         => 0
+        readonly     => 1,
+        is_system    => 0
     },
     TWO => {
         code         => 'TWO',
         display_text => 'Two',
-        ronly        => 1,
-        dflt         => 1
+        readonly     => 1,
+        is_system    => 1
     }
 };
 

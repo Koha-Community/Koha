@@ -7,12 +7,12 @@ if ( CheckVersion( $DBversion ) ) {
             CREATE TABLE debarment_types (
                 code varchar(50) NOT NULL PRIMARY KEY,
                 display_text text NOT NULL,
-                ronly tinyint(1) NOT NULL DEFAULT 0,
-                dflt tinyint(1) NOT NULL DEFAULT 0
+                readonly tinyint(1) NOT NULL DEFAULT 0,
+                system tinyint(1) NOT NULL DEFAULT 0
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         | );
         $dbh->do( q|
-            INSERT INTO debarment_types (code, display_text, ronly, dflt) VALUES
+            INSERT INTO debarment_types (code, display_text, readonly, system) VALUES
             ('MANUAL', 'Manual', 1, 1),
             ('OVERDUES', 'Overdues', 1, 0),
             ('SUSPENSION', 'Suspension', 1, 0),

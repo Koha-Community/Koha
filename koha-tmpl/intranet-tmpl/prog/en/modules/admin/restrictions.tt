@@ -170,11 +170,11 @@
                             [% restriction.display_text | html %]
                         </td>
                         <td>
-                            [% IF restriction.dflt %]Yes[% END %]
+                            [% IF restriction.is_system %]Yes[% END %]
                         </td>
                         <td class="actions">
                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                            [% IF !restriction.ronly %]
+                            [% IF !restriction.readonly %]
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
                             [% END %]
                         </td>
