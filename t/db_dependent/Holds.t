@@ -1567,12 +1567,12 @@ subtest 'CanItemBeReserved / recall' => sub {
         }
     );
     Koha::Recall->new({
-        borrowernumber => $patron1->borrowernumber,
-        biblionumber => $biblio1->biblionumber,
-        branchcode => $library1->branchcode,
-        itemnumber => $item1->itemnumber,
-        recalldate => '2020-05-04 10:10:10',
-        item_level_recall => 1,
+        patron_id => $patron1->borrowernumber,
+        biblio_id => $biblio1->biblionumber,
+        pickup_library_id => $library1->branchcode,
+        item_id => $item1->itemnumber,
+        created_date => '2020-05-04 10:10:10',
+        item_level => 1,
     })->store;
     is( CanItemBeReserved( $patron1, $item1, $library1->branchcode )->{status}, 'recall', "Can't reserve an item that they have already recalled" );
 

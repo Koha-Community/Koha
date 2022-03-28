@@ -145,9 +145,9 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
 
     t::lib::Mocks::mock_preference('UseRecalls', 1);
     my $recall = $builder->build_object({ class => 'Koha::Recalls', value => {
-        biblionumber    => $item->biblionumber,
-        itemnumber      => $item->itemnumber,
-        branchcode      => $item->holdingbranch,
+        biblio_id         => $item->biblionumber,
+        item_id           => $item->itemnumber,
+        pickup_library_id => $item->holdingbranch,
     }});
     $recall->set_waiting;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);

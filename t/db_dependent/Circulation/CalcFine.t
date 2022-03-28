@@ -228,13 +228,13 @@ subtest 'Recall overdue fines' => sub {
     );
 
     my $recall = Koha::Recall->new({
-        borrowernumber => $patron->{borrowernumber},
-        recalldate => dt_from_string,
-        biblionumber => $item->biblionumber,
-        branchcode => $branch->{branchcode},
-        itemnumber => $item->itemnumber,
-        expirationdate => undef,
-        item_level_recall => 1
+        patron_id => $patron->{borrowernumber},
+        created_date => dt_from_string,
+        biblio_id => $item->biblionumber,
+        pickup_library_id => $branch->{branchcode},
+        item_id => $item->itemnumber,
+        expiration_date => undef,
+        item_level => 1
     })->store;
     $recall->set_overdue;
 

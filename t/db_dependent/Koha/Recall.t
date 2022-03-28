@@ -54,7 +54,7 @@ my $category1 = $builder->build({ source => 'Category' })->{ categorycode };
 my $patron1 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch1 } });
 my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch1 } });
 t::lib::Mocks::mock_userenv({ patron => $patron1 });
-my $old_recalls_count = Koha::Recalls->search({ old => 1 })->count;
+my $old_recalls_count = Koha::Recalls->search({ completed => 1 })->count;
 
 Koha::CirculationRules->set_rule({
     branchcode => undef,
@@ -68,14 +68,14 @@ my $overdue_date = dt_from_string->subtract( days => 4 );
 C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode, $overdue_date );
 
 my $recall1 = Koha::Recall->new({
-    borrowernumber => $patron1->borrowernumber,
-    recalldate => dt_from_string,
-    biblionumber => $biblio1->biblionumber,
-    branchcode => $branch1,
+    patron_id => $patron1->borrowernumber,
+    created_date => dt_from_string,
+    biblio_id => $biblio1->biblionumber,
+    pickup_library_id => $branch1,
     status => 'requested',
-    itemnumber => $item1->itemnumber,
-    expirationdate => undef,
-    item_level_recall => 1
+    item_id => $item1->itemnumber,
+    expiration_date => undef,
+    item_level => 1
 })->store;
 
 is( $recall1->biblio->title, $biblio1->title, "Recall biblio relationship correctly linked" );
@@ -93,13 +93,13 @@ $recall1->set_cancelled;
 ok( $recall1->cancelled, "Recall is cancelled" );
 
 my $recall2 = Koha::Recall->new({
-    borrowernumber => $patron1->borrowernumber,
-    recalldate => dt_from_string,
-    biblionumber => $biblio1->biblionumber,
-    branchcode => $branch1,
-    itemnumber => $item1->itemnumber,
-    expirationdate => undef,
-    item_level_recall => 1
+    patron_id => $patron1->borrowernumber,
+    created_date => dt_from_string,
+    biblio_id => $biblio1->biblionumber,
+    pickup_library_id => $branch1,
+    item_id => $item1->itemnumber,
+    expiration_date => undef,
+    item_level => 1
 })->store;
 
 Koha::CirculationRules->set_rule({
@@ -135,17 +135,17 @@ ok( defined $notice, "Patron was notified to pick up waiting recall" );
 $recall2->set_expired({ interface => 'COMMANDLINE' });
 is( $recall2->expired, 1, "Recall has expired" );
 
-my $old_recalls_count_now = Koha::Recalls->search({ old => 1 })->count;
+my $old_recalls_count_now = Koha::Recalls->search({ completed => 1 })->count;
 is( $old_recalls_count_now, $old_recalls_count + 2, "Recalls have been flagged as old when cancelled or expired" );
 
 my $recall3 = Koha::Recall->new({
-    borrowernumber => $patron1->borrowernumber,
-    recalldate => dt_from_string,
-    biblionumber => $biblio1->biblionumber,
-    branchcode => $branch1,
-    itemnumber => $item1->itemnumber,
-    expirationdate => undef,
-    item_level_recall => 1
+    patron_id => $patron1->borrowernumber,
+    created_date => dt_from_string,
+    biblio_id => $biblio1->biblionumber,
+    pickup_library_id => $branch1,
+    item_id => $item1->itemnumber,
+    expiration_date => undef,
+    item_level => 1
 })->store;
 
 # test that recall gets T status
@@ -154,7 +154,7 @@ ok( $recall3->in_transit, "Recall is in transit" );
 
 $recall3->revert_transfer;
 ok( $recall3->requested, "Recall transfer has been cancelled and the status reverted" );
-is( $recall3->itemnumber, $item1->itemnumber, "Item persists for item-level recall" );
+is( $recall3->item_id, $item1->itemnumber, "Item persists for item-level recall" );
 
 # for testing purposes, pretend the item gets checked out
 $recall3->set_fulfilled;
@@ -162,27 +162,27 @@ ok( $recall3->fulfilled, "Recall has been fulfilled" );
 
 C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
 my $recall4 = Koha::Recall->new({
-    borrowernumber => $patron1->borrowernumber,
-    recalldate => dt_from_string,
-    biblionumber => $biblio1->biblionumber,
-    branchcode => $branch1,
-    itemnumber => undef,
-    expirationdate => undef,
-    item_level_recall => 0,
+    patron_id => $patron1->borrowernumber,
+    created_date => dt_from_string,
+    biblio_id => $biblio1->biblionumber,
+    pickup_library_id => $branch1,
+    item_id => undef,
+    expiration_date => undef,
+    item_level => 0
 })->store;
 
 ok( !defined $recall4->item, "No relevant item returned for a biblio-level recall" );
 is( $recall4->checkout->itemnumber, $item1->itemnumber, "Return most relevant checkout for a biblio-level recall");
 
 $recall4->set_waiting({ item => $item1, expirationdate => $expirationdate });
-is( $recall4->itemnumber, $item1->itemnumber, "Item has been allocated to biblio-level recall" );
+is( $recall4->item_id, $item1->itemnumber, "Item has been allocated to biblio-level recall" );
 
 $recall4->revert_waiting;
-ok( !defined $recall4->itemnumber, "Itemnumber has been removed from biblio-level recall when reverting waiting status" );
+ok( !defined $recall4->item_id, "Itemnumber has been removed from biblio-level recall when reverting waiting status" );
 
 $recall4->start_transfer({ item => $item1 });
-is( $recall4->itemnumber, $item1->itemnumber, "Itemnumber saved to recall when item is transferred" );
+is( $recall4->item_id, $item1->itemnumber, "Itemnumber saved to recall when item is transferred" );
 $recall4->revert_transfer;
-ok( !defined $recall4->itemnumber, "Itemnumber has been removed from biblio-level recall when reverting transfer status" );
+ok( !defined $recall4->item_id, "Itemnumber has been removed from biblio-level recall when reverting transfer status" );
 
 $schema->storage->txn_rollback();

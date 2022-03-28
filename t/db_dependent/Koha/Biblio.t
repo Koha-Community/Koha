@@ -899,33 +899,33 @@ subtest 'Recalls tests' => sub {
     t::lib::Mocks::mock_userenv({ patron => $patron1 });
 
     my $recall1 = Koha::Recall->new(
-        {   borrowernumber    => $patron1->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => $item1->itemnumber,
-            expirationdate    => undef,
-            item_level_recall => 1
+        {   patron_id         => $patron1->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => $item1->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
         }
     )->store;
     my $recall2 = Koha::Recall->new(
-        {   borrowernumber    => $patron2->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => undef,
-            expirationdate    => undef,
-            item_level_recall => 0
+        {   patron_id         => $patron2->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => undef,
+            expiration_date   => undef,
+            item_level        => 0
         }
     )->store;
     my $recall3 = Koha::Recall->new(
-        {   borrowernumber    => $patron3->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => $item1->itemnumber,
-            expirationdate    => undef,
-            item_level_recall => 1
+        {   patron_id         => $patron3->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => $item1->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
         }
     )->store;
 

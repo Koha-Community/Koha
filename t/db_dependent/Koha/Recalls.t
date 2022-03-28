@@ -106,7 +106,7 @@ ok( !defined $recall, "Can't add a recall without specifying a biblio" );
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
-is( $recall->branchcode, $branch2, "No pickup branch specified so patron branch used" );
+is( $recall->pickup_library_id, $branch2, "No pickup branch specified so patron branch used" );
 is( $due_interval, 5, "Recall due date interval defaults to 5 if not specified" );
 
 Koha::CirculationRules->set_rule({
@@ -134,7 +134,7 @@ is( $due_interval, 3, "Recall due date interval is based on circulation rules" )
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
-is( $recall->item_level_recall, 0, "No item provided so recall not flagged as item-level" );
+is( $recall->item_level, 0, "No item provided so recall not flagged as item-level" );
 
 my $expected_due_date = dt_from_string->add( days => 3 );
 is( t::lib::Dates::compare( $recall->checkout->date_due, $expected_due_date ), 0, "Checkout due date has correctly been extended by recall_due_date_interval days" );
@@ -146,19 +146,19 @@ is( $messages_count, 3, "RETURN_RECALLED_ITEM notice successfully sent to checko
 my $message = Koha::Recalls->move_recall;
 is( $message, 'no recall_id provided', "Can't move a recall without specifying which recall" );
 
-$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id });
+$message = Koha::Recalls->move_recall({ recall_id => $recall->id });
 is( $message, 'no action provided', "No clear action to perform on recall" );
-$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'whatever' });
+$message = Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'whatever' });
 is( $message, 'no action provided', "Legal action not provided to perform on recall" );
 
 $recall->set_waiting({ item => $item1 });
 ok( $recall->waiting, "Recall is waiting" );
-Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'revert' });
-$recall = Koha::Recalls->find( $recall->recall_id );
+Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'revert' });
+$recall = Koha::Recalls->find( $recall->id );
 ok( $recall->requested, "Recall reverted to requested with move_recall" );
 
-Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'cancel' });
-$recall = Koha::Recalls->find( $recall->recall_id );
+Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'cancel' });
+$recall = Koha::Recalls->find( $recall->id );
 ok( $recall->cancelled, "Recall cancelled with move_recall" );
 
 ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
@@ -169,8 +169,8 @@ ok( $recall->cancelled, "Recall cancelled with move_recall" );
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
-$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, item => $item2, borrowernumber => $patron1->borrowernumber });
-$recall = Koha::Recalls->find( $recall->recall_id );
+$message = Koha::Recalls->move_recall({ recall_id => $recall->id, item => $item2, borrowernumber => $patron1->borrowernumber });
+$recall = Koha::Recalls->find( $recall->id );
 ok( $recall->fulfilled, "Recall fulfilled with move_recall" );
 
 $schema->storage->txn_rollback();
@@ -191,7 +191,7 @@ subtest 'filter_by_current() and filter_by_finished() tests' => sub {
 
     my $recalls = Koha::Recalls->search(
         {
-            recall_id => [
+            id => [
                 $in_transit->id,
                 $overdue->id,
                 $requested->id,
@@ -201,7 +201,7 @@ subtest 'filter_by_current() and filter_by_finished() tests' => sub {
                 $fulfilled->id,
             ]
         },
-        { order_by => [ 'recall_id' ] }
+        { order_by => [ 'id' ] }
     );
 
     is( $recalls->count, 7, 'Resultset count is correct' );

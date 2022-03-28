@@ -158,11 +158,11 @@ subtest 'transfer already at destination' => sub {
     # recalls
     t::lib::Mocks::mock_preference('UseRecalls', 1);
     my $recall = Koha::Recall->new(
-        {   biblionumber      => $item->biblionumber,
-            itemnumber        => $item->itemnumber,
-            item_level_recall => 1,
-            borrowernumber    => $patron->borrowernumber,
-            branchcode        => $library->branchcode,
+        {   biblio_id         => $item->biblionumber,
+            item_id           => $item->itemnumber,
+            item_level        => 1,
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $library->branchcode,
         }
     )->store;
     ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
@@ -171,16 +171,16 @@ subtest 'transfer already at destination' => sub {
 
     my $item2 = $builder->build_object({ class => 'Koha::Items' }); # this item will have a different holding branch to the pickup branch
     $recall = Koha::Recall->new(
-        {   biblionumber      => $item2->biblionumber,
-            itemnumber        => $item2->itemnumber,
-            item_level_recall => 1,
-            borrowernumber    => $patron->borrowernumber,
-            branchcode        => $library->branchcode,
+        {   biblio_id         => $item2->biblionumber,
+            item_id           => $item2->itemnumber,
+            item_level        => 1,
+            patron_id         => $patron->borrowernumber,
+            pickup_library_id => $library->branchcode,
         }
     )->store;
     ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
     is( $dotransfer, 1, 'Transfer of recalled item succeeded' );
-    is( $messages->{RecallFound}->recall_id, $recall->recall_id, "We found the recall");
+    is( $messages->{RecallFound}->id, $recall->id, "We found the recall");
 };
 
 subtest 'transfer an issued item' => sub {

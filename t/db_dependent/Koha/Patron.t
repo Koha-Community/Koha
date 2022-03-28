@@ -1094,46 +1094,46 @@ subtest 'recalls() tests' => sub {
     my $item2 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio2->biblionumber } });
 
     Koha::Recall->new(
-        {   biblionumber      => $biblio1->biblionumber,
-            borrowernumber    => $patron->borrowernumber,
-            itemnumber        => $item1->itemnumber,
-            branchcode        => $patron->branchcode,
-            recalldate        => \'NOW()',
-            item_level_recall => 1,
+        {   biblio_id         => $biblio1->biblionumber,
+            patron_id         => $patron->borrowernumber,
+            item_id           => $item1->itemnumber,
+            pickup_library_id => $patron->branchcode,
+            created_date      => \'NOW()',
+            item_level        => 1,
         }
     )->store;
     Koha::Recall->new(
-        {   biblionumber      => $biblio2->biblionumber,
-            borrowernumber    => $patron->borrowernumber,
-            itemnumber        => $item2->itemnumber,
-            branchcode        => $patron->branchcode,
-            recalldate        => \'NOW()',
-            item_level_recall => 1,
+        {   biblio_id         => $biblio2->biblionumber,
+            patron_id         => $patron->borrowernumber,
+            item_id           => $item2->itemnumber,
+            pickup_library_id => $patron->branchcode,
+            created_date      => \'NOW()',
+            item_level        => 1,
         }
     )->store;
     Koha::Recall->new(
-        {   biblionumber      => $biblio1->biblionumber,
-            borrowernumber    => $patron->borrowernumber,
-            itemnumber        => undef,
-            branchcode        => $patron->branchcode,
-            recalldate        => \'NOW()',
-            item_level_recall => 0,
+        {   biblio_id         => $biblio1->biblionumber,
+            patron_id         => $patron->borrowernumber,
+            item_id           => undef,
+            pickup_library_id => $patron->branchcode,
+            created_date      => \'NOW()',
+            item_level        => 0,
         }
     )->store;
     my $recall = Koha::Recall->new(
-        {   biblionumber      => $biblio1->biblionumber,
-            borrowernumber    => $patron->borrowernumber,
-            itemnumber        => undef,
-            branchcode        => $patron->branchcode,
-            recalldate        => \'NOW()',
-            item_level_recall => 0,
+        {   biblio_id         => $biblio1->biblionumber,
+            patron_id         => $patron->borrowernumber,
+            item_id           => undef,
+            pickup_library_id => $patron->branchcode,
+            created_date      => \'NOW()',
+            item_level        => 0,
         }
     )->store;
     $recall->set_cancelled;
 
-    is( $patron->recalls->count,                                                                          4, "Correctly gets this patron's recalls" );
-    is( $patron->recalls->filter_by_current->count,                                                       3, "Correctly gets this patron's active recalls" );
-    is( $patron->recalls->filter_by_current->search( { biblionumber => $biblio1->biblionumber } )->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
+    is( $patron->recalls->count,                                                                       4, "Correctly gets this patron's recalls" );
+    is( $patron->recalls->filter_by_current->count,                                                    3, "Correctly gets this patron's active recalls" );
+    is( $patron->recalls->filter_by_current->search( { biblio_id => $biblio1->biblionumber } )->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
 
     $schema->storage->txn_rollback;
 };

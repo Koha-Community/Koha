@@ -1275,27 +1275,27 @@ subtest 'Recalls tests' => sub {
     t::lib::Mocks::mock_preference('UseRecalls', 1);
 
     my $recall1 = Koha::Recall->new(
-        {   borrowernumber    => $patron1->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => $item1->itemnumber,
-            expirationdate    => undef,
-            item_level_recall => 1
+        {   patron_id         => $patron1->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => $item1->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
         }
     )->store;
     my $recall2 = Koha::Recall->new(
-        {   borrowernumber    => $patron2->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => $item1->itemnumber,
-            expirationdate    => undef,
-            item_level_recall => 1
+        {   patron_id         => $patron2->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => $item1->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
         }
     )->store;
 
-    is( $item1->recall->borrowernumber, $patron1->borrowernumber, 'Correctly returns most relevant recall' );
+    is( $item1->recall->patron_id, $patron1->borrowernumber, 'Correctly returns most relevant recall' );
 
     $recall2->set_cancelled;
 
@@ -1367,13 +1367,13 @@ subtest 'Recalls tests' => sub {
     is( $item1->can_be_recalled({ patron => $patron1 }), 1, "Can recall item" );
 
     $recall1 = Koha::Recall->new(
-        {   borrowernumber    => $patron1->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => undef,
-            expirationdate    => undef,
-            item_level_recall => 0
+        {   patron_id         => $patron1->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => undef,
+            expiration_date   => undef,
+            item_level        => 0
         }
     )->store;
 
@@ -1406,42 +1406,42 @@ subtest 'Recalls tests' => sub {
     # check_recalls tests
 
     $recall1 = Koha::Recall->new(
-        {   borrowernumber    => $patron2->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => $item1->itemnumber,
-            expirationdate    => undef,
-            item_level_recall => 1
+        {   patron_id         => $patron2->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => $item1->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
         }
     )->store;
     $recall2 = Koha::Recall->new(
-        {   borrowernumber    => $patron1->borrowernumber,
-            recalldate        => \'NOW()',
-            biblionumber      => $biblio->biblionumber,
-            branchcode        => $branchcode,
-            itemnumber        => undef,
-            expirationdate    => undef,
-            item_level_recall => 0
+        {   patron_id         => $patron1->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $branchcode,
+            item_id           => undef,
+            expiration_date   => undef,
+            item_level        => 0
         }
     )->store;
     $recall2->set_waiting( { item => $item1 } );
 
     # return a waiting recall
     my $check_recall = $item1->check_recalls;
-    is( $check_recall->borrowernumber, $patron1->borrowernumber, "Waiting recall is highest priority and returned" );
+    is( $check_recall->patron_id, $patron1->borrowernumber, "Waiting recall is highest priority and returned" );
 
     $recall2->revert_waiting;
 
     # return recall based on recalldate
     $check_recall = $item1->check_recalls;
-    is( $check_recall->borrowernumber, $patron1->borrowernumber, "No waiting recall, so oldest recall is returned" );
+    is( $check_recall->patron_id, $patron1->borrowernumber, "No waiting recall, so oldest recall is returned" );
 
     $recall1->set_cancelled;
 
     # return a biblio-level recall
     $check_recall = $item1->check_recalls;
-    is( $check_recall->borrowernumber, $patron1->borrowernumber, "Only remaining recall is returned" );
+    is( $check_recall->patron_id, $patron1->borrowernumber, "Only remaining recall is returned" );
 
     $recall2->set_cancelled;
 
