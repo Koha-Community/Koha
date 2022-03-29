@@ -1742,6 +1742,25 @@ sub AddIssue {
                 }
             }
 
+            my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckout');
+            if ($yaml) {
+                $yaml = "$yaml\n\n";
+
+                my $rules;
+                eval { $rules = YAML::XS::Load(Encode::encode_utf8($yaml)); };
+                if ($@) {
+                    warn "Unable to parse UpdateNotForLoanStatusOnCheckout syspref : $@";
+                }
+                else {
+                    foreach my $key ( keys %$rules ) {
+                        if ( $item_object->notforloan eq $key ) {
+                            $item_object->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1 });
+                            last;
+                        }
+                    }
+                }
+            }
+
             # Record the fact that this book was issued.
             C4::Stats::UpdateStats(
                 {

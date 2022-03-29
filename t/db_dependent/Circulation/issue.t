@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 49;
+use Test::More tests => 52;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -542,6 +542,35 @@ is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
 AddRenewal( $unseen_patron->borrowernumber, $unseen_item->itemnumber, $branchcode_1, undef, undef, undef, 1 );
 my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
 is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
+
+my $itemnumber4 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 'barcode_6',
+        itemcallnumber => 'callnumber6',
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        notforloan     => -1,
+        itype          => $itemtype,
+        location       => 'loc1'
+    },
+)->store->itemnumber;
+
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', q{} );
+AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+my $item = Koha::Items->find( $itemnumber4 );
+ok( $item->notforloan eq -1, 'UpdateNotForLoanStatusOnCheckout does not modify value when not enabled' );
+
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', '-1: 0' );
+AddReturn( 'barcode_6', $branchcode_1 );
+my $test = AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+$item = Koha::Items->find( $itemnumber4 );
+ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout updates notforloan value from -1 to 0 with setting "-1: 0"} );
+
+AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+AddReturn( 'barcode_6', $branchcode_1 );
+$item = Koha::Items->find( $itemnumber4 );
+ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout does not update notforloan value from 0 with setting "-1: 0"} );
 
 #End transaction
 $schema->storage->txn_rollback;
