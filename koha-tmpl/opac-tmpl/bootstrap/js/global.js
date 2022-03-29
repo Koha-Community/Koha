@@ -229,4 +229,6 @@ $(document).ready(function(){
             content.first().find(':focusable').eq(0).focus();
         }
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });

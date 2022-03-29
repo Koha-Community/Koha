@@ -163,15 +163,6 @@
                                 [% ELSE %]
                                     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
                                         <div class="form-row align-items-center">
-                                            <div class="col-sm-auto order-1 order-sm-1">
-                                                [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
-                                                    [% IF ( mylibraryfirst ) %]
-                                                        <span title="Search in [% Branches.GetName( mylibraryfirst ) | html %] only">
-                                                            <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                                                        </span>
-                                                    [% END %]
-                                                [% END %]
-                                            </div>
                                             <div class="col-sm-auto order-2 order-sm-2">
                                                 <select name="idx" id="masthead_search" class="form-control">
                                                     [% IF ( ms_kw ) %]
@@ -226,10 +217,10 @@
                                             </div> <!-- /.col-sm-auto -->
 
                                             <div class="col order-4 order-sm-3">
-                                                [% IF ( ms_value ) %]
-                                                    <input type="text" title="Type search term" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" /><span id="translControl"></span>
+                                                [% IF ( !Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && mylibraryfirst ) %]
+                                                    <input type="text" class="transl1 form-control form-control-filtered" id="translControl1" name="q" value="[% ms_value | html %]" data-toggle="tooltip" data-placement="top" title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only" /><span id="translControl"></span>
                                                 [% ELSE %]
-                                                    <input type="text" title="Type search term" class="transl1 form-control" id="translControl1" name="q" /><span id="translControl"></span>
+                                                    <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" /><span id="translControl"></span>
                                                 [% END # /ms_value %]
                                             </div> <!-- /.col -->
 
