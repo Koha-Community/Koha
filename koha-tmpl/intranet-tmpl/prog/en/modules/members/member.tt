@@ -245,12 +245,6 @@
             $("#patron_search_form").on('submit', function(){$("#searchheader").show();});
             $("#clear_search").on("click",function(e){$("#searchheader").hide();});
 
-            // Apply DataTables on the results table
-            var table_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
-            [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
-                [%# Remove the first column if we do not display the checkbox %]
-                table_settings.splice(0, 1);
-            [% END %]
         });
 
         function patronListAdd(){
@@ -293,6 +287,15 @@
             }
         });
 
+    </script>
+
+    <script>
+        // Apply DataTables on the results table
+        var table_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
+        [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
+            [%# Remove the first column if we do not display the checkbox %]
+            table_settings.splice(0, 1);
+        [% END %]
     </script>
 
     [% IF circsearch == 1 %]
