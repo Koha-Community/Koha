@@ -24,19 +24,51 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Breeding qw( Z3950Search Z3950SearchAuth );
+use MARC::Record;
+use Koha::Authorities;
+use Koha::Authority::Types;
+use C4::AuthoritiesMarc qw( GetAuthority );
 
 my $input        = CGI->new;
 my $dbh          = C4::Context->dbh;
 my $error         = $input->param('error');
 my $authid  = $input->param('authid') || 0;
+
+my $record         = GetAuthority($authid);
+my $marc_flavour = C4::Context->preference('marcflavour');
+my $authfields_mapping = {
+    'authorpersonal'   => $marc_flavour eq 'MARC21' ? '100' : '200',
+    'authorcorp'       => $marc_flavour eq 'MARC21' ? '110' : '210',
+    'authormeetingcon' => $marc_flavour eq 'MARC21' ? '111' : '210',
+    'uniformtitle'     => $marc_flavour eq 'MARC21' ? '130' : '230',
+    'subject'          => $marc_flavour eq 'MARC21' ? '150' : '250',
+};
+
 my $nameany     = $input->param('nameany');
 my $authorany     = $input->param('authorany');
-my $authorcorp     = $input->param('authorcorp');
-my $authorpersonal     = $input->param('authorpersonal');
-my $authormeetingcon     = $input->param('authormeetingcon');
+my $authorcorp =
+    $record
+  ? $record->subfield( $authfields_mapping->{'authorcorp'}, 'a' )
+  : $input->param('authorcorp');
+my $authorpersonal =
+    $record
+  ? $record->subfield( $authfields_mapping->{'authorpersonal'}, 'a' )
+  : $input->param('authorpersonal');
+my $authormeetingcon =
+    $record
+  ? $record->subfield( $authfields_mapping->{'authormeetingcon'}, 'a' )
+  : $input->param('authormeetingcon');
+
 my $title         = $input->param('title');
-my $uniformtitle         = $input->param('uniformtitle');
-my $subject       = $input->param('subject');
+my $uniformtitle =
+    $record
+  ? $record->subfield( $authfields_mapping->{'uniformtitle'}, 'a' )
+  : $input->param('uniformtitle');
+my $subject =
+    $record
+  ? $record->subfield( $authfields_mapping->{'subject'}, 'a' )
+  : $input->param('subject');
+
 my $subjectsubdiv       = $input->param('subjectsubdiv');
 my $srchany       = $input->param('srchany');
 my $op            = $input->param('op')||'';
