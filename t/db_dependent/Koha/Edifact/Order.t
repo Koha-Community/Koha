@@ -45,12 +45,12 @@ subtest 'beggining_of_message tests' => sub {
     );
     my $dbic_edi_vendor = $schema->resultset('VendorEdiAccount')->find($edi_vendor->{id});
 
-    my $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor, 1);
+    my $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor->standard, 1);
     is( $bgm, qq{BGM+220+$basketno+9'}, "When vendor is set to EDItEUR standard we use 220 in BGM segment");
 
     $dbic_edi_vendor->update({ standard => 'BIC'});
-    $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor, 1);
-    is( $bgm, qq{BGM+220+$basketno+9'}, "When vendor is set to BiC standard we use 22V in BGM segment");
+    $bgm = Koha::Edifact::Order::beginning_of_message($basketno, $dbic_edi_vendor->standard, 1);
+    is( $bgm, qq{BGM+22V+$basketno+9'}, "When vendor is set to BiC standard we use 22V in BGM segment");
 
     $schema->storage->txn_rollback;
 };
