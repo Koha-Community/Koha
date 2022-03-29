@@ -106,8 +106,11 @@ fieldset.various li {
     }
 
     $(document).ready(function() {
-        $("#basket_groups").tabs();
-
+        [% IF ( listclosed) %]
+            $("#basket_groups a[href='#closed']").tab("show");
+        [% ELSE %]
+            $("#basket_groups a[href='#opened']").tab("show");
+        [% END %]
         $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
@@ -325,94 +328,94 @@ fieldset.various li {
                     <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
                     [% IF (NoEDIMessage) %]<div><strong>No EDIFACT configuration for [% booksellername | html %]</strong></div>[% END %]
                     <div id="basket_groups" class="toptabs">
-                        <ul class="ui-tabs-nav">
-                            [% UNLESS ( listclosed) %]<li class="ui-tabs-active"><a href="#opened">Open</a></li>
-                            [% ELSE%]<li><a href="#opened">Open</a></li>[% END %]
-                            [% IF ( listclosed) %]<li class="ui-tabs-active"><a href="#closed">Closed</a></li>
-                            [% ELSE %]<li><a href="#closed">Closed</a></li>[% END %]
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation"><a href="#opened" aria-controls="opened" role="tab" data-toggle="tab">Open</a></li>
+                            <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed</a></li>
                         </ul>
-                        <div id="opened">
-                            <table id="basket_group_opened">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Number</th>
-                                        <th>Billing place</th>
-                                        <th>Delivery place</th>
-                                        <th>Number of baskets</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH basketgroup IN basketgroups %]
-                                        [% UNLESS ( basketgroup.closed ) %]
-                                            <tr>
-                                                <td>[% IF ( basketgroup.name ) %]
-                                                    [% basketgroup.name | html %]
-                                                    [% ELSE %]
-                                                        Basket group no. [% basketgroup.id | html %]
-                                                    [% END %]
-                                                </td>
-                                                <td>[% basketgroup.id | html %]</td>
-                                                <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
-                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
-                                                <td>[% basketgroup.basketsqty | html %]</td>
-                                                <td>
-                                                    <input type="button" onclick="closeandprint('[% basketgroup.id | html %]');" value="Close and export as PDF" />
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Edit" /></form>
-                                                    [% UNLESS basketgroup.basketsqty %]
-                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Delete" /></form>
-                                                    [% END %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="closed">
-                            <table id="basket_group_closed">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Number</th>
-                                        <th>Billing place</th>
-                                        <th>Delivery place</th>
-                                        <th>Number of baskets</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH basketgroup IN basketgroups %]
-                                        [% IF ( basketgroup.closed ) %]
-                                            <tr>
-                                                <td>
-                                                    [% IF ( basketgroup.name ) %]
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="opened">
+                                <table id="basket_group_opened">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Number</th>
+                                            <th>Billing place</th>
+                                            <th>Delivery place</th>
+                                            <th>Number of baskets</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH basketgroup IN basketgroups %]
+                                            [% UNLESS ( basketgroup.closed ) %]
+                                                <tr>
+                                                    <td>[% IF ( basketgroup.name ) %]
                                                         [% basketgroup.name | html %]
                                                         [% ELSE %]
                                                             Basket group no. [% basketgroup.id | html %]
                                                         [% END %]
-                                                </td>
-                                                <td>[% basketgroup.id | html %]</td>
-                                                <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
-                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
-                                                <td>[% basketgroup.basketsqty | html %]</td>
-                                                <td>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="View" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Reopen" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as PDF" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as CSV" /></form>
-                                            [% IF (ediaccount) %]
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Generate EDIFACT order" /></form>
-                                            [% ELSE %]
-                                                    <div>No EDIFACT configuration for [% booksellername | html %]</div>
+                                                    </td>
+                                                    <td>[% basketgroup.id | html %]</td>
+                                                    <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
+                                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
+                                                    <td>[% basketgroup.basketsqty | html %]</td>
+                                                    <td>
+                                                        <input type="button" onclick="closeandprint('[% basketgroup.id | html %]');" value="Close and export as PDF" />
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Edit" /></form>
+                                                        [% UNLESS basketgroup.basketsqty %]
+                                                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Delete" /></form>
+                                                        [% END %]
+                                                    </td>
+                                                </tr>
                                             [% END %]
-                                                </td>
-                                            </tr>
                                         [% END %]
-                                    [% END %]
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="closed">
+                                <table id="basket_group_closed">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Number</th>
+                                            <th>Billing place</th>
+                                            <th>Delivery place</th>
+                                            <th>Number of baskets</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH basketgroup IN basketgroups %]
+                                            [% IF ( basketgroup.closed ) %]
+                                                <tr>
+                                                    <td>
+                                                        [% IF ( basketgroup.name ) %]
+                                                            [% basketgroup.name | html %]
+                                                            [% ELSE %]
+                                                                Basket group no. [% basketgroup.id | html %]
+                                                            [% END %]
+                                                    </td>
+                                                    <td>[% basketgroup.id | html %]</td>
+                                                    <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
+                                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
+                                                    <td>[% basketgroup.basketsqty | html %]</td>
+                                                    <td>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="View" /></form>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Reopen" /></form>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as PDF" /></form>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as CSV" /></form>
+                                                [% IF (ediaccount) %]
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Generate EDIFACT order" /></form>
+                                                [% ELSE %]
+                                                        <div>No EDIFACT configuration for [% booksellername | html %]</div>
+                                                [% END %]
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 [% END %]
