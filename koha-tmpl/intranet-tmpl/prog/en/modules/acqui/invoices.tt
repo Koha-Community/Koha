@@ -105,19 +105,19 @@
                                                             [% IF CAN_user_acquisition_edit_invoices %]
                                                                 <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid | uri %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close</a></li>
                                                             [% END %]
-                                                        [% END %]
+                                                        [% END # /IF invoice.closedate %]
                                                         [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
                                                             [% IF CAN_user_acquisition_delete_invoices %]
                                                                 <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid | uri %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]" class="delete_invoice"><i class="fa fa-trash"></i> Delete</a></li>
                                                             [% END %]
                                                         [% END %]
                                                     </ul>
-                                                </div>
+                                                </div> <!-- /.btn-group dropup -->
                                             </td>
                                         </tr>
-                                    [% END %]
+                                    [% END # /FOREACH invoice %]
                                 </tbody>
-                            </table>
+                            </table> <!-- /#[% tab | html %]resultst -->
 
                             [% IF CAN_user_acquisition_merge_invoices %]
                                 [% IF tab == 'closed' %]
@@ -126,9 +126,9 @@
                                 [% ELSE  %]
                                     <a class="btn btn-default merge" id="merge_open" href="#merge_invoices" data-table="openedresultst"><i class="fa fa-compress"></i> Merge selected invoices</a>
                                     <a class="btn btn-default" id="close_sel" href="#close_selected" data-table="openedresultst" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close selected invoices</a>
-                                [% END %]
-                            [% END %] <!-- invoices_table -->
-                        [% END %]
+                                [% END # /IF tab == 'closed' %]
+                            [% END # /IF CAN_user_acquisition_merge_invoices %]
+                        [% END # /BLOCK invoices_table %]
 
                         <div id="invoicestabs" class="toptabs" style="clear:both;">
                             <ul class="ui-tabs-nav">
@@ -143,7 +143,7 @@
                                         <p>Your search returned no open invoices.</p>
                                     </div>
                                 [% END %]
-                            </div> <!-- opened -->
+                            </div> <!-- /#opened -->
                             <div id="closed">
                                 [% IF closedinvoices %]
                                     [% INCLUDE invoices_table invoices = closedinvoices closed = 1 %]
@@ -152,8 +152,8 @@
                                         <p>Your search returned no closed invoices.</p>
                                     </div>
                                 [% END %]
-                            </div> <!-- closed -->
-                        </div> <!-- invoicestabs -->
+                            </div> <!-- /#closed -->
+                        </div> <!-- /#invoicestabs -->
 
 
                         <div id="merge_invoices">
@@ -217,10 +217,10 @@
                                     </ol>
                                     <input type="hidden" name="op" value="mod" />
                                     <input type="hidden" id="merge_invoiceid" name="invoiceid" value="" />
-                                </fieldset>
-                            </form>
-                        </div>
-                    [% ELSE %]
+                                </fieldset> <!-- /.rows -->
+                            </form> <!-- /#merge_invoice_form -->
+                        </div> <!-- /#merge_invoices -->
+                    [% ELSE # IF invoices %]
                         <p>Sorry, but there are no results for your search.</p>
                         <p>Search was:
                             <ul>
@@ -286,7 +286,7 @@
                                 [% END %]
                             </ul>
                         </p>
-                    [% END %]<!-- invoices -->
+                    [% END # /IF invoices %]
                 [% ELSE %]
                     <p>Use the search form on the left to find invoices.</p>
                 [% END %]<!-- do_search -->
@@ -383,7 +383,7 @@
                         <fieldset class="action">
                             <input type="submit" value="Search" />
                         </fieldset>
-                    </fieldset>
+                    </fieldset> <!-- /.sidebar.brief -->
                     <input type="hidden" name="op" id="op" value="do_search" />
                 </form>
                 [% INCLUDE 'acquisitions-menu.inc' %]
