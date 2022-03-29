@@ -76,7 +76,7 @@
         </div>
 
         <div id="info" class="dialog message" style="display: none;"></div>
-        <div id="error" class="dialog alert" style="dispay: none;"></div>
+        <div id="error" class="dialog alert" style="display: none;"></div>
 
         <input type="hidden" id="firstletter_filter" value="" />
         <div id="searchresults" style="display:none;">
@@ -171,7 +171,7 @@
                     [% SET search_fields = Koha.Preference('DefaultPatronSearchFields') || 'surname,firstname,othernames,cardnumber,userid' %]
                     return [
                         [% FOR search_field IN search_fields.split(',') %]
-                        {"me.[% search_field %]":{"like":"%"+filter+"%"}},
+                        {"me.[% search_field | html %]":{"like":"%"+filter+"%"}},
                         [% END %]
                         [% IF Koha.Preference('ExtendedPatronAttributes') %]
                         {
@@ -293,7 +293,7 @@
                         [% UNLESS loop.last %],[% END %]
                     [% END %]
                 ],
-                "order": [[ [% order_column_index %], "asc" ]],
+                "order": [[ [% order_column_index | html %], "asc" ]],
                 'bAutoWidth': false,
                 'sPaginationType': 'full_numbers',
                 "iDisplayLength": [% Koha.Preference('PatronsPerPage') | html %],
