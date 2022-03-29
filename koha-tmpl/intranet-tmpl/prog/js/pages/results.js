@@ -210,12 +210,11 @@ $(document).ready(function() {
             e.preventDefault();
             highlightOn();
         });
-    }
-
-    if( PREF_StaffHighlightedWords == 1 ){
-        highlightOn();
-    } else {
-    highlightOff();
+        if( PREF_StaffHighlightedWords == 1 ){
+            highlightOn();
+        } else {
+            highlightOff();
+        }
     }
 
 
