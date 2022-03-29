@@ -39,7 +39,8 @@ foreach my $route ( keys %{$paths} ) {
                 && $parameter->{schema}->{type} eq 'object' ) {
 
                 # it is an object type definition
-                if ( not exists $parameter->{schema}->{additionalProperties} ) {
+                if ( $parameter->{name} ne 'query' # our query parameter is under-specified
+                    and not exists $parameter->{schema}->{additionalProperties} ) {
                     push @missing_additionalProperties,
                       { type  => 'parameter',
                         route => $route,
