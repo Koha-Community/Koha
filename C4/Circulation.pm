@@ -2136,7 +2136,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->notforloan eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$key} };
-                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 });
+                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 }) unless $rules->{$key} eq 'ONLYMESSAGE';
                     last;
                 }
             }

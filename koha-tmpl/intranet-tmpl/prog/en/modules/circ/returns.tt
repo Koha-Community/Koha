@@ -264,6 +264,9 @@
                                     [% FOREACH errmsgloo IN errmsgloop %]
                                         [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
                                             <p class="problem ret_nflupdate">
+                                            [% IF errmsgloo.NotForLoanStatusUpdated.to == 'ONLYMESSAGE' %]
+                                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]
+                                            [% ELSE %]
                                                 Not for loan status updated.
                                                 <br />Old value:
                                                 [% IF errmsgloo.NotForLoanStatusUpdated.from %]
@@ -281,6 +284,7 @@
                                                 [% ELSE %]
                                                     Available for loan.
                                                 [% END %]
+                                            [% END %]
                                             </p>
                                         [% END %]
                                         [% IF ( errmsgloo.ItemLocationUpdated ) %]

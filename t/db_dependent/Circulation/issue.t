@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 48;
+use Test::More tests => 49;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -407,6 +407,12 @@ is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnChe
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
+
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: ONLYMESSAGE' );
+$item->notforloan(1)->store;
+AddReturn( 'barcode_3', $branchcode_1 );
+$item = Koha::Items->find( $itemnumber );
+ok( $item->notforloan eq 1, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 1 with setting "1: ONLYMESSAGE"} );
 
 my $itemnumber2 = Koha::Item->new(
     {
