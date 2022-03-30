@@ -68,7 +68,7 @@ my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
-my $view = $input->request_method() eq "GET"  && !$circsearch ? "show_form" : "show_results";
+my $defer_loading = $input->request_method() eq "GET"  && !$circsearch ? 1 : 0;
 
 $template->param(
     patron_lists => [ GetPatronLists() ],
@@ -78,7 +78,7 @@ $template->param(
     searchtype          => scalar $input->param('searchtype') || 'contain',
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
-    view                => $view,
+    defer_loading       => $defer_loading,
     circsearch          => $circsearch,
     attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
         ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
