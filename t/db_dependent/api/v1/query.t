@@ -34,7 +34,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'q handling tests' => sub {
 
-    plan tests => 15;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -99,6 +99,9 @@ subtest 'q handling tests' => sub {
       ->status_is(200)->tx->res->json;
 
     is( scalar @{$cities}, 1, 'empty list as first query, 1 city retrieved' );
+
+    $t->get_ok("//$userid:$password@/api/v1/cities" => { 'x-koha-request-id' => 100 } )
+      ->header_is( 'x-koha-request-id' => 100 );
 
     $schema->storage->txn_rollback;
 };
