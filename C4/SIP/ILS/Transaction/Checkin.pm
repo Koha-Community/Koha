@@ -170,7 +170,7 @@ sub do_checkin {
 
     # Set sort bin based on info in the item associated with the issue, and the
     # mapping from SIP2SortBinMapping
-    $self->sort_bin( _get_sort_bin( $item, $branch ) );
+    $self->sort_bin( _get_sort_bin( $item, $branch, $account ) );
 
     $self->ok($return);
 
@@ -231,13 +231,20 @@ Returns the ID of the appropriate sort_bin, if there is one, or undef.
 sub _get_sort_bin {
 
     # We should get an item represented as a hashref here
-    my ( $item, $branch ) = @_;
+    my ( $item, $branch, $account ) = @_;
     return unless $item;
 
-    # Get the mapping and split on newlines
-    my $raw_map = C4::Context->preference('SIP2SortBinMapping');
-    return unless $raw_map;
-    my @lines = split /\r\n/, $raw_map;
+    my @lines;
+    # Mapping in SIP config takes precedence over syspref
+    if ( my $mapping = $account->{sort_bin_mapping} ) {
+        @lines = map { $_->{mapping} } @$mapping;
+    }
+    else {
+        # Get the mapping and split on newlines
+        my $raw_map = C4::Context->preference('SIP2SortBinMapping');
+        return unless $raw_map;
+        @lines = split /\r\n/, $raw_map;
+    }
 
     # Iterate over the mapping. The first hit wins.
     my $rule = 0;

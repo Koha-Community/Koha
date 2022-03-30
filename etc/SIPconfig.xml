@@ -73,6 +73,9 @@
              prevcheckout_block_checkout="0"
              overdues_block_checkout="1"
              format_due_date="0">
+          <!-- Refer to syspref SIP2SortBinMapping for full explanation of sort bin mapping -->
+          <sort_bin_mapping mapping="CPL:itype:eq:BK:1"/>
+          <sort_bin_mapping mapping="CPL:location:eq:OFFICE:2"/>
           <screen_msg_regex find="Greetings from Koha." replace="Welcome to your library!" />
           <screen_msg_regex find="Invalid patron barcode." replace="Barcode not found, are you sure this is your library card?" />
           <patron_attribute field="XY" code="CODE" />
