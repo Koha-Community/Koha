@@ -204,7 +204,7 @@ value that should be returned for an item checked in via SIP2.
 
 The mapping should be:
 
- <branchcode>:<item field>:<comparitor>:<item field value>:<sort bin number>
+ <branchcode>:<item field>:<comparator>:<item field value>:<sort bin number>
 
 For example:
 
@@ -242,10 +242,9 @@ sub _get_sort_bin {
     # Iterate over the mapping. The first hit wins.
     my $rule = 0;
     foreach my $line (@lines) {
-        warn "Rule: " . $rule++ . " - " . $line . "\n";
 
         # Split the line into fields
-        my ( $branchcode, $item_property, $comparitor, $value, $sort_bin ) =
+        my ( $branchcode, $item_property, $comparator, $value, $sort_bin ) =
           split /:/, $line;
         if ( $value =~ s/^\$// ) {
             $value = $item->$value;
@@ -253,22 +252,22 @@ sub _get_sort_bin {
         # Check the fields against values in the item
         if ( $branch eq $branchcode ) {
             my $property = $item->$item_property;
-            if ( ( $comparitor eq 'eq' || $comparitor eq '=' ) && ( $property eq $value ) ) {
+            if ( ( $comparator eq 'eq' || $comparator eq '=' ) && ( $property eq $value ) ) {
                 return $sort_bin;
             }
-            if ( ( $comparitor eq 'ne' || $comparitor eq '!=' ) && ( $property ne $value ) ) {
+            if ( ( $comparator eq 'ne' || $comparator eq '!=' ) && ( $property ne $value ) ) {
                 return $sort_bin;
             }
-            if ( ( $comparitor eq '<' ) && ( $property < $value ) ) {
+            if ( ( $comparator eq '<' ) && ( $property < $value ) ) {
                 return $sort_bin;
             }
-            if ( ( $comparitor eq '>' ) && ( $property > $value ) ) {
+            if ( ( $comparator eq '>' ) && ( $property > $value ) ) {
                 return $sort_bin;
             }
-            if ( ( $comparitor eq '<=' ) && ( $property <= $value ) ) {
+            if ( ( $comparator eq '<=' ) && ( $property <= $value ) ) {
                 return $sort_bin;
             }
-            if ( ( $comparitor eq '>=' ) && ( $property >= $value ) ) {
+            if ( ( $comparator eq '>=' ) && ( $property >= $value ) ) {
                 return $sort_bin;
             }
         }

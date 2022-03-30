@@ -1287,7 +1287,19 @@ Circulation:
 
     SIP2:
         -
-            - "Use the following mappings to determine the sort_bin of a returned item. The mapping should be on the form 'branchcode:item field:item field value:sort bin number', with one mapping per line."
+            - "Use the following mappings to determine the sort_bin of a returned item.<br/>"
+            - "The mapping should be of the form 'branchcode:item field:comparator:item field value:sort bin number', with one mapping per line.<br/>"
+            - "- 'branchcode' is the location where the checkin is being performed (i.e. branch assigned to SIP user)<br/>"
+            - "- 'item field' is a database column in the items table<br/>"
+            - "- 'comparator' is the type of comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
+            - "- 'item field value' is the value to compare against the value in the specified 'item field'<br/>"
+            - "- 'sort bin number' is the expected return value in the CL field of the SIP response for an item matching a rule<br/><br/>"
+            - "NOTE: Specifying 'item_field_value' with a leading '\\$' and an item field name will use the value of that field in the item for comparison:<br/>"
+            - "i.e. \\$holdingbranch<br/></br>"
+            - "Examples:<br/>"
+            - "CPL:itype:eq:BOOK:1 - Will return sort bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
+            - "CPL:itemcallnumber:<:339.6:3 - Will return sort bin 3 for an item with a callnumber less than 339.6 returned to CPL .<br/>"
+            - "CPL:homebranch:ne:\\$holdingbranch:X - Wil return sort bin 'X' for an item returned to CPL where the holdingbranch is not equal to the homebranch (i.e. any item belonging to a different branch than CPL).<br/><br/>"
             - pref: SIP2SortBinMapping
               type: textarea
               class: long

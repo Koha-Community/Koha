@@ -564,16 +564,17 @@ RULES
     # Set holdingbranch as though item returned to library other than homebranch (As AddReturn would)
     $item_cd->holdingbranch($library2->branchcode)->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library2->branchcode );
-    is($bin, 'X', "Item parameter on RHS of comparison works (ne comparitor)");
+    is($bin, 'X', "Item parameter on RHS of comparison works (ne comparator)");
 
     # Reset holdingbranch as though item returned to home library
     $item_cd->holdingbranch($library->branchcode)->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_cd, $library->branchcode );
-    is($bin, '0', "Fixed value on RHS of comparison works (eq comparitor)");
+    is($bin, '0', "Fixed value on RHS of comparison works (eq comparator)");
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
-    is($bin, '1', "Rules applied in order (< comparitor)");
+    is($bin, '1', "Rules applied in order (< comparator)");
     $item_book->itemcallnumber('350.20')->store();
-    is($bin, '2', "Rules applied in order (< comparitor)");
+    $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
+    is($bin, '2', "Rules applied in order (< comparator)");
 };
 
 subtest item_circulation_status => sub {
