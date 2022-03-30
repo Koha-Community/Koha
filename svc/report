@@ -35,8 +35,11 @@ my $report_name = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
 my $report_recs = Koha::Reports->search( $report_name ? { 'report_name' => $report_name } : { 'id' => $report_id } );
+
 if (!$report_recs || $report_recs->count == 0 ) { die "There is no such report.\n"; }
 my $report_rec = $report_recs->next();
+
+$report_id = $report_rec->id;
 
 my @sql_params  = $query->multi_param('sql_params');
 my @param_names  = $query->multi_param('param_names');
