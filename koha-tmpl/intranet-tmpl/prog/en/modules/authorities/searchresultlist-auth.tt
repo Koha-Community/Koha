@@ -56,7 +56,7 @@
                     <th>Heading type</th>
                     <th>Used</th>
                     [% IF Koha.Preference('ShowHeadingUse') %]
-                        <th>Heading use</th>
+                        <th class="heading_use">Heading use</th>
                     [% END %]
                     <th>Get it!</th>
                     <th>Other action</th>
@@ -67,7 +67,7 @@
                         <td>[% resul.summary.label | html %]</td>
                         <td>[% resul.used | html %] times</td>
                         [% IF Koha.Preference('ShowHeadingUse') %]
-                            <td class="actions"><ul class="usefor">
+                            <td class="heading_use"><ul class="usefor">
                                 <li>[% IF resul.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
                                 <li>[% IF resul.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
                                 <li>[% IF resul.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
