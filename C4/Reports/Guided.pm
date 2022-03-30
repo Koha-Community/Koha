@@ -464,9 +464,74 @@ sub nb_rows {
     return $results ? $results->[0] : 0;
 }
 
+=head2 select_2_select_count
+
+ returns $sql, $offset, $limit
+ $sql returned will be transformed to:
+  ~ remove any LIMIT clause
+  ~ replace SELECT clause w/ SELECT count(*)
+
+=cut
+
+sub select_2_select_count {
+    # Modify the query passed in to create a count query... (I think this covers all cases -crn)
+    my ($sql) = strip_limit(shift) or return;
+    $sql =~ s/\bSELECT\W+(?:\w+\W+){1,}?FROM\b|\bSELECT\W\*\WFROM\b/SELECT count(*) FROM /ig;
+    return $sql;
+}
+
+=head2 strip_limit
+This removes the LIMIT from the query so that a custom one can be specified.
+Usage:
+   ($new_sql, $offset, $limit) = strip_limit($sql);
+
+Where:
+  $sql is the query to modify
+  $new_sql is the resulting query
+  $offset is the offset value, if the LIMIT was the two-argument form,
+      0 if it wasn't otherwise given.
+  $limit is the limit value
+
+Notes:
+  * This makes an effort to not break subqueries that have their own
+    LIMIT specified. It does that by only removing a LIMIT if it comes after
+    a WHERE clause (which isn't perfect, but at least should make more cases
+    work - subqueries with a limit in the WHERE will still break.)
+  * If your query doesn't have a WHERE clause then all LIMITs will be
+    removed. This may break some subqueries, but is hopefully rare enough
+    to not be a big issue.
+
+=cut
+
+sub strip_limit {
+    my ($sql) = @_;
+
+    return unless $sql;
+    return ($sql, 0, undef) unless $sql =~ /\bLIMIT\b/i;
+
+    # Two options: if there's no WHERE clause in the SQL, we simply capture
+    # any LIMIT that's there. If there is a WHERE, we make sure that we only
+    # capture a LIMIT after the last one. This prevents stomping on subqueries.
+    if ($sql !~ /\bWHERE\b/i) {
+        (my $res = $sql) =~ s/\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/ /ig;
+        return ($res, (defined $2 ? $1 : 0), (defined $3 ? $3 : $1));
+    } else {
+        my $res = $sql;
+        $res =~ m/.*\bWHERE\b/gsi;
+        $res =~ s/\G(.*)\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/$1 /is;
+        return ($res, (defined $3 ? $2 : 0), (defined $4 ? $4 : $2));
+    }
+}
+
 =head2 execute_query
 
-  ($sth, $error) = execute_query($sql, $offset, $limit[, \@sql_params])
+  ($sth, $error) = execute_query({
+      sql => $sql,
+      offset => $offset,
+      limit => $limit
+      sql_params => \@sql_params],
+      report_id => $report_id
+  })
 
 
 This function returns a DBI statement handler from which the caller can
@@ -487,57 +552,6 @@ The caller is responsible for making sure that C<$sql> has placeholders
 and that the number placeholders matches the number of parameters.
 
 =cut
-
-# returns $sql, $offset, $limit
-# $sql returned will be transformed to:
-#  ~ remove any LIMIT clause
-#  ~ repace SELECT clause w/ SELECT count(*)
-
-sub select_2_select_count {
-    # Modify the query passed in to create a count query... (I think this covers all cases -crn)
-    my ($sql) = strip_limit(shift) or return;
-    $sql =~ s/\bSELECT\W+(?:\w+\W+){1,}?FROM\b|\bSELECT\W\*\WFROM\b/SELECT count(*) FROM /ig;
-    return $sql;
-}
-
-# This removes the LIMIT from the query so that a custom one can be specified.
-# Usage:
-#   ($new_sql, $offset, $limit) = strip_limit($sql);
-#
-# Where:
-#   $sql is the query to modify
-#   $new_sql is the resulting query
-#   $offset is the offset value, if the LIMIT was the two-argument form,
-#       0 if it wasn't otherwise given.
-#   $limit is the limit value
-#
-# Notes:
-#   * This makes an effort to not break subqueries that have their own
-#     LIMIT specified. It does that by only removing a LIMIT if it comes after
-#     a WHERE clause (which isn't perfect, but at least should make more cases
-#     work - subqueries with a limit in the WHERE will still break.)
-#   * If your query doesn't have a WHERE clause then all LIMITs will be
-#     removed. This may break some subqueries, but is hopefully rare enough
-#     to not be a big issue.
-sub strip_limit {
-    my ($sql) = @_;
-
-    return unless $sql;
-    return ($sql, 0, undef) unless $sql =~ /\bLIMIT\b/i;
-
-    # Two options: if there's no WHERE clause in the SQL, we simply capture
-    # any LIMIT that's there. If there is a WHERE, we make sure that we only
-    # capture a LIMIT after the last one. This prevents stomping on subqueries.
-    if ($sql !~ /\bWHERE\b/i) {
-        (my $res = $sql) =~ s/\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/ /ig;
-        return ($res, (defined $2 ? $1 : 0), (defined $3 ? $3 : $1));
-    } else {
-        my $res = $sql;
-        $res =~ m/.*\bWHERE\b/gsi;
-        $res =~ s/\G(.*)\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/$1 /is;
-        return ($res, (defined $3 ? $2 : 0), (defined $4 ? $4 : $2));
-    }
-}
 
 sub execute_query {
 
