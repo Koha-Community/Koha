@@ -302,7 +302,7 @@
                         search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,surname,othernames,cardnumber,userid' | html %]";
                     }
                     search_fields.split(',').forEach(function(e,i){
-                        filters.push({["me."+e]:{"like":"%"+filter+(search_type == "contain" ? "%" : "" )}});
+                        filters.push({["me."+e]:{"like":(search_type == "contain" ? "%" : "" ) + filter + "%"}});
                     });
                     [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
                         filters.push({
