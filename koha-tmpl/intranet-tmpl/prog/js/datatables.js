@@ -538,13 +538,17 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                             },
                             'dataFilter': function(data, type) {
                                 var json = {data: JSON.parse(data)};
-                                if(total = this._xhr.getResponseHeader('x-total-count')) {
+                                if (total = this._xhr.getResponseHeader('x-total-count')) {
                                     json.recordsTotal = total;
                                     json.recordsFiltered = total;
                                 }
-                                if(total = this._xhr.getResponseHeader('x-base-total-count')) {
+                                if (total = this._xhr.getResponseHeader('x-base-total-count')) {
                                     json.recordsTotal = total;
                                 }
+                                if (draw = this._xhr.getResponseHeader('x-koha-request-id')) {
+                                    json.draw = draw;
+                                }
+
                                 return JSON.stringify(json);
                             },
                             'data': function( data, settings ) {
@@ -651,6 +655,10 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 }
 
                                 dataSet._match = options.criteria;
+
+                                if ( data["draw"] !== undefined ) {
+                                    settings.ajax.headers = { 'x-koha-request-id': data.draw }
+                                }
 
                                 if(options.columns) {
                                     var order = data.order;
