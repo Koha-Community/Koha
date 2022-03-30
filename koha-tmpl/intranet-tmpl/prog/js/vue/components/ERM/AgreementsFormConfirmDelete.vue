@@ -17,7 +17,9 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" variant="primary" value="Yes, delete" />
-                <a href="#" class="cancel" @click="$emit('switch-view', 'list')">No, do not delete</a>
+                <a href="#" class="cancel" @click="$emit('switch-view', 'list')"
+                    >No, do not delete</a
+                >
             </fieldset>
         </form>
     </div>
@@ -52,12 +54,11 @@ export default {
 
             let apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
 
-            const myHeaders = new Headers()
-            myHeaders.append('Content-Type', 'application/json')
-
             const options = {
                 method: 'DELETE',
-                myHeaders
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
             }
 
             fetch(apiUrl, options)

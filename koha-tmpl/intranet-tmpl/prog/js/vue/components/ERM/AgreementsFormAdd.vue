@@ -165,7 +165,9 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Submit" />
-                <a href="#" class="cancel" @click="$emit('switch-view', 'list')">Cancel</a>
+                <a href="#" class="cancel" @click="$emit('switch-view', 'list')"
+                    >Cancel</a
+                >
             </fieldset>
         </form>
     </div>
@@ -217,9 +219,6 @@ export default {
             let agreement = JSON.parse(JSON.stringify(this.agreement)) // copy
             let apiUrl = '/api/v1/erm/agreements'
 
-            const myHeaders = new Headers()
-            myHeaders.append('Content-Type', 'application/json')
-
             let method = 'POST'
             if (agreement.agreement_id) {
                 method = 'PUT'
@@ -241,7 +240,9 @@ export default {
             const options = {
                 method: method,
                 body: JSON.stringify(agreement),
-                myHeaders
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
             }
 
             fetch(apiUrl, options)
