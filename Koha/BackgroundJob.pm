@@ -97,6 +97,7 @@ sub enqueue {
     my $job_type = $self->job_type;
     my $job_size = $params->{job_size};
     my $job_args = $params->{job_args};
+    my $job_queue = $params->{job_queue} // 'default';
 
     my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
     my $json_args = encode_json $job_args;
@@ -105,6 +106,7 @@ sub enqueue {
         {
             status         => 'new',
             type           => $job_type,
+            queue          => $job_queue,
             size           => $job_size,
             data           => $json_args,
             enqueued_on    => dt_from_string,
@@ -129,7 +131,7 @@ sub enqueue {
         # Also, here we just want the Koha instance's name, but it's not in the config...
         # Picking a random id (memcached_namespace) from the config
         my $namespace = C4::Context->config('memcached_namespace');
-        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_type), body => $json_args } )
+        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_queue), body => $json_args } )
           or Koha::Exceptions::Exception->throw('Job has not been enqueued');
     } catch {
         $self->status('failed')->store;
