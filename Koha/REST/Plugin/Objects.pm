@@ -182,6 +182,10 @@ shouldn't be called twice in it.
                 $filtered_params = $c->merge_q_params( $filtered_params, $query_params, $result_set );
             }
 
+            # request sequence id (i.e. 'draw' Datatables parameter)
+            $c->res->headers->add( 'x-koha-request-id' => $reserved_params->{'x-koha-request-id'} )
+              if $reserved_params->{'x-koha-request-id'};
+
             # If search_limited exists, use it
             $result_set = $result_set->search_limited,
                 if $result_set->can('search_limited');

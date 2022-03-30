@@ -310,7 +310,7 @@ reference: https://metacpan.org/changes/distribution/JSON-Validator#L14
 
 sub _reserved_words {
 
-    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query x-koha-query);
+    my @reserved_words = qw( _match _order_by _order_by[] _page _per_page q query x-koha-query x-koha-request-id );
     return \@reserved_words;
 }
 
