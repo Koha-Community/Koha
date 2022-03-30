@@ -54,34 +54,34 @@
         name: license_info
         required: false
         type: string
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       200:
         description: A list of agreement
         schema:
           items:
-            $ref: ../definitions.yaml#/erm_agreement
+            $ref: "../swagger.yaml#/definitions/erm_agreement"
           type: array
       403:
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       500:
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       503:
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1
@@ -101,43 +101,43 @@
         name: body
         required: true
         schema:
-          $ref: ../definitions.yaml#/erm_agreement
+            $ref: "../swagger.yaml#/definitions/erm_agreement"
     responses:
       201:
         description: A successfully created agreement
         schema:
           items:
-            $ref: ../definitions.yaml#/erm_agreement
+            $ref: "../swagger.yaml#/definitions/erm_agreement"
       400:
         description: Bad parameter
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Ressource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       409:
         description: Conflict in creating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       500:
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       503:
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1
@@ -151,35 +151,35 @@
     produces:
       - application/json
     parameters:
-      - $ref: ../parameters.yaml#/agreement_id_pp
+      - $ref: "../swagger.yaml#/parameters/agreement_id_pp"
     responses:
       200:
         description: An agreement
         schema:
           items:
-            $ref: ../definitions.yaml#/erm_agreement
+            $ref: "../swagger.yaml#/definitions/erm_agreement"
       401:
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Ressource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       500:
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       503:
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1
@@ -198,46 +198,46 @@
     produces:
       - application/json
     parameters:
-      - $ref: ../parameters.yaml#/agreement_id_pp
+      - $ref: "../swagger.yaml#/parameters/agreement_id_pp"
       - name: body
         in: body
         description: A JSON object containing new information about existing agreement
         required: true
         schema:
-          $ref: ../definitions.yaml#/erm_agreement
+          $ref: "../swagger.yaml#/definitions/erm_agreement"
 
     responses:
       200:
         description: A successfully updated agreement
         schema:
           items:
-            $ref: ../definitions.yaml#/erm_agreement
+            $ref: "../swagger.yaml#/definitions/erm_agreement"
       400:
         description: Bad parameter
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Ressource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       409:
         description: Conflict in updating resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       500:
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       503:
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1
@@ -253,40 +253,40 @@
     produces:
       - application/json
     parameters:
-      - $ref: ../parameters.yaml#/agreement_id_pp
+      - $ref: "../swagger.yaml#/parameters/agreement_id_pp"
     responses:
       204:
         description: Agreement deleted
       400:
         description: Agreement deletion failed
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Ressource not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       409:
         description: Conflict in deleting resource
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       500:
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       503:
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1

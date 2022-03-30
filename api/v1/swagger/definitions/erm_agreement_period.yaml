@@ -2,7 +2,9 @@
 type: object
 properties:
   agreement_period_id:
-    $ref: ../x-primitives.yaml#/agreement_period_id
+    type: integer
+    description: internally assigned identifier
+    readOnly: true
   agreement_id:
     type: integer
     description: Internal agreement identifier

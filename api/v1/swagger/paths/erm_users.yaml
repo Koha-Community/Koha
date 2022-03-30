@@ -8,13 +8,13 @@
     tags:
       - ERM
     parameters:
-      - $ref: ../parameters.yaml#/match
-      - $ref: ../parameters.yaml#/order_by
-      - $ref: ../parameters.yaml#/page
-      - $ref: ../parameters.yaml#/per_page
-      - $ref: ../parameters.yaml#/q_param
-      - $ref: ../parameters.yaml#/q_body
-      - $ref: ../parameters.yaml#/q_header
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
     produces:
       - application/json
     responses:
@@ -23,22 +23,22 @@
         schema:
           type: array
           items:
-            $ref: ../definitions.yaml#/patron
+            $ref: "../swagger.yaml#/definitions/patron"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         erm: 1
