@@ -144,9 +144,9 @@ div#result { margin-top: 1em; }
             ev.preventDefault();
             newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
         });
-
-        // Creating tabs
-        $("#tabs").tabs();
+        if( $(".tab-pane.active").length < 1 ){
+            $("#tabs a:first").tab("show");
+        }
     });
 
 

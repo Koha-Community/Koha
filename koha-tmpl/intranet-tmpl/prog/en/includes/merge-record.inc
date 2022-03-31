@@ -1,5 +1,5 @@
 [% BLOCK sourcetab %]
-    <div id="tabrecord[% record.recordid | html %]">
+    <div id="tabrecord[% record.recordid | html %]" role="tabpanel" class="tab-pane">
         <div class="record">
             <ul id="ulrecord[% record.recordid | html %]">
                 [% FOREACH field IN record.display %]
@@ -45,24 +45,26 @@
 [% END %]
 
 [% BLOCK mergesource %]
-<div id="tabs" class="toptabs">
-<h2>Source records</h2>
-    <ul>
-        [% FOREACH record IN sourcerecords %]
-            <li>
-                <a href="#tabrecord[% record.recordid | uri %]">
-                    [% record.recordid | html %]
-                    [% IF record.reference %](ref)[% END %]
-                </a>
-            </li>
-        [% END %]
-    </ul>
-    [% IF ( sourcerecords.size ) %]
-        [% FOREACH record IN sourcerecords %]
-            [% PROCESS sourcetab tabrecord=record %]
-        [% END %]
-    [% END %]
-</div> <!-- // #tabs -->
+    <div id="tabs" class="toptabs">
+        <h2>Source records</h2>
+        <ul class="nav nav-tabs" role="tablist">
+            [% FOREACH record IN sourcerecords %]
+                <li role="presentation">
+                    <a href="#tabrecord[% record.recordid | uri %]" aria-controls="tabrecord[% record.recordid | uri %]" role="tab" data-toggle="tab">
+                        [% record.recordid | html %]
+                        [% IF record.reference %](ref)[% END %]
+                    </a>
+                </li>
+            [% END %]
+        </ul>
+        <div class="tab-content">
+            [% IF ( sourcerecords.size ) %]
+                [% FOREACH record IN sourcerecords %]
+                    [% PROCESS sourcetab tabrecord=record %]
+                [% END %]
+            [% END %]
+        </div> <!-- /.tab-content -->
+    </div> <!-- // #tabs -->
 [% END %]
 
 [% BLOCK mergetarget %]
