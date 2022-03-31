@@ -134,6 +134,14 @@
                 $("#authoritiestabs a:first").tab("show");
             }
 
+            var editAuth = $("#editAuth");
+            var editAuthLink = editAuth.attr("href");
+
+            $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                var newTabId = $(this).attr("href");
+                editAuth.attr("href", editAuthLink + newTabId );
+            });
+
             [% IF ( displayhierarchy ) %]
                 $('#hierarchies').jstree({
                     "types" : {

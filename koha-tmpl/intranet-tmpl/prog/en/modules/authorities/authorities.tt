@@ -21,17 +21,21 @@
     });
     var Sticky;
     $(document).ready(function() {
-        var tabs = $('#authoritytabs').tabs().bind('show.ui-tabs', function(e, ui) {
-            $("#"+ui.panel.id+" input:eq(0)").focus();
-        });
+        var tabs = $('#authoritytabs').tabs({
+            activate: function(e, ui) {
+                $("#"+ $(ui.newPanel).attr("id") + " .input_marceditor:visible:eq(0)").focus();
+            }
+         });
 
-        $( "ul.sortable_field", tabs ).sortable();
-        $( "ul.sortable_subfield", tabs ).sortable();
+        /* On page load, check for location.hash in the page URL */
+        var hash = location.hash;
+        var hashPieces = hash.split('?');
+        if( hashPieces[0] !== "" ){
+            var activeTab = $("[href='" + hashPieces[0] + "']");
+            selectTab(activeTab);
+            window.scrollTo( 0, 0 );
+        }
 
-        [% IF tab %]
-            link = $("a[href='#[% tab | html %]']");
-            selectTab( link );
-        [% END %]
         $( "ul.sortable_field", tabs ).sortable();
         $( "ul.sortable_subfield", tabs ).sortable();
         Sticky = $("#toolbar");
@@ -368,7 +372,9 @@
 
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
                             <div id="tab[% BIG_LOO.number | html %]XX">
-
+                                [% IF ( BIG_LOOP.size > 1 ) %]
+                                    <h2>Section [% BIG_LOO.number | html %]</h2>
+                                [% END %]
                                 [% previous = "" %]
                                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
                                     [% IF ( innerloo.tag ) %]
