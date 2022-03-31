@@ -68,16 +68,16 @@
 </div>
 
 <div id="authoritiestabs" class="toptabs numbered">
-    <ul>
+    <ul class="nav nav-tabs" role="tablist">
         [% FOREACH BIG_LOO IN BIG_LOOP %]
-            <li>
-                <a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a>
+            <li role="presentation">
+                <a href="#tab[% BIG_LOO.number | uri %]XX" aria-controls="tab[% BIG_LOO.number | uri %]XX" role="tab" data-toggle="tab">[% BIG_LOO.number | html %]</a>
             </li>
         [% END %]
     </ul>
-
+    <div class="tab-content">
 [% FOREACH BIG_LOO IN BIG_LOOP %]
-    <div id="tab[% BIG_LOO.number | html %]XX">
+    <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane">
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
         [% IF ( innerloo.tag_number ) %]
             <div class="tag">
@@ -116,6 +116,7 @@
     [% END %]
     </div>
 [% END %]
+</div> <!-- /.tab-content -->
 </div>
 </div>
 </div>
@@ -128,13 +129,10 @@
     [% END %]
     <script>
         $(document).ready(function() {
-            var editAuth = $("#editAuth");
-            var editAuthLink = editAuth.attr("href");
-            $('#authoritiestabs').tabs({
-                activate: function( event, ui ){
-                    editAuth.attr("href", editAuthLink + "#" + ui.newPanel.attr('id') );
-                }
-            });
+            if( $(".tab-pane.active").length < 1 ){
+                $("#authoritiestabs a:first").tab("show");
+            }
+
             [% IF ( displayhierarchy ) %]
                 $('#hierarchies').jstree({
                     "types" : {
