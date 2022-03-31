@@ -26,6 +26,8 @@
             <div class="col-sm-3">
                 [% IF ( koha_news.count ) %]
                     <div id="area-news">
+                         <iframe src="https://panzi.github.io/Browser-Ponies/ponies-iframe.html#fadeDuration=500&amp;volume=1&amp;fps=25&amp;speed=3&amp;audioEnabled=false&amp;showFps=false&amp;showLoadProgress=true&amp;speakProbability=0.1&amp;spawn.applejack=1&amp;spawn.fluttershy=1&amp;spawn.pinkie%20pie=1&amp;spawn.rainbow%20dash=1&amp;spawn.rarity=1&amp;spawn.twilight%20sparkle=1&amp;spawnRandom=1&amp;paddock=true&amp;grass=true" style="overflow:hidden;border-style:none;margin:0;padding:0;background:transparent;width:400px;600px;" width="400" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                         <!--
                         <h3><span class="news_title">News</span></h3>
                         [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'staff' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                         [% FOREACH koha_new IN koha_news %]
@@ -40,6 +42,7 @@
                                 </p>
                             </div>
                         [% END %]
+                        -->
                     </div><!-- /additional-contents -->
                 [% END %]
                 [% IF ( daily_quote ) %]
