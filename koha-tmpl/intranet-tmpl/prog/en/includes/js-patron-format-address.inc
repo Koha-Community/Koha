@@ -101,7 +101,7 @@
         window.$format_address = function(data, options) {
             let line_break = options && options.no_line_break ? ' ' : '<br/>';
             [%~ IF Koha.Preference( 'AddressFormat' ) ~%]
-                return member_display_address_style_[% Koha.Preference( 'AddressFormat' ) %](data, line_break);
+                return member_display_address_style_[% Koha.Preference( 'AddressFormat' ) | html %](data, line_break);
             [%~ ELSE ~%]
                 return member_display_address_style_us(data, line_break);
             [%~ END ~%]

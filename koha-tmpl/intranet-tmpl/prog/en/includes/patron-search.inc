@@ -78,7 +78,7 @@
         [% END %]
     </div>
 
-    <div id="[% table_id %]_search_results" style="display:none;">
+    <div id="[% table_id | html %]_search_results" style="display:none;">
 
         <div id="info" class="dialog message" style="display: none;"></div>
         <div id="error" class="dialog alert" style="display: none;"></div>
@@ -86,9 +86,9 @@
 
         <input type="hidden" id="firstletter_filter" value="" />
         [% IF open_on_row_click %]
-        <table id="[% table_id %]" class="selections-table">
+        <table id="[% table_id | html %]" class="selections-table">
         [% ELSE %]
-        <table id="[% table_id %]">
+        <table id="[% table_id | html %]">
         [% END %]
             <thead>
                 <tr>
@@ -202,7 +202,7 @@
                 [% default_sort_column = "name" %]
             [% END %]
             [% SET order_column_index = 0 %]
-            patrons_table = $("#[% table_id %]").kohaTable({
+            patrons_table = $("#[% table_id | html %]").kohaTable({
                 "ajax": {
                     [% SWITCH filter %]
                     [% CASE 'suggestions_managers' %]
@@ -433,7 +433,7 @@
 
         function filter() {
             $("#firstletter_filter").val('');
-            $("#[% table_id %]_search_results").show();
+            $("#[% table_id | html %]_search_results").show();
 
             let table_dt = patrons_table.DataTable();
             [% FOR c IN columns %]
@@ -457,7 +457,7 @@
         // User has clicked on a letter
         function filterByFirstLetterSurname(letter) {
             $("#firstletter_filter").val(letter);
-            $("#[% table_id %]_search_results").show();
+            $("#[% table_id | html %]_search_results").show();
             patrons_table.DataTable().draw();
         }
 

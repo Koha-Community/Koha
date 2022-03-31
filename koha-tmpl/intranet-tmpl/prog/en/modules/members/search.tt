@@ -28,16 +28,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% PROCESS patron_search_js
-        table_id    => 'memberresultst',
-        categories  => categories,
-        libraries   => libraries,
-        extended_attribute_types => extended_attribute_types,
-        columns     => columns,
-        filter      => filter,
-        selection_type => selection_type,
-        callback    => callback
-    %]
+    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => extended_attribute_types, columns => columns, filter => filter, selection_type => selection_type, callback => callback %]
 [% END %]
 
 [% SET popup_window = 1 %]
