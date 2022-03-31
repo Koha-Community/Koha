@@ -9,20 +9,20 @@
 </head>
 
 [%- BLOCK language_limit_select -%]
-<select name="limit" id="[% ln_id | html %]">
-    <option value="">No limit</option>
-    [% FOREACH ln_loo IN ln_loop %]
-        [% IF ( ln_loo.selected or selected == ln_loo.iso639_2_code ) %]
-            <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]" selected="selected">
-                [% ln_loo.language_description | html %]
-            </option>
-        [% ELSE %]
-            <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]">
-                [% ln_loo.language_description | html %]
-            </option>
+    <select name="limit" id="[% ln_id | html %]">
+        <option value="">No limit</option>
+        [% FOREACH ln_loo IN ln_loop %]
+            [% IF ( ln_loo.selected or selected == ln_loo.iso639_2_code ) %]
+                <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]" selected="selected">
+                    [% ln_loo.language_description | html %]
+                </option>
+            [% ELSE %]
+                <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]">
+                    [% ln_loo.language_description | html %]
+                </option>
+            [% END %]
         [% END %]
-    [% END %]
-</select>
+    </select>
 [%- END -%]
 
 <body id="catalog_advsearch" class="catalog">
@@ -46,301 +46,325 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-<form action="search.pl" method="get">
-<div id="advanced-search">
-<input type="hidden" name="advsearch" value="1"/>
-<h1>Advanced search</h1>
-<p>
-  <a href="/cgi-bin/koha/catalogue/itemsearch.pl">Go to item search</a>
-  [% IF searchid %]
-      <div id="previous_search_link"></div>
-  [% END %]
-</p>
+            <form action="search.pl" method="get">
+                <div id="advanced-search">
+                    <input type="hidden" name="advsearch" value="1"/>
+                    <h1>Advanced search</h1>
+                    <p>
+                        <a href="/cgi-bin/koha/catalogue/itemsearch.pl">Go to item search</a>
+                        [% IF searchid %]
+                            <div id="previous_search_link"></div>
+                        [% END %]
+                    </p>
 
-<!-- SEARCH BUTTONS -->
-<div id="toolbar" class="btn-toolbar">
-    <fieldset class="action" id="submit1">
-        <div class="btn-group">
-            <button class="btn btn-default" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
-        </div>
-        <div class="btn-group">
-        [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
-        </div>
-        [% ELSE %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
-        </div>
-        [% END %]
-        <div class="btn-group">
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
-        </div>
-    </fieldset>
-</div>
-<!-- /SEARCH BUTTONS -->
-
-
-[% IF ( outer_servers_loop ) %]
-<!-- DATABASES -->
-
-<fieldset>
-        <legend>Select local databases</legend>
-                [% FOREACH local_servers_loo IN local_servers_loop %]
-[% IF ( local_servers_loo.checked ) %]<input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" checked="checked" value="[% local_servers_loo.value | html %]" />[% ELSE %]<input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" value="[% local_servers_loo.value | html %]" />[% END %]<label for="[% local_servers_loo.id | html %]"><img width="16" height="16" alt="[% local_servers_loo.id | html %]" src="[% themelang | html %]/img/[% local_servers_loo.icon | html %]" /> [% local_servers_loo.label | html %]</label>[% END %]
-</fieldset>
-<!-- /DATABASES -->
-[% END %]
-
-[% IF ( outer_servers_loop ) %]
-<!-- REMOTE DATABASES -->
-<fieldset id="databases">
-    <legend>Select remote databases</legend>
-                [% FOREACH outer_servers_loo IN outer_servers_loop %]
-                [% IF ( outer_servers_loo.checked ) %]<input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" checked="checked" value="[% outer_servers_loo.value | html %]" />[% ELSE %]<input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" value="[% outer_servers_loo.value | html %]" />[% END %]
-<label for="[% outer_servers_loo.id | html %]"><img alt="[% outer_servers_loo.id | html %]" src="[% themelang | html %]/images/[% outer_servers_loo.icon | html %]" />[% outer_servers_loo.label | html %]</label>
-                [% END %]
-    </fieldset>
-<!-- /REMOTE DATABASES -->
-[% END %]
-
-<!-- BOOLEAN SEARCH OPTIONS -->
-    <fieldset id="searchterms">
-    <legend>Search for </legend>
-    [% FOREACH query IN queries %]
-        [% IF ( expanded_options ) %]
-        [% IF loop.first %]
-        <div class="search-term-row" style="text-indent: 4.25em;">
-        [% ELSE %]
-        <div class="search-term-row">
-            [% SET opindex = loop.index - 1 %]
-            <select name="op">
-            [% IF operators.$opindex == 'OR' %]
-                <option value="AND">and</option>
-                <option value="OR" selected="selected">or</option>
-                <option value="NOT">not</option>
-            [% ELSIF operators.$opindex == 'NOT' %]
-                <option value="AND">and</option>
-                <option value="OR">or</option>
-                <option value="NOT" selected="selected">not</option>
-            [% ELSE %]
-                <option value="AND" selected="selected">and</option>
-                <option value="OR">or</option>
-                <option value="NOT">not</option>
-            [% END %]
-            </select>
-        [% END %]
-        [% ELSE %]
-        <div>
-        [% END %]
-        [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
-        [% INCLUDE 'search_indexes.inc' %]
-        <input type="text" size="30" name="q" title="Enter search terms" value="[% query | html %]" />
-        [% IF ( expanded_options ) %]
-          [% IF ( loop.last ) %]
-            <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
-          [% END %]
-          [% IF ( loop.first ) %]
-            <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
-          [% END %]
-        [% END %]
-		</div>
-    [% END %]
-    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
-        [% IF ( expanded_options ) %]
-            <p>
-                [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
-                    <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
-                [% END %]
-                <span id="weight_search">
-                    <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
-                </span>
-            <p>
-        [% ELSE %]
-            <input type="hidden" name="weight_search" value="1" />
-        [% END %]
-    [% END %]
-    </fieldset>
-<!-- /BOOLEAN SEARCH OPTIONS -->
-
-</div>
-<!-- MC-TYPE LIMITS -->
-      <div id="advsearches" class="toptabs">
-      <ul>
-      [% FOREACH advsearchloo IN advancedsearchesloop %]
-        <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
-           <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]">
-           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
-           [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
-           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
-           [% ELSE %]Something else
-           [% END %]
-           </a>
-        </li>
-      [% END %]
-      </ul>
-    [% FOREACH advsearchloo IN advancedsearchesloop %]
-    <div id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch">
-    <h4>Limit to any of the following:</h4>
-    <table>
-        <tr>
-    [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-        <td>
-            [% SET limit_key = 'mc-' _ itemtypeloo.ccl _ "_" _ itemtypeloo.code %]
-            [% IF limits.$limit_key.defined %]
-                [% limits.delete( limit_key ) %]
-                <input type="checkbox" checked="checked" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
-            [% ELSE %]
-                <input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
-            [% END %]
-            <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
-        [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
-            [% IF ( itemtypeloo.imageurl ) %]
-                <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
-            [% END %]
-                &nbsp;
-        [% END %]
-        [% itemtypeloo.description | html %]
-            </label>
-        </td>
-        [% IF ( loop.last ) %]
-        </tr>
-        [% ELSE %]
-            [% UNLESS ( loop.count % 5 ) %]
-        </tr>
-        <tr>
-            [% END %]
-        [% END %]
-    [% END %]
-    </table>
-    </div>
-    [% END %]
-<!-- /MC-TYPE LIMIT -->
-[% IF ( expanded_options ) %]
-<!-- BASIC LIMITS -->
- <fieldset id="basiclimits">
-	<legend>Limits</legend>
-<fieldset id="pubrange">
-<!-- PUB / COPY YEAR LIMIT --><!-- FIXME: add publication,copyright,acquisition options -->
-	<p><label for="limit-yr">Year: </label>
-        [% SET year_limit_key = 'yr,st-numeric' %]
-        <input type="text" size="15" name="limit-yr" id="limit-yr" value="[% limits.$year_limit_key.0 | html %]"/>&nbsp;&nbsp;(format: yyyy-yyyy)</p>
-        [% IF limits.$year_limit_key.defined %]
-            [% limits.delete(year_limit_key) %]
-        [% END %]
-<!-- /PUB / COPY YEAR LIMIT -->
-</fieldset>
-<fieldset id="language">
-<!-- LANGUAGE LIMIT -->
-    <p>
-        <label for="language-limit">Language: </label>
-        [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-limit' ln_index='ln' selected = limits.${'ln,rtrn'}.0 %]
-        [% limits.delete( 'ln,rtrn' ) %]
-        <label for="language-original-limit">Language of original: </label>
-        [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-original-limit' ln_index='language-original' selected = limits.${'language-original,rtrn'}.0 %]
-        [% limits.delete( 'language-original,rtrn' ) %]
-    </p>
-<!-- /LANGUAGE LIMIT -->
-</fieldset>
-</fieldset>
-<!-- /BASIC LIMITS -->
-[% END %]
-
-[% IF ( UNIMARC ) %]
-[% INCLUDE 'subtypes_unimarc.inc' %]
-[% ELSE %]
-[% PROCESS 'subtype_limits.inc' %]
-<!-- SUBTYPE LIMITS -->
-        <fieldset id="subtype">
-        <legend>Subtype limits</legend><p>
-        [% PROCESS subtype_dropdowns %]
-        <fieldset id="current_subtype_limits"><legend>Current subtype limits</legend>
-        [% FOREACH subtype IN ['aud','fic','bio','ctype','l-format'] %]
-            [% FOREACH limit IN limits.$subtype %]
-                <span>
-                    <input name="limit" value="[% subtype | html %]:[% limit | html %]" type="hidden">
-                    <label for="subtype_limit_[% loop.index() | html %]">[%# PROCESS subtype_limits_description subtype_limit = subtype _':' _ limit #%]</label>
-                    <input type="checkbox" class="toggle_limit" name="subtype_limit_[% loop.index() | html %]" checked="checked">
-                </span>
-           [% END %]
-            [% limits.delete( subtype ) %]
-        [% END %]
-        </fieldset>
-
-
-</fieldset>
-[% END %]
-
-<!-- AVAILABILITY LIMITS -->
-    <fieldset id="availability"><legend>Location and availability</legend>
-<fieldset id="currently-avail">
-        [% IF limit_available %]
-            <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available"  checked="checked" /></p>
-        [% ELSE %]
-            <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
-        [% END %]
-</fieldset>
-
-<fieldset id="select-libs">
-        <p><label for="branchloop">Individual libraries:</label><select name="limit" id="branchloop">
-        <option value="">All libraries</option>
-        [%# FIXME Should not we filter the libraries displayed? %]
-        [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1, selected => limits.branch.0 ) %]
-        [% limits.delete('branch') %]
-        </select></p>
-        [% IF search_groups %]
-            <p>OR</p>
-
-            <p>
-                <label for="categoryloop">Groups of libraries: </label>
-                <select name="limit" id="categoryloop">
-                    <option value=""> -- none -- </option>
-                    [% FOREACH sg IN search_groups %]
-                        [% UNLESS sg.branchcode %]
-                            [% IF limits.multibranchlimit.0 == sg.id %]
-                                <option selected="selected" value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+                    <!-- SEARCH BUTTONS -->
+                    <div id="toolbar" class="btn-toolbar">
+                        <fieldset class="action" id="submit1">
+                            <div class="btn-group">
+                                <button class="btn btn-default" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
+                            </div>
+                            <div class="btn-group">
+                            [% IF ( expanded_options ) %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
+                            </div>
                             [% ELSE %]
-                                <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
+                            </div>
+                            [% END %]
+                            <div class="btn-group">
+                                <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- /SEARCH BUTTONS -->
+
+                    [% IF ( outer_servers_loop ) %]
+                        <!-- DATABASES -->
+                        <fieldset>
+                            <legend>Select local databases</legend>
+                            [% FOREACH local_servers_loo IN local_servers_loop %]
+                                [% IF ( local_servers_loo.checked ) %]
+                                    <input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" checked="checked" value="[% local_servers_loo.value | html %]" />
+                                [% ELSE %]
+                                    <input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" value="[% local_servers_loo.value | html %]" />
+                                [% END %]
+                                <label for="[% local_servers_loo.id | html %]">
+                                    <img width="16" height="16" alt="[% local_servers_loo.id | html %]" src="[% themelang | html %]/img/[% local_servers_loo.icon | html %]" /> [% local_servers_loo.label | html %]
+                                </label>
+                            [% END %]
+                        </fieldset>
+                        <!-- /DATABASES -->
+                    [% END %]
+
+                    [% IF ( outer_servers_loop ) %]
+                        <!-- REMOTE DATABASES -->
+                        <fieldset id="databases">
+                            <legend>Select remote databases</legend>
+                            [% FOREACH outer_servers_loo IN outer_servers_loop %]
+                                [% IF ( outer_servers_loo.checked ) %]
+                                    <input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" checked="checked" value="[% outer_servers_loo.value | html %]" />
+                                [% ELSE %]
+                                    <input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" value="[% outer_servers_loo.value | html %]" />
+                                [% END %]
+                                <label for="[% outer_servers_loo.id | html %]">
+                                    <img alt="[% outer_servers_loo.id | html %]" src="[% themelang | html %]/images/[% outer_servers_loo.icon | html %]" />[% outer_servers_loo.label | html %]
+                                </label>
+                            [% END %]
+                        </fieldset>
+                        <!-- /REMOTE DATABASES -->
+                    [% END %]
+
+                    <!-- BOOLEAN SEARCH OPTIONS -->
+                    <fieldset id="searchterms">
+                        <legend>Search for </legend>
+                        [% FOREACH query IN queries %]
+                            [% IF ( expanded_options ) %]
+                                [% IF loop.first %]
+                                    <div class="search-term-row" style="text-indent: 4.25em;">
+                                [% ELSE %]
+                                    <div class="search-term-row">
+                                        [% SET opindex = loop.index - 1 %]
+                                        <select name="op">
+                                            [% IF operators.$opindex == 'OR' %]
+                                                <option value="AND">and</option>
+                                                <option value="OR" selected="selected">or</option>
+                                                <option value="NOT">not</option>
+                                            [% ELSIF operators.$opindex == 'NOT' %]
+                                                <option value="AND">and</option>
+                                                <option value="OR">or</option>
+                                                <option value="NOT" selected="selected">not</option>
+                                            [% ELSE %]
+                                                <option value="AND" selected="selected">and</option>
+                                                <option value="OR">or</option>
+                                                <option value="NOT">not</option>
+                                            [% END %]
+                                        </select>
+                                [% END %]
+                            [% ELSE %]
+                                <div>
+                            [% END %]
+
+                            [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
+                            [% INCLUDE 'search_indexes.inc' %]
+                            <input type="text" size="30" name="q" title="Enter search terms" value="[% query | html %]" />
+                            [% IF ( expanded_options ) %]
+                                [% IF ( loop.last ) %]
+                                    <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+                                [% END %]
+                                [% IF ( loop.first ) %]
+                                    <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
+                                [% END %]
+                            [% END %]
+                            </div>
+                        [% END %]
+
+                        [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+                            [% IF ( expanded_options ) %]
+                                <p>
+                                    [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
+                                        <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
+                                    [% END %]
+                                    <span id="weight_search">
+                                        <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
+                                    </span>
+                                <p>
+                            [% ELSE %]
+                                <input type="hidden" name="weight_search" value="1" />
                             [% END %]
                         [% END %]
+                    </fieldset>
+                    <!-- /BOOLEAN SEARCH OPTIONS -->
+                </div>
+
+                <!-- MC-TYPE LIMITS -->
+                <div id="advsearches" class="toptabs">
+                    <ul>
+                        [% FOREACH advsearchloo IN advancedsearchesloop %]
+                            <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+                                <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]">
+                                    [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
+                                    [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
+                                    [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
+                                    [% ELSE %]Something else
+                                    [% END %]
+                                </a>
+                            </li>
+                        [% END %]
+                    </ul>
+
+                    [% FOREACH advsearchloo IN advancedsearchesloop %]
+                        <div id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch">
+                            <h4>Limit to any of the following:</h4>
+                            <table>
+                                <tr>
+                                    [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
+                                        <td>
+                                            [% SET limit_key = 'mc-' _ itemtypeloo.ccl _ "_" _ itemtypeloo.code %]
+                                            [% IF limits.$limit_key.defined %]
+                                                [% limits.delete( limit_key ) %]
+                                                <input type="checkbox" checked="checked" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
+                                            [% ELSE %]
+                                                <input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
+                                            [% END %]
+                                            <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
+                                                [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
+                                                    [% IF ( itemtypeloo.imageurl ) %]
+                                                        <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                    [% END %]
+                                                        &nbsp;
+                                                [% END %]
+                                                [% itemtypeloo.description | html %]
+                                            </label>
+                                        </td>
+                                        [% IF ( loop.last ) %]
+                                            </tr>
+                                        [% ELSE %]
+                                            [% UNLESS ( loop.count % 5 ) %]
+                                                </tr>
+                                                <tr>
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+                            </table>
+                        </div>
                     [% END %]
-                    [% limits.delete('multibranchlimit') %]
-                </select>
-            </p>
-    [% END %]
-</fieldset>
-    </fieldset>
-<!-- /AVAILABILITY LIMITS -->
+                </div>
+                <!-- /MC-TYPE LIMIT -->
 
-<!-- OTHER LIMITS (facets, etc.) -->
-[% IF limits.size %]
-<fieldset id=""><legend>Other limits</legend>
-    <p>
-    [% FOREACH key IN limits.keys %]
-        [% FOREACH limit IN limits.$key %]
-            <span>
-                <input type="hidden" name="limit" value="[% key | html %]:[% limit | html %]">
-                <label for="other_[% key _ loop.index() | html %]">[% key | html %]:[% limit | html %]</label>
-                <input type="checkbox" class="toggle_limit" name="other_[% key _ loop.index() | html %]" checked="checked">
-            </span>
-        [% END %]
-    [% END %]
-    </p>
-</fieldset>
-[% END %]
-<!-- /OTHER LIMITS (facets, etc.) -->
+                [% IF ( expanded_options ) %]
+                    <!-- BASIC LIMITS -->
+                    <fieldset id="basiclimits">
+                        <legend>Limits</legend>
+                        <fieldset id="pubrange">
+                            <!-- PUB / COPY YEAR LIMIT --><!-- FIXME: add publication,copyright,acquisition options -->
+                            <p>
+                                <label for="limit-yr">Year: </label>
+                                [% SET year_limit_key = 'yr,st-numeric' %]
+                                <input type="text" size="15" name="limit-yr" id="limit-yr" value="[% limits.$year_limit_key.0 | html %]"/>&nbsp;&nbsp;(format: yyyy-yyyy)
+                                [% IF limits.$year_limit_key.defined %]
+                                    [% limits.delete(year_limit_key) %]
+                                [% END %]
+                            </p>
+                            <!-- /PUB / COPY YEAR LIMIT -->
+                        </fieldset>
 
-<!-- RANK LIMITS -->
-<fieldset id="sortby"><legend>Sorting</legend>
-    <p>
-    <label for="sort_by">Sort by: </label><select id="sort_by" name="sort_by">
-  [% INCLUDE 'resort_form.inc' sort_by = sort %]
-    </select>
-        </p>
-</fieldset>
-</div>
-<!-- /RANK LIMITS -->
-</form>
-</div>
-</div>
+                        <fieldset id="language">
+                            <!-- LANGUAGE LIMIT -->
+                            <p>
+                                <label for="language-limit">Language: </label>
+                                [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-limit' ln_index='ln' selected = limits.${'ln,rtrn'}.0 %]
+                                [% limits.delete( 'ln,rtrn' ) %]
+                                <label for="language-original-limit">Language of original: </label>
+                                [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-original-limit' ln_index='language-original' selected = limits.${'language-original,rtrn'}.0 %]
+                                [% limits.delete( 'language-original,rtrn' ) %]
+                            </p>
+                            <!-- /LANGUAGE LIMIT -->
+                        </fieldset>
+                    </fieldset>
+                    <!-- /BASIC LIMITS -->
+                [% END %]
+
+                [% IF ( UNIMARC ) %]
+                    [% INCLUDE 'subtypes_unimarc.inc' %]
+                [% ELSE %]
+                    [% PROCESS 'subtype_limits.inc' %]
+                    <!-- SUBTYPE LIMITS -->
+                    <fieldset id="subtype">
+                        <legend>Subtype limits</legend><p>
+                        [% PROCESS subtype_dropdowns %]
+                        <fieldset id="current_subtype_limits">
+                            <legend>Current subtype limits</legend>
+                            [% FOREACH subtype IN ['aud','fic','bio','ctype','l-format'] %]
+                                [% FOREACH limit IN limits.$subtype %]
+                                    <span>
+                                        <input name="limit" value="[% subtype | html %]:[% limit | html %]" type="hidden">
+                                        <label for="subtype_limit_[% loop.index() | html %]">[%# PROCESS subtype_limits_description subtype_limit = subtype _':' _ limit #%]</label>
+                                        <input type="checkbox" class="toggle_limit" name="subtype_limit_[% loop.index() | html %]" checked="checked">
+                                    </span>
+                                [% END %]
+                                [% limits.delete( subtype ) %]
+                            [% END %]
+                        </fieldset>
+                    </fieldset>
+                [% END %]
+
+                <!-- AVAILABILITY LIMITS -->
+                <fieldset id="availability">
+                    <legend>Location and availability</legend>
+                    <fieldset id="currently-avail">
+                        [% IF limit_available %]
+                            <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available"  checked="checked" /></p>
+                        [% ELSE %]
+                            <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
+                        [% END %]
+                    </fieldset>
+
+                    <fieldset id="select-libs">
+                        <p>
+                            <label for="branchloop">Individual libraries:</label>
+                            <select name="limit" id="branchloop">
+                                <option value="">All libraries</option>
+                                [%# FIXME Should not we filter the libraries displayed? %]
+                                [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1, selected => limits.branch.0 ) %]
+                                [% limits.delete('branch') %]
+                            </select>
+                        </p>
+                        [% IF search_groups %]
+                            <p>OR</p>
+                            <p>
+                                <label for="categoryloop">Groups of libraries: </label>
+                                <select name="limit" id="categoryloop">
+                                    <option value=""> -- none -- </option>
+                                    [% FOREACH sg IN search_groups %]
+                                        [% UNLESS sg.branchcode %]
+                                            [% IF limits.multibranchlimit.0 == sg.id %]
+                                                <option selected="selected" value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+                                            [% ELSE %]
+                                                <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+                                    [% limits.delete('multibranchlimit') %]
+                                </select>
+                            </p>
+                        [% END %]
+                    </fieldset>
+                </fieldset>
+                <!-- /AVAILABILITY LIMITS -->
+
+                <!-- OTHER LIMITS (facets, etc.) -->
+                [% IF limits.size %]
+                    <fieldset id="">
+                        <legend>Other limits</legend>
+                        <p>
+                            [% FOREACH key IN limits.keys %]
+                                [% FOREACH limit IN limits.$key %]
+                                    <span>
+                                        <input type="hidden" name="limit" value="[% key | html %]:[% limit | html %]">
+                                        <label for="other_[% key _ loop.index() | html %]">[% key | html %]:[% limit | html %]</label>
+                                        <input type="checkbox" class="toggle_limit" name="other_[% key _ loop.index() | html %]" checked="checked">
+                                    </span>
+                                [% END %]
+                            [% END %]
+                        </p>
+                    </fieldset>
+                [% END %]
+                <!-- /OTHER LIMITS (facets, etc.) -->
+
+                <!-- RANK LIMITS -->
+                <fieldset id="sortby">
+                    <legend>Sorting</legend>
+                    <p>
+                        <label for="sort_by">Sort by: </label>
+                        <select id="sort_by" name="sort_by">
+                            [% INCLUDE 'resort_form.inc' sort_by = sort %]
+                        </select>
+                    </p>
+                </fieldset>
+                <!-- /RANK LIMITS -->
+            </form>
+        </div>
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
