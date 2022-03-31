@@ -680,7 +680,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_public_lists' -%]
         <span class="sub_permission edit_public_lists_subpermission">
-            Edit public lists
+            Edit public lists (Name, settings, and permissions, but not explicitly contents)
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'upload_general_files' -%]
