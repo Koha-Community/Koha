@@ -21,6 +21,7 @@ our $metadata = {
     minimum_version => '3.11',
     maximum_version => undef,
     version         => $VERSION,
+    namespace       => 'test',
     my_example_tag  => 'find_me',
 };
 
@@ -338,6 +339,13 @@ sub intranet_catalog_biblio_tab {
       );
 
     return @tabs;
+}
+
+sub background_tasks {
+    return {
+        foo => 'MyPlugin::Class::Foo',
+        bar => 'MyPlugin::Class::Bar',
+    };
 }
 
 sub _private_sub {
