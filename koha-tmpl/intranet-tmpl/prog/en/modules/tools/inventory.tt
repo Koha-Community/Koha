@@ -125,9 +125,9 @@
                         <option value="">Filter collection</option>
                 [% FOREACH cc IN ccodes %]
                     [% IF (ccode == cc.authorised_value) %]
-                        <option value="[% cc.authorised_value %]" selected="selected">[% cc.lib %]</option>
+                        <option value="[% cc.authorised_value | html %]" selected="selected">[% cc.lib | html %]</option>
                     [% ELSE %]
-                        <option value="[% cc.authorised_value %]">[% cc.lib %]</option>
+                        <option value="[% cc.authorised_value | html %]">[% cc.lib | html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -246,7 +246,7 @@
     <input type="hidden" name="location" value="[% location | html %]" />
     <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
     <input type="hidden" name="datelastseen" value="[% datelastseen | html %]" />
-    <input type="hidden" name="ccode" value="[% ccode %]" />
+    <input type="hidden" name="ccode" value="[% ccode | html %]" />
 
     [% UNLESS uploadedbarcodesflag %]
       <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
