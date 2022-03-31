@@ -74,8 +74,8 @@
                             <div class="btn-group">
                                 <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
                             </div>
-                        </fieldset>
-                    </div>
+                        </fieldset> <!-- /.action -->
+                    </div> <!-- /#toolbar -->
                     <!-- /SEARCH BUTTONS -->
 
                     [% IF ( outer_servers_loop ) %]
@@ -91,10 +91,10 @@
                                 <label for="[% local_servers_loo.id | html %]">
                                     <img width="16" height="16" alt="[% local_servers_loo.id | html %]" src="[% themelang | html %]/img/[% local_servers_loo.icon | html %]" /> [% local_servers_loo.label | html %]
                                 </label>
-                            [% END %]
+                            [% END # /FOREACH local_servers_loo %]
                         </fieldset>
                         <!-- /DATABASES -->
-                    [% END %]
+                    [% END # /IF ( outer_servers_loop ) %]
 
                     [% IF ( outer_servers_loop ) %]
                         <!-- REMOTE DATABASES -->
@@ -109,8 +109,8 @@
                                 <label for="[% outer_servers_loo.id | html %]">
                                     <img alt="[% outer_servers_loo.id | html %]" src="[% themelang | html %]/images/[% outer_servers_loo.icon | html %]" />[% outer_servers_loo.label | html %]
                                 </label>
-                            [% END %]
-                        </fieldset>
+                            [% END # /FOREACH outer_servers_loo %]
+                        </fieldset> <!-- /#databases -->
                         <!-- /REMOTE DATABASES -->
                     [% END %]
 
@@ -139,10 +139,10 @@
                                                 <option value="NOT">not</option>
                                             [% END %]
                                         </select>
-                                [% END %]
+                                [% END # /IF loop.first %]
                             [% ELSE %]
                                 <div>
-                            [% END %]
+                            [% END # /IF ( expanded_options ) %]
 
                             [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
                             [% INCLUDE 'search_indexes.inc' %]
@@ -154,9 +154,9 @@
                                 [% IF ( loop.first ) %]
                                     <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
                                 [% END %]
-                            [% END %]
-                            </div>
-                        [% END %]
+                            [% END # /IF ( expanded_options ) %]
+                            </div> <!-- /.search-term-row -->
+                        [% END # /FOREACH query IN queries %]
 
                         [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
                             [% IF ( expanded_options ) %]
@@ -170,11 +170,11 @@
                                 <p>
                             [% ELSE %]
                                 <input type="hidden" name="weight_search" value="1" />
-                            [% END %]
-                        [% END %]
-                    </fieldset>
+                            [% END # /IF ( expanded_options ) %]
+                        [% END #/IF Koha.Preference('SearchEngine') %]
+                    </fieldset> <!-- /#searchterms -->
                     <!-- /BOOLEAN SEARCH OPTIONS -->
-                </div>
+                </div> <!-- /#advanced-search -->
 
                 <!-- MC-TYPE LIMITS -->
                 <div id="advsearches" class="toptabs">
@@ -189,7 +189,7 @@
                                     [% END %]
                                 </a>
                             </li>
-                        [% END %]
+                        [% END # /FOREACH advsearchloo %]
                     </ul>
 
                     [% FOREACH advsearchloo IN advancedsearchesloop %]
@@ -205,7 +205,7 @@
                                                 <input type="checkbox" checked="checked" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
                                             [% ELSE %]
                                                 <input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
-                                            [% END %]
+                                            [% END # /IF limits.$limit_key.defined %]
                                             <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
                                                 [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                     [% IF ( itemtypeloo.imageurl ) %]
@@ -223,12 +223,12 @@
                                                 </tr>
                                                 <tr>
                                             [% END %]
-                                        [% END %]
-                                    [% END %]
+                                        [% END # /IF ( loop.last ) %]
+                                    [% END # /FOREACH itemtypeloo %]
                             </table>
-                        </div>
-                    [% END %]
-                </div>
+                        </div> <!-- /#advsearch-[% advsearchloo.advanced_search_type | html %] -->
+                    [% END # /FOREACH advsearchloo %]
+                </div> <!-- /#advsearches -->
                 <!-- /MC-TYPE LIMIT -->
 
                 [% IF ( expanded_options ) %]
@@ -246,7 +246,7 @@
                                 [% END %]
                             </p>
                             <!-- /PUB / COPY YEAR LIMIT -->
-                        </fieldset>
+                        </fieldset> <!-- /#pubrange -->
 
                         <fieldset id="language">
                             <!-- LANGUAGE LIMIT -->
@@ -259,10 +259,10 @@
                                 [% limits.delete( 'language-original,rtrn' ) %]
                             </p>
                             <!-- /LANGUAGE LIMIT -->
-                        </fieldset>
-                    </fieldset>
+                        </fieldset> <!-- /#language -->
+                    </fieldset> <!-- /#basiclimits -->
                     <!-- /BASIC LIMITS -->
-                [% END %]
+                [% END # /IF ( expanded_options ) %]
 
                 [% IF ( UNIMARC ) %]
                     [% INCLUDE 'subtypes_unimarc.inc' %]
@@ -283,10 +283,10 @@
                                     </span>
                                 [% END %]
                                 [% limits.delete( subtype ) %]
-                            [% END %]
-                        </fieldset>
-                    </fieldset>
-                [% END %]
+                            [% END # /FOREACH subtype %]
+                        </fieldset> <!-- #current_subtype_limits -->
+                    </fieldset> <!-- /#subtype -->
+                [% END # /IF ( UNIMARC ) %]
 
                 <!-- AVAILABILITY LIMITS -->
                 <fieldset id="availability">
@@ -297,7 +297,7 @@
                         [% ELSE %]
                             <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
                         [% END %]
-                    </fieldset>
+                    </fieldset> <!-- /#currently-avail -->
 
                     <fieldset id="select-libs">
                         <p>
@@ -307,7 +307,7 @@
                                 [%# FIXME Should not we filter the libraries displayed? %]
                                 [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1, selected => limits.branch.0 ) %]
                                 [% limits.delete('branch') %]
-                            </select>
+                            </select> <!-- /#branchloop -->
                         </p>
                         [% IF search_groups %]
                             <p>OR</p>
@@ -325,11 +325,11 @@
                                         [% END %]
                                     [% END %]
                                     [% limits.delete('multibranchlimit') %]
-                                </select>
+                                </select> <!-- /#categoryloop -->
                             </p>
-                        [% END %]
-                    </fieldset>
-                </fieldset>
+                        [% END # /search_groups %]
+                    </fieldset> <!-- /#select-libs -->
+                </fieldset> <!-- /#availability -->
                 <!-- /AVAILABILITY LIMITS -->
 
                 <!-- OTHER LIMITS (facets, etc.) -->
@@ -348,7 +348,7 @@
                             [% END %]
                         </p>
                     </fieldset>
-                [% END %]
+                [% END # /IF limits.size %]
                 <!-- /OTHER LIMITS (facets, etc.) -->
 
                 <!-- RANK LIMITS -->
@@ -360,7 +360,7 @@
                             [% INCLUDE 'resort_form.inc' sort_by = sort %]
                         </select>
                     </p>
-                </fieldset>
+                </fieldset> <!-- /#sortby -->
                 <!-- /RANK LIMITS -->
             </form>
         </div>
