@@ -25,6 +25,7 @@ use Try::Tiny qw( catch try );
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
+use Koha::Plugins;
 
 use base qw( Koha::Object );
 
@@ -250,9 +251,31 @@ sub _derived_class {
 
 =head3 type_to_class_mapping
 
+    my $mapping = Koha::BackgrounJob->new->type_to_class_mapping;
+
+Returns the available types to class mappings.
+
 =cut
 
 sub type_to_class_mapping {
+    my ($self) = @_;
+
+    my $plugins_mapping = $self->plugin_type_to_class;
+
+    return ($plugins_mapping)
+      ? { %{ $self->core_type_to_class }, %{ $self->plugin_type_to_class } }
+      : $self->core_type_to_class;
+}
+
+=head3 core_type_to_class
+
+    my $mappings = Koha::BackgrounJob->new->core_type_to_class
+
+Returns the core background jobs types to class mappings.
+
+=cut
+
+sub core_type_to_class {
     return {
         batch_authority_record_deletion     => 'Koha::BackgroundJob::BatchDeleteAuthority',
         batch_authority_record_modification => 'Koha::BackgroundJob::BatchUpdateAuthority',
@@ -262,6 +285,51 @@ sub type_to_class_mapping {
         batch_item_record_modification      => 'Koha::BackgroundJob::BatchUpdateItem',
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
     };
+}
+
+=head3 plugin_type_to_class
+
+    my $mappings = Koha::BackgroundJob->new->plugin_type_to_class
+
+Returns the plugin-refined background jobs types to class mappings.
+
+=cut
+
+sub plugin_type_to_class {
+    my ($self) = @_;
+
+    unless ( exists $self->{_plugin_mapping} ) {
+        my @plugins = Koha::Plugins->new()->GetPlugins( { method => 'background_tasks', } );
+
+        foreach my $plugin (@plugins) {
+
+            my $tasks    = $plugin->background_tasks;
+            my $metadata = $plugin->get_metadata;
+
+            unless ( $metadata->{namespace} ) {
+                Koha::Logger->get->warn(
+"The plugin includes the 'background_tasks' method, but doesn't provide the required 'namespace' method ("
+                      . $plugin->{class}
+                      . ')' );
+                next;
+            }
+
+            my $namespace = $metadata->{namespace};
+
+            foreach my $type ( keys %{$tasks} ) {
+                my $class = $tasks->{$type};
+
+                # skip if conditions not met
+                next unless $type and $class;
+
+                my $key = "plugin_$namespace" . "_$type";
+
+                $self->{_plugin_mapping}->{$key} = $tasks->{$type};
+            }
+        }
+    }
+
+    return $self->{_plugin_mapping};
 }
 
 =head3 _type
