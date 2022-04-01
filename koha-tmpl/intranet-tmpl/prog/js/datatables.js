@@ -788,14 +788,6 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
         var table = $(this).dataTable(settings);
 
-        table.DataTable().on("column-visibility.dt", function(){
-            if( typeof columnsInit == 'function' ){
-                // This function can be created separately and used to trigger
-                // an event after the DataTable has loaded AND column visibility
-                // has been updated according to the table's configuration
-                columnsInit();
-            }
-        }).columns( hidden_ids ).visible( false );
 
         if ( add_filters ) {
             var table_dt = table.DataTable();
@@ -824,6 +816,15 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                 }
             } );
         }
+
+        table.DataTable().on("column-visibility.dt", function(){
+            if( typeof columnsInit == 'function' ){
+                // This function can be created separately and used to trigger
+                // an event after the DataTable has loaded AND column visibility
+                // has been updated according to the table's configuration
+                columnsInit();
+            }
+        }).columns( hidden_ids ).visible( false );
 
         return table;
     };
