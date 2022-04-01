@@ -46,13 +46,15 @@ my ($template, $loggedinuser, $cookie)
                             });
 my $biblionumber = $query->param('biblionumber');
 my @subscriptionid = $query->multi_param('subscriptionid');
+my $skip_issues = $query->param('skip_issues') || 0;
+my $count_forward = int $skip_issues + 1;
 
 @subscriptionid= uniq @subscriptionid;
 @subscriptionid= sort @subscriptionid;
 my $subscriptiondescs;
 my $subscriptions;
 
-if($op eq 'gennext' && @subscriptionid){
+if($op eq 'cud-gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
     my $sth = $dbh->prepare("
         SELECT publisheddate, publisheddatetext, serialid, serialseq,
@@ -69,7 +71,7 @@ if($op eq 'gennext' && @subscriptionid){
             my $planneddate = $date_received_today ? dt_from_string : $issue->{planneddate};
             ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                     $planneddate, $issue->{publisheddate},
-                    $issue->{publisheddatetext}, $status, "" );
+                    $issue->{publisheddatetext}, $status, "", $count_forward );
         } else {
             require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);
@@ -79,7 +81,7 @@ if($op eq 'gennext' && @subscriptionid){
             my (
                  $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
                  $newinnerloop1, $newinnerloop2, $newinnerloop3
-            ) = GetNextSeq($subscription, $pattern, $frequency, $expected->{publisheddate});
+            ) = GetNextSeq($subscription, $pattern, $frequency, $expected->{publisheddate}, $count_forward);
 
              ## We generate the next publication date
              my $nextpublisheddate = GetNextDate($subscription, $expected->{publisheddate}, $frequency, 1);

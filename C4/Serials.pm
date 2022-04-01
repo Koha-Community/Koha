@@ -815,7 +815,7 @@ sub GetPreviousSerialid {
     my (
         $nextseq,       $newlastvalue1, $newlastvalue2, $newlastvalue3,
         $newinnerloop1, $newinnerloop2, $newinnerloop3
-    ) = GetNextSeq( $subscription, $pattern, $frequency, $planneddate );
+    ) = GetNextSeq( $subscription, $pattern, $frequency, $planneddate, $count_forward );
 
 $subscription is a hashref containing all the attributes of the table
 'subscription'.
@@ -823,18 +823,19 @@ $pattern is a hashref containing all the attributes of the table
 'subscription_numberpatterns'.
 $frequency is a hashref containing all the attributes of the table 'subscription_frequencies'
 $planneddate is a date string in iso format.
+$count_forward is the number of issues to count forward, defaults to 1 if omitted
 This function get the next issue for the subscription given on input arg
 
 =cut
 
 sub GetNextSeq {
-    my ($subscription, $pattern, $frequency, $planneddate) = @_;
+    my ($subscription, $pattern, $frequency, $planneddate, $count_forward) = @_;
 
     return unless ($subscription and $pattern);
 
     my ( $newlastvalue1, $newlastvalue2, $newlastvalue3,
     $newinnerloop1, $newinnerloop2, $newinnerloop3 );
-    my $count = 1;
+    my $count = $count_forward ? $count_forward : 1;
 
     if ($subscription->{'skip_serialseq'}) {
         my @irreg = split /;/, $subscription->{'irregularity'};
@@ -1074,7 +1075,7 @@ sub ModSubscriptionHistory {
 =head2 ModSerialStatus
 
     ModSerialStatus($serialid, $serialseq, $planneddate, $publisheddate,
-        $publisheddatetext, $status, $notes);
+        $publisheddatetext, $status, $notes, $count_forward);
 
 This function modify the serial status. Serial status is a number.(eg 2 is "arrived")
 Note : if we change from "waited" to something else,then we will have to create a new "waited" entry
@@ -1083,9 +1084,11 @@ Note : if we change from "waited" to something else,then we will have to create 
 
 sub ModSerialStatus {
     my ($serialid, $serialseq, $planneddate, $publisheddate, $publisheddatetext,
-        $status, $notes) = @_;
+        $status, $notes, $count_forward) = @_;
 
     return unless ($serialid);
+
+    my $count = $count_forward ? $count_forward : 1;
 
     #It is a usual serial
     # 1st, get previous status :
@@ -1155,7 +1158,7 @@ sub ModSerialStatus {
             $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3
           )
-          = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate );
+          = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate, $count );
 
         # next date (calculated from actual date & frequency parameters)
         my $nextpublisheddate = GetNextDate($subscription, $publisheddate, $frequency, 1);

@@ -37,6 +37,8 @@
 
                 [% INCLUDE 'modals/serials_multi_receiving.inc' %]
 
+                [% INCLUDE 'modals/serials_skip_issues.inc' %]
+
                 [% UNLESS ( popup ) %]
                     [% INCLUDE 'serials-toolbar.inc' %]
 
@@ -181,6 +183,9 @@
                                                 [% UNLESS subscription.closed %]
                                                     <div class="btn-group">
                                                         <input type="button" value="Generate next" data-subscriptionid="[% subscriptionidlist | html %]" class="btn btn-default btn-sm generatenext" />
+                                                    </div>
+                                                    <div class="btn-group">
+                                                        <input type="button" value="Skip issues and generate next" data-subscriptionid="[% subscriptionidlist | html %]"  href="#skip_issues" class="btn btn-default btn-sm" data-toggle="modal" />
                                                     </div>
                                                     [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;
                                                         <div class="btn-group"><input type="button" value="Multi receiving" href="#multi_receiving" class="btn btn-default btn-sm" data-toggle="modal"></div>
