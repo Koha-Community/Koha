@@ -118,7 +118,7 @@ sub get_items_that_can_fill {
     my @biblionumbers = $self->search({ 'me.itemnumber' => undef })->get_column('biblionumber');
     my @bibs_or_items;
     push @bibs_or_items, 'me.itemnumber' => { in => \@itemnumbers } if @itemnumbers;
-    push @bibs_or_items, 'biblionumber' => { in => \@biblionumbers } if @biblionumbers;
+    push @bibs_or_items, 'me.biblionumber' => { in => \@biblionumbers } if @biblionumbers;
 
     my @branchtransfers = Koha::Item::Transfers->search(
         { datearrived => undef },
