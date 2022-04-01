@@ -136,7 +136,8 @@ sub enqueue {
     $self->SUPER::enqueue(
         {
             job_size => scalar @hold_ids,
-            job_args => { hold_ids => \@hold_ids, reason => $args->{reason} }
+            job_args => { hold_ids => \@hold_ids, reason => $args->{reason} },
+            queue    => 'long_tasks',
         }
     );
 }

@@ -130,7 +130,8 @@ sub enqueue {
 
     $self->SUPER::enqueue({
         job_size => scalar @record_ids,
-        job_args => {mmtid => $mmtid, record_ids => \@record_ids,}
+        job_args => {mmtid => $mmtid, record_ids => \@record_ids,},
+        queue    => 'long_tasks',
     });
 }
 

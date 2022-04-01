@@ -215,7 +215,8 @@ sub enqueue {
             job_args => {
                 record_ids     => \@record_ids,
                 delete_biblios => $delete_biblios,
-            }
+            },
+            queue    => 'long_tasks',
         }
     );
 }

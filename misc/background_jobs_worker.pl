@@ -41,7 +41,7 @@ Repeatable. Give the job queues this worker will process.
 The different values available are:
 
     default
-    index
+    long_tasks
 
 =back
 

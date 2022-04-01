@@ -157,6 +157,7 @@ sub enqueue {
         {
             job_size => scalar @record_ids,
             job_args => {%$args},
+            queue    => 'long_tasks',
         }
     );
 }
