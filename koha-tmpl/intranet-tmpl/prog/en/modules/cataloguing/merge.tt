@@ -31,6 +31,7 @@ div#result { margin-top: 1em; }
                 Merging records
             </a>
         </li>
+    </ol>
 </nav>
 
 <div class="main container-fluid">
@@ -289,13 +290,14 @@ div#result { margin-top: 1em; }
               rebuild_target($("#tabs"), $("#resultul"));
             });
 
-            // Creating tabs
-            $("#tabs").tabs();
+            if( $(".tab-pane.active").length < 1 ){
+                $("#tabs a:first").tab("show");
+            }
 
-            // Check all checkboxes in first tab, and uncheck all others to avoid
-            // inconsistencies from a page refresh.
-            $('#tabs div#tabrecord[% ref_biblionumber | html %]').find('input[type="checkbox"]').prop('checked', true);
-            $('#tabs > div:not("#tabrecord[% ref_biblionumber | html %]")').find('input[type="checkbox"]').prop('checked', false);
+            // Uncheck all checkboxes in both tabs, then check all checkboxes in first tab
+            // to avoid inconsistencies from a page refresh.
+            $("#tabs input[type='checkbox']").prop("checked", false);
+            $("#tabrecord[% ref_biblionumber | html %] input[type='checkbox']").prop("checked", true );
 
             //Set focus to cataloging search
             $("input[name=q]:eq(0)").focus();
