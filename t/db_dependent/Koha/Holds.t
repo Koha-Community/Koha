@@ -411,7 +411,7 @@ subtest 'Desks' => sub {
 };
 
 subtest 'get_items_that_can_fill' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $biblio = $builder->build_sample_biblio;
     my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' }); # For 1, 2, 3, 4
@@ -502,6 +502,19 @@ subtest 'get_items_that_can_fill' => sub {
     $items = $holds->get_items_that_can_fill;
     is_deeply( [ map { $_->itemnumber } $items->as_list ],
         [ $item_2->itemnumber ], 'Only item 2 is available for filling the hold' );
+
+
+    my $noloan_itype = $builder->build_object( { class => 'Koha::ItemTypes', value => { notforloan => 1 } } );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+    Koha::Holds->find( $waiting_reserve_id )->delete;
+    $holds = Koha::Holds->search(
+        {
+            reserve_id => [ $reserve_id_1, $reserve_id_2 ]
+        }
+    );
+    $items = $holds->get_items_that_can_fill;
+    is_deeply( [ map { $_->itemnumber } $items->as_list ],
+        [ $item_1->itemnumber, $item_2->itemnumber, $item_5->itemnumber ], 'Items 1, 2, and 5 are available for filling the holds' );
 
     my $no_holds = Koha::Holds->new->empty();
     my $no_items = $no_holds->get_items_that_can_fill();
