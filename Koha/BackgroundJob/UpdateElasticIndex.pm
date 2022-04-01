@@ -16,12 +16,10 @@ package Koha::BackgroundJob::UpdateElasticIndex;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use JSON qw( encode_json decode_json );
 
-use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
-use C4::Biblio;
-use C4::MarcModificationTemplates;
 
 use base 'Koha::BackgroundJob';
 
@@ -54,17 +52,11 @@ Process the modification.
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
-
-    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
-        return;
-    }
-
     # FIXME If the job has already been started, but started again (worker has been restart for instance)
     # Then we will start from scratch and so double process the same records
 
     my $job_progress = 0;
-    $job->started_on(dt_from_string)
+    $self->started_on(dt_from_string)
         ->progress($job_progress)
         ->status('started')
         ->store;
@@ -98,14 +90,14 @@ sub process {
         $report->{total_success} = scalar @record_ids;
     }
 
-    my $job_data = decode_json $job->data;
+    my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;
 
-    $job->ended_on(dt_from_string)
+    $self->ended_on(dt_from_string)
         ->data(encode_json $job_data);
-    $job->status('finished') if $job->status ne 'cancelled';
-    $job->store;
+    $self->status('finished') if $self->status ne 'cancelled';
+    $self->store;
 }
 
 =head3 enqueue
