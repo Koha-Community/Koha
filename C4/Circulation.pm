@@ -154,6 +154,7 @@ Will do some manipulation of the barcode for systems that deliver a barcode
 to circulation.pl that differs from the barcode stored for the item.
 For proper functioning of this filter, calling the function on the 
 correct barcode string (items.barcode) should return an unaltered barcode.
+Barcode is going to be automatically trimmed of leading/trailing whitespaces.
 
 The optional $filter argument is to allow for testing or explicit 
 behavior that ignores the System Pref.  Valid values are the same as the 
@@ -167,6 +168,7 @@ System Pref options.
 sub barcodedecode {
     my ($barcode, $filter) = @_;
     my $branch = C4::Context::mybranch();
+    $barcode =~ s/^\s+|\s+$//g;
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
     Koha::Plugins->call('item_barcode_transform',  \$barcode );
     $filter or return $barcode;     # ensure filter is defined, else return untouched barcode

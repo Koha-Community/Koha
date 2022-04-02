@@ -43,7 +43,6 @@ my $itemnumber   = $cgi->param('itemnumber')   || '';
 my $is_edit      = $cgi->param('is_edit')      || '';
 my $biblionumber = $cgi->param('biblionumber') || '';
 
-$barcode =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
 $barcode = barcodedecode($barcode) if $barcode;
 $biblionumber =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
 
