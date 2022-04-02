@@ -22,7 +22,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Circulation qw( transferbook );
+use C4::Circulation qw( transferbook barcodedecode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Reserves qw( ModReserve ModReserveAffect );
 use C4::Auth qw( get_session get_template_and_user );
@@ -121,7 +121,7 @@ my @trsfitemloop;
 my $transferred;
 my $barcode = $query->param('barcode');
 # remove leading/trailing whitespace
-defined $barcode and $barcode =~ s/^\s*|\s*$//g;  # FIXME: barcodeInputFilter
+$barcode = barcodedecode($barcode) if $barcode;
 # warn "barcode : $barcode";
 if ($barcode) {
 

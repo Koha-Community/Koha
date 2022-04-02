@@ -43,7 +43,6 @@ my $schema = Koha::Database->new()->schema();
 
 my $barcode        = $cgi->param('barcode') // '';
 my $unseen         = $cgi->param('unseen') || 0;
-$barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespae
 $barcode = barcodedecode($barcode) if $barcode;
 my $override_limit = $cgi->param('override_limit');
 my $override_holds = $cgi->param('override_holds');
@@ -54,7 +53,7 @@ my $error = q{};
 my ( $soonest_renew_date, $latest_auto_renew_date );
 
 if ($barcode) {
-    $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
+    $barcode = barcodedecode($barcode) if $barcode;
     $item = $schema->resultset("Item")->single( { barcode => $barcode } );
 
     if ($item) {
