@@ -1891,6 +1891,21 @@ sub updateClaim {
     unless ( ref $serialids ) {
         $serialids = [ $serialids ];
     }
+
+    foreach my $serialid(@$serialids) {
+        my $serial = Koha::Serials->find($serialid);
+
+        C4::Serials::ModSerialStatus(
+            $serialid,
+            $serial->serialseq,
+            $serial->planneddate,
+            $serial->publisheddate,
+            $serial->publisheddatetext,
+            C4::Serials->CLAIMED,
+            $serial->notes
+        );
+    }
+
     my $dbh = C4::Context->dbh;
     return $dbh->do(q|
         UPDATE serial
