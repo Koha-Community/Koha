@@ -526,7 +526,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                         next RECORD;
                     }
                     elsif (!$success) {
-                        warn "ERROR: Update biblio $matched_record_id failed for unkown reason";
+                        warn "ERROR: Update biblio $matched_record_id failed for unknown reason";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     }
@@ -713,7 +713,6 @@ sub GetRecordId {
             return $marcrecord->subfield($tag, $subfield);
         }
     }
-    return undef;
 }
 sub build_query {
     my ($match, $record) = @_;
