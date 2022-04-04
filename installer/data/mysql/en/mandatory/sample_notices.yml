@@ -1890,3 +1890,28 @@ tables:
             - "<p>This is to confirm that someone enabled two factor authentication on your account.</p>"
             - "<p>If you did not do this, someone else may be using your account. Please contact technical support.</p>"
             - "<p>Your library</p>"
+
+        - module: members
+          code: OPAC_REG
+          branchcode: ""
+          name: "New OPAC self-registration submitted"
+          is_html: 1
+          title: "New OPAC self-registration"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h3>New OPAC self-registration</h3>"
+            - "<p><h4>Self-registration made by</h4>"
+            - "<ul>"
+            - "<li><<borrower_modifications.firstname>> <<borrower_modifications.surname>></li>"
+            - "<li>Physical address: <<borrower_modifications.streetnumber>> <<borrower_modifications.streettype>> <<borrower_modifications.address>> <<borrower_modifications.address2>>, <<borrower_modifications.city>>, <<borrower_modifications.state>> <<borrower_modifications.zipcode>>, <<borrower_modifications.country>></li>"
+            - "<li>Email: <<borrower_modifications.email>></li>"
+            - "<li>Phone: <<borrower_modifications.phone>></li>"
+            - "<li>Mobile: <<borrower_modifications.mobile>></li>"
+            - "<li>Fax: <<borrower_modifications.fax>></li>"
+            - "<li>Secondary email: <<borrower_modifications.emailpro>></li>"
+            - "<li>Secondary phone:<<borrower_modifications.phonepro>></li>"
+            - "<li>Home library: <<borrower_modifications.branchcode>></li>"
+            - "<li>Temporary patron category: <<borrower_modifications.categorycode>></li>"
+            - "</ul>"
+            - "</p>"

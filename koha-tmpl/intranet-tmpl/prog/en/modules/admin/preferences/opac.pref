@@ -865,6 +865,19 @@ OPAC:
                   1: Allow
                   0: "Don't allow"
             - patrons to notify the library of changes to their contact information from the OPAC.
+        -
+            - "Choose email address that new patron self-registrations will be sent to: "
+            - pref: EmailPatronRegistrations
+              default: 0
+              choices:
+                  0: none
+                  EmailAddressForPatronRegistrations: EmailAddressForPatronRegistrations
+                  BranchEmailAddress: email address of branch
+                  KohaAdminEmailAddress: KohaAdminEmailAddress
+            - 'If you chooose <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailAddressForPatronRegistrations">EmailAddressForPatronRegistrations</a> you have to enter a valid email address: '
+        -
+            - pref: EmailAddressForPatronRegistrations
+              class: email
 
     Advanced search options:
         -
