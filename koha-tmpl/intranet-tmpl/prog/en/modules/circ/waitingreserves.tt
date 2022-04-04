@@ -81,15 +81,16 @@
             </div>
         [% END %]
         <div id="resultlist" class="toptabs">
-            <ul>
-                <li><a href="#holdswaiting">Holds waiting: [% reservecount | html %]</a></li>
-                <li>
-                    <a href="#holdsover">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#holdswaiting" aria-controls="holdswaiting" role="tab" data-toggle="tab">Holds waiting: [% reservecount | html %]</a></li>
+                <li role="presentation">
+                    <a href="#holdsover" aria-controls="holdsover" role="tab" data-toggle="tab">
                         Holds waiting over [% Koha.Preference('ReservesMaxPickUpDelay') | html %] days: [% overcount | html %]
                     </a>
                 </li>
             </ul>
-            <div id="holdswaiting">
+            <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="holdswaiting">
         [% IF ( reserveloop ) %]
             <div id="toolbar" class="btn-toolbar">
                 <button class="cancel_selected_holds" data-bulk="true"></button>
@@ -99,7 +100,7 @@
             <div class="dialog message">No holds found.</div>
         [% END %]
         </div>
-        <div id="holdsover">
+        <div role="tabpanel" class="tab-pane" id="holdsover">
             [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>[% END %]
             [% IF ( overloop ) %]
                 <span id="holdsover-cancel-all">
@@ -194,8 +195,6 @@
                 "order": [[1, 'asc']]
             }, holdso_table_settings);
 
-            $('#resultlist').tabs();
-
             let cancel_link;
 
             $("#cancelModalConfirmBtn").on("click",function(e) {
@@ -228,7 +227,7 @@
 
             $('.holds_table').each(function() {
               var table = $(this);
-              var parent = table.parents('.ui-tabs-panel');
+              var parent = table.parents('.tab-pane');
 
               $('.holds_table .select_hold_all', parent).each(function() {
                   var count = $('.select_hold:not(:checked)', table).length;
