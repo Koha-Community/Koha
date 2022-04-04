@@ -56,6 +56,15 @@ __PACKAGE__->table("background_jobs");
   is_nullable: 1
   size: 64
 
+=head2 queue
+
+  data_type: 'varchar'
+  default_value: 'default'
+  is_nullable: 0
+  size: 191
+
+Name of the queue the job is sent to
+
 =head2 data
 
   data_type: 'longtext'
@@ -94,6 +103,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "type",
   { data_type => "varchar", is_nullable => 1, size => 64 },
+  "queue",
+  {
+    data_type => "varchar",
+    default_value => "default",
+    is_nullable => 0,
+    size => 191,
+  },
   "data",
   { data_type => "longtext", is_nullable => 1 },
   "enqueued_on",
@@ -129,8 +145,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-05 11:12:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JciFnOzpDW3lZlCfEVJUnQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-04 17:50:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EQUgOEtr2ymejd/0ZffJWg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
