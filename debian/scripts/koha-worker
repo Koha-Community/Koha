@@ -58,11 +58,15 @@ EOF
 start_worker()
 {
     local name=$1
+    local queue=$2
 
-    if ! is_worker_running $name; then
+    if ! is_worker_running $name $queue; then
+
+        worker_name=`get_worker_name $name $queue`
+
         export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
 
-        DAEMONOPTS="--name=$name-koha-worker \
+        DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
             --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
@@ -70,15 +74,15 @@ start_worker()
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
-        log_daemon_msg "Starting Koha worker daemon for $name"
+        log_daemon_msg "Starting Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS -- $worker_DAEMON; then
+        if daemon $DAEMONOPTS -- $worker_DAEMON --job-queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Error: worker already running for $name"
+        log_daemon_msg "Error: worker already running for $name ($queue)"
         log_end_msg 1
     fi
 }
@@ -86,11 +90,14 @@ start_worker()
 stop_worker()
 {
     local name=$1
+    local queue=$2
 
-    if is_worker_running $name; then
+    if is_worker_running $name $queue; then
         export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
 
-        DAEMONOPTS="--name=$name-koha-worker \
+        worker_name=`get_worker_name $name $queue`
+
+        DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
             --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
@@ -98,15 +105,15 @@ stop_worker()
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
-        log_daemon_msg "Stopping Koha worker daemon for $name"
+        log_daemon_msg "Stopping Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS --stop -- $worker_DAEMON; then
+        if daemon $DAEMONOPTS --stop -- $worker_DAEMON --job-queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Error: worker not running for $name"
+        log_daemon_msg "Error: worker not running for $name ($queue)"
         log_end_msg 1
     fi
 }
@@ -114,11 +121,14 @@ stop_worker()
 restart_worker()
 {
     local name=$1
+    local queue=$2
 
-    if is_worker_running $name; then
+    if is_worker_running $name $queue; then
         export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
 
-        DAEMONOPTS="--name=$name-koha-worker \
+        worker_name=`get_worker_name $name $queue`
+
+        DAEMONOPTS="--name=${worker_name} \
             --errlog=/var/log/koha/$name/worker-error.log \
             --stdout=/var/log/koha/$name/worker.log \
             --output=/var/log/koha/$name/worker-output.log \
@@ -126,15 +136,15 @@ restart_worker()
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
-        log_daemon_msg "Restarting Koha worker daemon for $name"
+        log_daemon_msg "Restarting Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS --restart -- $worker_DAEMON; then
+        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --job-queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Error: worker not running for $name"
+        log_daemon_msg "Error: worker not running for $name ($queue)"
         log_end_msg 1
     fi
 }
@@ -142,12 +152,13 @@ restart_worker()
 worker_status()
 {
     local name=$1
+    local queue=$2
 
-    if is_worker_running ${name}; then
-        log_daemon_msg "worker running for ${name}"
+    if is_worker_running ${name} ${queue}; then
+        log_daemon_msg "worker running for ${name} ($queue)"
         log_end_msg 0
     else
-        log_daemon_msg "worker not running for ${name}"
+        log_daemon_msg "worker not running for ${name} ($queue)"
         log_end_msg 3
     fi
 }
@@ -162,6 +173,7 @@ set_action()
 }
 
 op=""
+queue="default"
 quiet="no"
 
 # Read command line parameters
@@ -185,6 +197,9 @@ while [ $# -gt 0 ]; do
         --status)
             set_action "status"
             shift ;;
+        --queue)
+            queue="$2"
+            shift 2 ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
@@ -214,16 +229,16 @@ if [ $# -gt 0 ]; then
 
             case $op in
                 "start")
-                    start_worker $name
+                    start_worker $name $queue
                     ;;
                 "stop")
-                    stop_worker $name
+                    stop_worker $name $queue
                     ;;
                 "restart")
-                    restart_worker $name
+                    restart_worker $name $queue
                     ;;
                 "status")
-                    worker_status $name
+                    worker_status $name $queue
             esac
 
         else

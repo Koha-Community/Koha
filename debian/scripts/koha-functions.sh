@@ -202,14 +202,29 @@ is_indexer_running()
 is_worker_running()
 {
     local instancename=$1
+    local queue=$2
 
-    if daemon --name="$instancename-koha-worker" \
+    local name=`get_worker_name $instancename $queue`
+
+    if daemon --name="$name" \
             --pidfiles="/var/run/koha/$instancename/" \
             --user="$instancename-koha.$instancename-koha" \
             --running ; then
         return 0
     else
         return 1
+    fi
+}
+
+get_worker_name()
+{
+    local name=$1
+    local queue=$2
+
+    if [ "$queue" = "" ] || [ "$queue" = "default" ]; then
+        echo "${name}-koha-worker"
+    else
+        echo "${name}-koha-worker-${queue}"
     fi
 }
 

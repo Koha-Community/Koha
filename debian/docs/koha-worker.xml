@@ -26,6 +26,7 @@
       <command>koha-worker</command>
       <arg><option>--start</option>|<option>--stop</option>|<option>--restart</option></arg>
       <arg><option>--status</option></arg>
+      <arg><option>--queue</option></arg>
       <arg><option>--quiet</option>|<option>-q</option></arg>
       <arg><option>-h</option>|<option>--help</option></arg>
     </cmdsynopsis>
@@ -57,6 +58,12 @@
       <listitem>
         <para>Show status information about worker daemon for named Koha instances.</para>
       </listitem>
+    </varlistentry>
+    <varlistentry>
+        <term><option>--queue</option></term>
+        <listitem>
+          <para>Allows specifying the queue worker (defaults to 'default').</para>
+        </listitem>
     </varlistentry>
     <varlistentry>
       <term><option>-v</option>|<option>--verbose</option></term>
