@@ -1,11 +1,11 @@
 use Modern::Perl;
 
-{
+return {
     bug_number => "23352",
     description => "Adding new column 'subscription.ccode'",
     up => sub {
         my ($args) = @_;
-        my $dbh = $args->{dbh};
+        my ($dbh, $out) = @$args{qw(dbh out)};
 
         if( !column_exists( 'subscription', 'ccode' ) ) {
           $dbh->do(q{
@@ -13,4 +13,4 @@ use Modern::Perl;
           });
         }
     },
-}
+};
