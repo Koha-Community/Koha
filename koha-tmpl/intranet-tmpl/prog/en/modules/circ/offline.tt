@@ -149,62 +149,63 @@
                 </form>
 
                 <div id="patronlists" class="toptabs">
-                    <ul>
-                        <li><a href="#checkouts"><span class="checkout-count">0</span> Checkouts</a></li>
-                        <li><a href="#fines"><span class="fine-amount">0</span> in fines</a></li>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#checkouts" aria-controls="checkouts" role="tab" data-toggle="tab"><span class="checkout-count">0</span> Checkouts</a></li>
+                        <li role="presentation"><a href="#fines" aria-controls="fines" role="tab" data-toggle="tab"><span class="fine-amount">0</span> in fines</a></li>
                     </ul>
+                    <div class="tab-content">
+                        <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
+                        <div role="tabpanel" class="tab-pane active" id="checkouts">
+                            <div id="session-issues">
+                                <table id="issuest">
+                                    <thead><tr>
+                                        <th scope="col">Due date</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Barcode</th>
+                                        <th scope="col">Item type</th>
+                                        <th scope="col">Checked out on</th>
+                                        <th scope="col">Checked out from</th>
+                                        <th scope="col">Call number</th>
+                                        <th scope="col">Charge</th>
+                                    </tr></thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                    <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
-                    <div id="checkouts">
-                        <div id="session-issues">
-                            <table id="issuest">
-                                <thead><tr>
-                                    <th scope="col">Due date</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Barcode</th>
-                                    <th scope="col">Item type</th>
-                                    <th scope="col">Checked out on</th>
-                                    <th scope="col">Checked out from</th>
-                                    <th scope="col">Call number</th>
-                                    <th scope="col">Charge</th>
-                                </tr></thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div id="oldissues">
+                                <h5>Previous checkouts</h5>
+                                <table id="oldissuest">
+                                    <thead><tr>
+                                        <th scope="col">Due date</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Barcode</th>
+                                        <th scope="col">Item type</th>
+                                        <th scope="col">Checked out on</th>
+                                        <th scope="col">Checked out from</th>
+                                        <th scope="col">Call number</th>
+                                        <th scope="col">Charge</th>
+                                    </tr></thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
-                        <div id="oldissues">
-                            <h5>Previous checkouts</h5>
-                            <table id="oldissuest">
-                                <thead><tr>
-                                    <th scope="col">Due date</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Barcode</th>
-                                    <th scope="col">Item type</th>
-                                    <th scope="col">Checked out on</th>
-                                    <th scope="col">Checked out from</th>
-                                    <th scope="col">Call number</th>
-                                    <th scope="col">Charge</th>
-                                </tr></thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        <div role="tabpanel" class="tab-pane" id="fines">
+                            <span class="patron-title"></span> has <span class="fine-amount">0</span> in fines. If you would like you can record payments.
+                            <fieldset><legend>Pay fines</legend>
+                                <label for="pay-fine-amount">Fine amount: </label><input type="text" name="pay-fine-amount" id="pay-fine-amount"/>
+                                <button id="pay-fine" class="submit">Pay fine</button>
 
-                    <div id="fines">
-                        <span class="patron-title"></span> has <span class="fine-amount">0</span> in fines. If you would like you can record payments.
-                        <fieldset><legend>Pay fines</legend>
-                            <label for="pay-fine-amount">Fine amount: </label><input type="text" name="pay-fine-amount" id="pay-fine-amount"/>
-                            <button id="pay-fine" class="submit">Pay fine</button>
-
-                            <table id="session-payments" style="display: none;">
-                                <thead><tr><th>Amount</th><th>Date</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </fieldset>
-                    </div>
-                </div>
+                                <table id="session-payments" style="display: none;">
+                                    <thead><tr><th>Amount</th><th>Date</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </fieldset>
+                        </div> <!-- /# -->fines
+                    </div> <!-- /.tab-content -->
+                </div> <!-- /#patronlists -->
             </div>
         </div>
     </main>
@@ -770,8 +771,6 @@
                 event.preventDefault();
                 recordFine($('#pay-fine-amount').val());
             });
-
-            $('#patronlists').tabs();
 
             $("#duedatespec").flatpickr({
                 enableTime: true,
