@@ -234,6 +234,34 @@ sub finish {
     )->store;
 }
 
+=head3 decoded_data
+
+    my $job_data = $self->decoded_data;
+
+Returns the decoded JSON contents from $self->data.
+
+=cut
+
+sub decoded_data {
+    my ($self) = @_;
+
+    return decode_json($self->data);
+}
+
+=head3 set_encoded_data
+
+    $self->set_encoded_data( $data );
+
+Serializes I<$data> as a JSON string and sets the I<data> attribute with it.
+
+=cut
+
+sub set_encoded_data {
+    my ( $self, $data ) = @_;
+
+    return $self->data( encode_json($data) );
+}
+
 =head3 job_type
 
 Return the job type of the job. Must be a string.

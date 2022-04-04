@@ -17,14 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateItem;
 
-use JSON qw( decode_json );
+use JSON qw( decode_json encode_json );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -151,4 +151,19 @@ subtest 'start(), step() and finish() tests' => sub {
     is( $@->expected_status, 'started' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'decoded_data() and set_encoded_data() tests' => sub {
+
+    plan tests => 3;
+
+    my $job = Koha::BackgroundJob::BatchUpdateItem->new->set_encoded_data( undef );
+    is( $job->decoded_data, undef );
+
+    my $data = { some => 'data' };
+
+    $job->set_encoded_data( $data );
+
+    is_deeply( decode_json($job->data), $data );
+    is_deeply( $job->decoded_data, $data );
 };
