@@ -1121,7 +1121,9 @@ CREATE TABLE `borrower_attribute_types` (
   `keep_for_pseudonymization` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field is copied to anonymized_borrower_attributes (1 for yes, 0 for no)',
   `mandatory` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not',
   PRIMARY KEY (`code`),
-  KEY `auth_val_cat_idx` (`authorised_value_category`)
+  KEY `auth_val_cat_idx` (`authorised_value_category`),
+  KEY `category_code` (`category_code`),
+  CONSTRAINT `borrower_attribute_types_ibfk_1` FOREIGN KEY (`category_code`) REFERENCES `categories` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
