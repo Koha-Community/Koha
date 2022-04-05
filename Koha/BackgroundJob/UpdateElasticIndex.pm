@@ -17,9 +17,6 @@ package Koha::BackgroundJob::UpdateElasticIndex;
 
 use Modern::Perl;
 
-use JSON qw( encode_json decode_json );
-
-use Koha::DateUtils qw( dt_from_string );
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 
@@ -54,14 +51,7 @@ Process the modification.
 sub process {
     my ( $self, $args ) = @_;
 
-    # FIXME If the job has already been started, but started again (worker has been restart for instance)
-    # Then we will start from scratch and so double process the same records
-
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)
-        ->progress($job_progress)
-        ->status('started')
-        ->store;
+    $self->start;
 
     my @record_ids = @{ $args->{record_ids} };
     my $record_server = $args->{record_server};
@@ -93,14 +83,11 @@ sub process {
         $report->{total_success} = scalar @record_ids;
     }
 
-    my $job_data = decode_json $self->data;
-    $job_data->{messages} = \@messages;
-    $job_data->{report} = $report;
+    my $data = $self->decoded_data;
+    $data->{messages} = \@messages;
+    $data->{report} = $report;
 
-    $self->ended_on(dt_from_string)
-        ->data(encode_json $job_data);
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
+    $self->finish( $data );
 }
 
 =head3 enqueue
