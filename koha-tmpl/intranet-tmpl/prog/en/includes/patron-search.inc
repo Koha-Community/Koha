@@ -249,7 +249,11 @@
         var Sticky;
         var singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-        let defer_loading = [% defer_loading | html ? 1 : 0 %];
+        [% IF defer_loading %]
+            let defer_loading = 1;
+        [% ELSE %]
+            let defer_loading = 0;
+        [% END %]
 
         /* popstate event triggered by forward and back button. Need to refresh search */
         window.addEventListener('popstate', (event) => {
