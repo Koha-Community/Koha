@@ -53,13 +53,16 @@
 
 <div id="tabs" class="toptabs">
   [% IF Koha.Preference('OnSiteCheckouts') %]
-  <ul>
-    <li><a href="#readingrec" id="tab_all">All</a></li>
-    <li><a href="#readingrec" id="tab_checkout">Checkouts</a></li>
-    <li><a href="#readingrec" id="tab_onsite_checkout">On-site checkouts</a></li>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" data-tabname="all" id="tab_all">All</a></li>
+    <li role="presentation"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" data-tabname="checkouts" id="tab_checkout">Checkouts</a></li>
+    <li role="presentation"><a href="#readingrec" aria-controls="readingrec" role="tab" data-toggle="tab" id="tab_onsite_checkout" data-tabname="onsite">On-site checkouts</a></li>
   </ul>
+  <div class="tab-content">
+      <div id="readingrec" role="tabpanel" class="tab-pane active">
+  [% ELSE %]
+    <div id="readingrec">
   [% END %]
-  <div id="readingrec">
     <table id="table_readingrec">
       <thead>
         <tr>
@@ -130,6 +133,9 @@
       </tbody>
     </table>
   </div>
+  [% IF Koha.Preference('OnSiteCheckouts') %]
+    </div> <!-- /.tab-content -->
+  [% END %]
 </div>
 [% END %]
 
@@ -156,16 +162,14 @@
                 "aaSorting": [[10, 'desc']]
             }, columns_settings);
 
-            var tabs = $("#tabs").tabs({
-                activate: function(e, ui) {
-                    var active = tabs.tabs("option", "active" );
-                    if ( active == 1 ) {
-                        table.fnFilter("standard_checkout", 0);
-                    } else if ( active == 2 ) {
-                        table.fnFilter("onsite_checkout", 0);
-                    } else { // all
-                        table.fnFilter('', 0);
-                    }
+            $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                active_tab = $(this).data("tabname");
+                if( active_tab == "checkouts" ){
+                    table.fnFilter("standard_checkout", 0);
+                } else if( active_tab == "onsite" ){
+                    table.fnFilter("onsite_checkout", 0);
+                } else {
+                    table.fnFilter('', 0);
                 }
             });
         });
