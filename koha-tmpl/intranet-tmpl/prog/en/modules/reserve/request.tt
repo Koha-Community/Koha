@@ -161,33 +161,35 @@
                         [% END %]
                     [% END %]
                     <div id="circ_holds_select" class="toptabs">
-                        <ul>
-                            <li><a href="#holds_patronsearch_pane">Patrons</a></li>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#holds_patronsearch_pane" aria-controls="holds_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
                             [% IF clubcount %]
-                                <li><a href="#holds_clubsearch_pane">Clubs</a></li>
+                                <li role="presentation"><a href="#holds_clubsearch_pane" aria-controls="holds_clubsearch_pane" role="tab" data-toggle="tab">Clubs</a></li>
                             [% END %]
                         </ul>
-                        <div id="holds_patronsearch_pane">
-                            [% PROCESS patron_search_filters_simple %]
+                        <div class="tab-content">
+                            <div id="holds_patronsearch_pane" role="tabpanel" class="tab-pane active">
+                                [% PROCESS patron_search_filters_simple %]
 
-                            [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
-                        </div>
-                        [% IF clubcount %]
-                            <div id="holds_clubsearch_pane">
-                                <form id="holds_clubsearch" action="request.pl" method="post">
-                                    <div class="hint">Enter club ID or partial name:</div>
-                                    <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
-                                    <input type="submit" value="Search" />
-                                    [% FOREACH biblionumber IN biblionumbers %]
-                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
-                                    [% END %]
-
-                                </form> <!-- /#holds_patronsearch -->
-                                [% IF clubs %]
-                                    [% INCLUDE 'clubs-table.inc' destination = "holds" %]
-                                [% END %]
+                                [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
                             </div>
-                        [% END %]
+                            [% IF clubcount %]
+                                <div id="holds_clubsearch_pane" role="tabpanel" class="tab-pane">
+                                    <form id="holds_clubsearch" action="request.pl" method="post">
+                                        <div class="hint">Enter club ID or partial name:</div>
+                                        <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                        <input type="submit" value="Search" />
+                                        [% FOREACH biblionumber IN biblionumbers %]
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
+                                        [% END %]
+
+                                    </form> <!-- /#holds_patronsearch -->
+                                    [% IF clubs %]
+                                        [% INCLUDE 'clubs-table.inc' destination = "holds" %]
+                                    [% END %]
+                                </div>
+                            [% END %]
+                        </div> <!-- /.tab-content -->
                     </div>
                 </fieldset>
             [% ELSIF club %]
@@ -1193,15 +1195,16 @@
             });
 
             [% SET active = clubs ? 1 : 0 %]
-            $('#circ_holds_select').tabs({
-                active: [% active | $raw %],
-                activate: function(){
-                    $(this).find("input.focus").focus();
-                },
-                create: function(){
-                    $(this).find("input.focus").focus();
-                }
+            /* Set active tab based on whether a club search was submitted */
+            var tabs = $("#circ_holds_select li:eq(" + [% active | $raw %] + ") a").tab("show");
+            $( tabs[0].hash ).find("input.focus").focus();
+
+            /* Change active focus when tabs change */
+            $("#circ_holds_select a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                active_tab = e.target.hash;
+                $( active_tab ).find("input.focus").focus();
             });
+
             function ToggleHoldsToPlace() {
                 if ( $("#requestany").prop('checked') ) {
                     $("#holds_to_place_count").prop('disabled', false);
