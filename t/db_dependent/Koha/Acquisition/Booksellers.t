@@ -58,7 +58,7 @@ subtest '->baskets() tests' => sub {
 
 subtest '->subscriptions() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin();
 
@@ -91,7 +91,7 @@ subtest '->subscriptions() tests' => sub {
     );
     my $bib = MARC::Record->new();
     $bib->append_fields(
-        MARC::Field->new( '245', ' ', ' ', a => 'Journal of ethnology' ),
+        MARC::Field->new( '245', ' ', ' ', a => 'Journal of ethnology', b => 'A subtitle' ),
         MARC::Field->new( '500', ' ', ' ', a => 'bib notes' ),
     );
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $bib, '' );
@@ -113,6 +113,10 @@ subtest '->subscriptions() tests' => sub {
     is( $subscriptions[0]->{publicnotes},
         'subscription notes',
         'subscription search results include public notes (bug 10689)'
+    );
+    is( $subscriptions[0]->{subtitle},
+        'A subtitle',
+        'subscription search results include subtitle (bug 30204)'
     );
 
     my $id_subscription2 = NewSubscription(
