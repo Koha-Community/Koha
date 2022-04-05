@@ -606,7 +606,7 @@ sub payout_amount {
                     type              => 'PAYOUT',
                     transaction_type  => $params->{payout_type},
                     amountoutstanding => $params->{amount},
-                    manager_id        => $params->{staff_id},
+                    user_id           => $params->{staff_id},
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
                     cash_register     => $params->{cash_register}
