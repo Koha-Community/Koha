@@ -10,7 +10,7 @@
             [% IF ( Koha.Preference('IntranetAddMastheadLibraryPulldown') ) %]
                 <select id="select_library" name="limit" style="margin-left:5px;">
                     <option value="">All libraries</option>
-                    [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => "" ) %]
+                    [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => branch_limit ) %]
                 </select>
             [% END %]
             <input type="submit" value="Submit"  class="submit" />
