@@ -2108,6 +2108,57 @@ sub account_balance {
     return $self->account->balance;
 }
 
+=head3 notify_library_of_registration
+
+$patron->notify_library_of_registration( $email_patron_registrations );
+
+Send patron registration email to library if EmailPatronRegistrations system preference is enabled.
+
+=cut
+
+sub notify_library_of_registration {
+    my ( $self, $email_patron_registrations ) = @_;
+
+    if (
+        my $letter = C4::Letters::GetPreparedLetter(
+            module      => 'members',
+            letter_code => 'OPAC_REG',
+            branchcode  => $self->branchcode,
+            lang        => $self->lang || 'default',
+            tables      => {
+                'borrowers' => $self->borrowernumber
+            },
+        )
+    ) {
+        my $to_address;
+        if ( $email_patron_registrations eq "BranchEmailAddress" ) {
+            my $library = Koha::Libraries->find( $self->branchcode );
+            $to_address = $library->inbound_email_address;
+        }
+        elsif ( $email_patron_registrations eq "KohaAdminEmailAddress" ) {
+            $to_address = C4::Context->preference('ReplytoDefault')
+            || C4::Context->preference('KohaAdminEmailAddress');
+        }
+        else {
+            $to_address =
+                C4::Context->preference('EmailAddressForPatronRegistrations')
+                || C4::Context->preference('ReplytoDefault')
+                || C4::Context->preference('KohaAdminEmailAddress');
+        }
+
+        my $message_id = C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $self->borrowernumber,
+                to_address             => $to_address,
+                message_transport_type => 'email'
+            }
+        ) or warn "can't enqueue letter $letter";
+        if ( $message_id ) {
+            return 1;
+        }
+    }
+}
 
 =head3 has_messaging_preference
 

@@ -117,6 +117,12 @@ if (
             }
         }
 
+        # Notify library of new patron registration
+        my $notify_library = C4::Context->preference("EmailPatronRegistrations");
+        if ($notify_library) {
+            $patron->notify_library_of_registration($notify_library);
+        }
+
         $template->param(
             PatronSelfRegistrationAdditionalInstructions =>
               C4::Context->preference(

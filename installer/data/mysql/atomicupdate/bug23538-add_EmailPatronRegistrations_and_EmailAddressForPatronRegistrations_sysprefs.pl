@@ -13,16 +13,15 @@ return {
             '<h3>New OPAC self-registration</h3>
             <p><h4>Self-registration made by</h4>
             <ul>
-            <li><<borrower_modifications.firstname>> <<borrower_modifications.surname>></li>
-            <li>Physical address: <<borrower_modifications.streetnumber>> <<borrower_modifications.streettype>> <<borrower_modifications.address>> <<borrower_modifications.address2>>, <<borrower_modifications.city>>, <<borrower_modifications.state>> <<borrower_modifications.zipcode>>, <<borrower_modifications.country>></li>
-            <li>Email: <<borrower_modifications.email>></li>
-            <li>Phone: <<borrower_modifications.phone>></li>
-            <li>Mobile: <<borrower_modifications.mobile>></li>
-            <li>Fax: <<borrower_modifications.fax>></li>
-            <li>Secondary email: <<borrower_modifications.emailpro>></li>
-            <li>Secondary phone:<<borrower_modifications.phonepro>></li>
-            <li>Home library: <<borrower_modifications.branchcode>></li>
-            <li>Temporary patron category: <<borrower_modifications.categorycode>></li>
+            <li><<borrowers.firstname>> <<borrowers.surname>></li>
+            <li>Email: <<borrowers.email>></li>
+            <li>Phone: <<borrowers.phone>></li>
+            <li>Mobile: <<borrowers.mobile>></li>
+            <li>Fax: <<borrowers.fax>></li>
+            <li>Secondary email: <<borrowers.emailpro>></li>
+            <li>Secondary phone:<<borrowers.phonepro>></li>
+            <li>Home library: <<borrowers.branchcode>></li>
+            <li>Patron category: <<borrowers.categorycode>></li>
             </ul>
             </p>', 'email', 'default') });
     },
