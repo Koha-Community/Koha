@@ -249,7 +249,7 @@
         var Sticky;
         var singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-        let defer_loading = [% defer_loading ? 1 : 0 %];
+        let defer_loading = [% defer_loading | html ? 1 : 0 %];
 
         /* popstate event triggered by forward and back button. Need to refresh search */
         window.addEventListener('popstate', (event) => {
@@ -618,7 +618,7 @@
                 "pageLength": [% Koha.Preference('PatronsPerPage') | html %],
                 [% IF sticky_header %]
                 "initComplete": function(settings, json) {
-                    $("#[% sticky_header %]").show();
+                    $("#[% sticky_header | html %]").show();
                     Sticky = $("#[% sticky_header | html %]");
                     Sticky.hcSticky({
                         stickTo: "#[% sticky_to | html %]",
