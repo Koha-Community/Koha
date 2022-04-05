@@ -20,6 +20,8 @@ use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 
 use base 'Koha::BackgroundJob';
 
