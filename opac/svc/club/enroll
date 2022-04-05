@@ -57,7 +57,7 @@ if ( $borrowernumber && $id ) {
             }
         )->store();
 
-        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields();
+        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
 
         foreach my $e (@enrollment_fields) {
             Koha::Club::Enrollment::Field->new()->set(

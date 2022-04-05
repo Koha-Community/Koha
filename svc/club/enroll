@@ -54,7 +54,7 @@ if ($club) {
     )->store();
 
     if ($enrollment) {
-        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields();
+        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
 
         foreach my $e (@enrollment_fields) {
             my $club_enrollment_field = Koha::Club::Enrollment::Field->new(
