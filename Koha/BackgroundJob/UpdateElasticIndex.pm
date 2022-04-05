@@ -81,6 +81,7 @@ sub process {
         $indexer->update_index(\@record_ids);
     };
     if ( $@ ) {
+        warn $@;
         push @messages, {
             type => 'error',
             code => 'index_error',
