@@ -901,9 +901,9 @@
                               [% IF defaultRefundRule == 'refund' %]
                                 Use default (Refund lost item charge)
                               [% ELSIF defaultRefundRule == 'charge' %]
-                                Use default (Refund lost item charge and restore overdue fine)
+                                <span>Use default (Refund lost item charge and charge new overdue fine)</span>
                               [% ELSIF defaultRefundRule == 'restore' %]
-                                Use default (Refund lost item charge and charge new overdue fine)
+                                <span>Use default (Refund lost item charge and restore overdue fine)</span>
                               [% ELSE %]
                                 Use default (Leave lost item charge)
                               [% END %]
