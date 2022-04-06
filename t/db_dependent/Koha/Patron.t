@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::Warn;
 
@@ -1289,6 +1289,62 @@ subtest 'encode_secret and decoded_secret' => sub {
     is( length($patron->secret) > 0, 1, 'Secret length' );
     isnt( $patron->secret, 'encrypt_me', 'Encrypted column' );
     is( $patron->decoded_secret, 'encrypt_me', 'Decrypted column' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'notify_library_of_registration()' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+    my $dbh = C4::Context->dbh;
+
+    my $library = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => {
+                branchemail   => 'from@mybranch.com',
+                branchreplyto => 'to@mybranch.com'
+            }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'root@localhost' );
+    t::lib::Mocks::mock_preference( 'EmailAddressForPatronRegistrations', 'library@localhost' );
+
+    # Test when EmailPatronRegistrations equals BranchEmailAddress
+    t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'BranchEmailAddress' );
+    is( $patron->notify_library_of_registration(C4::Context->preference('EmailPatronRegistrations')), 1, 'OPAC_REG email is queued if EmailPatronRegistration syspref equals BranchEmailAddress');
+    my $sth = $dbh->prepare("SELECT to_address FROM message_queue where borrowernumber = ?");
+    $sth->execute( $patron->borrowernumber );
+    my $to_address = $sth->fetchrow_array;
+    is( $to_address, 'to@mybranch.com', 'OPAC_REG email queued to go to branchreplyto address when EmailPatronRegistration equals BranchEmailAddress' );
+    $dbh->do(q|DELETE FROM message_queue|);
+
+    # Test when EmailPatronRegistrations equals EmailAddressForPatronRegistrations
+    t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'EmailAddressForPatronRegistrations' );
+    is( $patron->notify_library_of_registration(C4::Context->preference('EmailPatronRegistrations')), 1, 'OPAC_REG email is queued if EmailPatronRegistration syspref equals EmailAddressForPatronRegistrations');
+    $sth->execute( $patron->borrowernumber );
+    $to_address = $sth->fetchrow_array;
+    is( $to_address, 'library@localhost', 'OPAC_REG email queued to go to EmailAddressForPatronRegistrations syspref when EmailPatronRegistration equals EmailAddressForPatronRegistrations' );
+    $dbh->do(q|DELETE FROM message_queue|);
+
+    # Test when EmailPatronRegistrations equals KohaAdminEmailAddress
+    t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'KohaAdminEmailAddress' );
+    is( $patron->notify_library_of_registration(C4::Context->preference('EmailPatronRegistrations')), 1, 'OPAC_REG email is queued if EmailPatronRegistration syspref equals KohaAdminEmailAddress');
+    $sth->execute( $patron->borrowernumber );
+    $to_address = $sth->fetchrow_array;
+    is( $to_address, 'root@localhost', 'OPAC_REG email queued to go to KohaAdminEmailAddress syspref when EmailPatronRegistration equals KohaAdminEmailAddress' );
+    $dbh->do(q|DELETE FROM message_queue|);
 
     $schema->storage->txn_rollback;
 };
