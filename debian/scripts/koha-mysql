@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-set -e
-
 umask 0077
 
 # include helper functions
@@ -50,11 +48,20 @@ is_instance "$name" || ( usage; die "Unknown instance '$name'" )
 shift # remove instance name from argument list.
 kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
 
-mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
-mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
-mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
-mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
+mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )" || die "hostname missing from $kohaconfig"
+mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )" || die "database missing from $kohaconfig"
+mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )" || die "user missing from $kohaconfig"
+mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )" || die "pass missing from $kohaconfig"
 
-mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" \
+mysqltz="$( xmlstarlet sel -t -v 'yazgfs/config/timezone' $kohaconfig )"
+if [ $? -eq 0 ]
+then
+    echo "Using time zone $mysqltz"
+    mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" --init-command="SET time_zone = '$mysqltz'" \
     "$mysqldb"  "${@}"
+else
+    echo "No time zone set for Koha, using database time zone."
+    mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass"  \
+    "$mysqldb"  "${@}"
+fi
 
