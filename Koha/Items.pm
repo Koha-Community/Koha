@@ -353,11 +353,12 @@ sub batch_update {
             Koha::Items->search( { itemnumber => \@modified_itemnumbers } )
                        ->get_column('biblionumber'));
 
-        my $indexer = Koha::SearchEngine::Indexer->new(
-            { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-        $indexer->index_records( \@biblionumbers, 'specialUpdate',
-            "biblioserver", undef )
-          if @biblionumbers;
+        if ( @biblionumbers ) {
+            my $indexer = Koha::SearchEngine::Indexer->new(
+                { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
+            $indexer->update_index( \@biblionumbers );
+        }
     }
 
     return ( { modified_itemnumbers => \@modified_itemnumbers, modified_fields => $modified_fields }, $self );

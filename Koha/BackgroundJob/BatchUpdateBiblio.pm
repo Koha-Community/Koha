@@ -20,6 +20,8 @@ use JSON qw( decode_json encode_json );
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Virtualshelves;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 
 use C4::Context;
 use C4::Biblio;
@@ -89,7 +91,8 @@ sub process {
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
             C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode, {
-                overlay_context => $args->{overlay_context},
+                overlay_context   => $args->{overlay_context},
+                skip_record_index => 1,
             });
         };
         if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well
@@ -109,6 +112,9 @@ sub process {
         }
         $self->progress( ++$job_progress )->store;
     }
+
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( \@record_ids, "specialUpdate", "biblioserver" );
 
     my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;

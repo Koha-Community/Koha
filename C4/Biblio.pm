@@ -357,7 +357,9 @@ Returns 1 on success 0 on failure
 
 sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode, $options ) = @_;
+
     $options //= {};
+    my $skip_record_index = $options->{skip_record_index} || 0;
 
     if (!$record) {
         carp 'No record passed to ModBiblio';
@@ -421,7 +423,7 @@ sub ModBiblio {
     _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
 
     # update the MARC record (that now contains biblio and items) with the new record data
-    ModBiblioMarc( $record, $biblionumber );
+    ModBiblioMarc( $record, $biblionumber, { skip_record_index => $skip_record_index } );
 
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
@@ -2871,11 +2873,13 @@ Function exported, but should NOT be used, unless you really know what you're do
 sub ModBiblioMarc {
     # pass the MARC::Record to this function, and it will create the records in
     # the marcxml field
-    my ( $record, $biblionumber ) = @_;
+    my ( $record, $biblionumber, $params ) = @_;
     if ( !$record ) {
         carp 'ModBiblioMarc passed an undefined record';
         return;
     }
+
+    my $skip_record_index = $params->{skip_record_index} || 0;
 
     # Clone record as it gets modified
     $record = $record->clone();
@@ -2936,8 +2940,10 @@ sub ModBiblioMarc {
     $m_rs->metadata( $record->as_xml_record($encoding) );
     $m_rs->store;
 
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-    $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
+    unless ( $skip_record_index ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
+    }
 
     return $biblionumber;
 }
