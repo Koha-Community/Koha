@@ -240,35 +240,35 @@
         </fieldset>
 
         [% IF languages.size %]
-            <div style="clear:both"></div>
-            <div id="tabs">
-                <ul>
+            <div id="tabs" class="toptabs">
+                <ul class="nav nav-tabs" role="tablist">
                     [% FOR language IN languages %]
                         [% IF language.lang == 'default' %]
-                            <li><a href="#lang_default">Default</a></li>
+                            <li role="presentation"><a href="#lang_default" aria-controls="lang_default" role="tab" data-toggle="tab">Default</a></li>
                         [% ELSE %]
-                            <li><a href="#lang_[% language.lang | uri %]">[% language.description | html %]</a></li>
+                            <li role="presentation"><a href="#lang_[% language.lang | uri %]" aria-controls="lang_[% language.lang | uri %]" role="tab" data-toggle="tab">[% language.description | html %]</a></li>
                         [% END %]
                     [% END %]
                 </ul>
-
-                [% FOR language IN languages %]
-                    <div id="lang_[% language.lang | uri %]" class="lang clearfix" data-lang="[% language.description | html %]">
-                        <fieldset class="rows">
-                            <ol>
-                                <li style="list-style: none;">
-                                    <label for="title_[% language.lang | html %]">Title: </label>
-                                    <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_contents.item(language.lang).title | html %]">
-                                </li>
-                                <li style="list-style: none;">
-                                    <label for="content_[% language.lang | html %]">Content: </label>
-                                    <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
-                                    <input type="hidden" name="lang" value="[% language.lang | html %]" />
-                                </li>
-                            </ol>
-                        </fieldset>
-                    </div>
-                [% END %]
+                <div class="tab-content">
+                    [% FOR language IN languages %]
+                        <div id="lang_[% language.lang | uri %]" class="lang clearfix tab-pane" data-lang="[% language.description | html %]">
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <label for="title_[% language.lang | html %]">Title: </label>
+                                        <input id="title_[% language.lang| html %]" size="100" maxlength="250" type="text" name="title_[% language.lang | html %]" value="[% translated_contents.item(language.lang).title | html %]">
+                                    </li>
+                                    <li>
+                                        <label for="content_[% language.lang | html %]">Content: </label>
+                                        <textarea name="content_[% language.lang | html %]" id="content_[% language.lang | html %]" data-lang="[% language.lang | html%]" cols="75" rows="10">[% translated_contents.item(language.lang).content | html %]</textarea>
+                                        <input type="hidden" name="lang" value="[% language.lang | html %]" />
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                    [% END %]
+                </div> <!-- /.tab-content -->
             </div>
         [% ELSE %]
             <div id="lang_default">
@@ -567,7 +567,9 @@
     [% ELSE %]
         <script>
             $(document).ready(function() {
-                $("#tabs").tabs();
+                if( $("#tabs .tab-pane.active").length < 1 ){
+                    $("#tabs a:first").tab("show");
+                }
                 [% IF category == 'news' %]
                 $("#add_additional_content").validate({
                     submitHandler: function(form){

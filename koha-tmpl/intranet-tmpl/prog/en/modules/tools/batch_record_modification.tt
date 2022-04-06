@@ -75,54 +75,63 @@
                             <br><br>
 
                             <div id="batch_mod_form" class="toptabs" style="clear:both">
-                                <ul>
-                                    <li><a href="#uploadfile_tab">Upload a file</a></li>
-                                        [% IF lists.count %]<li id="show_list_option"><a href="#shelves_tab">Select a list of records</a></li>[% END %]
-                                    <li><a href="#enterlist_tab">Enter a list of record IDs</a></li>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#uploadfile_tab" aria-controls="uploadfile_tab" role="tab" data-toggle="tab">Upload a file</a>
+                                    </li>
+                                    [% IF lists.count %]
+                                        <li id="show_list_option">
+                                            <a href="#shelves_tab" aria-controls="shelves_tab" role="tab" data-toggle="tab">Select a list of records</a>
+                                        </li>
+                                    [% END %]
+                                    <li role="presentation">
+                                        <a href="#enterlist_tab" aria-controls="enterlist_tab" role="tab" data-toggle="tab">Enter a list of record numbers</a>
+                                    </li>
                                 </ul>
 
-                                <div id="uploadfile_tab">
-                                    <fieldset class="rows">
-                                        <ol>
-                                            <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-                                        </ol>
-                                    </fieldset>
-                                    &nbsp;
-                                </div>
+                                <div class="tab-content">
+                                    <div id="uploadfile_tab" role="tabpanel" class="tab-pane active">
+                                        <fieldset class="rows">
+                                            <ol>
+                                                <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
+                                            </ol>
+                                        </fieldset>
+                                        &nbsp;
+                                    </div>
 
-                                [% IF lists.count %]
-                                    <div id="shelves_tab">
+                                    [% IF lists.count %]
+                                        <div id="shelves_tab" role="tabpanel" class="tab-pane">
+                                            <fieldset class="rows">
+                                                <ol>
+                                                    <li>
+                                                        <label for="shelf_number">List: </label>
+                                                        <select name="shelf_number" id="shelf_number">
+                                                            <option value="">Select a list</option>
+                                                            [% FOREACH list IN lists %]
+                                                            <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
+                                                            [% END %]
+                                                            </option>
+                                                        </select>
+                                                    </li>
+                                                </ol>
+                                            </fieldset>
+                                            &nbsp;
+                                        </div>
+                                    [% END %]
+
+                                    <div id="enterlist_tab" role="tabpanel" class="tab-pane">
                                         <fieldset class="rows">
                                             <ol>
                                                 <li>
-                                                    <label for="shelf_number">List: </label>
-                                                    <select name="shelf_number" id="shelf_number">
-                                                        <option value="">Select a list</option>
-                                                        [% FOREACH list IN lists %]
-                                                        <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
-                                                        [% END %]
-                                                        </option>
-                                                    </select>
+                                                    <label for="recordnumber_list">Record numbers: </label>
+                                                    <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
+                                                    <div class="hint">Enter a list of biblionumbers or authority IDs, one per line.</div>
                                                 </li>
                                             </ol>
                                         </fieldset>
                                         &nbsp;
                                     </div>
-                                [% END %]
-
-                                <div id="enterlist_tab">
-                                    <fieldset class="rows">
-                                        <ol>
-                                            <li>
-                                                <label for="recordnumber_list">IDs: </label>
-                                                <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
-                                                <div class="hint">Enter a list of biblionumbers or authority IDs, one per line.</div>
-                                            </li>
-                                        </ol>
-                                    </fieldset>
-                                    &nbsp;
-                                </div>
-
+                                </div> <!-- /.tab-content -->
                             </div> <!-- /#batch_mod_form -->
 
                             <fieldset class="rows">
@@ -276,8 +285,6 @@
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     <script>
         $(document).ready(function() {
-
-            $("#batch_mod_form").tabs();
 
             $("input[type='radio']").click(function() {
                 if ($(this).attr('id') == 'authority_type') {
