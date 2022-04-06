@@ -3,8 +3,11 @@ package Koha::BackgroundJob::BatchDeleteBiblio;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
-use Koha::DateUtils qw( dt_from_string );
 use C4::Biblio;
+
+use Koha::DateUtils qw( dt_from_string );
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 
 use base 'Koha::BackgroundJob';
 
@@ -107,7 +110,7 @@ sub process {
         # Delete items
         my $items = Koha::Items->search({ biblionumber => $biblionumber });
         while ( my $item = $items->next ) {
-            my $deleted = $item->safe_delete;
+            my $deleted = $item->safe_delete({ skip_record_index => 1 });
             unless ( $deleted ) {
                 push @messages, {
                     type => 'error',
@@ -124,7 +127,7 @@ sub process {
 
         # Finally, delete the biblio
         my $error = eval {
-            C4::Biblio::DelBiblio( $biblionumber );
+            C4::Biblio::DelBiblio( $biblionumber, { skip_record_index => 1 } );
         };
         if ( $error or $@ ) {
             push @messages, {
@@ -146,6 +149,15 @@ sub process {
         $report->{total_success}++;
         $schema->storage->txn_commit;
         $self->progress( ++$job_progress )->store;
+    }
+
+    my @deleted_biblionumbers =
+      map { $_->{code} eq 'biblio_deleted' ? $_->{biblionumber} : () }
+          @messages;
+
+    if ( @deleted_biblionumbers ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( \@deleted_biblionumbers, "recordDelete", "biblioserver" );
     }
 
     my $job_data = decode_json $self->data;
