@@ -100,7 +100,7 @@ Arrayref of C<MARC::Record>s.
 sub update_index {
     my ($self, $record_ids, $records) = @_;
 
-    my $index_record_ids;
+    my $index_record_ids = [];
     unless ( $records && @$records ) {
         for my $record_id ( sort { $a <=> $b } @$record_ids ) {
 

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
@@ -120,6 +120,22 @@ subtest 'index_records() tests' => sub {
     }
     "Update background " . $biblio->biblionumber,
     "When passing id only to index_records the marc record is fetched and passed through to update_index";
+
+};
+
+subtest 'update_index' => sub {
+    plan tests => 1;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $biblionumber = $biblio->biblionumber;
+    $biblio->delete;
+
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' });
+    warning_is {
+        $indexer->update_index([$biblionumber]);
+
+    } "", "update_index called with deleted biblionumber should not crash";
+
 };
 
 }
