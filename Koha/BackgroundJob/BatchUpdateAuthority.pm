@@ -23,6 +23,8 @@ use C4::AuthoritiesMarc qw( ModAuthority );
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::MetadataRecord::Authority;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 
 use base 'Koha::BackgroundJob';
 
@@ -81,7 +83,7 @@ sub process {
             my $authority = Koha::MetadataRecord::Authority->get_from_authid( $authid );
             my $record = $authority->record;
             ModifyRecordWithTemplate( $mmtid, $record );
-            ModAuthority( $authid, $record, $authority->authtypecode );
+            ModAuthority( $authid, $record, $authority->authtypecode, { skip_record_index => 1 } );
         };
         if ( $error and $error != $authid or $@ ) {
             push @messages, {
@@ -100,6 +102,9 @@ sub process {
         }
         $self->progress( ++$job_progress )->store;
     }
+
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+    $indexer->index_records( \@record_ids, "specialUpdate", "authorityserver" );
 
     my $job_data = decode_json $self->data;
     $job_data->{messages} = \@messages;

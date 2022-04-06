@@ -545,7 +545,10 @@ returns authid of the newly created authority
 
 sub AddAuthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
-  my ($record,$authid,$authtypecode) = @_;
+    my ( $record, $authid, $authtypecode, $params ) = @_;
+
+    my $skip_record_index = $params->{skip_record_index} || 0;
+
   my $dbh=C4::Context->dbh;
 	my $leader='     nz  a22     o  4500';#Leader for incomplete MARC21 record
 
@@ -654,8 +657,11 @@ sub AddAuthority {
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
     # Update
     $dbh->do( "UPDATE auth_header SET authtypecode=?, marc=?, marcxml=? WHERE authid=?", undef, $authtypecode, $record->as_usmarc, $record->as_xml_record($format), $authid ) or die $DBI::errstr;
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
-    $indexer->index_records( $authid, "specialUpdate", "authorityserver", $record );
+
+    unless ( $skip_record_index ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+        $indexer->index_records( $authid, "specialUpdate", "authorityserver", $record );
+    }
 
     _after_authority_action_hooks({ action => $action, authority_id => $authid });
     return ( $authid );
@@ -703,13 +709,18 @@ sub DelAuthority {
 Modifies authority record, optionally updates attached biblios.
 The parameter skip_merge is optional and should be used with care.
 
+skip_record_index will skip the indexation step.
+
 =cut
 
 sub ModAuthority {
     my ( $authid, $record, $authtypecode, $params ) = @_;
+
+    my $skip_record_index = $params->{skip_record_index} || 0;
+
     my $oldrecord = GetAuthority($authid);
     #Now rewrite the $record to table with an add
-    $authid = AddAuthority($record, $authid, $authtypecode);
+    $authid = AddAuthority($record, $authid, $authtypecode, { skip_record_index => $skip_record_index });
     merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record }) if !$params->{skip_merge};
     logaction( "AUTHORITIES", "MODIFY", $authid, "authority BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
     return $authid;
