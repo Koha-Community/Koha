@@ -3,8 +3,11 @@ package Koha::BackgroundJob::BatchDeleteAuthority;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
-use Koha::DateUtils qw( dt_from_string );
 use C4::AuthoritiesMarc;
+
+use Koha::DateUtils qw( dt_from_string );
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 
 use base 'Koha::BackgroundJob';
 
@@ -46,7 +49,10 @@ sub process {
         $schema->storage->txn_begin;
 
         my $authid = $record_id;
-        eval { C4::AuthoritiesMarc::DelAuthority({ authid => $authid }) };
+        eval {
+            C4::AuthoritiesMarc::DelAuthority(
+                { authid => $authid, skip_record_index => 1 } );
+        };
         if ( $@ ) {
             push @messages, {
                 type => 'error',
@@ -67,6 +73,15 @@ sub process {
         }
 
         $self->progress( ++$job_progress )->store;
+    }
+
+    my @deleted_authids =
+      map { $_->{code} eq 'authority_deleted' ? $_->{authid} : () }
+          @messages;
+
+    if ( @deleted_authids ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+        $indexer->index_records( \@deleted_authids, "recordDelete", "authorityserver" );
     }
 
     my $job_data = decode_json $self->data;

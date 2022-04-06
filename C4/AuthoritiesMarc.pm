@@ -669,12 +669,16 @@ Deletes $authid and calls merge to cleanup linked biblio records.
 Parameter skip_merge is used in authorities/merge.pl. You should normally not
 use it.
 
+skip_record_index will skip the indexation step.
+
 =cut
 
 sub DelAuthority {
     my ( $params ) = @_;
     my $authid = $params->{authid} || return;
     my $skip_merge = $params->{skip_merge};
+    my $skip_record_index = $params->{skip_record_index} || 0;
+
     my $dbh = C4::Context->dbh;
 
     # Remove older pending merge requests for $authid to itself. (See bug 22437)
@@ -684,8 +688,10 @@ sub DelAuthority {
     merge({ mergefrom => $authid }) if !$skip_merge;
     $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
     logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
-    $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
+    unless ( $skip_record_index ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+        $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
+    }
 
     _after_authority_action_hooks({ action => 'delete', authority_id => $authid });
 }
