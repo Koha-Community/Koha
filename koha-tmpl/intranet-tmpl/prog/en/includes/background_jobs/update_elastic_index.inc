@@ -17,6 +17,21 @@
 [% END %]
 
 [% BLOCK detail %]
+    [% FOR m IN job.messages %]
+        <div class="dialog message">
+            [% IF m.type == 'success' %]
+                <i class="fa fa-check success"></i>
+            [% ELSIF m.type == 'warning' %]
+                <i class="fa fa-warning warn"></i>
+            [% ELSIF m.type == 'error' %]
+                <i class="fa fa-exclamation error"></i>
+            [% END %]
+            [% SWITCH m.code %]
+            [% CASE 'index_error' %]
+                Something went wrong during the indexation process: [% m.error | html %]
+            [% END %]
+        </div>
+    [% END %]
 [% END %]
 
 [% BLOCK js %]
