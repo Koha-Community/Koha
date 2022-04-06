@@ -71,88 +71,90 @@
                 <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) | html %][% ELSE %] default library [% END %]</h3>
                     [% IF ( datasaved ) %]<div class="dialog message">Changes saved.</div> [% END %]
 
-  <div id="rulestabs" class="toptabs">
-    <ul class="ui-tabs-nav">
-      [% FOR tab IN tabs %]
-          <li><a href="#[% tab.id | uri %]" class="tab [% tab.id | html %]" data-number="[% tab.number | html %]"></a></li>
-      [% END %]
-    </ul>
-    [% FOR tab IN tabs %]
-      <div id="[% tab.id | html %]">
-        <table>
-          <thead>
-            <tr>
-              <th>&nbsp;</th>
-              <th scope="col">Delay</th>
-              <th scope="col">Letter</th>
-              <th scope="col">Restrict</th>
-              [% FOREACH mtt IN message_transport_types %]
-                [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
-                [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
-                <th scpre="col">
-                  [% SWITCH mtt %]
-                  [% CASE 'email' %]<span>Email</span>
-                  [% CASE 'print' %]<span>Print</span>
-                  [% CASE 'sms' %]<span>SMS</span>
-                  [% CASE 'feed' %]<span>Feed</span>
-                  [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
-                  [% CASE 'phone' %]<span>Phone</span>
-                  [% CASE %]<span>[% mtt | html %]</span>
-                  [% END %]
-                </th>
-              [% END %]
-            </tr>
-          </thead>
-          <tbody>
-          [% FOREACH value IN tab.values %]
-            <tr>
-              <th scope="row">[% value.line | html %]</th>
-              <td>
-              <input type="text" inputmode="numeric" pattern="[0-9]*" name="delay[% tab.number | html %]-[% value.overduename | html %]" value="[% value.delay | html %]" />
-              </td>
-              <td>
-                <select name="letter[% tab.number | html %]-[% value.overduename | html %]">
-                  <option value="">No notice</option>
-                  [% FOREACH letter IN letters %]
-                    [% IF letter.code == value.selected_lettercode %]
-                      <option value="[% letter.code | html %]" selected="selected">[% letter.name | html %]</option>
-                    [% ELSE %]
-                      <option value="[% letter.code | html %]">[% letter.name | html %]</option>
-                    [% END %]
-                  [% END %]
-                </select>
-              </td>
-              <td>
-              [% IF ( value.debarred ) %]
-                <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" checked="checked" value="1" />
-              [% ELSE %]
-                <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" value="1" />
-              [% END %]
-              </td>
-              [% FOREACH mtt IN value.message_transport_types %]
-                [% NEXT IF mtt.value == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
-                [% NEXT IF mtt.value == 'phone' AND !Koha.Preference('PhoneNotification') %]
-                <td>
-                  [% IF mtt.selected %]
-                    <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" checked="checked" />
-                  [% ELSE %]
-                    [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
-                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
-                    [% ELSE %]
-                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
-                    [% END %]
-                  [% END %]
-                </td>
-              [% END %]
-            </tr>
-          [% END %]
-          </tbody>
-        </table>
-      </div>
-    [% END %]
-
-
-</div>
+                <div id="rulestabs" class="toptabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        [% FOR tab IN tabs %]
+                            <li role="presentation">
+                                <a href="#[% tab.id | uri %]" class="tab [% tab.id | html %]" data-number="[% tab.number | html %]" aria-controls="[% tab.id | uri %]" role="tab" data-toggle="tab"></a>
+                            </li>
+                        [% END %]
+                    </ul>
+                    <div class="tab-content">
+                        [% FOR tab IN tabs %]
+                            <div id="[% tab.id | html %]" role="tabpanel" class="tab-pane">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                        <th>&nbsp;</th>
+                                        <th scope="col">Delay</th>
+                                        <th scope="col">Letter</th>
+                                        <th scope="col">Restrict</th>
+                                            [% FOREACH mtt IN message_transport_types %]
+                                                [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                                                [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
+                                                <th scope="col">
+                                                    [% SWITCH mtt %]
+                                                    [% CASE 'email' %]<span>Email</span>
+                                                    [% CASE 'print' %]<span>Print</span>
+                                                    [% CASE 'sms' %]<span>SMS</span>
+                                                    [% CASE 'feed' %]<span>Feed</span>
+                                                    [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
+                                                    [% CASE 'phone' %]<span>Phone</span>
+                                                    [% CASE %]<span>[% mtt | html %]</span>
+                                                    [% END %]
+                                                </th>
+                                            [% END %]
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH value IN tab.values %]
+                                            <tr>
+                                                <th scope="row">[% value.line | html %]</th>
+                                                <td>
+                                                    <input type="text" inputmode="numeric" pattern="[0-9]*" name="delay[% tab.number | html %]-[% value.overduename | html %]" value="[% value.delay | html %]" />
+                                                </td>
+                                                <td>
+                                                    <select name="letter[% tab.number | html %]-[% value.overduename | html %]">
+                                                        <option value="">No notice</option>
+                                                        [% FOREACH letter IN letters %]
+                                                            [% IF letter.code == value.selected_lettercode %]
+                                                            <option value="[% letter.code | html %]" selected="selected">[% letter.name | html %]</option>
+                                                            [% ELSE %]
+                                                            <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    [% IF ( value.debarred ) %]
+                                                        <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" checked="checked" value="1" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" value="1" />
+                                                    [% END %]
+                                                </td>
+                                                [% FOREACH mtt IN value.message_transport_types %]
+                                                    [% NEXT IF mtt.value == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                                                    [% NEXT IF mtt.value == 'phone' AND !Koha.Preference('PhoneNotification') %]
+                                                    <td>
+                                                        [% IF mtt.selected %]
+                                                            <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" checked="checked" />
+                                                        [% ELSE %]
+                                                            [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
+                                                                <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
+                                                            [% ELSE %]
+                                                                <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
+                                                            [% END %]
+                                                        [% END %]
+                                                    </td>
+                                                [% END # /FOREACH mtt %]
+                                            </tr>
+                                        [% END # /FOREACH value %]
+                                    </tbody>
+                                </table>
+                            </div> <!-- /.tab-pane -->
+                        [% END # /FOR tabs %]
+                    </div> <!-- /.tab-content -->
+                </div>
 
                 <fieldset class="action"><input type="submit" value="Save changes" /></fieldset>
             </form>
@@ -184,7 +186,9 @@
                 var id = $(this).attr("data-number");
                 $(this).html(tab_map[id]);
             });
-            $('#rulestabs').tabs();
+            if( $("#rulestabs .tab-pane.active").length < 1 ){
+                $("#rulestabs a:first").tab("show");
+            }
         });
     </script>
 [% END %]
