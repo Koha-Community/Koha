@@ -540,7 +540,7 @@ function PopupMARCFieldDoc(field) {
         var subfields = new Array();
         var tab = new Array();
         var label = new Array();
-        var flag=0;
+        var flag = false;
         var tabflag= new Array();
         var StrAlert = "<div id='form-errors' class='dialog alert list'>";
         var notFilledClass = "subfield_not_filled";
@@ -609,7 +609,7 @@ function PopupMARCFieldDoc(field) {
                 var tag=tagsubfieldid.substr(0,3);
                 var subfield=tagsubfieldid.substr(3,1);
                 StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
-                flag=1;
+                flag = true;
             }
         }
         StrAlert += "</ul>";
@@ -663,7 +663,7 @@ function PopupMARCFieldDoc(field) {
             }
 
             if(isempty){
-                flag = 1;
+                flag = true;
                 if (mandatory) {
                     mandatoryFields[ arr[0] ] = {
                         importance: "mandatory",
@@ -694,7 +694,7 @@ function PopupMARCFieldDoc(field) {
             StrAlert += "</ul>";
         }
         StrAlert += "</div>";
-        if (flag) {
+        if ( flag ) {
             $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa fa-warning"></i> ' + _("Errors") + '</span>');
             return StrAlert;
         } else {
@@ -703,33 +703,36 @@ function PopupMARCFieldDoc(field) {
     }
 
     /**
-     *
-     *
+     * Run checks for mandatory and important fields
+     * Output errors if necessary, or submit the form
      */
     function Check(){
         var StrAlert = AreFieldsNotOk();
-        if( ! StrAlert ){
-            var StrWarning = AreFieldsNotOk(false);
-            if (StrWarning){
+        var StrWarning = AreFieldsNotOk( false );
+        if( !StrAlert && StrWarning ){
+            // Check important fields
+            $("#check_errors").html( StrWarning );
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
 
-                // Check important fields
-                $("#check_errors").html( AreFieldsNotOk(false) );
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-
-                var r=confirm(_("Important fields(s) are not filled. Are you sure you want to save?"));
-                if (! r){
-                    return false;
-                }
+            var r=confirm( _("Important fields(s) are not filled. Are you sure you want to save?" ) );
+            if (! r){
+                return false;
+            } else {
+                document.f.submit();
+                return true;
             }
-            document.f.submit();
-            return true;
-        } else {
-
-            // Call AreFieldsNotOk() twice to check both mandatory and important fields
-            $("#check_errors").html( AreFieldsNotOk() + AreFieldsNotOk(false) );
+        } else if( StrAlert ){
+            var strAll = StrAlert;
+            if( StrWarning ){
+                strAll += StrWarning;
+            }
+            $("#check_errors").html( strAll );
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             Sticky.hcSticky('refresh');
             return false;
+        } else if( !StrAlert && !StrWarning ){
+            document.f.submit();
+            return true;
         }
     }
 
