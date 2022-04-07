@@ -3315,6 +3315,77 @@ button,
     padding: 3px 5px;
 }
 
+/* Bootstrap Collapse */
+
+.panel {
+    background: #F4F8F9 none;
+    box-shadow: none;
+}
+
+.panel-collapse {
+    background: #FFF none;
+}
+
+.panel-title {
+    a {
+        border-radius: 3px;
+        display: block;
+        padding: 10px 15px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        &::before {
+            content: "\f0d7";
+            display: inline-block;
+            font-family: FontAwesome;
+            width: 1em;
+        }
+
+        &:hover {
+            background: #e6f0f2 none;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &.collapsed {
+            &::before {
+                content: "\f0da";
+                display: inline-block;
+                font-family: FontAwesome;
+                width: 1em;
+            }
+
+            &:hover {
+                background: #e6f0f2 none;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+        }
+    }
+}
+
+.panel-default {
+    border: 1px solid #B9D8D9;
+    > .panel-heading {
+        background: transparent none;
+        padding: 0;
+
+        + .panel-collapse {
+            > .panel-body {
+                border-top-color: #B9D8D9;
+            }
+        }
+    }
+}
+
+.panel-group {
+    .panel {
+        + .panel {
+            margin-top: 3px;
+        }
+    }
+}
+
 #toolbar {
     .dropdown-menu {
         border-top-width: 1px;

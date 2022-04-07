@@ -74,7 +74,7 @@ if ( $action eq 'save' ) {
 if ( $action eq 'list' ) {
     my $modules = C4::Utils::DataTables::TablesSettings::get_modules;
     $template->param(
-        panel   => ( $input->param('panel') || 0 ),
+        panel   => defined $input->param('panel') ? $input->param('panel') : undef,
         modules => $modules,
     );
 }
