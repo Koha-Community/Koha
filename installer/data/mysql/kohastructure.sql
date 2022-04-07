@@ -3137,9 +3137,9 @@ DROP TABLE IF EXISTS `issues`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `issues` (
   `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key for issues table',
-  `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
+  `borrowernumber` int(11) NOT NULL COMMENT 'foreign key, linking this to the borrowers table for the patron this item was checked out to',
   `issuer_id` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the borrowers table for the user who checked out this item',
-  `itemnumber` int(11) DEFAULT NULL COMMENT 'foreign key, linking this to the items table for the item that was checked out',
+  `itemnumber` int(11) NOT NULL COMMENT 'foreign key, linking this to the items table for the item that was checked out',
   `date_due` datetime DEFAULT NULL COMMENT 'datetime the item is due (yyyy-mm-dd hh:mm::ss)',
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'foreign key, linking to the branches table for the location the item was checked out',
   `returndate` datetime DEFAULT NULL COMMENT 'date the item was returned, will be NULL until moved to old_issues',
