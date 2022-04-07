@@ -249,10 +249,10 @@
         var Sticky;
         var singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-        [% IF defer_loading %]
-            let defer_loading = 1;
-        [% ELSE %]
+        [% IF do_not_defer_loading %]
             let defer_loading = 0;
+        [% ELSE %]
+            let defer_loading = 1;
         [% END %]
 
         /* popstate event triggered by forward and back button. Need to refresh search */
@@ -670,7 +670,7 @@
                 $("#searchpattern").parent().hide();
             });
 
-            if ( !defer_loading && $("#search_patron_filter").val().length > 0 ) {
+            if ( !defer_loading ) {
                 $("#patron_search_form").submit();
             }
 
