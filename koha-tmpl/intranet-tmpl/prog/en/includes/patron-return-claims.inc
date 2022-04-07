@@ -1,4 +1,4 @@
-<div id="return-claims">
+<div id="return-claims" role="tabpanel" class="tab-pane">
     <p id="return-claims-controls">
         [% IF ( patron.return_claims.resolved.count > 0 || patron.return_claims.unresolved.count > 0 ) %]
             <a id="show_all_claims" class="ctrl_link" href="#">Show all [% patron.return_claims.count | html %] claim(s)</a>

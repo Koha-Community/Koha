@@ -120,7 +120,7 @@ $(document).ready(function() {
     $("#holds-tab").on( "click", function(){ load_holds_table() } );
 
     // If the holds tab is preselected on load, we need to load the table
-    if ( $("#holds-tab").parent().hasClass('ui-state-active') ) { load_holds_table() }
+    if ( $("#holds-tab").parent().hasClass('active') ) { load_holds_table() }
 
     function load_holds_table() {
         var holds = new Array();

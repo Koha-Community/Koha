@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% PROCESS 'patron_restrictions.inc' %]
-<div id="reldebarments">
+<div id="reldebarments" role="tabpanel" class="tab-pane">
     [% IF ( not debarments.defined || debarments.size < 1 ) %]
         <p>Patron is currently unrestricted.</p>
     [% ELSE %]

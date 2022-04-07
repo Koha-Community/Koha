@@ -8,10 +8,8 @@ $(document).ready(function() {
         return false;
     });
 
-    $('#patronlists').tabs({
-        activate: function( event, ui ) {
-            $("a", ui.newTab ).click();
-        }
+    $("#patronlists a[data-toggle='tab']").on("shown.bs.tab", function(e){
+        $(this).click();
     });
 
     $("#borrower_messages .cancel").on("click",function(){
@@ -91,6 +89,12 @@ $(document).ready(function() {
         $("#" + fieldID).val("");
     });
 
+    /* Preselect Bootstrap tab based on location hash */
+    var hash = window.location.hash.substring(1);
+    if( hash ){
+        var activeTab = $('a[href="#' + hash + '"]');
+        activeTab && activeTab.tab('show');
+    }
 
 });
 

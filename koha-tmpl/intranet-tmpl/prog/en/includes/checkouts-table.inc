@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% PROCESS 'modal-claims.inc' %]
 [% INCLUDE 'format_price.inc' %]
-<div id="checkouts">
+<div id="checkouts" role="tabpanel" class="tab-pane active">
     [% IF ( issuecount ) %]
         <div id="issues-table-loading-message">
             <p>

@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% IF ( relatives_issues_count ) %]
-    <div id="relatives-issues">
+    <div id="relatives-issues" role="tabpanel" class="tab-pane">
         <table id="relatives-issues-table" style="width: 100% !Important;">
             <thead>
                 <tr>
