@@ -164,7 +164,7 @@ sub add_recall {
 
         $item = Koha::Items->find( $itemnumber );
         # add to statistics table
-        UpdateStats({
+        C4::Stats::UpdateStats({
             branch => C4::Context->userenv->{'branch'},
             type => 'recall',
             itemnumber => $itemnumber,
