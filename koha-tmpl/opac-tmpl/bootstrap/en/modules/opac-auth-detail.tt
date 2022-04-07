@@ -188,8 +188,16 @@
                             [% FOR identifier IN author_identifiers %]
                                 <li>
                                 [% SWITCH identifier.source.lower %]
-                                [% CASE 'orcid' %]ORCID: <a href="https://orcid.org/[% identifier.number | url %]">[% identifier.number | html %]</a>
-                                [% CASE %][% identifier.source | html %]: [% identifier.number | html %]
+                                [% CASE 'orcid' %]ORCID:
+                                [% CASE 'scopus' %]ScopusID:
+                                [% CASE 'loop' %]loop:
+                                [% CASE 'rid' %]Publons:
+                                [% CASE %][% identifier.source | html %]:
+                                [% END %]
+                                [% IF identifier.linkage %]
+                                    <a href="[% identifier.linkage | url %]">[% identifier.number | html %]</a>
+                                [% ELSE %]
+                                    [% identifier.number | html %]
                                 [% END %]
                                 </li>
                             [% END %]
