@@ -240,178 +240,185 @@
                         [% END %]
 
                         <div id="tabs" class="toptabs">
-                            <ul>
-                                <li><a href="#reports">All</a></li>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#reports" aria-controls="reports" role="tab" data-toggle="tab">All</a>
+                                </li>
                                 [% FOREACH group IN groups_with_subgroups %]
-                                    <li><a id="[% group.id | html %]" href="#reports">[% group.name | html %]</a></li>
+                                    <li role="presentation">
+                                        <a id="[% group.id | html %]" href="#reports" aria-controls="reports" role="tab" data-toggle="tab">[% group.name | html %]</a>
+                                    </li>
                                 [% END %]
                             </ul>
-                            <div id="reports">
-                                <div id="subgroup_filter_block">
-                                    <label for="subgroup_filter">Subgroup:</label>
-                                    <select id="subgroup_filter">
-                                        <option value="">All</option>
-                                    </select>
-                                </div>
 
-                                [% IF (Koha.Preference('Mana') == 1) %]
-                                    [% IF manamsg %]
-                                        <div id="mana_search_message" class="dialog message">
-                                            <p> [% manamsg | html %] </p>
-                                        </div>
+                            <div class="tab-content">
+                                <div id="reports" role="tabpanel" class="tab-pane active">
+                                    <div id="subgroup_filter_block">
+                                        <label for="subgroup_filter">Subgroup:</label>
+                                        <select id="subgroup_filter">
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+
+                                    [% IF (Koha.Preference('Mana') == 1) %]
+                                        [% IF manamsg %]
+                                            <div id="mana_search_message" class="dialog message">
+                                                <p> [% manamsg | html %] </p>
+                                            </div>
+                                        [% END %]
                                     [% END %]
-                                [% END %]
 
-                                <form action="/cgi-bin/koha/reports/guided_reports.pl" id="reports_form" method="post">
-                                    <input type="hidden" name="phase" value="Delete Multiple" />
-                                    <table id="table_reports">
-                                        <thead>
-                                            <tr>
-                                                <th class="NoSort">&nbsp;</th>
-                                                <th>ID</th>
-                                                <th>Report name</th>
-                                                <th>Type</th>
-                                                <th>Group</th>
-                                                <th>Subgroup</th>
-                                                <th>Notes</th>
-                                                <th>Author</th>
-                                                <th>Creation date</th>
-                                                <th>Last edit</th>
-                                                <th>Last run</th>
-                                                <th class="report_public">Public</th>
-                                                <th class="report_json_url">JSON URL</th>
-                                                [% IF (usecache) %]
-                                                    <th>Cache expiry (seconds)</th>
-                                                [% ELSE %]
-                                                    <th class="NoVisible">Cache expiry (seconds)</th>
-                                                [% END %]
-                                                <th>Saved results</th>
-                                                [% IF has_obsolete_reports %]
-                                                    <th>Update</th>
-                                                [% ELSE %]
-                                                    <th class="NoVisible">Update</th>
-                                                [% END %]
-                                                <th class="NoSort noExport">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH savedreport IN savedreports %]
-                                                [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
-                                                    <td class="report_checkbox">
-                                                        [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
-                                                            <input type="checkbox" name="ids" id="ids[% savedreport.id | html %]" value="[% savedreport.id | html %]" />
-                                                        [% END %]
-                                                        <input type="hidden" class="report_sql" value="[% savedreport.savedsql |html %]">
-                                                    </td>
-                                                    <td class="report_id">
-                                                        <label for="ids[% savedreport.id | html %]">[% savedreport.id | html %]</label>
-                                                    </td>
-                                                    <td class="report_name">
-                                                        [% IF ( savedreport.report_name ) %]
-                                                            [% savedreport.report_name | html %]
-                                                        [% ELSE %]
-                                                            [ no name ]
-                                                        [% END %]
-                                                    </td>
-                                                    <td class="report_type">
-                                                        [% savedreport.type | html %]
-                                                    </td>
-                                                    <td class="report_group">
-                                                        [% savedreport.groupname | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% savedreport.subgroupname | html %]
-                                                    </td>
-                                                    <td class="report_notes">
-                                                        [% savedreport.notes | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% savedreport.borrowersurname | html %]
-                                                        [% IF ( savedreport.borrowerfirstname ) %]
-                                                            , [% savedreport.borrowerfirstname | html %]
-                                                        [% END %]
-                                                        ([% savedreport.borrowernumber | html %])
-                                                    </td>
-                                                    <td data-order="[% savedreport.date_created | html %]">
-                                                        [% savedreport.date_created | $KohaDates %]
-                                                    </td>
-                                                    <td data-order="[% savedreport.last_modified | html %]">
-                                                        [% savedreport.last_modified | $KohaDates  with_hours => 1 %]
-                                                    </td>
-                                                    <td data-order="[% savedreport.last_run | html %]">
-                                                        [% savedreport.last_run | $KohaDates  with_hours => 1 %]
-                                                    </td>
-                                                    <td class="report_public">
-                                                        [% IF (savedreport.public) %]
-                                                            Yes
-                                                        [% ELSE %]
-                                                            No
-                                                        [% END %]
-                                                    </td>
-                                                    <td class="report_json_url">
-                                                        [% IF (savedreport.public) %]
-                                                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
-                                                        [% ELSE %]
-                                                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
-                                                        [% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% savedreport.cache_expiry | html %]
-                                                    </td>
-                                                    <td>
-                                                        [% FOR result IN savedreport.results %]
-                                                            <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id | uri %]">[% result.date_run | html %]</a>
-                                                            <br/>
-                                                        [% END %]
-                                                    </td>
-                                                    <td>
-                                                        [% IF savedreport.seems_obsolete %]
-                                                            This report seems obsolete, it uses biblioitems.marcxml field.
-                                                            <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
-                                                        [% END %]
-                                                    </td>
-                                                    <td>
-                                                        <div class="btn-group dropup">
-                                                            [%# There should be no space between these two buttons, it would render badly %]
-                                                            <a class="btn btn-default btn-xs" role="button"
-                                                               href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
-                                                               class="fa fa-play"></i> Run</a><a
-                                                               class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
-                                                               href="#"><b class="caret"></b></a>
-                                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                                                                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> View</a></li>
-                                                                <li>
-                                                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&phase=Show%20SQL" class="preview_sql" data-reportid="[% savedreport.id | html %]">
-                                                                        <i class="fa fa-eye"></i> Preview SQL
-                                                                    </a>
-                                                                </li>
-                                                                [% IF ( CAN_user_reports_create_reports ) %]
-                                                                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
-                                                                    <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
-                                                                [% END %]
-                                                                [% IF (Koha.Preference('Mana') == 1) %]
-                                                                    <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
-                                                                [% END %]
-                                                                <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
-                                                                [% IF ( CAN_user_reports_delete_reports ) %]
-                                                                    <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
-                                                                [% END %]
-                                                            </ul>
-                                                        </div>
-                                                        <input type="hidden" id="previewSql[% savedreport.id | html %]" value="[% savedreport.savedsql | html %]" data-title="[% savedreport.report_name | html %]" />
-                                                    </td>
+                                    <form action="/cgi-bin/koha/reports/guided_reports.pl" id="reports_form" method="post">
+                                        <input type="hidden" name="phase" value="Delete Multiple" />
+                                        <table id="table_reports">
+                                            <thead>
+                                                <tr>
+                                                    <th class="NoSort">&nbsp;</th>
+                                                    <th>ID</th>
+                                                    <th>Report name</th>
+                                                    <th>Type</th>
+                                                    <th>Group</th>
+                                                    <th>Subgroup</th>
+                                                    <th>Notes</th>
+                                                    <th>Author</th>
+                                                    <th>Creation date</th>
+                                                    <th>Last edit</th>
+                                                    <th>Last run</th>
+                                                    <th class="report_public">Public</th>
+                                                    <th class="report_json_url">JSON URL</th>
+                                                    [% IF (usecache) %]
+                                                        <th>Cache expiry (seconds)</th>
+                                                    [% ELSE %]
+                                                        <th class="NoVisible">Cache expiry (seconds)</th>
+                                                    [% END %]
+                                                    <th>Saved results</th>
+                                                    [% IF has_obsolete_reports %]
+                                                        <th>Update</th>
+                                                    [% ELSE %]
+                                                        <th class="NoVisible">Update</th>
+                                                    [% END %]
+                                                    <th class="NoSort noExport">Actions</th>
                                                 </tr>
-                                            [% END %]
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                [% FOREACH savedreport IN savedreports %]
+                                                    [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
+                                                        <td class="report_checkbox">
+                                                            [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
+                                                                <input type="checkbox" name="ids" id="ids[% savedreport.id | html %]" value="[% savedreport.id | html %]" />
+                                                            [% END %]
+                                                            <input type="hidden" class="report_sql" value="[% savedreport.savedsql |html %]">
+                                                        </td>
+                                                        <td class="report_id">
+                                                            <label for="ids[% savedreport.id | html %]">[% savedreport.id | html %]</label>
+                                                        </td>
+                                                        <td class="report_name">
+                                                            [% IF ( savedreport.report_name ) %]
+                                                                [% savedreport.report_name | html %]
+                                                            [% ELSE %]
+                                                                [ no name ]
+                                                            [% END %]
+                                                        </td>
+                                                        <td class="report_type">
+                                                            [% savedreport.type | html %]
+                                                        </td>
+                                                        <td class="report_group">
+                                                            [% savedreport.groupname | html %]
+                                                        </td>
+                                                        <td>
+                                                            [% savedreport.subgroupname | html %]
+                                                        </td>
+                                                        <td class="report_notes">
+                                                            [% savedreport.notes | html %]
+                                                        </td>
+                                                        <td>
+                                                            [% savedreport.borrowersurname | html %]
+                                                            [% IF ( savedreport.borrowerfirstname ) %]
+                                                                , [% savedreport.borrowerfirstname | html %]
+                                                            [% END %]
+                                                            ([% savedreport.borrowernumber | html %])
+                                                        </td>
+                                                        <td data-order="[% savedreport.date_created | html %]">
+                                                            [% savedreport.date_created | $KohaDates %]
+                                                        </td>
+                                                        <td data-order="[% savedreport.last_modified | html %]">
+                                                            [% savedreport.last_modified | $KohaDates  with_hours => 1 %]
+                                                        </td>
+                                                        <td data-order="[% savedreport.last_run | html %]">
+                                                            [% savedreport.last_run | $KohaDates  with_hours => 1 %]
+                                                        </td>
+                                                        <td class="report_public">
+                                                            [% IF (savedreport.public) %]
+                                                                Yes
+                                                            [% ELSE %]
+                                                                No
+                                                            [% END %]
+                                                        </td>
+                                                        <td class="report_json_url">
+                                                            [% IF (savedreport.public) %]
+                                                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                                                            [% ELSE %]
+                                                                <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% savedreport.cache_expiry | html %]
+                                                        </td>
+                                                        <td>
+                                                            [% FOR result IN savedreport.results %]
+                                                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id | uri %]">[% result.date_run | html %]</a>
+                                                                <br/>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF savedreport.seems_obsolete %]
+                                                                This report seems obsolete, it uses biblioitems.marcxml field.
+                                                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group dropup">
+                                                                [%# There should be no space between these two buttons, it would render badly %]
+                                                                <a class="btn btn-default btn-xs" role="button"
+                                                                href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
+                                                                class="fa fa-play"></i> Run</a><a
+                                                                class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
+                                                                href="#"><b class="caret"></b></a>
+                                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                                                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> View</a></li>
+                                                                    <li>
+                                                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&phase=Show%20SQL" class="preview_sql" data-reportid="[% savedreport.id | html %]">
+                                                                            <i class="fa fa-eye"></i> Preview SQL
+                                                                        </a>
+                                                                    </li>
+                                                                    [% IF ( CAN_user_reports_create_reports ) %]
+                                                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
+                                                                        <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
+                                                                    [% END %]
+                                                                    [% IF (Koha.Preference('Mana') == 1) %]
+                                                                        <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
+                                                                    [% END %]
+                                                                    <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
+                                                                    [% IF ( CAN_user_reports_delete_reports ) %]
+                                                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                            <input type="hidden" id="previewSql[% savedreport.id | html %]" value="[% savedreport.savedsql | html %]" data-title="[% savedreport.report_name | html %]" />
+                                                        </td>
+                                                    </tr>
+                                                [% END %]
+                                            </tbody>
+                                        </table>
 
-                                    [% IF ( CAN_user_reports_delete_reports ) %]
-                                        <fieldset class="action">
-                                            <input type="submit" value="Delete selected" />
-                                        </fieldset>
-                                    [% END %]
-                                </form>
-                            </div>
+                                        [% IF ( CAN_user_reports_delete_reports ) %]
+                                            <fieldset class="action">
+                                                <input type="submit" value="Delete selected" />
+                                            </fieldset>
+                                        [% END %]
+                                    </form>
+                                </div> <!-- /#reports -->
+                            </div> <!-- /.tab-content -->
                         </div>
                     [% ELSE # IF ( savedreports ) %]
                         <div class="dialog message">
@@ -1863,16 +1870,12 @@
                     }
                 }, table_settings);
 
-                var rtabs = $("#tabs").tabs({
-                    create: function( e, ui ){
-                        tabsInit( ui, rtable );
-                    },
-                    activate: function( e, ui ){
-                        tabsInit( ui, rtable );
-                    }
+                $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                    tabsInit( $(e.target).parent(), rtable );
                 });
+
                 if( activeTab ){
-                    $("#tabs").tabs("option","active", activeTab );
+                    $("#tabs li:eq(" + activeTab + ") a").tab("show");
                 }
 
                 $("#subgroup_filter").change(function() {
@@ -2168,8 +2171,8 @@
             $("#toggle_auto_links").click();
         }
 
-        function tabsInit( ui, rtable ){
-            var thisTab = ui.newTab ? ui.newTab : ui.tab;
+        function tabsInit( tab, rtable ){
+            var thisTab = tab; // ui.newTab ? ui.newTab : ui.tab;
             var activeTab = thisTab.index();
             localStorage.setItem("sql_reports_activetab", activeTab );
 
@@ -2183,8 +2186,8 @@
             rtable.fnSetColumnVis(4, true);
             rtable.fnSetColumnVis(5, true);
 
-            var g_id = $(ui.newTab).children().attr('id');
-            var g_name = $(ui.newTab).text();
+            var g_id = $( tab ).children().attr('id');
+            var g_name = $( tab ).children().text();
             if ( g_name == _("All") ) {
                 g_id = "";
                 g_name = "";
