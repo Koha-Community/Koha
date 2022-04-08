@@ -2095,6 +2095,16 @@ sub AddReturn {
         }
     }
 
+    if ( $item->withdrawn ) { # book has been cancelled
+        $messages->{'withdrawn'} = 1;
+
+        # In the case where we block return of withdrawn, we should completely block the return
+        # without updating item statuses, so we exit early
+        return ( 0, $messages, $issue, ( $patron ? $patron->unblessed : {} ))
+            if C4::Context->preference("BlockReturnOfWithdrawnItems");
+    }
+
+
         # full item data, but no borrowernumber or checkout info (no issue)
     my $hbr = GetBranchItemRule($item->homebranch, $itemtype)->{'returnbranch'} || "homebranch";
         # get the proper branch to which to return the item
@@ -2162,11 +2172,6 @@ sub AddReturn {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
         return ( $doreturn, $messages, $issue, $patron_unblessed);
-    }
-
-    if ( $item->withdrawn ) { # book has been cancelled
-        $messages->{'withdrawn'} = 1;
-        $doreturn = 0 if C4::Context->preference("BlockReturnOfWithdrawnItems");
     }
 
     if ( $item->itemlost and C4::Context->preference("BlockReturnOfLostItems") ) {
