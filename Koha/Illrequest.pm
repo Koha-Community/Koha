@@ -116,6 +116,33 @@ available for request.
 
 =head2 Class methods
 
+=head3 init_processors
+
+    $request->init_processors()
+
+Initialises an empty processors arrayref
+
+=cut
+
+sub init_processors {
+    my ( $self ) = @_;
+
+    $self->{processors} = [];
+}
+
+=head3 push_processor
+
+    $request->push_processors(sub { ...something... });
+
+Pushes a passed processor function into our processors arrayref
+
+=cut
+
+sub push_processor {
+    my ( $self, $processor ) = @_;
+    push @{$self->{processors}}, $processor;
+}
+
 =head3 statusalias
 
     my $statusalias = $request->statusalias;
@@ -371,6 +398,7 @@ sub _backend_capability {
     try {
         $capability = $self->_backend->capabilities($name);
     } catch {
+        warn $_;
         return 0;
     };
     # Try to invoke it
@@ -894,6 +922,28 @@ sub backend_create {
     }
 
     return $self->expandTemplate($result);
+}
+
+=head3 backend_get_update
+
+    my $update = backend_get_update($request);
+
+    Given a request, returns an update in a prescribed
+    format that can then be passed to update parsers
+
+=cut
+
+sub backend_get_update {
+    my ( $self, $options ) = @_;
+
+    my $response = $self->_backend_capability(
+        'get_supplier_update',
+        {
+            request => $self,
+            %{$options}
+        }
+    );
+    return $response;
 }
 
 =head3 expandTemplate
@@ -1437,7 +1487,7 @@ Send a specified notice regarding this request to a patron
 =cut
 
 sub send_patron_notice {
-    my ( $self, $notice_code ) = @_;
+    my ( $self, $notice_code, $additional_text ) = @_;
 
     # We need a notice code
     if (!$notice_code) {
@@ -1448,8 +1498,9 @@ sub send_patron_notice {
 
     # Map from the notice code to the messaging preference
     my %message_name = (
-        ILL_PICKUP_READY   => 'Ill_ready',
-        ILL_REQUEST_UNAVAIL => 'Ill_unavailable'
+        ILL_PICKUP_READY    => 'Ill_ready',
+        ILL_REQUEST_UNAVAIL => 'Ill_unavailable',
+        ILL_REQUEST_UPDATE  => 'Ill_update'
     );
 
     # Get the patron's messaging preferences
@@ -1471,8 +1522,9 @@ sub send_patron_notice {
     my @fail = ();
     for my $transport (@transports) {
         my $letter = $self->get_notice({
-            notice_code => $notice_code,
-            transport   => $transport
+            notice_code     => $notice_code,
+            transport       => $transport,
+            additional_text => $additional_text
         });
         if ($letter) {
             my $result = C4::Letters::EnqueueLetter({
@@ -1613,11 +1665,48 @@ sub get_notice {
         substitute  => {
             ill_bib_title      => $title ? $title->value : '',
             ill_bib_author     => $author ? $author->value : '',
-            ill_full_metadata  => $metastring
+            ill_full_metadata  => $metastring,
+            additional_text    => $params->{additional_text}
         }
     );
 
     return $letter;
+}
+
+
+=head3 attach_processors
+
+Receive a Koha::Illrequest::SupplierUpdate and attach
+any processors we have for it
+
+=cut
+
+sub attach_processors {
+    my ( $self, $update ) = @_;
+
+    foreach my $processor(@{$self->{processors}}) {
+        if (
+            $processor->{target_source_type} eq $update->{source_type} &&
+            $processor->{target_source_name} eq $update->{source_name}
+        ) {
+            $update->attach_processor($processor);
+        }
+    }
+}
+
+=head3 append_to_note
+
+    append_to_note("Some text");
+
+Append some text to the staff note
+
+=cut
+
+sub append_to_note {
+    my ($self, $text) = @_;
+    my $current = $self->notesstaff;
+    $text = ($current && length $current > 0) ? "$current\n\n$text" : $text;
+    $self->notesstaff($text)->store;
 }
 
 =head3 id_prefix
