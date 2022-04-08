@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5779,6 +5779,19 @@ subtest "CanBookBeIssued + needsconfirmation message" => sub {
     $hold->found("P")->store();
     ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued( $patron, $item->barcode );
     is($needsconfirmation->{resbranchcode}, $hold->branchcode, "Branchcodes match when hold is being processed.");
+};
+
+subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
+
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
+    my $item = $builder->build_sample_item();
+    $item->withdrawn(1)->itemlost(1)->store;
+    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        \@return,
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ], "Item returned as withdrawn, no other messages");
 };
 
 $schema->storage->txn_rollback;
