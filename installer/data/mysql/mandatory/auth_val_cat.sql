@@ -54,6 +54,7 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
     ('ETAT'),
     ('CAND'),
     ('COUNTRY'),
+    ('TYPEDOC'),
     ('qualif');
 
 -- For Housebound
