@@ -9,5 +9,6 @@ values
 (7, 'Ill_ready', 0),
 (8, 'Ill_unavailable', 0),
 (9, 'Auto_Renewals', 0),
-(10, 'Hold_Reminder', 0);
+(10, 'Hold_Reminder', 0),
+(11, 'Ill_update', 0);
 

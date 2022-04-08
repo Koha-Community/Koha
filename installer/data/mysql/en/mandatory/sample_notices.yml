@@ -839,6 +839,40 @@ tables:
             - "[% branch.branchemail %]"
 
         - module: ill
+          code: ILL_REQUEST_UPDATE
+          branchcode: ""
+          name: "ILL request update"
+          is_html: 0
+          title: "Interlibrary loan request update"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "has been updated."
+            - ""
+            - "Details of the update are below:"
+            - ""
+            - "[% additional_text %]"
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
+
+        - module: ill
           code: ILL_PICKUP_READY
           branchcode: ""
           name: "ILL request ready for pickup"
@@ -940,6 +974,40 @@ tables:
             - "[% ill_full_metadata %]"
             - ""
             - "Please let us know if you are able to supply this to us."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
+
+        - module: ill
+          code: ILL_REQUEST_UPDATE
+          branchcode: ""
+          name: "ILL request update"
+          is_html: 0
+          title: "Interlibrary loan request update"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "has been updated."
+            - ""
+            - "Details of the update are below:"
+            - ""
+            - "[% additional_text %]"
             - ""
             - "Kind Regards"
             - ""
