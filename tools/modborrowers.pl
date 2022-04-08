@@ -409,7 +409,7 @@ if ( $op eq 'do' ) {
             if ( $attributes->{$code}->{disabled} ) {
                 # The attribute is disabled, we remove it for this borrower !
                 eval {
-                    $patron->get_extended_attribute($code)->delete;
+                    $patron->extended_attributes->search({'me.code' => $code})->filter_by_branch_limitations->delete;
                 };
                 push @errors, { error => $@ } if $@;
             } else {
