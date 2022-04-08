@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 57;
+use Test::More tests => 58;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5167,6 +5167,19 @@ subtest "GetSoonestRenewDate tests" => sub {
         $datedue,
         'Checkouts with auto-renewal can be renewed earliest on due date if no renewalbefore'
     );
+};
+
+subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
+
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
+    my $item = $builder->build_sample_item();
+    $item->withdrawn(1)->itemlost(1)->store;
+    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        \@return,
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1 }, undef, {} ], "Item returned as withdrawn, no other messages");
 };
 
 $schema->storage->txn_rollback;
