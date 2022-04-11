@@ -1,8 +1,15 @@
-/* global dataTablesDefaults */
+/* global dataTablesDefaults tagsubfield */
 $(document).ready(function() {
-    var tabs = $('#subfieldtabs').tabs();
+    if( tagsubfield && tagsubfield == "@"){
+        $("#subfieldtabs a[href='#subATfield']").tab("show");
+    } else if ( tagsubfield && tagsubfield != "@"){
+        $("#subfieldtabs a[href='#sub" + tagsubfield + "field'").tab("show");
+    } else {
+        $("#subfieldtabs a:first").tab("show");
+    }
+
     var current_index;
-    tabs.find( ".ui-tabs-nav" ).sortable({
+    $("#subfieldtabs > ul").sortable({
         axis: "x",
         start: function (e, ui) {
             current_index = $(ui.item[0]).index();
@@ -12,15 +19,15 @@ $(document).ready(function() {
             if (current_index < new_index) new_index++;
             var subfield_code = $(ui.item[0]).attr('id').replace( /^tab_subfield_/, '');
             var content = $('#sub' + subfield_code + 'field');
-            var panels = $("#subfieldtabs > div");
+            var panels = $("#subfieldtabs .tab-pane");
             if ( new_index < $(panels).size() ){
-                $(content).insertBefore($("#subfieldtabs > div")[new_index]);
+                $(content).insertBefore( panels[new_index]);
             } else {
-                $(content).insertAfter($("#subfieldtabs > div")[new_index-1]);
+                $(content).insertAfter( panels[new_index-1]);
             }
-            tabs.tabs("refresh");
         }
     });
+
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function() {
         populateHiddenCheckboxes($(this).attr('id').split('-')[1]);

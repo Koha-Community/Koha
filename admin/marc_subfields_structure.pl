@@ -199,6 +199,7 @@ if ( $op eq 'add_form' ) {
     $template->param(
         action   => "Edit subfields",
         tagfield => $tagfield,
+        tagsubfield => $tagsubfield,
         loop           => \@loop_data,
         more_tag       => $tagfield
     );
