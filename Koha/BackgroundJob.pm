@@ -260,22 +260,22 @@ Returns the available types to class mappings.
 sub type_to_class_mapping {
     my ($self) = @_;
 
-    my $plugins_mapping = $self->plugin_type_to_class;
+    my $plugins_mapping = $self->plugin_types_to_classes;
 
     return ($plugins_mapping)
-      ? { %{ $self->core_type_to_class }, %{ $self->plugin_type_to_class } }
-      : $self->core_type_to_class;
+      ? { %{ $self->core_types_to_classes }, %{ $self->plugin_types_to_classes } }
+      : $self->core_types_to_classes;
 }
 
-=head3 core_type_to_class
+=head3 core_types_to_classes
 
-    my $mappings = Koha::BackgrounJob->new->core_type_to_class
+    my $mappings = Koha::BackgrounJob->new->core_types_to_classes
 
 Returns the core background jobs types to class mappings.
 
 =cut
 
-sub core_type_to_class {
+sub core_types_to_classes {
     return {
         batch_authority_record_deletion     => 'Koha::BackgroundJob::BatchDeleteAuthority',
         batch_authority_record_modification => 'Koha::BackgroundJob::BatchUpdateAuthority',
@@ -287,15 +287,15 @@ sub core_type_to_class {
     };
 }
 
-=head3 plugin_type_to_class
+=head3 plugin_types_to_classes
 
-    my $mappings = Koha::BackgroundJob->new->plugin_type_to_class
+    my $mappings = Koha::BackgroundJob->new->plugin_types_to_classes
 
-Returns the plugin-refined background jobs types to class mappings.
+Returns the plugin-defined background jobs types to class mappings.
 
 =cut
 
-sub plugin_type_to_class {
+sub plugin_types_to_classes {
     my ($self) = @_;
 
     unless ( exists $self->{_plugin_mapping} ) {
@@ -308,9 +308,9 @@ sub plugin_type_to_class {
 
             unless ( $metadata->{namespace} ) {
                 Koha::Logger->get->warn(
-"The plugin includes the 'background_tasks' method, but doesn't provide the required 'namespace' method ("
-                      . $plugin->{class}
-                      . ')' );
+                        q{A plugin includes the 'background_tasks' method, }
+                      . q{but doesn't provide the required 'namespace' }
+                      . qq{method ($plugin->{class})} );
                 next;
             }
 

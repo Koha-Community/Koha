@@ -76,7 +76,7 @@ subtest 'background_tasks() hooks tests' => sub {
 
     $bj = Koha::BackgroundJob->new;
     $tasks = $bj->type_to_class_mapping;
-    $logger->warn_is("The plugin includes the 'background_tasks' method, but doesn't provide the required 'namespace' method (Koha::Plugin::Test)");
+    $logger->warn_is("A plugin includes the 'background_tasks' method, but doesn't provide the required 'namespace' method (Koha::Plugin::Test)");
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
