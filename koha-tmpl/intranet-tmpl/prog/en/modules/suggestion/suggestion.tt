@@ -731,6 +731,7 @@
                                             <th class="anti-the">Suggestion</th>
                                             <th>Suggested by</th>
                                             <th>Suggested on</th>
+                                            <th>Patron reason</th>
                                             <th>Managed by</th>
                                             <th>Managed on</th>
                                             <th>Last modification by</th>
@@ -791,6 +792,7 @@
                                                 <td data-order="[% suggestions_loo.suggesteddate | html %]">
                                                     [% IF ( suggestions_loo.suggesteddate ) %][% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                                                 </td>
+                                                <td>[% AuthorisedValues.GetByCode( 'OPAC_SUG', suggestions_loo.patronreason ) | html %]</td>
                                                 <td>
                                                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.managedby | uri %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
                                                 </td>
