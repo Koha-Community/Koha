@@ -1747,7 +1747,7 @@ sub desensitize {
     my $patron = $params->{patron};
     my $server = $params->{server};
 
-    my $patron_categories = $server->{account}->{never_demagnitize};
+    my $patron_categories = $server->{account}->{inhouse_patron_categories};
 
     # If no patron categories are set for never desensitize, no need to do anything
     return $desensitize unless $patron_categories;

@@ -906,22 +906,22 @@ sub test_checkout_desensitize {
 
     undef $response;
     my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
-    $server->{account}->{never_demagnitize} = "A,$patron_category,Z";
+    $server->{account}->{inhouse_patron_categories} = "A,$patron_category,Z";
     $msg->handle_checkout( $server );
     my $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'N', "Desensitize flag was not set for patron category in never_demagnitize" );
+    is( $respcode, 'N', "Desensitize flag was not set for patron category in inhouse_patron_categories" );
 
     undef $response;
-    $server->{account}->{never_demagnitize} = "A,B,C";
+    $server->{account}->{inhouse_patron_categories} = "A,B,C";
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'Y', "Desensitize flag was set for patron category not in never_demagnitize" );
+    is( $respcode, 'Y', "Desensitize flag was set for patron category not in inhouse_patron_categories" );
 
     undef $response;
-    $server->{account}->{never_demagnitize} = "";
+    $server->{account}->{inhouse_patron_categories} = "";
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'Y', "Desensitize flag was set for empty never_demagnitize" );
+    is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_patron_categories" );
 }
 
 sub test_renew_desensitize {
@@ -972,22 +972,22 @@ sub test_renew_desensitize {
 
     undef $response;
     my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
-    $server->{account}->{never_demagnitize} = "A,$patron_category,Z";
+    $server->{account}->{inhouse_patron_categories} = "A,$patron_category,Z";
     $msg->handle_checkout( $server );
     my $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'N', "Desensitize flag was not set for patron category in never_demagnitize" );
+    is( $respcode, 'N', "Desensitize flag was not set for patron category in inhouse_patron_categories" );
 
     undef $response;
-    $server->{account}->{never_demagnitize} = "A,B,C";
+    $server->{account}->{inhouse_patron_categories} = "A,B,C";
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'Y', "Desensitize flag was set for patron category not in never_demagnitize" );
+    is( $respcode, 'Y', "Desensitize flag was set for patron category not in inhouse_patron_categories" );
 
     undef $response;
-    $server->{account}->{never_demagnitize} = "";
+    $server->{account}->{inhouse_patron_categories} = "";
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
-    is( $respcode, 'Y', "Desensitize flag was set for empty never_demagnitize" );
+    is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_patron_categories" );
 }
 
 # Helper routines
