@@ -76,7 +76,7 @@ start_worker()
 
         log_daemon_msg "Starting Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS -- $worker_DAEMON --job-queue ${queue}; then
+        if daemon $DAEMONOPTS -- $worker_DAEMON --queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -107,7 +107,7 @@ stop_worker()
 
         log_daemon_msg "Stopping Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS --stop -- $worker_DAEMON --job-queue ${queue}; then
+        if daemon $DAEMONOPTS --stop -- $worker_DAEMON --queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -138,7 +138,7 @@ restart_worker()
 
         log_daemon_msg "Restarting Koha worker daemon for $name ($queue)"
 
-        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --job-queue ${queue}; then
+        if daemon $DAEMONOPTS --restart -- $worker_DAEMON --queue ${queue}; then
             log_end_msg 0
         else
             log_end_msg 1

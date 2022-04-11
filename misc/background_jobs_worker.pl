@@ -21,20 +21,20 @@ background_jobs_worker.pl - Worker script that will process background jobs
 
 =head1 SYNOPSIS
 
-./background_jobs_worker.pl [--job-queue QUEUE]
+./background_jobs_worker.pl [--queue QUEUE]
 
 =head1 DESCRIPTION
 
 This script will connect to the Stomp server (RabbitMQ) and subscribe to the queues passed in parameter (or the 'default' queue),
 or if a Stomp server is not active it will poll the database every 10s for new jobs in the passed queue.
 
-You can specify some queues only (using --job-queue, which is repeatable) if you want to run several workers that will handle their own jobs.
+You can specify some queues only (using --queue, which is repeatable) if you want to run several workers that will handle their own jobs.
 
 =head1 OPTIONS
 
 =over
 
-=item B<--job-queue>
+=item B<--queue>
 
 Repeatable. Give the job queues this worker will process.
 
@@ -58,7 +58,7 @@ use Koha::BackgroundJobs;
 my ( $help, @queues );
 GetOptions(
     'h|help' => \$help,
-    'job-queue=s' => \@queues,
+    'queue=s' => \@queues,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
