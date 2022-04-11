@@ -129,6 +129,7 @@ $(document).ready(function() {
     });
 
     $( ".transport-types" ).accordion({
+        header: "h3",
         collapsible: true,
         active: parseInt( $("#section").val(), 10),
         animate: 200,
