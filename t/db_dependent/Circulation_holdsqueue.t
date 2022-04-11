@@ -41,16 +41,18 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
     my $item    = $builder->build_sample_item({ library => $library->id });
 
     t::lib::Mocks::mock_userenv({ branchcode => $library->id });
+    t::lib::Mocks::mock_preference( 'UpdateTotalIssuesOnCirc', 1 );
 
     my $action;
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
     $mock->mock( 'enqueue', sub {
         my ( $self, $args ) = @_;
+        my ($package, $filename, $line) = caller;
         is_deeply(
             $args->{biblio_ids},
             [ $item->biblionumber ],
-            "$action triggers a holds queue update for the related biblio"
+            "$action triggers a holds queue update for the related biblio from $package"
         );
     } );
 
