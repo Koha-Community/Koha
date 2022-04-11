@@ -263,7 +263,7 @@ sub type_to_class_mapping {
     my $plugins_mapping = $self->plugin_types_to_classes;
 
     return ($plugins_mapping)
-      ? { %{ $self->core_types_to_classes }, %{ $self->plugin_types_to_classes } }
+      ? { %{ $self->core_types_to_classes }, %$plugins_mapping }
       : $self->core_types_to_classes;
 }
 
