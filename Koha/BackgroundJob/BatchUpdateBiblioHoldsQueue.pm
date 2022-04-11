@@ -69,7 +69,7 @@ sub process {
         }
     )->store;
 
-    my @biblio_ids = @{ $args->{biblio_id} };
+    my @biblio_ids = @{ $args->{biblio_ids} };
 
     my $report = {
         total_biblios => scalar @biblio_ids,
