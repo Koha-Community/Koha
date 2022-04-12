@@ -19,7 +19,7 @@ use Modern::Perl;
 use JSON qw( decode_json encode_json );
 
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
-use C4::AuthoritiesMarc qw( ModAuthority );
+use C4::AuthoritiesMarc;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::MetadataRecord::Authority;
