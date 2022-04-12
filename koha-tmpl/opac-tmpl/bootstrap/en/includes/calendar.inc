@@ -18,23 +18,18 @@
     var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
     var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
     var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
-    var dateformat_string = "";
     var flatpickr_dateformat_string = "";
     switch ( dateformat_pref ){
         case "us":
-            dateformat_string = "mm/dd/yy";
             flatpickr_dateformat_string = "m/d/Y";
             break;
         case "metric":
-            dateformat_string = "dd/mm/yy";
             flatpickr_dateformat_string = "d/m/Y";
             break;
         case "dmydot":
-            dateformat_string = "dd.mm.yy";
             flatpickr_dateformat_string = "d.m.Y";
             break;
         default:
-            dateformat_string = "yy-mm-dd";
             flatpickr_dateformat_string = "Y-m-d";
     }
 </script>
@@ -94,19 +89,19 @@
     function is_valid_date(date) {
         // An empty string is considered as a valid date for convenient reasons.
         if (date === '') return 1;
-        var dateformat = dateformat_string;
-        if (dateformat == 'us') {
-            if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-            dateformat = 'mm/dd/yy';
-        } else if (dateformat == 'metric') {
-            if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-            dateformat = 'dd/mm/yy';
-        } else if (dateformat == 'iso') {
-            if (date.search(/^\d{4}-\d{2}-\d{2}($|\s)/) == -1) return 0;
-            dateformat = 'yy-mm-dd';
-        } else if (dateformat == 'dmydot') {
-            if (date.search(/^\d{2}\.\d{2}\.\d{4}($|\s)/) == -1) return 0;
-            dateformat = 'dd.mm.yy';
+        var dateformat = flatpickr_dateformat_string;
+        switch ( dateformat_pref ){
+            case "us":
+                flatpickr_dateformat_string = "m/d/Y";
+                break;
+            case "metric":
+                flatpickr_dateformat_string = "d/m/Y";
+                break;
+            case "dmydot":
+                flatpickr_dateformat_string = "d.m.Y";
+                break;
+            default:
+                flatpickr_dateformat_string = "Y-m-d";
         }
         try {
             flatpickr.parseDate(date, dateformat);

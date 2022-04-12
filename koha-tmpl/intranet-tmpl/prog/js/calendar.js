@@ -1,4 +1,4 @@
-/* global debug sentmsg __ dateformat_pref dateformat_string bidi calendarFirstDayOfWeek */
+/* global debug sentmsg __ dateformat_pref flatpickr_dateformat_string bidi calendarFirstDayOfWeek */
 /* exported DateTime_from_syspref flatpickr_weekdays flatpickr_months */
 var MSG_PLEASE_ENTER_A_VALID_DATE = ( __("Please enter a valid date (should match %s).") );
 if (debug > 1) {
@@ -8,19 +8,19 @@ if (debug > 1) {
 function is_valid_date(date) {
     // An empty string is considered as a valid date for convenient reasons.
     if (date === '') return 1;
-    var dateformat = dateformat_string;
+    var dateformat = flatpickr_dateformat_string;
     if (dateformat == 'us') {
         if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-        dateformat = 'mm/dd/yy';
+        dateformat = 'm/d/Y';
     } else if (dateformat == 'metric') {
         if (date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1) return 0;
-        dateformat = 'dd/mm/yy';
+        dateformat = 'd/m/Y';
     } else if (dateformat == 'iso') {
         if (date.search(/^\d{4}-\d{2}-\d{2}($|\s)/) == -1) return 0;
-        dateformat = 'yy-mm-dd';
+        dateformat = 'Y-m-d';
     } else if (dateformat == 'dmydot') {
         if (date.search(/^\d{2}\.\d{2}\.\d{4}($|\s)/) == -1) return 0;
-        dateformat = 'dd.mm.yy';
+        dateformat = 'd.m.Y';
     }
     try {
         flatpickr.parseDate(date, dateformat);
