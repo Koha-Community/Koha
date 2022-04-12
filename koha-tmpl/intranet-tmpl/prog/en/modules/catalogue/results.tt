@@ -436,7 +436,7 @@
         <div id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]" class="cover-slides" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]">
             [% IF ( LocalCoverImages ) %][% SEARCH_RESULT.localimage | html %]
                 <div id="local-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image local-coverimg">
-                    <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]" class => 'p1'>
+                    <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]">
                         <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" alt="Local cover image" />
                     </a>
                     <div class="hint">Local cover image</div>
@@ -445,7 +445,7 @@
 
             [% IF ( AmazonCoverImages && SEARCH_RESULT.normalized_isbn ) %]
                 <div id="amazon-bookcoverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image amazon-bookcoverimg">
-                    <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]" class => 'p1'>
+                    <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]">
                         <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="Cover image from Amazon.com" />
                     </a>
                     <div class="hint">Amazon cover image</div>
@@ -455,7 +455,7 @@
             [% IF ( SyndeticsCovers ) %]
                     [% IF ( SEARCH_RESULT.normalized_isbn || SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_oclc ) %]
                         <div id="syndetics-bookcoverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image syndetics-bookcoverimg">
-                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                            <a href="/cgi-bin/koha/catalogue/[% DetailPage | url %]?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
                                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="Cover from Syndetics" />
                             </a>
                             <div class="hint">Syndetics cover image</div>
@@ -467,7 +467,7 @@
                 [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
                 [% IF ( coce_id ) %]
                     <div id="coce-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image coce-coverimg">
-                        <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]" class => 'p1'>
+                        <a href="[% PROCESS biblio_a_href biblionumber => SEARCH_RESULT.biblionumber %]">
                             <span style="block" title="[% SEARCH_RESULT.biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail[% SEARCH_RESULT.biblionumber | html %]"></span>
                         </a>
                         <div class="hint">Coce cover image</div>
