@@ -143,13 +143,17 @@
             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
         [% END %]
         [% IF invalid_otp_token %]
-            <div class="dialog error">Invalid two-factor code</div>
+            <div id="login_error">Invalid two-factor code</div>
         [% END %]
 
-        <p><label for="otp_token">Two-factor authentication code:</label>
-        <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
-        <p class="submit"><input id="submit-button" type="submit" value="Verify code" /></p>
-        <a class="logout" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
+        <p>
+            <label for="otp_token">Two-factor authentication code:</label>
+            <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
+        </p>
+        <p>
+            <input id="submit-button" type="submit" value="Verify code" />
+            <a class="cancel" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Cancel</a>
+        </p>
 
     </form>
 [% END %]
