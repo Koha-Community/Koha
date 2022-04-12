@@ -567,14 +567,11 @@
     [% ELSE %]
         <script>
             $(document).ready(function() {
-                if( $("#tabs .tab-pane.active").length < 1 ){
-                    $("#tabs a:first").tab("show");
-                }
                 [% IF category == 'news' %]
                 $("#add_additional_content").validate({
                     submitHandler: function(form){
                         if ( ! $("#title_default").val().length > 0 ) {
-                            alert(__("Please specify a title for 'Default'"));
+                            alert(_("Please specify a title for 'Default'"));
                             return false;
                         }
 
@@ -603,40 +600,83 @@
         [% Asset.js( "lib/linters/htmlhint.min.js" ) | $raw %]
         [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
         <script>
-            $("textarea[name^='content_']").each( function(index) {
-                var this_lang = $(this).attr('data-lang');
-                var editor = CodeMirror.fromTextArea(document.getElementById('content_' + this_lang), {
-                    lineNumbers: true,
-                    lineWrapping: true,
-                    lint: true,
-                    mode: "text/html",
-                    gutters: ["CodeMirror-lint-markers"],
-                    viewportMargin: Infinity,
+            let editors = new Object(); /* Keeps track of initialized CodeMirror instances */
+            $(document).ready(function(){
+
+                if( $("#tabs .tab-pane.active").length < 1 ){
+                    /* Activate first tab and initialize its CodeMirror instance */
+                    let firstTab = $("#tabs a:first");
+                    firstTab.tab("show");
+                    initCodeMirror( firstTab[0].hash );
+                }
+
+                $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                    /* Try to initialize CodeMirror instance when tab opens */
+                    initCodeMirror( e.target.hash );
                 });
             });
+
+            function initCodeMirror( container ){
+                /* Initialize CodeMirror instance only if it doesn't exist */
+                if( !editors[ container ] ){
+                    let textarea = $( container ).find("textarea[name^='content_']");
+                    let this_lang = textarea.attr('data-lang');
+                    let editor = CodeMirror.fromTextArea( document.getElementById('content_' + this_lang), {
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        lint: true,
+                        mode: "text/html",
+                        gutters: ["CodeMirror-lint-markers"],
+                        viewportMargin: Infinity,
+                    });
+                    editors[ container ] = editor;
+                    return editor;
+                }
+            }
         </script>
     [% ELSE %]
         [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
         [% INCLUDE 'str/tinymce_i18n.inc' %]
         <script>
-            tinyMCE.init({
-                verify_html: false,
-                force_br_newlines : false,
-                force_p_newlines : false,
-                forced_root_block : '',
-                branding : false,
-                relative_urls : false,
-                content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
-                menubar : "file edit view insert format tools table",
-                mode : "specific_textareas",
-                plugins : "autoresize table hr link image charmap lists code emoticons",
-                extended_valid_elements:"style,link[href|rel]",
-                custom_elements:"style,link,~link",
-                toolbar : [
-                    "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
-                    "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code"
-                ],
+
+            $(document).ready(function(){
+                if( $("#tabs .tab-pane.active").length < 1 ){
+                    /* Activate first tab and initialize its tinyMCE instance */
+                    let firstTab = $("#tabs a:first");
+                    firstTab.tab("show");
+                    initTinyMce( firstTab[0].hash );
+                }
+
+                $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                    /* Try to initialize tinyMCE instance when tab opens */
+                    initTinyMce( e.target.hash );
+                });
             });
+
+            function initTinyMce( container ){
+                let textarea = $( container ).find("textarea[name^='content_']");
+                /* TinyMCE seems to do its own check to prevent double-initialization
+                   so We don't need to keep track of it */
+                let editor = tinyMCE.init({
+                    branding : false,
+                    content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
+                    custom_elements:"style,link,~link",
+                    extended_valid_elements:"style,link[href|rel]",
+                    force_br_newlines : false,
+                    force_p_newlines : false,
+                    forced_root_block : '',
+                    menubar : "file edit view insert format tools table",
+                    plugins : "autoresize table hr link image charmap lists code emoticons",
+                    relative_urls : false,
+                    selector: "#" + textarea[0].id,
+                    verify_html: false,
+                    toolbar : [
+                        "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
+                        "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code"
+                    ],
+                });
+                return editor;
+            }
         </script>
     [% END # /UNLESS wysiwyg %]
 [% END %]
