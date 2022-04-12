@@ -872,7 +872,6 @@
             $("#replace_existing_filter").click(function(){
                 let id = $("#existing_filters").val();
                 let name = $("#existing_filters option[value="+id+"]").text();
-                console.log(id,name);
                 save_search_filter(name,id);
             });
             function save_search_filter(name,id,opac,staff){
@@ -900,7 +899,6 @@
                         getFilters();
                     })
                     .fail(function(err) {
-                        console.log(err);
                         humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
                     });
             }

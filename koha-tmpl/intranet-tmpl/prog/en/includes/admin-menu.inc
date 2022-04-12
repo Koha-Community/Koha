@@ -113,6 +113,9 @@
             [% IF ( CAN_user_parameters_manage_item_search_fields ) %]
                 <li><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></li>
             [% END %]
+            [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
+                <li><a href="/cgi-bin/koha/admin/search_filters.pl">Search filters</a></li>
+            [% END %]
             [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                 <li><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></li>
             [% END %]

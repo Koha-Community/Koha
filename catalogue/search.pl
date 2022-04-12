@@ -177,7 +177,7 @@ my @nolimits = map uri_unescape($_), $cgi->multi_param('nolimit');
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 if  (
-        !$cgi->param('edit_search') &&
+        !$cgi->param('edit_search') && !$cgi->param('edit_filter') &&
         ( (@limits>=1) || (defined $cgi->param("q") && $cgi->param("q") ne "" ) || ($cgi->param('limit-yr')) )
     ) {
     $template_name = 'catalogue/results.tt';
@@ -262,32 +262,58 @@ $template->param( searchid => scalar $cgi->param('searchid'), );
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
 
+    my @operands;
+    my @operators;
+    my @indexes;
     my $expanded = $cgi->param('expanded_options');
     if( $cgi->param('edit_search') ){
-        my @operators = $cgi->multi_param('op');
-        my @indexes   = $cgi->multi_param('idx');
-        my %limit_hash;
-        foreach my $limit (@limits){
-            if ( $limit eq 'available' ){
-                $template->param( limit_available => 1 );
-            } else {
-                my ($index,$value) = split(':',$limit);
-                $value =~ s/"//g;
-                if ( $index =~ /mc-/ ){
-                    $limit_hash{$index . "_" . $value} = 1;
-                } else {
-                    push @{$limit_hash{$index}}, $value;
-                }
-            }
-        };
-        $expanded = 1 if scalar @operators || scalar @limits;
-        $template->param( operators => \@operators );
-        $template->param( limits => \%limit_hash );
+        @operands = $cgi->multi_param('q');
+        @operators = $cgi->multi_param('op');
+        @indexes   = $cgi->multi_param('idx');
         $template->param(
-           indexes   => \@indexes,
            sort      => $cgi->param('sort_by'),
         );
+        # determine what to display next to the search boxes
+    } elsif ( $cgi->param('edit_filter') ){
+        my $search_filter = Koha::SearchFilters->find( $cgi->param('edit_filter') );
+        if( $search_filter ){
+            my $query = decode_json( $search_filter->query );
+            my $limits = decode_json( $search_filter->limits );
+            @operands  = @{ $query->{operands} };
+            @indexes   = @{ $query->{indexes} };
+            @operators = @{ $query->{operators} };
+            @limits    = @{ $limits->{limits} };
+            $template->param( edit_filter => $search_filter );
+        } else {
+            $template->param( unknown_filter => 1 );
+        }
     }
+
+    while( scalar @operands < 3 ){
+        push @operands, "";
+    }
+    $template->param( operands  => \@operands );
+    $template->param( operators => \@operators );
+    $template->param( indexes   => \@indexes );
+
+    my %limit_hash;
+    foreach my $limit (@limits){
+        if ( $limit eq 'available' ){
+            $template->param( limit_available => 1 );
+        } else {
+            my ($index,$value) = split(':',$limit);
+            $value =~ s/"//g;
+            if ( $index =~ /mc-/ ){
+                $limit_hash{$index . "_" . $value} = 1;
+            } else {
+                push @{$limit_hash{$index}}, $value;
+            }
+        }
+    };
+    $template->param( limits => \%limit_hash );
+
+    $expanded = 1 if scalar @operators || scalar @limits;
+
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
@@ -304,17 +330,11 @@ if ( $template_type eq 'advsearch' ) {
         $template->param( sort_by => $default_sort_by  );
     }
 
-    # determine what to display next to the search boxes
-    my @queries = $cgi->multi_param('q');
-    while( scalar @queries < 3 ){
-        push @queries, "";
-    }
     $template->param(uc(C4::Context->preference("marcflavour")) =>1 );
 
     # load the language limits (for search)
     my $languages_limit_loop = getLanguages($lang, 1);
     $template->param(search_languages_loop => $languages_limit_loop,);
-    $template->param(       queries   => \@queries );
 
     # Expanded search options in advanced search:
     # use the global setting by default, but let the user override it

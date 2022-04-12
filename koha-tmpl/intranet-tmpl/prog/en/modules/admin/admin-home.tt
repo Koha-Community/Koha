@@ -203,6 +203,10 @@
                         <dt><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></dt>
                         <dd>Manage custom fields for item search</dd>
                     [% END %]
+                    [% IF Koha.Preference('SavedSearchFilters') && ( CAN_user_parameters_manage_search_filters ) %]
+                        <dt><a href="/cgi-bin/koha/admin/search_filters.pl">Search filters</a></dt>
+                        <dd>Manage custom search filters</dd>
+                    [% END %]
                     [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                         <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></dt>
                         <dd>Manage indexes, facets, and their mappings to MARC fields and subfields</dd>

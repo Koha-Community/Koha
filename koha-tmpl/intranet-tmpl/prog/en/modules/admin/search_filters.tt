@@ -1,0 +1,226 @@
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% USE AuthorisedValues %]
+[% INCLUDE 'doc-head-open.inc' %]
+  <title>Search filters &rsaquo; Administration &rsaquo; Koha</title>
+  [% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_searchfilters" class="admin">
+  [% INCLUDE 'header.inc' %]
+  [% INCLUDE 'prefs-admin-search.inc' %]
+
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Search filters
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+        [% IF filters_count %]
+            <div id="search_filters_list">
+                <h2>Search filters</h2>
+
+                <table id="search_filters_table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Query</th>
+                            <th>Limits</th>
+                            <th>OPAC</th>
+                            <th>Staff client</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        [% ELSE %]
+            <div class="dialog message">
+                There are no search filters defined.
+            </div>
+        [% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+    <div id="edit_search_filter_modal" class="modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="search_filters_label">Edit filter: <span id="filter_edit_modal_name"></span</h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="filter_edit_id" name="filter_edit_id">
+                <label for="filter_edit_name">Name:</label>
+                <input id="filter_edit_name" name="filter_edit_name" type="text">
+                <hr>
+                <h6>Visibility:<h6>
+                <label for="filter_edit_opac">Show in OPAC?</label>
+                <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac">
+                <label for="filter_edit_staff_client">Show in Staff client?</label>
+                <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client">
+                <hr>
+                <a id="replace_existing_filter" class="btn btn-default btn-xs" href="#">Update</a>
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.css("css/humanmsg.css") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+
+    <script>
+        let filters_table;
+        $(document).ready(function(){
+            filters_table = $("#search_filters_table").kohaTable({
+                "ajax": {
+                    "url": "/api/v1/search_filters"
+                },
+                "columns": [
+                    {
+                        "data": "search_filter_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "name",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "filter_query",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "filter_limits",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "opac",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "staff_client",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, meta, val, type ) {
+                            let filter = row;
+                            let filter_buttons = '<a class="btn btn-default btn-xs edit_filter" onclick="edit_filter(this)"';
+                            filter_buttons += ' data-filter_id="'+ filter.search_filter_id;
+                            filter_buttons += '" data-filter_name="'+ filter.name;
+                            filter_buttons += '" data-filter_opac="'+ filter.opac;
+                            filter_buttons += '" data-filter_staff_client="'+ filter.staff_client;
+                            filter_buttons += '" ><i class="fa fa-pencil"></i> Edit filter</a>';
+                            filter_buttons += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter='+filter.search_filter_id+'"><i class="fa fa-search"></i> Edit search</a>';
+                            filter_buttons += '<a class="btn btn-default btn-xs delete_filter" onclick="delete_filter(this)"';
+                            filter_buttons += ' data-filter_id="'+ filter.search_filter_id;
+                            filter_buttons += '"><i class="fa fa-trash"></i> Delete</a>';
+                            return filter_buttons;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            });
+        });
+
+        $("#replace_existing_filter").click(function(){
+            let name = $("#filter_edit_name").val();
+            let id = $("#filter_edit_id").val();
+            let opac = $("#filter_edit_opac").prop('checked');
+            let staff_client = $("#filter_edit_staff_client").prop('checked');
+            save_search_filter(name,id,opac,staff_client);
+        });
+
+        function edit_filter(element){
+            let filter_id = $(element).data('filter_id');
+            let filter_name = $(element).data('filter_name');
+            let filter_opac = $(element).data('filter_opac');
+            let filter_staff_client = $(element).data('filter_staff_client');
+            $("#filter_edit_name").val(filter_name);
+            $("#filter_edit_id").val(filter_id);
+            $("#filter_edit_opac").prop('checked',filter_opac);
+            $("#filter_edit_staff_client").prop('checked',filter_staff_client);
+            $("#edit_search_filter_modal").modal('show');
+        };
+
+        function delete_filter(element){
+            let filter_id = $(element).data('filter_id');
+            let options = {
+                url: '/api/v1/search_filters/' + filter_id,
+                method: "DELETE",
+                contentType: "application/json",
+            };
+            $.ajax(options)
+                .then(function(result) {
+                    humanMsg.displayAlert( _("Filter successfully deleted."), { className: 'human Success' } );
+                    filters_table.DataTable().ajax.reload();
+                })
+                .fail(function(err) {
+                    humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                });
+        }
+
+
+        function save_search_filter(name,id,opac,staff){
+            let options = {
+                url: '/api/v1/search_filters/' + id,
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: name,
+                    opac: opac,
+                    staff_client: staff,
+                })
+            };
+            $.ajax(options)
+                .then(function(result) {
+                    $("#edit_search_filter_modal").modal('hide');
+                    humanMsg.displayAlert( _("Saved filter: ") + name  , { className: 'human Success' } );
+                    filters_table.DataTable().ajax.reload();
+                })
+                .fail(function(err) {
+                    humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                });
+        }
+
+
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -51,33 +51,58 @@
 
             <form action="search.pl" method="get">
                 <div id="advanced-search">
-                    <input type="hidden" name="advsearch" value="1"/>
-                    <h1>Advanced search</h1>
-                    [% IF searchid %]
-                        <div id="previous_search_link"></div>
-                    [% END %]
-
-                    <!-- SEARCH BUTTONS -->
+                    [% IF edit_filter %]
                     <div id="toolbar" class="btn-toolbar">
+                        <legend>Editing filter: [% edit_filter.name | html %]</legend>
                         <div class="btn-group">
-                            <button class="btn btn-primary" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
+                            <label for="filter_edit_opac">Show in OPAC?</label>
+                            [% IF edit_filter.opac %]
+                                <input type="checkbox" id="show_filter_opac" name="show_filter_opac" checked="checked">
+                            [% ELSE %]
+                                <input type="checkbox" id="show_filter_opac" name="show_filter_opac">
+                            [% END %]
+                            <label for="filter_edit_staff_client">Show in Staff client?</label>
+                            [% IF edit_filter.staff_client %]
+                                <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client" checked="checked">
+                            [% ELSE %]
+                                <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client">
+                            [% END %]
+                        </div>
+                        <hr>
+                        <div class="btn-group">
+                            <button id="save_filter" class="btn btn-default"><i class="fa fa-save"></i> Save filter</button>
+                            <button class="btn btn-default" type="submit" accesskey="s"><i class="fa fa-search"></i> Search using filter</button>
                         </div>
                         <div class="btn-group">
-                        [% IF ( expanded_options ) %]
-                            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Cancel</a>
                         </div>
-                        [% ELSE %]
-                            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
-                        </div>
-                        [% END %]
-                        <div class="btn-group">
-                            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
-                        </div>
-                        <div class="btn-group">
-                            <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-link"><i class="fa fa-search"></i> Go to item search</a>
-                        </div>
-                    </div> <!-- /#toolbar -->
-                    <!-- /SEARCH BUTTONS -->
+                    </div>
+                    [% ELSE %]
+                        <input type="hidden" name="advsearch" value="1"/>
+                        <h1>Advanced search</h1>
+
+                        <!-- SEARCH BUTTONS -->
+                        <div id="toolbar" class="btn-toolbar">
+                            <div class="btn-group">
+                                <button class="btn btn-default" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
+                            </div>
+                            <div class="btn-group">
+                            [% IF ( expanded_options ) %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
+                            </div>
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
+                            </div>
+                            [% END %]
+                            <div class="btn-group">
+                                <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+                            </div>
+                            <div class="btn-group">
+                                <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-link"><i class="fa fa-search"></i> Go to item search</a>
+                            </div>
+                        </div> <!-- /#toolbar -->
+                        <!-- /SEARCH BUTTONS -->
+                    [% END %]
 
                     [% IF ( outer_servers_loop ) %]
                         <!-- DATABASES -->
@@ -115,66 +140,64 @@
                         <!-- /REMOTE DATABASES -->
                     [% END %]
 
-                    <!-- BOOLEAN SEARCH OPTIONS -->
+                <!-- BOOLEAN SEARCH OPTIONS -->
                     <fieldset id="searchterms">
-                        <legend>Search for </legend>
-                        [% FOREACH query IN queries %]
-                            [% IF ( expanded_options ) %]
-                                [% IF loop.first %]
-                                    <div class="search-term-row" style="text-indent: 4.25em;">
-                                [% ELSE %]
-                                    <div class="search-term-row">
-                                        [% SET opindex = loop.index - 1 %]
-                                        <select name="op">
-                                            [% IF operators.$opindex == 'OR' %]
-                                                <option value="AND">and</option>
-                                                <option value="OR" selected="selected">or</option>
-                                                <option value="NOT">not</option>
-                                            [% ELSIF operators.$opindex == 'NOT' %]
-                                                <option value="AND">and</option>
-                                                <option value="OR">or</option>
-                                                <option value="NOT" selected="selected">not</option>
-                                            [% ELSE %]
-                                                <option value="AND" selected="selected">and</option>
-                                                <option value="OR">or</option>
-                                                <option value="NOT">not</option>
-                                            [% END %]
-                                        </select>
-                                [% END # /IF loop.first %]
+                    <legend>Search for </legend>
+                    [% FOREACH query IN operands %]
+                        [% IF ( expanded_options ) %]
+                        [% IF loop.first %]
+                        <div class="search-term-row" style="text-indent: 4.25em;">
+                        [% ELSE %]
+                        <div class="search-term-row">
+                            [% SET opindex = loop.index - 1 %]
+                            <select name="op">
+                            [% IF operators.$opindex == 'OR' %]
+                                <option value="AND">and</option>
+                                <option value="OR" selected="selected">or</option>
+                                <option value="NOT">not</option>
+                            [% ELSIF operators.$opindex == 'NOT' %]
+                                <option value="AND">and</option>
+                                <option value="OR">or</option>
+                                <option value="NOT" selected="selected">not</option>
                             [% ELSE %]
-                                <div>
-                            [% END # /IF ( expanded_options ) %]
-
-                            [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
-                            [% INCLUDE 'search_indexes.inc' %]
-                            <input type="text" size="30" name="q" title="Enter search terms" value="[% query | html %]" />
-                            [% IF ( expanded_options ) %]
-                                [% IF ( loop.last ) %]
-                                    <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+                                <option value="AND" selected="selected">and</option>
+                                <option value="OR">or</option>
+                                <option value="NOT">not</option>
+                            [% END %]
+                            </select>
+                        [% END %]
+                        [% ELSE %]
+                        <div>
+                        [% END %]
+                        [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
+                        [% INCLUDE 'search_indexes.inc' %]
+                        <input type="text" size="30" name="q" title="Enter search terms" value="[% query | html %]" />
+                        [% IF ( expanded_options ) %]
+                          [% IF ( loop.last ) %]
+                            <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+                          [% END %]
+                          [% IF ( loop.first ) %]
+                            <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
+                          [% END %]
+                        [% END %]
+                        </div>
+                    [% END %]
+                    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+                        [% IF ( expanded_options ) %]
+                            <p>
+                                [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
+                                    <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
                                 [% END %]
-                                [% IF ( loop.first ) %]
-                                    <label for="scan">Scan indexes:</label> <input type="checkbox" name="scan" id="scan" value="1" />
-                                [% END %]
-                            [% END # /IF ( expanded_options ) %]
-                            </div> <!-- /.search-term-row -->
-                        [% END # /FOREACH query IN queries %]
-
-                        [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
-                            [% IF ( expanded_options ) %]
-                                <p>
-                                    [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
-                                        <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
-                                    [% END %]
-                                    <span id="weight_search">
-                                        <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
-                                    </span>
-                                <p>
-                            [% ELSE %]
-                                <input type="hidden" name="weight_search" value="1" />
-                            [% END # /IF ( expanded_options ) %]
-                        [% END #/IF Koha.Preference('SearchEngine') %]
-                    </fieldset> <!-- /#searchterms -->
-                    <!-- /BOOLEAN SEARCH OPTIONS -->
+                                <span id="weight_search">
+                                    <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
+                                </span>
+                            <p>
+                        [% ELSE %]
+                            <input type="hidden" name="weight_search" value="1" />
+                        [% END %]
+                    [% END %]
+                    </fieldset>
+                <!-- /BOOLEAN SEARCH OPTIONS -->
                 </div> <!-- /#advanced-search -->
 
                 <!-- MC-TYPE LIMITS -->
@@ -372,6 +395,8 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
+    [% Asset.css("css/humanmsg.css") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
         /**
          *  Function add_field();
@@ -426,6 +451,58 @@
                 browser = KOHA.browser('[% searchid | html %]');
                 browser.show_back_link();
             [% END %]
+
+            [% IF edit_filter %]
+            $("#save_filter").click(function(e){
+                e.preventDefault();
+                let operators = [];
+                let indexes = [];
+                let operands = [];
+                let limits =[];
+                let opac = $("#show_filter_opac").prop('checked');
+                let staff_client = $("#show_filter_staff_client").prop('checked');
+                $("select[name='op']").each(function(){
+                    operators.push( $(this).val() );
+                });
+                $("select[name='idx']").each(function(){
+                    indexes.push( $(this).val() );
+                });
+                $("input[name='q']").each(function(){
+                    operands.push( $(this).val() );
+                });
+                $("select[name='limit'],input[name='limit']:checked").each(function(){
+                    if( $(this).val() != ""){
+                        limits.push( $(this).val() );
+                    }
+                });
+                let year_limit = $("#limit-yr").val();
+                if( year_limit ){
+                    limits.push( "yr,st-numeric:"+year_limit );
+                }
+                let options = {
+                    url: '/api/v1/search_filters/'+ [% edit_filter.id | html %],
+                    method: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        name: "[% edit_filter.name | html %]",
+                        filter_query: JSON.stringify({ operands: operands, indexes: indexes, operators:operators }),
+                        filter_limits: JSON.stringify({ limits: limits }),
+                        opac: opac,
+                        staff_client: staff_client,
+                    })
+                };
+                $.ajax(options)
+                    .then(function(result) {
+                        humanMsg.displayAlert( _("Saved filter: ") + result.name  , { className: 'human Success' } );
+                    })
+                    .fail( function(err){
+                        humanMsg.displayAlert( _("There was an error during saving:") + err.responseText, { className: 'humanError' } );
+                    });
+
+
+            });
+            [% END %]
+
 
         });
     </script>
