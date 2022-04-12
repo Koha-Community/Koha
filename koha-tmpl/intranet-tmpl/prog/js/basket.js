@@ -25,10 +25,10 @@ if(valCookie){
 
 function writeCookie(name, val, wd) {
     if (wd) {
-        parent.opener.document.cookie = name + "=" + val + "; path=/";
+        parent.opener.document.cookie = name + "=" + val + "; SameSite=Lax; path=/";
     }
     else {
-        parent.document.cookie = name + "=" + val + "; path=/";
+        parent.document.cookie = name + "=" + val + "; SameSite=Lax; path=/";
     }
 }
 
