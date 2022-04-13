@@ -115,23 +115,22 @@ Return 1 if this item is ready to be moved on to the next stage in its rota.
 =cut
 
 sub needs_advancing {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return 0 if $self->itemnumber->get_transfer; # intransfer: don't advance.
     return 1 if $self->fresh;                    # Just on rota: advance.
     my $completed = $self->itemnumber->_result->branchtransfers->search(
         { 'reason' => "StockrotationAdvance" },
         { order_by => { -desc => 'datearrived' } }
     );
+
     # Do maths on whether we need to be moved on.
     if ( $completed->count ) {
-        my $arrival = dt_from_string(
-            $completed->next->datearrived, 'iso'
-        );
-        my $duration = DateTime::Duration
-            ->new( days => $self->stage->duration );
-        if ( $arrival + $duration le dt_from_string() ) {
+        my $arrival  = dt_from_string( $completed->next->datearrived );
+        my $duration = $arrival->delta_days( dt_from_string() );
+        if ( $duration->in_units('days') >= $self->stage->duration ) {
             return 1;
-        } else {
+        }
+        else {
             return 0;
         }
     } else {
