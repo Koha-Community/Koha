@@ -51,8 +51,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
-my %cookies   = parse CGI::Cookie($cookie);
-my $sessionID = $cookies{'CGISESSID'}->value;
 my $dbh       = C4::Context->dbh;
 
 # Show borrower informations

@@ -70,8 +70,6 @@ my $itemnumber     = $input->param('itemnumber');
 my $replace        = !C4::Context->preference("AllowMultipleCovers")
   || $input->param('replace');
 my $op        = $input->param('op');
-my %cookies   = parse CGI::Cookie($cookie);
-my $sessionID = $cookies{'CGISESSID'}->value;
 
 my $error;
 
