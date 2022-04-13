@@ -22,9 +22,12 @@ use Modern::Perl;
 use DateTime;
 use DateTime::Duration;
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Item::Transfer;
-use t::lib::TestBuilder;
+
 use Test::Warn;
+use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Test::More tests => 8;
 
@@ -160,7 +163,7 @@ subtest "Tests for repatriate." => sub {
 };
 
 subtest "Tests for needs_advancing." => sub {
-    plan tests => 7;
+    plan tests => 8;
     $schema->storage->txn_begin;
 
     # Test behaviour of item freshly added to rota.
@@ -224,6 +227,21 @@ subtest "Tests for needs_advancing." => sub {
         DateTime->now - DateTime::Duration->new( days => 75 )
     )->store;
     is($dbitem->needs_advancing, 1, "Ready to be advanced.");
+
+    # Bug 30518: Confirm that DST boundaries do not explode.
+    # mock_config does not work here, because of tz vs timezone subroutines
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'tz', sub {
+        'Europe/London';
+    });
+    my $bad_date = dt_from_string("2020-09-29T01:15:30", 'iso');
+    $dbtransfer->datesent($bad_date)->store;
+    $dbtransfer->datearrived($bad_date)->store;
+    $dbitem->stage->duration(180)->store;
+    is( $dbitem->needs_advancing, 1, "DST boundary doesn't cause failure." );
+    $context->unmock('tz');
+
+    # Test that missing historical branch transfers do not crash
     $dbtransfer->delete;
     warning_is {$dbitem->needs_advancing} "We have no historical branch transfer for itemnumber " . $dbitem->itemnumber->itemnumber . "; This should not have happened!", "Missing transfer is warned.";
 
