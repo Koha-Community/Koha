@@ -679,12 +679,14 @@ sub BatchCommitRecords {
                 }
                 $oldxml = $old_marc->as_xml($marc_type);
 
+                my $context = { source => 'batchimport' };
+                if ($logged_in_patron) {
+                    $context->{categorycode} = $logged_in_patron->categorycode;
+                    $context->{userid} = $logged_in_patron->userid;
+                }
+
                 ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {
-                    overlay_context => {
-                        source => 'batchimport',
-                        categorycode => $logged_in_patron->categorycode,
-                        userid => $logged_in_patron->userid
-                    },
+                    overlay_context => $context
                 });
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
