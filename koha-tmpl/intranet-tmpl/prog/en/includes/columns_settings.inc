@@ -24,6 +24,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     });
 
     var exportColumns = ":visible:not(.noExport)";
+    var exportRows = ":visible:not(.noExport)";
     if( dt_parameters.hasOwnProperty("exportColumns") ){
         // A custom buttons configuration has been passed from the page
         exportColumns = dt_parameters["exportColumns"];
@@ -62,6 +63,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             text: _("CSV"),
             exportOptions: {
                 columns: exportColumns,
+                rows: exportRows,
                 format:  export_format
             },
         },
@@ -70,6 +72,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             text: _("Copy"),
             exportOptions: {
                 columns: exportColumns,
+                rows: exportRows,
                 format:  export_format
             },
         },
@@ -78,6 +81,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             text: _("Print"),
             exportOptions: {
                 columns: exportColumns,
+                rows: exportRows,
                 format:  export_format
             },
         }
@@ -90,6 +94,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 text: _("Excel"),
                 exportOptions: {
                     columns: exportColumns,
+                    rows: exportRows,
                     format:  export_format
                 },
             }
@@ -101,6 +106,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 text: _("Excel"),
                 exportOptions: {
                     columns: exportColumns,
+                    rows: exportRows,
                     format:  export_numeric
                 },
             }
@@ -131,7 +137,8 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 titleAttr: _("Columns settings"),
                 text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
                 exportOptions: {
-                    columns: exportColumns
+                    columns: exportColumns,
+                    rows: exportRows,
                 }
             }
         );
