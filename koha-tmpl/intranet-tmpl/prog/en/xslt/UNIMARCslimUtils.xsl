@@ -32,30 +32,127 @@
     <span class="results_summary publication">
       <span class="label">Publication: </span>
       <xsl:for-each select="marc:datafield[@tag=210]">
-        <span>
+        <xsl:if test="not (position() = 1)">
+          <br/>
+        </xsl:if>
+        <span class="valeur">
           <xsl:call-template name="addClassRtl" />
           <xsl:for-each select="marc:subfield">
             <xsl:choose>
+              <xsl:when test="@code='a'">
+                <xsl:value-of select="."/>
+                <xsl:if test="position() != last()">
+                  <xsl:text>: </xsl:text>
+                </xsl:if>
+              </xsl:when>
+              <xsl:when test="@code='b'">
+                <xsl:value-of select="."/>
+                <xsl:if test="position() != last()">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+              </xsl:when>
               <xsl:when test="@code='c' or @code='g'">
                 <xsl:if test="position()>1">
                   <xsl:text> : </xsl:text>
                 </xsl:if>
-                <xsl:value-of select="."/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:if test="position()>1">
+                <a>
+                  <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?idx=pb&amp;q=<xsl:value-of select="."/>
+                  </xsl:attribute>
+                  <xsl:attribute name="title"> Search for publisher "<xsl:value-of select="."/>
+                  <xsl:text>"</xsl:text>
+                  </xsl:attribute>
+                  <xsl:value-of select="."/>
+                </a>
+                <xsl:if test="position() != last()">
                   <xsl:text>, </xsl:text>
                 </xsl:if>
+              </xsl:when>
+              <xsl:when test="@code='d'">
                 <xsl:value-of select="."/>
-              </xsl:otherwise>
+                <xsl:if test="position() != last()">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+              </xsl:when>
             </xsl:choose>
           </xsl:for-each>
-          <xsl:if test="not (position() = last())">
-            <xsl:text> • </xsl:text>
-          </xsl:if>
         </span>
       </xsl:for-each>
     </span>
+  </xsl:template>
+
+  <xsl:template name="tag_214">
+    <xsl:for-each select="marc:datafield[@tag=214]">
+      <xsl:sort select="@ind2" data-type="number" />
+      <span class="results_summary publication">
+        <span class="label">
+          <xsl:choose>
+            <xsl:when test="@ind2=1">Production:
+	    </xsl:when>
+            <xsl:when test="@ind2=2">Distribution:
+	    </xsl:when>
+            <xsl:when test="@ind2=3">Manufacture:
+	    </xsl:when>
+            <xsl:when test="@ind2=4">
+              <xsl:choose>
+                <xsl:when test="substring(marc:subfield[@code='d'],1,1)='C'">Copyright date:
+		</xsl:when>
+                <xsl:when test="substring(marc:subfield[@code='d'],1,1)='P'">Protection date:
+		</xsl:when>
+                <xsl:otherwise>Copyright date / protection date:
+		</xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>Publication:
+	    </xsl:otherwise>
+          </xsl:choose>
+        </span>
+        <span>
+          <xsl:call-template name="addClassRtl" />
+          <xsl:for-each select="marc:subfield">
+            <xsl:choose>
+              <xsl:when test="@code='a'">
+                <xsl:value-of select="."/>
+                <xsl:if test="position() != last()">
+                  <xsl:text>: </xsl:text>
+                </xsl:if>
+              </xsl:when>
+              <xsl:when test="@code='b'">
+                <xsl:value-of select="."/>
+                <xsl:if test="not(position()=1)">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+              </xsl:when>
+              <xsl:when test="@code='c'">
+                <a>
+                  <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?idx=pb&amp;q=<xsl:value-of select="."/>
+                  </xsl:attribute>
+                  <xsl:attribute name="title"> Search for publisher "<xsl:value-of select="."/>
+                  <xsl:text>"</xsl:text>
+                  </xsl:attribute>
+                  <xsl:value-of select="."/>
+                </a>
+              </xsl:when>
+              <xsl:when test="@code='d'">
+                <xsl:if test="not(position()=1)">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:choose>
+                  <xsl:when test="substring(.,1,1)='C'">
+                    <xsl:value-of select="substring(.,2)"/>
+                  </xsl:when>
+                  <xsl:when test="substring(.,1,1)='P'">
+                    <xsl:value-of select="substring(.,2)"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:for-each>
+        </span>
+      </span>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="tag_215">
