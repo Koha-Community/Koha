@@ -54,7 +54,7 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {tools => 'manage_staged_marc'},
                  });
 
-my %cookies = parse CGI::Cookie($cookie);
+my %cookies = CGI::Cookie->fetch();
 our $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh;
 

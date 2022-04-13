@@ -46,10 +46,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
      flagsrequired   => { circulate => "circulate_remaining_permissions" },
 });
 
-
 my $fileID=$query->param('uploadedfileid');
-my %cookies = parse CGI::Cookie($cookie);
-my $sessionID = $cookies{'CGISESSID'}->value;
+
 ## 'Local' globals.
 our $dbh = C4::Context->dbh();
 

@@ -56,7 +56,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $fileID=$query->param('uploadedfileid');
 my $runinbackground = $query->param('runinbackground');
 my $completedJobID = $query->param('completedJobID');
-my %cookies = parse CGI::Cookie($cookie);
+my %cookies = CGI::Cookie->fetch();
 my $sessionID = $cookies{'CGISESSID'}->value;
 ## 'Local' globals.
 our $dbh = C4::Context->dbh();

@@ -83,9 +83,6 @@ $restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrar
 my $nextop="";
 my $display_items;
 
-my %cookies = parse CGI::Cookie($cookie);
-my $sessionID = $cookies{'CGISESSID'}->value;
-
 my @messages;
 
 if ( $op eq "action" ) {

@@ -79,7 +79,7 @@ $template->param(
     booksellerid => $booksellerid,
 );
 
-my %cookies = parse CGI::Cookie($cookie);
+my %cookies = CGI::Cookie->fetch();
 my $sessionID = $cookies{'CGISESSID'}->value;
 if ($completedJobID) {
     my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
