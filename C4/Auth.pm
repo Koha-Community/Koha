@@ -49,6 +49,7 @@ use C4::Auth_with_shibboleth qw( shib_ok get_login_shib login_shib_url logout_sh
 use Net::CIDR;
 use C4::Log qw( logaction );
 use Koha::CookieManager;
+use Koha::Token;
 
 # use utf8;
 
@@ -299,6 +300,7 @@ sub get_template_and_user {
         $template->param( loggedinusernumber => $borrowernumber ); # FIXME Should be replaced with logged_in_user.borrowernumber
         $template->param( logged_in_user     => $patron );
         $template->param( sessionID          => $sessionID );
+        $template->param( csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $sessionID }));
 
         if ( $in->{'type'} eq 'opac' ) {
             require Koha::Virtualshelves;
