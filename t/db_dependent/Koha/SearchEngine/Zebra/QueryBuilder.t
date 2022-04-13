@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
@@ -94,5 +94,30 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
     is( $limit, "(holdingbranch= $branchcodes[0] or holdingbranch= $branchcodes[1])", "branch limit expanded to holding branch");
     is( $limit_desc, "(holdingbranch: $branchcodes[0] or holdingbranch: $branchcodes[1])", "Limit description correctly expanded");
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
+
+};
+
+subtest "Handle search filters" => sub {
+    plan tests => 4;
+
+    my $qb;
+
+    ok(
+        $qb = Koha::SearchEngine::Zebra::QueryBuilder->new({ 'index' => 'biblios' }),
+        'Creating new query builder object for biblios'
+    );
+
+    my $filter = Koha::SearchFilter->new({
+        name => "test",
+        query => q|{"operands":["cat","bat","rat"],"indexes":["kw","ti","au"],"operators":["AND","OR"]}|,
+        limits => q|{"limits":["mc-itype,phr:BK","available"]}|,
+    })->store;
+    my $filter_id = $filter->id;
+
+    my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
+
+    is( $limit,q{(kw=(cat) AND ti=(bat) OR au=(rat)) and (mc-itype,phr=BK) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit correctly formed");
+    is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
+    is( $limit_desc,q{(kw=(cat) AND ti=(bat) OR au=(rat)) and (mc-itype,phr=BK) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit description is correctly expanded");
 
 };

@@ -22,12 +22,13 @@ use Test::Exception;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use List::Util qw( all );
 
 use Koha::Database;
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
+use Koha::SearchFilters;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -780,6 +781,31 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
     is( $limit, "(holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "branch limit expanded to holding branch");
     is( $limit_desc, "(holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "Limit description correctly expanded");
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
+
+};
+
+subtest "Handle search filters" => sub {
+    plan tests => 4;
+
+    my $qb;
+
+    ok(
+        $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new({ 'index' => 'biblios' }),
+        'Creating new query builder object for biblios'
+    );
+
+    my $filter = Koha::SearchFilter->new({
+        name => "test",
+        query => q|{"operands":["cat","bat","rat"],"indexes":["kw","ti","au"],"operators":["AND","OR"]}|,
+        limits => q|{"limits":["mc-itype,phr:BK","available"]}|,
+    })->store;
+    my $filter_id = $filter->id;
+
+    my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
+
+    is( $limit,q{(itype:("BK")) AND (onloan:false) AND (((cat) AND title:(bat) OR author:(rat)))},"Limit correctly formed");
+    is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
+    is( $limit_desc,q{(itype:("BK")) AND (onloan:false) AND (((cat) AND title:(bat) OR author:(rat)))},"Limit description is correctly expanded");
 
 };
 
