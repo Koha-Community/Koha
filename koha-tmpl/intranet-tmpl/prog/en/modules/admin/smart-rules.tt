@@ -1092,9 +1092,10 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
          $(document).ready(function() {
-            $("#default-circulation-rules").dataTable($.extend(true,{},dataTablesDefaults, {
+            KohaTable("default-circulation-rules", {
                 "aoColumnDefs": [
                     { "bVisible": false, "aTargets": [ 0,2 ] },
                     { "bSortable": false, "aTargets": ["_all"] }
@@ -1102,7 +1103,7 @@
                 "aaSortingFixed": [ [0,'asc'], [1,'asc'], [2,'asc'], [3,'asc'] ],
                 "bPaginate": false,
                 "bAutoWidth": false
-            }));
+            });
         });
 
         function clear_edit(){
