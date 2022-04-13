@@ -1896,7 +1896,6 @@ sub to_api_mapping {
         emailpro            => 'secondary_email',
         flags               => undef,    # permissions manipulation handled in /permissions
         gonenoaddress       => 'incorrect_address',
-        guarantorid         => 'guarantor_id',
         lastseen            => 'last_seen',
         lost                => 'patron_card_lost',
         opacnote            => 'opac_notes',
