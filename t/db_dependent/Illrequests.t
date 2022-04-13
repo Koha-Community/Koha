@@ -799,6 +799,18 @@ subtest 'Backend core methods' => sub {
               },
               "Backend confirm: arbitrary stage.");
 
+    # backend_get_update
+    $backend->mock(
+        'get_supplier_update',
+        sub {
+            my ( $self, $options ) = @_;
+            return $options;
+        }
+    );
+    $backend->mock('capabilities', sub { return sub { return 1; } });
+    is_deeply($illrq->backend_get_update({}), 1,
+              "Backend get_update method.");
+
     $config->set_always('partner_code', "ILLTSTLIB");
     $backend->set_always('metadata', { Test => "Foobar" });
     my $illbrn = $builder->build({
@@ -838,7 +850,7 @@ subtest 'Backend core methods' => sub {
 
 subtest 'Helpers' => sub {
 
-    plan tests => 21;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -881,6 +893,30 @@ subtest 'Helpers' => sub {
     my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
     $illrq_obj->_config($config);
     $illrq_obj->_backend($backend);
+
+    #attach_processors
+    my $type = 'test_type_1';
+    my $name = 'test_name_1';
+    my $update = Test::MockObject->new;
+    $update->set_isa('Koha::Illrequest::SupplierUpdate');
+    $update->{source_type} = $type;
+    $update->{source_name} = $name;
+    $update->{processors} = [];
+    $update->mock('attach_processor', sub {
+        my ( $self, $to_attach ) = @_;
+        push @{$self->{processors}}, $to_attach;
+    });
+    my $processor = Test::MockObject->new;
+    $processor->{target_source_type} = $type;
+    $processor->{target_source_name} = $name;
+    $illrq_obj->init_processors();
+    $illrq_obj->push_processor($processor);
+    $illrq_obj->attach_processors($update);
+    is_deeply(
+        scalar @{$update->{processors}},
+        1,
+        'attaching processors as appropriate works'
+    );
 
     # getPrefix
     $config->set_series('getPrefixes',
@@ -932,6 +968,27 @@ subtest 'Helpers' => sub {
         "Correct return when notice created"
     );
     is($notice, 'ILL_PICKUP_READY' ,"Notice is correctly created");
+
+    # ill update notice, passes additional text parameter
+    my $attr_update = Koha::MessageAttributes->find({ message_name => 'Ill_update' });
+    C4::Members::Messaging::SetMessagingPreference({
+        borrowernumber => $patron->{borrowernumber},
+        message_attribute_id => $attr_update->message_attribute_id,
+        message_transport_types => ['email']
+    });
+    my $return_patron_update = $illrq_obj->send_patron_notice('ILL_REQUEST_UPDATE', 'Some additional text');
+    my $notice_update = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_REQUEST_UPDATE',
+            message_transport_type => 'email',
+            borrowernumber => $illrq_obj->borrowernumber
+        })->next()->letter_code;
+    is_deeply(
+        $return_patron_update,
+        { result => { success => ['email'], fail => [] } },
+        "Correct return when notice created"
+    );
+    is($notice_update, 'ILL_REQUEST_UPDATE' ,"Notice is correctly created");
+
 
     my $return_patron_fail = $illrq_obj->send_patron_notice();
     is_deeply(
@@ -1011,6 +1068,13 @@ subtest 'Helpers' => sub {
     is(
         $not->{content},"Thepatronforinterlibraryloansrequest" . $illrq_obj->id . ",withthefollowingdetails,hasrequestedcancellationofthisILLrequest:-author:myauthor-title:mytitle",
         'Correct content returned from get_notice with metadata correctly ordered'
+    );
+
+    $illrq_obj->append_to_note('Some text');
+    like(
+        $illrq_obj->notesstaff,
+        qr/Some text$/,
+        'appending to a note works'
     );
 
     $schema->storage->txn_rollback;
