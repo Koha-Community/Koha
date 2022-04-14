@@ -1231,25 +1231,104 @@ sub buildQuery {
         $query = "ccl=$query" if $cclq;
     }
 
+    # add limits
+    my %group_OR_limits;
+    my $availability_limit;
+    foreach my $this_limit (@limits) {
+        next unless $this_limit;
+        if ( $this_limit =~ /available/ ) {
+#
+## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
+## In English:
+## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
+            $availability_limit .=
+"( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )";
+            $limit_cgi  .= "&limit=available";
+            $limit_desc .= "";
+        }
+
+        # group_OR_limits, prefixed by mc-
+        # OR every member of the group
+        elsif ( $this_limit =~ /mc/ ) {
+            my ($k,$v) = split(/:/, $this_limit,2);
+            if ( $k !~ /mc-i(tem)?type/ ) {
+                # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
+                $this_limit =~ tr/"//d;
+                $this_limit = $k.':"'.$v.'"';
+            }
+
+            $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
+            $limit_desc      .= " or " if $group_OR_limits{$k};
+            $group_OR_limits{$k} .= "$this_limit";
+            $limit_cgi       .= "&limit=" . uri_escape_utf8($this_limit);
+            $limit_desc      .= " $this_limit";
+        }
+        elsif ( $this_limit =~ '^multibranchlimit:|^branch:' ) {
+            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
+            $limit .= " and " if $limit || $query;
+            my $branchfield  = C4::Context->preference('SearchLimitLibrary');
+            my @branchcodes;
+            if(  $this_limit =~ '^multibranchlimit:' ){
+                my ($group_id) = ( $this_limit =~ /^multibranchlimit:(.*)$/ );
+                my $search_group = Koha::Library::Groups->find( $group_id );
+                @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
+                @branchcodes = sort { $a cmp $b } @branchcodes;
+            } else {
+                @branchcodes = ( $this_limit =~ /^branch:(.*)$/ );
+            }
+
+            if (@branchcodes) {
+                if ( $branchfield eq "homebranch" ) {
+                    $this_limit = sprintf "(%s)", join " or ", map { 'homebranch: ' . $_ } @branchcodes;
+                }
+                elsif ( $branchfield eq "holdingbranch" ) {
+                    $this_limit = sprintf "(%s)", join " or ", map { 'holdingbranch: ' . $_ } @branchcodes;
+                }
+                else {
+                    $this_limit =  sprintf "(%s or %s)",
+                      join( " or ", map { 'homebranch: ' . $_ } @branchcodes ),
+                      join( " or ", map { 'holdingbranch: ' . $_ } @branchcodes );
+                }
+            }
+            $limit .= "$this_limit";
+            $limit_desc .= " $this_limit";
+        } elsif ( $this_limit =~ '^search_filter:' ) {
+            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
+            my ($filter_id) = ( $this_limit =~ /^search_filter:(.*)$/ );
+            my $search_filter = Koha::SearchFilters->find( $filter_id );
+            next unless $search_filter;
+            my $expanded = $search_filter->expand_filter;
+            my ( $error, undef, undef, undef, undef, $fixed_limit, undef, undef, undef ) = buildQuery ( undef, undef, undef, $expanded, undef, undef, $lang);
+            $limit .= " and " if $limit || $query;
+            $limit .= "$fixed_limit";
+            $limit_desc .= " $limit";
+        }
+
+        # Regular old limits
+        else {
+            $limit .= " and " if $limit || $query;
+            $limit      .= "$this_limit";
+            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
+            $limit_desc .= " $this_limit";
+        }
+    }
+    foreach my $k (keys (%group_OR_limits)) {
+        $limit .= " and " if ( $query || $limit );
+        $limit .= "($group_OR_limits{$k})";
+    }
+    if ($availability_limit) {
+        $limit .= " and " if ( $query || $limit );
+        $limit .= "($availability_limit)";
+    }
+
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
 # DIAGNOSTIC ONLY!!
     if ( $query =~ /^ccl=/ ) {
         my $q=$';
         # This is needed otherwise ccl= and &limit won't work together, and
         # this happens when selecting a subject on the opac-detail page
-        @limits = grep {!/^$/} @limits;
         my $original_q = $q; # without available part
-        unless ( grep { $_ eq 'available' } @limits ) {
-            $q =~ s| and \( \(allrecords,AlwaysMatches=''\) and \(not-onloan-count,st-numeric >= 1\) and \(lost,st-numeric=0\) \)||;
-            $original_q = $q;
-        }
-        if ( @limits ) {
-            if ( grep { $_ eq 'available' } @limits ) {
-                $q .= q| and ( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )|;
-                @limits = grep {!/^available$/} @limits;
-            }
-            $q .= ' and '.join(' and ', @limits) if @limits;
-        }
+        $q .= $limit;
         return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $original_q, '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
@@ -1446,85 +1525,6 @@ sub buildQuery {
     }
     Koha::Logger->get->debug("QUERY BEFORE LIMITS: >$query<");
 
-    # add limits
-    my %group_OR_limits;
-    my $availability_limit;
-    foreach my $this_limit (@limits) {
-        next unless $this_limit;
-        if ( $this_limit =~ /available/ ) {
-#
-## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
-## In English:
-## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
-            $availability_limit .=
-"( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )";
-            $limit_cgi  .= "&limit=available";
-            $limit_desc .= "";
-        }
-
-        # group_OR_limits, prefixed by mc-
-        # OR every member of the group
-        elsif ( $this_limit =~ /mc/ ) {
-            my ($k,$v) = split(/:/, $this_limit,2);
-            if ( $k !~ /mc-i(tem)?type/ ) {
-                # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
-                $this_limit =~ tr/"//d;
-                $this_limit = $k.':"'.$v.'"';
-            }
-
-            $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
-            $limit_desc      .= " or " if $group_OR_limits{$k};
-            $group_OR_limits{$k} .= "$this_limit";
-            $limit_cgi       .= "&limit=" . uri_escape_utf8($this_limit);
-            $limit_desc      .= " $this_limit";
-        }
-        elsif ( $this_limit =~ '^multibranchlimit:|^branch:' ) {
-            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
-            $limit .= " and " if $limit || $query;
-            my $branchfield  = C4::Context->preference('SearchLimitLibrary');
-            my @branchcodes;
-            if(  $this_limit =~ '^multibranchlimit:' ){
-                my ($group_id) = ( $this_limit =~ /^multibranchlimit:(.*)$/ );
-                my $search_group = Koha::Library::Groups->find( $group_id );
-                @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
-                @branchcodes = sort { $a cmp $b } @branchcodes;
-            } else {
-                @branchcodes = ( $this_limit =~ /^branch:(.*)$/ );
-            }
-
-            if (@branchcodes) {
-                if ( $branchfield eq "homebranch" ) {
-                    $this_limit = sprintf "(%s)", join " or ", map { 'homebranch: ' . $_ } @branchcodes;
-                }
-                elsif ( $branchfield eq "holdingbranch" ) {
-                    $this_limit = sprintf "(%s)", join " or ", map { 'holdingbranch: ' . $_ } @branchcodes;
-                }
-                else {
-                    $this_limit =  sprintf "(%s or %s)",
-                      join( " or ", map { 'homebranch: ' . $_ } @branchcodes ),
-                      join( " or ", map { 'holdingbranch: ' . $_ } @branchcodes );
-                }
-            }
-            $limit .= "$this_limit";
-            $limit_desc .= " $this_limit";
-        }
-
-        # Regular old limits
-        else {
-            $limit .= " and " if $limit || $query;
-            $limit      .= "$this_limit";
-            $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
-            $limit_desc .= " $this_limit";
-        }
-    }
-    foreach my $k (keys (%group_OR_limits)) {
-        $limit .= " and " if ( $query || $limit );
-        $limit .= "($group_OR_limits{$k})";
-    }
-    if ($availability_limit) {
-        $limit .= " and " if ( $query || $limit );
-        $limit .= "($availability_limit)";
-    }
 
     # Normalize the query and limit strings
     # This is flawed , means we can't search anything with : in it
