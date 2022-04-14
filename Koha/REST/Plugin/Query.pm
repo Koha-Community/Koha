@@ -240,7 +240,11 @@ Merges parameters from $q_params into $filtered_params.
 
             my $spec = $args->{spec} // {};
 
-            my $embed_spec   = $spec->{'x-koha-embed'};
+            my $embed_spec;
+            for my $param (@{$spec->{parameters}}) {
+                next unless $param->{name} eq 'x-koha-embed';
+                $embed_spec = $param->{items}->{enum};
+            }
             my $embed_header = $c->req->headers->header('x-koha-embed');
 
             Koha::Exceptions::BadParameter->throw("Embedding objects is not allowed on this endpoint.")
