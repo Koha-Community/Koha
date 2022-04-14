@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -102,6 +102,41 @@ subtest 'q handling tests' => sub {
 
     $t->get_ok("//$userid:$password@/api/v1/cities" => { 'x-koha-request-id' => 100 } )
       ->header_is( 'x-koha-request-id' => 100 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'x-koha-embed tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }     # superlibrarian
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron_id = $builder->build_object( { class => 'Koha::Patrons' } )->id;
+
+    my $res = $t->get_ok(
+        "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}"
+          => { 'x-koha-embed' => 'extended_attributes' } )->status_is(200)
+      ->tx->res->json;
+
+    is( scalar @{$res}, 1, 'One patron returned' );
+
+    $res = $t->get_ok(
+        "//$userid:$password@/api/v1/patrons?q={\"me.patron_id\":$patron_id}" => {
+            'x-koha-embed' =>
+              'extended_attributes,custom_bad_embed,another_bad_embed'
+        }
+    )->status_is(400);
 
     $schema->storage->txn_rollback;
 };
