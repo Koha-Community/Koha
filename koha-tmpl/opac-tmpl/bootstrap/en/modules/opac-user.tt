@@ -71,7 +71,7 @@
                         </div>
                     [% END %]
 
-                    [% IF ( borrower.blockedonfines ) %]
+                    [% IF ( borrower.blockedonfines && Koha.Preference('OPACHoldRequests') ) %]
                         <div class="alert alert-warning" id="blockedonfines">
                             <strong>Please note:</strong><span> Your account has outstanding fees & charges of [% amountoutstanding | $Price %]. Holds are blocked because your fine balance is over the limit.</span>
                         </div>
