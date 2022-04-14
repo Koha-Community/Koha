@@ -73,8 +73,12 @@ sub checkout {
     my ($self) = @_;
 
     my $checkout_rs = $self->_result->checkout;
-    return unless $checkout_rs;
-    return Koha::Checkout->_new_from_dbic($checkout_rs);
+    return Koha::Checkout->_new_from_dbic($checkout_rs)
+        if $checkout_rs;
+
+    $checkout_rs = $self->_result->old_checkout;
+    return Koha::Old::Checkout->_new_from_dbic($checkout_rs)
+        if $checkout_rs;
 }
 
 =head3 old_checkout
