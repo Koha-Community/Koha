@@ -83,7 +83,11 @@
                                                 </select>
                                             </li>[% END %]
 
-                                            <li><label for="expirationdate">Recall not needed after:</label> <input type="text" name="expirationdate" id="expirationdate" size="20"> <a id="cleartext" style="display:none;">Clear text</a><span id="expiration-hint">[% INCLUDE 'date-format.inc' %]</span></li>
+                                            <li>
+                                                <label for="expirationdate">Recall not needed after:</label>
+                                                <input type="text" name="expirationdate" id="expirationdate" size="20" class="flatpickr futuredate" />
+                                                <span id="expiration-hint">[% INCLUDE 'date-format.inc' %]</span>
+                                            </li>
                                             <li class="level-option" style="display:none;"><label for="bibliolevel">Recall next available item</label> <input type="radio" name="type" id="bibliolevel" value="bibliolevel" checked></li>
                                             <li class="level-option" style="display:none;"><label for="itemlevel">Recall a specific item</label> <input type="radio" name="type" id="itemlevel" value="itemlevel"></li>
 
@@ -198,9 +202,6 @@
             if ( $("#bibliolevel").is(':checked') ){
                 $("#items").hide();
             }
-        });
-        $("#expirationdate").datepicker({
-            minDate: 0,
         });
     });
 </script>
