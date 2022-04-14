@@ -255,7 +255,7 @@ sub output_pref {
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     if ( $dt->ymd !~ /^9999/ ) {
         my $tz = $dateonly ? DateTime::TimeZone->new(name => 'floating') : C4::Context->tz;
-        $dt->set_time_zone( $tz );
+        eval { $dt->set_time_zone( $tz ); }
     }
 
     my $pref =
