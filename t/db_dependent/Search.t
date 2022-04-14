@@ -154,6 +154,8 @@ $contextmodule->mock('preference', sub {
         return 'branch';
     } elsif ($pref eq 'SearchLimitLibrary') {
         return 'both';
+    } elsif ($pref eq 'UseRecalls') {
+        return '0';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
