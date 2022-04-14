@@ -212,9 +212,9 @@ isa_ok( $dt, 'DateTime', 'dt_from_string should return a DateTime object if a DS
 # Test output_pref for invalid local time explosion
 $dt = DateTime->new(
     year       => 2017,
-    month      => 03,
+    month      => 3,
     day        => 26,
-    hour       => 01,
+    hour       => 1,
     minute     => 35,
 );
 $module_context->mock(
