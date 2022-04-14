@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 79;
+use Test::More tests => 80;
 
 use Test::MockModule;
 use Test::Warn;
@@ -208,6 +208,22 @@ $module_context->mock(
 
 $dt = dt_from_string('2014-03-30 02:00:00');
 isa_ok( $dt, 'DateTime', 'dt_from_string should return a DateTime object if a DST is given' );
+
+# Test output_pref for invalid local time explosion
+$dt = DateTime->new(
+    year       => 2017,
+    month      => 03,
+    day        => 26,
+    hour       => 01,
+    minute     => 35,
+);
+$module_context->mock(
+    'tz',
+    sub {
+        return DateTime::TimeZone->new( name => 'Europe/London' );
+    }
+);
+is( output_pref( { dt => $dt, dateonly => 0 } ), '03/26/2017 01:35', 'output_pref should return even if an invalid DST time is passed' );
 
 # Test dt_from_string
 t::lib::Mocks::mock_preference('dateformat', 'metric');
