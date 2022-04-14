@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Exception;
 use Test::Warn;
 
@@ -1134,6 +1134,25 @@ subtest 'recalls() tests' => sub {
     is( $patron->recalls->count,                                                                          4, "Correctly gets this patron's recalls" );
     is( $patron->recalls->filter_by_current->count,                                                       3, "Correctly gets this patron's active recalls" );
     is( $patron->recalls->filter_by_current->search( { biblionumber => $biblio1->biblionumber } )->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'encode_secret and decoded_secret' => sub {
+    plan tests => 5;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config('encryption_key', 't0P_secret');
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    is( $patron->decoded_secret, undef, 'TestBuilder does not initialize it' );
+    $patron->secret(q{});
+    is( $patron->decoded_secret, q{}, 'Empty string case' );
+
+    $patron->encode_secret('encrypt_me'); # Note: lazy testing; should be base32 string normally.
+    is( length($patron->secret) > 0, 1, 'Secret length' );
+    isnt( $patron->secret, 'encrypt_me', 'Encrypted column' );
+    is( $patron->decoded_secret, 'encrypt_me', 'Decrypted column' );
 
     $schema->storage->txn_rollback;
 };

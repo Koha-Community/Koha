@@ -36,6 +36,7 @@ use Koha::CirculationRules;
 use Koha::Club::Enrollments;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Encryption;
 use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::Old::Checkouts;
@@ -2128,6 +2129,40 @@ sub can_patron_change_staff_only_lists {
     my ( $self, $params ) = @_;
     return 1 if C4::Auth::haspermission( $self->userid, { 'catalogue' => 1 });
     return 0;
+}
+
+=head3
+
+    $patron->encode_secret($secret32);
+
+    Secret (TwoFactorAuth expects it in base32 format) is encrypted.
+    You still need to call ->store.
+
+=cut
+
+sub encode_secret {
+    my ( $self, $secret ) = @_;
+    if( $secret ) {
+        return $self->secret( Koha::Encryption->new->encrypt_hex($secret) );
+    }
+    return $self->secret($secret);
+}
+
+=head3
+
+    my $secret32 = $patron->decoded_secret;
+
+    Decode the patron secret. We expect to get back a base32 string, but this
+    is not checked here. Caller of encode_secret is responsible for that.
+
+=cut
+
+sub decoded_secret {
+    my ( $self ) = @_;
+    if( $self->secret ) {
+        return Koha::Encryption->new->decrypt_hex( $self->secret );
+    }
+    return $self->secret;
 }
 
 =head2 Internal methods
