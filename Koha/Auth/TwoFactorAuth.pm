@@ -68,7 +68,7 @@ sub new {
     } elsif( $secret ) {
         $type = 'secret';
     } elsif( $patron->secret ) {
-        $secret32 = $patron->secret; # saved already in base32
+        $secret32 = $patron->decoded_secret; # saved already in base32
     } else {
         Koha::Exceptions::MissingParameter->throw("No secret passed or patron has no secret");
     }

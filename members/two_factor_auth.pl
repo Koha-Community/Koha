@@ -69,7 +69,7 @@ if ( $op eq 'register-2FA' ) {
 
     if ($verified) {
         # FIXME Generate a (new?) secret
-        $logged_in_user->secret($secret32);
+        $logged_in_user->encode_secret($secret32);
         $logged_in_user->auth_method('two-factor')->store;
         $op = 'registered';
         if( $logged_in_user->notice_email_address ) {

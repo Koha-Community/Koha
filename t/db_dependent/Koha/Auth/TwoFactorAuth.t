@@ -42,10 +42,10 @@ subtest 'new' => sub {
         'Croaked on wrong encoding';
 
     # Test passing secret or secret32 (converted to base32)
-    $patron->secret('nv4v65dpobpxgzldojsxiii'); # this is base32 already for 'my_top_secret!'
+    $patron->encode_secret('nv4v65dpobpxgzldojsxiii'); # this is base32 already for 'my_top_secret!'
     my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron });
-    is( $auth->secret32, $patron->secret, 'Base32 secret as expected' );
-    $auth->code( $patron->secret ); # trigger conversion by passing base32 to code
+    is( $auth->secret32, $patron->decoded_secret, 'Base32 secret as expected' );
+    $auth->code( $patron->decoded_secret ); # trigger conversion by passing base32 to code
     is( $auth->secret, 'my_top_secret!', 'Decoded secret fine too' );
     # The other way around
     $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron, secret => 'my_top_secret!' });
@@ -64,7 +64,7 @@ subtest 'qr_code' => sub {
 
     t::lib::Mocks::mock_preference('TwoFactorAuthentication', 1);
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    $patron->secret('you2wont2guess2it'); # this is base32 btw
+    $patron->encode_secret('you2wont2guess2it'); # this is base32 btw
     $patron->auth_method('two-factor');
     $patron->store;
 
@@ -76,7 +76,7 @@ subtest 'qr_code' => sub {
     $auth->clear;
 
     # Changing the secret should generate different data, right?
-    $patron->secret('no3really3not3cracked'); # base32
+    $patron->encode_secret('no3really3not3cracked'); # base32
     $patron->store;
     $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron });
     my $img_data02 = $auth->qr_code;
