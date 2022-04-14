@@ -145,7 +145,6 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
             my $attributes = $args->{attributes};
             my $result_set = $args->{result_set};
             my $embed = $c->stash('koha.embed');
-
             return unless defined $embed;
 
             my @prefetches;
@@ -229,41 +228,23 @@ Merges parameters from $q_params into $filtered_params.
 
 =head3 stash_embed
 
-    $c->stash_embed( $c->match->endpoint->pattern->defaults->{'openapi.op_spec'} );
+    $c->stash_embed( );
 
 =cut
 
     $app->helper(
         'stash_embed' => sub {
 
-            my ( $c, $args ) = @_;
-
-            my $spec = $args->{spec} // {};
-
-            my $embed_spec;
-            for my $param (@{$spec->{parameters}}) {
-                next unless $param->{name} eq 'x-koha-embed';
-                $embed_spec = $param->{items}->{enum};
-            }
+            my ( $c ) = @_;
             my $embed_header = $c->req->headers->header('x-koha-embed');
-
-            Koha::Exceptions::BadParameter->throw("Embedding objects is not allowed on this endpoint.")
-                if $embed_header and !defined $embed_spec;
-
-            if ( $embed_header ) {
+            if ($embed_header) {
                 my $THE_embed = {};
                 foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                    my $matches = grep {lc $_ eq lc $embed_req} @{ $embed_spec };
-
-                    Koha::Exceptions::BadParameter->throw(
-                        error => 'Embeding '.$embed_req. ' is not authorised. Check your x-koha-embed headers or remove it.'
-                    ) unless $matches;
-
-                    _merge_embed( _parse_embed($embed_req), $THE_embed);
+                    _merge_embed( _parse_embed($embed_req), $THE_embed );
                 }
 
                 $c->stash( 'koha.embed' => $THE_embed )
-                    if $THE_embed;
+                  if $THE_embed;
             }
 
             return $c;
