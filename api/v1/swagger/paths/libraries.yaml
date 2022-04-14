@@ -133,8 +133,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
-    x-koha-embed:
-      - smtp_server
   post:
     x-mojo-to: Libraries#add
     operationId: addLibrary
@@ -218,8 +216,6 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
-    x-koha-embed:
-      - smtp_server
   put:
     x-mojo-to: Libraries#update
     operationId: updateLibrary

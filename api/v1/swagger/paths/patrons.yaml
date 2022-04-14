@@ -392,11 +392,6 @@
         - tools: "label_creator"
         - serials: "routing"
         - acquisition: "order_manage"
-    x-koha-embed:
-      - extended_attributes
-      - checkouts+count
-      - overdues+count
-      - account_balance
   post:
     x-mojo-to: Patrons#add
     operationId: addPatron
@@ -506,8 +501,6 @@
     x-koha-authorization:
       permissions:
         borrowers: edit_borrowers
-    x-koha-embed:
-      - extended_attributes
   put:
     x-mojo-to: Patrons#update
     operationId: updatePatron

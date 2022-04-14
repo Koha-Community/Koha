@@ -100,20 +100,6 @@
         acquisition:
           - order_manage
           - order_manage_all
-    x-koha-embed:
-      - basket
-      - basket.basket_group
-      - basket.creator
-      - biblio
-      - biblio.active_orders+count
-      - biblio.holds+count
-      - biblio.items+count
-      - biblio.suggestions.suggester
-      - fund
-      - current_item_level_holds+count
-      - invoice
-      - items
-      - subscription
   post:
     x-mojo-to: Acquisitions::Orders#add
     operationId: addOrder
@@ -228,20 +214,6 @@
     x-koha-authorization:
       permissions:
         acquisition: order_manage
-    x-koha-embed:
-      - basket
-      - basket.basket_group
-      - basket.creator
-      - biblio
-      - biblio.active_orders+count
-      - biblio.holds+count
-      - biblio.items+count
-      - biblio.suggestions.suggester
-      - fund
-      - current_item_level_holds+count
-      - invoice
-      - items
-      - subscription
   put:
     x-mojo-to: Acquisitions::Orders#update
     operationId: updateOrder

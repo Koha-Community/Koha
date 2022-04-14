@@ -156,11 +156,6 @@
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
-    x-koha-embed:
-      - issuer
-      - item
-      - patron
-      - library
 "/biblios/{biblio_id}/items":
   get:
     x-mojo-to: Biblios#get_items

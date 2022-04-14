@@ -57,8 +57,6 @@
     x-koha-authorization:
       permissions:
         cash_management: cashup
-    x-koha-embed:
-      - manager
 "/cashups/{cashup_id}":
   get:
     x-mojo-to: CashRegisters::Cashups#get
@@ -107,5 +105,3 @@
     x-koha-authorization:
       permissions:
         cash_management: cashup
-    x-koha-embed:
-      - summary
