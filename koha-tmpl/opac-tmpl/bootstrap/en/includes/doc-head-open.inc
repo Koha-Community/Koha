@@ -3,10 +3,17 @@
 
 [% USE raw %]
 [% USE Koha %]
+[% USE Dumper( Indent=1, SortKeys=1 ) %]
+
+[% IF Koha.Preference('DumpSearchQueryTemplate') %]
+    <!-- SearchQuery
+        [% Dumper.dump( search_query ) | $raw %]
+    -->
+[% END %]
+
 [% IF Koha.Preference('DumpTemplateVarsOpac') %]
     [% TRY %]
         [% USE Stash %]
-        [% USE Dumper ( Indent=1, SortKeys=1 ) %]
         <!--
         [% FILTER replace('<!--', '<!- -') %]
             [% FILTER replace('-->', '- ->') %]
