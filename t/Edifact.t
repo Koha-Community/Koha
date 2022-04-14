@@ -80,8 +80,8 @@ my $branch = $test_line->girfield('branch');
 is( $branch, 'ELIB', "branch returned" );
 my $fund_allocation = $test_line->girfield('fund_allocation');
 is( $fund_allocation, '660BOO_2013', "fund_allocation returned" );
-my $collection_code = $test_line->girfield('collection_code');
-is( $collection_code, 'EBOO', "collection_code returned" );
+my $sequence_code = $test_line->girfield('sequence_code');
+is( $sequence_code, 'EBOO', "sequence_code returned" );
 
 #my $shelfmark = $test_line->girfield('shelfmark');
 #my $classification = $test_line->girfield('classification');
@@ -118,8 +118,8 @@ is( $y, 'REF', 'Copy fund returned' );
 $y = $ol->girfield( 'branch', 4 );
 is( $y, 'SOU', 'Copy Branch returned' );
 
-$y = $ol->girfield( 'collection_code', 4 );
-is( $y, 'ANF', 'Collection code returned' );
+$y = $ol->girfield( 'sequence_code', 4 );
+is( $y, 'ANF', 'Sequence code returned' );
 
 $y = $ol->girfield( 'stock_category', 4 );
 is( $y, 'RS', 'Copy stock category returned' );
