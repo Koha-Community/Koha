@@ -637,8 +637,14 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'ccl=an:42' ], [], ['available'], [], 0, 'en');
-    is( $query, "an:42 and ( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )", 'buildQuery should add the available part to the query if requested with ccl' );
+    is( $query, "an:42 and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))", 'buildQuery should add the available part to the query if requested with ccl' );
     is( $query_desc, 'an:42', 'buildQuery should remove the available part from the query' );
+
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $query_type ) = buildQuery([], [ 'ccl=an:42' ], [], ['branch:CPL'], [], 0, 'en');
+    is( $query, "an:42 and (homebranch: CPL or holdingbranch: CPL)", 'buildQuery should expand the limit as necessary for ccl queries' );
+    is( $query_desc, 'an:42', 'buildQuery should not add limit to limit desc for ccl queries' );
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
@@ -903,7 +909,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 90;
+    plan tests => 92;
     run_marc21_search_tests();
 };
 
