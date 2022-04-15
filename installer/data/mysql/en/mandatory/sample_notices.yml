@@ -554,12 +554,42 @@ tables:
             - "Thank you."
 
         - module: circulation
+          code: CHECKIN
+          branchcode: ""
+          name: "Item check-in (digest)"
+          is_html: 0
+          title: "Check-ins"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "The following items have been checked in:"
+            - "----"
+            - "[% biblio.title %]"
+            - "----"
+            - "Thank you."
+
+        - module: circulation
           code: CHECKOUT
           branchcode: ""
           name: "Item check-out (digest)"
           is_html: 0
           title: "Checkouts"
           message_transport_type: email
+          lang: default
+          content:
+            - "The following items have been checked out:"
+            - "----"
+            - "[% biblio.title %]"
+            - "----"
+            - "Thank you for visiting [% branch.branchname %]."
+
+        - module: circulation
+          code: CHECKOUT
+          branchcode: ""
+          name: "Item check-out (digest)"
+          is_html: 0
+          title: "Checkouts"
+          message_transport_type: sms
           lang: default
           content:
             - "The following items have been checked out:"
@@ -595,6 +625,21 @@ tables:
             - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
 
         - module: circulation
+          code: DUE
+          branchcode: ""
+          name: "Item due reminder"
+          is_html: 0
+          title: "Item due reminder"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item is now due:"
+            - ""
+            - "<<biblio.title>>"
+
+        - module: circulation
           code: DUEDGST
           branchcode: ""
           name: "Item due reminder (digest)"
@@ -608,6 +653,21 @@ tables:
             - "The following item(s) are now due:"
             - ""
             - "<<items.content>>"
+            - ""
+            - "Thank you."
+
+        - module: circulation
+          code: DUEDGST
+          branchcode: ""
+          name: "Item due reminder (digest)"
+          is_html: 0
+          title: "Item due reminder"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have <<count>> item(s) that are now due"
             - ""
             - "Thank you."
 
@@ -779,6 +839,21 @@ tables:
             - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
 
         - module: circulation
+          code: PREDUE
+          branchcode: ""
+          name: "Advance notice of item due"
+          is_html: 0
+          title: "Advance notice of item due"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item will be due soon:"
+            - ""
+            - "<<biblio.title>>"
+
+        - module: circulation
           code: PREDUEDGST
           branchcode: ""
           name: "Advance notice of item due (digest)"
@@ -792,6 +867,21 @@ tables:
             - "The following item(s) will be due soon:"
             - ""
             - "<<items.content>>"
+            - ""
+            - "Thank you."
+
+        - module: circulation
+          code: PREDUEDGST
+          branchcode: ""
+          name: "Advance notice of item due (digest)"
+          is_html: 0
+          title: "Advance notice of item due"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have <<count>> item(s) that will be due soon."
             - ""
             - "Thank you."
 
@@ -1680,6 +1770,19 @@ tables:
             - "<<branches.branchaddress2>>"
             - "<<branches.branchaddress3>>"
             - "<<branches.branchcity>> <<branches.branchzip>>"
+
+        - module: reserves
+          code: HOLD
+          branchcode: ""
+          name: "Hold available for pickup"
+          is_html: 0
+          title: "Hold available for pickup at <<branches.branchname>>"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "Your hold for <<biblio.title>> is available for pickup."
 
         - module: reserves
           code: HOLD
