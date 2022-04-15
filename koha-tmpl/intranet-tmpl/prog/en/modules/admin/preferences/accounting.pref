@@ -34,6 +34,14 @@ Accounting:
                 0: "Don't use"
             - " cash registers with the accounting system to track payments."
         -
+            - "When collecting a payment, "
+            - pref: RequireCashRegister
+              default: no
+              choices:
+                no: "require a cash register only when the CASH payment type is selected"
+                yes: "always require a cash register"
+            - " (Requires UseCashRegisters)"
+        -
             - pref: EnablePointOfSale
               default: no
               choices:

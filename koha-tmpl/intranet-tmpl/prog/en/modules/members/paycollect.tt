@@ -187,11 +187,26 @@
 
     [% IF Koha.Preference('UseCashRegisters') %]
     <li>
-        <label for="cash_register">Cash register: </label>
-        <select name="cash_register" id="cash_register">
+        [% IF Koha.Preference('RequireCashRegister') %]
+            <label for="cash_register" class="required">
+        [% ELSE %]
+            <label for="cash_register">
+        [% END %]
+            Cash register:
+        </label>
+
+        [% IF Koha.Preference('RequireCashRegister') %]
+            <select name="cash_register" id="cash_register" required>
+        [% ELSE %]
+            <select name="cash_register" id="cash_register">
+        [% END %]
             <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
             [% PROCESS options_for_registers %]
         </select>
+
+        [% IF Koha.Preference('RequireCashRegister') %]
+            <span class="required">Required</span>
+        [% END %]
     </li>
     [% END %]
 </ol>
@@ -420,9 +435,13 @@
                     },
                     [% IF Koha.Preference('UseCashRegisters') %]
                     cash_register: {
-                        required: function() {
-                            return $('#payment_type').val() == 'CASH'
-                        }
+                        [% IF Koha.Preference('RequireCashRegister') %]
+                            required: true
+                        [% ELSE %]
+                            required: function() {
+                                return $('#payment_type').val() == 'CASH'
+                            }
+                        [% END %]
                     }
                     [% END %]
                 },

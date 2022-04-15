@@ -569,6 +569,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RentalsInNoissuesCharge','1',NULL,'Rental charges block checkouts (added to noissuescharge).','YesNo'),
 ('ReplyToDefault','',NULL,'Use this email address as the replyto in emails','Free'),
 ('ReportsLog','0',NULL,'If ON, log information about reports.','YesNo'),
+('RequireCashRegister','0',NULL,'Require a cash register when collecting a payment','YesNo'),
 ('RequirePaymentType','0','','Require staff to select a payment type when a payment is made','YesNo'),
 ('RequireStrongPassword','1','','Require a strong login password for staff and patrons','YesNo'),
 ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice'),
