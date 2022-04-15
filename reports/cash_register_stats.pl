@@ -108,7 +108,8 @@ if ($do_it) {
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
         LEFT JOIN borrowers m ON (al.manager_id = m.borrowernumber)
-        LEFT JOIN branches br ON (br.branchcode = m.branchcode )
+        LEFT JOIN cash_registers cr ON (al.register_id = cr.id)
+        LEFT JOIN branches br ON (br.branchcode = cr.branch)
         LEFT JOIN items i ON (i.itemnumber = al.itemnumber)
         LEFT JOIN biblio bi ON (bi.biblionumber = i.biblionumber)
         LEFT JOIN account_credit_types act ON (al.credit_type_code = act.code)
