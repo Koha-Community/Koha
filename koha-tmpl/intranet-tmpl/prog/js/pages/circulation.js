@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     $('#patronlists').tabs({
         activate: function( event, ui ) {
-            $('#'+ui.newTab.context.id).click();
+            $("a", ui.newTab ).click();
         }
     });
 
