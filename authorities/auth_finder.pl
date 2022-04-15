@@ -23,10 +23,13 @@ use CGI qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
+use C4::Languages;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
 use Koha::Authority::Types;
+use Koha::Authorities;
+use Koha::XSLT::Base;
 
 my $query        = CGI->new;
 my $op           = $query->param('op') || '';
@@ -130,6 +133,29 @@ if ( $op eq "cud-do_search" ) {
     }
     else {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
+    }
+
+    my $AuthorityXSLTResultsDisplay = C4::Context->preference('AuthorityXSLTResultsDisplay');
+    if ( $results && $AuthorityXSLTResultsDisplay ) {
+        my $lang = C4::Languages::getlanguage();
+        foreach my $result (@$results) {
+            my $authority = Koha::Authorities->find( $result->{authid} );
+            next unless $authority;
+
+            my $authtypecode = $authority->authtypecode;
+            my $xsl          = $AuthorityXSLTResultsDisplay;
+            $xsl =~ s/\{langcode\}/$lang/g;
+            $xsl =~ s/\{authtypecode\}/$authtypecode/g;
+
+            my $xslt_engine = Koha::XSLT::Base->new;
+            my $output      = $xslt_engine->transform( { xml => $authority->marcxml, file => $xsl } );
+            if ( $xslt_engine->err ) {
+                warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
+                next;
+            }
+
+            $result->{html} = $output;
+        }
     }
 
     $template->param( result => $results ) if $results;
