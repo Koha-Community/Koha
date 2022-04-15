@@ -71,7 +71,13 @@
                 </tr>
                 [% FOREACH resul IN result %]
                     <tr>
-                        <td>[% PROCESS authresult summary=resul.summary authid=resul.authid auth_preview=1 %]</td>
+                        <td>
+                            [% IF resul.html %]
+                                [% resul.html | $raw %]
+                            [% ELSE %]
+                                [% PROCESS authresult summary=resul.summary authid=resul.authid auth_preview=1 %]
+                            [% END %]
+                        </td>
                         <td>[% resul.summary.label | html %]</td>
                         <td>
                             [% IF resul.used > 0 %]
