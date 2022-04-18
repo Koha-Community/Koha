@@ -112,6 +112,10 @@ our $RULE_KINDS = {
     hardduedatecompare => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    waiting_hold_cancellation => {
+        scope        => [ 'branchcode', 'categorycode', 'itemtype' ],
+        can_be_blank => 0,
+    },
     holds_per_day => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },

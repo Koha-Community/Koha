@@ -660,7 +660,40 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
             }
         );
     }
+} elsif ( $op eq "set-waiting-hold-cancellation" ) {
+
+    my $category = $input->param('waiting_hold_cancellation_category');
+    my $itemtype = $input->param('waiting_hold_cancellation_itemtype');
+    my $policy   = strip_non_numeric( scalar $input->param('waiting_hold_cancellation_policy') )
+                    ? 1
+                    : 0;
+
+    Koha::Exception->throw("No value passed for waiting holds cancellation policy")
+      if not defined $policy # There is a JS check for that
+      || $policy eq '';
+
+    Koha::CirculationRules->set_rules(
+        {   categorycode => ( $category eq '*' ) ? undef : $category,
+            itemtype     => ( $itemtype eq '*' ) ? undef : $itemtype,
+            branchcode   => ( $branch   eq '*' ) ? undef : $branch,
+            rules        => { waiting_hold_cancellation => $policy },
+        }
+    );
+
+} elsif ( $op eq 'del-waiting-hold-cancellation' ) {
+
+    my $category = $input->param('waiting_hold_cancellation_category');
+    my $itemtype = $input->param('waiting_hold_cancellation_itemtype');
+
+    Koha::CirculationRules->set_rules(
+        {   categorycode => ( $category eq '*' ) ? undef : $category,
+            itemtype     => ( $itemtype eq '*' ) ? undef : $itemtype,
+            branchcode   => ( $branch   eq '*' ) ? undef : $branch,
+            rules        => { waiting_hold_cancellation => undef },
+        }
+    );
 }
+
 
 my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'lostreturn' });
 my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'lostreturn' });

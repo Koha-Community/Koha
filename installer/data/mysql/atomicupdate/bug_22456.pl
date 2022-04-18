@@ -17,5 +17,21 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
+
+        my ($count) = $dbh->selectrow_array(q{
+                SELECT COUNT(*)
+                FROM circulation_rules
+                WHERE rule_name = 'waiting_hold_cancellation'
+        });
+
+        unless ( $count ) {
+            $dbh->do(q{
+                INSERT INTO circulation_rules (rule_name, rule_value)
+                VALUES ('waiting_hold_cancellation', 0)
+            });
+        }
+        else {
+            say $out "Found already existing 'waiting_hold_cancellation' circulation rules on the DB. Please review.";
+        }
     },
 };

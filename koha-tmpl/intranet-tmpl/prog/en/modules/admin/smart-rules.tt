@@ -845,6 +845,89 @@
     </div>
     [% END %]
 
+    <div id="waiting-hold-cancel-category" class="container">
+    [% IF humanbranch %]
+        <h3>Waiting hold cancellation policy for [% Branches.GetName( humanbranch ) | html %]</h3>
+    [% ELSE %]
+        <h3>Default waiting hold cancellation policy</h3>
+    [% END %]
+        <p>Specify if waiting holds can be cancelled for a given patron category.</p>
+        <form id="set-waiting-hold-cancellation" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="set-waiting-hold-cancellation" />
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
+            <table>
+                <tr>
+                    <th>Patron category</th>
+                    <th>Item type</th>
+                    <th>Cancellation allowed</th>
+                    <th>&nbsp;</th>
+                </tr>
+    [% FOREACH c IN categorycodes %]
+        [% SET c = '*' UNLESS c.defined AND c != '' %]
+        [% FOREACH i IN itemtypes %]
+            [% SET i = '*' UNLESS i.defined AND i != '' %]
+
+            [% SET waiting_hold_cancellation = CirculationRules.Search( current_branch, c, i, 'waiting_hold_cancellation' ) %]
+
+            [% IF ( waiting_hold_cancellation.defined && waiting_hold_cancellation != '' ) %]
+                <tr>
+                    <td>
+                        [% IF c == '*' %]
+                            <em>All</em>
+                        [% ELSE %]
+                            [% Categories.GetName(c) | html %]
+                        [% END %]
+                    </td>
+                    <td>
+                        [% IF i == '*' %]
+                            <em>All</em>
+                        [% ELSE %]
+                            [% ItemTypes.GetDescription(i,1) | html %]
+                        [% END %]
+                    </td>
+                    <td>
+                        [% IF waiting_hold_cancellation %]
+                            <span>Yes</span>
+                        [% ELSE %]
+                            <span>No</span>
+                        [% END %]
+                    </td>
+                    <td class="actions">
+                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-waiting-hold-cancellation&amp;waiting_hold_cancellation_category=[% c | uri %]&amp;waiting_hold_cancellation_itemtype=[% i | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                    </td>
+                </tr>
+            [% END %]
+        [% END %]
+    [% END %]
+                <tr>
+                    <td>
+                        <select name="waiting_hold_cancellation_category" id="waiting_hold_cancellation_category">
+                            <option value="*">All</option>
+                        [% FOREACH patron_category IN patron_categories %]
+                            <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="waiting_hold_cancellation_itemtype" id="waiting_hold_cancellation_itemtype">
+                            <option value="*">All</option>
+                        [% FOREACH itemtype IN itemtypeloop %]
+                            <option value="[% itemtype.itemtype | html %]">[% ItemTypes.GetDescription(itemtype.itemtype) | html %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="waiting_hold_cancellation_policy" id="waiting_hold_cancellation_policy">
+                            <option value="0" selected>No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </td>
+                    <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
 [% IF Koha.Preference('ArticleRequests') %]
     <div id="open-article-requests-limit-patron-category" class="container">
     [% IF humanbranch %]
