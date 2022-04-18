@@ -4565,6 +4565,21 @@ CREATE TABLE `reserves` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `hold_cancellation_requests`
+--
+
+DROP TABLE IF EXISTS `hold_cancellation_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hold_cancellation_requests` (
+  `hold_cancellation_request_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique ID of the cancellation request',
+  `hold_id` int(11) NOT null COMMENT 'ID of the hold',
+  `creation_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Time and date the cancellation request was created',
+  PRIMARY KEY (`hold_cancellation_request_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `return_claims`
 --
 
