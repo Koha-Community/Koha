@@ -43,10 +43,10 @@ sub to_api_mapping {
 
 =head3 expand_filter
 
-    my $expanded_filter = $filter->expand_filter;
+    my ($expanded_limit, $query_limit) = $filter->expand_filter;
 
-    Returns the filter as an arrayref of limit queries suitable to
-    be passed to QueryBuilder
+    Returns the filter as an arrayref of limit queries, and the query parts combined
+    into a string suitable to be passed to QueryBuilder
 
 =cut
 
@@ -74,9 +74,7 @@ sub expand_filter {
         $query_limit .= $limit;
     }
 
-    push @$limits, "(".$query_limit.")" if $query_limit;
-
-    return $limits;
+    return ($limits, $query_limit);
 }
 
 =head2 Internal methods

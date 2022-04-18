@@ -1301,12 +1301,15 @@ sub buildQuery {
             $limit .= "$this_limit";
             $limit_desc .= " $this_limit";
         } elsif ( $this_limit =~ '^search_filter:' ) {
+            # Here we will get the query as a string, append to the limits, and pass through buildQuery
+            # again to clean the terms and handle nested filters
             $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
             my ($filter_id) = ( $this_limit =~ /^search_filter:(.*)$/ );
             my $search_filter = Koha::SearchFilters->find( $filter_id );
             next unless $search_filter;
-            my $expanded = $search_filter->expand_filter;
-            my ( $error, undef, undef, undef, undef, $fixed_limit, undef, undef, undef ) = buildQuery ( undef, undef, undef, $expanded, undef, undef, $lang);
+            my ($expanded_lim, $query_lim) = $search_filter->expand_filter;
+            push @$expanded_lim, $query_lim;
+            my ( $error, undef, undef, undef, undef, $fixed_limit, undef, undef, undef ) = buildQuery ( undef, undef, undef, $expanded_lim, undef, undef, $lang);
             $limit .= " and " if $limit || $query;
             $limit .= "$fixed_limit";
             $limit_desc .= " $limit";

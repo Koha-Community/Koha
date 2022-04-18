@@ -1070,13 +1070,18 @@ sub _fix_limit_special_cases {
             push @new_lim, "date-of-publication:[$start TO $end]";
         }
         elsif( $l =~ /^search_filter:/ ){
+            # Here we are going to get the query as a string, clean it, and take care of the part of the limit
+            # Calling build_query_compat here is avoided because we generate more complex query structures
             my ($filter_id) = ( $l =~ /^search_filter:(.*)$/ );
             my $search_filter = Koha::SearchFilters->find( $filter_id );
             next unless $search_filter;
-            my $expanded = $search_filter->expand_filter;
-            foreach my $e ( @{$self->_fix_limit_special_cases($expanded)} ) {
-                push @new_lim, $self->clean_search_term( $e );
+            my ($expanded_lim,$query_lim) = $search_filter->expand_filter;
+            # In the case of nested filters we need to expand them all
+            foreach my $el ( @{$self->_fix_limit_special_cases($expanded_lim)} ){
+                push @new_lim, $el;
             }
+            # We need to clean the query part as we have built a string from the original search
+            push @new_lim, $self->clean_search_term( $query_lim );
         }
         elsif ( $l =~ /^yr,st-numeric[=:]/ ) {
             my ($date) = ( $l =~ /^yr,st-numeric[=:](.*)$/ );

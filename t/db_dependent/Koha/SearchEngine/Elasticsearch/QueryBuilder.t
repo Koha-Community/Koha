@@ -785,7 +785,7 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
 };
 
 subtest "Handle search filters" => sub {
-    plan tests => 4;
+    plan tests => 7;
 
     my $qb;
 
@@ -797,15 +797,28 @@ subtest "Handle search filters" => sub {
     my $filter = Koha::SearchFilter->new({
         name => "test",
         query => q|{"operands":["cat","bat","rat"],"indexes":["kw","ti","au"],"operators":["AND","OR"]}|,
-        limits => q|{"limits":["mc-itype,phr:BK","available"]}|,
+        limits => q|{"limits":["mc-itype,phr:BK","mc-itype,phr:MU","available"]}|,
     })->store;
     my $filter_id = $filter->id;
 
     my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
 
-    is( $limit,q{(itype:("BK")) AND (onloan:false) AND (((cat) AND title:(bat) OR author:(rat)))},"Limit correctly formed");
+    is( $limit,q{(onloan:false) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit correctly formed");
     is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
-    is( $limit_desc,q{(itype:("BK")) AND (onloan:false) AND (((cat) AND title:(bat) OR author:(rat)))},"Limit description is correctly expanded");
+    is( $limit_desc,q{(onloan:false) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit description is correctly expanded");
+
+    $filter = Koha::SearchFilter->new({
+        name => "test",
+        query => q|{"operands":["su:biography"],"indexes":[],"operators":[]}|,
+        limits => q|{"limits":[]}|,
+    })->store;
+    $filter_id = $filter->id;
+
+    ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
+
+    is( $limit,q{(subject:biography)},"Limit correctly formed for ccl type query");
+    is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
+    is( $limit_desc,q{(subject:biography)},"Limit description is correctly handled for ccl type query");
 
 };
 
