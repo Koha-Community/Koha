@@ -267,7 +267,7 @@ legend:hover {
                             [% END %]
 
                             [% IF ( step_1 ) %]
-                                [% UNLESS notitle && nosurname && nofirstname && nodateofbirth && noinitials && noothernames &&nosex %]
+                                [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex %]
                                     <fieldset class="rows" id="memberentry_identity">
                                         <legend id="identity_lgd">[% IF ( I ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
                                         <ol>
@@ -341,6 +341,21 @@ legend:hover {
                                                         [% END %]
                                                     </li>
                                                 [% END #/UNLESS nofirstname %]
+                                                [% UNLESS nomiddle_name %]
+                                                    <li>
+                                                        [% IF ( mandatorymiddle_name ) %]
+                                                            <label for="middle_name" class="required">
+                                                        [% ELSE %]
+                                                            <label for="middle_name">
+                                                        [% END %]
+                                                            Middle name:
+                                                        </label>
+                                                        <input type="text" id="middle_name" name="middle_name" size="20"  value="[% borrower_data.middle_name | html UNLESS opduplicate %]" />
+                                                        [% IF ( mandatorymiddle_name ) %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                    </li>
+                                                [% END #/UNLESS nomiddle_name %]
                                                 [% UNLESS nodateofbirth %]
                                                     <li>
                                                         [% IF ( mandatorydateofbirth ) %]

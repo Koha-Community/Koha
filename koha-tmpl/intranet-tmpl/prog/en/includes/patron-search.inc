@@ -60,7 +60,7 @@
                         <li>
                             <label for="searchfieldstype_filter">Search field:</label>
                             <select name="searchfieldstype" id="searchfieldstype_filter">
-                                [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,surname,othernames,cardnumber,userid' %]
+                                [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' %]
                                 [% default_fields = [ standard, 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
                                 [% search_options = default_fields.merge(standard.split(',')).unique %]
                                 [% FOREACH s_o IN search_options %]
@@ -317,7 +317,7 @@
                     let search_type = $("#searchtype_filter").val() || "contain";
                     let search_fields = $("#searchfieldstype_filter").val();
                     if ( !search_fields ) {
-                        search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,surname,othernames,cardnumber,userid' | html %]";
+                        search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
                     }
 
                     let subquery_and = [];
@@ -458,7 +458,7 @@
                             }
                             [% CASE 'name-address' %]
                             {
-                                "data": "me.surname:me.firstname:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
+                                "data": "me.surname:me.firstname:me.middle_name:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
@@ -508,7 +508,7 @@
                             }
                             [% CASE 'name' %]
                             {
-                                "data": "me.surname:me.firstname:me.othernames",
+                                "data": "me.surname:me.firstname:me.middle_name:me.othernames",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {

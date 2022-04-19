@@ -19,8 +19,12 @@
             }
 
             var name;
-            var firstname = escape_str(patron.firstname);
-            var surname   = escape_str(patron.surname);
+            var firstname   = escape_str(patron.firstname);
+            var surname     = escape_str(patron.surname);
+
+            if ( patron.middle_name != null && patron.middle_name != '' ) {
+                firstname += ' ' + escape_str(patron.middle_name);
+            }
 
             if ( patron.other_name != null && patron.other_name != '' ) {
                 firstname += ' (' + escape_str(patron.other_name) + ')';

@@ -63,6 +63,7 @@ sub columns {
             "title"               => __("Salutation"),
             "surname"             => __("Surname"),
             "firstname"           => __("First name"),
+            "middle_name"         => __("Middle name"),
             "dateofbirth"         => __("Date of birth"),
             "initials"            => __("Initials"),
             "othernames"          => __("Other name"),

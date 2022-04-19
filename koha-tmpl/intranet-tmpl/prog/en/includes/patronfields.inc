@@ -5,6 +5,7 @@
      [%- CASE 'cardnumber' -%]<span>Card number</span>
      [%- CASE 'surname' -%]<span>Surname</span>
      [%- CASE 'firstname' -%]<span>First name</span>
+     [%- CASE 'middle_name' -%]<span>Middle name</span>
      [%- CASE 'title' -%]<span>Salutation</span>
      [%- CASE 'othernames' -%]<span>Other name</span>
      [%- CASE 'initials' -%]<span>Initials</span>

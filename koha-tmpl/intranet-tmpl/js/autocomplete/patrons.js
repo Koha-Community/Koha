@@ -12,7 +12,7 @@ function patron_autocomplete(params) {
             if ( field_to_retrieve == 'borrowernumber' ) {
                 field = ui.item.borrowernumber;
             }
-            AddPatron( ui.item.firstname + " " + ui.item.surname, field, patron_container, patron_input_name );
+            AddPatron( ui.item.firstname + " " + ui.item.middle_name + " " + ui.item.surname, field, patron_container, patron_input_name );
             input_autocomplete.val('').focus();
             return false;
         }
@@ -20,7 +20,7 @@ function patron_autocomplete(params) {
     .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
         return $( "<li></li>" )
         .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+        .append( "<a>" + item.surname + ", " + item.firstname + " " + item.middle_name + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
         .appendTo( ul );
     };
 

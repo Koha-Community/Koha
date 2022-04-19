@@ -59,9 +59,10 @@ foreach my $p (@parts) {
     push(
         @params,
         -or => [
-            surname    => { -like => "%$p%" },
-            firstname  => { -like => "%$p%" },
-            cardnumber => { -like => "$p%" },
+            surname     => { -like => "%$p%" },
+            firstname   => { -like => "%$p%" },
+            middle_name => { -like => "%$p%" },
+            cardnumber  => { -like => "$p%" },
         ]
     );
 }
@@ -74,7 +75,7 @@ my $borrowers_rs = Koha::Patrons->search_limited(
         # Get the first 10 results
         page     => 1,
         rows     => 10,
-        order_by => [ 'surname', 'firstname' ],
+        order_by => [ 'surname', 'firstname', 'middle_name' ],
         prefetch => 'branchcode',
     },
 );
@@ -82,18 +83,20 @@ my $borrowers_rs = Koha::Patrons->search_limited(
 my @borrowers;
 while ( my $b = $borrowers_rs->next ) {
     push @borrowers,
-      { borrowernumber => $b->borrowernumber,
-        surname        => $b->surname    // '',
-        firstname      => $b->firstname  // '',
-        cardnumber     => $b->cardnumber // '',
-        dateofbirth    => format_sqldatetime($b->dateofbirth, undef, undef, 1) // '',
-        age            => $b->get_age    // '',
-        address        => $b->address    // '',
-        city           => $b->city       // '',
-        zipcode        => $b->zipcode    // '',
-        country        => $b->country    // '',
-        branchcode     => $b->branchcode // '',
-        branchname     => $b->library->branchname // '',
+      {
+        borrowernumber => $b->borrowernumber,
+        surname        => $b->surname     // '',
+        firstname      => $b->firstname   // '',
+        middle_name    => $b->middle_name // '',
+        cardnumber     => $b->cardnumber  // '',
+        dateofbirth    => format_sqldatetime( $b->dateofbirth, undef, undef, 1 ) // '',
+        age        => $b->get_age             // '',
+        address    => $b->address             // '',
+        city       => $b->city                // '',
+        zipcode    => $b->zipcode             // '',
+        country    => $b->country             // '',
+        branchcode => $b->branchcode          // '',
+        branchname => $b->library->branchname // '',
       };
 }
 

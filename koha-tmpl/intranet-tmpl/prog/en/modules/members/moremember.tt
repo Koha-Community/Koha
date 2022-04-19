@@ -95,12 +95,7 @@
                             [% INCLUDE 'patron_messages.inc' %]
                         </div>
 
-                        <h1>
-                            [% UNLESS ( I ) %]
-                                [% patron.title | html %] [% patron.firstname | html %]
-                            [% END %]
-                            [% patron.surname | html %] ([% patron.cardnumber | html %])
-                        </h1>
+                        <h1>[% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
                         <div class="col-sm-6">
 
                             <div id="patron-information" class="patroninfo-section">
