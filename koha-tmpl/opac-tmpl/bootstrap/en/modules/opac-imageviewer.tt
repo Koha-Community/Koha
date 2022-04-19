@@ -45,8 +45,7 @@
                     <a href="/cgi-bin/koha/opac-main.pl">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]">
-                    [% INCLUDE 'biblio-title.inc' %]</a>
+                    [% INCLUDE 'biblio-title.inc' %]
                 </li>
                 <li class="breadcrumb-item active">
                     <a href="#" aria-current="page">Images</a>
@@ -69,9 +68,7 @@
 
                     <div class="row">
                         <div class="col-lg-9 maincontent">
-                            <h1 class="title">Images for
-                                <a class="title" href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" title="View details for this title">
-                                [% INCLUDE 'biblio-title.inc' %]</a> [% biblio.author | html %]
+                            <h1 class="title">Images for  [% INCLUDE 'biblio-title.inc' link=> 1 %] [% biblio.author | html %]
                             </h1>
                         </div> <!-- / col-lg-9 -->
                     </div> <!-- / .row -->

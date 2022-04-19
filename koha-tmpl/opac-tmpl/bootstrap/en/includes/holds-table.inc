@@ -47,10 +47,8 @@
                     [% END %]
                         <td class="title">
                             [% IF ! onlyinfo %]
-                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% HOLD.biblionumber | html %]">
-                                    [% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]
-                                    [% HOLD.item.enumchron | html %]
-                                </a>
+                                [% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio link=> 1 %]
+                                [% HOLD.item.enumchron | html %]
                             [% ELSE %]
                                 <strong>
                                     [% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]

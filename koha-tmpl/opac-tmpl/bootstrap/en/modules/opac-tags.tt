@@ -163,9 +163,7 @@
                                                     [% MY_TAG.XSLTBloc | $raw %]
                                                 [% ELSE %]
                                                     <span class="tdlabel">Title:</span>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber | html %]">
-                                                        [% INCLUDE 'biblio-title.inc' biblio=MY_TAG %]
-                                                    </a>
+                                                    [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
                                                     [% IF ( MY_TAG.author ) %]
                                                         by [% MY_TAG.author | html %]
                                                     [% END %]

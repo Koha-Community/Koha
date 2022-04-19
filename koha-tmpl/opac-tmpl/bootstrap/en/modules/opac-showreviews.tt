@@ -44,9 +44,7 @@
                                 <tr>
                                     <td>
                                         <p>
-                                            <a class="title" href="[% PROCESS biblio_a_href biblionumber => review.biblionumber %]" title="View details for this title">
-                                                [% INCLUDE 'biblio-title.inc' biblio=review %]
-                                            </a>
+                                            [% INCLUDE 'biblio-title.inc' biblio=review link=> 1 %]
                                             [% IF ( review.author ) %]
                                                 by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author | html %]</a>
                                             [% END %]
