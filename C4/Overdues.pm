@@ -599,7 +599,7 @@ sub UpdateFine {
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
             my $patron = Koha::Patrons->find( $borrowernumber );
-            my $desc = C4::Letters::GetPreparedLetter(
+            my $letter = eval { C4::Letters::GetPreparedLetter(
                 module                 => 'circulation',
                 letter_code            => 'OVERDUE_FINE_DESC',
                 message_transport_type => 'print',
@@ -609,7 +609,8 @@ sub UpdateFine {
                     borrowers => $borrowernumber,
                     items     => $itemnum,
                 },
-            )->{content};
+            ) };
+            my $desc = $letter ? $letter->{content} : "Item $itemnum - due $due";
 
             my $account = Koha::Account->new({ patron_id => $borrowernumber });
             $accountline = $account->add_debit(
