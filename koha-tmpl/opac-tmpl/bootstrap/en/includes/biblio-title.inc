@@ -1,3 +1,7 @@
+[% IF ( link ) %]
+    <a href="[% PROCESS biblio_a_href biblionumber => biblio.biblionumber %]" class="title">
+[% END %]
+
 [% IF ( biblio.title ) %]
     <span class="biblio-title">[% biblio.title | html %]</span>
 [% ELSE %]
@@ -17,4 +21,8 @@
         <span class="part-name">[% part_names.$i | html %]</span>
     [% END %]
     [% i = i + 1 %]
+[% END %]
+
+[% IF ( link ) %]
+    </a>
 [% END %]

@@ -189,9 +189,8 @@
                                         </span>
                                     [% END # / bibitemloo.holdable %]
 
-                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber | html %]">
-                                        [% INCLUDE 'biblio-title.inc' biblio=bibitemloo %]
-                                    </a>
+                                    [% INCLUDE 'biblio-title.inc' biblio=bibitemloo link=> 1%]
+
                                     [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author | html %][% END %]
                                 </p>
 

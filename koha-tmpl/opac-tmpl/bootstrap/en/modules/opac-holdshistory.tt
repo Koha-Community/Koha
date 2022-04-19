@@ -118,7 +118,7 @@
                                     <tbody>
                                     [% FOREACH hold IN holds %]
                                         <tr>
-                                        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% hold.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=hold.biblio %]</a></td>
+                                        <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link=>1 %]</td>
                                         <td>[% hold.biblio.author | html %]</td>
                                         <td>[% hold.item.barcode | html %]</td>
                                         <td>[% Branches.GetName( hold.branchcode ) | html %]</td>

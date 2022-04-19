@@ -312,7 +312,7 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=ISSUE %]</a>
+                                                    [% INCLUDE 'biblio-title.inc' biblio=ISSUE link=> 1 %]
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
 
                                                     [% IF ( ISSUE.onsite_checkout ) %] <em class="onsite_checkout">(On-site checkout)</em>[% END %]
@@ -682,7 +682,7 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=OVERDUE %]</a>
+                                                    [% INCLUDE 'biblio-title.inc' biblio=OVERDUE link=> 1 %]
                                                     <span class="item-details">[% OVERDUE.author | html %]</span>
                                                 </td>
 
@@ -767,7 +767,7 @@
                                         [% FOREACH RECALL IN RECALLS %]
                                         <tr>
                                             <td class="title">
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblio_id | html %]">[% INCLUDE 'biblio-title.inc' biblio=RECALL.biblio %]</a> [% IF RECALL.item_level %]<p class="hint">Item recalled: [% RECALL.item.barcode | html %]</p>[% END %]
+                                                [% INCLUDE 'biblio-title.inc' biblio=RECALL.biblio link=> 1 %] [% IF RECALL.item_level %]<p class="hint">Item recalled: [% RECALL.item.barcode | html %]</p>[% END %]
                                             </td>
                                             <td class="recalldate" data-order="[% RECALL.created_date | html %]">
                                                 <span title="[% RECALL.created_date | html %]">
@@ -849,10 +849,8 @@
                                         <tbody>
                                         [% FOREACH ar IN current_article_requests %]
                                                 <td class="article-request-record-title">
-                                                    <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber | html %]">
-                                                        [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
-                                                        [% ar.item.enumchron | html %]
-                                                    </a>
+                                                    [% INCLUDE 'biblio-title.inc' biblio=ar.biblio link=> 1 %]
+                                                    [% ar.item.enumchron | html %]
                                                     [% ar.biblio.author | html %]
                                                     [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
                                                 </td>
