@@ -35,7 +35,8 @@ subtest '_derived_class() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $mapping = Koha::BackgroundJob::type_to_class_mapping;
+    my $job_object = Koha::BackgroundJob->new();
+    my $mapping = $job_object->type_to_class_mapping;
 
     # pick the first
     my $type = ( keys %{$mapping} )[0];
