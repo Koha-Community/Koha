@@ -56,9 +56,11 @@ use Koha::CookieManager;
 use vars qw($ldap $cas $caslogout);
 our (@ISA, @EXPORT_OK);
 
+#NOTE: The utility of keeping the safe_exit function is that it can be easily re-defined in unit tests and plugins
 sub safe_exit {
-    if   (C4::Context::psgi_env) { die 'psgi:exit' }
-    else            { exit }
+    # It's fine for us to "exit" because CGI::Compile (used in Plack::App::WrapCGI) redefines "exit" for us automatically.
+    # Since we only seem to use C4::Auth::safe_exit in a CGI context, we don't actually need PSGI detection at all here.
+    exit;
 }
 
 
