@@ -137,20 +137,20 @@
 
 [% IF ( years ) %]<form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="post">
 <div id="subscription_years" class="toptabs numbered">
-<ul>
-	[% FOREACH year IN years %]
+<ul class="nav nav-tabs" role="tablist">
+    [% FOREACH year IN years %]
         [% IF ( year.year ) %]
             [% IF year.year == 'manage' %]
-                <li><a href="#subscription-year-manage">Manage</a></li>
+                <li role="presentation"><a href="#subscription-year-manage" aria-controls="subscription-year-manage" role="tab" data-toggle="tab">Manage</a></li>
             [% ELSE %]
-                <li><a href="#subscription-year-[% year.year | uri %]">[% year.year | html %]</a></li>
+                <li role="presentation"><a href="#subscription-year-[% year.year | uri %]" aria-controls="subscription-year-[% year.year | uri %]" role="tab" data-toggle="tab">[% year.year | html %]</a></li>
             [% END %]
         [% END %]
     [% END %]
 </ul>
-
+<div class="tab-content">
  [% FOREACH year IN years %]
-<div id="subscription-year-[% year.year | html %]">
+<div id="subscription-year-[% year.year | html %]" role="tabpanel" class="tab-pane">
     [% IF ( CAN_user_serials_receive_serials ) %]
         <p>
             <div class="btn-group"><input type="submit" value="Edit serials" class="btn btn-default btn-sm" /></div>
@@ -297,6 +297,7 @@
       </table>
     </div>
     [% END %]
+    </div>
   <input type="hidden" name="subscriptionid" value="[% subscriptionidlist | html %]" />
 
 </div>
@@ -342,7 +343,9 @@
         }
 
         $(document).ready(function() {
-            $('#subscription_years').tabs();
+            if( $("#subscription_years .tab-pane.active").length < 1 ){
+                $("#subscription_years a:first").tab("show");
+            }
             $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false }
