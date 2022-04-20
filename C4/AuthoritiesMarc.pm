@@ -465,7 +465,7 @@ sub GetTagsLabels {
   my $dbh=C4::Context->dbh;
   $authtypecode="" unless $authtypecode;
   my $sth;
-  my $libfield = ($forlibrarian == 1)? 'liblibrarian' : 'libopac';
+  my $libfield = ($forlibrarian) ? 'liblibrarian' : 'libopac';
 
 
   # check that authority exists
