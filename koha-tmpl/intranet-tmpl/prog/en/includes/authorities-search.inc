@@ -1,5 +1,5 @@
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1>
+<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div>
 <!-- Begin Authorities Resident Search Box -->
 <div id="header_search" class="residentsearch">
     <div id="mainmain_heading" class="residentsearch">
