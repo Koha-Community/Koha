@@ -40,7 +40,7 @@
             [% CASE 'hold_cancelled' %]
                 [% biblio_link = BLOCK %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% m.biblio_id | uri %]">[% m.biblio.title | html %]</a>[% END %]
                 [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% m.patron_id | uri %]">[% INCLUDE 'patron-title.inc' patron=m.patron %]</a>[% END %]
-                <span>Hold on [% biblio_link | $KohaSpan %] for [% patron_link | $KohaSpan %] has successfully been cancelled.</span>
+                <span>Hold on [% biblio_link | $raw | $KohaSpan %] for [% patron_link | $raw | $KohaSpan %] has successfully been cancelled.</span>
             [% END %]
         </div>
     [% END %]

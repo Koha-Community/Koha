@@ -40,10 +40,10 @@
             [% biblio_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a>[% END %]
             [% SWITCH m.code %]
             [% CASE 'biblio_not_modified' %]
-                <span>Bibliographic record [% biblio_link %] has not been modified. An error occurred on modifying it.</span>
+                <span>Bibliographic record [% biblio_link | $raw %] has not been modified. An error occurred on modifying it.</span>
                 [% IF m.error %] ([% m.error | html %])[% END %].
             [% CASE 'biblio_modified' %]
-                <span>Bibliographic record [% biblio_link %] has successfully been modified.</span>
+                <span>Bibliographic record [% biblio_link | $raw %] has successfully been modified.</span>
             [% END %]
         </div>
     [% END %]

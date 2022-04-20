@@ -41,7 +41,7 @@
             [% SWITCH m.code %]
                 [% CASE 'item_not_deleted' %]
                     [% item_link = BLOCK %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% m.biblionumber | uri %]&itemnumber=[% m.itemnumber | uri %]">[% m.barcode | html %]</a>[% END %]
-                    <span>Item with barcode [% item_link | $KohaSpan%] cannot be deleted:</span>
+                    <span>Item with barcode [% item_link | $raw | $KohaSpan%] cannot be deleted:</span>
                     [% SWITCH m.reason %]
                         [% CASE "book_on_loan" %]<span>Item is checked out</span>
                         [% CASE "not_same_branch" %]<span>Item does not belong to your library</span>

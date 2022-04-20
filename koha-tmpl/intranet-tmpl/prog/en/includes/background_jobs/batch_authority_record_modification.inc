@@ -29,10 +29,10 @@
             [% authority_link = BLOCK %]<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a>[% END %]
             [% SWITCH m.code %]
             [% CASE 'authority_not_modified' %]
-                <span>Authority record [% authority_link | $KohaSpan %] has not been modified. An error occurred on modifying it</span>
+                <span>Authority record [% authority_link | $raw | $KohaSpan %] has not been modified. An error occurred on modifying it</span>
                 [% IF m.error %] ([% m.error | html %])[% END %].
             [% CASE 'authority_modified' %]
-                <span>Authority record [% authority_link | $KohaSpan %] has successfully been modified.</span>
+                <span>Authority record [% authority_link | $raw | $KohaSpan %] has successfully been modified.</span>
             [% END %]
         </div>
     [% END %]
