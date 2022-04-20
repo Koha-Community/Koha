@@ -4749,7 +4749,8 @@ CREATE TABLE `stockrotationrotas` (
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Description for this rota',
   `cyclical` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Should items on this rota keep cycling?',
   `active` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Is this rota currently active?',
-  PRIMARY KEY (`rota_id`)
+  PRIMARY KEY (`rota_id`),
+  UNIQUE KEY `stockrotationrotas_title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
