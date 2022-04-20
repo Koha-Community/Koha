@@ -89,6 +89,20 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("rota_id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<stockrotationrotas_title>
+
+=over 4
+
+=item * L</title>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("stockrotationrotas_title", ["title"]);
+
 =head1 RELATIONS
 
 =head2 stockrotationstages
@@ -107,8 +121,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BpWsKESjapNKXaj2bZ1sjg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-20 11:37:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9jp+fNV7DMuz5i+eMrt/Cw
 
 __PACKAGE__->add_columns(
   '+cyclical' => { is_boolean => 1 },
