@@ -180,7 +180,7 @@ END_OF_BODY
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
 else {
-    my $new_session_id = $cookie->value;
+    my $new_session_id = $query->cookie('CGISESSID');
     $template->param(
         bib_list       => $bib_list,
         url            => "/cgi-bin/koha/opac-sendbasket.pl",

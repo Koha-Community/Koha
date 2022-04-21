@@ -83,7 +83,7 @@ if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
     $template->param( sms_providers => $providers, sms_provider_id => $patron->sms_provider_id );
 }
 
-my $new_session_id = $cookie->value;
+my $new_session_id = $query->cookie('CGISESSID');
 $template->param(
     csrf_token => Koha::Token->new->generate_csrf({
             session_id => $new_session_id,
