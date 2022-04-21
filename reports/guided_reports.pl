@@ -77,7 +77,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { reports => $flagsrequired },
     }
 );
-my $session = $cookie ? get_session($cookie->value) : undef;
+my $session_id = $input->cookie('CGISESSID');
+my $session = $session_id ? get_session($session_id) : undef;
 
 my $filter;
 if ( $input->param("filter_set") or $input->param('clear_filters') ) {
