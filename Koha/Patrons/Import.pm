@@ -141,6 +141,7 @@ sub import_patrons {
         }
 
         $borrower{cardnumber} = undef if $borrower{cardnumber} eq "";
+        $borrower{auth_method} = undef if $borrower{auth_method} eq "";
 
         # Check if borrower category code exists and if it matches to a known category. Pushing error to missing_criticals otherwise.
         $self->check_borrower_category($borrower{categorycode}, $borrowerline, $line_number, \@missing_criticals);
