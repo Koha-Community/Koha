@@ -597,6 +597,7 @@
                                 <thead>
                                     <tr>
                                         <th>Hold</th>
+                                        <th>Allowed pickup locations</th>
                                         [% IF Koha.Preference('item-level_itypes') %]
                                             <th>Item type</th>
                                         [% END %]
@@ -612,7 +613,6 @@
                                             <th>Vol no.</th>
                                         [% END %]
                                         <th>Information</th>
-                                        <th>Allowed pickup locations</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -669,6 +669,18 @@
                                                             [% END %]
                                                         </span>
                                                     [% END # /IF force_hold_level %]
+                                                </td>
+                                                <td>
+                                                [% IF (itemloo.pickup_locations_count > 0) %]
+                                                    <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations" style="width:100%;"
+                                                            data-item-id="[% itemloo.itemnumber | html %]"
+                                                            data-patron-id="[% patron.borrowernumber | html %]"
+                                                            data-pickup-location-source="item">
+                                                    [% IF (itemloo.default_pickup_location) %]
+                                                        <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
+                                                    [% END %]
+                                                    </select>
+                                                [% END %]
                                                 </td>
                                                 [% IF Koha.Preference('item-level_itypes') %]
                                                     <td>
@@ -759,18 +771,6 @@
                                                        <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
                                                     [% END %]
                                                 </td>
-                                                <td>
-                                                [% IF (itemloo.pickup_locations_count > 0) %]
-                                                    <select name="item_pickup_[% itemloo.itemnumber | html %]" class="pickup_locations" style="width:100%;"
-                                                            data-item-id="[% itemloo.itemnumber | html %]"
-                                                            data-patron-id="[% patron.borrowernumber | html %]"
-                                                            data-pickup-location-source="item">
-                                                    [% IF (itemloo.default_pickup_location) %]
-                                                        <option value="[% itemloo.default_pickup_location.branchcode | html %]" selected="selected">[% itemloo.default_pickup_location.branchname | html %]</option>
-                                                    [% END %]
-                                                    </select>
-                                                [% END %]
-                                                </td>
                                             </tr>
                                         [% END # / UNLESS itemloo.hide %]
                                     [% END # /FOREACH itemloo %]
@@ -790,13 +790,13 @@
                             <table id="requesttitles">
                                 <tr>
                                     <th>&nbsp;</th>
+                                    <th>Pickup location</th>
                                     <th>Title</th>
                                     [% UNLESS Koha.Preference('item-level_itypes') %]
                                         <th>Item type</th>
                                     [% END %]
                                     <th>Priority</th>
                                     <th>Information</th>
-                                    <th>Pickup location</th>
                                 </tr>
                                 [% FOREACH biblioloo IN biblioloop %]
                                     [% IF ( biblioloo.warn ) %]
@@ -809,6 +809,20 @@
                                                     <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
                                                 </td>
                                             [% END %]
+                                        <td>
+                                            [% UNLESS ( biblioloo.none_avail || biblioloo.noitems ) %]
+                                                <select name="pickup_[% biblioloo.biblionumber | html %]"
+                                                        class="multi_pickup_select"
+                                                        data-biblio-id="[% biblioloo.biblionumber | html %]"
+                                                        data-patron-id="[% patron.borrowernumber | html %]"
+                                                        data-pickup-locations='[% biblioloo.pickup_locations_codes.json | $raw %]'>
+                                                    <option value=""></option>
+                                                    [% FOREACH pickup_location IN biblioloo.pickup_locations %]
+                                                        <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
+                                                    [% END %]
+                                                </select>
+                                            [% END %]
+                                        </td>
                                         <td>
                                             <ul>
                                                 <li>
@@ -859,20 +873,6 @@
                                                 [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                     </ul>
                                                 [% END %]
-                                            [% END %]
-                                        </td>
-                                        <td>
-                                            [% UNLESS ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                <select name="pickup_[% biblioloo.biblionumber | html %]"
-                                                        class="multi_pickup_select"
-                                                        data-biblio-id="[% biblioloo.biblionumber | html %]"
-                                                        data-patron-id="[% patron.borrowernumber | html %]"
-                                                        data-pickup-locations='[% biblioloo.pickup_locations_codes.json | $raw %]'>
-                                                    <option value=""></option>
-                                                    [% FOREACH pickup_location IN biblioloo.pickup_locations %]
-                                                        <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
-                                                    [% END %]
-                                                </select>
                                             [% END %]
                                         </td>
                                     </tr>
