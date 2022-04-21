@@ -226,7 +226,7 @@
                 [%- END -%]
             </td>
             [% IF ( hold.intransit || hold.atdestination ) %]
-                <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id=[% hold.reserve_id | html %]></td>
+                <td><input class="printholdslip" type="button" name="printholdslip" value="Print slip" data-reserve_id="[% hold.reserve_id | html %]"></td>
             [% ELSE %]
                 <td></td>
             [% END %]
