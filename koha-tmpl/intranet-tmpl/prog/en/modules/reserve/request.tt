@@ -806,9 +806,9 @@
                                     [% END %]
                                         <td>
                                             [% UNLESS ( biblioloo.warn ) %]
-                                                    <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
-                                                </td>
+                                                <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
                                             [% END %]
+                                        </td>
                                         <td>
                                             [% UNLESS ( biblioloo.none_avail || biblioloo.noitems ) %]
                                                 <select name="pickup_[% biblioloo.biblionumber | html %]"
