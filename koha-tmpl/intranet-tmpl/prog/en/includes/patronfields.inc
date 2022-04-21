@@ -1,6 +1,6 @@
 [%- BLOCK patron_fields -%]
      [%- SWITCH name -%]
-     [%- CASE 'firstname,surname,othernames,cardnumber,userid' -%]<span>Standard</span>
+     [%- CASE standard -%]<span>Standard</span>
      [%- CASE 'borrowernumber' -%]<span>Borrowernumber</span>
      [%- CASE 'cardnumber' -%]<span>Card number</span>
      [%- CASE 'surname' -%]<span>Surname</span>
