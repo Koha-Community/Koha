@@ -20,6 +20,11 @@
         }
     </style>
 [% END %]
+    <style>
+        .syspref-link::before {
+            content: " | ";
+        }
+    </style>
 </head>
 
 <body id="tools_additional-contents" class="tools">
@@ -301,8 +306,8 @@
         See <a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
     [% END %]
     [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-        | <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
-        | <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
+        <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
+        <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>
     [% END %]
 
     [% IF additional_contents.count %]
