@@ -25,8 +25,8 @@ use Koha::Exceptions::Patron;
 
 use base qw( Auth::GoogleAuth );
 
-use constant CONFIRM_NOTICE_REG => '2FA_REGISTER';
-use constant CONFIRM_NOTICE_DEREG => '2FA_DEREGISTER';
+use constant CONFIRM_NOTICE_REG => '2FA_ENABLE';
+use constant CONFIRM_NOTICE_DEREG => '2FA_DISABLE';
 
 =head1 NAME
 

@@ -1634,29 +1634,29 @@ tables:
             - "Notes: <<recalls.recallnotes>>"
 
         - module: members
-          code: 2FA_DEREGISTER
+          code: 2FA_DISABLE
           branchcode: ""
-          name: "Confirmation of deregistering two factor authentication"
+          name: "Confirmation of disabling two factor authentication"
           is_html: 1
-          title: "Confirmation of deregistering two factor authentication"
+          title: "Confirmation of disabling two factor authentication"
           message_transport_type: email
           lang: default
           content:
             - "<p>Dear [% borrower.firstname %] [% borrower.surname %],</p>"
-            - "<p>This is to confirm that we deregistered two factor authentication for you.</p>"
-            - "<p>If you did not deregister, someone else may be using your account. Please contact technical support.</p>"
+            - "<p>This is to confirm that someone disabled two factor authentication on your account.</p>"
+            - "<p>If you did not do this, someone else may be using your account. Please contact technical support.</p>"
             - "<p>Your library</p>"
 
         - module: members
-          code: 2FA_REGISTER
+          code: 2FA_ENABLE
           branchcode: ""
-          name: "Confirmation of registering two factor authentication"
+          name: "Confirmation of enabling two factor authentication"
           is_html: 1
-          title: "Confirmation of registering two factor authentication"
+          title: "Confirmation of enabling two factor authentication"
           message_transport_type: email
           lang: default
           content:
             - "<p>Dear [% borrower.firstname %] [% borrower.surname %],</p>"
-            - "<p>This is to confirm that we registered two factor authentication for you.</p>"
-            - "<p>If you did not register, someone else may be using your account. Please contact technical support.</p>"
+            - "<p>This is to confirm that someone enabled two factor authentication on your account.</p>"
+            - "<p>If you did not do this, someone else may be using your account. Please contact technical support.</p>"
             - "<p>Your library</p>"
