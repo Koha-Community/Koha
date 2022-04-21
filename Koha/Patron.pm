@@ -1769,7 +1769,7 @@ sub anonymize {
         split /\s*\|\s*/, C4::Context->preference('BorrowerMandatoryField') };
     $mandatory->{userid} = 1; # needed since sub store does not clear field
     my @columns = $self->_result->result_source->columns;
-    @columns = grep { !/borrowernumber|branchcode|categorycode|^date|password|flags|updated_on|lastseen|lang|login_attempts|anonymized/ } @columns;
+    @columns = grep { !/borrowernumber|branchcode|categorycode|^date|password|flags|updated_on|lastseen|lang|login_attempts|anonymized|auth_method/ } @columns;
     push @columns, 'dateofbirth'; # add this date back in
     foreach my $col (@columns) {
         $self->_anonymize_column($col, $mandatory->{lc $col} );
