@@ -1122,7 +1122,7 @@ EOF
             credits => $account->accountlines_id
         }
     );
-    is($letter->{content},'    <span>Payment<span> (Cancelled)</span>    </span>', "Include used in notice");
+    is($letter->{content},'<span>Payment</span><span> (Cancelled)</span>', "Include used in notice");
 };
 
 subtest 'Dates formatting' => sub {
