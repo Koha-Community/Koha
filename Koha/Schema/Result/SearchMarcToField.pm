@@ -60,9 +60,10 @@ true if this field can be used to generate suggestions for browse
 =head2 sort
 
   data_type: 'tinyint'
-  is_nullable: 1
+  default_value: 1
+  is_nullable: 0
 
-true/false creates special sort handling, null doesn't
+Sort defaults to 1 (Yes) and creates sort fields in the index, 0 (no) will prevent this
 
 =cut
 
@@ -78,7 +79,7 @@ __PACKAGE__->add_columns(
   "suggestible",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "sort",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -128,8 +129,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-02 12:47:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9mqZ/zrii+Fv+k+eQNHYUw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-21 12:39:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/uoQ4AbA16vTZJAGm3WuQ
 
 __PACKAGE__->add_columns(
     '+facet' => { is_boolean => 1 },
