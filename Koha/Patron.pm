@@ -2131,12 +2131,12 @@ sub can_patron_change_staff_only_lists {
     return 0;
 }
 
-=head3
+=head3 encode_secret
 
-    $patron->encode_secret($secret32);
+  $patron->encode_secret($secret32);
 
-    Secret (TwoFactorAuth expects it in base32 format) is encrypted.
-    You still need to call ->store.
+Secret (TwoFactorAuth expects it in base32 format) is encrypted.
+You still need to call ->store.
 
 =cut
 
@@ -2148,12 +2148,12 @@ sub encode_secret {
     return $self->secret($secret);
 }
 
-=head3
+=head3 decoded_secret
 
-    my $secret32 = $patron->decoded_secret;
+  my $secret32 = $patron->decoded_secret;
 
-    Decode the patron secret. We expect to get back a base32 string, but this
-    is not checked here. Caller of encode_secret is responsible for that.
+Decode the patron secret. We expect to get back a base32 string, but this
+is not checked here. Caller of encode_secret is responsible for that.
 
 =cut
 
