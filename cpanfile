@@ -1,6 +1,6 @@
 requires 'Algorithm::CheckDigits', '0.5';
 requires 'Array::Utils', '0.5';
-requires 'Auth::GoogleAuth', '1.03';
+requires 'Auth::GoogleAuth', '1.02';
 requires 'Authen::CAS::Client', '0.05';
 requires 'Auth::GoogleAuth', '1.02';
 requires 'Biblio::EndnoteStyle', '0.05';
