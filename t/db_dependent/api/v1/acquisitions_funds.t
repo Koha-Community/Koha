@@ -102,6 +102,8 @@ subtest 'list_owners() and list_users() tests' => sub {
       $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
     my $password = 'thePassword123';
     $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
+    $superlibrarian->discard_changes;
+
     my $userid = $superlibrarian->userid;
 
     # Restrict the query to a know list of patrons

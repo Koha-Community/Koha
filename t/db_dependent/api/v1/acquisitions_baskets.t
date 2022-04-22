@@ -49,6 +49,7 @@ subtest 'list_managers() tests' => sub {
     my $password = 'thePassword123';
     $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $superlibrarian->userid;
+    $superlibrarian->discard_changes;
 
     my $api_filter = encode_json(
         {   'me.patron_id' =>
