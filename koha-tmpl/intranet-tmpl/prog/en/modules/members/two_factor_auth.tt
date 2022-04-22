@@ -33,60 +33,69 @@
 
                 [% INCLUDE 'members-toolbar.inc' %]
 
-                [% IF op == 'register' %]
-                    <h1>Register two-factor authenticator</h1>
-                    <div class="dialog message">
-                        <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
-                        <p>Can't scan the code?</p>
-                        <p>To add the entry manually, provide the following details to the application on your phone.</p>
-                        <p>Account: [% issuer | html %]</p>
-                        <p>Key: [% key_id | html %]</p>
-                        <p>Time based: Yes</p>
+                <h1>Manage two-factor authentication</h1>
+
+                [% IF ( missing_key ) %]
+                    <div id="error_message" class="dialog message">
+                        <p>
+                            Operation cannot proceed, please define an encryption key in your configuration.
+                        </p>
                     </div>
-
-                    [% IF invalid_pin %]
-                        <div class="dialog error">Invalid pin code</div>
-                    [% END %]
-                    <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                        <fieldset class="rows">
-                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                            <input type="hidden" name="op" value="register-2FA" />
-                            <input type="hidden" name="secret32" value="[% secret32 | html %]" />
-                            <ol>
-                                <li>
-                                    <label for="qr_code">QR code: </label>
-                                    <img id="qr_code" src="[% qr_code | $raw %]" />
-                                </li>
-                                <li>
-                                    <label for="pin_code">Pin code: </label>
-                                    <input type="text" id="pin_code" name="pin_code" value="" />
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" value="Register with two-factor app" />
-                            <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl">Cancel</a>
-                        </fieldset>
-                    </form>
                 [% ELSE %]
-                    <h1>Two-factor authentication</h1>
-                    [% IF patron.auth_method == "two-factor" %]
-                        <div class="two-factor-status">Status: Enabled</div>
 
+                    [% IF op == 'register' %]
+                        <div class="dialog message">
+                            <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
+                            <p>Can't scan the code?</p>
+                            <p>To add the entry manually, provide the following details to the application on your phone.</p>
+                            <p>Account: [% issuer | html %]</p>
+                            <p>Key: [% key_id | html %]</p>
+                            <p>Time based: Yes</p>
+                        </div>
+
+                        [% IF invalid_pin %]
+                            <div class="dialog error">Invalid pin code</div>
+                        [% END %]
                         <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                            <input type="hidden" name="op" value="disable-2FA" />
-                            <input type="submit" value="Disable two-factor authentication" />
+                            <fieldset class="rows">
+                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                                <input type="hidden" name="op" value="register-2FA" />
+                                <input type="hidden" name="secret32" value="[% secret32 | html %]" />
+                                <ol>
+                                    <li>
+                                        <label for="qr_code">QR code: </label>
+                                        <img id="qr_code" src="[% qr_code | $raw %]" />
+                                    </li>
+                                    <li>
+                                        <label for="pin_code">Pin code: </label>
+                                        <input type="text" id="pin_code" name="pin_code" value="" />
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="submit" value="Register with two-factor app" />
+                                <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl">Cancel</a>
+                            </fieldset>
                         </form>
                     [% ELSE %]
-                        <div class="two-factor-status">Status: Disabled</div>
+                        [% IF patron.auth_method == "two-factor" %]
+                            <div class="two-factor-status">Status: Enabled</div>
 
-                        <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                            <input type="hidden" name="op" value="enable-2FA" />
-                            <input type="submit" value="Enable two-factor authentication" />
-                        </form>
+                            <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                                <input type="hidden" name="op" value="disable-2FA" />
+                                <input type="submit" value="Disable two-factor authentication" />
+                            </form>
+                        [% ELSE %]
+                            <div class="two-factor-status">Status: Disabled</div>
 
+                            <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
+                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                                <input type="hidden" name="op" value="enable-2FA" />
+                                <input type="submit" value="Enable two-factor authentication" />
+                            </form>
+
+                        [% END %]
                     [% END %]
                 [% END %]
             </main>

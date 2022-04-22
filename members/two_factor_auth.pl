@@ -42,86 +42,106 @@ unless ( C4::Context->preference('TwoFactorAuthentication') ) {
     exit;
 }
 
-output_and_exit( $cgi, $cookie, $template, 'Entry encryption_key is missing in koha-conf.xml' )
-    if !C4::Context->config('encryption_key');
-
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $op             = $cgi->param('op') // '';
 
-my $op = $cgi->param('op') // '';
-my $csrf_pars = {
-    session_id => scalar $cgi->cookie('CGISESSID'),
-    token  => scalar $cgi->param('csrf_token'),
-};
+if ( !C4::Context->config('encryption_key') ) {
+    $template->param( missing_key => 1 );
+}
+else {
 
-if ( $op eq 'register-2FA' ) {
-    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf($csrf_pars);
+    my $csrf_pars = {
+        session_id => scalar $cgi->cookie('CGISESSID'),
+        token      => scalar $cgi->param('csrf_token'),
+    };
 
-    my $pin_code = $cgi->param('pin_code');
-    my $secret32 = $cgi->param('secret32');
-    my $auth     = Koha::Auth::TwoFactorAuth->new(
-        { patron => $logged_in_user, secret32 => $secret32 } );
+    if ( $op eq 'register-2FA' ) {
+        output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
+          unless Koha::Token->new->check_csrf($csrf_pars);
 
-    my $verified = $auth->verify(
-        $pin_code,
-        1,    # range
-        $secret32,
-        undef,    # timestamp (defaults to now)
-        30,       # interval (default 30)
-    );
+        my $pin_code = $cgi->param('pin_code');
+        my $secret32 = $cgi->param('secret32');
+        my $auth     = Koha::Auth::TwoFactorAuth->new(
+            { patron => $logged_in_user, secret32 => $secret32 } );
 
-    if ($verified) {
-        # FIXME Generate a (new?) secret
-        $logged_in_user->encode_secret($secret32);
-        $logged_in_user->auth_method('two-factor')->store;
-        $op = 'registered';
-        if( $logged_in_user->notice_email_address ) {
-            $logged_in_user->queue_notice({
-                letter_params => {
-                    module => 'members', letter_code => '2FA_ENABLE',
-                    branchcode => $logged_in_user->branchcode, lang => $logged_in_user->lang,
-                    tables => { branches => $logged_in_user->branchcode, borrowers => $logged_in_user->id },
-                },
-                message_transports => [ 'email' ],
-            });
+        my $verified = $auth->verify(
+            $pin_code,
+            1,        # range
+            $secret32,
+            undef,    # timestamp (defaults to now)
+            30,       # interval (default 30)
+        );
+
+        if ($verified) {
+
+            # FIXME Generate a (new?) secret
+            $logged_in_user->encode_secret($secret32);
+            $logged_in_user->auth_method('two-factor')->store;
+            $op = 'registered';
+            if ( $logged_in_user->notice_email_address ) {
+                $logged_in_user->queue_notice(
+                    {
+                        letter_params => {
+                            module      => 'members',
+                            letter_code => '2FA_ENABLE',
+                            branchcode  => $logged_in_user->branchcode,
+                            lang        => $logged_in_user->lang,
+                            tables      => {
+                                branches  => $logged_in_user->branchcode,
+                                borrowers => $logged_in_user->id
+                            },
+                        },
+                        message_transports => ['email'],
+                    }
+                );
+            }
+        }
+        else {
+            $template->param( invalid_pin => 1, );
+            $op = 'enable-2FA';
         }
     }
-    else {
-        $template->param( invalid_pin => 1, );
-        $op = 'enable-2FA';
-    }
-}
 
-if ( $op eq 'enable-2FA' ) {
-    my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
-    my $auth = Koha::Auth::TwoFactorAuth->new(
-        { patron => $logged_in_user, secret => $secret } );
+    if ( $op eq 'enable-2FA' ) {
+        my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
+        my $auth   = Koha::Auth::TwoFactorAuth->new(
+            { patron => $logged_in_user, secret => $secret } );
 
-    $template->param(
-        issuer      => $auth->issuer,
-        key_id      => $auth->key_id,
-        qr_code  => $auth->qr_code,
-        secret32    => $auth->secret32,
+        $template->param(
+            issuer   => $auth->issuer,
+            key_id   => $auth->key_id,
+            qr_code  => $auth->qr_code,
+            secret32 => $auth->secret32,
+
             # IMPORTANT: get secret32 after qr_code call !
-    );
-    $auth->clear;
-    $op = 'register';
-}
-elsif ( $op eq 'disable-2FA' ) {
-    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf($csrf_pars);
-    my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $logged_in_user });
-    $logged_in_user->secret(undef);
-    $logged_in_user->auth_method('password')->store;
-    if( $logged_in_user->notice_email_address ) {
-        $logged_in_user->queue_notice({
-            letter_params => {
-                module => 'members', letter_code => '2FA_DISABLE',
-                branchcode => $logged_in_user->branchcode, lang => $logged_in_user->lang,
-                tables => { branches => $logged_in_user->branchcode, borrowers => $logged_in_user->id },
-            },
-            message_transports => [ 'email' ],
-        });
+        );
+        $auth->clear;
+        $op = 'register';
+    }
+    elsif ( $op eq 'disable-2FA' ) {
+        output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
+          unless Koha::Token->new->check_csrf($csrf_pars);
+        my $auth =
+          Koha::Auth::TwoFactorAuth->new( { patron => $logged_in_user } );
+        $logged_in_user->secret(undef);
+        $logged_in_user->auth_method('password')->store;
+        if ( $logged_in_user->notice_email_address ) {
+            $logged_in_user->queue_notice(
+                {
+                    letter_params => {
+                        module      => 'members',
+                        letter_code => '2FA_DISABLE',
+                        branchcode  => $logged_in_user->branchcode,
+                        lang        => $logged_in_user->lang,
+                        tables      => {
+                            branches  => $logged_in_user->branchcode,
+                            borrowers => $logged_in_user->id
+                        },
+                    },
+                    message_transports => ['email'],
+                }
+            );
+        }
     }
 }
 
