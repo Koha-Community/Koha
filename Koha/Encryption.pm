@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use base qw( Crypt::CBC );
 
+use Koha::Exceptions;
+
 =head1 NAME
 
 Koha::Encryption - Koha class to encrypt or decrypt strings
@@ -52,6 +54,9 @@ It's based on Crypt::CBC
 sub new {
     my ( $class ) = @_;
     my $key = C4::Context->config('encryption_key');
+    if( !$key ) {
+        Koha::Exceptions::MissingParameter->throw('No encryption_key in koha-conf.xml');
+    }
     return $class->SUPER::new(
         -key    => $key,
         -cipher => 'Cipher::AES'

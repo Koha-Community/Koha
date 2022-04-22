@@ -42,6 +42,9 @@ unless ( C4::Context->preference('TwoFactorAuthentication') ) {
     exit;
 }
 
+output_and_exit( $cgi, $cookie, $template, 'Entry encryption_key is missing in koha-conf.xml' )
+    if !C4::Context->config('encryption_key');
+
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
 my $op = $cgi->param('op') // '';
