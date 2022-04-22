@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -145,6 +145,40 @@ SKIP: {
             $driver->find_element('//input[@type="submit"]')->click;
             like( $driver->get_title, qr(Checking out to ), 'Must be redirected to the original page' );
         }
+    };
+
+    subtest "Disable" => sub {
+        plan tests => 4;
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get( $mainpage . q|?logout.x=1| );
+        fill_login_form($s);
+        my $auth = Koha::Auth::TwoFactorAuth->new( { patron => $patron } );
+        my $code = $auth->code();
+        $auth->clear;
+        $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')
+          ->send_keys($code);
+        $driver->find_element('//input[@type="submit"]')->click;
+
+        $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
+
+        is(
+            $driver->find_element('//div[@class="two-factor-status"]')->get_text(),
+            'Status: Enabled',
+            '2FA is enabled'
+        );
+
+        $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
+
+        is(
+            $driver->find_element('//div[@class="two-factor-status"]')->get_text(),
+            'Status: Disabled',
+            '2FA has been disabled'
+        );
+
+        $patron = $patron->get_from_storage;
+        is( $patron->secret, undef, "Secret has been cleared" );
+        is( $patron->auth_method(), 'password', 'auth_method has been reset to "password"' );
     };
 
     $driver->quit();
