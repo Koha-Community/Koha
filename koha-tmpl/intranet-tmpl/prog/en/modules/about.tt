@@ -484,6 +484,13 @@
                         The effective temporary directory is '[% config_entry.effective_tmp_dir | html %]'.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'encryption_key_missing' %]
+                <tr>
+                    <th scope="row"><strong>Warning</strong></th>
+                    <td>You are missing the &lt;encryption_key&gt; entry in your koha-conf.xml file.
+                        Please generate a key. We recommend one of at least 32 bytes. (You might use 'pwgen 32' to do so.)
+                    </td>
+                </tr>
                 [% END %]
             [% END %]
             </table>

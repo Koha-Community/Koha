@@ -277,6 +277,10 @@ if ( ! C4::Context->config('tmp_path') ) {
     }
 }
 
+if( ! C4::Context->config('encryption_key') ) {
+    push @xml_config_warnings, { error => 'encryption_key_missing' };
+}
+
 # Test Zebra facets configuration
 if ( !defined C4::Context->config('use_zebra_facets') ) {
     push @xml_config_warnings, { error => 'use_zebra_facets_entry_missing' };
