@@ -24,7 +24,8 @@
         <p><label for="searchfieldstype">Search fields:</label>
             <select name="searchfieldstype" id="searchfieldstype">
               [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname,surname,othernames,cardnumber,userid' %]
-              [% SET search_options = [ standard, 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
+              [% default_fields = [ standard, 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
+              [% search_options = default_fields.merge(standard.split(',')).unique %]
               [% FOREACH s_o IN search_options %]
                   [% display_name = PROCESS patron_fields name=s_o %]
                   [% NEXT IF !display_name.length %]

@@ -51,7 +51,7 @@ my $base_url      = $s->base_url;
 my $builder       = t::lib::TestBuilder->new;
 
 subtest 'Search patrons' => sub {
-    plan tests => 19;
+    plan tests => 23;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
@@ -142,22 +142,28 @@ subtest 'Search patrons' => sub {
     C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
     $driver->get( $base_url . "/members/members-home.pl" );
     my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
+    is( scalar @adv_options, 13, 'All standard fields are searchable if DefaultPatronSearchFields not set');
+    is( $adv_options[0]->get_value(), 'firstname,surname,othernames,cardnumber,userid', 'Standard search uses hard coded list when DefaultPatronSearchFields not set');
     my @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @adv_options, 11, 'All standard fields are searchable if DefaultPatronSearchFields not set');
-    is( scalar @filter_options, 11, 'All standard fields are searchable by filter if DefaultPatronSearchFields not set');
-    C4::Context->set_preference('DefaultPatronSearchFields',"initials");
+    is( scalar @filter_options, 13, 'All standard fields are searchable by filter if DefaultPatronSearchFields not set');
+    is( $filter_options[0]->get_value(), 'firstname,surname,othernames,cardnumber,userid', 'Standard filter uses hard coded list when DefaultPatronSearchFields not set');
+    C4::Context->set_preference('DefaultPatronSearchFields',"firstname,initials");
+    $driver->get( $base_url . "/members/members-home.pl" );
+    @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
+    is( scalar @adv_options, 13, 'New option added when DefaultPatronSearchFields is populated with a field');
+    is( $adv_options[0]->get_value(), 'firstname,initials', 'Standard search uses DefaultPatronSearchFields when populated');
+    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    is( scalar @filter_options, 13, 'New filter option added when DefaultPatronSearchFields is populated with a field');
+    is( $filter_options[0]->get_value(), 'firstname,initials', 'Standard filter uses DefaultPatronSearchFields when populated');
+    C4::Context->set_preference('DefaultPatronSearchFields',"firstname,initials,horses");
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @adv_options, 12, 'New option added when DefaultPatronSearchFields is populated with a field');
-    is( scalar @filter_options, 12, 'New filter option added when DefaultPatronSearchFields is populated with a field');
-    C4::Context->set_preference('DefaultPatronSearchFields',"initials,horses");
-    $driver->get( $base_url . "/members/members-home.pl" );
-    @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
-    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @adv_options, 12, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
-    is( scalar @filter_options, 12, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @adv_options, 13, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @filter_options, 13, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+    # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
+    $driver->get( $base_url . "/members/members-home.pl" );
     $s->fill_form( { search_patron_filter => 'test_patron' } );
     $s->submit_form;
     my $first_patron = $patrons[0];
@@ -190,7 +196,8 @@ subtest 'Search patrons' => sub {
             "Modify patron %s %s (%s) %s (%s) (%s) › Patrons › Koha",
             $first_patron->title, $first_patron->firstname, $first_patron->othernames, $first_patron->surname, $first_patron->cardnumber,
             $first_patron->category->description,
-        )
+        ),
+        'Page title is correct after following modification link'
     );
 
     $driver->get( $base_url . "/members/members-home.pl" );
@@ -200,11 +207,11 @@ subtest 'Search patrons' => sub {
 
     $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
     $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
 
     $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="'.$library->branchcode.'"]')->click;
     $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
 
     # Reset the filters
     $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
@@ -212,14 +219,14 @@ subtest 'Search patrons' => sub {
     $s->wait_for_ajax;
 
     # And make sure all the patrons are present
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
 
     # Search on non-searchable attribute, we expect no result!
     $s->fill_form( { search_patron_filter => 'test_attr_1' } );
     $s->submit_form;
     $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons), 'Searching on a non-searchable attribute returns no results' );
 
     # clear form
     $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
@@ -228,19 +235,19 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
     # Refine search and search for test_patron in all the data using the DT global search
     # No change in result expected, still 2 patrons
     $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
     $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Refining with DataTables search works to further filter the original query' );
 
     # Adding the surname of the first patron in the "Name" column
     # We expect only 1 result
     $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($patrons[0]->surname);
     $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
 
     push @cleanup, $_ for @patrons;
     push @cleanup, $library;
