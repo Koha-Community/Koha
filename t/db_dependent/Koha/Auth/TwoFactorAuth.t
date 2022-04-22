@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::Exception;
 use Test::MockModule;
 
@@ -84,34 +84,4 @@ subtest 'qr_code' => sub {
     isnt( $img_data02, $img_data, 'Another secret, another image' );
 
     $schema->storage->txn_rollback;
-};
-
-subtest 'send_confirm_notice' => sub {
-    plan tests => 4;
-    $schema->storage->txn_begin;
-
-    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 1);
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    $patron->secret('you2wont2guess2it'); # this is base32 btw
-    $patron->auth_method('two-factor');
-    $patron->store;
-    my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron });
-
-    # Trivial tests: no patron, no email
-    throws_ok { $auth->send_confirm_notice; }
-        'Koha::Exceptions::MissingParameter',
-        'Croaked on missing patron';
-    $patron->set({ email => undef, emailpro => undef, B_email => undef });
-    throws_ok { $auth->send_confirm_notice({ patron => $patron }) }
-        'Koha::Exceptions::Patron::MissingEmailAddress',
-        'Croaked on missing email';
-
-    $patron->email('noreply@doof.nl')->store;
-    $auth->send_confirm_notice({ patron => $patron });
-    is( Koha::Notice::Messages->search({ borrowernumber => $patron->id, letter_code => '2FA_REGISTER' })->count, 1, 'Found message' );
-    $auth->send_confirm_notice({ patron => $patron, deregister => 1 });
-    is( Koha::Notice::Messages->search({ borrowernumber => $patron->id, letter_code => '2FA_DEREGISTER' })->count, 1, 'Found message' );
-
-    $schema->storage->txn_rollback;
-    $mocked_stuffer->unmock;
 };

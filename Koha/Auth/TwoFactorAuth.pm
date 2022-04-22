@@ -25,9 +25,6 @@ use Koha::Exceptions::Patron;
 
 use base qw( Auth::GoogleAuth );
 
-use constant CONFIRM_NOTICE_REG => '2FA_ENABLE';
-use constant CONFIRM_NOTICE_DEREG => '2FA_DISABLE';
-
 =head1 NAME
 
 Koha::Auth::TwoFactorAuth- Koha class deal with Two factor authentication
@@ -40,7 +37,6 @@ my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
 my $auth = Koha::Auth::TwoFactorAuth->new({ patron => $patron, secret => $secret });
 my $image_src = $auth->qr_code;
 my $ok = $auth->verify( $pin_code, 1 );
-$auth->send_confirm_notice({ patron => $patron });
 
 It's based on Auth::GoogleAuth
 
@@ -106,44 +102,6 @@ sub qr_code {
     my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', Version => 8, ModuleSize => 4 } );
     my $data = $qrcode->plot->png;
     return "data:image/png;base64,". encode_base64( $data, q{} ); # does not contain newlines
-}
-
-=head3 send_confirm_notice
-
-    $auth->send_confirm_notice({ patron => $p, deregister => 1 });
-
-    Send a notice to confirm (de)registering 2FA.
-    Parameter patron is mandatory.
-    If there is no deregister param, a register notice is sent.
-    If the patron has no email address, we throw an exception.
-
-=cut
-
-sub send_confirm_notice {
-    my ( $self, $params ) = @_;
-    my $patron = $params->{patron};
-    my $deregister = $params->{deregister};
-
-    Koha::Exceptions::MissingParameter->throw("Mandatory patron parameter missing")
-        unless $patron && ref($patron) eq 'Koha::Patron';
-    Koha::Exceptions::Patron::MissingEmailAddress->throw
-        if !$patron->notice_email_address;
-
-    my $letter = C4::Letters::GetPreparedLetter (
-        module => 'members', # called patrons on interface
-        letter_code => $deregister ? CONFIRM_NOTICE_DEREG : CONFIRM_NOTICE_REG,
-        branchcode => $patron->branchcode,
-        lang => $patron->lang,
-        tables => {
-            'branches'    => $patron->branchcode,
-            'borrowers'   => $patron->id,
-        },
-    );
-    C4::Letters::EnqueueLetter({
-        letter         => $letter,
-        borrowernumber => $patron->id,
-        message_transport_type => 'email',
-    }) or warn "Couldnt enqueue 2FA notice for patron ". $patron->id;
 }
 
 1;

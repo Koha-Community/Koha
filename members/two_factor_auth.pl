@@ -73,7 +73,14 @@ if ( $op eq 'register-2FA' ) {
         $logged_in_user->auth_method('two-factor')->store;
         $op = 'registered';
         if( $logged_in_user->notice_email_address ) {
-            $auth->send_confirm_notice({ patron => $logged_in_user });
+            $logged_in_user->queue_notice({
+                letter_params => {
+                    module => 'members', letter_code => '2FA_ENABLE',
+                    branchcode => $logged_in_user->branchcode, lang => $logged_in_user->lang,
+                    tables => { branches => $logged_in_user->branchcode, borrowers => $logged_in_user->id },
+                },
+                message_transports => [ 'email' ],
+            });
         }
     }
     else {
@@ -104,7 +111,14 @@ elsif ( $op eq 'disable-2FA' ) {
     $logged_in_user->secret(undef);
     $logged_in_user->auth_method('password')->store;
     if( $logged_in_user->notice_email_address ) {
-        $auth->send_confirm_notice({ patron => $logged_in_user, deregister => 1 });
+        $logged_in_user->queue_notice({
+            letter_params => {
+                module => 'members', letter_code => '2FA_DISABLE',
+                branchcode => $logged_in_user->branchcode, lang => $logged_in_user->lang,
+                tables => { branches => $logged_in_user->branchcode, borrowers => $logged_in_user->id },
+            },
+            message_transports => [ 'email' ],
+        });
     }
 }
 
