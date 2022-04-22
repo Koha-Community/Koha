@@ -85,7 +85,7 @@ SKIP: {
     };
 
     subtest 'Login' => sub {
-        plan tests => 19;
+        plan tests => 18;
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
 
@@ -115,8 +115,7 @@ SKIP: {
             is( login_error($s), undef );
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys('wrong_code');
             $driver->find_element('//input[@type="submit"]')->click;
-            ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid two-factor code")]'));
-            is( login_error($s), undef );
+            is( login_error($s), "Invalid two-factor code" );
 
             $driver->get($mainpage);
             like( $driver->get_title, qr(Two-factor authentication), 'Must still be on the second auth screen' );
@@ -137,7 +136,7 @@ SKIP: {
             is( login_error($s), undef );
             $driver->find_element('//form[@id="loginform"]//input[@id="otp_token"]')->send_keys('wrong_code');
             $driver->find_element('//input[@type="submit"]')->click;
-            ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid two-factor code")]'));
+            is( login_error($s), "Invalid two-factor code" );
 
             my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron});
             my $code = $auth->code();
