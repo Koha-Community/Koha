@@ -118,6 +118,7 @@ subtest 'Update child to patron' => sub {
         my $handles = $driver->get_window_handles;
         $driver->switch_to_window($handles->[1]);
         $driver->find_element('//input[@id="catcode'.$patron_category_A->categorycode.'"]')->click;
+        $driver->set_window_size(1024, 768);
         $s->submit_form;
 
         is( $child->get_from_storage->categorycode, $patron_category_A->categorycode, 'The child should now be an adult!' );
