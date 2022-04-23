@@ -2085,6 +2085,7 @@ sub GetHistory {
     my $title = $params{title};
     my $author = $params{author};
     my $isbn   = $params{isbn};
+    my $issn   = $params{issn};
     my $ean    = $params{ean};
     my $name = $params{name};
     my $internalnote = $params{internalnote};
@@ -2123,6 +2124,20 @@ sub GetHistory {
         unless (@isbns){
             push @isbns, $isbn;
             push @isbn_params, '?';
+        }
+    }
+
+    #get variation of issn
+    my @issn_params;
+    my @issns;
+    if ($issn){
+        if ( C4::Context->preference("SearchWithISSNVariations") ){
+            @issns = C4::Koha::GetVariationsOfISSN( $issn );
+            push @issn_params, ('?') x @issns;
+        }
+        unless (@issns){
+            push @issns, $issn;
+            push @issn_params, '?';
         }
     }
 
@@ -2201,6 +2216,13 @@ sub GetHistory {
         $query .= " AND ( biblioitems.isbn LIKE " . join (" OR biblioitems.isbn LIKE ", @isbn_params ) . ")";
         foreach my $isb (@isbns){
             push @query_params, "%$isb%";
+        }
+    }
+
+    if ( @issns ) {
+        $query .= " AND ( biblioitems.issn LIKE " . join (" OR biblioitems.issn LIKE ", @issn_params ) . ")";
+        foreach my $isn (@issns){
+            push @query_params, "%$isn%";
         }
     }
 

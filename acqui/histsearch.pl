@@ -75,6 +75,7 @@ my $filters = {
     title                   => scalar $input->param('title'),
     author                  => scalar $input->param('author'),
     isbn                    => scalar $input->param('isbn'),
+    issn                    => scalar $input->param('issn'),
     name                    => scalar $input->param('name'),
     internalnote            => scalar $input->param('internalnote'),
     vendornote              => scalar $input->param('vendornote'),
