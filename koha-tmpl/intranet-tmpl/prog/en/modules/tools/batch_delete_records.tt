@@ -70,7 +70,7 @@
         <ul>
           <li><a href="#uploadfile_tab">Upload a file</a></li>
           [% IF lists.count %]<li id="show_list_option"><a href="#shelves_tab">Select a list of records</a></li>[% END %]
-          <li><a href="#enterlist_tab">Enter a list of record ids</a></li>
+          <li><a href="#enterlist_tab">Enter a list of record IDs</a></li>
         </ul>
 
         <div id="uploadfile_tab">
@@ -106,9 +106,9 @@
           <fieldset class="rows">
             <ol>
               <li>
-                <label for="recordnumber_list">Ids: </label>
+                <label for="recordnumber_list">IDs: </label>
                 <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
-                <div class="hint">Enter a list of biblionumbers or authority ids, one per line.</div>
+                <div class="hint">Enter a list of biblionumbers or authority IDs, one per line.</div>
               </li>
             </ol>
           </fieldset>
@@ -172,7 +172,7 @@
             <thead>
               <tr>
                 <th></th>
-                <th>Authid</th>
+                <th>AuthID</th>
                 <th>Summary</th>
                 <th>Used in</th>
               </tr>
@@ -198,7 +198,7 @@
         </fieldset>
       </form>
     [% ELSE %]
-      There are no record ids defined.
+      There are no record IDs defined.
     [% END %]
   [% ELSIF op == 'enqueued' %]
     <div class="dialog message">
