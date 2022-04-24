@@ -64,7 +64,7 @@
             [% IF summary.equalterm.size %]
                 [% FOREACH term IN summary.equalterm %]
                         <span class="label">=</span>
-                        <span class="authorized">[% term.heading %]</span>
+                        <span class="authorized">[% term.heading | html %]</span>
                 [% END %]
             [% END %]
         </div>
