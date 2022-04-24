@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE TablesSettings %]
 <!-- columns_settings.inc -->
