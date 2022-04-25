@@ -10,9 +10,9 @@ return {
         my $rv = $dbh->do(q{
             UPDATE borrowers
             SET updated_on = GREATEST(
-                COALESCE(date_renewed, FROM_UNIXTIME(0)),
-                COALESCE(dateenrolled, FROM_UNIXTIME(0)),
-                COALESCE(lastseen, FROM_UNIXTIME(0))
+                COALESCE(date_renewed, FROM_UNIXTIME(1)),
+                COALESCE(dateenrolled, FROM_UNIXTIME(1)),
+                COALESCE(lastseen, FROM_UNIXTIME(1))
             )
             WHERE updated_on IS NULL
         });
@@ -21,9 +21,9 @@ return {
         $rv = $dbh->do(q{
             UPDATE deletedborrowers
             SET updated_on = GREATEST(
-                COALESCE(date_renewed, FROM_UNIXTIME(0)),
-                COALESCE(dateenrolled, FROM_UNIXTIME(0)),
-                COALESCE(lastseen, FROM_UNIXTIME(0))
+                COALESCE(date_renewed, FROM_UNIXTIME(1)),
+                COALESCE(dateenrolled, FROM_UNIXTIME(1)),
+                COALESCE(lastseen, FROM_UNIXTIME(1))
             )
             WHERE updated_on IS NULL
         });
