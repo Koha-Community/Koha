@@ -44,7 +44,8 @@
     [%- SET data.title = span_start _ data.title _ span_end _ ' ' -%]
 [%- END -%]
 [%- SET display_patron_name = 1 -%]
-[%- SET display_cardnumber  = 1 -%]
+[%- SET display_cardnumber = 1 -%]
+[%- IF no_cardnumber %][% SET display_cardnumber = 0 %][% END -%]
 [%- IF hide_patron_infos_if_needed %] [%# Should only be set if patron is set -%]
     [%- SET can_see_patron_infos = logged_in_user.can_see_patron_infos( patron ) -%]
     [%- UNLESS can_see_patron_infos -%]
@@ -57,6 +58,7 @@
 [%- IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -%]
     [%- IF link_to == 'circulation_reserves' %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% data.borrowernumber | uri %]#reserves">
     [%- ELSIF link_to == 'circulation_recalls' %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% data.borrowernumber | uri %]#recalls">
+    [%- ELSIF link_to == 'members_pay' %]<a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">
     [%- ELSE %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | uri %]">
     [%- END -%]
 [%- END -%]
