@@ -475,10 +475,6 @@ is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for internalno
 $orders = GetHistory( vendornote => 'vendor note foo' );
 is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for vendornote' );
 
-
-# Test GetHistory() with and without SearchWithISBNVariations
-# The ISBN passed as a param is the ISBN-10 version of the 13-digit ISBN in the sample record declared in $marcxml
-
 my $budgetid2 = C4::Budgets::AddBudget(
     {
         budget_code => "budget_code_test_modrecv",
@@ -616,16 +612,53 @@ sub run_flavoured_tests {
     is( scalar(@$orders), 1, "GetHistory searches correctly by ISBN" );
 
     Koha::Acquisition::Orders->find($ordernumber)->cancel;
+
+    my $marc_record_issn = MARC::Record->new;
+    $marc_record_issn->append_fields( create_issn_field( '2434561X', $marcflavour ) );
+    my ( $biblionumber6_issn, undef ) = AddBiblio( $marc_record_issn, '' );
+
+    my $orders_issn = GetHistory( issn => '2434561X' );
+    is( scalar(@$orders_issn), 0, "Precheck that ISSN shouln't be in database" );
+
+    # Create order
+    my $ordernumber_issn = Koha::Acquisition::Order->new( {
+            basketno     => $basketno,
+            biblionumber => $biblionumber6_issn,
+            budget_id    => $budget->{budget_id},
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note",
+            quantity       => 1,
+            ecost          => 10,
+            rrp            => 10,
+            listprice      => 10,
+            ecost          => 10,
+            rrp            => 10,
+            discount       => 0,
+            uncertainprice => 0,
+    } )->store->ordernumber;
+
+    t::lib::Mocks::mock_preference('SearchWithISSNVariations', 0);
+    $orders_issn = GetHistory( issn => '2434-561X' );
+    is( scalar(@$orders_issn), 0, "GetHistory searches correctly by ISSN" );
+
+    t::lib::Mocks::mock_preference('SearchWithISSNVariations', 1);
+    $orders_issn = GetHistory( issn => '2434-561X' );
+    is( scalar(@$orders_issn), 1, "GetHistory searches correctly by ISSN" );
+
+    Koha::Acquisition::Orders->find($ordernumber_issn)->cancel;
 }
+
+# Test GetHistory() with and without SearchWithISBNVariations or SearchWithISSNVariations
+# The ISBN passed as a param is the ISBN-10 version of the 13-digit ISBN in the sample record declared in $marcxml
 
 # Do "flavoured" tests
 subtest 'MARC21' => sub {
-    plan tests => 2;
+    plan tests => 5;
     run_flavoured_tests('MARC21');
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 2;
+    plan tests => 5;
     run_flavoured_tests('UNIMARC');
 };
 
@@ -659,6 +692,15 @@ sub create_isbn_field {
     # Add the price subfield
     my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c';
     $field->add_subfields( $price_subfield => '$100' );
+
+    return $field;
+}
+
+sub create_issn_field {
+    my ( $issn, $marcflavour ) = @_;
+
+    my ( $issn_field, $issn_subfield ) = get_issn_field();
+    my $field = MARC::Field->new( $issn_field, '', '', $issn_subfield => $issn );
 
     return $field;
 }
