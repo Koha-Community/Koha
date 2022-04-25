@@ -1,4 +1,4 @@
-/* global enquire readCookie updateBasket delCookie */
+/* global enquire readCookie updateBasket delCookie __ */
 (function( w ){
     // if the class is already set, the font has already been loaded
     if( w.document.documentElement.className.indexOf( "fonts-loaded" ) > -1 ){
@@ -231,4 +231,19 @@ $(document).ready(function(){
     });
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    /* Scroll back to top button */
+    $("body").append('<button id="backtotop" class="btn btn-primary" aria-label="' + __("Back to top") + '"><i class="fa fa-arrow-up" aria-hidden="true" title="' + __("Scroll to the top of the page") + '"></i></button>');
+    $("#backtotop").hide();
+    $(window).on("scroll", function(){
+        if ( $(window).scrollTop() < 300 ) {
+            $("#backtotop").fadeOut();
+        } else {
+            $("#backtotop").fadeIn();
+        }
+    });
+    $("#backtotop").on("click", function(e) {
+        e.preventDefault();
+        $("html,body").animate({scrollTop: 0}, "slow");
+    });
 });
