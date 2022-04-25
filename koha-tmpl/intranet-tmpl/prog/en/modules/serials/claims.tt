@@ -96,7 +96,7 @@
                         </select>
                         <input type="submit" value="OK" />
                     </fieldset>
-                </form>
+                </form> <!-- /#claims -->
 
                 [% IF ( missingissues ) %]
                     <h3>Missing issues</h3>
@@ -179,7 +179,7 @@
                                                 [% END %]
                                             [% END %]
                                         </tr>
-                                    [% END %]
+                                    [% END # /FOREACH missingissue %]
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -198,7 +198,7 @@
                                         [% END %]
                                     </tr>
                                 </tfoot>
-                            </table>
+                            </table> <!-- /#claimst -->
 
                             [% IF csv_profiles.count %]
                                 <fieldset class="action">
@@ -225,9 +225,9 @@
                                     <input type="submit" name="submit" class="button" value="Send notification" />
                                 </fieldset>
                             [% END %]
-                        </form>
+                        </form> <!-- /#claims_form -->
                     </fieldset>
-                [% END %]
+                [% END # /missingissues %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
