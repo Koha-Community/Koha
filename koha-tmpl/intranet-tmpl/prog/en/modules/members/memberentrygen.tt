@@ -488,7 +488,7 @@
                                                         [% IF patron_category.category_type == 'I' %]
                                                             <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
                                                                 <span class="label">Organization:</span>
-                                                                [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
+                                                                [% INCLUDE 'patron-title.inc' patron=r.guarantor %]
                                                             </li>
                                                             <li>
                                                                 <span class="label">Relationship:</span>
@@ -497,7 +497,7 @@
                                                         [% ELSE %]
                                                             <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
                                                                 <span class="label">Guarantor:</span>
-                                                                [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
+                                                                [% INCLUDE 'patron-title.inc' patron=r.guarantor %]
                                                                 <input type="hidden" class="guarantor_id relation-[% r.id | html %]" name="guarantor_id" value="[% r.guarantor_id | html %]" />
                                                             </li>
                                                             <li>

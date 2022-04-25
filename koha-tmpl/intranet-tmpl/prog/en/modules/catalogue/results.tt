@@ -165,9 +165,9 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="#" class="placehold dropdown-item">Place hold</a></li>
                                     [% IF holdfor %]
-                                        <li><a href="#" class="placeholdfor dropdown-item">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></li>
+                                        <li><a href="#" class="placeholdfor dropdown-item">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 no_html => 1 %]</a></li>
                                         <li><hr class="dropdown-divider" /></li>
-                                        <li><a class="dropdown-item" href="#" id="forgetholdfor">Forget [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></li>
+                                        <li><a class="dropdown-item" href="#" id="forgetholdfor">Forget [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 no_html => 1 %]</a></li>
                                     [% END %]
                                     [% IF holdforclub %]
                                         <li><a href="#" class="placeholdforclub dropdown-item">Place hold for [% holdforclub_name | html %]</a></li>
@@ -690,7 +690,7 @@
                                                         <span class="holdforlink"
                                                             >|
                                                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]"
-                                                                >Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a
+                                                                >Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 no_html => 1 %]</a
                                                             ></span
                                                         >
                                                     [% END %]
