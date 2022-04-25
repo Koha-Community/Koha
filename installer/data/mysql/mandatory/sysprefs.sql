@@ -216,7 +216,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesAutoFill','0',NULL,'Automatically fill the next hold with a automatically canceled expired waiting hold.','YesNo'),
-('ExpireReservesAutoFillEmail','', NULL,'Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply to address','Free'),
+('ExpireReservesAutoFillEmail','', NULL,'Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply-to address','Free'),
 ('ExpireReservesMaxPickUpDelay','0','','Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay','YesNo'),
 ('ExpireReservesMaxPickUpDelayCharge','0',NULL,'If ExpireReservesMaxPickUpDelay is enabled, and this field has a non-zero value, than a borrower whose waiting hold has expired will be charged this amount.','free'),
 ('ExpireReservesOnHolidays', '1', NULL, 'If false, reserves at a library will not be canceled on days the library is not open.', 'YesNo'),

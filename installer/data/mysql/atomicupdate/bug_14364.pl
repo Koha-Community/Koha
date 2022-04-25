@@ -9,13 +9,13 @@ return {
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('ExpireReservesAutoFill','0',NULL,'Automatically fill the next hold with a automatically canceled expired waiting hold.','YesNo'),
-            ('ExpireReservesAutoFillEmail','', NULL,'. Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply to address','Free');
+            ('ExpireReservesAutoFillEmail','', NULL,'. Send email notification of hold filled from automatically expired/cancelled hold to this address. If not defined, Koha will fallback to the library reply-to address','Free');
         });
         say $out "Added ExpireReservesAutoFill system preferences";
 
         $dbh->do(q{
         INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-        VALUES ( 'reserves', 'HOLD_CHANGED', '', 'Canceled Hold Available for Different Patron', '0', 'Canceled Hold Available for Different Patron', 'The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).
+        VALUES ( 'reserves', 'HOLD_CHANGED', '', 'Canceled hold available for different patron', '0', 'Canceled Hold Available for Different Patron', 'The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).
 
 Please update the hold information for this item.
 
@@ -26,4 +26,4 @@ Pickup location: <<branches.branchname>>', 'email');
         });
         say $out "Added HOLD_CHANGED notice";
     },
-}
+};

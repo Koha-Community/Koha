@@ -12,6 +12,7 @@ use MARC::Record;
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
+use C4::Reserves qw(CancelExpiredReserves);
 use Koha::Database;
 use Koha::Holds;
 
@@ -176,7 +177,7 @@ subtest 'Test automatically canceled expired waiting holds to fill the next hold
 
     CancelExpiredReserves();
 
-    my @holds = Koha::Holds->search( {}, { order_by => 'priority' } );
+    my @holds = Koha::Holds->search( {}, { order_by => 'priority' } )->as_list;
     $hold_2 = $holds[0];
 
     is( @holds,            1,   'Found 1 hold' );

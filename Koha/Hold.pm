@@ -729,7 +729,7 @@ sub cancel {
             my $is_transfer = $self->branchcode ne $next_hold->{branchcode};
 
             C4::Reserves::ModReserveAffect( $self->itemnumber, $self->borrowernumber, $is_transfer, $next_hold->{reserve_id}, $self->desk_id, $autofill_next );
-            C4::Reserves::ModItemTransfer( $self->itemnumber, $self->branchcode, $next_hold->{branchcode}, "Reserve" ) if $is_transfer;
+            C4::Items::ModItemTransfer( $self->itemnumber, $self->branchcode, $next_hold->{branchcode}, "Reserve" ) if $is_transfer;
         }
     }
 
