@@ -23,7 +23,7 @@ description:
   - "LIBRARY OF CONGRESS NAMES (authority records)"
   - "LIBRARY OF CONGRESS SUBJECTS (authority records)"
   - "COLUMBIA UNIVERSITY"
-
+  - "NATIONAL LIBRARY OF FRANCE"
 
 tables:
   - z3950servers:
@@ -79,3 +79,19 @@ tables:
           encoding: utf8
           servertype: sru
           sru_fields: "title=dc.title,isbn=bath.isbn,srchany=cql.anywhere,author=dc.author,issn=bath.issn,subject=dc.subject,stdid=bath.standardIdentifier"
+
+  - z3950servers:
+      translatable: [ servername ]
+      multiline: []
+      rows:
+        - host: "z3950.bnf.fr"
+          port: 2211
+          db: "TOUT-UTF8"
+          userid: "Z3950"
+          password: "Z3950_BNF"
+          servername: "NATIONAL LIBRARY OF FRANCE"
+          checked: 1
+          rank: 2
+          syntax: UNIMARC
+          encoding: utf8
+          servertype: zed
