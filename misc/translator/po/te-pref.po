@@ -9870,14 +9870,23 @@ msgid ""
 "address by entering it twice."
 msgstr "వారి ఇమెయిల్ చిరునామాను రెండుసార్లు నమోదు చేయడం ద్వారా ధృవీకరించడానికి పోషకులు."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
-"unrecoverably delete all patrons that have registered more than "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+"use a regular patron category for self registration.</strong>"
+msgstr "ఒపాక్ ద్వారా నమోదు చేయబడిన పోషకుల కోసం డిఫాల్ట్ పోషక వర్గంగా."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: స్వీయ "
 "నమోదు కోసం సాధారణ పోషక వర్గాన్ని ఉపయోగించవద్దు.</strong> ఉంటే <code>misc/cronjobs/"
@@ -9886,8 +9895,8 @@ msgstr ""
 "పొందలేము PatronSelfRegistrationExpireTemporaryAccountsDelay రోజుల క్రితం."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "పోషక వర్గం కోడ్‌ను ఉపయోగించండి"
 
 # OPAC > Self registration and modification
@@ -9914,11 +9923,13 @@ msgstr ""
 "అంగీకరించబడదు."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>గమనిక:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/"
 "cleanup_database.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."

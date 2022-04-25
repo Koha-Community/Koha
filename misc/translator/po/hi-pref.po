@@ -6012,10 +6012,9 @@ msgid ""
 "AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
 "brute force attacks to gain patron information outside the library."
 msgstr ""
-"circulation.pref#SelfCheckoutByLogin# .</br>नोट: यदि 'कार्ड नंबर' और ऑटो "
-"सेल्फचेक अनुमत का उपयोग कर रहे हैं तो आपको पुस्तकालय के बाहर संरक्षक जानकारी "
-"प्राप्त करने के लिए क्रूर बल के हमलों को रोकने के लिए "
-"SelfCheckAllowByIPRanges सेट करना चाहिए।"
+"circulation.pref#SelfCheckoutByLogin# .</br>नोट: यदि 'कार्ड नंबर' और ऑटो सेल्फचेक "
+"अनुमत का उपयोग कर रहे हैं तो आपको पुस्तकालय के बाहर संरक्षक जानकारी प्राप्त करने के लिए "
+"क्रूर बल के हमलों को रोकने के लिए SelfCheckAllowByIPRanges सेट करना चाहिए।"
 
 # Circulation > Self check-out module
 msgid ""
@@ -10724,14 +10723,25 @@ msgstr ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# दो बार दर्ज करके अपने ईमेल पते की "
 "पुष्टि करने के लिए संरक्षक."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
-"unrecoverably delete all patrons that have registered more than "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"opac.pref # PatronSelfRegistrationDefaultCategory # ओपेक के माध्यम से पंजीकृत "
+"संरक्षक के लिए डिफ़ॉल्ट संरक्षक श्रेणी के रूप में।"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>चेतावनी: स्व-"
 "पंजीकरण के लिए एक नियमित संरक्षक श्रेणी का उपयोग न करें.</strong> यदि <code>misc/"
@@ -10741,8 +10751,8 @@ msgstr ""
 "पंजीकरण किया है."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr ""
 "opac.pref # PatronSelfRegistrationDefaultCategory # संरक्षक श्रेणी कोड का उपयोग "
 "करें"
@@ -10774,11 +10784,13 @@ msgstr ""
 "नहीं किया जाएगा."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए <code>misc/cronjobs/"

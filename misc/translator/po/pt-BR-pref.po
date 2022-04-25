@@ -10279,14 +10279,23 @@ msgid ""
 "address by entering it twice."
 msgstr "usuários confirmem seu endereço de e-mail digitando-o duas vezes."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
-"unrecoverably delete all patrons that have registered more than "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+"use a regular patron category for self registration.</strong>"
+msgstr "como o usuário padrão para os registros feitos via OPAC."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "<br> <strong> AVISO: Não use uma categoria de usuário regular para "
 "autorregistro. </strong> Se o cronjob <code>misc/cronjobs/cleanup_database."
@@ -10296,8 +10305,8 @@ msgstr ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay dias atrás."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Utilize o código de categoria do usuário"
 
 # OPAC > Self registration and modification
@@ -10324,11 +10333,13 @@ msgstr ""
 "não será aceito se já existir no banco de dados."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da "
 "linha <code>misc/cronjobs/cleanup_database.pl</code> no cronjob. Peça ao "

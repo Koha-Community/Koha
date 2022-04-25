@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-02-21 08:22+0000\n"
-"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
+"PO-Revision-Date: 2022-03-31 10:13+0000\n"
+"Last-Translator: pmis <pmis@mnw.art.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1645431775.910959\n"
+"X-POOTLE-MTIME: 1648721598.980402\n"
 "X-Pootle-Path: /pl/20.11/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -8353,7 +8353,7 @@ msgid ""
 "patron's guarantor."
 msgstr ""
 "użytkownikom wybrać własnych ustawień prywatności dotyczących wyświetlania "
-"wypożyczeń opiekunowi użytkownika."
+"wypożyczeń poręczycielowi użytkownika."
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
@@ -8370,7 +8370,7 @@ msgid ""
 "guarantor."
 msgstr ""
 "użytkownikom wybrać własnych ustawień prywatności dotyczących wyświetlania "
-"należności opiekunowi użytkownika."
+"należności poręczycielowi użytkownika."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -10184,14 +10184,23 @@ msgid ""
 msgstr ""
 "od użytkowników, w celu potwierdzenia, ponownego wprowadzenia adresu email."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
-"unrecoverably delete all patrons that have registered more than "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
+"use a regular patron category for self registration.</strong>"
+msgstr "jako domyślnej kategorii dla użytkownika zarejestrowanego w OPAC."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
+"unrecoverably delete all patrons that have registered more than <a href='/"
+"cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "<br><strong>OSTRZEŻENIE: Nie używaj do samodzielnej rejestracji zwykłej "
 "kategorii użytkownika.</strong> Jeśli skrypt <code>misc/cronjobs/"
@@ -10202,8 +10211,8 @@ msgstr ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Użyj kodu kategorii użytkownika"
 
 # OPAC > Self registration and modification
@@ -10230,11 +10239,13 @@ msgstr ""
 "rejestracji. E-mail nie zostanie zaakceptowany, jeśli istnieje już w bazie."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>UWAGA:</strong> Opcja wymaga pracy skryptu <code>misc/cronjobs/"
 "cleanup_database.pl</code> . Poproś administratora systemu o jego włączenie."
@@ -10712,7 +10723,7 @@ msgstr "Formularze rejestracji"
 
 # Patrons > Patron relationships
 msgid "patrons.pref Patron relationships"
-msgstr "Opiekunowie użytkownika"
+msgstr "Powiązania użytkownika"
 
 # Patrons > Privacy
 msgid "patrons.pref Privacy"
@@ -10755,7 +10766,7 @@ msgid ""
 "the ability for a patron's checkouts to be viewed by linked patrons in the "
 "OPAC."
 msgstr ""
-"bibliotekarzowi na ustawianie opiekunowi podglądu wypożyczeń użytkownika "
+"bibliotekarzowi na ustawianie poręczycielowi podglądu wypożyczeń użytkownika "
 "(podopiecznego) w OPAC."
 
 # Patrons > Patron relationships
@@ -10771,8 +10782,8 @@ msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's fines to be viewed by linked patrons in the OPAC."
 msgstr ""
-"bibliotekarzowi na ustawianie opiekunowi podglądu należności użytkownika "
-"(podopiecznego) w OPAC."
+"bibliotekarzowi na umożliwienie poręczycielowi podglądu w OPAC należności "
+"powiązanego użytkownika."
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
@@ -10970,7 +10981,7 @@ msgstr "Dane kontaktowe"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Guarantor information"
-msgstr "Informacje o opiekunie"
+msgstr "Informacje o poręczycielu"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Housebound roles"
@@ -11174,10 +11185,11 @@ msgid ""
 "Regulation. When you enforce, patrons need to give consent before using the "
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
-". GDPR to Ogólne rozporządzenie o ochronie danych (General Data Protection "
-"Regulation). Gdy ustawisz opcję na 'wymuszającą zgodę', użytkownicy będą "
-"musieli potwierdzić swoją zgodę przed skorzystaniem z OPAC. Jeśli ustawisz "
-"na 'zalecającą zgodę', Koha ostrzeże o polityce prywatności, ale zgoda "
+"RODO to Rozporządzenie o ochronie danych osobowych (lub Ogólne "
+"rozporządzenie o ochronie danych, ang. General Data Protection Regulation). "
+"Gdy ustawisz opcję na 'wymuszającą zgodę', użytkownicy będą musieli "
+"potwierdzić swoją zgodę przed skorzystaniem z OPAC. Jeśli ustawisz na "
+"'zalecającą zgodę', Koha ostrzeże o polityce prywatności, ale zgoda "
 "użytkownika nie będzie wymagana."
 
 # Patrons > Privacy
@@ -11192,7 +11204,7 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Ustaw GDPR na:"
+msgstr "Ustaw politykę RODO na"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# disabled"
@@ -11287,8 +11299,8 @@ msgid ""
 "specified here. If applicable the guarantor form will be shown as well, "
 "individual fields in that form will be ignored."
 msgstr ""
-"będą dodane do skróconego formularza dodawania użytkownika. Wyświetla tylko "
-"pola wymagane i pola określone tutaj. W formularzu opiekuna będą się "
+"dodaj pola w formularzu skróconym dodawania użytkownika. Wyświetla tylko "
+"pola wymagane i pola określone tutaj. W formularzu poręczyciela będą się "
 "wyświetlać odpowiednie pola, indywidualne pola w formularzu będą ignorowane."
 
 # Patrons > General
@@ -11459,16 +11471,17 @@ msgid ""
 "patron fill the following fields in the guarantee's member entry form from "
 "the guarantors record:"
 msgstr ""
-"Podczas dodawania podopiecznego do opiekuna wypełnij następujące pola w "
-"formularzu zgłoszeniowym podopiecznego z rekordu opiekuna:"
+"Podczas dodawania powiązanego użytkownika do konta poręczyciela skopiuj z "
+"konta poręczyciela do formularza zgłoszeniowego powiązanego użytkownika "
+"następujące pola:"
 
 # Patrons > Privacy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if GDPR_Policy is set."
 msgstr ""
-"<br><strong>UWAGA:</strong> URL wyświetli się tylko, gdy opcja GDPR_Policy "
-"będzie włączona."
+"<br><strong>UWAGA:</strong> URL wyświetli się tylko wtedy, gdy opcja "
+"GDPR_Policy będzie włączona."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -11481,8 +11494,8 @@ msgid ""
 "make sure that this page is not blocked.)"
 msgstr ""
 "aby wyświetlić zasady biblioteki dotyczące polityki prywatności i ochrony "
-"danych osobowych. (Jeśli włączysz zasady GDPR, upewnij się, że strona nie "
-"jest zablokowana.)"
+"danych osobowych. (Jeśli włączysz wymuszenie akceptacji polityki RODO, "
+"upewnij się, że ta strona nie jest zablokowana.)"
 
 # Patrons > General
 msgid ""
@@ -11627,7 +11640,7 @@ msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
 "personal information."
 msgstr ""
-"pseudonimizację danych osobowych dla zachowania zgodności z polityką GDPR."
+"pseudonimizację danych osobowych dla zachowania zgodności z polityką RODO."
 
 # Patrons > Security
 msgid ""
