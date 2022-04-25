@@ -23,6 +23,8 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Koha::DateUtils qw( dt_from_string );
+
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
@@ -77,7 +79,7 @@ subtest 'success tests' => sub {
 
 subtest 'failure tests' => sub {
 
-    plan tests => 8;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -90,6 +92,16 @@ subtest 'failure tests' => sub {
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
     $patron->set_password({ password => $password });
     my $userid = $patron->userid;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
+      ->status_is( 200, 'All good' );
+
+    # expire patron's password
+    $patron->password_expiration_date( dt_from_string->subtract( days => 1 ) )->store;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
+      ->status_is( 403 )
+      ->json_is( '/error' => 'Password has expired', 'Password expired' );
 
     $t->get_ok("//@/api/v1/patrons")
       ->status_is( 401, 'No credentials passed' );
