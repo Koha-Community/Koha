@@ -401,7 +401,7 @@
            $("#returned, #refund_type").focus();
         });
 
-        $(".printReceipt").click(function() {
+        $("body").on('click', ".printReceipt", function() {
             var accountlines_id = $(this).data('accountline');
             var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=' + accountlines_id, '_blank');
             win.focus();
