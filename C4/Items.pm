@@ -1858,6 +1858,7 @@ sub ToggleNewStatus {
             WHERE 1
         |;
         for my $condition ( @$conditions ) {
+            next unless $condition->{field};
             if (
                  grep { $_ eq $condition->{field} } @item_columns
               or grep { $_ eq $condition->{field} } @biblioitem_columns
