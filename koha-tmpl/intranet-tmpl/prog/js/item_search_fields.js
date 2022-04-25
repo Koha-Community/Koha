@@ -2,7 +2,7 @@
 
 jQuery.validator.addMethod("marcfield", function(value, element) {
     return this.optional(element) || /^[0-9a-zA-Z]+$/.test(value);
-}, _("Please enter letters or numbers") );
+}, __("Please enter letters or numbers") );
 
 $(document).ready(function(){
     $("#add_field_form").hide();

@@ -46,7 +46,7 @@ function patron_autocomplete(node, options) {
                 },
                 error: function(e) {
                     if ( e.state() != 'rejected' ) {
-                        alert( _("An error occurred. Check the logs") );
+                        alert( __("An error occurred. Check the logs") );
                     }
                     return response();
                 }

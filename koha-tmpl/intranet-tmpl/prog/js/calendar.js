@@ -114,7 +114,7 @@ function DateTime_from_syspref(date_time) {
         },
         messages: {
             input_name_of_later_date_field: {
-                is_date_after: _("Validation error to be shown, i.e. End date must come after start date")
+                is_date_after: __("Validation error to be shown, i.e. End date must come after start date")
             }
         }
     });
