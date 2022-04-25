@@ -276,7 +276,7 @@ sub sip_circulation_status {
     elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_attached} } ) {
         return '08';    # waiting on hold shelf
     }
-    elsif ( $self->{location} eq 'CART' ) {
+    elsif ( $self->{location} and $self->{location} eq 'CART' ) {
         return '09';    # waiting to be re-shelved
     }
     elsif ( $self->{damaged} ) {
