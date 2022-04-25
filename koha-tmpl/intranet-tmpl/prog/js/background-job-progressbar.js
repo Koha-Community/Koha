@@ -69,7 +69,7 @@ function submitBackgroundJob(f) {
                 backgroundJobProgressTimer = setInterval("updateJobProgress()", 500);
             },
             error: function(xml, textStatus) {
-                humanMsg.displayMsg( '<p>' + _('Import of record(s) failed: ') + textStatus + '</p></br>'+xml.responseText, { className: 'humanError' } );
+                humanMsg.displayMsg( '<p>' + __('Import of record(s) failed: ') + textStatus + '</p></br>'+xml.responseText, { className: 'humanError' } );
             }
 
         });

@@ -54,11 +54,11 @@ function verify_cover_images() {
                     if( div.hasClass("coce-coverimg") ){
                         /* Identify which service's image is being loaded by IntranetCoce system pref */
                         if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
-                            div.find(".hint").html(_("Coce image from Amazon.com"));
+                            div.find(".hint").html(__("Coce image from Amazon.com"));
                         } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
-                            div.find(".hint").html(_("Coce image from Google Books"));
+                            div.find(".hint").html(__("Coce image from Google Books"));
                         } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
-                            div.find(".hint").html(_("Coce image from Open Library"));
+                            div.find(".hint").html(__("Coce image from Open Library"));
                         } else {
                             blanks.push( coverId );
                             div.remove();

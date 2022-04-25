@@ -41,7 +41,7 @@ $(document).ready(function() {
         var filename = $(this).val();
         if ( ! /(?:\.csv|\.ods)$/.test(filename)) {
             $(this).css("background-color","yellow");
-            alert(_("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
+            alert(__("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
             $(this).val("");
             $(this).css("background-color","white");
         }
@@ -56,9 +56,9 @@ $(document).ready(function() {
         var id = $(this).attr('id');
         var obj = $('#' + id + ' input:file');
         if (/(?:\.csv|\.ods)$/.test(obj.val())) {
-            if (confirm(_("Do you really want to import the authority type fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
+            if (confirm(__("Do you really want to import the authority type fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
                 var authtypecode = $('#' + id + ' input:hidden[name=authtypecode]').val();
-                $('#importing_' + authtypecode).find("span").html(_("Importing to authority type: %s. Importing from file: %s").format("<strong>" + authtypecode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
+                $('#importing_' + authtypecode).find("span").html(__("Importing to authority type: %s. Importing from file: %s").format("<strong>" + authtypecode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
                 if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                     var timestamp = new Date().getTime();
                     $('#importing_' + authtypecode).find("img").attr('src', '[% interface | html %]/[% theme | html %]/img/loading-small.gif' + '?' +timestamp);
@@ -73,7 +73,7 @@ $(document).ready(function() {
             }
         }
         obj.css("background-color","yellow");
-        alert(_("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
+        alert(__("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
         obj.val("");
         bj.css("background-color","white");
         return false;

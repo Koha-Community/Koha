@@ -5,7 +5,7 @@ $('body').on('click', '.return-claim-tools-resolve', function() {
     $('#claims-returned-resolved-modal-id').val(id);
     $("#new_lost_status").val(current_lost_status);
     let selected_option = $("#new_lost_status option:selected");
-    $(selected_option).text(_("%s (current status)").format($(selected_option).text()));
+    $(selected_option).text(__("%s (current status)").format($(selected_option).text()));
     $('#claims-returned-resolved-modal').modal()
 });
 

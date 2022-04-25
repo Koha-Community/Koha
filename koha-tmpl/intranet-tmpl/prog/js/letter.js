@@ -147,7 +147,7 @@ $(document).ready(function() {
     $(".content_sms").on("keyup", function(){
         var length = $(this).val().length;
         var sms_counter = ("#sms_counter_" + $(this).data('lang'));
-        $(sms_counter).html(length + "/" + sms_limit + _(" characters"));
+        $(sms_counter).html(length + "/" + sms_limit + __(" characters"));
         if ( length  > sms_limit ) {
             $(sms_counter).css("color", "red");
         } else {

@@ -32,13 +32,13 @@ function count_reject () {
 }
 
 var success_approve = function(tag){
-    // window.alert(_("AJAX approved tag: ") + tag);
+    // window.alert(__("AJAX approved tag: ") + tag);
 };
 var failure_approve = function(tag){
     window.alert( __("AJAX failed to approve tag: %s").format(decodeURIComponent(tag)) );
 };
 var success_reject  = function(tag){
-    // window.alert(_("AJAX rejected tag: ") + tag);
+    // window.alert(__("AJAX rejected tag: ") + tag);
 };
 var failure_reject  = function(tag){
     window.alert( __("AJAX failed to reject tag: %s").format(decodeURIComponent(tag)) );
@@ -55,7 +55,7 @@ var indeterminate_test = function(tag){
 
 var success_test_call = function() {
     $('#test_button').prop('disabled', false);
-    $('#test_button').html("<i class='fa fa-check-square-o' aria-hidden='true'></i>" +_(" Test"));
+    $('#test_button').html("<i class='fa fa-check-square-o' aria-hidden='true'></i>" +__(" Test"));
 };
 
 $(document).ready(function() {
@@ -100,7 +100,7 @@ $(document).ready(function() {
         pull_counts();
         var getelement;
         var gettitle;
-        // window.alert(_("Click detected on ") + event.target + ": " + $(event.target).html);
+        // window.alert(__("Click detected on ") + event.target + ": " + $(event.target).html);
         if ($(event.target).is('.ok')) {
             $.ajax(Object.assign({}, review_ajax_params, {
                 data: {
