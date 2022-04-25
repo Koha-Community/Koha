@@ -98,6 +98,7 @@ defines if this field displays in checkout screens
 =head2 category_code
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
   size: 10
 
@@ -150,7 +151,7 @@ __PACKAGE__->add_columns(
   "display_checkout",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "category_code",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "class",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "keep_for_pseudonymization",
@@ -203,6 +204,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 category_code
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Category>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "category_code",
+  "Koha::Schema::Result::Category",
+  { categorycode => "category_code" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
 =head2 pseudonymized_borrower_attributes
 
 Type: has_many
@@ -219,8 +240,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a/IA2iqSJqg3oOS+o1nXFg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-25 12:50:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VgJP4Ugfz0sN3YoJk/tshA
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },

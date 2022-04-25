@@ -268,6 +268,21 @@ __PACKAGE__->set_primary_key("categorycode");
 
 =head1 RELATIONS
 
+=head2 borrower_attribute_types
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BorrowerAttributeType>
+
+=cut
+
+__PACKAGE__->has_many(
+  "borrower_attribute_types",
+  "Koha::Schema::Result::BorrowerAttributeType",
+  { "foreign.category_code" => "self.categorycode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrower_message_preferences
 
 Type: has_many
@@ -329,8 +344,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-19 14:20:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xrnHXXv5sd3S2sMEKzHLmA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-25 12:50:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vEpp1HRkUOvPyWd/yAsxng
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
