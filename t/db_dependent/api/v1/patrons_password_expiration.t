@@ -56,21 +56,21 @@ subtest 'basic tests' => sub {
 
     my $new_password = 'abc';
 
-    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+    $t->put_ok( "//$userid:$password@/api/v1/patrons/"
           . $patron->id
-          . "/password/expiration" => json =>
+          . "/password/expiration_date" => json =>
           { expiration_date => '2021-01-01' } )
       ->status_is(200)->json_is('');
 
-    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+    $t->put_ok( "//$userid:$password@/api/v1/patrons/"
           . $patron->id
-          . "/password/expiration" => json =>
+          . "/password/expiration_date" => json =>
           { expiration_date => '01/13/2021' } )
       ->status_is(200)->json_is('');
 
-    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+    $t->put_ok( "//$userid:$password@/api/v1/patrons/"
           . $patron->id
-          . "/password/expiration" => json =>
+          . "/password/expiration_date" => json =>
           { expiration_date => '13/01/2021' } )
       ->status_is(500)->json_is({
           error => 'Something went wrong, check Koha logs for details.',
@@ -79,9 +79,9 @@ subtest 'basic tests' => sub {
 
     $privileged_patron->flags(0)->store();
 
-    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+    $t->put_ok( "//$userid:$password@/api/v1/patrons/"
           . $patron->id
-          . "/password/expiration" => json =>
+          . "/password/expiration_date" => json =>
           { expiration_date => '2021-01-01' } )
       ->status_is(403)->json_is({
            error => "Authorization failure. Missing required permission(s).",
