@@ -217,7 +217,7 @@ sub store {
         {
             biblio_ids => [ $self->biblionumber ]
         }
-    );
+    ) unless $params->{skip_holds_queue};
 
     return $result;
 }

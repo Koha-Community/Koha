@@ -344,6 +344,11 @@ Unless C<disable_autolink> is passed ModBiblio will relink record headings
 to authorities based on settings in the system preferences. This flag allows
 us to not relink records when the authority linker is saving modifications.
 
+=item C<skip_holds_queue>
+
+Unless C<skip_holds_queue> is passed, ModBiblio will trigger the BatchUpdateBiblioHoldsQueue
+task to rebuild the holds queue for the biblio.
+
 =back
 
 Returns 1 on success 0 on failure
@@ -433,7 +438,7 @@ sub ModBiblio {
         {
             biblio_ids => [ $biblionumber ]
         }
-    );
+    ) unless $options->{skip_holds_queue};
 
     return 1;
 }
@@ -3082,7 +3087,7 @@ Update the total issue count for a particular bib record.
 =cut
 
 sub UpdateTotalIssues {
-    my ($biblionumber, $increase, $value) = @_;
+    my ($biblionumber, $increase, $value, $skip_holds_queue) = @_;
     my $totalissues;
 
     my $record = GetMarcBiblio({ biblionumber => $biblionumber });
@@ -3116,7 +3121,7 @@ sub UpdateTotalIssues {
          $record->insert_grouped_field($field);
      }
 
-     return ModBiblio($record, $biblionumber, $biblio->frameworkcode);
+     return ModBiblio($record, $biblionumber, $biblio->frameworkcode, { skip_holds_queue => $skip_holds_queue });
 }
 
 =head2 RemoveAllNsb

@@ -400,7 +400,7 @@ sub ModDateLastSeen {
     my $item = Koha::Items->find($itemnumber);
     $item->datelastseen($today);
     $item->itemlost(0) unless $leave_item_lost;
-    $item->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
+    $item->store({ log_action => 0, skip_record_index => $params->{skip_record_index}, skip_holds_queue => $params->{skip_holds_queue} });
 }
 
 =head2 CheckItemPreSave

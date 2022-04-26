@@ -1671,7 +1671,7 @@ sub AddIssue {
             }
 
             if ( C4::Context->preference('UpdateTotalIssuesOnCirc') ) {
-                UpdateTotalIssues( $item_object->biblionumber, 1 );
+                UpdateTotalIssues( $item_object->biblionumber, 1, undef, { skip_holds_queue => 1 } );
             }
 
             # Record if item was lost
@@ -1683,7 +1683,7 @@ sub AddIssue {
             $item_object->onloan($datedue->ymd());
             $item_object->datelastborrowed( dt_from_string()->ymd() );
             $item_object->datelastseen( dt_from_string()->ymd() );
-            $item_object->store({log_action => 0});
+            $item_object->store( { log_action => 0, skip_holds_queue => 1 } );
 
             # If the item was lost, it has now been found, charge the overdue if necessary
             if ($was_lost) {
@@ -2077,7 +2077,7 @@ sub AddReturn {
                 . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
-        $item->onloan(undef)->store({skip_record_index=>1}) if defined $item->onloan;
+        $item->onloan(undef)->store( { skip_record_index => 1, skip_holds_queue => 1 } ) if defined $item->onloan;
 
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
@@ -2110,7 +2110,7 @@ sub AddReturn {
                 (!defined $item->location && $update_loc_rules->{_ALL_} ne "")
                ) {
                 $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
-                $item->location($update_loc_rules->{_ALL_})->store({skip_record_index=>1});
+                $item->location($update_loc_rules->{_ALL_})->store({ skip_record_index => 1, skip_holds_queue => 1});
             }
         }
         else {
@@ -2119,7 +2119,7 @@ sub AddReturn {
                 if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
                 if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
                     $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
-                    $item->location($update_loc_rules->{$key})->store({skip_record_index=>1});
+                    $item->location($update_loc_rules->{$key})->store({ skip_record_index => 1, skip_holds_queue => 1});
                     last;
                 }
             }
@@ -2138,7 +2138,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->notforloan eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$key} };
-                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1 });
+                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 });
                     last;
                 }
             }
@@ -2174,7 +2174,7 @@ sub AddReturn {
 
         if ($patron) {
             eval {
-                MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy, { skip_record_index => 1} );
+                MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy, { skip_record_index => 1, skip_holds_queue => 1} );
             };
             unless ( $@ ) {
                 if (
@@ -2200,19 +2200,19 @@ sub AddReturn {
             $messages->{'WasReturned'} = 1;
 
         } else {
-            $item->onloan(undef)->store({ log_action => 0 , skip_record_index => 1 });
+            $item->onloan(undef)->store({ log_action => 0 , skip_record_index => 1, skip_holds_queue => 1 });
         }
     }
 
     # the holdingbranch is updated if the document is returned to another location.
     # this is always done regardless of whether the item was on loan or not
     if ($item->holdingbranch ne $branch) {
-        $item->holdingbranch($branch)->store({ skip_record_index => 1 });
+        $item->holdingbranch($branch)->store({ skip_record_index => 1, skip_holds_queue => 1 });
     }
 
     my $item_was_lost = $item->itemlost;
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-    my $updated_item = ModDateLastSeen( $item->itemnumber, $leave_item_lost, { skip_record_index => 1 } ); # will unset itemlost if needed
+    my $updated_item = ModDateLastSeen( $item->itemnumber, $leave_item_lost, { skip_record_index => 1, skip_holds_queue => 1 } ); # will unset itemlost if needed
 
     # fix up the accounts.....
     if ($item_was_lost) {
@@ -2509,7 +2509,12 @@ sub MarkIssueReturned {
         # And finally delete the issue
         $issue->delete;
 
-        $issue->item->onloan(undef)->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
+        $issue->item->onloan(undef)->store(
+            {   log_action        => 0,
+                skip_record_index => $params->{skip_record_index},
+                skip_holds_queue  => $params->{skip_holds_queue}
+            }
+        );
 
         if ( C4::Context->preference('StoreLastBorrower') ) {
             my $item = Koha::Items->find( $itemnumber );
