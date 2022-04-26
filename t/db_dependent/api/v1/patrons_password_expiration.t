@@ -52,8 +52,6 @@ subtest 'basic tests' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    t::lib::Mocks::mock_preference( 'dateformat','us' );
-
     my $new_password = 'abc';
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
@@ -66,16 +64,13 @@ subtest 'basic tests' => sub {
           . $patron->id
           . "/password/expiration_date" => json =>
           { expiration_date => '01/13/2021' } )
-      ->status_is(200)->json_is('');
+      ->status_is(400)->json_is('/errors/0/message' => 'Does not match date format.');
 
     $t->put_ok( "//$userid:$password@/api/v1/patrons/"
           . $patron->id
           . "/password/expiration_date" => json =>
           { expiration_date => '13/01/2021' } )
-      ->status_is(500)->json_is({
-          error => 'Something went wrong, check Koha logs for details.',
-          error_code => "internal_server_error"
-      });
+      ->status_is(400)->json_is('/errors/0/message' => 'Does not match date format.');
 
     $privileged_patron->flags(0)->store();
 
@@ -89,8 +84,6 @@ subtest 'basic tests' => sub {
                "superlibrarian" => "1"
            }
       });
-
-
 
     $schema->storage->txn_rollback;
 };
