@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-17 08:33-0300\n"
-"PO-Revision-Date: 2022-03-22 06:57+0000\n"
+"PO-Revision-Date: 2022-04-19 11:21+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1647932278.235198\n"
+"X-POOTLE-MTIME: 1650367306.753961\n"
 "X-Pootle-Path: /tr/21.05/tr-TR-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -520,7 +520,7 @@ msgstr "%s %sPaylaşılmış%sÖzel%s %s Genel %s"
 msgid ""
 "%s %sYou reached your open article requests limit. %sAn error has occurred. "
 "%s "
-msgstr ""
+msgstr "%s %sAçık makale istekleri sınırınıza ulaştınız. %sBir hata oluştu. %s"
 
 #. %1$s:  added_count | html 
 #. %2$s:  IF ( added_count == 1 ) 
@@ -979,11 +979,13 @@ msgstr "%s Otomatik Ödünç & İade Sistemi"
 #. %2$s:  ELSIF ( typeissuecancel ) 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
 "alert %s "
-msgstr "%sAbonelik uyarısına abone ol %s Abonelik uyarısını kaldır %s"
+msgstr ""
+"%s Bir abonelik uyarısına abone olun %s Bir abonelik uyarısının "
+"aboneliğinden çıkın %s "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
@@ -1165,7 +1167,7 @@ msgstr "%s materyal sipariş edildi."
 #, c-format
 msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
-"%s sonuçtan %s kadarı yüklendi, diğer kayıtları görmek için aramanızı "
+"%s kadar sonuç %s sonuçtan getirildi, diğer kayıtları görmek için aramanızı "
 "daraltın"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
@@ -4482,7 +4484,7 @@ msgstr "Bileşenler (%s)"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:481
 msgid "Confirm hold"
-msgstr "Ayırtmayı onaylayın"
+msgstr "Materyal ayırtmayı onaylayın"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
@@ -4918,15 +4920,15 @@ msgid "Default sorting"
 msgstr "Varsayılan sıralama"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default: keep my checkout history according to local laws. This is the "
 "default option : the library will keep your checkout history for the "
 "duration permitted by local laws."
 msgstr ""
-"Varsayılan: yerel yasalar uyarınca okuma geçmişimi saklansın. Bu varsayılan "
-"seçenektir : Kütüphane, okuma geçmişinizi saklamaya, yerel yasalar "
-"tarafından izin verilen süre içerisinde devam edecektir."
+"Varsayılan: yerel yasalar uyarınca ödünç alma geçmişim saklansın. Bu "
+"varsayılan seçenektir : Kütüphane, ödünç alma geçmişinizi saklamaya, yerel "
+"yasalar tarafından izin verilen süre içerisinde devam edecektir."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:199
 #, c-format
@@ -5059,7 +5061,7 @@ msgstr "Sadece özetler"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:151
 #, c-format
 msgid "Digital scan"
-msgstr ""
+msgstr "Dijital tarama"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
 #, c-format
@@ -5197,9 +5199,9 @@ msgid "Due %s"
 msgstr "İade %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Due date is not valid."
-msgstr "Bağlantı geçersiz."
+msgstr "İade tarihi geçerli değil."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
@@ -5241,9 +5243,9 @@ msgstr "Listeyi düzenle &nbsp;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:452
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
-#, fuzzy, c-format
+#, c-format
 msgid "Edit note"
-msgstr "Nüsha notunu düzenle"
+msgstr "Not düzenle"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
 #, c-format
@@ -5572,9 +5574,9 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:636
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:638
-#, fuzzy, c-format
+#, c-format
 msgid "Fax"
-msgstr "Faks:"
+msgstr "Faks"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
 #, c-format
@@ -5718,12 +5720,12 @@ msgid "Forever"
 msgstr "Daima"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Forever: keep my checkout history without limit. This is the option for "
 "users who want to keep track of what they are reading."
 msgstr ""
-"Daima: Okuma geçmişimi limitsiz olarak saklayın. Bu seçenek, ne okumakta "
+"Daima: Ödünç alma geçmişimi süresiz olarak saklayın. Bu seçenek, ne okumakta "
 "olduğunu izlemek isteyen kullanıcılar içindir."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
@@ -5924,13 +5926,14 @@ msgstr ""
 "zamanlı arama sağlar."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Given a set of bibliographic or item identifiers, returns a list with "
 "availability and call number of the items associated with the identifiers."
 msgstr ""
-"Bir kaynakça veya materyal tanımlayıcıları ile ilişkili öğeleri "
-"kullanılabilirliği ile listesini döndürür."
+"Bir dizi bibliyografik veya materyal tanımlayıcısı verildiğinde, "
+"tanımlayıcılarla ilişkili materyallerin kullanılabilirliğini ve yer "
+"numarasını içeren bir liste döndürür."
 
 #. INPUT type=submit name=save
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
@@ -6078,9 +6081,9 @@ msgid "Hide options"
 msgstr "Seçenekleri gizle"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
-#, fuzzy, c-format
+#, c-format
 msgid "Hide unholdable items"
-msgstr "Sonraki kullanılabilir materyal"
+msgstr "Ayırtılamayan materyalleri gizle"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
 #, c-format
@@ -6096,7 +6099,7 @@ msgstr "Vurgula"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:108
 #, c-format
 msgid "Hold date"
-msgstr "Ayırtma tarihi"
+msgstr "Materyal ayırtma tarihi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:66
 #, c-format
@@ -6116,7 +6119,7 @@ msgstr "Ayırma notları:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
 msgid "Hold requests"
-msgstr "Ayırtma istekleri"
+msgstr "Materyal ayırtma istekleri"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:283
 #, c-format
@@ -6369,13 +6372,13 @@ msgid "If this is an error, please contact the library."
 msgstr "Eğer bu bir hata ise, lütfen kütüphane ile irtibata geçin."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If this is an error, please take your library card to the circulation desk "
 "at your local library and the error will be corrected."
 msgstr ""
-"Eğer bu bir hata ise düzeltilmesi için kartınızı kütüphanenizin ödünç verme "
-"servisine götürün."
+"Bu bir hata ise, lütfen kütüphane kartınızı yerel kütüphanenizdeki ödünç "
+"verme servisine götürün, hata düzeltilecektir."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:35
 #, c-format
@@ -6494,15 +6497,15 @@ msgid "If you want to, you can try to "
 msgstr "Eğer isterseniz, deneyebilirsiniz"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Image from Amazon.com"
-msgstr "Amazon.com üzerinde görüntüle"
+msgstr "Amazon.com'dan alınan resim"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Image from Baker &amp; Taylor"
-msgstr "Bkz. Baker & Taylor"
+msgstr "Baker & Taylor'dan alınan resim"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
@@ -6515,11 +6518,12 @@ msgstr "Coce'den alınan resim"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
 msgid "Image from Google Books (<a href='%s'>see the original image</a>)"
 msgstr ""
+"Google Kitaplar'dan alınan resim (<a href='%s'>orijinal resme bakın</a>)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:99
 #, c-format
 msgid "Image from Google Jackets"
-msgstr ""
+msgstr "Google Jackets'tan alınan resim"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:116
 #, c-format
@@ -6739,7 +6743,7 @@ msgstr "Materyal ayırma sırası önceliği"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, c-format
 msgid "Item holds"
-msgstr "Ayırmalar"
+msgstr "Materyal Ayırtmaları"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
@@ -6747,9 +6751,9 @@ msgid "Item lost"
 msgstr "Materyal kayıp"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Item must be checked out at a circulation desk."
-msgstr "Üzgünüz, bu materyal bu birimden ödünç alınamaz."
+msgstr "Materyal bir dolaşım masasında ödünç verilmelidir."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
@@ -6759,9 +6763,9 @@ msgstr ""
 "başvurunuz"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:211
-#, fuzzy, c-format
+#, c-format
 msgid "Item not renewed"
-msgstr "Materyalin süresi uzatıldı"
+msgstr "Materyalin süresi uzatılmadı"
 
 #. %1$s:  HOLD.item.barcode | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
@@ -7182,9 +7186,9 @@ msgstr "Yükleniyor..."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Local cover image"
-msgstr "Kapak resmi"
+msgstr "Yerel kapak resmi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
@@ -7440,7 +7444,7 @@ msgstr "Sürekli adres"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:594
 #, c-format
 msgid "Main contact method:"
-msgstr ""
+msgstr "Ana iletişim yöntemi:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:566
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:568
@@ -7656,7 +7660,7 @@ msgid "Never expires %s %s "
 msgstr "Süresiz %s %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Never: Delete my checkout history immediately. This will delete all record "
 "of the item that was checked-out upon check-in."
@@ -7722,7 +7726,7 @@ msgstr "Yeni etiket:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:76
 #, c-format
 msgid "News"
-msgstr "Haberler"
+msgstr "Duyurular"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -7854,7 +7858,7 @@ msgstr "Gösterilecek girdi yok"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 msgid "No holds"
-msgstr "Ayırtma yok"
+msgstr "Materyal ayırtma yok"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
@@ -8317,7 +8321,7 @@ msgstr "Çevrimiçi kaynaklar:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
 #, c-format
 msgid "Only %s results are shown: "
-msgstr ""
+msgstr "Sadece %s sonuç gösteriliyor:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
 #, c-format
@@ -8390,9 +8394,9 @@ msgstr "Diğer adı:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:617
-#, fuzzy, c-format
+#, c-format
 msgid "Other phone"
-msgstr "Diğer telefon:"
+msgstr "Diğer telefon"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:546
 #, c-format
@@ -8620,7 +8624,7 @@ msgstr "Telefon:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:150
 #, c-format
 msgid "Photocopy"
-msgstr ""
+msgstr "Fotokopi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, c-format
@@ -8917,9 +8921,8 @@ msgstr "Lütfen kart numarasını giriniz:"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:246
-#, fuzzy
 msgid "Please fill in at least one field."
-msgstr "Lütfen bu alanı düzeltiniz."
+msgstr "Lütfen en az bir alanı doldurun."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:61
 #, c-format
@@ -9006,7 +9009,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:95
 #, c-format
 msgid "Please see a member of the library staff."
-msgstr ""
+msgstr "Lütfen bir kütüphaneciye danışınız."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:246
@@ -9148,9 +9151,9 @@ msgstr "Temel"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:622
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:624
-#, fuzzy, c-format
+#, c-format
 msgid "Primary email"
-msgstr "Birincil e-posta:"
+msgstr "Birincil e-posta"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:555
 #, c-format
@@ -9159,9 +9162,9 @@ msgstr "Birincil e-posta:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:603
-#, fuzzy, c-format
+#, c-format
 msgid "Primary phone"
-msgstr "Birincil telefon:"
+msgstr "Birincil telefon"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
 #, c-format
@@ -9878,12 +9881,12 @@ msgstr "Kaldığı yerden devam et"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:216
 #, c-format
 msgid "Resume all suspended holds"
-msgstr "Tüm askıya alınan ayırmaları devam ettir"
+msgstr "Tüm askıya alınan materyal ayırtmaları devam ettir"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:149
-#, fuzzy, c-format
+#, c-format
 msgid "Resume your hold on "
-msgstr "üzerindeki ayırma işlemini askıya al"
+msgstr "Materyal ayırtma işleminize kaldığı yerden devam edin"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:129
@@ -10040,9 +10043,9 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:17
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes"
-msgstr "Değişiklikleri gönderin"
+msgstr "Değişiklikleri kaydet"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:60
 #, c-format
@@ -10243,9 +10246,9 @@ msgstr "OverDrive aranıyor..."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:629
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:631
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary email"
-msgstr "İkinci e-posta:"
+msgstr "İkinci e-posta"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:573
 #, c-format
@@ -10254,9 +10257,9 @@ msgstr "İkinci e-posta:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:608
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:610
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary phone"
-msgstr "İkinci telefon:"
+msgstr "İkinci telefon"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:537
 #, c-format
@@ -10304,9 +10307,9 @@ msgid "See: %s%s%sprevious biblio%s"
 msgstr "Bkz.: %s%s%sbir önceki bibliyo%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:5
-#, fuzzy, c-format
+#, c-format
 msgid "Select a download format"
-msgstr "Lütfen bir indirme biçimi seçin"
+msgstr "Bir indirme biçimi seçin"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -10534,7 +10537,7 @@ msgid "Share"
 msgstr "Paylaş"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "Share a list"
 msgstr "Bir liste paylaşın"
 
@@ -11285,7 +11288,7 @@ msgstr "Askıya al"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:203
 #, c-format
 msgid "Suspend all holds"
-msgstr "Tüm ayırmaları beklet"
+msgstr "Tüm materyal ayırtmaları beklet"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:159
 #, c-format
@@ -12480,13 +12483,13 @@ msgid "We"
 msgstr "Çrş"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "We take great care in protecting your privacy. On this screen, you can "
 "define how long we keep your checkout history."
 msgstr ""
-"Gizliliğinizi korumaya büyük özen gösteriyoruz. Bu ekranda, ödünç alma ve "
-"ayırtma geçmişinizi ne kadar süreyle tutacağımızı tanımlayabilirsiniz."
+"Gizliliğinizi korumaya büyük özen gösteriyoruz. Bu ekranda, ödünç "
+"geçmişinizi ne kadar süreyle saklayacağımızı tanımlayabilirsiniz."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
 #, c-format
@@ -12525,12 +12528,13 @@ msgid "What's next?"
 msgstr "Sırada ne var?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Whatever your privacy rule you choose, you can delete all your checkout "
 "history immediately by clicking here. "
 msgstr ""
-"Tüm ödünç alma ve ayırtma geçmişinizi buraya tıklayarak hemen silebilirsiniz."
+"Seçtiğiniz gizlilik kuralı ne olursa olsun, tüm okuma geçmişinizi buraya "
+"tıklayarak hemen silebilirsiniz."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:69
 #, c-format
@@ -14091,7 +14095,7 @@ msgstr "göster_cezalar"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:535
 #, c-format
 msgid "show_holds"
-msgstr "göster_ayırmalar"
+msgstr "show_holds"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:537
 #, c-format
@@ -14427,7 +14431,7 @@ msgstr "Hesabınız"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:39
 #, c-format
 msgid "your tags"
-msgstr "etiketleriniz"
+msgstr "tag'leriniz"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:3
 #, c-format

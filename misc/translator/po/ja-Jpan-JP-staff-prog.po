@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-03-17 07:59-0300\n"
+"POT-Creation-Date: 2022-04-17 18:39-0300\n"
 "PO-Revision-Date: 2019-01-26 07:11+0000\n"
 "Last-Translator: DeigoHiga <diegomh27@hotmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -2746,13 +2746,6 @@ msgid ""
 "Holding library %s %s %s "
 msgstr ""
 
-#. %1$s: - IF ( hold.found ) -
-#. %2$s: - IF ( hold.atdestination ) -
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:120
-#, fuzzy, c-format
-msgid "%s %s Item waiting at "
-msgstr "%s %s %s 待機中のアイテム: "
-
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:112
 #, fuzzy
@@ -4818,7 +4811,7 @@ msgstr ""
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1035
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1041
 #, fuzzy
 msgid "%s - Click to Expand this Tag"
 msgstr "新しく増加して本にかごを借りる"
@@ -5503,7 +5496,7 @@ msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s %s %s%s%sタイトルなし%s %s %s%s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:916
 #, fuzzy, c-format
 msgid "%s Default "
 msgstr "選択"
@@ -5648,8 +5641,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:813
 #, fuzzy, c-format
 msgid "%s Editing "
 msgstr "待つことの中 "
@@ -5820,6 +5813,12 @@ msgstr "名 "
 msgid "%s Guarantor surname: "
 msgstr "名 "
 
+#. %1$s: - ELSE -
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:128
+#, c-format
+msgid "%s Hold expected at "
+msgstr ""
+
 #. For the first occurrence,
 #. %1$s:  holds_count | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:767
@@ -5885,7 +5884,7 @@ msgid "%s Initials: "
 msgstr ""
 
 #. %1$s: - ELSIF (hold.inprocessing) -
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:125
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:126
 #, fuzzy, c-format
 msgid "%s Item being processed at "
 msgstr "%s %s 輸送中： "
@@ -5941,6 +5940,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s Item type not for loan. %s %s Item not for loan%s (%s)%s. %s "
 msgstr "館所蔵 "
+
+#. %1$s: - IF ( hold.atdestination ) -
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:122
+#, fuzzy, c-format
+msgid "%s Item waiting at "
+msgstr "%s %s %s 待機中のアイテム: "
 
 #. %1$s:  IF (more_than_one_serial) 
 #. %2$s:  ELSE 
@@ -6282,8 +6287,8 @@ msgstr "%s Not renewable%s "
 #. For the first occurrence,
 #. %1$s: - ELSE -
 #. %2$s: - END -
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:150
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:162
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:153
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:165
 #, fuzzy, c-format
 msgid "%s No barcode %s "
 msgstr "%s Not renewable%s "
@@ -6977,7 +6982,7 @@ msgstr "罰金 "
 #. %3$s:  END 
 #. %4$s:  IF cities_count > 0 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:175
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:176
 #, fuzzy, c-format
 msgid "%s Searching: %s %s %s "
 msgstr "%s %s %s %s "
@@ -8090,7 +8095,7 @@ msgstr "%s %s 以来%s "
 #. %1$s:  IF ( hold.suspend ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:214
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:217
 #, fuzzy, c-format
 msgid "%s on %s until %s"
 msgstr "%s %s %s %s %s"
@@ -8893,6 +8898,16 @@ msgid ""
 "%s, %s %sRepeatable, %sNot repeatable, %s %sMandatory, %sNot mandatory, %s "
 "%shidden, %s %sis a url, %s %s | "
 msgstr ""
+
+#. %1$s:  IF hold.desk_name 
+#. %2$s:  hold.desk_name | html 
+#. %3$s:  END 
+#. %4$s:  hold.waiting_date | $KohaDates 
+#. %5$s: - ELSIF (hold.intransit) -
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:124
+#, fuzzy, c-format
+msgid "%s, %s,%s since %s %s Item being transferred to "
+msgstr "%s %s 輸送中： "
 
 # %1$s: IF ( author )
 # %2$s: author
@@ -9911,7 +9926,7 @@ msgstr ""
 "with limit(s):&nbsp;'%s'%s %s You did not specify any search criteria. %s %s"
 
 #. INPUT type=button
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:222
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:225
 msgid "%sRevert transit status%sRevert waiting status%s"
 msgstr ""
 
@@ -10772,7 +10787,7 @@ msgstr "姓"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr ""
@@ -10780,7 +10795,7 @@ msgstr ""
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:792
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:798
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr ""
@@ -10913,7 +10928,7 @@ msgstr ""
 msgid "(exclusive) "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:811
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:817
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:151
 #, fuzzy, c-format
 msgid "(fast cataloging)"
@@ -11203,6 +11218,15 @@ msgstr ""
 #, c-format
 msgid ", please ask an administrator to check your configuration. "
 msgstr ""
+
+#. %1$s: - END -
+#. %2$s: - ELSE -
+#. %3$s: - IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 -
+#. %4$s:  Branches.GetName(hold.branchcode) | html 
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:130
+#, fuzzy, c-format
+msgid ", please checkin to verify status %s %s %s %s "
+msgstr "（貸し出す）"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/about-team.inc:72
 #, c-format
@@ -11599,12 +11623,6 @@ msgid ""
 "A bibliographic record for this request exists, but no item. You are about "
 "to create an item and check it out"
 msgstr ""
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
-#, fuzzy
-msgid "A few important fields are not filled:"
-msgstr "エラーが発生しました"
 
 # For the first occurrence,
 # %1$s: ELSE
@@ -12144,10 +12162,10 @@ msgstr "狀態 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:382
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:103
@@ -12240,7 +12258,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:189
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:258
@@ -12284,7 +12302,7 @@ msgstr "アクション:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:169
@@ -12525,7 +12543,7 @@ msgid "Add a new message"
 msgstr "新規リストに追加:"
 
 # A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
 #, fuzzy, c-format
 msgid "Add a new record"
 msgstr "他のフィールドを追加"
@@ -14556,6 +14574,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -14563,7 +14582,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
@@ -15685,9 +15703,7 @@ msgid ""
 "undone."
 msgstr "このリストを本当に削除しますか?"
 
-#. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/cataloging_additem.inc:3
 #, fuzzy
 msgid "Are you sure you want to save?"
@@ -15701,7 +15717,7 @@ msgid ""
 msgstr "このリストを本当に削除しますか?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:229
 #, fuzzy
 msgid "Are you sure you want to uninstall the plugin %s?"
 msgstr "このリストを本当に削除しますか? "
@@ -16019,7 +16035,7 @@ msgstr "作者"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:116
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
@@ -16733,6 +16749,7 @@ msgstr "自分"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
@@ -16740,7 +16757,6 @@ msgstr "自分"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:779
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:78
@@ -18014,7 +18030,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:781
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:787
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -18063,6 +18079,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -18089,9 +18108,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:14
@@ -18126,9 +18142,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:14
@@ -18549,7 +18565,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:68
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, c-format
 msgid "CSV"
 msgstr ""
@@ -18942,7 +18958,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/debit_types.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:135
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/didyoumean.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:139
@@ -18973,11 +18989,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:933
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:937
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:941
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:945
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:950
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:939
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:943
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:947
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:956
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -19109,7 +19125,7 @@ msgstr "館所蔵を取り消す"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:374
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:231
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:199
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:202
 #, fuzzy, c-format
 msgid "Cancel "
 msgstr "館所蔵を取り消す"
@@ -19952,7 +19968,7 @@ msgstr "狀態"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:787
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
@@ -20209,7 +20225,7 @@ msgstr "分類："
 msgid "Change currency"
 msgstr "いかなる分館"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, fuzzy, c-format
 msgid "Change framework"
@@ -21824,7 +21840,7 @@ msgid "Clear fields"
 msgstr "全てを一掃する"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, fuzzy, c-format
 msgid "Clear filter"
 msgstr "全てを明らかに示す"
@@ -21945,7 +21961,7 @@ msgstr ""
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:359
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1076
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
 #, fuzzy
 msgid "Click to Expand this Tag"
 msgstr "新しく増加して本にかごを借りる"
@@ -21996,7 +22012,7 @@ msgstr "すべての図書館"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22022,7 +22038,7 @@ msgstr ""
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -22536,7 +22552,7 @@ msgid "Column: "
 msgstr "トップページに戻る "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:308
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, fuzzy, c-format
 msgid "Columns"
 msgstr "トップページに戻る"
@@ -22549,7 +22565,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, fuzzy
 msgid "Columns settings"
 msgstr "成年、全般"
@@ -22760,7 +22776,7 @@ msgstr "待つことの中"
 msgid "Configuration OK, you don't have errors in your MARC parameters table"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:194
 #, c-format
 msgid "Configure"
 msgstr ""
@@ -23421,7 +23437,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, fuzzy, c-format
 msgid "Copy"
@@ -23926,7 +23942,7 @@ msgstr "館所蔵 "
 msgid "Create a new city"
 msgstr "新しい仮定の本棚を作り上げる"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:207
 #, fuzzy, c-format
 msgid "Create a new desk"
 msgstr "新しい仮定の本棚を作り上げる"
@@ -24570,7 +24586,7 @@ msgstr ""
 msgid "DBMS auto increment fix"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:150
 #, c-format
 msgid "DISABLED"
 msgstr ""
@@ -24837,13 +24853,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:393
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2341
@@ -25626,7 +25642,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:384
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/classsources.tt:405
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:236
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:194
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:92
@@ -25658,18 +25674,18 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:290
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
@@ -25861,7 +25877,7 @@ msgid "Delete current subfield and copy to 'clipboard'"
 msgstr "この仮定の本棚を削除する"
 
 #. %1$s:  desk.desk_name | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:147
 #, fuzzy, c-format
 msgid "Delete desk \"%s\"?"
 msgstr "この仮定の本棚を削除する"
@@ -26129,8 +26145,8 @@ msgstr ""
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:368
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1085
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1086
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
 #, fuzzy
 msgid "Delete this Tag"
 msgstr "この仮定の本棚を削除する"
@@ -26172,7 +26188,7 @@ msgstr "この仮定の本棚を削除する"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #, fuzzy
 msgid "Delete this subfield"
 msgstr "この仮定の本棚を削除する"
@@ -26402,7 +26418,7 @@ msgstr "待つことの中"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:186
@@ -26544,14 +26560,14 @@ msgid ""
 "item)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:147
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:186
 #, c-format
 msgid "Desk"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:149
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:185
 #, c-format
 msgid "Desk ID"
 msgstr ""
@@ -26586,7 +26602,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:49
 #, c-format
 msgid "Desks"
@@ -26874,7 +26890,7 @@ msgstr ""
 msgid "Directory is not writeable"
 msgstr "%sこのレコードにはアイテムはありません。%s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:200
 #, fuzzy, c-format
 msgid "Disable"
 msgstr "%s %s %s %s "
@@ -27583,7 +27599,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "ロープの書籍コード"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:819
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:825
 #, c-format
 msgid "Duplicate record suspected"
 msgstr ""
@@ -27708,7 +27724,7 @@ msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s"
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:146
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:148
 #, c-format
 msgid "ENABLED"
 msgstr ""
@@ -27751,7 +27767,7 @@ msgstr ""
 msgid "ERROR: %s %s %s"
 msgstr "%s %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:135
 #, c-format
 msgid "ERRORS"
 msgstr ""
@@ -27801,7 +27817,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/debit_types.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:91
@@ -28504,7 +28520,7 @@ msgstr "空っぽなのはしかも閉鎖する"
 msgid "Empty option"
 msgstr "その他の選択："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:202
 #, fuzzy, c-format
 msgid "Enable"
 msgstr "電子メール: "
@@ -29008,8 +29024,8 @@ msgstr ""
 msgid "Error downloading the file"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:138
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:140
 #, fuzzy, c-format
 msgid "Error found whilst attempting to load plugin"
 msgstr "このリストを本当に削除しますか?"
@@ -29260,8 +29276,9 @@ msgstr ""
 msgid "Exceeded max holds per record"
 msgstr ""
 
+#. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 msgid "Excel"
 msgstr ""
 
@@ -29456,7 +29473,7 @@ msgstr "待つことの中 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:295
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:235
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:84
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, c-format
 msgid "Export"
 msgstr ""
@@ -29597,7 +29614,7 @@ msgid "Export labels"
 msgstr "改正して本棚を仮想する <em>%s</em>"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #, fuzzy
 msgid "Export or print"
 msgstr "出版していない"
@@ -30035,7 +30052,7 @@ msgid "Field 3"
 msgstr ""
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "すべての図書館"
@@ -32788,7 +32805,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:784
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -32838,6 +32855,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:28
@@ -32864,9 +32884,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:17
@@ -32901,9 +32918,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:53
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:17
@@ -34265,11 +34282,17 @@ msgid "Import this batch into the catalog"
 msgstr "館所蔵のディレクトリは探し出せない。"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:172
 #, fuzzy, c-format
 msgid "Important"
 msgstr "探し出せない"
+
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#, fuzzy
+msgid "Important fields(s) are not filled. Are you sure you want to save?"
+msgstr "このリストを本当に削除しますか?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:160
@@ -34780,7 +34803,7 @@ msgstr ""
 msgid "Insert\\/edit video"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:91
 #, c-format
 msgid "Install"
 msgstr ""
@@ -35259,7 +35282,7 @@ msgid "Is new"
 msgstr "追加先: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:820
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:826
 #, c-format
 msgid "Is this a duplicate of "
 msgstr ""
@@ -36934,7 +36957,7 @@ msgid "Last update: "
 msgstr "みごとにパスワードを改正する "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:218
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:736
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:70
@@ -36983,6 +37006,11 @@ msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s"
 #, c-format
 msgid "Later you can modify your form and that's what matters on import."
 msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:80
+#, fuzzy, c-format
+msgid "Latest version"
+msgstr "待つことの中 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:851
 #, c-format
@@ -37229,16 +37257,16 @@ msgstr "%1$s -- 館所蔵のディレクトリ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:169
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:155
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:187
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/overdrive.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:847
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:81
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:116
@@ -37447,9 +37475,9 @@ msgstr "%1$s -- 館所蔵のディレクトリ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:405
@@ -37665,7 +37693,7 @@ msgstr "罰金"
 msgid "Link a host record to "
 msgstr "館所蔵"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:887
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
 #, c-format
 msgid "Link authorities automatically"
 msgstr ""
@@ -37927,7 +37955,7 @@ msgid "Loading records, please wait..."
 msgstr "館所蔵"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:776
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:782
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, fuzzy, c-format
 msgid "Loading, please wait..."
@@ -37938,7 +37966,7 @@ msgstr "館所蔵"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:989
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:898
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:139
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:142
 #, fuzzy, c-format
 msgid "Loading..."
 msgstr "館所蔵"
@@ -39858,7 +39886,7 @@ msgstr ""
 msgid "Max. suspension duration (day)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:121
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:123
 #, c-format
 msgid "Maximum Koha version"
 msgstr ""
@@ -40138,7 +40166,7 @@ msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:122
 #, c-format
 msgid "Minimum Koha version"
 msgstr ""
@@ -41019,11 +41047,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/common/patron_search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:113
@@ -41031,7 +41059,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:131
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2328
@@ -41560,7 +41588,7 @@ msgid "New definition"
 msgstr "館所蔵"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:173
 #, fuzzy, c-format
 msgid "New desk"
 msgstr "新しく１つの新しい仮定の本棚に増加する： "
@@ -42004,13 +42032,13 @@ msgstr "1筆おりる &gt;&gt;"
 msgid "Next >>"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:172
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:175
 #, fuzzy, c-format
 msgid "Next available"
 msgstr "次の複本（いかなるフォーマット）"
 
 #. %1$s:  ItemTypes.GetDescription( hold.itemtype ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:170
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:173
 #, fuzzy, c-format
 msgid "Next available %s item"
 msgstr "次の複本（いかなるフォーマット）"
@@ -42779,33 +42807,33 @@ msgstr ""
 msgid "No physical items for this record"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:99
 #, c-format
 msgid "No plugins installed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:102
 #, c-format
 msgid "No plugins that can be used as a tool are installed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:106
 #, c-format
 msgid "No plugins that can convert files to MARC records are installed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:104
 #, c-format
 msgid "No plugins that can create a report are installed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:108
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:110
 #, c-format
 msgid ""
 "No plugins that can enhance the intranet catalog biblio records are installed"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:108
 #, c-format
 msgid ""
 "No plugins that can process online payments via the public catalog are "
@@ -43009,7 +43037,7 @@ msgstr "選択"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:299
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:193
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:439
@@ -43076,8 +43104,8 @@ msgstr "選択"
 msgid "No, let me think about it"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:834
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:836
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:842
 #, fuzzy, c-format
 msgid "No, save as new record"
 msgstr "図書目録は番号を記録する："
@@ -43109,7 +43137,7 @@ msgstr ""
 msgid "Nobody"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:179
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:182
 #, fuzzy, c-format
 msgid "Non priority hold"
 msgstr "予約する"
@@ -44608,7 +44636,7 @@ msgstr ""
 msgid "Only available on the staff interface: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:157
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:160
 #, fuzzy, c-format
 msgid "Only item "
 msgstr "続けて借りる "
@@ -48200,7 +48228,7 @@ msgstr ""
 msgid "Please verify the integrity of the zip file and retry."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:119
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:121
 #, fuzzy, c-format
 msgid "Plugin version"
 msgstr "待つことの中"
@@ -48702,7 +48730,7 @@ msgstr "列印"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:171
-#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:4
+#: koha-tmpl/intranet-tmpl/prog/en/includes/columns_settings.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:29
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #, c-format
@@ -48826,7 +48854,7 @@ msgid "Print receipt for %s &rsaquo; Patrons &rsaquo; Koha"
 msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:166
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:226
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:229
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:25
 #, fuzzy, c-format
 msgid "Print slip"
@@ -50922,8 +50950,8 @@ msgstr ""
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:364
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1081
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1087
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1088
 msgid "Repeat this Tag"
 msgstr ""
 
@@ -50983,7 +51011,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:882
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:888
 #, fuzzy, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "検索"
@@ -51383,7 +51411,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:61
@@ -51392,6 +51420,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:308
@@ -51435,7 +51464,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1270
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1479
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
@@ -51468,7 +51496,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:271
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:423
@@ -51477,6 +51504,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
@@ -52348,7 +52376,7 @@ msgstr "を管理する"
 msgid "Run macro"
 msgstr "この館所蔵を選ぶ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:180
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1411
 #, c-format
 msgid "Run report"
@@ -52369,7 +52397,7 @@ msgstr ""
 msgid "Run the report"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:186
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:188
 #, fuzzy, c-format
 msgid "Run tool"
 msgstr "個人の記録に戻る"
@@ -52661,9 +52689,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:860
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:864
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:877
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:866
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:883
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:138
@@ -52736,13 +52764,13 @@ msgstr ""
 msgid "Save all %s preferences"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:871
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:877
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:266
 #, fuzzy, c-format
 msgid "Save and continue editing"
 msgstr "を管理する"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:876
 #, fuzzy, c-format
 msgid "Save and edit items"
 msgstr "を管理する"
@@ -52757,7 +52785,7 @@ msgstr "改正"
 msgid "Save and preview routing slip"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:869
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:875
 #, fuzzy, c-format
 msgid "Save and view record"
 msgstr "図書目録は番号を記録する："
@@ -53791,7 +53819,7 @@ msgid "Section"
 msgstr "館所蔵"
 
 #. %1$s:  BIG_LOO.number | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1012
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1018
 #, fuzzy, c-format
 msgid "Section %s"
 msgstr "館所蔵"
@@ -55025,7 +55053,7 @@ msgid "Set to 'yes' to show this library on the Libraries page in the OPAC."
 msgstr ""
 
 #. IMG
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:189
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:192
 #, fuzzy
 msgid "Set to lowest priority"
 msgstr "改正"
@@ -55077,7 +55105,7 @@ msgstr ""
 msgid "Settings"
 msgstr "すみません"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:892
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:898
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, fuzzy, c-format
 msgid "Settings "
@@ -55365,7 +55393,7 @@ msgstr "図書目録の記録に戻る"
 msgid "Show MARC"
 msgstr "続けて借りる"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:899
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:905
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr ""
@@ -55679,7 +55707,7 @@ msgstr "陳述"
 msgid "Show suggestion #%s "
 msgstr "提案を買う"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:907
 #, fuzzy, c-format
 msgid "Show tags"
 msgstr "新しく１つの新しい仮定の本棚に増加する："
@@ -57138,7 +57166,7 @@ msgstr "テーマ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/clone-rules.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:134
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:139
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/items_search_field.tt:58
@@ -57756,7 +57784,7 @@ msgid "Surveys"
 msgstr ""
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:209
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:212
 #, fuzzy, c-format
 msgid "Suspend %s "
 msgstr "%s%s &rsaquo; ILS-DI %s"
@@ -57797,7 +57825,7 @@ msgid "Switch languages"
 msgstr "言語を選ぶ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:895
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #, fuzzy, c-format
 msgid "Switch to advanced editor"
 msgstr "高度な検索"
@@ -58219,8 +58247,8 @@ msgstr "タグクラウド"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1174
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:127
 #, fuzzy, c-format
@@ -59098,6 +59126,12 @@ msgstr ""
 msgid "The following ids exist in both tables %s and %s:"
 msgstr ""
 
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#, fuzzy
+msgid "The following important subfields aren’t filled:"
+msgstr "エラーが発生しました"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:70
 #, fuzzy, c-format
@@ -59129,6 +59163,12 @@ msgstr ""
 msgid "The following items were removed from all courses:"
 msgstr "エラーが発生しました"
 
+#. SCRIPT
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
+#, fuzzy
+msgid "The following mandatory subfields aren't filled:"
+msgstr "エラーが発生しました"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:249
 #, c-format
 msgid ""
@@ -59139,12 +59179,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:196
 #, fuzzy, c-format
 msgid "The following records could not be deleted:"
-msgstr "エラーが発生しました"
-
-#. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
-#, fuzzy
-msgid "The following subfields aren't filled:"
 msgstr "エラーが発生しました"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:270
@@ -59576,7 +59610,7 @@ msgstr ""
 msgid "The record id "
 msgstr "%sこのレコードにはアイテムはありません。%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:985
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:991
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr ""
@@ -59851,7 +59885,7 @@ msgstr "すみません、この題名はいかなる評論がない。"
 msgid "There are no defined templates. Please create a template first."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:206
 #, fuzzy, c-format
 msgid "There are no desks defined. "
 msgstr "すみません、この題名はいかなる評論がない。"
@@ -61523,7 +61557,7 @@ msgid "Toggle Keyboard"
 msgstr ""
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:185
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:188
 #, fuzzy
 msgid "Toggle lowest priority"
 msgstr "改正"
@@ -62712,7 +62746,7 @@ msgstr "一律にする題名："
 msgid "Uniform Resource Identifier"
 msgstr "%1$s 図書目録の記録"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:196
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:198
 #, c-format
 msgid "Uninstall"
 msgstr ""
@@ -62858,7 +62892,7 @@ msgstr ""
 msgid "Unknown error."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:110
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:112
 #, c-format
 msgid "Unknown plugin type "
 msgstr ""
@@ -62952,12 +62986,12 @@ msgid "Unset Gone no address for this patron"
 msgstr "すみません、この題名はいかなる評論がない。"
 
 #. IMG
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:187
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:190
 msgid "Unset lowest priority"
 msgstr ""
 
 #. %1$s:  ELSE 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:207
+#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:210
 #, c-format
 msgid "Unsuspend %s "
 msgstr ""
@@ -63145,7 +63179,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:943
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
@@ -63247,8 +63281,8 @@ msgstr "（%1$s 全部で）"
 
 #. INPUT type=submit name=upload
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
@@ -64755,10 +64789,17 @@ msgid ""
 "I'll try my best."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:157
 #, c-format
 msgid ""
-"Warning: This plugin was written for an older version of Koha. Run at your "
+"Warning: This plugin was written for a newer version of Koha. Use at your "
+"own risk. "
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:163
+#, c-format
+msgid ""
+"Warning: This plugin was written for an older version of Koha. Use at your "
 "own risk. "
 msgstr ""
 
@@ -64767,13 +64808,6 @@ msgstr ""
 msgid ""
 "Warning: This report is very resource intensive on systems with large "
 "numbers of overdue items."
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:155
-#, c-format
-msgid ""
-"Warning: This report was written for a newer version of Koha. Run at your "
-"own risk. "
 msgstr ""
 
 #. SCRIPT
@@ -65454,7 +65488,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:161
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:308
@@ -65521,7 +65555,7 @@ msgstr "この仮定の本棚を削除する"
 msgid "Yes, delete this tag"
 msgstr "この仮定の本棚を削除する"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:824
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
 #, fuzzy, c-format
 msgid "Yes, edit existing items"
 msgstr "改正して本棚を仮想する <em>%s</em>"
@@ -65552,7 +65586,7 @@ msgid "Yes: Edit existing authority"
 msgstr "改正して本棚を仮想する <em>%s</em>"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:835
 msgid "Yes: View existing items"
 msgstr ""
 
@@ -66549,7 +66583,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:884
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, fuzzy, c-format
 msgid "Z39.50/SRU search"
@@ -67563,7 +67597,7 @@ msgstr "システムメンテナンス"
 msgid "display detail for this librarian."
 msgstr "題名を検索する："
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
 #, fuzzy, c-format
 msgid "do a catalog search"
 msgstr "%1$s 館所蔵のディレクトリ --"
@@ -68672,7 +68706,7 @@ msgstr ""
 msgid "or"
 msgstr "誰の"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:987
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:443
@@ -69069,13 +69103,6 @@ msgstr ""
 msgid "show all component parts"
 msgstr "複本がない。"
 
-#. %1$s:  hold.waiting_date | $KohaDates 
-#. %2$s: - ELSIF (hold.intransit) -
-#: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:123
-#, fuzzy, c-format
-msgid "since %s %s Item being transferred to "
-msgstr "%s %s 輸送中： "
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:49
 #, c-format
 msgid "since last transfer"
@@ -69248,7 +69275,7 @@ msgid "system preference if you wish to enable this feature."
 msgstr "このリストを本当に削除しますか?"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:975
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:981
 msgid "tag_anchor_%s_%s%s"
 msgstr ""
 
@@ -70586,6 +70613,10 @@ msgstr ""
 #~ msgstr "%s から %s までの %s の結果 "
 
 #, fuzzy
+#~ msgid "A few important fields are not filled:"
+#~ msgstr "エラーが発生しました"
+
+#, fuzzy
 #~ msgid "Actions (NIY)"
 #~ msgstr "アクション: "
 
@@ -70940,10 +70971,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Import date"
 #~ msgstr "探し出せない"
-
-#, fuzzy
-#~ msgid "Important fields(s) are not filled. Are you sure you want to save?"
-#~ msgstr "このリストを本当に削除しますか?"
 
 #, fuzzy
 #~ msgid "Inactive recalls"
@@ -71936,11 +71963,11 @@ msgstr ""
 #~ msgstr "典拠検索の結果は"
 
 #, fuzzy
-#~ msgid "The following mandatory subfields aren't filled:"
+#~ msgid "The following recalls could be fulfilled by available items. %s "
 #~ msgstr "エラーが発生しました"
 
 #, fuzzy
-#~ msgid "The following recalls could be fulfilled by available items. %s "
+#~ msgid "The following subfields aren't filled:"
 #~ msgstr "エラーが発生しました"
 
 #, fuzzy

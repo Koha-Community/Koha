@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2022-03-17 08:18-0300\n"
-"PO-Revision-Date: 2022-02-15 18:45+0000\n"
+"PO-Revision-Date: 2022-03-29 10:23+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1644950710.428895\n"
+"X-POOTLE-MTIME: 1648549383.124207\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -129,7 +129,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -138,14 +138,13 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %s %sTaxa de criação de conta %sTaxa de renovação de conta %sTaxa de "
-"pedido de artigo %sExemplar perdido %sMulta manual %sNovo cartão %sMulta "
-"%sTaxa de processamento de exemplar perdido %sTaxa de aluguer %sTaxa diária "
-"de aluguer %sTaxa de renovação %sTaxa de renovação de aluguer diária %sTaxa "
-"de reserva %sReserva à espera há demasiado %sPagamento %s%s %s %s %s %s "
-"%sPagamento %sAmortizar %sPerdoado %sCrédito %sReembolso de taxa de exemplar "
-"perdido %sRembolso de pagamento excessivo %s Reembolso %sCobrança cancelada "
-"%s%s %s %s %s %s %s"
+"%s %s %s %sTaxa de criação de conta %sTaxa de renovação de conta %sExemplar "
+"perdido %sMulta manual %sNovo cartão %sMulta %sTaxa de processamento de "
+"exemplar perdido %sTaxa de aluguer %sTaxa diária de aluguer %sTaxa de "
+"renovação %sTaxa de renovação de aluguer diária %sTaxa de reserva %sReserva "
+"à espera há demasiado %sPagamento %s%s %s %s %s %s %sPagamento %sAmortizar %"
+"sPerdoado %sCrédito %sReembolso de taxa de exemplar perdido %sRembolso de "
+"pagamento excessivo %s Reembolso %sCobrança cancelada %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -639,16 +638,16 @@ msgstr ""
 # Alterado por Ricardo Dias Marques em 28-Mai-2009
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
-msgstr "Renovação automática"
+msgstr "%s Renovação automática "
 
 # Alterado por Ricardo Dias Marques em 28-Mai-2009
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "A renovação automática falhou, conta expirada."
+msgstr "%s A renovação automática falhou, conta expirada. "
 
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
@@ -810,18 +809,20 @@ msgstr ""
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
-msgstr "A renovação automática falhou, tem multas por pagar"
+msgstr ""
+"%s Não renovável %s A renovação automática falhou, porque tem multas por "
+"pagar. "
 
 # Alterado por Ricardo Dias Marques em 28-Mai-2009
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "%s No renewal before %s "
-msgstr "Renovável após data %s"
+msgstr "%s Renovável após data %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -856,20 +857,22 @@ msgstr "%s Não permitido"
 # Alterado por Ricardo Dias Marques em 28-Mai-2009
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "Não renovável "
+msgstr "%s Não renovável "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.too_unseen ) 
 #. %3$s:  ISSUE.renewsleft | html 
 #. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
-msgstr "O exemplar deve ser renovado na biblioteca. %s renovações restantes"
+msgstr ""
+"%s Não renovável %s O exemplar deve ser renovado na biblioteca. %s "
+"renovações restantes %s Não permitido "
 
 # Alterado por Ricardo Dias Marques em 28-Mai-2009
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
@@ -4961,15 +4964,15 @@ msgid "Default sorting"
 msgstr "Ordenação por omissão"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default: keep my checkout history according to local laws. This is the "
 "default option : the library will keep your checkout history for the "
 "duration permitted by local laws."
 msgstr ""
-"Omissão: manter o meu histórico de acordo com as leis locais. Esta é a opção "
-"por omissão : a biblioteca vai manter o seu histórico durante o tempo "
-"permitido pelas leis locais."
+"Omissão: manter o meu histórico de empréstimos de acordo com as leis locais. "
+"Esta é a opção por omissão : a biblioteca vai manter o seu histórico de "
+"empréstimos durante o tempo permitido pelas leis locais."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:199
 #, c-format
@@ -5771,13 +5774,13 @@ msgid "Forever"
 msgstr "Sempre"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Forever: keep my checkout history without limit. This is the option for "
 "users who want to keep track of what they are reading."
 msgstr ""
-"Sempre: manter o meu histórico sem limite. Esta é a opção para os leitores "
-"que desejam acompanhar o que estão a ler ou das reservas que efetuaram."
+"Sempre: manter o meu histórico de empréstimos sem limite. Esta é a opção "
+"para os leitores que desejam acompanhar o que estão a ler."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
@@ -6133,9 +6136,9 @@ msgid "Hide options"
 msgstr "Esconder opções"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
-#, fuzzy, c-format
+#, c-format
 msgid "Hide unholdable items"
-msgstr "Próximo exemplar disponível"
+msgstr "Esconder exemplares não reserváveis"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
 #, c-format
@@ -7726,14 +7729,13 @@ msgid "Never expires %s %s "
 msgstr "Nunca expira %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Never: Delete my checkout history immediately. This will delete all record "
 "of the item that was checked-out upon check-in."
 msgstr ""
-"Nunca: Eliminar o meu histórico imediatamente. Isto irá eliminar todos os "
-"registos do exemplar que foram emprestados e devolvidos, e todo o histórico "
-"de reservas preenchidas ou canceladas."
+"Nunca: Eliminar o meu histórico de circulação imediatamente. Isto irá "
+"eliminar todos os registos do exemplar que foram emprestados e devolvidos."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:942
 #, c-format
@@ -9961,9 +9963,9 @@ msgid "Resume all suspended holds"
 msgstr "Retomar todas as reservas suspensas"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:149
-#, fuzzy, c-format
+#, c-format
 msgid "Resume your hold on "
-msgstr "Suspender reserva em "
+msgstr "Retomar reserva em "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:129
@@ -10749,9 +10751,9 @@ msgstr "Mostrar o topo "
 
 # Recherche:&nbsp;
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:468
-#, fuzzy, c-format
+#, c-format
 msgid "Show unholdable items"
-msgstr "Ver todos os exemplares"
+msgstr "Mostrar exemplares não reserváveis"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:112
 #, c-format
@@ -12592,13 +12594,13 @@ msgid "We"
 msgstr "We"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "We take great care in protecting your privacy. On this screen, you can "
 "define how long we keep your checkout history."
 msgstr ""
 "Preocupamo-nos em proteger a sua privacidade. Nesta página pode definir por "
-"quanto tempo quer guardar o seu histórico de empréstimos e de reservas."
+"quanto tempo quer guardar o seu histórico de empréstimos."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
 #, c-format
@@ -12637,13 +12639,13 @@ msgid "What's next?"
 msgstr "O que se segue?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Whatever your privacy rule you choose, you can delete all your checkout "
 "history immediately by clicking here. "
 msgstr ""
-"Pode eliminar imediatamente o seu histórico de empréstimos e de reservas "
-"clicando aqui. "
+"Independentemente da regra de privacidade escolhida, pode eliminar "
+"imediatamente o seu histórico de empréstimos clicando aqui. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:69
 #, c-format

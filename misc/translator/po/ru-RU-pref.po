@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-02-16 17:11+0000\n"
+"PO-Revision-Date: 2022-04-16 18:56+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/21.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1645031484.099957\n"
+"X-POOTLE-MTIME: 1650135412.020176\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -5843,7 +5843,7 @@ msgstr "текущую дату."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalPeriodBase# the old due date of the checkout."
-msgstr "старую дату возврата для книговыдачи."
+msgstr "старый срок возврата для книговыдачи."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalSendNotice# Don't send"
@@ -6186,9 +6186,7 @@ msgstr "Запретить"
 # Circulation > Interface
 msgid ""
 "circulation.pref#SpecifyDueDate# staff to specify a due date for a checkout."
-msgstr ""
-" библиотечному персоналу указывать дату возвращения (ожидания) при "
-"оформлении выдачи."
+msgstr "сотрудникам устанавливать дату возврата для книговыдачи."
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyReturnDate# Allow"
@@ -6986,7 +6984,7 @@ msgstr "Сортировать предыдущие выдачи на стран
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# due date."
-msgstr "даты возврата."
+msgstr "дата возврата."
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# earliest to latest"
@@ -10722,7 +10720,6 @@ msgstr ""
 "самостоятельной регистрации.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
@@ -10732,14 +10729,12 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br><strong>ВНИМАНИЕ: Не используйте обычный тип читателя для "
-"самостоятельной регистрации.</strong> Если cron задача <code>misc/cronjobs/"
-"cleanup_database.pl</code> настроена на удаление непроверенных и "
-"незавершенных саморегистраций ЭК, она навсегда и безвозвратно удалит всех "
-"читателей, которые зарегистрировались более чем <a href='/cgi-bin/koha/admin/"
-"preferences.pl?"
+"<br>Если cron задача <code>misc/cronjobs/cleanup_database.pl</code> "
+"настроена на удаление непроверенных и незавершенных саморегистраций OPAC, "
+"она навсегда и безвозвратно удалит всех читателей, которые "
+"зарегистрировались более чем <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> дней назад."
+"a> дней назад (если только эта задержка не пуста или не равна нулю)."
 
 # OPAC > Self registration and modification
 #, fuzzy
@@ -10772,7 +10767,6 @@ msgstr ""
 "базе данных."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -10783,6 +10777,8 @@ msgstr ""
 "<br><strong>Примечание:</strong> Эта системная настройка требует <code>misc/"
 "cronjobs/cleanup_database.pl</code> cron задачи. Обратитесь к вашему "
 "системному администратору, чтобы установить эту задачу в расписание."
+"<br>Читатели не будут удалены, если вы установите префикс равным нулю или "
+"сделаете его пустым."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11938,6 +11934,11 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Дополнительный адрес - Улица"
 
 # Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
+msgstr "Дополнительный адрес - Улица"
+
+# Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
 msgstr "Дополнительный адрес - Почтовый индекс"
 
@@ -12023,6 +12024,11 @@ msgstr "Основной адрес - Область/край/регион"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
+msgstr "Основной адрес - Улица"
+
+# Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
 msgstr "Основной адрес - Улица"
 
 # Patrons > Patron relationships
