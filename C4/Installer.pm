@@ -285,6 +285,7 @@ sub load_db_schema {
     my $datadir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}";
 
     # Disable checks before load
+    # NOTE: These lines are found in kohastructure itself, but DBIx::RunSQL ignores them!
     $self->{'dbh'}->do(q{SET NAMES utf8mb4});
     $self->{'dbh'}->do(q{SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0});
     $self->{'dbh'}->do(q{SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0});
