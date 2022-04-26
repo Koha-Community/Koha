@@ -56,6 +56,10 @@ definitions:
     $ref: ./definitions/patron_extended_attribute.yaml
   quote:
     $ref: ./definitions/quote.yaml
+  renewal:
+    $ref: ./definitions/renewal.yaml
+  renewals:
+    $ref: ./definitions/renewals.yaml
   return_claim:
     $ref: ./definitions/return_claim.yaml
   smtp_server:
@@ -111,6 +115,8 @@ paths:
     $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}"
   "/checkouts/{checkout_id}/allows_renewal":
     $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}~1allows_renewal"
+  "/checkouts/{checkout_id}/renewals":
+    $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}~1renewals"
   "/checkouts/{checkout_id}/renewal":
     $ref: "./paths/checkouts.yaml#/~1checkouts~1{checkout_id}~1renewal"
   /circulation-rules/kinds:

@@ -13,7 +13,10 @@ properties:
       - "null"
     description: "Interface from which the renewal took place (values can be: api, cron, commandline, intranet, opac and sip)"
   renewer_id:
-    $ref: ../x-primitives.yaml#/patron_id
+    type:
+      - integer
+      - "null"
+    description: internally assigned for the user that processed the renewal
   renewal_date:
     type: string
     format: date-time

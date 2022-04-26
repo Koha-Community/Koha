@@ -30,6 +30,7 @@
           type: string
           enum:
             - issuer
+            - renewals
         collectionFormat: csv
     produces:
       - application/json
@@ -156,34 +157,34 @@
       - checkouts
     summary: Renew a checkout
     parameters:
-      - $ref: ../parameters.yaml#/checkout_id_pp
-      - $ref: ../parameters.yaml#/seen_pp
+      - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
+      - $ref: "../swagger.yaml#/parameters/seen_pp"
     produces:
       - application/json
     responses:
       "201":
         description: Updated borrower's checkout
         schema:
-          $ref: ../definitions.yaml#/checkout
+          $ref: "../swagger.yaml#/definitions/checkout"
       "403":
         description: Cannot renew checkout
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Checkout not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
@@ -194,33 +195,43 @@
       - checkouts
     summary: List renewals for a checkout
     parameters:
-      - $ref: ../parameters.yaml#/checkout_id_pp
+      - $ref: "../swagger.yaml#/parameters/checkout_id_pp"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - renewer
+        collectionFormat: csv
     produces:
       - application/json
     responses:
       "200":
         description: List of checkouts renewals
         schema:
-          $ref: ../definitions.yaml#/renewals
+          $ref: "../swagger.yaml#/definitions/renewals"
       "403":
         description: Access forbidden
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Checkout not found
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
       "503":
         description: Under maintenance
         schema:
-          $ref: ../definitions.yaml#/error
+          $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
         circulate: circulate_remaining_permissions
