@@ -15,7 +15,7 @@ return {
 
         $dbh->do(q{
         INSERT IGNORE INTO letter(module,code,branchcode,name,is_html,title,content,message_transport_type)
-        VALUES ( 'reserves', 'HOLD_CHANGED', '', 'Canceled hold available for different patron', '0', 'Canceled Hold Available for Different Patron', 'The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).
+        VALUES ( 'reserves', 'HOLD_CHANGED', '', 'Canceled hold available for different patron', '0', 'Canceled hold available for different patron', 'The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).
 
 Please update the hold information for this item.
 
