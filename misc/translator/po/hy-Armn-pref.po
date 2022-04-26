@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-02-16 16:36+0000\n"
+"PO-Revision-Date: 2022-04-18 12:27+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1645029367.424556\n"
+"X-POOTLE-MTIME: 1650284871.290880\n"
 "X-Pootle-Path: /hy/21.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -7209,12 +7209,17 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "circulation.pref#maxoutstanding# [% local_currency %] տուգանքներ։"
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
-msgstr "circulation.pref#maxreserves# Ընթերցողները կարող են միայն ունենալ"
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
+msgstr "circulation.pref#maxreserves# Ընթերցողները կարող են ունենալ մեծագույնը"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "circulation.pref#maxreserves# պահումներ միանգամից։"
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
+"circulation.pref#maxreserves# պահվում է միանգամից (թողեք դատարկ կամ դրեք 0՝ "
+"անջատելու համար): Տացքի կանոնների հիման վրա կարող են կիրառվել լրացուցիչ "
+"սահմանափակումներ:"
 
 # Circulation > Checkout policy
 msgid ""
@@ -11253,32 +11258,35 @@ msgstr ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# օգտվողները հաստատում են իրենց "
 "էլ. փոստի հասցեն՝ երկու անգամ մուտքագրելով այն:"
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>ԶԳՈՒՇԱՑՈՒՄ: Մի "
+"օգտագործեք ընթերցողի սովորական դասը ինքնագրանցման համար:</strong>"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>ԶԳՈՒՇԱՑՈՒՄ. Մի "
-"օգտագործեք սովորական ընթերցողի դասը ինքնագրանցման համար:</strong> Եթե "
-"<code>misc/cronjobs/cleanup_database.pl</code> միջուկի աշխատանքը կարգավորված "
-"է ՀՕԱՔ չստուգված և անավարտ ինքնագրանցումները ջնջելու համար, այն ընդմիշտ և "
-"անվերադարձ վերականգնելու է բոլոր այն ընթերցողներին, ովքեր գրանցվել են ավելի "
-"քան <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> օր առաջ:"
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>Եթե "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob -ը ստեղծված է ջնջելու "
+"չստուգված և անավարտ ՀՕԱՔ ինքնագրանցումները, այն ընդմիշտ և անվերականգնելի "
+"կերպով կջնջի բոլոր այն հաճախորդներին, ովքեր գրանցել են ավելի քան <a href"
+"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistra"
+"tionExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccoun"
+"tsDelay</a> օր առաջ (եթե այդ ուշացումը դատարկ է կամ զրո)։"
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
-msgstr ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Օգտագործի ընթերցողի դասի "
-"կոդը"
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
+msgstr "opac.pref#PatronSelfRegistrationDefaultCategory# Օգտագործիր"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11311,12 +11319,14 @@ msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>ՆՇՈՒՄ:</strong> Համակարգային այս նախապատվությունը պահանջում է "
 "<code>misc/cronjobs/cleanup_database.pl</code> cronjob։ Հարցրու քո համակարգի "
-"կառավարիչին, որ այն նախատեսի։"
+"կառավարիչին, որ այն նախատեսի։<br>Ոչ մի այցելու չի ջնջվի, եթե "
+"նախապատվությունը զրո լինի կամ դարձնեք դատարկ:"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -15332,6 +15342,10 @@ msgstr ""
 # Circulation > Self check-out module
 #~ msgid "circulation.pref#SelfCheckoutByLogin# ."
 #~ msgstr "circulation.pref#SelfCheckoutByLogin# ."
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "circulation.pref#maxreserves# պահումներ միանգամից։"
 
 # I18N/L10N
 #~ msgid ""

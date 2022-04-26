@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-16 21:43-0300\n"
-"PO-Revision-Date: 2022-03-11 09:27+0000\n"
-"Last-Translator: jane <a230591160@gmail.com>\n"
+"POT-Creation-Date: 2022-04-17 20:02-0300\n"
+"PO-Revision-Date: 2022-04-21 05:58+0000\n"
+"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1646990870.033205\n"
+"X-POOTLE-MTIME: 1650520683.057123\n"
 "X-Pootle-Path: /zh_TW/21.05/zh-Hant-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -566,7 +566,7 @@ msgstr "%s 凍結帳號 %s %s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:83
 #, c-format
 msgid "%s Account identification with this email address only is ambiguous. "
-msgstr "%s 此電子郵件識別的帳號不明。"
+msgstr "%s 此電子郵件識別的帳號不詳。"
 
 #. %1$s:  IF review.your_comment 
 #. %2$s:  review.datereviewed | $KohaDates 
@@ -1024,14 +1024,14 @@ msgstr "%s 密碼不符。%s "
 #. %17$s:  ELSIF ( circ_error_ADDITIONAL_MATERIALS ) 
 #. %18$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s The system does not recognize this barcode. %s You have checked out too "
 "many items and can't check out any more. %s This item is checked out to "
 "someone else. %s You cannot renew this item again. %s This item is not for "
 "loan. %s You owe the library %s and cannot check out. %s This item has been "
 "withdrawn from the collection. %s This item is restricted. %s This item is "
-"on hold for another patron. %s This item belongs to another branch. %s Your "
+"on hold for another patron. %s This item belongs to another library. %s Your "
 "account has expired. %s Your account has been suspended. %s This card has "
 "been declared lost. %s Your contact information seems to be incomplete. %s "
 "Due date is not valid. %s Item must be checked out at a circulation desk. %s "
@@ -1499,7 +1499,7 @@ msgstr "%s權威搜尋結果%s沒有找到結果%s &rsaquo; %s%s%sKoha 線上%s 
 msgid ""
 "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
 "%sCollection: %s%s "
-msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s館藏代碼: %s%s "
+msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s合集: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -1507,7 +1507,7 @@ msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s館藏代碼: 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:87
 #, c-format
 msgid "%sCollection%sItem type%s"
-msgstr "%s館藏%s館藏類型%s"
+msgstr "%s合集%s館藏類型%s"
 
 #. %1$s:  IF op == 'view' 
 #. %2$s:  shelf.shelfname | html 
@@ -1591,8 +1591,8 @@ msgid ""
 "checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
 "%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
-"%s到期日 %s提早通知 %s預約可取 %s還入館藏 %s %s借出館藏及續借 %s 館藏借出 %s "
-"%s館際互助 %s不提供館際互助 %s自動續借 %s不明 %s"
+"%s到期日 %s提早通知 %s預約可取 %s還入館藏 %s %s借出館藏及續借 %s 館藏借出 %s %s館際互助 %s不提供館際互助 %s自動續借 %"
+"s不詳 %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -1602,7 +1602,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:167
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%s館藏類型 %s館藏 %s書架位置 %s其他 %s "
+msgstr "%s館藏類型 %s合集 %s書架位置 %s其他 %s "
 
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
@@ -4307,23 +4307,23 @@ msgstr "您有興趣的館藏"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, c-format
 msgid "Collection"
-msgstr "館藏"
+msgstr "合集"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:194
 #, c-format
 msgid "Collection library:"
-msgstr "典藏圖書館："
+msgstr "合集圖書館："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:139
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:143
 #, c-format
 msgid "Collection title:"
-msgstr "館藏題名："
+msgstr "合集題名："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:221
 #, c-format
 msgid "Collection: "
-msgstr "館藏："
+msgstr "合集："
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4331,12 +4331,12 @@ msgstr "館藏："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:84
 #, c-format
 msgid "Collection: %s "
-msgstr "館藏：%s "
+msgstr "合集：%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:30
 #, c-format
 msgid "Collections"
-msgstr "館藏"
+msgstr "合集"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
@@ -5058,7 +5058,7 @@ msgstr "下載 "
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 msgid "Download as: "
-msgstr "下載虛擬書架："
+msgstr "下載虛擬書架： "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -5070,9 +5070,9 @@ msgstr "下載書目清單"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Download cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%sKoha 線上%s 目錄"
+msgstr "下載書目清單 &rsaquo; %s%s%sKoha 線上%s 目錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:25
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:52
@@ -5091,14 +5091,14 @@ msgid "Download list %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "下載清單 %s &rsaquo; %s%s%sKoha 線上%s 目錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Download list unsuccessful"
-msgstr "下載虛擬書架 "
+msgstr "下載虛擬書架未成功"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:64
 #, c-format
 msgid "Dublin Core"
-msgstr "Dublin Core"
+msgstr "都伯林核心"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:245
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:546
@@ -5117,18 +5117,18 @@ msgstr "到期日 %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
 msgid "ERROR: Internal error: incomplete hold request. "
-msgstr "錯誤：內部錯誤：不完整的預約需求。"
+msgstr "錯誤：內部錯誤：不完整的預約需求。 "
 
 #. %1$s:  bad_biblionumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:87
 #, c-format
 msgid "ERROR: No record found for record id %s. "
-msgstr "錯誤: 找不到對應書目號碼 %s 的書目記錄。"
+msgstr "錯誤: 找不到對應書目號碼 %s 的書目記錄。 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:105
 #, c-format
 msgid "ERROR: No record id specified. "
-msgstr "錯誤: 沒有收到書目號碼。"
+msgstr "錯誤: 未指定書目號碼。 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:902
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:772
@@ -10262,12 +10262,12 @@ msgstr "期刊"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:601
 #, c-format
 msgid "Serial collection"
-msgstr "期刊館藏"
+msgstr "期刊合集"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:597
-#, fuzzy, c-format
+#, c-format
 msgid "Serial collections"
-msgstr "期刊館藏"
+msgstr "期刊合集"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial | $raw 
@@ -11968,7 +11968,7 @@ msgstr "劃一題名："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:191
 #, c-format
 msgid "Unknown"
-msgstr "不明"
+msgstr "不詳"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:37
 #, c-format

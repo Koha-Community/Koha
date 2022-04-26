@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-01-06 08:03+0000\n"
+"PO-Revision-Date: 2022-04-22 09:06+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1641456226.578079\n"
+"X-POOTLE-MTIME: 1650618366.508064\n"
 "X-Pootle-Path: /zh_TW/21.05/zh-Hant-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2561,7 +2561,7 @@ msgstr "做為預設分類法來源。"
 msgid ""
 "cataloguing.pref#DefaultCountryField008#  Empty defaults to ||| - No attempt "
 "to code."
-msgstr "  預設為 ||| - 請勿嘗試編碼。"
+msgstr "  預設為 ||| - 不選用。"
 
 # Cataloging > Record structure
 msgid ""
@@ -2570,9 +2570,8 @@ msgid ""
 "execution. (See <a href='http://www.loc.gov/marc/countries/countries_code."
 "html'>MARC Code List for Countries</a>):"
 msgstr ""
-"在 MARC 21 欄號 008 15-17 位元組填入預設的國家代碼 - 出版地、出版者或執行者。"
-"見 <a href=\"http://www.loc.gov/marc/countries/countries_code.html\">MARC 的"
-"國家代碼表</a>"
+"在 MARC 21 欄號 008 15-17 位元組填入預設的國家代碼 - 出版地區。見 <a href=\""
+"http://www.loc.gov/marc/countries/countries_code.html\">MARC 的國家代碼表</a>"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
@@ -6427,12 +6426,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] 罰款。"
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "讀者最多可以預約"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "最多的預約數。"
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -8920,7 +8922,7 @@ msgstr "著者"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr "集叢題名"
+msgstr "合集題名"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
@@ -8979,7 +8981,7 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr ""
+msgstr "合集題名"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
@@ -10003,21 +10005,27 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "做為經由 OPAC 註冊讀者的預設讀者類型。"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "使用讀者類型代碼"
 
 # OPAC > Self registration and modification
@@ -10044,11 +10052,13 @@ msgstr ""
 "子郵件帳號。"
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/"
 "cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
@@ -11301,7 +11311,7 @@ msgstr ""
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Collection code"
-msgstr ""
+msgstr "合集代碼"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -11702,8 +11712,8 @@ msgid ""
 "Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</"
 "strong>) and Shelving Location (<strong>loc</strong>)."
 msgstr ""
-"<em>支援的值</em>：館藏類型(<strong>itemtypes</strong>), 館藏代碼"
-"(<strong>ccode</strong>)與書架位置(<strong>loc</strong>)。"
+"<em>支援的值</em>：館藏類型(<strong>itemtypes</strong>), "
+"合集代碼(<strong>ccode</strong>)與書架位置(<strong>loc</strong>)。"
 
 # Searching > Search form
 msgid ""
@@ -13486,6 +13496,10 @@ msgstr "經由報表頁面服務指定報表的列數。"
 #~ "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron "
 #~ "categories separated with a pipe '|')"
 #~ msgstr "(讀者類型以直線 '|' 區隔)"
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "最多的預約數。"
 
 # I18N/L10N
 #~ msgid ""

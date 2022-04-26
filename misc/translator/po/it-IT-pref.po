@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2022-01-27 06:58+0000\n"
+"PO-Revision-Date: 2022-04-19 06:35+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1643266684.270392\n"
+"X-POOTLE-MTIME: 1650350100.881966\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/21.05/it-IT-pref.po\n"
@@ -5908,6 +5908,9 @@ msgid ""
 "AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
 "brute force attacks to gain patron information outside the library."
 msgstr ""
+".</br>NOTA: Se stai usando il numero della tessera ('cardnumber') e "
+"AutoSelfCheckAllowed devi abilitare e configurare SelfCheckAllowByIPRanges "
+"per prevenire attacchi a strascico per ottenere le informazioni degli utenti."
 
 # Circulation > Self check-out module
 msgid ""
@@ -6741,12 +6744,16 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] in multe."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Gli utenti posso avere al massimo"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "prenotazioni in contemporanea."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
+" prenotazioni in una volta sola (lascia blank o 0 per disabilitare). Limiti "
+"ulteriori posso essere basati sulle regole di circolazione."
 
 # Circulation > Checkout policy
 msgid ""
@@ -10534,30 +10541,35 @@ msgid ""
 "address by entering it twice."
 msgstr "che l'utente confermi l'indirizzo di posta scrivendolo due volte."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"<br>Come tipologia di default per gli utenti che si autoregistrano dall'Opac "
+"<strong>USA una categoria ad hoc. </strong>Non usare categorie con utenti "
+"attivi."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br><strong>ATTENZIONE: Non usare una normale categoria utente per "
-"l'autoregistrazione.</strong> Se il cronjob <code>misc/cronjobs/"
-"cleanup_database.pl</code> è configurato per cancellare le registrazioni "
-"dall'Opac non verificate e non finite, esso cancellerà definitivamente e "
-"senza possibile recupero tutti gli utenti che si sono registrati da più "
-"giorni di quanto indicato in <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a>."
+"<br>Se il cronjob <code>misc/cronjobs/cleanup_database.pl</code> è impostato "
+"per cancellare autoregistrazioni non verificate o incomplete, cancellerà "
+"definitivamente tutti gli utenti registratisi più di <a href='/cgi-bin/koha/a"
+"dmin/preferences.pl?op=search&searchfield=PatronSelfRegistrationExpireTempora"
+"ryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</a> "
+"giorni fa (a meno che il ritardo sia zero o vuoto)."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
-msgstr "Usa il codice utente"
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
+msgstr "Usa"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10588,11 +10600,13 @@ msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>NOTA:</strong> Questa preferenza di sistema richiede il cronjob "
 "<code>misc/cronjobs/cleanup_database.pl</code>. Chiedi al tuo amministratore "
-"di attivarlo."
+"di attivarlo.<br>Nessun utente verrà cancellato se la preferenza è a zero o "
+"vuota."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -13847,11 +13861,12 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Di default mostra"
 
 # Tools > Reports
-#, fuzzy
 msgid ""
 "tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
 "is recommended. If empty, all reports will be shown."
-msgstr "i reports nella pagine dei reports salvati."
+msgstr ""
+"dei reports nella pagine dei reports salvati. Un valore di 20 è "
+"raccomandato. Se vuota tutti i report saranno mostrati."
 
 # Tools > Upload
 msgid ""
@@ -14288,6 +14303,10 @@ msgstr ""
 # Circulation > Self check-out module
 #~ msgid "circulation.pref#SelfCheckoutByLogin# ."
 #~ msgstr "."
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "prenotazioni in contemporanea."
 
 # I18N/L10N
 #~ msgid ""

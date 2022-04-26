@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2022-02-16 11:53+0000\n"
+"PO-Revision-Date: 2022-04-18 20:50+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1645012425.452575\n"
+"X-POOTLE-MTIME: 1650315022.551996\n"
 "X-Pootle-Path: /es/21.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -6778,12 +6778,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %] en multas."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Los usuarios sólo pueden tener"
 
-# Circulation > Holds Policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "reservas a la vez."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -10609,29 +10612,35 @@ msgid ""
 msgstr ""
 "a los usuarios confirmar su dirección de email ingresando la misma dos veces."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self Registration
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"<br><strong>ADVERTENCIA: No utilizar una categoría de usuario regular para "
+"el autoregistro.</strong>"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br><strong>ADVERTENCIA: no utilice una categoría regular de usuario para el "
-"autoregistro.</strong> Si el cronjob <code>misc/cronjobs/cleanup_database."
-"pl</code> está configurado para eliminar autorregistros de OPAC no "
-"verificados y sin terminar, eliminará de forma permanente e irrecuperable a "
-"todos los usuarios que se hayan registrado hace más de <a href='/cgi-bin/"
-"koha/admin/preferences.pl?"
-"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> días atrás."
+"<br>Si el cronjob <code>misc/cronjobs/cleanup_database.pl</code> está "
+"configurado para eliminar autorregistros de OPAC no verificados y sin "
+"terminar, eliminará de forma permanente e irrecuperable a todos los usuarios "
+"que se hayan registrado hace más de <a href='/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>"
+"PatronSelfRegistrationExpireTemporaryAccountsDelay</a> días atrás (a menos "
+"que el retraso sea vacío o cero)."
 
 # OPAC > Self Registration
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Utilizar el código de categoría de usuario"
 
 # OPAC > Self Registration
@@ -10665,11 +10674,13 @@ msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
 "programada o cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Pídale "
-"al administrador que la programe."
+"al administrador que la programe.<br>Ningún socio será eliminado si la "
+"configura en cero o la deja vacía."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -14428,6 +14439,10 @@ msgstr "filas del reporte solicitado a través del web service de reportes."
 # Circulation > Self check-out module
 #~ msgid "circulation.pref#SelfCheckoutByLogin# ."
 #~ msgstr " ."
+
+# Circulation > Holds Policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "reservas a la vez."
 
 # I18N/L10N
 #~ msgid ""

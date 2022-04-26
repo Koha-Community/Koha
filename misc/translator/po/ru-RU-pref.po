@@ -6792,12 +6792,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr " [% local_currency %] в штрафах."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "Посетители могут иметь лишь "
 
-# Circulation > Holds Policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr " резервирований за один раз."
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -10589,17 +10592,24 @@ msgid ""
 "address by entering it twice."
 msgstr "от читателей подтверждать свой e-mail, вводя его дважды."
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
 #, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr ""
+"как тип читателя по умолчанию для читателей, зарегистрированных через ЭК."
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+#, fuzzy
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 "<br><strong>ВНИМАНИЕ: Не используйте обычный тип читателя для "
 "самостоятельной регистрации.</strong> Если cron задача <code>misc/cronjobs/"
@@ -10609,8 +10619,8 @@ msgstr ""
 "PatronSelfRegistrationExpireTemporaryAccountsDelay дней назад."
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Использовать код типа читателя"
 
 # OPAC > Self registration and modification
@@ -10639,11 +10649,13 @@ msgstr ""
 "базе данных."
 
 # OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 "<br><strong>Примечание:</strong> Эта системная настройка требует <code>misc/"
 "cronjobs/cleanup_database.pl</code> cron задачи. Обратитесь к вашему "
@@ -14341,6 +14353,10 @@ msgstr "строк отчета, запрошенного через веб-сл
 # Circulation > Self check-out module
 #~ msgid "circulation.pref#SelfCheckoutByLogin# ."
 #~ msgstr "."
+
+# Circulation > Holds Policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr " резервирований за один раз."
 
 # I18N/L10N
 #~ msgid ""

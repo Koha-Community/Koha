@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2022-03-08 09:44+0000\n"
+"PO-Revision-Date: 2022-03-28 05:52+0000\n"
 "Last-Translator: shahab.bohlooli@gmail.com <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
 "Language: fa\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/21.05/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1646732642.303300\n"
+"X-POOTLE-MTIME: 1648446733.420945\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -4423,9 +4423,8 @@ msgid ""
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
 "circulation.pref#نگهداری بدون هیچ گونه هزینه ای# هنگام جمع بندی هزینه ها "
-"برای محدودیت تعیین شده <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\">بدون "
-"هزینه</a> اولویت سیستم. "
+"برای محدودیت تعیین شده <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=noissuescharge\">بدون هزینه</a> اولویت سیستم. "
 
 # Circulation > Checkin policy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
@@ -6196,12 +6195,15 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "circulation.pref#maxoutstanding# [% local_currency %] در جریمه ها."
 
 # Circulation > Holds policy
-msgid "circulation.pref#maxreserves# Patrons can only have"
+#, fuzzy
+msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
 msgstr "کاربران می توانند فقط داشته باشند"
 
-# Circulation > Holds policy
-msgid "circulation.pref#maxreserves# holds at once."
-msgstr "فقط یکبار رزرو کردن. "
+# Circulation > Holds policy > maxreserves
+msgid ""
+"circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
+"disable). Additional limits may apply based on circulation rules."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -9775,21 +9777,27 @@ msgid ""
 "address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+# OPAC > Self registration and modification
+#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
-"use a regular patron category for self registration.</strong> If the "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete "
-"unverified and unfinished OPAC self registrations, it will permanently and "
+"use a regular patron category for self registration.</strong>"
+msgstr "اجازه ندادن"
+
+# OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
+msgid ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
+"and unfinished OPAC self registrations, it will permanently and "
 "unrecoverably delete all patrons that have registered more than <a href='/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
-"a> days ago."
+"a> days ago (unless that delay is empty or zero)."
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid ""
-"opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "اجازه ندادن"
 
 # OPAC > Self registration and modification
@@ -9813,12 +9821,13 @@ msgid ""
 "already exists in the database."
 msgstr ""
 
-# OPAC > Self registration and modification
+# OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator "
-"to schedule it."
+"to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
+"make it empty."
 msgstr ""
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
@@ -10976,6 +10985,9 @@ msgid ""
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
 msgstr ""
+"patrons.pref#آدرس سیاست حفظ حریم خصوصی# <br><strong>توجه:</strong> آدرس فقط "
+"در صورتی نمایش داده می شود که<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a>تنظیم شده باشد."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -13169,6 +13181,10 @@ msgstr "ردیف های یک گزارش درخواستی از طریق گزار�
 #, fuzzy
 #~ msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
 #~ msgstr "circulation.pref#وجین کردن# فعال کنید "
+
+# Circulation > Holds policy
+#~ msgid "circulation.pref#maxreserves# holds at once."
+#~ msgstr "فقط یکبار رزرو کردن. "
 
 # I18N/L10N
 #~ msgid ""
