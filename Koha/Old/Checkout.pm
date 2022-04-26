@@ -90,6 +90,21 @@ sub issuer {
     return Koha::Patron->_new_from_dbic( $issuer_rs );
 }
 
+=head3 renewals
+
+  my $renewals = $checkout->renewals;
+
+Return a Koha::Checkouts::Renewals set attached to this checkout
+
+=cut
+
+sub renewals {
+    my ( $self ) = @_;
+    my $renewals_rs = $self->_result->renewals;
+    return unless $renewals_rs;
+    return Koha::Checkouts::Renewals->_new_from_dbic( $renewals_rs );
+}
+
 =head3 anonymize
 
     $checkout->anonymize();

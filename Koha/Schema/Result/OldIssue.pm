@@ -343,6 +343,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 renewals
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CheckoutRenewal>
+
+=cut
+
+__PACKAGE__->has_many(
+    "renewals",
+    "Koha::Schema::Result::CheckoutRenewal",
+    { "foreign.issue_id" => "self.issue_id" },
+    { cascade_copy       => 0, cascade_delete => 0 },
+);
+
 =head2 return_claim
 
 Type: might_have
