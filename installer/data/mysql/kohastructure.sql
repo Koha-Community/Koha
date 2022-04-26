@@ -4,6 +4,11 @@
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB-1:10.6.5+maria~focal
 
+-- IMPORTANT NOTE:
+-- The lines with /*! are silently IGNORED when the web installer runs this
+-- file (in C4::Installer, using DBIx::RunSQL).
+-- The lines only work when you run this sql script directly with mysql.
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
