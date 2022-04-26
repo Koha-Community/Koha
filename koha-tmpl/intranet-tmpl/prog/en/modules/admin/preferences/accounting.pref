@@ -38,9 +38,9 @@ Accounting:
             - pref: RequireCashRegister
               default: no
               choices:
-                no: "require a cash register only when the CASH payment type is selected"
-                yes: "always require a cash register"
-            - " (Requires UseCashRegisters)"
+                0: "require a cash register only when the CASH payment type is selected"
+                1: "always require a cash register"
+            - '. (Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters">UseCashRegisters</a>)'
         -
             - pref: EnablePointOfSale
               default: no
