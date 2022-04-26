@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2021-10-20 13:58-0300\n"
-"PO-Revision-Date: 2022-01-04 05:46+0000\n"
+"PO-Revision-Date: 2022-04-22 08:09+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1641275207.094441\n"
+"X-POOTLE-MTIME: 1650614979.451980\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -506,9 +506,7 @@ msgstr "%s %s %s %s %s %s 此請求無紀錄日誌 %s "
 msgid ""
 "%s %s %s %s %s %sItem due %sAdvance notice %sUpcoming events %sHold filled "
 "%sItem check-in %sItem checkout %sUnknown %s: "
-msgstr ""
-"%s %s %s %s %s %s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館"
-"藏 %s不明 %s："
+msgstr "%s %s %s %s %s %s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館藏 %s不詳 %s："
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -793,8 +791,8 @@ msgid ""
 "serial issues claims %s Basket export in acquisition %s Export lost items in "
 "report %s Unknown usage %s %s %s %s "
 msgstr ""
-"%s %s %s %s MARC %s SQL %s 類型不明 %s %s %s %s 匯出紀錄 %s 催缺遲到的期刊 "
-"%s 採訪匯出的採購籃 %s 匯出遺失館藏於報表 %s 不明用法 %s %s %s %s "
+"%s %s %s %s MARC %s SQL %s 類型不詳 %s %s %s %s 匯出紀錄 %s 催缺遲到的期刊 %s 採訪匯出的採購籃 %s "
+"匯出遺失館藏於報表 %s 不詳用法 %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -1076,7 +1074,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:164
 #, c-format
 msgid "%s %s %s Collection %s "
-msgstr "%s %s %s 館藏 %s "
+msgstr "%s %s %s 合集 %s "
 
 #. %1$s:  IF ( hold.found ) 
 #. %2$s:  IF ( hold.atdestination ) 
@@ -1225,7 +1223,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:320
 #, c-format
 msgid "%s %s %s Unknown %s "
-msgstr "%s %s %s 不明 %s "
+msgstr "%s %s %s 不詳 %s "
 
 #. %1$s:  END 
 #. %2$s:  IF close_form 
@@ -1291,7 +1289,7 @@ msgstr "%s %s %s from &quot;%s&quot; %s %s %s to &quot;%s&quot; "
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:64
 #, c-format
 msgid "%s %s %s unknown %s "
-msgstr "%s %s %s 不明 %s "
+msgstr "%s %s %s 不詳 %s "
 
 #. %1$s:  USE raw 
 #. %2$s:  USE KohaDates 
@@ -1359,10 +1357,9 @@ msgid ""
 "group delivery place%sBasket group billing place%sBasket delivery place"
 "%sBasket billing place%s "
 msgstr ""
-"%s %s %s帳號%s採購單名稱%s訂單號碼%s著者%s題名%s出版者%s出版年%s集叢題"
-"名%sISBN%s數量%s含稅%s不含稅%s折扣%s含稅估價%s不含稅估價%s給代理商的說明%s鍵"
-"入日期%s書商名稱%s書商地址%s書商郵寄地址%s合約號碼%s合約名稱%s採購單群組寄送"
-"地址%s採購單群組帳單地址%s採購單寄送地址%s採購單帳單地址%s "
+"%s %s %s帳號%s採購單名稱%s訂單號碼%s著者%s題名%s出版者%s出版年%s合集題名%sISBN%s數量%s含稅%s不含稅%s折扣%s含稅估價%"
+"s不含稅估價%s給代理商的說明%s鍵入日期%s書商名稱%s書商地址%s書商郵寄地址%s合約號碼%s合約名稱%s採購單群組寄送地址%s採購單群組帳單地址%s"
+"採購單寄送地址%s採購單帳單地址%s "
 
 #. %1$s: - USE Koha -
 #. %2$s: - SET delimiter = Koha.Preference( 'delimiter' ) || ',' -
@@ -1388,8 +1385,9 @@ msgid ""
 "%sPublication year%sPublisher%sCollection title%sNote for vendor%sQuantity"
 "%sRRP%sDelivery place%sBilling place%s "
 msgstr ""
-"%s %s %s合約名稱%s訂單編號%s成案日期%sISBN%s著者%s題名%s出版年%s出版者%s集叢"
-"題名%s給代理商說明%s數量%sRRP%s送達地%s帳單地址%s "
+"%s %s "
+"%s合約名稱%s訂單編號%s成案日期%sISBN%s著者%s題名%s出版年%s出版者%s合集題名%s給代理商說明%s數量%sRRP%s送達地%s帳單地址%"
+"s "
 
 #. %1$s:  BLOCK translate_justification_types 
 #. %2$s:   SWITCH type 
@@ -1495,9 +1493,9 @@ msgid ""
 "number &lt; %sPatron sort1 = %sPatron sort2 = %sHome library = %sHolding "
 "library = %sPatron library = %sIssuing library = %s%s = %s %s "
 msgstr ""
-"%s %s %s起始自 %s終止於 %s讀者類型 = %s館藏類型 = %s借出圖書館 = %s館藏 = %s"
-"位置 = %s館藏索書號 &gt;= %s館藏索書號 &lt; %s讀者排序1 = %s讀者排序2 = %s所"
-"屬圖書館 = %s所在圖書館 = %s讀者圖書館 = %s借出圖書館 = %s%s = %s %s "
+"%s %s %s起始自 %s終止於 %s讀者類型 = %s館藏類型 = %s借出圖書館 = %s合集 = %s位置 = %s館藏索書號 &gt;= %"
+"s館藏索書號 &lt; %s讀者排序1 = %s讀者排序2 = %s所屬圖書館 = %s所在圖書館 = %s讀者圖書館 = %s借出圖書館 = %s%s "
+"= %s %s "
 
 #. %1$s: - BLOCK role -
 #. %2$s: - SWITCH role.key -
@@ -2254,12 +2252,11 @@ msgstr ""
 #. %8$s:  cn | html 
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s Item type %s Collection %s Shelving location %s Home library %s "
 "Holding library %s %s %s "
-msgstr ""
-"%s %s 館藏類型 %s 館藏代碼 %s 書架位置 %s 所屬圖書館 %s 所在圖書館 %s %s %s "
+msgstr "%s %s 館藏類型 %s 合集 %s 書架位置 %s 所屬圖書館 %s 所在圖書館 %s %s %s "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:85
@@ -2422,9 +2419,8 @@ msgid ""
 "on (to) %s Vendor %s Home library %s Collection %s Item type %s Fund %s "
 "Sort1 %s Sort2 %s Unknown filter %s : %s "
 msgstr ""
-"%s %s 置於 (來自) %s 置於 (送出) %s 收到 (來自) %s 收到 (送出) %s 供應商 %s "
-"所屬圖書館 %s 館藏 %s 館藏類型 %s 基金 %s 排序1 %s 排序2 %s 不明的篩選器 %s "
-"：%s "
+"%s %s 置於 (來自) %s 置於 (送出) %s 收到 (來自) %s 收到 (送出) %s 供應商 %s 所屬圖書館 %s 合集 %s 館藏類型 "
+"%s 基金 %s 排序1 %s 排序2 %s 不詳的篩選器 %s ：%s "
 
 #. %1$s:  SWITCH plugin.name 
 #. %2$s:  CASE 'AuthorityFile' 
@@ -2923,9 +2919,7 @@ msgstr "%s %s成人 %s兒童 %s專業 %s機構 %s館員 %s統計%s "
 msgid ""
 "%s %sAuthors %sItem Types %sLocations %sPlaces %sSeries %sTopics "
 "%sCollections %sHolding libraries %sHome libraries %sLanguage %s%s %s "
-msgstr ""
-"%s %s著者 %s館藏類型 %s位置 %s地圖 %s集叢 %s主題 %s館藏 %s儲存圖書館 %s所屬圖"
-"書館 %s語言 %s%s %s "
+msgstr "%s %s著者 %s館藏類型 %s位置 %s地圖 %s集叢 %s主題 %s合集 %s儲存圖書館 %s所屬圖書館 %s語言 %s%s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( errornoitem ) 
@@ -3093,8 +3087,7 @@ msgid ""
 "%s %sPending %sAccepted %sChecked %sRejected %sAvailable %sOrdered %sStatus "
 "unknown %s%s%s %s %s %s %s No name %s %s (%s)"
 msgstr ""
-"%s %s待決 %s接受 %s已檢查 %s拒絕 %s可取得 %s已訂購 %s狀態不明 %s%s%s %s %s "
-"%s %s 無名稱 %s %s (%s)"
+"%s %s待決 %s接受 %s已檢查 %s拒絕 %s可取得 %s已訂購 %s狀態不詳 %s%s%s %s %s %s %s 無名稱 %s %s (%s)"
 
 #. %1$s:  SWITCH basket.create_items 
 #. %2$s:  CASE 'receiving' 
@@ -3893,7 +3886,7 @@ msgstr "%s 製作 pdf 檔案時發生錯誤。請連繫管理者解決此問題�
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:30
 #, c-format
 msgid "%s An unknown error has occurred."
-msgstr "%s 發生不明錯誤。"
+msgstr "%s 發生不詳錯誤。"
 
 #. %1$s:  IF ( op == 'approve' ) 
 #. %2$s:  ELSIF ( op == 'reject' ) 
@@ -3906,7 +3899,7 @@ msgstr "%s 發生不明錯誤。"
 #, c-format
 msgid ""
 "%s Approved %s Rejected %s Tested %sUnknown Operation (%s) on %s %s Term(s). "
-msgstr "%s 批准 %s 拒絕 %s 測試 %s未明的作業 (%s) 在 %s %s 期間。"
+msgstr "%s 批准 %s 拒絕 %s 測試 %s不詳的作業 (%s) 在 %s %s 期間。"
 
 #. For the first occurrence,
 #. %1$s:  patron.article_requests_current.count | html 
@@ -4919,9 +4912,7 @@ msgstr "%s 未找到付款紀錄 %s 未找到付款 %s "
 msgid ""
 "%s Pending %s Accepted %s Ordered %s Rejected %s Checked %s Available %s %s "
 "%s Status unknown %s %s "
-msgstr ""
-"%s 待決 %s 接受 %s 已採購 %s 已拒絕 %s 已檢查 %s 可借 %s %s %s 狀態不明 %s "
-"%s "
+msgstr "%s 待決 %s 接受 %s 已採購 %s 已拒絕 %s 已檢查 %s 可借 %s %s %s 狀態不詳 %s %s "
 
 #. For the first occurrence,
 #. %1$s:  IF ar.status == 'PENDING' 
@@ -5411,7 +5402,7 @@ msgstr "%s 匯出選定的館藏，"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:233
 #, c-format
 msgid "%s Unknown not-for-loan status"
-msgstr "%s 不明的不能借出狀態"
+msgstr "%s 不詳的不能借出狀態"
 
 #. %1$s:  ELSIF ( f.backend ) 
 #. %2$s:  f.backend | html 
@@ -7261,8 +7252,7 @@ msgstr "%s依館藏類型的預約政策給 %s%s依館藏類型預設的預約�
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
-msgstr ""
-"%s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館藏 %s不明 %s"
+msgstr "%s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館藏 %s不詳 %s"
 
 #. %1$s:  IF ( not_deleted_loo.book_on_loan ) 
 #. %2$s:  ELSIF ( not_deleted_loo.book_reserved ) 
@@ -7290,7 +7280,7 @@ msgstr "%s因為館藏欄位的號碼不對，無法處理館藏記錄。%s %s "
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:129
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%s館藏類型 %s館藏 %s書架位置 %s其他 %s "
+msgstr "%s館藏類型 %s合集 %s書架位置 %s其他 %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  INCLUDE 'doc-head-close.inc' 
@@ -7518,9 +7508,7 @@ msgid ""
 "%sTitle, Publication date, Publisher, Collection, Barcode, Call number, Home "
 "library, Current location, Shelving location, Itemtype, Inventory number, "
 "Not for loan status, Lost status, Withdrawn status, Checkouts%s "
-msgstr ""
-"%s題名、出版日期、出版者、館藏、條碼、索書號、所屬圖書館、所在位置、書架位"
-"置、館藏類型、登錄號、狀態、借出%s "
+msgstr "%s題名、出版日期、出版者、合集、條碼、索書號、所屬圖書館、所在位置、書架位置、館藏類型、登錄號、狀態、借出%s "
 
 #. %1$s:  CASE 
 #. %2$s:  message.error | html 
@@ -8169,14 +8157,14 @@ msgstr "&rsaquo; %s 收到摘要 "
 #, c-format
 msgid ""
 "&rsaquo; %s Unknown authority record %s Details for authority #%s (%s) %s "
-msgstr "&rsaquo; %s 權威紀錄不明 %s 權威紀錄詳情 #%s (%s) %s "
+msgstr "&rsaquo; %s 權威紀錄不詳 %s 權威紀錄詳情 #%s (%s) %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:48
 #, c-format
 msgid "&rsaquo; %s Unknown record %s Details for "
-msgstr "&rsaquo; %s 不明紀錄 %s 詳情 "
+msgstr "&rsaquo; %s 不詳紀錄 %s 詳情 "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -8185,7 +8173,7 @@ msgstr "&rsaquo; %s 不明紀錄 %s 詳情 "
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:19
 #, c-format
 msgid "&rsaquo; %s Unknown record %s ISBD details for %s %s "
-msgstr "&rsaquo; %s 不明紀錄 %s ISBD 詳情 %s %s "
+msgstr "&rsaquo; %s 不詳紀錄 %s ISBD 詳情 %s %s "
 
 #. For the first occurrence,
 #. %1$s:  IF ( unknownbiblionumber ) 
@@ -8194,7 +8182,7 @@ msgstr "&rsaquo; %s 不明紀錄 %s ISBD 詳情 %s %s "
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:20
 #, c-format
 msgid "&rsaquo; %s Unknown record %s MARC details for "
-msgstr "&rsaquo; %s 不明紀錄 %s MARC 詳情 "
+msgstr "&rsaquo; %s 不詳紀錄 %s MARC 詳情 "
 
 #. %1$s:  Branches.GetName( branch ) | html 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
@@ -9502,7 +9490,7 @@ msgstr "&rsaquo; 送出通知給 %s"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:16
 #, c-format
 msgid "&rsaquo; Serial collection information for "
-msgstr "&rsaquo; 期刊館藏資訊 "
+msgstr "&rsaquo; 期刊合集資訊 "
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:86
 #, c-format
@@ -9961,7 +9949,7 @@ msgstr "(組態不佳形成的退化值)"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "(Unknown)"
-msgstr "(不明)"
+msgstr "(不詳)"
 
 #: intranet-tmpl/prog/en/includes/accounts.inc:53
 #, c-format
@@ -10323,7 +10311,7 @@ msgstr "- 首期出版日期不確定"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:310
 msgid "- Frequency is not defined"
-msgstr "- 未指定幣別"
+msgstr "- 刊期未定義"
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:53
 #, c-format
@@ -13107,7 +13095,7 @@ msgstr "內部連結破碎且頁面不存在"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:35
 #, c-format
 msgid "An unknown error has occurred."
-msgstr "發生不明的錯誤。"
+msgstr "發生不詳的錯誤。"
 
 #. %1$s:  card_element | html 
 #. %2$s:  element_id | html 
@@ -17448,7 +17436,7 @@ msgstr "類別代碼祗能用下列字元：字母、數字、- 與 _。"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Category code unknown."
-msgstr "類型代碼不明。"
+msgstr "類型代碼不詳。"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:34
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:66
@@ -19462,7 +19450,7 @@ msgstr "讀者支付："
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:146
 #, c-format
 msgid "Collection"
-msgstr "館藏"
+msgstr "合集"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:27
@@ -19474,52 +19462,52 @@ msgstr "館藏"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:74
 #, c-format
 msgid "Collection "
-msgstr "館藏 "
+msgstr "合集 "
 
 #: intranet-tmpl/prog/en/columns.def:97
 #, c-format
 msgid "Collection code"
-msgstr "館藏代碼"
+msgstr "合集代碼"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:58
 #, c-format
 msgid "Collection deleted successfully"
-msgstr "成功刪除館藏"
+msgstr "成功刪除合集"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:62
 #, c-format
 msgid "Collection failed to be deleted"
-msgstr "無法刪除館藏"
+msgstr "無法刪除合集"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "Collection title"
-msgstr "館藏題名："
+msgstr "合集題名："
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:102
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:268
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:684
 #, c-format
 msgid "Collection title:"
-msgstr "館藏題名："
+msgstr "合集題名："
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:24
 #, c-format
 msgid "Collection transferred successfully"
-msgstr "館藏轉移成功"
+msgstr "合集轉移成功"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:57
 #: intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:69
 #, c-format
 msgid "Collection:"
-msgstr "館藏："
+msgstr "合集："
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:129
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:96
 #, c-format
 msgid "Collection: "
-msgstr "館藏："
+msgstr "合集："
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -19527,17 +19515,17 @@ msgstr "館藏："
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:83
 #, c-format
 msgid "Collection: %s "
-msgstr "館藏：%s "
+msgstr "合集：%s "
 
 #: intranet-tmpl/prog/en/includes/facets.inc:26
 #, c-format
 msgid "Collections"
-msgstr "館藏"
+msgstr "合集"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:352
-#, fuzzy, c-format
+#, c-format
 msgid "Collections (appear when cataloging and working with items)"
-msgstr "館藏代碼 (編目與處理館藏時出現)"
+msgstr "合集 (編目與處理館藏時出現)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -23834,7 +23822,7 @@ msgstr "ENV 和 koha-conf.xml"
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:43
 #, c-format
 msgid "ERROR - unknown"
-msgstr "錯誤 - 不明"
+msgstr "錯誤 - 不詳"
 
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:60
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:61
@@ -26766,12 +26754,12 @@ msgstr "經常被出不了門模組使用。在館員介面的讀者帳號顯示
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:42
 #, c-format
 msgid "Frequency"
-msgstr "頻率"
+msgstr "刊期"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
 msgid "Frequency is not defined"
-msgstr "未指定幣別"
+msgstr "刊期未定義"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:250
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:166
@@ -28574,7 +28562,7 @@ msgstr "所屬圖書館(分館代碼)"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Home library unknown."
-msgstr "所屬圖書館不明。"
+msgstr "所屬圖書館不詳。"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:65
 #, c-format
@@ -29385,7 +29373,7 @@ msgstr "照片未匯入，因為Koha不能開啟照片。%s"
 msgid ""
 "Image not imported because of an unknown error. Please refer to the error "
 "log for more details. %s %s %s imported successfully. %s"
-msgstr "因為不明的錯誤，未匯入照片。請參照錯誤紀錄。%s %s %s 成功匯入。%s"
+msgstr "因為不詳的錯誤，未匯入照片。請參照錯誤紀錄。%s %s %s 成功匯入。%s"
 
 #. %1$s:  ELSIF ( filerror.IMGEXISTS ) 
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:60
@@ -32390,7 +32378,7 @@ msgstr "Koha &rsaquo; 權威"
 msgid ""
 "Koha &rsaquo; Authorities &rsaquo; %s Unknown authority record %s Details "
 "for authority #%s (%s) %s "
-msgstr "Koha &rsaquo; 權威 &rsaquo; %s 不明權威紀錄 %s 權威詳情 #%s (%s) %s "
+msgstr "Koha &rsaquo; 權威 &rsaquo; %s 不詳權威紀錄 %s 權威詳情 #%s (%s) %s "
 
 #. %1$s:  IF ( authid ) 
 #. %2$s:  authid | html 
@@ -32439,7 +32427,7 @@ msgstr "Koha &rsaquo; 編目 &rsaquo; %s &rsaquo; 封面"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:33
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Details for %s %s "
-msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s 詳情 %s %s "
+msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不詳紀錄 %s 詳情 %s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -32449,7 +32437,7 @@ msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s 詳情 %s %s "
 #, c-format
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s ISBD details for %s %s "
-msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s ISBD 詳情 %s %s "
+msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不詳紀錄 %s ISBD 詳情 %s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -32460,7 +32448,7 @@ msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s ISBD 詳情 %s %s "
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Labeled MARC details for "
 "%s %s "
-msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s 標記 MARC 詳情%s %s "
+msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不詳紀錄 %s 標記 MARC 詳情%s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -32470,7 +32458,7 @@ msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s 標記 MARC 詳情%s %s
 #, c-format
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s MARC details for %s %s "
-msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不明紀錄 %s MARC 詳情 %s %s "
+msgstr "Koha &rsaquo; 目錄 &rsaquo; %s 不詳紀錄 %s MARC 詳情 %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  IF ( query_desc ) 
@@ -33303,7 +33291,7 @@ msgstr "Koha &rsaquo; 期刊 &rsaquo; 選擇供應商"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:8
 #, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Serial collection information for %s"
-msgstr "Koha &rsaquo; 期刊 &rsaquo; %s 的期刊館藏資訊"
+msgstr "Koha &rsaquo; 期刊 &rsaquo; %s 的期刊合集資訊"
 
 #. %1$s:  bibliotitle | html 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:5
@@ -33754,12 +33742,11 @@ msgstr ""
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
 "&rsaquo; Add or remove items"
-msgstr ""
-"Koha &rsaquo; 工具 &rsaquo; 巡迴館藏 &rsaquo; 館藏 %s &rsaquo; 新增/移除館藏"
+msgstr "Koha &rsaquo; 工具 &rsaquo; 巡迴合集 &rsaquo; 合集 %s &rsaquo; 新增/移除館藏"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:6
 #, c-format
@@ -41346,7 +41333,7 @@ msgstr "訂單搜尋"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:59
 #, c-format
 msgid "Orders with uncertain prices"
-msgstr "價格不明的訂單"
+msgstr "價格不詳的訂單"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:28
 #, c-format
@@ -49293,18 +49280,18 @@ msgstr "期刊"
 #: intranet-tmpl/prog/en/includes/serials-menu.inc:5
 #, c-format
 msgid "Serial collection"
-msgstr "期刊館藏"
+msgstr "期刊合集"
 
 #. %1$s:  subscription.subscriptionid | html 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:454
 #, c-format
 msgid "Serial collection #%s"
-msgstr "期刊館藏 #%s"
+msgstr "期刊合集 #%s"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:28
 #, c-format
 msgid "Serial collection information for "
-msgstr "期刊館藏資訊 "
+msgstr "期刊合集資訊 "
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:95
 #, c-format
@@ -56534,43 +56521,43 @@ msgstr "Université de St Etienne，法國"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1232
 #, c-format
 msgid "Unknown"
-msgstr "不明"
+msgstr "不詳"
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:127
 #, c-format
 msgid "Unknown error processing your request. Contact your administrator. "
-msgstr "處理您的請求出現不明錯誤。連結管理者。"
+msgstr "處理您的請求出現不詳錯誤。連結管理者。"
 
 #. %1$s:  errtype | html 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:47
 #, c-format
 msgid "Unknown error type %s."
-msgstr "不明類型錯誤 %s."
+msgstr "不詳類型錯誤 %s."
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #, c-format
 msgid "Unknown error."
-msgstr "不明的錯誤。"
+msgstr "不詳的錯誤。"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:60
 #, c-format
 msgid "Unknown plugin type "
-msgstr "不明的外掛程式類型 "
+msgstr "不詳的外掛程式類型 "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
 msgid "Unknown record type, cannot import"
-msgstr "不明的記錄類型，無法匯入"
+msgstr "不詳的記錄類型，無法匯入"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
 msgid "Unknown subfield"
-msgstr "不明的分欄"
+msgstr "不詳的分欄"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
 msgid "Unknown tag"
-msgstr "不明的欄號"
+msgstr "不詳的欄號"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:144
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:152
@@ -61938,7 +61925,7 @@ msgstr "未填入數量或填入的不是數字"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "reason unknown"
-msgstr "理由不明"
+msgstr "理由不詳"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:125
 #, c-format
@@ -62440,7 +62427,7 @@ msgstr "沒有定義"
 #: intranet-tmpl/prog/en/modules/about.tt:95
 #, c-format
 msgid "unknown"
-msgstr "不明"
+msgstr "不詳"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
 #, c-format
