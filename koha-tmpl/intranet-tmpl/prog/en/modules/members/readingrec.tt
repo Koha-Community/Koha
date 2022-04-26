@@ -112,7 +112,7 @@
           <td>
               [% issue.renewals_count | html %]
               [% IF issue.renewals_count > 0 %]
-                  [ <a class="patron_renewals_view" data-renewals="[% issue.renewals_count | html %]" data-issueid="[% issue.issue_id %]" href="#">View</a> ]
+                  [ <a class="patron_renewals_view" data-renewals="[% issue.renewals_count | html %]" data-issueid="[% issue.issue_id | html %]" href="#">View</a> ]
               [% END %]
           </td>
           <td data-order="[% issue.issuedate | html %]">
