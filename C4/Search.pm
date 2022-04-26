@@ -1420,6 +1420,13 @@ sub buildQuery {
                             $indexes[$i] = $index = 'kw';
                         }
                     }
+                    if ( $index eq 'ns' ) {
+                        if ( C4::Context->preference("SearchWithISSNVariations") ) {
+                            my @issns = C4::Koha::GetVariationsOfISSN( $operand );
+                            $operands[$i] = $operand =  '(ns=' . join(' OR ns=', @issns) . ')';
+                            $indexes[$i] = $index = 'kw';
+                        }
+                    }
                 }
 
                 # Set default structure attribute (word list)
