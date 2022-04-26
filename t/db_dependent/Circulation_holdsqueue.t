@@ -52,7 +52,7 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
         is_deeply(
             $args->{biblio_ids},
             [ $item->biblionumber ],
-            "$action triggers a holds queue update for the related biblio from $package"
+            "$action triggers a holds queue update for the related biblio from $package at line $line"
         );
     } );
 
