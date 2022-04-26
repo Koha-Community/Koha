@@ -167,7 +167,7 @@
                             [% END # /IF GoogleOpenIDConnect %]
                         [% END # /UNLESS OPACShibOnly %]
 
-                        [% IF password_has_expired %]
+                        [% IF !(invalid_username_or_password || too_many_login_attempts) and password_has_expired %]
                             <div class="alert alert-info">
                                 <p><strong>Error: </strong>Your password has expired!</p>
                             </div>
