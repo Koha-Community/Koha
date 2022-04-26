@@ -1995,9 +1995,7 @@ sub searchResults {
                     ),
                     fix_amps       => 1,
                     hidden_items   => \@hiddenitems,
-                    xslt_variables => $xslt_variables,
-                    branches => \%branches,
-                    itemtypes => \%itemtypes
+                    xslt_variables => $xslt_variables
                 }
             );
         }
