@@ -776,7 +776,7 @@
             e.preventDefault();
             var index = $("#refine_search #idx").val() || "";
             if( index){index += ":";}
-            window.location.href = "/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %]&[% limit_cgi | $raw %]&[% sort_cgi | $raw %]&limit="+index+$("#refiner").val();
+            window.location.href = "/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %]&[% limit_cgi | $raw %]&[% sort_cgi | $raw %]&limit="+index+escape_str( $("#refiner").val() );
         });
     </script>
     [% Asset.js("js/pages/results.js") | $raw %]
