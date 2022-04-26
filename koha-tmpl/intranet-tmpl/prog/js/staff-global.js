@@ -340,6 +340,7 @@ function logOut() {
     localStorage.removeItem("bibs_selected");
     localStorage.removeItem("patron_search_selections");
     localStorage.removeItem("item_search_selections");
+    localStorage.removeItem("copiedPermissions");
 }
 
 function openHelp() {
@@ -786,4 +787,21 @@ function selectBsTabByHash(tabs_container_id) {
     } else {
         $("#" + tabs_container_id + " a:first").tab("show");
     }
+}
+
+/**
+ * Fades out a Font Awesome icon, fades in a replacement, and back
+ * @param {object} element - jQuery object representing the icon's container
+ * @param {string} start - The icon which will be temporarily replaced
+ * @param {string} replacement - The icon which will be the temporary replacement
+ */
+function toggleBtnIcon( element, start, replacement ){
+    let icon = element.find( "." + start );
+    icon.fadeOut( 1000, function(){
+        $(this).removeClass( start ).addClass( replacement ).fadeIn( 1000, function(){
+            $(this).fadeOut( 1000, function(){
+                $(this).removeClass( replacement ).addClass( start ).fadeIn( 1000 );
+            });
+        });
+    });
 }

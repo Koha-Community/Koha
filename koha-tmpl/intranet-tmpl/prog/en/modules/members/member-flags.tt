@@ -40,6 +40,7 @@
 
 [% INCLUDE 'members-toolbar.inc' %]
 
+
 <form id="flag_form" method="post" action="/cgi-bin/koha/members/member-flags.pl">
     [% INCLUDE 'csrf-token.inc' %]
     <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -58,12 +59,22 @@
             <a id="UncheckAllFlags" class="btn btn-link" href="#">
                 <i class="fa fa-times"></i> Clear all
             </a>
+
+            <div class="btn-group">
+                <button id="copyPermissions" class="btn btn-link"><i class="fa fa-copy"></i> Copy settings</button>
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a id="clearCopied" href="#">Forget copied settings</a></li>
+                </ul>
+            </div>
+
+            <a href="#" id="pastePermissions" class="btn btn-link disabled"><i class="fa fa-paste"></i> Paste settings</a>
             <div class="btn-group pull-right">
                 Filter: <input type="text" name="permissions_filter" id="permissions_filter" size="20" />
                 <a href="#" id="clear_filter" style="display:none"><i class="fa fa-times"></i></a>
             </div>
         </div>
-        <div class="permissions">
+        <div class="permissions page-section">
             [% FOREACH loo IN loop %]
                 [% IF ( loo.expand ) %]
                     <div id="parent-flag-[% loo.flag | html %]" class="open parent">
@@ -272,7 +283,56 @@
                     }
                 }
             });
+
+            if( copied = getCopiedPermissions() ){
+                $("#pastePermissions").removeClass("disabled");
+            }
+
+            /* write to the clipboard now */
+            $("#copyPermissions").on("click", function(e){
+                e.preventDefault();
+                let flags = new Object();
+                $("#flag_form input:checkbox").each(function(){
+                    flags[ $(this).attr('id') ] = $(this).prop("checked");
+                });
+                formText = JSON.stringify( flags );
+                localStorage.setItem("copiedPermissions", formText );
+                toggleBtnIcon( $(this), "fa-copy", "fa-check" );
+                $("#pastePermissions").removeClass("disabled");
+            });
+
+            $("#pastePermissions").on("click", function(e){
+                e.preventDefault();
+                $(".toggleall_on").click();
+                let copiedPermissions = getCopiedPermissions();
+
+                let checkBox;
+                let checked;
+                for( const permission in copiedPermissions ){
+                    checkBox = `${permission}`;
+                    checked = `${copiedPermissions[permission]}` == "true" ? true : false;
+                    $("#" + checkBox).prop("checked", checked );
+                }
+            });
+
+            $("#clearCopied").on("click", function(e){
+                e.preventDefault();
+                localStorage.removeItem("copiedPermissions");
+                $("#pastePermissions").addClass("disabled");
+            });
         });
+
+        function getCopiedPermissions(){
+            const copied = localStorage.getItem("copiedPermissions");
+            let copiedPermissions;
+            try {
+                copiedPermissions = JSON.parse( copied );
+                return copiedPermissions;
+            } catch ( ex ){
+                console.error("Bad parse: ", ex.message );
+                return false;
+            }
+        }
 
         function setLibrarian(){
             $('input[name="flag"]').each(function() {
