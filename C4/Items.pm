@@ -1299,6 +1299,22 @@ sub _SearchItems_build_where_fragment {
                     }
                     $column = "ExtractValue($sqlfield, '$xpath')";
                 }
+            }
+            elsif ($field eq 'isbn') {
+                if ( C4::Context->preference("SearchWithISBNVariations") and $query ) {
+                    my @isbns = C4::Koha::GetVariationsOfISBN( $query );
+                    $query = [];
+                    push @$query, @isbns;
+                }
+                $column = $field;
+            }
+            elsif ($field eq 'issn') {
+                if ( C4::Context->preference("SearchWithISSNVariations") and $query ) {
+                    my @issns = C4::Koha::GetVariationsOfISSN( $query );
+                    $query = [];
+                    push @$query, @issns;
+                }
+                $column = $field;
             } else {
                 $column = $field;
             }
@@ -1308,15 +1324,23 @@ sub _SearchItems_build_where_fragment {
             }
 
             if (ref $query eq 'ARRAY') {
-                if ($op eq '=') {
-                    $op = 'IN';
-                } elsif ($op eq '!=') {
-                    $op = 'NOT IN';
+                if ($op eq 'like') {
+                    $where_fragment = {
+                        str => "($column LIKE " . join (" OR $column LIKE ", ('?') x @$query ) . ")",
+                        args => $query,
+                    };
                 }
-                $where_fragment = {
-                    str => "$column $op (" . join (',', ('?') x @$query) . ")",
-                    args => $query,
-                };
+                else {
+                    if ($op eq '=') {
+                        $op = 'IN';
+                    } elsif ($op eq '!=') {
+                        $op = 'NOT IN';
+                    }
+                    $where_fragment = {
+                        str => "$column $op (" . join (',', ('?') x @$query) . ")",
+                        args => $query,
+                    };
+                }
             } elsif ( $op eq 'is' ) {
                 $where_fragment = {
                     str => "$column $op $query",
