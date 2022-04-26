@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2022-03-23 14:09+0000\n"
+"PO-Revision-Date: 2022-04-05 12:46+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1648044593.739871\n"
+"X-POOTLE-MTIME: 1649162817.900634\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -49,8 +49,9 @@ msgid ""
 "enabled for each credit type (<a href=\"/cgi-bin/koha/admin/credit_types.pl"
 "\">Configure credit types</a>)"
 msgstr ""
-"Automaattinen luonti pitää olla päällä myös yksittäisillä credit-tyypeillä (<"
-"a href=\"/cgi-bin/koha/admin/credit_types.pl\">Määrittele credit-tyypit</a>)"
+"Automaattinen luonti pitää olla päällä myös yksittäisillä credit-tyypeillä "
+"(<a href=\"/cgi-bin/koha/admin/credit_types.pl\">Määrittele credit-tyypit</"
+"a>)"
 
 # Accounting > Features
 msgid ""
@@ -84,9 +85,8 @@ msgid ""
 "\">UseCashRegisters</a>)"
 msgstr ""
 "myyntipiste-ominaisuus mahdollistaaksesi anonyymit myyntitapahtumat "
-"kirjanpitojärjestelmään. (Vaatii <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a>)"
+"kirjanpitojärjestelmään. (Vaatii <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -201,7 +201,7 @@ msgid ""
 "a receipt, update the item's subfields if they were created when placing an "
 "order (e.g. o=5|a=\"bar foo\"):"
 msgstr ""
-"Kun lasku perutaan, päivitä niteen osakentät, jos ne luotiin tilausta "
+"Kun vastaanotto perutaan, päivitä niteen osakentät, jos ne luotiin tilausta "
 "tehtäessä (esim. o=5|a=\"bar foo\"):"
 
 # Acquisitions > Policy
@@ -5892,7 +5892,8 @@ msgstr "käyttäjän kuva(a) itsepalvelulainauksessa (jos tallennettu)."
 msgid ""
 "circulation.pref#SkipHoldTrapOnNotForLoanValue# (list of not for loan values "
 "separated with a pipe '|')"
-msgstr "(lista not for loan -arvoista, erotetaan toististaan putkimerkillä '|')"
+msgstr ""
+"(lista not for loan -arvoista, erotetaan toististaan putkimerkillä '|')"
 
 # Circulation > Checkin policy
 msgid ""
@@ -11123,10 +11124,9 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
-"Jos tyhjä, Koha asettaa oletukseksi \""
-"surname,firstname,othernames,cardnumber,userid\". Muut tähän asetukseen "
-"lisätyt kentät lisätään vaihtoehtoina alasvetovalikkoon asiakkaan "
-"hakusivulla."
+"Jos tyhjä, Koha asettaa oletukseksi \"surname,firstname,othernames,"
+"cardnumber,userid\". Muut tähän asetukseen lisätyt kentät lisätään "
+"vaihtoehtoina alasvetovalikkoon asiakkaan hakusivulla."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -11460,6 +11460,11 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Vaihtoehtoinen osoite - Katuosoite"
 
 # Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
+msgstr "Vaihtoehtoinen osoite - Katuosoite"
+
+# Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
 msgstr "Vaihtoehtoinen osoite - Postinumero"
 
@@ -11545,6 +11550,11 @@ msgstr "Pääosoite - Valtio"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
+msgstr "Pääosoite - Kadun numero"
+
+# Patrons > Patron relationships
+#, fuzzy
+msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
 msgstr "Pääosoite - Kadun numero"
 
 # Patrons > Patron relationships
@@ -12162,19 +12172,16 @@ msgid "searching.pref#FacetOrder# Sort facets"
 msgstr "Näytä fasetit"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#FacetOrder# alphabetically"
-msgstr "automaattisesti."
+msgstr "aakkosjärjestyksessä"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# by usage count"
-msgstr "Näytä näin monta"
+msgstr "esiintymismäärän mukaan"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# for each category."
-msgstr "fasettia kussakin kategoriassa."
+msgstr "kussakin kategoriassa."
 
 # Searching > Features
 msgid ""
@@ -12376,17 +12383,19 @@ msgstr ""
 
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
-msgstr "Näytä"
+msgstr "Tee"
 
 # Searching > Features
 msgid "searching.pref#PassItemMarcToXSLT# Don't"
-msgstr "Älä näytä"
+msgstr "Älä tee"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
 "searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
 "stylesheets. Default is \"Don't\", items are displayed using other methods."
 msgstr ""
+"niteen MARC-tietoja saatavaksi XSLT-tyylitiedostoille. Oletus on \"Älä tee"
+"\", jolloin niteet näytetään muilla keinoin."
 
 # Searching > Features
 msgid ""

@@ -4,19 +4,19 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-17 08:20-0300\n"
-"PO-Revision-Date: 2022-02-16 17:09+0000\n"
+"PO-Revision-Date: 2022-04-16 18:46+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/21.05/ru-RU-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1645031358.582278\n"
+"X-POOTLE-MTIME: 1650134804.350532\n"
 
 #. %1$s:  USE AdditionalContents 
 #. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
@@ -638,16 +638,17 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
-msgstr "Автоматическое продление"
+msgstr "%s Автоматическое продление "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr ""
-"Ошибка автоматического продления, срок действия вашей учетной записи истек."
+"%s Ошибка автоматического продления, срок действия вашей учетной записи "
+"истек. "
 
 #. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
 #. %2$s:  ELSE 
@@ -804,18 +805,19 @@ msgstr ""
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
 msgstr ""
-"Не удалось выполнить автоматическое продление, у Вас неоплаченные штрафы."
+"%s Больше не продляется %s Не удалось выполнить автоматическое продление, у "
+"Вас неоплаченные штрафы. "
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "%s No renewal before %s "
-msgstr "Нет продлений до %s"
+msgstr "%s Нет продления до %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -849,20 +851,22 @@ msgstr "%s Не разрешено"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "Не продлевается "
+msgstr "%s Не продлевается "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.too_unseen ) 
 #. %3$s:  ISSUE.renewsleft | html 
 #. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
-msgstr "Экземпляр необходимо продлить в библиотеке. %s продлений осталось"
+msgstr ""
+"%s Не продлевается %s Экземпляр необходимо продлить в библиотеке. %s "
+"продлений осталось %s Не разрешено "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -4871,7 +4875,7 @@ msgstr "Когда добавлено:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 #, c-format
 msgid "Date due"
-msgstr "Ожидается на дату"
+msgstr "Выдана до"
 
 # --Дата возвращения (конфликт с Return date)
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:327
@@ -4879,7 +4883,7 @@ msgstr "Ожидается на дату"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:704
 #, c-format
 msgid "Date due:"
-msgstr "Ожидается на дату: "
+msgstr "Выдана до:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:13
 #, c-format
@@ -5218,9 +5222,9 @@ msgid "Due %s"
 msgstr "Возвращение %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Due date is not valid."
-msgstr "Ссылка сломана."
+msgstr "Дата возврата не действительна."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
@@ -5590,7 +5594,7 @@ msgstr "Экспорт в Dublin Core..."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:707
 #, c-format
 msgid "Extends the due date for a patron's existing loan."
-msgstr "Продлевает дату ожидания возврата для существующих ссуд посетителя."
+msgstr "Продлевает срок возврата для существующих выдач читателя."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:636
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:638
@@ -9949,9 +9953,9 @@ msgstr "Приостановить ваши резервирования на "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "Return"
-msgstr "(Возвращен)"
+msgstr "Возврат"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:135

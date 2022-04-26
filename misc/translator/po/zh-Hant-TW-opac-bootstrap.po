@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-17 08:38-0300\n"
-"PO-Revision-Date: 2022-01-07 04:40+0000\n"
+"PO-Revision-Date: 2022-04-25 02:47+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1641530415.243781\n"
+"X-POOTLE-MTIME: 1650854850.407617\n"
 "X-Pootle-Path: /zh_TW/21.05/zh-Hant-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -611,7 +611,7 @@ msgstr "%s 製作 pdf 檔時發生錯誤。請連繫館員解決此錯誤。%s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
 msgstr "%s 自動續借 "
 
@@ -1428,7 +1428,7 @@ msgstr ""
 msgid ""
 "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
 "%sCollection: %s%s "
-msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s館藏代碼: %s%s "
+msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s合集: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -1436,7 +1436,7 @@ msgstr "%s瀏覽 %s 書架%s %s, %s %s書架位置: %s%s %s, %s %s館藏代碼: 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #, c-format
 msgid "%sCollection%sItem type%s"
-msgstr "%s館藏%s館藏類型%s"
+msgstr "%s合集%s館藏類型%s"
 
 #. %1$s:  IF op == 'view' 
 #. %2$s:  shelf.shelfname | html 
@@ -1529,8 +1529,8 @@ msgid ""
 "%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
 "%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
-"%s到期日 %s提早通知 %s預約可取 %s預約提醒 %s還入館藏 %s %s借出館藏及續借 %s "
-"館藏借出 %s %s館際互助 %s不提供館際互助 %s自動續借 %s不明 %s"
+"%s到期日 %s提早通知 %s預約可取 %s預約提醒 %s還入館藏 %s %s借出館藏及續借 %s 館藏借出 %s %s館際互助 %s不提供館際互助 %"
+"s自動續借 %s不詳 %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -1540,7 +1540,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%s館藏類型 %s館藏 %s書架位置 %s其他 %s "
+msgstr "%s館藏類型 %s合集 %s書架位置 %s其他 %s "
 
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
@@ -4292,18 +4292,18 @@ msgstr "您有興趣的館藏"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:114
 #, c-format
 msgid "Collection"
-msgstr "館藏"
+msgstr "合集"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:197
 #, c-format
 msgid "Collection library:"
-msgstr "典藏圖書館："
+msgstr "合集圖書館："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:145
 #, c-format
 msgid "Collection title:"
-msgstr "館藏題名："
+msgstr "合集題名："
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4311,12 +4311,12 @@ msgstr "館藏題名："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:84
 #, c-format
 msgid "Collection: %s "
-msgstr "館藏：%s "
+msgstr "合集：%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:30
 #, c-format
 msgid "Collections"
-msgstr "館藏"
+msgstr "合集"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
@@ -10292,12 +10292,12 @@ msgstr "期刊"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:481
 #, c-format
 msgid "Serial collection"
-msgstr "期刊館藏"
+msgstr "期刊合集"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:477
-#, fuzzy, c-format
+#, c-format
 msgid "Serial collections"
-msgstr "期刊館藏"
+msgstr "期刊合集"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial | $raw 
@@ -12035,7 +12035,7 @@ msgstr "劃一題名：%s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:195
 #, c-format
 msgid "Unknown"
-msgstr "不明"
+msgstr "不詳"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:51
 #, c-format
