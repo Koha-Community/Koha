@@ -7,6 +7,16 @@ use C4::Context;
 use Koha::Database;
 use Koha::Caches;
 
+=head1 NAME
+
+C4::Utils::DataTables::TablesSettings - Koha DataTables Settings
+
+=head1 API
+
+=head2 Methods
+
+=cut
+
 sub get_yaml {
     my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
     my $cache = Koha::Caches->get_instance();
@@ -61,13 +71,13 @@ sub get_columns {
 
 =head3 get_table_settings
 
-my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings(
+  my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings(
     {
         module                 => $module,
         pag                    => $page,
         tablename              => $tablename,
     }
-);
+  );
 
 Returns the settings for a given table.
 
@@ -140,7 +150,7 @@ sub update_columns {
 
 =head3 update_table_settings
 
-C4::Utils::DataTables::TablesSettings::update_table_settings(
+  C4::Utils::DataTables::TablesSettings::update_table_settings(
     {
         module                 => $module,
         pag                    => $page,
@@ -148,7 +158,7 @@ C4::Utils::DataTables::TablesSettings::update_table_settings(
         default_display_length => $default_display_length,
         default_sort_order     => $default_sort_order
     }
-);
+  );
 
 Will update the default_display_length and default_sort_order for the given table.
 
