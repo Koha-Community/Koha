@@ -103,7 +103,7 @@ subtest 'Koha::Hold tests' => sub {
         {
             class => 'Koha::Holds',
             value => {
-                borrowernumber => $patron->id,
+                borrowernumber => $patron->id, found => undef,
             }
         }
     );
@@ -118,7 +118,7 @@ subtest 'Koha::Hold tests' => sub {
         {
             class => 'Koha::Holds',
             value => {
-                borrowernumber => $patron->id,
+                borrowernumber => $patron->id, found => undef,
             }
         }
     );
