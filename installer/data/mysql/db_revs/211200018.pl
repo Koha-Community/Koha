@@ -88,10 +88,16 @@ Notes: <<recalls.recallnotes>>', 'print')
                 INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (27, 'manage_recalls', 'Manage recalls for patrons')
             });
 
-            # Add Recall and CancelReserve ENUM options to branchtransfers.reason
+            # Add Recall ENUM option to branchtransfers.reason
             $dbh->do(q{
                 ALTER TABLE branchtransfers MODIFY COLUMN reason
-                ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'Recall', 'CancelRecall')
+                ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'TransferCancellation', 'Recall')
+            });
+
+            # Add CancelRecall ENUM option to branchtransfers.cancellation_reason
+            $dbh->do(q{
+                ALTER TABLE branchtransfers MODIFY COLUMN cancellation_reason
+                ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve', 'ItemLost', 'WrongTransfer', 'CancelRecall')
             });
 
         }
