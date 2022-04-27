@@ -23,18 +23,18 @@ __PACKAGE__->table("checkout_renewals");
 
 =head1 ACCESSORS
 
-=head2 id
+=head2 renewal_id
 
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 issue_id
+=head2 checkout_id
 
   data_type: 'integer'
   is_nullable: 1
 
-the id of the issue this renewal pertains to
+the id of the checkout this renewal pertains to
 
 =head2 renewer_id
 
@@ -72,9 +72,9 @@ the date and time the renewal took place
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "renewal_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "issue_id",
+  "checkout_id",
   { data_type => "integer", is_nullable => 1 },
   "renewer_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
@@ -95,13 +95,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</renewal_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("renewal_id");
 
 =head1 RELATIONS
 
@@ -126,8 +126,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-11 16:33:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:agLgLnVeKYB5wdWS06xD0A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-27 19:43:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7mjiEx634L5FZyjroACUkg
 
 =head2 checkout
 
@@ -140,7 +140,7 @@ Related object: L<Koha::Schema::Result::Issue>
 __PACKAGE__->belongs_to(
     "checkout",
     "Koha::Schema::Result::Issue",
-    { issue_id => "issue_id" },
+    { issue_id => "checkout_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",
@@ -158,7 +158,7 @@ Related object: L<Koha::Schema::Result::OldIssue>
 __PACKAGE__->belongs_to(
     "old_checkout",
     "Koha::Schema::Result::OldIssue",
-    { issue_id => "issue_id" },
+    { issue_id => "checkout_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",

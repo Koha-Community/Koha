@@ -21,12 +21,11 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
-use Koha::Checkout;
 use Koha::Checkouts;
-use Koha::Exceptions;
 use Koha::Exceptions::Checkouts::Renewals;
+use Koha::Exceptions::Object;
 use Koha::Old::Checkouts;
-use Koha::Patron;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -54,13 +53,13 @@ sub store {
         Koha::Exceptions::Checkouts::Renewals::NoRenewerID->throw();
     }
 
-    unless ( ( !$self->issue_id && $self->in_storage )
-        || Koha::Checkouts->find( $self->issue_id )
-        || Koha::Old::Checkouts->find( $self->issue_id ) )
+    unless ( ( !$self->checkout_id && $self->in_storage )
+        || Koha::Checkouts->find( $self->checkout_id )
+        || Koha::Old::Checkouts->find( $self->checkout_id ) )
     {
         Koha::Exceptions::Object::FKConstraint->throw(
             error     => 'Broken FK constraint',
-            broken_fk => 'issue_id'
+            broken_fk => 'checkout_id'
         );
     }
 
@@ -100,20 +99,6 @@ sub renewer {
 
     my $renewer = $self->_result->renewer;
     return Koha::Patron->_new_from_dbic( $renewer ) if $renewer;
-}
-
-=head3 to_api_mapping
-
-This method returns the mapping for representing a Koha::Checkouts::Renewal object
-on the API.
-
-=cut
-
-sub to_api_mapping {
-    return {
-        id       => 'renewal_id',
-        issue_id => 'checkout_id'
-    };
 }
 
 =head2 Internal methods

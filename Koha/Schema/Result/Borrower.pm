@@ -1989,8 +1989,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-24 15:30:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8f/ch5BjQ1LL9jrEvegkmA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-05 12:41:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e5ZH2Ise5JLYRXrq22L9rw
 
 __PACKAGE__->has_many(
   "extended_attributes",

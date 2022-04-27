@@ -354,7 +354,7 @@ Related object: L<Koha::Schema::Result::CheckoutRenewal>
 __PACKAGE__->has_many(
     "renewals",
     "Koha::Schema::Result::CheckoutRenewal",
-    { "foreign.issue_id" => "self.issue_id" },
+    { "foreign.checkout_id" => "self.issue_id" },
     { cascade_copy       => 0, cascade_delete => 0 },
 );
 
