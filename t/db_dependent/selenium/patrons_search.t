@@ -238,7 +238,7 @@ subtest 'Search patrons' => sub {
 
     # Adding the surname of the first patron in the "Name" column
     # We expect only 1 result
-    $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys($patrons[0]->surname);
+    $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($patrons[0]->surname);
     $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons) );
 
