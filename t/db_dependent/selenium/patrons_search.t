@@ -51,7 +51,7 @@ my $base_url      = $s->base_url;
 my $builder       = t::lib::TestBuilder->new;
 
 subtest 'Search patrons' => sub {
-    plan tests => 17;
+    plan tests => 19;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
