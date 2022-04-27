@@ -49,7 +49,7 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $overdues = [
-    map { $_->unblessed_all_relateds } $patron->get_overdues->as_list
+    map { $_->unblessed_all_relateds } $patron->overdues->as_list
 ];
 
 my $letter = parse_overdues_letter(

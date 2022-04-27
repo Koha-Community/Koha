@@ -240,7 +240,7 @@ if ($patron) {
     $template->param( borrowernumber => $patron->borrowernumber );
     output_and_exit_if_error( $query, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-    my $overdues = $patron->get_overdues;
+    my $overdues = $patron->overdues;
     my $issues = $patron->checkouts;
     $balance = $patron->account->balance;
 

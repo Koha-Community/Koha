@@ -558,7 +558,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     $patron->delete;
 };
 
-subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
+subtest 'checkouts + pending_checkouts + overdues + old_checkouts' => sub {
     plan tests => 17;
 
     my $library = $builder->build( { source => 'Branch' } );
@@ -620,9 +620,9 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     my $first_checkout = $pending_checkouts->next;
     is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_3->biblionumber, 'pending_checkouts should prefetch values from other tables (here biblio)' );
 
-    my $overdues = $patron->get_overdues;
+    my $overdues = $patron->overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
-    is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->get_overdues should return Koha::Checkouts' );
+    is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->overdues should return Koha::Checkouts' );
     is( $overdues->next->itemnumber, $item_1->itemnumber, 'The issue should be returned in the same order as they have been done, first is correct' );
     is( $overdues->next->itemnumber, $item_2->itemnumber, 'The issue should be returned in the same order as they have been done, second is correct' );
 
@@ -1419,7 +1419,7 @@ subtest 'is_child | is_adult' => sub {
     $patron_other->delete;
 };
 
-subtest 'get_overdues' => sub {
+subtest 'overdues' => sub {
     plan tests => 7;
 
     my $library = $builder->build( { source => 'Branch' } );
@@ -1456,7 +1456,7 @@ subtest 'get_overdues' => sub {
     AddIssue( $patron, $item_3->barcode );
 
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    my $overdues = $patron->get_overdues;
+    my $overdues = $patron->overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
     is( $overdues->next->itemnumber, $item_1->itemnumber, 'The issue should be returned in the same order as they have been done, first is correct' );
     is( $overdues->next->itemnumber, $item_2->itemnumber, 'The issue should be returned in the same order as they have been done, second is correct' );

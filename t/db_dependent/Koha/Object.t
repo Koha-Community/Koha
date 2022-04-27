@@ -871,7 +871,7 @@ subtest 'unblessed_all_relateds' => sub {
     );
 
     my $issue = AddIssue( $patron->unblessed, $item->barcode, DateTime->now->subtract( days => 1 ) );
-    my $overdues = Koha::Patrons->find( $patron->id )->get_overdues; # Koha::Patron->get_overdue prefetches
+    my $overdues = Koha::Patrons->find( $patron->id )->overdues; # Koha::Patron->overdues prefetches
     my $overdue = $overdues->next->unblessed_all_relateds;
     is( $overdue->{issue_id}, $issue->issue_id, 'unblessed_all_relateds has field from the original table (issues)' );
     is( $overdue->{title}, $biblio->title, 'unblessed_all_relateds has field from other tables (biblio)' );

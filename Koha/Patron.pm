@@ -1215,15 +1215,15 @@ sub old_checkouts {
     return Koha::Old::Checkouts->_new_from_dbic( $old_checkouts );
 }
 
-=head3 get_overdues
+=head3 overdues
 
-my $overdue_items = $patron->get_overdues
+my $overdue_items = $patron->overdues
 
 Return the overdue items
 
 =cut
 
-sub get_overdues {
+sub overdues {
     my ($self) = @_;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     return $self->checkouts->search(
@@ -1235,8 +1235,6 @@ sub get_overdues {
         }
     );
 }
-
-sub overdues { my $self = shift; return $self->get_overdues(@_); }
 
 =head3 get_routing_lists
 
