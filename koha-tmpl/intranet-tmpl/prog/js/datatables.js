@@ -600,7 +600,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 // Build query for the global search filter
                                 var or_query_parameters = settings.aoColumns
                                 .filter(function(col) {
-                                    return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value == '' && filter != ''
+                                    return col.bSearchable
                                 })
                                 .map(function(col) {
                                     var value = filter;
