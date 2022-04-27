@@ -512,6 +512,16 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         if(options) {
             if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
             options.criteria = options.criteria.toLowerCase();
+
+            // Don't redefine the default initComplete
+            if ( options.initComplete ) {
+                let our_initComplete = options.initComplete;
+                options.initComplete = function(settings, json){
+                    our_initComplete(settings, json);
+                    dataTablesDefaults.initComplete(settings, json)
+                };
+            }
+
             settings = $.extend(true, {}, dataTablesDefaults, {
                         'deferRender': true,
                         "paging": true,
