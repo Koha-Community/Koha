@@ -179,7 +179,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DefaultToLoggedInLibraryOverdueTriggers',  '0', NULL ,  'If enabled, overdue status triggers editor will default to the logged in library''s rules, rather than the ''default'' rules.',  'YesNo'),
 ('CSVDelimiter',';',';|tabulation|,|/|\\|#||','Define the default separator character for exporting reports','Choice'),
 ('Display856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding staff interface XSLT option must be on','Choice'),
-('DisplayClearScreenButton','0','','If set to ON, a clear screen button will appear on the circulation page.','YesNo'),
+('DisplayClearScreenButton','no','no|issueslip|issueqslip','If set to ON, a clear screen button will appear on the circulation page.','Choice'),
 ('displayFacetCount','0',NULL,NULL,'YesNo'),
 ('DisplayIconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.','YesNo'),
 ('DisplayLibraryFacets',  'holding',  'home|holding|both',  'Defines which library facets to display.',  'Choice'),

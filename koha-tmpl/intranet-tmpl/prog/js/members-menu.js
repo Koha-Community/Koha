@@ -82,6 +82,10 @@ $(document).ready(function(){
         printx_window("slip");
         window.location.replace("/cgi-bin/koha/circ/circulation.pl");
     });
+    $("#printclearscreenq").click(function(){
+        printx_window("qslip");
+        window.location.replace("/cgi-bin/koha/circ/circulation.pl");
+    });
     $("#searchtohold").click(function(){
         searchToHold();
         return false;

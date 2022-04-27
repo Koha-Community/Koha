@@ -153,10 +153,6 @@ my $searchtype = $query->param('searchtype') || q{contain};
 
 my $branch = C4::Context->userenv->{'branch'};
 
-if (C4::Context->preference("DisplayClearScreenButton")) {
-    $template->param(DisplayClearScreenButton => 1);
-}
-
 for my $barcode ( @$barcodes ) {
     $barcode = barcodedecode( $barcode ) if $barcode;
 }
