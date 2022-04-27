@@ -1385,7 +1385,7 @@ Note that permanent location is a code, and location may be an authval.
             }
 
             [% IF Koha.Preference('AcquisitionDetails') %]
-                var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') %];
+                var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
                 var acquisitiondetails_table = KohaTable("orders", {
                     "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                     'bPaginate': false,

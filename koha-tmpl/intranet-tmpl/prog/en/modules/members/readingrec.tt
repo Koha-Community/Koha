@@ -156,7 +156,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
             var table = KohaTable("table_readingrec", {
                 "sPaginationType": "full",
                 "aaSorting": [[10, 'desc']]

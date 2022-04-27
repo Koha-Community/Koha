@@ -131,7 +131,7 @@
 [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') %];
+            var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'checkoutshistory-table', 'json') | $raw %];
             [% UNLESS show_patron_column %]
                 // Remove the patron column definition
                 table_settings['columns'].splice(0,1);

@@ -137,7 +137,7 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
-            var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') %];
+            var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') | $raw %];
             [% UNLESS show_itemtype_column %]
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});

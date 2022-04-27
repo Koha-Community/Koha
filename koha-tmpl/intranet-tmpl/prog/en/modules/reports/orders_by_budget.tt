@@ -171,7 +171,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table', 'json' ) %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table', 'json' ) | $raw %];
         $(document).ready( function () {
             var funds_table = KohaTable("funds", {
                 'autoWidth': false,
