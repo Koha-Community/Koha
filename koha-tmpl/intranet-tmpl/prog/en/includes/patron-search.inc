@@ -195,6 +195,7 @@
 [%# Get the following parameters: %]
 [%# - redirect_if_one_result: Redirect to the patron if the search returns only one result, note that it will not redirect if filters of the DT are used (this is a feature) %]
 [%# - redirect_url: The URL to use, the borrowernumber parameter will be added %]
+[%# - redirect_if_attribute_equal: Name of the attribute to use for the redirect. Query using this attribute, before the normal search %]
 [%# filter: Same as patron_search_table %]
 [%# open_on_row_click: boolean, default off. Will allow to select a patron by clicking on the whole tr element %]
 [%# columns: list of columns that will be displayed. Possible values are: 'checkbox', 'cardnumber', 'dateofbirth', 'address', 'name', 'name-address', 'branch', 'category', 'dateexpiry', 'borrowernotes, 'phone', 'checkouts', 'account_balance', 'action' %]
@@ -260,6 +261,18 @@
             getSearchByLocation( false );
         });
 
+        [% SWITCH filter %]
+        [% CASE 'suggestions_managers' %]
+            let patron_search_url = '/api/v1/suggestions/managers';
+        [% CASE 'baskets_managers' %]
+            let patron_search_url = '/api/v1/acquisitions/baskets/managers';
+        [% CASE 'funds_owners' %]
+            let patron_search_url = '/api/v1/acquisitions/funds/owners';
+        [% CASE 'funds_users' %]
+            let patron_search_url = '/api/v1/acquisitions/funds/users';
+        [% CASE %]
+            let patron_search_url = '/api/v1/patrons';
+        [% END %]
         $(document).ready(function(){
 
             $("#info").hide();
@@ -317,6 +330,7 @@
                     return filters;
                 }
             };
+
             [% UNLESS default_sort_column %]
                 [% default_sort_column = "name" %]
             [% END %]
@@ -324,18 +338,7 @@
             [% SET embed = ['extended_attributes'] %]
             patrons_table = $("#[% table_id | html %]").kohaTable({
                 "ajax": {
-                    [% SWITCH filter %]
-                    [% CASE 'suggestions_managers' %]
-                        "url": '/api/v1/suggestions/managers',
-                    [% CASE 'baskets_managers' %]
-                        "url": '/api/v1/acquisitions/baskets/managers',
-                    [% CASE 'funds_owners' %]
-                        "url": '/api/v1/acquisitions/funds/owners',
-                    [% CASE 'funds_users' %]
-                        "url": '/api/v1/acquisitions/funds/users',
-                    [% CASE %]
-                        "url": '/api/v1/patrons',
-                    [% END %]
+                    "url": patron_search_url,
                     "dataSrc": function ( json ) {
                         [% IF redirect_if_one_result %]
                             // redirect if there is only 1 result.
@@ -716,6 +719,28 @@
         }
 
         function filter() {
+            [% IF redirect_if_attribute_equal %]
+                let filter = $("#search_patron_filter").val();
+                if ( filter ) {
+                    $.ajax({
+                        data: { cardnumber: filter, _match: 'exact' },
+                        type: 'GET',
+                        url: patron_search_url,
+                        success: function(data) {
+                            if ( data.length == 1 ) {
+                                let url = '[% redirect_url | url %]'.indexOf("?") != -1
+                                    ? '[% redirect_url | url %]&borrowernumber=' + data[0].patron_id
+                                    : '[% redirect_url | url %]?borrowernumber=' + data[0].patron_id;
+                                document.location.href = url;
+                                return false;
+                            }
+                        },
+                        error: function() {
+                            alert( _("An error occurred. Check the logs") );
+                        }
+                    });
+                }
+            [% END %]
             $("#firstletter_filter").val('');
             $("#[% table_id | html %]_search_results").show();
 
