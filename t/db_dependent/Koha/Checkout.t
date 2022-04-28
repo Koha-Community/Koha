@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use t::lib::TestBuilder;
 
 use Koha::Database;
@@ -45,6 +45,35 @@ subtest 'library() tests' => sub {
 
     is( ref($checkout->library), 'Koha::Library', 'Object type is correct' );
     is( $checkout->library->branchcode, $library->branchcode, 'Right library linked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'renewals() tests' => sub {
+
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts'
+        }
+    );
+    my $renewal1 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::Renewals',
+            value => { checkout_id => $checkout->issue_id }
+        }
+    );
+    my $renewal2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::Renewals',
+            value => { checkout_id => $checkout->issue_id }
+        }
+    );
+
+    is( ref($checkout->renewals), 'Koha::Checkouts::Renewals', 'Object set type is correct' );
+    is( $checkout->renewals->count, 2, "Count of renewals is correct" );
 
     $schema->storage->txn_rollback;
 };
