@@ -49,7 +49,14 @@ $.fn.selectTabByID = function (tabID) {
 };
 
 $(document).ready(function() {
-    $('#header_search').tabs().on( "tabsactivate", function() { $(this).find("div:visible").find('input').eq(0).focus(); });
+    $('#header_search').tabs({
+        create: function( e, ui ){
+            ui.panel.find("input:text:first").focus();
+        },
+        activate: function ( e, ui ) {
+            ui.newPanel.find("input:text:first").focus();
+        }
+    });
 
     $(".close").click(function(){ window.close(); });
 
