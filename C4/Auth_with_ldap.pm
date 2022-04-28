@@ -23,6 +23,7 @@ use Carp qw( croak );
 use C4::Context;
 use C4::Members::Messaging;
 use C4::Auth qw( checkpw_internal );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::Patrons;
 use Koha::AuthUtils qw( hash_password );
 use Net::LDAP;
@@ -74,7 +75,8 @@ if(defined $ldap->{categorycode_mapping}) {
 my %config = (
     anonymous => defined ($ldap->{anonymous_bind}) ? $ldap->{anonymous_bind} : 1,
     replicate => defined($ldap->{replicate}) ? $ldap->{replicate} : 1,  #    add from LDAP to Koha database for new user
-       update => defined($ldap->{update}   ) ? $ldap->{update}    : 1,  # update from LDAP to Koha database for existing user
+    welcome   => defined($ldap->{welcome}) ? $ldap->{welcome} : 0,  #    send welcome notice when patron is added via replicate
+    update    => defined($ldap->{update}) ? $ldap->{update} : 1,  # update from LDAP to Koha database for existing user
 );
 
 sub description {
@@ -225,7 +227,41 @@ sub checkpw_ldap {
         )->store;
         die "Insert of new patron failed" unless $patron;
         $borrowernumber = $patron->borrowernumber;
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $borrowernumber, categorycode => $borrower{'categorycode'} } );
+        C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+            {
+                borrowernumber => $borrowernumber,
+                categorycode   => $borrower{'categorycode'}
+            }
+        );
+
+        # Send welcome email if enabled
+        if ( $config{welcome} ) {
+            my $emailaddr = $patron->notice_email_address;
+
+            # if we manage to find a valid email address, send notice
+            if ($emailaddr) {
+                my $letter = C4::Letters::GetPreparedLetter(
+                    module      => 'members',
+                    letter_code => 'WELCOME',
+                    branchcode  => $patron->branchcode,
+                    lang        => $patron->lang || 'default',
+                    tables      => {
+                        'branches'  => $patron->branchcode,
+                        'borrowers' => $patron->borrowernumber,
+                    },
+                    want_librarian => 1,
+                ) or return;
+
+                my $message_id = C4::Letters::EnqueueLetter(
+                    {
+                        letter                 => $letter,
+                        borrowernumber         => $patron->id,
+                        to_address             => $emailaddr,
+                        message_transport_type => 'email'
+                    }
+                );
+            }
+        }
    } else {
         return 0;   # B2, D2
     }
@@ -508,6 +544,7 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
     <user>cn=Manager,dc=metavore,dc=com</user>             <!-- DN, if not anonymous -->
     <pass>metavore</pass>          <!-- password, if not anonymous -->
     <replicate>1</replicate>       <!-- add new users from LDAP to Koha database -->
+    <welcome>1</welcome>           <!-- send new users the welcome email when added via replicate -->
     <update>1</update>             <!-- update existing users in Koha database -->
     <auth_by_bind>0</auth_by_bind> <!-- set to 1 to authenticate by binding instead of
                                         password comparison, e.g., to use Active Directory -->
