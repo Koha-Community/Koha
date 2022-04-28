@@ -378,7 +378,7 @@ if ($op eq "additem") {
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
     my $deleted = $item->safe_delete;
-    unless ( $deleted ) {
+    if ( $deleted ) {
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
         exit;
     }
