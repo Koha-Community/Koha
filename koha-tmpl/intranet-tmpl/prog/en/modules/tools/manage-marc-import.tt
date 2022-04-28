@@ -623,7 +623,8 @@
                 $.ajax({
                     url: '/api/v1/import/[% import_batch_id | html %]/records/'+$(this).data('import_record_id')+'/matches/chosen',
                     method: apimethod,
-                    data: apidata
+                    data: apidata,
+                    contentType: 'application/json'
                 }).fail(function(){ alert(_("Unable to update match choices")); return false; });
             });
 
