@@ -972,7 +972,7 @@ sub _availability {
     my $location = $library ? $library->branchname : '';
     my $itemcallnumber = $item->itemcallnumber;
 
-    if ( $item->notforloan ) {
+    if ( $item->is_notforloan ) {
         return ( $biblionumber, __('not available'), __('Not for loan'), $location, $itemcallnumber );
     } elsif ( $item->onloan ) {
         return ( $biblionumber, __('not available'), __('Checked out'), $location, $itemcallnumber );
