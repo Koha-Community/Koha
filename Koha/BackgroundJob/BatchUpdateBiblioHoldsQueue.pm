@@ -100,7 +100,7 @@ sub process {
                 type           => 'success',
                 code           => 'holds_queue_updated',
                 biblio_id      => $biblio_id,
-                availabe_items => $result->{available_items},
+                available_items => $result->{available_items},
                 mapped_items   => $result->{mapped_items},
                 requests       => $result->{requests},
               };
