@@ -20,6 +20,7 @@ use Modern::Perl;
 use JSON qw( encode_json decode_json );
 use Try::Tiny;
 
+use Koha::Biblios;
 use Koha::Exceptions;
 
 use C4::HoldsQueue
@@ -59,12 +60,10 @@ sub process {
 
     my $schema = Koha::Database->new->schema;
 
-    my $job_progress = 0;
-
     $self->set(
         {
             started_on => \'NOW()',
-            progress   => $job_progress,
+            progress   => 0,
             status     => 'started',
         }
     )->store;
@@ -100,26 +99,25 @@ sub process {
                 type           => 'success',
                 code           => 'holds_queue_updated',
                 biblio_id      => $biblio_id,
-                available_items => $result->{available_items},
-                mapped_items   => $result->{mapped_items},
-                requests       => $result->{requests},
               };
             $report->{total_success}++;
 
             $schema->storage->txn_commit;
         }
         catch {
-            push @messages, {
+
+            push @messages,
+              {
                 type      => 'error',
                 code      => 'holds_queue_update_error',
                 biblio_id => $biblio_id,
                 error     => "$_",
-            };
+              };
 
             $schema->storage->txn_rollback;
         };
 
-        $self->progress( $job_progress++ )->store;
+        $self->progress( $self->progress + 1 )->store;
     }
 
     my $job_data = decode_json $self->data;
@@ -130,12 +128,9 @@ sub process {
         {
             ended_on => \'NOW()',
             data     => encode_json $job_data,
+            status   => 'finished',
         }
-    );
-    $self->status('finished')
-      unless $self->status ne 'cancelled';
-
-    $self->store;
+    )->store;
 }
 
 =head3 enqueue

@@ -39,6 +39,8 @@
         <span>Batch hold cancellation</span>
     [% CASE 'update_elastic_index' %]
         <span>Update Elasticsearch index</span>
+    [% CASE 'update_holds_queue_for_biblios' %]
+        <span>Holds queue update</span>
     [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
     [% END %]
 
