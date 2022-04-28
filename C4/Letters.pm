@@ -824,8 +824,9 @@ sub _parseletter {
                     $dateonly = $1 unless $dateonly;
                 }
                 my $replacedby_date = eval {
-                    output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
+                    output_pref({ dt => scalar dt_from_string( $replacedby ), dateonly => $dateonly });
                 };
+                $replacedby_date //= q{};
 
                 if ( $letter->{ $letter_field } ) {
                     $letter->{ $letter_field } =~ s/\Q<<$table.$field$filter_string_used>>\E/$replacedby_date/g;
