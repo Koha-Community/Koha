@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Reserves qw( ModReserve ModReserveCancelAll );
 use C4::Auth qw( get_template_and_user );
 use Koha::DateUtils qw( dt_from_string );
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -96,6 +97,12 @@ else {
             }
         }
     }
+    my @biblio_ids = uniq @biblionumber;
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => \@biblio_ids
+        }
+    );
 }
 
 my $from=$query->param('from');
