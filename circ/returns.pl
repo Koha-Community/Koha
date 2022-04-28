@@ -431,7 +431,7 @@ if ( $messages->{'ResFound'}) {
         my $biblio = $item->biblio;
 
         my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
-        ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id}, $desk_id );
+        ModReserveAffect( $itemnumber, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id}, $desk_id );
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
 
         $template->param(
