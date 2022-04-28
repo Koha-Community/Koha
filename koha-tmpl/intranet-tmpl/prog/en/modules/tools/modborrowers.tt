@@ -367,7 +367,7 @@
         [% END %]
         $(document).ready(function() {
             [% IF borrowers %]
-                KohaTable("borrowerst", {
+                let patron_table = KohaTable("borrowerst", {
                     "order": [[ 1, "asc" ]],
                     "autoWidth": false,
                 }, table_settings);
@@ -417,6 +417,23 @@
             $("#cataloguing_additem_newitem").on("click",".del_attributes",function(e){
                 e.preventDefault();
                 del_attributes(this);
+            });
+
+            $('form[name="f"]').on("submit", function(){
+                // Add the checkboxes to the DOM before we submit the form
+                var form = this;
+                var checkboxes = patron_table.$('input:checkbox:checked').serializeArray();
+                $.each(checkboxes, function(){
+                    let borrowernumber = this.value;
+                    if(!$(form).find('input[name="borrowernumber"][value="'+borrowernumber+'"]').length){
+                        $(form).append(
+                            $('<input>')
+                                .attr('type', 'hidden')
+                                .attr('name', 'borrowernumber')
+                                .val(borrowernumber)
+                        );
+                    }
+                });
             });
         });
 
