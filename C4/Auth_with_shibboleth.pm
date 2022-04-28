@@ -23,6 +23,7 @@ use C4::Context;
 use Koha::AuthUtils qw( get_script_name );
 use Koha::Database;
 use Koha::Patrons;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use C4::Members::Messaging;
 use Carp qw( carp );
 use List::MoreUtils qw( any );
@@ -134,8 +135,42 @@ sub _autocreate {
     }
 
     my $patron = Koha::Patron->new( \%borrower )->store;
-    C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $patron->borrowernumber, categorycode => $patron->categorycode } );
+    C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+        {
+            borrowernumber => $patron->borrowernumber,
+            categorycode   => $patron->categorycode
+        }
+    );
 
+    # Send welcome email if enabled
+    if ( $config->{welcome} ) {
+        my $emailaddr = $patron->notice_email_address;
+
+        # if we manage to find a valid email address, send notice
+        if ($emailaddr) {
+            my $letter = C4::Letters::GetPreparedLetter(
+                module      => 'members',
+                letter_code => 'WELCOME',
+                branchcode  => $patron->branchcode,
+                ,
+                lang   => $patron->lang || 'default',
+                tables => {
+                    'branches'  => $patron->branchcode,
+                    'borrowers' => $patron->borrowernumber,
+                },
+                want_librarian => 1,
+            ) or return;
+
+            my $message_id = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $patron->id,
+                    to_address             => $emailaddr,
+                    message_transport_type => 'email'
+                }
+            );
+        }
+    }
     return ( 1, $patron->cardnumber, $patron->userid );
 }
 
