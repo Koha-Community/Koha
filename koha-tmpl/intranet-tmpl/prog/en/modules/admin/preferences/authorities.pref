@@ -64,13 +64,13 @@ Authorities:
                   "strict": strict
             - mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default.
         -
-            - When BiblioAddsAuthorities and AutoCreateAuthorities are enabled, use this as a default value for the 667$a field of MARC21 records
+            - "Use the following text as default value for the 667$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField667
               default: "Machine generated authority record"
               type: textarea
               class: code
         -
-            - When BiblioAddsAuthorities and AutoCreateAuthorities are enabled, use this as a default value for the 670$a field of MARC21 records
+            - "Use the following text as default value for the 670$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField670
               default: "Work cat."
               type: textarea
