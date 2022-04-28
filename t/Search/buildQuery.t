@@ -24,7 +24,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 10;
+        plan tests => 12;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -62,6 +62,8 @@ sub _get_ccl_properties {
         phr 4=1
         fuzzy 5=103
         ccode 1=8009
+        nb 1=7
+        ns 1=8
     );
     return $config;
 }
@@ -148,6 +150,7 @@ subtest "test weighted not-autotruncated" => sub {
 
     t::lib::Mocks::mock_preference('QueryWeightFields', '1');
     t::lib::Mocks::mock_preference('QueryAutoTruncate', '0');
+    t::lib::Mocks::mock_preference('QueryFuzzy', '1');
 
     my $config = _get_ccl_properties();
     my $operators = [""];
@@ -327,4 +330,76 @@ subtest "one and two weighted autotruncated" => sub {
     is($ccl_errstr,"");
     is($ccl_errpos,0);
     Net::Z3950::ZOOM::query_destroy($q);
+};
+
+subtest "test with ISBN variations" => sub {
+    plan tests => 12;
+
+    my $config = _get_ccl_properties();
+    my $operators = [""];
+    my $operands = ["1565926994"];
+    my $indexes = ["nb"];
+    my $limits = [""];
+    my $sort_by = [""];
+    my ($scan,$lang);
+
+    foreach my $sample (
+        { state => 0, query => 'nb=(rk=(1565926994)) ' },
+        { state => 1, query => 'kw,wrdl=(rk=((nb=1-56592-699-4 OR nb=1-56592-699-4 OR nb=978-1-56592-699-8 OR nb=1565926994 OR nb=9781565926998))) ' })
+    {
+        t::lib::Mocks::mock_preference('SearchWithISBNVariations', $sample->{state});
+        # Test with disabled variatioms
+        my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) =
+            C4::Search::buildQuery($operators,$operands,$indexes,$limits,$sort_by,$scan,$lang);
+            say 'Q: > ', $query;
+        is($error,undef,"Error is correct");
+        is($query,$sample->{query},'Search ISBN when variations is '.$sample->{state});
+        my $q = Net::Z3950::ZOOM::query_create();
+        my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
+        my $res = Net::Z3950::ZOOM::query_ccl2rpn($q, $query, $config,
+            $ccl_errcode, $ccl_errstr, $ccl_errpos
+        );
+        is($res,0,"created CCL2RPN query");
+        is($ccl_errcode,0);
+        is($ccl_errstr,"");
+        is($ccl_errpos,0);
+        Net::Z3950::ZOOM::query_destroy($q);
+    }
+
+};
+
+subtest "test with ISSN variations" => sub {
+    plan tests => 12;
+
+    my $config = _get_ccl_properties();
+    my $operators = [""];
+    my $operands = ["2434561X"];
+    my $indexes = ["ns"];
+    my $limits = [""];
+    my $sort_by = [""];
+    my ($scan,$lang);
+
+    foreach my $sample (
+        { state => 0, query => 'ns=(rk=(2434561X)) ' },
+        { state => 1, query => 'kw,wrdl=(rk=((ns=2434-561X OR ns=2434561X))) ' })
+    {
+        t::lib::Mocks::mock_preference('SearchWithISSNVariations', $sample->{state});
+        # Test with disabled variatioms
+        my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) =
+            C4::Search::buildQuery($operators,$operands,$indexes,$limits,$sort_by,$scan,$lang);
+            say 'Q: > ', $query;
+        is($error,undef,"Error is correct");
+        is($query,$sample->{query},'Search ISSN when variations is '.$sample->{state});
+        my $q = Net::Z3950::ZOOM::query_create();
+        my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
+        my $res = Net::Z3950::ZOOM::query_ccl2rpn($q, $query, $config,
+            $ccl_errcode, $ccl_errstr, $ccl_errpos
+        );
+        is($res,0,"created CCL2RPN query");
+        is($ccl_errcode,0);
+        is($ccl_errstr,"");
+        is($ccl_errpos,0);
+        Net::Z3950::ZOOM::query_destroy($q);
+    }
+
 };
