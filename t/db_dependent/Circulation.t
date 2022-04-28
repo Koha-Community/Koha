@@ -4410,6 +4410,34 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
 };
 
+subtest 'AddRenewal() adds to renewals' => sub {
+    plan tests => 4;
+
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron   = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { branchcode => $library->id }
+    });
+
+    my $item = $builder->build_sample_item();
+
+    set_userenv( $library->unblessed );
+
+    # Check the item out
+    my $issue = AddIssue( $patron->unblessed, $item->barcode );
+    is(ref($issue), 'Koha::Checkout', 'Issue added');
+
+    # Renew item
+    my $duedate = AddRenewal( $patron->id, $item->id, $library->id );
+
+    ok( $duedate, "Renewal added" );
+
+    my $renewals = Koha::Checkouts::Renewals->search({ checkout_id => $issue->issue_id });
+    is($renewals->count, 1, 'One renewal added');
+    my $THE_renewal = $renewals->next;
+    is( $THE_renewal->renewer_id, C4::Context->userenv->{'number'}, 'Renewer recorded from context' );
+};
+
 subtest 'ProcessOfflinePayment() tests' => sub {
 
     plan tests => 4;
