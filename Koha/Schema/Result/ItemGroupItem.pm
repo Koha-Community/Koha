@@ -132,6 +132,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-02 16:18:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FLtrDLTHqXdzqyOmVvaXJQ
 
+sub koha_object_class {
+    'Koha::Biblio::ItemGroup::Item';
+}
+sub koha_objects_class {
+    'Koha::Biblio::ItemGroup::Items';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -151,6 +151,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-02 16:18:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YO7VdfzHDqBjGHt7vQX7gw
 
+sub koha_objects_class {
+    'Koha::Biblio::ItemGroups';
+}
+sub koha_object_class {
+    'Koha::Biblio::ItemGroup';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
