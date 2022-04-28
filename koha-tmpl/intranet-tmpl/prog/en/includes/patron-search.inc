@@ -309,8 +309,9 @@
                     return { "like": start_with + "%" }
                 },
                 "-and": function(){
-                    let filter = $("#search_patron_filter").val();
-                    if (!filter) return "";
+                    let pattern = $("#search_patron_filter").val();
+                    if (!pattern) return "";
+                    let patterns = pattern.split(' ').filter(function(s){ return s.length });
 
                     let filters = [];
                     let search_type = $("#searchtype_filter").val() || "contain";
@@ -318,14 +319,28 @@
                     if ( !search_fields ) {
                         search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,surname,othernames,cardnumber,userid' | html %]";
                     }
-                    search_fields.split(',').forEach(function(e,i){
-                        filters.push({["me."+e]:{"like":(search_type == "contain" ? "%" : "" ) + filter + "%"}});
-                    });
-                    [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
-                        filters.push({
-                            "extended_attributes.value": { "like": "%" + filter + (search_type == "contain" ? "%" : "" )},
-                            "extended_attributes.code": extended_attribute_types
+
+                    let subquery_and = [];
+                    patterns.forEach(function(pattern,i){
+                        let sub_or = [];
+                        search_fields.split(',').forEach(function(attr,ii){
+                            sub_or.push({["me."+attr]:{"like":(search_type == "contain" ? "%" : "" ) + pattern + "%"}});
                         });
+                        subquery_and.push(sub_or);
+                    });
+                    filters.push({"-and": subquery_and});
+
+                    [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
+                        subquery_and = [];
+                        patterns.forEach(function(pattern,i){
+                            let sub_or = [];
+                            sub_or.push({
+                                "extended_attributes.value": { "like": "%" + pattern + (search_type == "contain" ? "%" : "" )},
+                                "extended_attributes.code": extended_attribute_types
+                            });
+                            subquery_and.push(sub_or);
+                        });
+                        filters.push({"-and": subquery_and});
                     [% END %]
                     return filters;
                 }

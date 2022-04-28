@@ -51,7 +51,7 @@ my $base_url      = $s->base_url;
 my $builder       = t::lib::TestBuilder->new;
 
 subtest 'Search patrons' => sub {
-    plan tests => 23;
+    plan tests => 24;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
@@ -91,6 +91,22 @@ subtest 'Search patrons' => sub {
             }
           );
     }
+
+    push @patrons, $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname   => "test",
+                firstname => "not_p_a_t_r_o_n",    # won't match 'patron'
+                categorycode  => $patron_category->categorycode,
+                branchcode    => $library->branchcode,
+                borrowernotes => $borrowernotes,
+                address       => $address,
+                email         => $email,
+            }
+        }
+    );
+
     my $library_2 = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => 'X' . $branchname } }
     );
@@ -220,6 +236,16 @@ subtest 'Search patrons' => sub {
 
     # And make sure all the patrons are present
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
+
+    # Pattern terms must be split
+    $s->fill_form( { search_patron_filter => 'test patron' } );
+    $s->submit_form;
+
+    $s->wait_for_ajax;
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
+    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+    $s->submit_form;
+    $s->wait_for_ajax;
 
     # Search on non-searchable attribute, we expect no result!
     $s->fill_form( { search_patron_filter => 'test_attr_1' } );
