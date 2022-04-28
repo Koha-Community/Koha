@@ -287,6 +287,7 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
 
     t::lib::Mocks::mock_preference('NoIssuesChargeGuarantees', 1);
+    t::lib::Mocks::mock_preference('NoIssuesChargeGuarantorsWithGuarantees', undef);
 
     my $fee1 = $builder->build_object(
         {
