@@ -509,7 +509,7 @@ subtest 'Renewal related tests' => sub {
             value => {
                 itemnumber      => $item->itemnumber,
                 onsite_checkout => 0,
-                renewals        => 99,
+                renewals_count  => 99,
                 auto_renew      => 0
             }
         }
@@ -558,7 +558,7 @@ subtest 'Renewal related tests' => sub {
             value => {
                 itemnumber      => $item->itemnumber,
                 onsite_checkout => 0,
-                renewals        => 0,
+                renewals_count  => 0,
                 auto_renew      => 0
             }
         }

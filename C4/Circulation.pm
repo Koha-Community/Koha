@@ -3221,7 +3221,7 @@ sub AddRenewal {
         my $renewal = Koha::Checkouts::Renewal->new(
             {
                 checkout_id => $issue->issue_id,
-                renewer_id  => C4::Context->userenv->{'number'},
+                renewer_id  => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                 seen        => $seen,
                 interface   => C4::Context->interface
             }

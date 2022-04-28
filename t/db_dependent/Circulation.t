@@ -56,9 +56,11 @@ use Koha::ActionLogs;
 use Koha::Notice::Messages;
 use Koha::Cache::Memory::Lite;
 
+my $builder = t::lib::TestBuilder->new;
 sub set_userenv {
     my ( $library ) = @_;
-    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+    my $staff = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $staff, branchcode => $library->{branchcode} });
 }
 
 sub str {
@@ -105,7 +107,6 @@ sub test_debarment_on_checkout {
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
-my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 
 # Prevent random failures by mocking ->now
@@ -711,6 +712,9 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Make sure fine calculation isn't skipped when adding renewal
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
+
+    my $staff = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $staff });
 
     t::lib::Mocks::mock_preference('RenewalLog', 0);
     my $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
@@ -3940,26 +3944,34 @@ subtest 'ItemsDeniedRenewal preference' => sub {
         }
     });
     my $future = dt_from_string->add( days => 1 );
-    my $deny_issue = $builder->build_object({ class => 'Koha::Checkouts', value => {
-        returndate => undef,
-        renewals => 0,
-        auto_renew => 0,
-        borrowernumber => $idr_borrower->borrowernumber,
-        itemnumber => $deny_book->itemnumber,
-        onsite_checkout => 0,
-        date_due => $future,
+    my $deny_issue = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                returndate      => undef,
+                renewals_count  => 0,
+                auto_renew      => 0,
+                borrowernumber  => $idr_borrower->borrowernumber,
+                itemnumber      => $deny_book->itemnumber,
+                onsite_checkout => 0,
+                date_due        => $future,
+            }
         }
-    });
-    my $allow_issue = $builder->build_object({ class => 'Koha::Checkouts', value => {
-        returndate => undef,
-        renewals => 0,
-        auto_renew => 0,
-        borrowernumber => $idr_borrower->borrowernumber,
-        itemnumber => $allow_book->itemnumber,
-        onsite_checkout => 0,
-        date_due => $future,
+    );
+    my $allow_issue = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                returndate      => undef,
+                renewals_count  => 0,
+                auto_renew      => 0,
+                borrowernumber  => $idr_borrower->borrowernumber,
+                itemnumber      => $allow_book->itemnumber,
+                onsite_checkout => 0,
+                date_due        => $future,
+            }
         }
-    });
+    );
 
     my $idr_rules;
 

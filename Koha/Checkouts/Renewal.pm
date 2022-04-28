@@ -22,7 +22,6 @@ use Modern::Perl;
 use base qw(Koha::Object);
 
 use Koha::Checkouts;
-use Koha::Exceptions::Checkouts::Renewals;
 use Koha::Exceptions::Object;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
@@ -39,7 +38,7 @@ Koha::Checkouts::Renewal - Koha Renewal object class
 
 =head3 store
 
-    my $return_claim = Koha::Checkout::Renewal->new($args)->store;
+    my $renewal = Koha::Checkout::Renewal->new($args)->store;
 
 Overloaded I<store> method that validates the attributes and raises relevant
 exceptions as needed.
@@ -48,10 +47,6 @@ exceptions as needed.
 
 sub store {
     my ( $self ) = @_;
-
-    unless ( $self->in_storage || $self->renewer_id ) {
-        Koha::Exceptions::Checkouts::Renewals::NoRenewerID->throw();
-    }
 
     unless ( ( !$self->checkout_id && $self->in_storage )
         || Koha::Checkouts->find( $self->checkout_id )
