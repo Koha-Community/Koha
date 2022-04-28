@@ -332,10 +332,7 @@
                                                             [% savedreport.notes | html %]
                                                         </td>
                                                         <td>
-                                                            [% savedreport.borrowersurname | html %]
-                                                            [% IF ( savedreport.borrowerfirstname ) %]
-                                                                , [% savedreport.borrowerfirstname | html %]
-                                                            [% END %]
+                                                            [%- savedreport.borrowersurname | html -%][%- IF ( savedreport.borrowerfirstname ) -%], [%- savedreport.borrowerfirstname | html -%][%- END -%]
                                                             ([% savedreport.borrowernumber | html %])
                                                         </td>
                                                         <td data-order="[% savedreport.date_created | html %]">
