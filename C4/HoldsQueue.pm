@@ -23,7 +23,6 @@ use strict;
 use warnings;
 
 use C4::Context;
-use C4::Search;
 use C4::Circulation qw( GetTransfers GetBranchItemRule );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
