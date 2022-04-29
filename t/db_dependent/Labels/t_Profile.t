@@ -29,7 +29,7 @@ BEGIN {
 my $expected_profile = {
         creator         => 'Labels',
         printer_name    => 'Circulation Desk',
-        template_id     => '',
+        template_id     => 0,
         paper_bin       => 'bypass',
         offset_horz     => 0,
         offset_vert     => 0,
