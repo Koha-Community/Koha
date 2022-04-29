@@ -86,7 +86,7 @@
                 </dl>
             [% END %]
 
-            [% IF ( CAN_user_parameters_manage_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities ) %]
+            [% IF ( CAN_user_parameters_manage_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities || CAN_user_parameters_manage_curbside_pickups ) %]
                 <h3>Patrons and circulation</h3>
                 <dl>
                 [% IF ( CAN_user_parameters_manage_patron_categories ) %]
@@ -118,6 +118,10 @@
                 [% IF ( CAN_user_parameters_manage_cities ) %]
                     <dt><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></dt>
                     <dd>Define cities and towns that your patrons live in</dd>
+                [% END %]
+                [% IF ( CAN_user_parameters_manage_curbside_pickups ) %]
+                    <dt><a href="/cgi-bin/koha/admin/curbside_pickup.pl">Curbside pickup</a></dt>
+                    <dd>Configure curbside pickup for libraries</dd>
                 [% END %]
                 </dl>
             [% END %]
