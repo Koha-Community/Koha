@@ -94,5 +94,11 @@ return {
             VALUES
             ('CurbsidePickup', '0', NULL, 'Enable curbside pickup', 'YesNo')
         });
+
+        $dbh->do(qq{
+            INSERT IGNORE permissions (module_bit, code, description)
+            VALUES
+            (3, 'manage_curbside_pickups', 'Manage curbside pickups')
+        });
     }
   }

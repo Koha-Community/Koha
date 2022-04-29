@@ -273,6 +273,11 @@
             Manage background jobs
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_curbside_pickups' -%]
+        <span class="sub_permission manage_curbside_pickups_subpermission">
+            Manage curbside pickups
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_borrowers' -%]
         <span class="sub_permission delete_borrowers_subpermission">
             Delete patrons
