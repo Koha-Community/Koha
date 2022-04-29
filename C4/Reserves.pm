@@ -1442,6 +1442,11 @@ sub AlterPriority {
       _FixPriority({ reserve_id => $reserve_id, rank => $last_priority });
     }
 
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $hold->biblionumber ]
+        }
+    );
     # FIXME Should return the new priority
 }
 
@@ -2089,6 +2094,13 @@ sub RevertWaitingStatus {
     )->store();
 
     _FixPriority( { biblionumber => $hold->biblionumber } );
+
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+        {
+            biblio_ids => [ $hold->biblionumber ]
+        }
+    );
+
 
     return $hold;
 }

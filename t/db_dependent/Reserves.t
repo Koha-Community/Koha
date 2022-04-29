@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 70;
+use Test::More tests => 71;
 use Test::MockModule;
 use Test::Warn;
 
@@ -31,7 +31,7 @@ use C4::Circulation qw( AddReturn AddIssue );
 use C4::Items;
 use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
 use C4::Members;
-use C4::Reserves qw( AddReserve CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
+use C4::Reserves qw( AddReserve AlterPriority CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Caches;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -934,7 +934,7 @@ subtest 'reserves.item_level_hold' => sub {
     );
 
     subtest 'item level hold' => sub {
-        plan tests => 2;
+        plan tests => 3;
         my $reserve_id = AddReserve(
             {
                 branchcode     => $item->homebranch,
@@ -950,6 +950,16 @@ subtest 'reserves.item_level_hold' => sub {
 
         # Mark it waiting
         ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 1 );
+
+        my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+        $mock->mock( 'enqueue', sub {
+            my ( $self, $args ) = @_;
+            is_deeply(
+                $args->{biblio_ids},
+                [ $hold->biblionumber ],
+                "AlterPriority triggers a holds queue update for the related biblio"
+            );
+        } );
 
         # Revert the waiting status
         C4::Reserves::RevertWaitingStatus(
@@ -1425,6 +1435,60 @@ subtest 'AddReserve() tests' => sub {
             biblionumber   => $biblio->id,
         }
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'AlterPriorty() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron_1  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_2  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_3  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio  = $builder->build_sample_biblio;
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_2->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_3->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+
+    my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
+    $mock->mock( 'enqueue', sub {
+        my ( $self, $args ) = @_;
+        is_deeply(
+            $args->{biblio_ids},
+            [ $biblio->id ],
+            "AlterPriority triggers a holds queue update for the related biblio"
+        );
+    } );
+
+
+    AlterPriority( "bottom", $reserve_id, 1, 2, 1, 3 );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    is($hold->priority,3,'Successfully altered priority to bottom');
 
     $schema->storage->txn_rollback;
 };
