@@ -88,5 +88,11 @@ return {
                 }
             );
         }
+
+        $dbh->do(q{
+            INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type` )
+            VALUES
+            ('CurbsidePickup', '0', NULL, 'Enable curbside pickup', 'YesNo')
+        });
     }
   }

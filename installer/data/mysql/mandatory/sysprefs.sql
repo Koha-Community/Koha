@@ -153,6 +153,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CreateAVFromCataloguing', '1', '', 'Ability to create authorized values from the cataloguing module', 'YesNo'),
 ('CronjobLog','0',NULL,'If ON, log information from cron jobs.','YesNo'),
 ('CumulativeRestrictionPeriods',0,NULL,'Cumulate the restriction periods instead of keeping the highest','YesNo'),
+('CurbsidePickup', '0', NULL, 'Enable curbside pickup', 'YesNo'),
 ('CurrencyFormat','US','US|FR|CH','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice'),
 ('CustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed in the staff interface. CustomCoverImagesURL must be defined.','YesNo'),
 ('CustomCoverImagesURL','',NULL,'Define an URL serving book cover images, using the following patterns: %issn%, %isbn%, FIXME ADD MORE (use it with CustomCoverImages and/or OPACCustomCoverImages)','free'),
