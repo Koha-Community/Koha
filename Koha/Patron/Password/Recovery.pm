@@ -104,6 +104,7 @@ sub SendPasswordRecoveryEmail {
     my $borrower  = shift;    # Koha::Patron
     my $userEmail = shift;    #to_address (the one specified in the request)
     my $update    = shift;
+    my $staff     = shift // 0;
 
     my $schema = Koha::Database->new->schema;
 
@@ -114,8 +115,9 @@ sub SendPasswordRecoveryEmail {
     } while ( substr ( $uuid_str, -1, 1 ) eq '.' );
 
     # insert into database
+    my $days = $staff ? 5 : 2;
     my $expirydate =
-      dt_from_string()->add( days => 2 );
+      dt_from_string()->add( days => $days );
     if ($update) {
         my $rs =
           $schema->resultset('BorrowerPasswordRecovery')
@@ -141,7 +143,7 @@ sub SendPasswordRecoveryEmail {
     # prepare the email
     my $letter = C4::Letters::GetPreparedLetter(
         module      => 'members',
-        letter_code => 'PASSWORD_RESET',
+        letter_code => $staff ? 'STAFF_PASSWORD_RESET' : 'PASSWORD_RESET',
         branchcode  => $borrower->branchcode,
         lang        => $borrower->lang,
         substitute =>

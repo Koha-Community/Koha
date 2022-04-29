@@ -27,6 +27,7 @@ use C4::Members;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patron::Password::Recovery qw( SendPasswordRecoveryEmail ValidateBorrowernumber );
 
 my $input=CGI->new;
 
@@ -91,6 +92,24 @@ if ( $op eq 'send_welcome' ) {
 
     # redirect to self to avoid form submission on refresh
     print $input->redirect("/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
+}
+
+if ( $op eq 'send_password_reset' ) {
+
+    my $emailaddr = $patron->notice_email_address;
+
+    if ($emailaddr) {
+
+        # check if there's already a recovery in process
+        my $update = ValidateBorrowernumber( $patron->borrowernumber );
+
+        # send staff initiated password recovery
+        SendPasswordRecoveryEmail( $patron, $emailaddr, $update, 1 );
+    }
+
+    # redirect to self to avoid form submission on refresh
+    print $input->redirect(
+        "/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
 }
 
 # Getting the messages
