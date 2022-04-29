@@ -348,9 +348,9 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     $sth->execute(@params);
 
     my $itm = $sth->fetchall_arrayref({});
-    my @items = grep { ! scalar GetTransfers($_->{itemnumber}) } @$itm;
+    my @items = grep { ! scalar C4::Circulation::GetTransfers($_->{itemnumber}) } @$itm;
     return [ grep {
-        my $rule = GetBranchItemRule($_->{homebranch}, $_->{itype});
+        my $rule = C4::Circulation::GetBranchItemRule($_->{homebranch}, $_->{itype});
         $_->{holdallowed} = $rule->{holdallowed};
         $_->{hold_fulfillment_policy} = $rule->{hold_fulfillment_policy};
     } @items ];
