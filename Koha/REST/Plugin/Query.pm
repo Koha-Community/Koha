@@ -228,7 +228,9 @@ Merges parameters from $q_params into $filtered_params.
 
 =head3 stash_embed
 
-    $c->stash_embed( );
+    $c->stash_embed();
+
+Unwraps and stashes the x-koha-embed headers for use later query construction
 
 =cut
 
