@@ -1,0 +1,316 @@
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% USE TablesSettings %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+    Curbside pickup &rsaquo; Administration &rsaquo; Koha
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style>
+    .pickup-slot {
+        border: solid;
+        padding: 1em;
+    }
+</style>
+</head>
+
+<body id="admin_curbside_pickup" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cities-admin-search.inc' %]
+
+[% USE format_minutes = format('%02d') %]
+[% MACRO minutes_format BLOCK %][% IF m != "" %][% format_minutes(m) | html %][% END %][% END %]
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        <li>
+            <a href="#" aria-current="page">
+                Curbside pickup
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+[% FOR m IN messages %]
+    <div class="dialog [% m.type | html %]">
+        [% SWITCH m.code %]
+        [% CASE %]
+            <span>[% m.code | html %]</span>
+        [% END %]
+    </div>
+[% END %]
+
+[% IF op == 'list' %]
+
+    <h1>Curbside pickup configuration</h1>
+
+    <form method="post" class="form">
+        <div id="curbside_pickup_tabs" class="toptabs">
+            <ul class="nav nav-tabs" role="tablist">
+                [% FOREACH l IN libraries %]
+                    [% IF loop.first %]
+                    <li role="presentation" class="active">
+                    [% ELSE %]
+                    <li role="presentation">
+                    [% END %]
+                        <a href="#conf-[% l.branchcode | uri %]" aria-controls="conf-[% l.branchcode | html %]" role="tab" data-toggle="tab">[% l.branchname | html %]</a>
+                    </li>
+                [% END %]
+            </ul>
+
+            <div class="tab-content">
+                [% FOREACH l IN libraries %]
+                    [% SET branchcode = l.branchcode %]
+                    [% IF loop.first %]
+                    <div id="conf-[% l.branchcode | html %]" role="tabpanel" class="tab-pane active">
+                    [% ELSE %]
+                    <div id="conf-[% l.branchcode | html %]" role="tabpanel" class="tab-pane">
+                    [% END %]
+                        <fieldset class="rows" style="float: none;">
+                            <ol>
+                                <li>
+                                    <label for="enable-[% l.branchcode | html %]">Enable: </label>
+                                    [% IF policies.$branchcode.enabled %]
+                                        <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox" checked>
+                                    [% ELSE %]
+                                        <input name="enable-[% l.branchcode | html %]" id="enable-[% l.branchcode | html %]" value="1" type="checkbox">
+                                    [% END %]
+                                    <span class="hint">Enable curbside pickup.<span>
+                                </li>
+
+                                <li>
+                                    <label for="interval-[% l.branchcode | html %]">Pickup interval: </label>
+                                    <input name="interval-[% l.branchcode | html %]" id="interval-[% l.branchcode | html %]" value="[% policies.$branchcode.pickup_interval | html %]" type="text">
+                                    <span class="hint">Number of minutes each curbside pickup interaction will take.</span>
+                                </li>
+
+                                <li>
+                                    <label for="max-per-interval-[% l.branchcode | html %]">Maximum patrons per interval: </label>
+                                    <input name="max-per-interval-[% l.branchcode | html %]" id="max-per-interval-[% l.branchcode | html %]" value="[% policies.$branchcode.patrons_per_interval | html %]" type="text">
+                                    <span class="hint">Maximum number of simultaneus pickups per interval.</span>
+                                </li>
+
+                                <li>
+                                    <label for="patron-scheduled-[% l.branchcode | html %]">Patron-scheduled pickup: </label>
+                                    [% IF policies.$branchcode.patron_scheduled_pickup %]
+                                        <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox" checked>
+                                    [% ELSE %]
+                                        <input name="patron-scheduled-[% l.branchcode | html %]" id="patron-scheduled-[% l.branchcode | html %]" value="1" type="checkbox">
+                                    [% END %]
+                                    <span class="hint">Enable patrons to schedule their own curbside pickups.</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+
+                        <fieldset class="rows" style="float: none;">
+                            <legend>Curbside pickup hours</legend>
+
+                            <em>Times should be in 24-hour format ( 00:00 to 23:59 ).</em>
+
+                            <ol class="pickup_hours">
+                                [% BLOCK pickup_hours_day %]
+                                    [% SET day_start_hour = d _ '_start_hour' %]
+                                    [% SET day_start_minute = d _ '_start_minute' %]
+                                    [% SET day_end_hour = d _ '_end_hour' %]
+                                    [% SET day_end_minute = d _ '_end_minute' %]
+                                    [% SET p = policies.$branchcode %]
+                                    [% IF p.$day_start_hour && p.$day_start_minute && p.$day_end_hour && p.$day_end_minute %]
+                                        <li>
+                                            <span class="slot">
+                                                <input type="hidden" class="pickup-slot" name="pickup-slot-[% l.branchcode | html %]" value="[% d | html %]-[% p.$day_start_hour %]:[% p.$day_start_minute %]-[% p.$day_end_hour %]:[% p.$day_end_minute %]" />
+                                            </span>
+                                        </li>
+                                    [% END %]
+                                [% END %]
+                                [% PROCESS pickup_hours_day d => 'sunday' %]
+                                [% PROCESS pickup_hours_day d => 'monday' %]
+                                [% PROCESS pickup_hours_day d => 'tuesday' %]
+                                [% PROCESS pickup_hours_day d => 'wednesday' %]
+                                [% PROCESS pickup_hours_day d => 'thursday' %]
+                                [% PROCESS pickup_hours_day d => 'friday' %]
+                                [% PROCESS pickup_hours_day d => 'saturday' %]
+                            </ol>
+
+                            <ol>
+                                <li>
+                                    <label>New slot:</label>
+                                    <div>
+                                        <select id="day-[% l.branchcode | html %]">
+                                            <option value="0">Sunday</option>
+                                            <option value="1">Monday</option>
+                                            <option value="2">Tuesday</option>
+                                            <option value="3">Wednesday</option>
+                                            <option value="4">Thursday</option>
+                                            <option value="5">Friday</option>
+                                            <option value="6">Saturday</option>
+                                            <span>
+                                                From <input type="text" size="5" class="noEnterSubmit" id="new-start-[% l.branchcode | html %]" placeholder="00:00" />
+                                                to <input type="text" size="5" class="noEnterSubmit" id="new-end-[% l.branchcode | html %]" placeholder="23:55" />
+                                            </span>
+                                        </select>
+                                        <input type="button" class="add-new-slot" data-branchcode="[% l.branchcode | html %]" value="Add" />
+                                    </div>
+                                </li>
+
+                            </ol>
+                        </fieldset>
+                    </div>
+                [% END %]
+            </div>
+        </div>
+
+        <input type="hidden" name="op" value="save" />
+
+        <fieldset class="action">
+            <input type="submit" value="Save configuration" />
+        </fieldset>
+    </form>
+[% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    <script>
+
+        let opening_slots = {};
+        let slots;
+        [% FOR l IN libraries %]
+            [% SET branchcode = l.branchcode %]
+            slots = [];
+            [% FOR p IN policies.$branchcode.opening_slots %]
+                slots.push('%s-%s-%s'.format("[% p.day | html %]", format_hhmm("[% p.start_hour | html %]:[% p.start_minute | html %]"), format_hhmm("[% p.end_hour | html %]:[% p.end_minute | html %]")));
+            [% END %]
+            opening_slots["[% l.branchcode | html %]"] = slots;
+        [% END %]
+
+        function format_hhmm(hhmm){
+            let hh, mm;
+            [ hh, mm ] = hhmm.split(':');
+            return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+        }
+        function format_slot(slot){
+            let start = slot[0];
+            let end = slot[1];
+            return format_hhmm(start) + _(" to ") + format_hhmm(end);
+        }
+        function refresh_pickup_hours(branchcode) {
+            let slots = {};
+            $("#conf-"+branchcode).find("input.pickup-slot").each(function(){
+                let splitted  = $(this).val().split("-");
+                let day = splitted[0];
+                let start = splitted[1];
+                let end = splitted[2];
+
+                if(!slots[day]) slots[day] = [];
+
+                slots[day].push([start, end]);
+            });
+
+            let new_slot_node = $("<span class='slot'><input type='hidden' class='pickup-slot' name='pickup-slot-"+branchcode+"' value='"+day+"-"+start+"-"+end+"'/></span>");
+            $("#conf-"+branchcode).find(".pickup_hours").append(new_slot_node);
+
+            $("#conf-"+branchcode).find(".pickup_hours li").remove();
+
+            Object.keys(slots).forEach(function(day){
+                let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
+                slots[day].forEach(function(slot) {
+                    li_node.append('<span>'+format_slot(slot)+'</span>');
+                });
+                li_node.appendTo($("#conf-"+branchcode).find(".pickup_hours"));
+            });
+        }
+        function get_day_lib(day){
+            let lib;
+            switch(day){
+            case 'sunday':
+                lib = _("Sunday");
+                break;
+            case 'monday':
+                lib = _("Monday");
+                break;
+            case 'tuesday':
+                lib = _("Tuesday");
+                break;
+            case 'wednesday':
+                lib = _("Wednesday");
+                break;
+            case 'thursday':
+                lib = _("Thursday");
+                break;
+            case 'friday':
+                lib = _("Friday");
+                break;
+            case 'saturday':
+                lib = _("Saturday");
+                break;
+            }
+            return lib;
+        }
+
+        let opening_slots = {};
+        [% FOR l IN libraries %]
+            opening_slots["[% l.branchcode | html %]"] = [];
+        [% END %]
+        $(document).ready(function(){
+            [% FOR l IN libraries %]
+                refresh_pickup_hours("[% l.branchcode | html %]");
+            [% END %]
+
+            $(".add-new-slot").on("click", function(){
+                let branchcode = $(this).data('branchcode');
+                let day = $("#day-" + branchcode).val();
+                let start = $("#new-start-" + branchcode).val();
+                let end = $("#new-end-" + branchcode).val();
+                // FIXME confirm selection
+
+                let start_hour, start_minute, end_hour, end_minute;
+                [ start_hour, start_minute ] = start.split(":");
+                [ end_hour, end_minute ] = end.split(":");
+                if ( start_hour === undefined
+                  || start_minute === undefined
+                  || end_hour === undefined
+                  || end_minute === undefined
+                  || isNaN(parseInt(start_hour))
+                  || isNaN(parseInt(end_hour))
+                  || isNaN(parseInt(start_minute))
+                  || isNaN(parseInt(end_minute))
+                  || start_hour > 23 || start_minute > 59
+                  || end_hour > 23 || end_minute > 59
+                  ) {
+                    $("#invalid_slot_warning").show();
+                    return;
+                } else {
+                    $("#invalid_slot_warning").hide();
+                }
+
+                let new_slot = day + '-' + start + '-' + end;
+                if ( opening_slots[branchcode].indexOf(new_slot) < 0 )
+                    opening_slots[branchcode].push(new_slot);
+
+                refresh_pickup_hours(branchcode);
+            })
+        });
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
