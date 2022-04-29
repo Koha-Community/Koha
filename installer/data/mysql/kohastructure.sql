@@ -4296,7 +4296,7 @@ CREATE TABLE `ratings` (
 
 DROP TABLE IF EXISTS recalls;
 CREATE TABLE recalls (
-    id int(11) NOT NULL AUTO_INCREMENT COMMENT "Unique identifier for this recall",
+    recall_id int(11) NOT NULL AUTO_INCREMENT COMMENT "Unique identifier for this recall",
     patron_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for patron who requested recall",
     created_date datetime DEFAULT NULL COMMENT "Date the recall was requested",
     biblio_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for bibliographic record that has been recalled",
@@ -4311,7 +4311,7 @@ CREATE TABLE recalls (
     expiration_date datetime DEFAULT NULL COMMENT "Date recall is no longer required, or date recall will expire after waiting on shelf for pickup",
     completed TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is old and no longer active, i.e. expired, cancelled or completed",
     item_level TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is for a specific item",
-    PRIMARY KEY (id),
+    PRIMARY KEY (recall_id),
     KEY recalls_ibfk_1 (patron_id),
     KEY recalls_ibfk_2 (biblio_id),
     KEY recalls_ibfk_3 (item_id),
