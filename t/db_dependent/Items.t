@@ -309,7 +309,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 19;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
@@ -566,6 +566,53 @@ subtest 'SearchItems test' => sub {
     };
     ($items, $total_results) = SearchItems($filter,$params);
     is($items->[0]->{barcode}, $item1->barcode, 'Items sorted as expected by availability');
+
+    subtest 'Search items by ISSN and ISBN with variations' => sub {
+        plan tests => 4;
+
+        my $marc_record = MARC::Record->new;
+        # Prepare ISBN for biblio:
+        $marc_record->append_fields( MARC::Field->new( '020', '', '', 'a' => '9780136019701' ) );
+        # Prepare ISSN for biblio:
+        $marc_record->append_fields( MARC::Field->new( '022', '', '', 'a' => '2434561X' ) );
+        my ( $isbnissn_biblionumber ) = AddBiblio( $marc_record, '' );
+        my $isbnissn_biblio = Koha::Biblios->find($isbnissn_biblionumber);
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber => $isbnissn_biblio->biblionumber,
+            }
+        );
+        my $item_itemnumber = $item->itemnumber;
+
+        my $filter_isbn = {
+            field => 'isbn',
+            query => '978013-6019701',
+            operator => 'like',
+        };
+
+        t::lib::Mocks::mock_preference('SearchWithISBNVariations', 0);
+        ($items, $total_results) = SearchItems($filter_isbn);
+        is($total_results, 0, "Search items finds ISBN, no variations");
+
+        t::lib::Mocks::mock_preference('SearchWithISBNVariations', 1);
+        ($items, $total_results) = SearchItems($filter_isbn);
+        is($total_results, 1, "Search items finds ISBN with variations");
+
+        my $filter_issn = {
+            field => 'issn',
+            query => '2434-561X',
+            operator => 'like',
+        };
+
+        t::lib::Mocks::mock_preference('SearchWithISSNVariations', 0);
+        ($items, $total_results) = SearchItems($filter_issn);
+        is($total_results, 0, "Search items finds ISSN, no variations");
+
+        t::lib::Mocks::mock_preference('SearchWithISSNVariations', 1);
+        ($items, $total_results) = SearchItems($filter_issn);
+        is($total_results, 1, "Search items finds ISSN with variations");
+    };
 
     $schema->storage->txn_rollback;
 };
