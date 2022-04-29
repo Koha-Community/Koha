@@ -160,7 +160,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
       $can_renew_error && $can_renew_error eq 'too_soon'
       ? output_pref(
         {
-            dt => $info,
+            dt => $info->{soonest_renew_date},
             as_due_date => 1
         }
       )

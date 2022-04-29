@@ -800,7 +800,7 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = undef (returned code is auto_too_soon)' );
-    is( $info, $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
+    is( $info->{soonest_renew_date} , $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
     AddReserve(
         {
             branchcode       => $branch,
@@ -822,7 +822,7 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, undef, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'auto_too_soon', 'returned code is auto_too_soon, reserve not checked when checking for cron' );
-    is( $info, $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
+    is( $info->{soonest_renew_date}, $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
@@ -858,7 +858,7 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error, $info ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 0, 'Bug 7413: Cannot renew, renewal is premature');
     is( $error, 'too_soon', 'Bug 7413: Cannot renew, renewal is premature (returned code is too_soon)');
-    is( $info, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'too_soon'");
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'too_soon'");
 
     # Bug 14101
     # Test premature automatic renewal
@@ -868,13 +868,13 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature (returned code is auto_too_soon)'
     );
-    is( $info, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'auto_too_soon'");
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'auto_too_soon'");
 
     $renewing_borrower_obj->autorenew_checkouts(0)->store;
     ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'No renewal before is 7, patron opted out of auto_renewal still cannot renew early' );
     is( $error, 'too_soon', 'Error is too_soon, no auto' );
-    is( $info, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'too_soon'");
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'too_soon'");
     $renewing_borrower_obj->autorenew_checkouts(1)->store;
 
     # Change policy so that loans can only be renewed exactly on due date (0 days prior to due date)
@@ -886,13 +886,13 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = 0 (returned code is auto_too_soon)'
     );
-    is( $info, dt_from_string($issue->date_due), "Soonest renew date returned when error is 'auto_too_soon'");
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due), "Soonest renew date returned when error is 'auto_too_soon'");
 
     $renewing_borrower_obj->autorenew_checkouts(0)->store;
     ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'No renewal before is 0, patron opted out of auto_renewal still cannot renew early' );
     is( $error, 'too_soon', 'Error is too_soon, no auto' );
-    is( $info, dt_from_string($issue->date_due), "Soonest renew date returned when error is 'auto_too_soon'");
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due), "Soonest renew date returned when error is 'auto_too_soon'");
     $renewing_borrower_obj->autorenew_checkouts(1)->store;
 
     # Change policy so that loans can be renewed 99 days prior to the due date

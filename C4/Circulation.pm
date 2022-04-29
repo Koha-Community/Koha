@@ -2838,7 +2838,8 @@ item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
 already renewed the loan.
     $error will contain the reason the renewal can not proceed
-    $info will contain the soonest renewal date if the error is 'too soon'
+    $info will contain a hash of additional info
+      currently 'soonest_renew_date' if error is 'too soon'
 
 =cut
 
@@ -2897,7 +2898,7 @@ sub CanBookBeRenewed {
             branchcode => $branchcode,
             issue      => $issue
         });
-        return ( 0, $auto_renew, $soonest ) if $auto_renew =~ 'auto_too_soon' && $cron;
+        return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'auto_too_soon' && $cron;
         # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
         # extra notices being sent. Cron also implies no override
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
@@ -3000,10 +3001,10 @@ sub CanBookBeRenewed {
     }
 
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
-    return ( 0, $auto_renew, $soonest ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
+    return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
     $soonest = GetSoonestRenewDate($borrowernumber, $itemnumber);
     if ( $soonest > dt_from_string() ){
-        return (0, "too_soon", $soonest ) unless $override_limit;
+        return (0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
     }
 
     return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed

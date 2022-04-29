@@ -254,7 +254,7 @@ if ( $pending_checkouts->count ) { # Useless test
 
             if ( $renewerror eq 'too_soon' ) {
                 $issue->{'too_soon'}         = 1;
-                $issue->{'soonestrenewdate'} = $info;
+                $issue->{'soonestrenewdate'} = $info->{soonest_renew_date};
             }
         }
 

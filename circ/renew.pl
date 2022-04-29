@@ -83,7 +83,7 @@ if ($barcode) {
                 }
 
                 if ( $error && ($error eq 'too_soon' or $error eq 'auto_too_soon') ) {
-                    $soonest_renew_date = $info;
+                    $soonest_renew_date = $info->{soonest_renew_date};
                 }
                 if ( $error && ( $error eq 'auto_too_late' ) ) {
                     $latest_auto_renew_date = C4::Circulation::GetLatestAutoRenewDate(
