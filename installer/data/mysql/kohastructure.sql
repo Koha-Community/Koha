@@ -2336,38 +2336,26 @@ CREATE TABLE `curbside_pickup_policy` (
   `pickup_interval` INT(2) NOT NULL DEFAULT 0,
   `patrons_per_interval` INT(2) NOT NULL DEFAULT 0,
   `patron_scheduled_pickup` TINYINT(1) NOT NULL DEFAULT 0,
-  `sunday_start_hour` INT(2) NULL DEFAULT NULL,
-  `sunday_start_minute` INT(2) NULL DEFAULT NULL,
-  `sunday_end_hour` INT(2) NULL DEFAULT NULL,
-  `sunday_end_minute` INT(2) NULL DEFAULT NULL,
-  `monday_start_hour` INT(2) NULL DEFAULT NULL,
-  `monday_start_minute` INT(2) NULL DEFAULT NULL,
-  `monday_end_hour` INT(2) NULL DEFAULT NULL,
-  `monday_end_minute` INT(2) NULL DEFAULT NULL,
-  `tuesday_start_hour` INT(2) NULL DEFAULT NULL,
-  `tuesday_start_minute` INT(2) NULL DEFAULT NULL,
-  `tuesday_end_hour` INT(2) NULL DEFAULT NULL,
-  `tuesday_end_minute` INT(2) NULL DEFAULT NULL,
-  `wednesday_start_hour` INT(2) NULL DEFAULT NULL,
-  `wednesday_start_minute` INT(2) NULL DEFAULT NULL,
-  `wednesday_end_hour` INT(2) NULL DEFAULT NULL,
-  `wednesday_end_minute` INT(2) NULL DEFAULT NULL,
-  `thursday_start_hour` INT(2) NULL DEFAULT NULL,
-  `thursday_start_minute` INT(2) NULL DEFAULT NULL,
-  `thursday_end_hour` INT(2) NULL DEFAULT NULL,
-  `thursday_end_minute` INT(2) NULL DEFAULT NULL,
-  `friday_start_hour` INT(2) NULL DEFAULT NULL,
-  `friday_start_minute` INT(2) NULL DEFAULT NULL,
-  `friday_end_hour` INT(2) NULL DEFAULT NULL,
-  `friday_end_minute` INT(2) NULL DEFAULT NULL,
-  `saturday_start_hour` INT(2) NULL DEFAULT NULL,
-  `saturday_start_minute` INT(2) NULL DEFAULT NULL,
-  `saturday_end_hour` INT(2) NULL DEFAULT NULL,
-  `saturday_end_minute` INT(2) NULL DEFAULT NULL,
-  `patron_scheduled_pickup` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`branchcode`),
   FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `curbside_pickup_opening_slots`
+--
+
+DROP TABLE IF EXISTS `curbside_pickup_opening_slots`;
+CREATE TABLE `curbside_pickup_opening_slots` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `curbside_pickup_policy_id` INT(11) NOT NULL,
+    `day` TINYINT(1) NOT NULL,
+    `start_hour` INT(2) NOT NULL,
+    `start_minute` INT(2) NOT NULL,
+    `end_hour` INT(2) NOT NULL,
+    `end_minute` INT(2) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (curbside_pickup_policy_id) REFERENCES curbside_pickup_policy(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

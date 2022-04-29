@@ -51,6 +51,74 @@ return {
         }
             );
         }
+
+        unless ( TableExists('curbside_pickup_opening_slots') ) {
+            $dbh->do(q{
+                CREATE TABLE `curbside_pickup_opening_slots` (
+                    `id` INT(11) NOT NULL AUTO_INCREMENT,
+                    `curbside_pickup_policy_id` INT(11) NOT NULL,
+                    `day` INT(1) NOT NULL,
+                    `start_hour` INT(2) NOT NULL,
+                    `start_minute` INT(2) NOT NULL,
+                    `end_hour` INT(2) NOT NULL,
+                    `end_minute` INT(2) NOT NULL,
+                    PRIMARY KEY (`id`),
+                    FOREIGN KEY (curbside_pickup_policy_id) REFERENCES curbside_pickup_policy(id) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+            my $existing_slots = $dbh->selectall_arrayref(q{SELECT * FROM curbside_pickup_policy}, { Slice => {} });
+            my $insert_sth = $dbh->prepare(q{INSERT INTO curbside_pickup_opening_slots ( curbside_pickup_policy_id, day, start_hour, start_minute, end_hour, end_minute ) VALUES (?, ?, ?, ?, ?, ?)});
+            for my $slot ( @$existing_slots ) {
+                my $day_i = 0;
+                for my $day ( qw( sunday monday tuesday wednesday thursday friday saturday ) ) {
+                    my $start_hour = $slot->{$day . '_start_hour'};
+                    my $start_minute = $slot->{$day . '_start_minute'};
+                    my $end_hour = $slot->{$day . '_end_hour'};
+                    my $end_minute = $slot->{$day . '_end_minute'};
+                    next unless $start_hour && $start_minute && $end_hour && $end_minute;
+                    $insert_sth->execute($slot->{id}, $day_i, $start_hour, $start_minute, $end_hour, $end_minute);
+                    $day_i++;
+                }
+            }
+            $dbh->do(q{
+                ALTER TABLE curbside_pickup_policy
+                DROP COLUMN sunday_start_hour,
+                DROP COLUMN sunday_start_minute,
+                DROP COLUMN sunday_end_hour,
+                DROP COLUMN sunday_end_minute,
+
+                DROP COLUMN monday_start_hour,
+                DROP COLUMN monday_start_minute,
+                DROP COLUMN monday_end_hour,
+                DROP COLUMN monday_end_minute,
+
+                DROP COLUMN tuesday_start_hour,
+                DROP COLUMN tuesday_start_minute,
+                DROP COLUMN tuesday_end_hour,
+                DROP COLUMN tuesday_end_minute,
+
+                DROP COLUMN wednesday_start_hour,
+                DROP COLUMN wednesday_start_minute,
+                DROP COLUMN wednesday_end_hour,
+                DROP COLUMN wednesday_end_minute,
+
+                DROP COLUMN thursday_start_hour,
+                DROP COLUMN thursday_start_minute,
+                DROP COLUMN thursday_end_hour,
+                DROP COLUMN thursday_end_minute,
+
+                DROP COLUMN friday_start_hour,
+                DROP COLUMN friday_start_minute,
+                DROP COLUMN friday_end_hour,
+                DROP COLUMN friday_end_minute,
+
+                DROP COLUMN saturday_start_hour,
+                DROP COLUMN saturday_start_minute,
+                DROP COLUMN saturday_end_hour,
+                DROP COLUMN saturday_end_minute
+            });
+        }
+
         unless ( TableExists('curbside_pickups') ) {
 
             $dbh->do(
