@@ -1030,6 +1030,27 @@ tables:
             - ""
 
         - module: members
+          code: STAFF_PASSWORD_RESET
+          branchcode: ""
+          name: "Online password reset"
+          is_html: 1
+          title: "Koha password reset"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<html>"
+            - "<p>A librarian has reset the password for the account <strong><<user>></strong>."
+            - "</p>"
+            - "<p>"
+            - "Please create your new password using the following link:"
+            - "<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>"
+            - "</p>"
+            - "<p>This link will be valid for 5 days from this email's reception, then you must reapply if you do not change your password.</p>"
+            - "<p>Thank you.</p>"
+            - "</html>"
+            - ""
+
+        - module: members
           code: SHARE_ACCEPT
           branchcode: ""
           name: "Notification about an accepted share"
