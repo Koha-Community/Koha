@@ -356,6 +356,11 @@ if ($op=~/else/) {
     {
         @criteria_dv = ( C4::Context->userenv->{'branch'} );
     }
+    # Pending tab first
+    if ( $displayby eq 'STATUS' ) {
+        @criteria_dv = grep { $_ ne 'ASKED' } @criteria_dv;
+        unshift @criteria_dv, 'ASKED';
+    }
 
     my @allsuggestions;
     foreach my $criteriumvalue ( @criteria_dv ) {
