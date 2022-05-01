@@ -399,7 +399,7 @@ $(document).ready(function() {
                     <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
-                  <select name="field_value">
+                  <select name="field_value" class="select2 input_marceditor">
                   [% FOREACH value IN iteminformatio.marc_value.values %]
                     [% IF ( value == iteminformatio.marc_value.default ) %]
                       <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
