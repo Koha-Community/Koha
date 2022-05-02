@@ -9,8 +9,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .pickup-slot {
-        border: solid;
-        padding: 1em;
+        border: 2px solid #b9d8d9;
+        padding: 0 .1em;
+        margin: 0 .1em;
     }
 </style>
 </head>
@@ -117,31 +118,9 @@
                         <fieldset class="rows" style="float: none;">
                             <legend>Curbside pickup hours</legend>
 
-                            <em>Times should be in 24-hour format ( 00:00 to 23:59 ).</em>
+                            <em>Times should be in 24-hour format (00:00 to 23:59).</em>
 
-                            <ol class="pickup_hours">
-                                [% BLOCK pickup_hours_day %]
-                                    [% SET day_start_hour = d _ '_start_hour' %]
-                                    [% SET day_start_minute = d _ '_start_minute' %]
-                                    [% SET day_end_hour = d _ '_end_hour' %]
-                                    [% SET day_end_minute = d _ '_end_minute' %]
-                                    [% SET p = policies.$branchcode %]
-                                    [% IF p.$day_start_hour && p.$day_start_minute && p.$day_end_hour && p.$day_end_minute %]
-                                        <li>
-                                            <span class="slot">
-                                                <input type="hidden" class="pickup-slot" name="pickup-slot-[% l.branchcode | html %]" value="[% d | html %]-[% p.$day_start_hour %]:[% p.$day_start_minute %]-[% p.$day_end_hour %]:[% p.$day_end_minute %]" />
-                                            </span>
-                                        </li>
-                                    [% END %]
-                                [% END %]
-                                [% PROCESS pickup_hours_day d => 'sunday' %]
-                                [% PROCESS pickup_hours_day d => 'monday' %]
-                                [% PROCESS pickup_hours_day d => 'tuesday' %]
-                                [% PROCESS pickup_hours_day d => 'wednesday' %]
-                                [% PROCESS pickup_hours_day d => 'thursday' %]
-                                [% PROCESS pickup_hours_day d => 'friday' %]
-                                [% PROCESS pickup_hours_day d => 'saturday' %]
-                            </ol>
+                            <ol class="pickup_hours"></ol>
 
                             <ol>
                                 <li>
@@ -161,6 +140,7 @@
                                             </span>
                                         </select>
                                         <input type="button" class="add-new-slot" data-branchcode="[% l.branchcode | html %]" value="Add" />
+                                        <span id="invalid_slot_warning" style="display:none;">Invalid format for this new slot, must be '00:00 to 23:59'.</span>
                                     </div>
                                 </li>
 
@@ -210,32 +190,41 @@
             return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
         }
         function format_slot(slot){
-            let start = slot[0];
-            let end = slot[1];
+            let day, start, end;
+            [ day, start, end ] = slot.split("-");
             return format_hhmm(start) + _(" to ") + format_hhmm(end);
         }
+        function delete_slot(node, branchcode){
+            let slot = $(node).find('.pickup-slot').val();
+            let splitted  = slot.split("-");
+            let day = splitted[0];
+            let start = splitted[1];
+            let end = splitted[2];
+            opening_slots[branchcode].splice($.inArray(start+'-'+end, opening_slots), 1);
+            refresh_pickup_hours(branchcode);
+        }
         function refresh_pickup_hours(branchcode) {
-            let slots = {};
-            $("#conf-"+branchcode).find("input.pickup-slot").each(function(){
-                let splitted  = $(this).val().split("-");
-                let day = splitted[0];
-                let start = splitted[1];
-                let end = splitted[2];
-
-                if(!slots[day]) slots[day] = [];
-
-                slots[day].push([start, end]);
+            let slots_per_day = {};
+            opening_slots[branchcode].forEach(function(slot){
+                let day, start, end;
+                [ day, start, end ] = slot.split("-");
+                if(!slots_per_day[day]) slots_per_day[day] = [];
+                slots_per_day[day].push(slot);
             });
-
-            let new_slot_node = $("<span class='slot'><input type='hidden' class='pickup-slot' name='pickup-slot-"+branchcode+"' value='"+day+"-"+start+"-"+end+"'/></span>");
-            $("#conf-"+branchcode).find(".pickup_hours").append(new_slot_node);
 
             $("#conf-"+branchcode).find(".pickup_hours li").remove();
 
-            Object.keys(slots).forEach(function(day){
+            Object.keys(slots_per_day).forEach(function(day){
                 let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
-                slots[day].forEach(function(slot) {
-                    li_node.append('<span>'+format_slot(slot)+'</span>');
+                slots_per_day[day].forEach(function(slot) {
+                    let span_node = $('<span class="pickup-slot"></span>');
+                    span_node.append('<input type="hidden" class="pickup-slot" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
+                    span_node.append('<span>'+format_slot(slot)+'</span>');
+
+                    let delete_link = $('<a href="#" on><i class="fa fa-trash" aria-hidden="true"></i>').on('click', function(e){ e.preventDefault; delete_slot($(this).closest('li'), branchcode); });
+                    span_node.append(delete_link);
+
+                    span_node.appendTo(li_node);
                 });
                 li_node.appendTo($("#conf-"+branchcode).find(".pickup_hours"));
             });
@@ -243,35 +232,31 @@
         function get_day_lib(day){
             let lib;
             switch(day){
-            case 'sunday':
+            case '0':
                 lib = _("Sunday");
                 break;
-            case 'monday':
+            case '1':
                 lib = _("Monday");
                 break;
-            case 'tuesday':
+            case '2':
                 lib = _("Tuesday");
                 break;
-            case 'wednesday':
+            case '3':
                 lib = _("Wednesday");
                 break;
-            case 'thursday':
+            case '4':
                 lib = _("Thursday");
                 break;
-            case 'friday':
+            case '5':
                 lib = _("Friday");
                 break;
-            case 'saturday':
+            case '6':
                 lib = _("Saturday");
                 break;
             }
             return lib;
         }
 
-        let opening_slots = {};
-        [% FOR l IN libraries %]
-            opening_slots["[% l.branchcode | html %]"] = [];
-        [% END %]
         $(document).ready(function(){
             [% FOR l IN libraries %]
                 refresh_pickup_hours("[% l.branchcode | html %]");
@@ -282,7 +267,6 @@
                 let day = $("#day-" + branchcode).val();
                 let start = $("#new-start-" + branchcode).val();
                 let end = $("#new-end-" + branchcode).val();
-                // FIXME confirm selection
 
                 let start_hour, start_minute, end_hour, end_minute;
                 [ start_hour, start_minute ] = start.split(":");

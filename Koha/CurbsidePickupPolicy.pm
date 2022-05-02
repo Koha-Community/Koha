@@ -20,6 +20,8 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Library;
+use Koha::CurbsidePickupOpeningSlots;
 
 use base qw(Koha::Object);
 
@@ -42,6 +44,32 @@ sub library {
     my $rs = $self->_result->branchcode;
     return unless $rs;
     return Koha::Library->_new_from_dbic( $rs );
+}
+
+sub opening_slots {
+    my ( $self ) = @_;
+    my $rs = $self->_result->curbside_pickup_opening_slots;
+    return unless $rs;
+    return Koha::CurbsidePickupOpeningSlots->_new_from_dbic( $rs );
+}
+
+sub add_opening_slot {
+    my ( $self, $slot ) = @_;
+
+    my ( $day, $start, $end ) = split '-', $slot;
+    my ( $start_hour, $start_minute ) = split ':', $start;
+    my ( $end_hour,   $end_minute )   = split ':', $end;
+
+    return Koha::CurbsidePickupOpeningSlot->new(
+        {
+            curbside_pickup_policy_id => $self->id,
+            day                       => $day,
+            start_hour                => $start_hour,
+            start_minute              => $start_minute,
+            end_hour                  => $end_hour,
+            end_minute                => $end_minute,
+        }
+    )->store;
 }
 
 =head2 Internal methods

@@ -43,7 +43,6 @@ if ( $op eq 'save' ) {
         my $branchcode = $library->branchcode;
 
         my $params = {
-
             branchcode      => $branchcode,
             enabled         => scalar $input->param("enable-$branchcode") || 0,
             pickup_interval => scalar $input->param("interval-$branchcode"),
@@ -51,28 +50,15 @@ if ( $op eq 'save' ) {
             patron_scheduled_pickup => scalar $input->param("patron-scheduled-$branchcode") || 0,
         };
 
-        for my $day (
-            qw( sunday monday tuesday wednesday thursday friday saturday ))
-        {
-            for my $start_end (qw( start end )) {
-                for my $hour_min (qw( hour minute )) {
+        my $policy =
+          Koha::CurbsidePickupPolicies->find_or_create( { branchcode => $branchcode } );
+        $policy->update($params);
 
-                    my $value = $input->param(
-                        "pickup-$start_end-$hour_min-$day-$branchcode");
-                    $value = undef if $value eq q{};
-
-                    my $key = $day . '_' . $start_end . '_' . $hour_min;
-
-                    $params->{$key} = $value;
-                }
-            }
+        $policy->opening_slots->delete;
+        my @pickup_slots = $input->multi_param("pickup-slot-" . $branchcode);
+        for my $pickup_slot ( @pickup_slots ) {
+            $policy->add_opening_slot($pickup_slot);
         }
-
-        my $CurbsidePickupPolicy =
-          Koha::CurbsidePickupPolicies->find( { branchcode => $branchcode } );
-        $CurbsidePickupPolicy->delete if $CurbsidePickupPolicy;
-
-        Koha::CurbsidePickupPolicy->new($params)->store();
     }
     $op = 'list';
 }
