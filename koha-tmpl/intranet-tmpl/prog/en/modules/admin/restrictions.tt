@@ -21,19 +21,19 @@
     <li>
         <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
     </li>
-    <li>
-        <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
-    </li>
 
     [% IF op == 'list' %]
         <li>
             <a href="#" aria-current="page">
-                All restrictions
+                Patron restrictions
             </a>
         </li>
     [% END %]
 
     [% IF op == 'add_form' %]
+        <li>
+            <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
+        </li>
         [% IF restriction %]
             <li>
                 <a href="#" aria-current="page">
@@ -50,6 +50,9 @@
     [% END %]
 
     [% IF op == 'delete_confirm' %]
+        <li>
+            <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a>
+        </li>
         <li>
             <a href="#" aria-current="page">
                 Delete restriction?
@@ -99,6 +102,16 @@
                         <input type="text" value="[% restriction.display_text | html %]" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
                         <span class="required">Required</span>
                     </li>
+                    <li>
+                        <label for="can_be_added_manually">Can be manually added?</label>
+                        [% IF restriction && restriction.is_system %]
+                            [% IF restriction.can_be_added_manually %]Yes[% ELSE %]No[% END %]
+                        [% ELSIF restriction.can_be_added_manually %]
+                            <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" value="1" />
+                        [% END %]
+                    </li>
                 [% ELSE %]
                     <li>
                         <label for="code" class="required">Code: </label>
@@ -109,6 +122,16 @@
                         <label for="display_text" class="required">Label: </label>
                         <input type="text" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
                         <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="can_be_added_manually">Can be manually added?</label>
+                        [% IF restriction && restriction.is_system %]
+                            [% IF restriction.can_be_added_manually %]Yes[% ELSE %]No[% END %]
+                        [% ELSIF restriction.can_be_added_manually %]
+                            <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" value="1" />
+                        [% END %]
                     </li>
                 [% END %]
             </ol>
@@ -156,6 +179,7 @@
                 <tr>
                     <th scope="col">Code</th>
                     <th scope="col">Label</th>
+                    <th scope="col">Manual</th>
                     <th scope="col">Default</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -170,11 +194,14 @@
                             [% restriction.display_text | html %]
                         </td>
                         <td>
-                            [% IF restriction.is_system %]Yes[% END %]
+                            [% IF restriction.can_be_added_manually %]Yes[% END %]
+                        </td>
+                        <td>
+                            [% IF restriction.default_value %]Yes[% END %]
                         </td>
                         <td class="actions">
                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                            [% IF !restriction.readonly %]
+                            [% IF !restriction.is_system %]
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
                             [% END %]
                         </td>

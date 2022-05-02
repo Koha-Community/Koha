@@ -57,3 +57,9 @@ Accounting:
                 branchyyyymmincr: 'Automatically generate credit numbers in the form <branchcode>yyyymm0001'
                 incremental: 'Automatically generate credit numbers in the form 1, 2, 3'
             - Automatic generation also has to be enabled for each credit type (<a href="/cgi-bin/koha/admin/credit_types.pl">Configure credit types</a>)
+        -
+         - pref: PatronRestrictionTypes
+           choices:
+               1: Allow
+               0: Don't allow
+         - "the type of patron restriction to be specified when applying manually."

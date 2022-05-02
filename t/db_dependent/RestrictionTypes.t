@@ -17,15 +17,16 @@ use_ok('Koha::RestrictionType');
 use_ok('Koha::RestrictionTypes');
 
 $dbh->do(q|DELETE FROM borrower_debarments|);
-Koha::RestrictionTypes->search->delete;
+$dbh->do(q|DELETE FROM debarment_types|);
 
 $builder->build({
     source => 'DebarmentType',
     value  => {
         code         => 'ONE',
         display_text => 'One',
-        readonly     => 1,
-        is_system    => 0
+        is_system     => 1,
+        default_value    => 0,
+        can_be_added_manually => 0
     }
 });
 $builder->build({
@@ -33,8 +34,9 @@ $builder->build({
     value  => {
         code         => 'TWO',
         display_text => 'Two',
-        readonly     => 1,
-        is_system    => 1
+        is_system     => 1,
+        default_value    => 1,
+        can_be_added_manually => 0
     }
 });
 $builder->build({
@@ -42,8 +44,9 @@ $builder->build({
     value  => {
         code         => 'THREE',
         display_text => 'Three',
-        readonly     => 1,
-        is_system    => 0
+        is_system     => 1,
+        default_value    => 0,
+        can_be_added_manually => 0
     }
 });
 $builder->build({
@@ -51,8 +54,9 @@ $builder->build({
     value  => {
         code         => 'FOUR',
         display_text => 'Four',
-        readonly     => 0,
-        is_system    => 0
+        is_system     => 0,
+        default_value    => 0,
+        can_be_added_manually => 0
     }
 });
 $builder->build({
@@ -60,8 +64,9 @@ $builder->build({
     value  => {
         code         => 'FIVE',
         display_text => 'Five',
-        readonly     => 0,
-        is_system    => 0
+        is_system     => 0,
+        default_value    => 0,
+        can_be_added_manually => 0
     }
 });
 
@@ -71,10 +76,9 @@ ok( $created->display_text eq 'One', 'Restrictions created');
 
 # Can we delete RestrictionTypes, when appropriate
 my $deleted = Koha::RestrictionTypes->find({ code => 'FOUR' })->delete;
-ok( $deleted == 1, 'Restriction deleted');
+ok( $deleted, 'Restriction deleted');
 my $not_deleted = Koha::RestrictionTypes->find({ code => 'TWO' })->delete;
-ok( $not_deleted == 0, 'Read only restriction not deleted');
-
+ok( !$not_deleted, 'Read only restriction not deleted');
 
 # Add a patron with a debarment
 my $library = $builder->build({ source => 'Branch' });

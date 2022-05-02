@@ -53,6 +53,7 @@ if ( $op eq 'add_form') {
 } elsif ( $op eq 'add_validate' ) {
 
     my $display_text = $input->param('display_text');
+    my $can_be_added_manually = $input->param('can_be_added_manually') || 0;
     my $is_a_modif = $input->param("is_a_modif");
 
     if ($is_a_modif) {
@@ -66,7 +67,10 @@ if ( $op eq 'add_form') {
             };
         } else {
             my $restriction = Koha::RestrictionTypes->find($code);
-            $restriction->display_text($display_text);
+            unless ($restriction->is_system) {
+                $restriction->display_text($display_text);
+                $restriction->can_be_added_manually($can_be_added_manually);
+            }
             $restriction->store;
         }
     } else {
@@ -79,7 +83,8 @@ if ( $op eq 'add_form') {
         } else {
             my $restriction = Koha::RestrictionType->new({
                 code => $code,
-                display_text => $display_text
+                display_text => $display_text,
+                can_be_added_manually => $can_be_added_manually
             });
             $restriction->store;
         }

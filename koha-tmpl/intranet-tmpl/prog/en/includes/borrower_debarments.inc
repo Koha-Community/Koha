@@ -64,7 +64,9 @@
                         <label for="debarred_type">Type:</label>
                         <select name="debarred_type">
                             [% FOREACH code IN restriction_types.keys %]
-                                <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                                [% IF restriction_types.$code.can_be_added_manually %]
+                                    <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                                [% END %]
                             [% END %]
                         </select>
                     </li>
