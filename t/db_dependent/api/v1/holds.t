@@ -234,7 +234,7 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(200)
       ->json_is([]);
 
-    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id2" )
+    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id2" => json => "Cancellation reason" )
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 

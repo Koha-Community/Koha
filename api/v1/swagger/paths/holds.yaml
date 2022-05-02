@@ -403,6 +403,12 @@
     summary: Cancel hold
     parameters:
       - $ref: "../swagger.yaml#/parameters/hold_id_pp"
+      - name: body
+        in: body
+        description: Cancellation reason
+        required: false
+        schema:
+          type: string
       - name: x-koha-override
         in: header
         required: false
