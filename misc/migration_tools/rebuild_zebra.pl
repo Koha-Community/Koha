@@ -661,6 +661,7 @@ sub get_corrected_marc_record {
             push @filters, 'EmbedItemsAvailability';
             push @filters, 'EmbedSeeFromHeadings'
                 if C4::Context->preference('IncludeSeeFromInSearches');
+            push @filters, 'Index880InZebra';
 
             my $normalizer = Koha::RecordProcessor->new( { filters => \@filters } );
             $marc = $normalizer->process($marc);
