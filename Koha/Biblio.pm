@@ -1001,6 +1001,13 @@ sub get_marc_notes {
     return \@marcnotes;
 }
 
+=head3 _get_marc_authors
+
+Private method to return the list of authors contained in the MARC record.
+See get get_marc_contributors and get_marc_authors for the public methods.
+
+=cut
+
 sub _get_marc_authors {
     my ( $self, $params ) = @_;
 
@@ -1091,7 +1098,7 @@ sub _get_marc_authors {
     my $contributors = $biblio->get_marc_contributors;
 
 Get all contributors (but first author) from the MARC record and returns them in an array.
-They are stored in different fields depending on MARC flavour (700..712 for MARC21)
+They are stored in different fields depending on MARC flavour (700..720 for MARC21)
 
 =cut
 
@@ -1126,7 +1133,7 @@ sub get_marc_contributors {
 
 Get all authors from the MARC record and returns them in an array.
 They are stored in different fields depending on MARC flavour
-(main author from 100 then secondary authors from 700..712).
+(main author from 100 then secondary authors from 700..720).
 
 =cut
 
