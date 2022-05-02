@@ -188,16 +188,19 @@
                             [% FOR identifier IN author_identifiers %]
                                 <li>
                                 [% SWITCH identifier.source.lower %]
-                                [% CASE 'orcid' %]ORCID:
-                                [% CASE 'scopus' %]ScopusID:
-                                [% CASE 'loop' %]loop:
-                                [% CASE 'rid' %]Publons:
-                                [% CASE %][% identifier.source | html %]:
-                                [% END %]
-                                [% IF identifier.linkage %]
-                                    <a href="[% identifier.linkage | url %]">[% identifier.number | html %]</a>
-                                [% ELSE %]
-                                    [% identifier.number | html %]
+                                [% CASE 'orcid' %]
+                                    ORCID:
+                                    <a href="https://orcid.org/[% identifier.number | url %]">[% identifier.number | html %]</a>
+                                [% CASE 'scopus' %]
+                                    ScopusID:
+                                    <a href="https://www.scopus.com/authid/detail.uri?authorId=[% identifier.number | url %]">[% identifier.number | html %]</a>
+                                [% CASE 'loop' %]
+                                    loop:
+                                    <a href="https://loop.frontiersin.org/people/[% identifier.number | url %]">[% identifier.number | html %]</a>
+                                [% CASE 'rid' %]
+                                    Publons:
+                                    <a href="https://publons.com/researcher/[% identifier.number | url %]">[% identifier.number | html %]</a>
+                                [% CASE %][% identifier.source | html %]: [% identifier.number | html %]
                                 [% END %]
                                 </li>
                             [% END %]
