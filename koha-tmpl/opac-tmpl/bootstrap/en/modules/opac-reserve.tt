@@ -516,14 +516,15 @@
         $(".toggle-hold-options").show();
         $(".hold-options").hide();
         var OPACMandatoryHoldDates = "[% Koha.Preference('OPACMandatoryHoldDates') | html %]";
+        var requiredDiv = "<div class=\"required_label required\">" + _("Required") + "</div>";
         if( OPACMandatoryHoldDates ) {
             if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) {
                 $(".holddatefrom").prop( 'required', true );
-                $(".holddatefrom").parent().append('<div class="required_label required">Required</div>');
+                $(".holddatefrom").parent().append(requiredDiv);
             }
             if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) {
                 $(".futuredate").prop( 'required', true );
-                $(".futuredate").parent().append('<div class="required_label required">Required</div>');
+                $(".futuredate").parent().append(requiredDiv);
             }
         }
         $(".holddatefrom,.futuredate").prop("readOnly", true);
