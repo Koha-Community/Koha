@@ -14,5 +14,4 @@
 [% CASE 'viaf' %]
     <span>VIAF: </span>
     <a href="https://viaf.org/viaf/[% identifier.number | url %]">[% identifier.number | html %]</a>
-[% CASE %][% identifier.source | html %]: [% identifier.number | html %]
 [% END %]
