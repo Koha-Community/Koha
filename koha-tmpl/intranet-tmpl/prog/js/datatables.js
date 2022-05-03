@@ -853,7 +853,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
-                $(this).removeClass('sorting');
+                $(this).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
                 $(this).data('th-id', i);
                 if ( is_searchable ) {
                     let input_type = 'input';
