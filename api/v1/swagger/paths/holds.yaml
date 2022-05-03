@@ -180,10 +180,15 @@
             - pickup_library_id
           additionalProperties: false
       - name: x-koha-override
-        description: "Comma-separated list of overrides (valid values: any)"
         in: header
-        type: string
         required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - any
+        collectionFormat: csv
     consumes:
       - application/json
     produces:
@@ -561,10 +566,15 @@
     summary: Get valid pickup locations for hold
     parameters:
       - name: x-koha-override
-        description: "Comma-separated list of overrides (valid values: any)"
         in: header
-        type: string
         required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - any
+        collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/hold_id_pp"
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
