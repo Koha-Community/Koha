@@ -44,6 +44,8 @@
                             id="agreement_description"
                             v-model="agreement.description"
                             placeholder="Description"
+                            rows="10"
+                            cols="50"
                             required
                         />
                         <span class="required">Required</span>
