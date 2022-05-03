@@ -49,12 +49,12 @@ expiration date of the restriction
 
 =head2 type
 
-  data_type: 'enum'
-  default_value: 'MANUAL'
-  extra: {list => ["SUSPENSION","OVERDUES","MANUAL","DISCHARGE"]}
+  data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 0
+  size: 50
 
-type of restriction
+type of restriction, FK to debarment_types.code
 
 =head2 comment
 
@@ -97,12 +97,7 @@ __PACKAGE__->add_columns(
   "expiration",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "type",
-  {
-    data_type => "enum",
-    default_value => "MANUAL",
-    extra => { list => ["SUSPENSION", "OVERDUES", "MANUAL", "DISCHARGE"] },
-    is_nullable => 0,
-  },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 50 },
   "comment",
   { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
@@ -151,9 +146,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 type
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vQL2xYGB5GI//2l4FdIR9w
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::DebarmentType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "type",
+  "Koha::Schema::Result::DebarmentType",
+  { code => "type" },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-04 11:05:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bxRDwUTv9cZVpDfNDatosQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
