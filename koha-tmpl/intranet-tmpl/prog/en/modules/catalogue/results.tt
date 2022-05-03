@@ -143,9 +143,9 @@
                                         <ul class="dropdown-menu">
                                             <li><a href="#" class="placehold">Place hold</a></li>
                                             [% IF holdfor %]
-                                                <li><a href="#" class="placeholdfor">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
+                                            <li><a href="#" class="placeholdfor">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></li>
                                                 <li class="divider"></li>
-                                                <li><a href="#" id="forgetholdfor">Forget  [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
+                                                <li><a href="#" id="forgetholdfor">Forget [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></li>
                                             [% END %]
                                             [% IF holdforclub %]
                                                 <li><a href="#" class="placeholdforclub">Place hold for [% holdforclub_name | html %]</a></li>
@@ -519,7 +519,7 @@
                                                     [% ELSE %]
                                                         [% IF CAN_user_reserveforothers_place_holds %]
                                                             <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
-                                                            [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
+                                                            [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></span>[% END %]
                                                             [% IF ( holdforclub ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;club=[% holdforclub | uri %]">Place hold for [% holdforclub_name | html %]</a></span>[% END %]
                                                         [% ELSE %]
                                                             <span>Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</span>

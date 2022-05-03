@@ -103,10 +103,8 @@ if($query->cookie("holdfor")){
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     if ( $holdfor_patron ) {
         $template->param(
-            # FIXME Should pass the patron object
             holdfor => $query->cookie("holdfor"),
-            holdfor_surname => $holdfor_patron->surname,
-            holdfor_firstname => $holdfor_patron->firstname,
+            holdfor_patron => $holdfor_patron,
             holdfor_cardnumber => $holdfor_patron->cardnumber,
         );
     }

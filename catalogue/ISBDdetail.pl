@@ -108,9 +108,8 @@ my $res = GetISBDView({
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
-        holdfor => $query->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->surname,
-        holdfor_firstname => $holdfor_patron->firstname,
+        holdfor            => $query->cookie("holdfor"),
+        holdfor_patron     => $holdfor_patron,
         holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
