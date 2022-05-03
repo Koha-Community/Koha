@@ -11,6 +11,8 @@ return {
                 ALTER TABLE import_record_matches ADD COLUMN chosen TINYINT null DEFAULT null AFTER score
             });
             say $out "chosen column added to import_record_matches";
+        } else {
+            say $out "chosen column exists. Update has already been run";
         }
     },
-}
+};
