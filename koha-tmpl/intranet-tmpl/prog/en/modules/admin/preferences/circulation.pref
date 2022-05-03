@@ -196,12 +196,6 @@ Circulation:
                   0: "Don't allow"
             - staff to override and check out items when the patron has reached the maximum number of allowed checkouts.
         -
-            - pref: AutoRemoveOverduesRestrictions
-              choices:
-                  1: "Do"
-                  0: "Don't"
-            - allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron.
-        -
             - pref: AllowNotForLoanOverride
               choices:
                   1: Allow
@@ -527,13 +521,6 @@ Circulation:
                   blockitem: block renewing only for this item.
                   block: block renewing for all the patron's items.
         -
-            - If a patron is restricted,
-            - pref: RestrictionBlockRenewing
-              choices:
-                  1: block
-                  0: allow
-            - renewing of items from the staff interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> cronjob.
-        -
             - If a patron owes more than the value of <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a>,
             - pref: OPACFineNoRenewalsBlockAutoRenew
               choices:
@@ -648,12 +635,6 @@ Circulation:
             - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value
             - "it will be updated to the right-hand value. For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
             - Each pair of values should be on a separate line.
-        -
-            - pref: CumulativeRestrictionPeriods
-              choices:
-                  1: Cumulate
-                  0: "Don't cumulate"
-            - the restriction periods.
         -
             - pref: HidePersonalPatronDetailOnCirculation
               choices:
@@ -977,6 +958,32 @@ Circulation:
                   homebranch: "item's home library"
                   holdingbranch: "item's holding library"
             - "."
+    Patron restrictions:
+        -
+            - pref: PatronRestrictionTypes
+              choices:
+                  1: Allow
+                  0: Don't allow
+            - "the type of patron restriction to be specified when applying manually."
+        -
+            - pref: CumulativeRestrictionPeriods
+              choices:
+                  1: Cumulate
+                  0: "Don't cumulate"
+            - the restriction periods.
+        -
+            - pref: AutoRemoveOverduesRestrictions
+              choices:
+                  1: "Do"
+                  0: "Don't"
+            - allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron.
+        -
+            - If a patron is restricted,
+            - pref: RestrictionBlockRenewing
+              choices:
+                  1: block
+                  0: allow
+            - renewing of items from the staff interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> cronjob.
     Interlibrary loans:
         -
             - pref: ILLModule
