@@ -19,10 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 use Test::Exception;
 
-use Koha::Suggestion;
 use Koha::Suggestions;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -326,6 +325,68 @@ subtest 'search_limited() tests' => sub {
 
     $filtered_rs = $resultset->search_limited;
     is( $filtered_rs->count, 3, 'IndependentBranches but patron is superlibrarian, all suggestions returned' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_pending() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $suggestion_1 = $builder->build_object( { class => 'Koha::Suggestions', value => { STATUS => 'ASKED' } } );
+    my $suggestion_2 = $builder->build_object( { class => 'Koha::Suggestions', value => { STATUS => 'ACCEPTED' } } );
+    my $suggestion_3 = $builder->build_object( { class => 'Koha::Suggestions', value => { STATUS => 'ASKED' } } );
+
+    my $suggestions =
+      Koha::Suggestions->search( { suggestionid => [ $suggestion_1->id, $suggestion_2->id, $suggestion_3->id ] },
+        { order_by => ['suggestionid'] } );
+
+    is( $suggestions->count, 3 );
+
+    my $pending     = $suggestions->filter_by_pending;
+    my @pending_ids = $pending->get_column('suggestionid');
+
+    is( $pending->count, 2 );
+    is_deeply( \@pending_ids, [ $suggestion_1->id, $suggestion_3->id ] );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_suggested_days_range() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $today             = dt_from_string;
+    my $today_minus_two   = dt_from_string->subtract( days => 2 );
+    my $today_minus_three = dt_from_string->subtract( days => 3 );
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    my $suggestion_1 = $builder->build_object(
+        { class => 'Koha::Suggestions', value => { suggesteddate => $dtf->format_date($today) } } );
+    my $suggestion_2 = $builder->build_object(
+        { class => 'Koha::Suggestions', value => { suggesteddate => $dtf->format_date($today_minus_two) } } );
+    my $suggestion_3 = $builder->build_object(
+        { class => 'Koha::Suggestions', value => { suggesteddate => $dtf->format_date($today_minus_three) } } );
+
+    my $suggestions =
+      Koha::Suggestions->search( { suggestionid => [ $suggestion_1->id, $suggestion_2->id, $suggestion_3->id ] },
+        { order_by => ['suggestionid'] } );
+
+    is( $suggestions->count, 3 );
+
+    my $three_days = $suggestions->filter_by_suggested_days_range(3);
+    is( $three_days->count, 3 );
+
+    my $two_days = $suggestions->filter_by_suggested_days_range(2);
+    is( $two_days->count, 2 );
+
+    my $one_days = $suggestions->filter_by_suggested_days_range(1);
+    is( $one_days->count, 1 );
 
     $schema->storage->txn_rollback;
 };
