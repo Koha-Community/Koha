@@ -23,13 +23,12 @@ use C4::Output qw( output_html_with_http_headers );
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Booksellers;
-use Koha::ERM::Agreements;
 
 my $input        = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => "erm/agreements.tt",
+        template_name => "erm/erm.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired => { 'erm' => '1' },

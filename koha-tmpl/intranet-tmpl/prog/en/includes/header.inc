@@ -44,7 +44,7 @@
                         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
                     [% END %]
                     [% IF Koha.Preference('ERMModule') && CAN_user_erm %]
-                        <li><a href="/cgi-bin/koha/erm/erm-home.pl">Electronic resources management</a></li>
+                        <li><a href="/cgi-bin/koha/erm/erm.pl">Electronic resources management</a></li>
                     [% END %]
                     [% IF ( Koha.Preference('UseCourseReserves') ) %]
                         <li><a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a></li>

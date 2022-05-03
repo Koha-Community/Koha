@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import Toolbar from "./components/ERM/AgreementsToolbar.vue"
-import List from "./components/ERM/AgreementsList.vue"
-import Show from "./components/ERM/AgreementsShow.vue"
-import AddForm from "./components/ERM/AgreementsFormAdd.vue"
-import ConfirmDeleteForm from "./components/ERM/AgreementsFormConfirmDelete.vue"
+import Toolbar from "./AgreementsToolbar.vue"
+import List from "./AgreementsList.vue"
+import Show from "./AgreementsShow.vue"
+import AddForm from "./AgreementsFormAdd.vue"
+import ConfirmDeleteForm from "./AgreementsFormConfirmDelete.vue"
 
 import { reactive, computed } from "vue"
 
