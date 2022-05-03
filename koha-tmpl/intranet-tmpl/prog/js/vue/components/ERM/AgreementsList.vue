@@ -75,7 +75,7 @@ export default {
             },
             "order": [[1, "asc"]],
             "columnDefs": [{
-                "targets": [0, 1, 2, 3, 4],
+                "targets": [0, 2],
                 "render": function (data, type, row, meta) {
                     if (type == 'display') {
                         return escape_str(data)
@@ -85,10 +85,13 @@ export default {
             }],
             "columns": [
                 {
-                    "title": __("Agrement ID"),
-                    "data": "agreement_id",
+                    "title": __("Name"),
+                    "data": ["me.agreement_id", "me.name"],
                     "searchable": true,
-                    "orderable": true
+                    "orderable": true,
+                    "render": function (data, type, row, meta) {
+                        return escape_str(`${row.name} (#${row.agreement_id})`)
+                    }
                 },
                 {
                     "title": __("Vendor"),
@@ -98,12 +101,6 @@ export default {
                     "render": function (data, type, row, meta) {
                         return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
                     }
-                },
-                {
-                    "title": __("Name"),
-                    "data": "name",
-                    "searchable": true,
-                    "orderable": true
                 },
                 {
                     "title": __("description"),
@@ -177,9 +174,9 @@ export default {
             preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
                 $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_vendors')
-                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_statuses')
-                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'av_closure_reasons')
-                $("#" + table_id).find("thead th").eq(7).attr('data-filter', 'av_renewal_priorities')
+                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_statuses')
+                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_closure_reasons')
+                $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'av_renewal_priorities')
             }
 
         }, columns_settings, 1)
