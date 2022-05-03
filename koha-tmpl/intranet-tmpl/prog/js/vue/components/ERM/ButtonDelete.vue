@@ -6,6 +6,6 @@
 
 <script>
 export default {
-    name: "AgreementsButtonDelete"
+    name: "ButtonDelete"
 }
 </script>

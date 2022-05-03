@@ -34,8 +34,8 @@
         const agreement_user_roles = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_USER_ROLES')) | $raw %];
 
         var table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
-        var agreements_table_url = '/api/v1/erm/agreements?';
 
+        var agreements_table_url = '/api/v1/erm/agreements?';
         [% IF agreement_name_filter %]
             var agreement_name_filter = {
                 'name': {
@@ -44,6 +44,22 @@
             };
             agreements_table_url += 'q='+ encodeURIComponent(JSON.stringify(agreement_name_filter));
         [% END %]
+
+        const license_types = [% To.json(AuthorisedValues.Get('ERM_LICENSE_TYPE')) | $raw %];
+        const license_statuses = [% To.json(AuthorisedValues.Get('ERM_LICENSE_STATUS')) | $raw %];
+
+        var table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
+
+        var licenses_table_url = '/api/v1/erm/licenses?';
+        [% IF license_name_filter %]
+            var license_name_filter = {
+                'name': {
+                    "like": '%[%- license_name_filter | html -%]%'
+                }
+            };
+            licenses_table_url += 'q='+ encodeURIComponent(JSON.stringify(license_name_filter));
+        [% END %]
+
     </script>
 
     [% Asset.js("js/vue/dist/main.js") | $raw %]

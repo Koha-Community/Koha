@@ -6,6 +6,6 @@
 
 <script>
 export default {
-    name: "AgreementsButtonEdit",
+    name: "ButtonEdit",
 }
 </script>

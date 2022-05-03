@@ -1,0 +1,274 @@
+---
+/erm/licenses:
+  get:
+    x-mojo-to: ERM::Licenses#list
+    operationId: listErmLicenses
+    tags:
+      - license
+    summary: List licenses for agreements
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on license license_id
+        in: query
+        name: license_id
+        required: false
+        type: integer
+      - description: Case insensitive search on license name
+        in: query
+        name: name
+        required: false
+        type: string
+      - description: Case insensitive search on license type
+        in: query
+        name: type
+        required: false
+        type: string
+      - description: Case insensitive search on license status
+        in: query
+        name: status
+        required: false
+        type: string
+      - description: Case insensitive search on license start date
+        in: query
+        name: started_on
+        required: false
+        type: string
+      - description: Case insensitive search on license end date
+        in: query
+        name: ended_on
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of agreements' licenses
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_license"
+          type: array
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  post:
+    x-mojo-to: ERM::Licenses#add
+    operationId: addERMLicenses
+    tags:
+      - license
+    summary: Add license
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new agreement's license
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/erm_license"
+    responses:
+      201:
+        description: A successfully created license
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_license"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/licenses/{license_id}":
+  get:
+    x-mojo-to: ERM::Licenses#get
+    operationId: getERMlicense
+    tags:
+      - license
+    summary: get license
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/license_id_pp"
+    responses:
+      200:
+        description: license
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_license"
+      401:
+        description: authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - agreements
+  put:
+    x-mojo-to: ERM::Licenses#update
+    operationId: updateERMlicenses
+    tags:
+      - license
+    summary: update license
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/license_id_pp"
+      - name: body
+        in: body
+        description: a json object containing new information about existing license
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/erm_license"
+
+    responses:
+      200:
+        description: a successfully updated license
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_license"
+      400:
+        description: bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - agreements
+  delete:
+    x-mojo-to: ERM::Licenses#delete
+    operationId: deleteERMlicenses
+    tags:
+      - license
+    summary: Delete license
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/license_id_pp"
+    responses:
+      204:
+        description: license deleted
+      400:
+        description: license deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          internal server error. possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

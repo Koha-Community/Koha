@@ -24,6 +24,8 @@ definitions:
     $ref: ./definitions/city.yaml
   erm_agreement:
     $ref: ./definitions/erm_agreement.yaml
+  erm_license:
+    $ref: ./definitions/erm_license.yaml
   error:
     $ref: ./definitions/error.yaml
   fund:
@@ -163,6 +165,10 @@ paths:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
   "/erm/agreements/{agreement_id}":
     $ref: "./paths/erm_agreements.yaml#/~1erm~1agreements~1{agreement_id}"
+  /erm/licenses:
+    $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
+  "/erm/licenses/{license_id}":
+    $ref: "./paths/erm_licenses.yaml#/~1erm~1licenses~1{license_id}"
   /erm/users:
     $ref: ./paths/erm_users.yaml#/~1erm~1users
   /holds:
@@ -374,6 +380,12 @@ parameters:
     name: library_id
     required: true
     type: string
+  license_id_pp:
+    description: License internal identifier
+    in: path
+    name: license_id
+    required: true
+    type: integer
   match:
     description: Matching criteria
     enum:

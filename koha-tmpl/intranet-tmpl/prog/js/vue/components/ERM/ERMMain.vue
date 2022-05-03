@@ -22,6 +22,15 @@
                                         Agreements</router-link
                                     >
                                 </li>
+                                <li>
+                                    <router-link
+                                        to="/cgi-bin/koha/erm/licenses"
+                                    >
+                                        <i class="fa fa-file-text-o"></i>
+                                        Licenses</router-link
+                                    >
+                                </li>
+
                             </ul>
                         </div>
                     </div>

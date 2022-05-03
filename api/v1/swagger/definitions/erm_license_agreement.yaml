@@ -1,0 +1,34 @@
+---
+type: object
+properties:
+  license_id:
+    type: integer
+    description: internally assigned license identifier
+    readOnly: true
+  agreement_id:
+    description: foreign key to agreements
+    type: integer
+  status:
+    description: status of the license
+    type:
+      - string
+      - "null"
+  physical_location:
+    description: physical location of the license
+    type:
+      - string
+      - "null"
+  notes:
+    description: notes about the license
+    type:
+      - string
+      - "null"
+  uri:
+    description: URI of the license
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - license_id
+  - agreement_id
