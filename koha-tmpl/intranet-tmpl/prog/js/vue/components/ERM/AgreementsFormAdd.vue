@@ -82,7 +82,7 @@
                             id="agreement_closure_reason"
                             v-model="agreement.closure_reason"
                             :disabled="
-                                agreement.status == 'closed' ? true : false
+                                agreement.status == 'closed' ? false : true
                             "
                         >
                             <option value=""></option>
@@ -262,8 +262,8 @@ export default {
                     }
                 )
         },
-        onStatusChange(status) {
-            if (status == 'closed') {
+        onStatusChange(event) {
+            if (event.target.value != 'closed') {
                 this.agreement.closure_reason = ''
             }
         }
