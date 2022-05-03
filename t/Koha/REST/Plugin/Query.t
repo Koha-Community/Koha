@@ -209,50 +209,13 @@ get '/build_query' => sub {
 get '/stash_embed' => sub {
     my $c = shift;
 
-    try {
-        $c->stash_embed(
-            {
-                spec => {
-                    'x-koha-embed' => [
-                        'checkouts',
-                        'checkouts.item',
-                        'library',
-                        'holds+count'
-                    ]
-                }
-            }
-        );
+    $c->stash_embed();
+    my $embed = $c->stash('koha.embed');
 
-        $c->render(
-            status => 200,
-            json   => $c->stash( 'koha.embed' )
-        );
-    }
-    catch {
-        $c->render(
-            status => 400,
-            json   => { error => "$_" }
-        );
-    };
-};
-
-get '/stash_embed_no_spec' => sub {
-    my $c = shift;
-
-    try {
-        $c->stash_embed({ spec => {} });
-
-        $c->render(
-            status => 200,
-            json   => $c->stash( 'koha.embed' )
-        );
-    }
-    catch {
-        $c->render(
-            status => 400,
-            json   => { error => "$_" }
-        );
-    };
+    $c->render(
+        status => 200,
+        json   => $embed
+    );
 };
 
 get '/stash_overrides' => sub {
@@ -466,38 +429,24 @@ subtest '_build_query_params_from_api' => sub {
 
 subtest 'stash_embed() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 8;
 
     my $t = Test::Mojo->new;
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item' } )
-      ->status_is(200)
-      ->json_is( { checkouts => { children => { item => {} } } } );
+      ->json_is( { checkouts => { children => { item => { } } } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,library' } )
-      ->status_is(200)
       ->json_is( { checkouts => { children => { item => {} } }, library => {} } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'holds+count' } )
-      ->status_is(200)
       ->json_is( { holds_count => { is_count => 1 } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,patron' } )
-      ->status_is(400)
-      ->json_is(
-        {
-            error => qq{Exception 'Koha::Exceptions::BadParameter' thrown 'Embeding patron is not authorised. Check your x-koha-embed headers or remove it.'\n}
-        }
-      );
-
-    $t->get_ok( '/stash_embed_no_spec' => { 'x-koha-embed' => 'checkouts,checkouts.item,patron' } )
-      ->status_is(400)
-      ->json_is(
-        {
-            error => qq{Exception 'Koha::Exceptions::BadParameter' thrown 'Embedding objects is not allowed on this endpoint.'\n}
-        }
-      );
-
+      ->json_is({
+            checkouts => { children => { item => {} } },
+            patron    => {}
+        });
 };
 
 subtest 'stash_overrides() tests' => sub {
