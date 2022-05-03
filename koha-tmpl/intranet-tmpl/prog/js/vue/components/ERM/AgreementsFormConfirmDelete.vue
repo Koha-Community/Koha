@@ -17,7 +17,7 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" variant="primary" value="Yes, delete" />
-                <a href="#" class="cancel" @click="$emit('switch-view', 'list')"
+                <a role="button" class="cancel" @click="$emit('switch-view', 'list')"
                     >No, do not delete</a
                 >
             </fieldset>

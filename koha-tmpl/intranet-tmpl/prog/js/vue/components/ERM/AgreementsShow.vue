@@ -115,7 +115,10 @@
             </ol>
         </fieldset>
         <fieldset class="action">
-            <a href="#" class="cancel" @click="$emit('switch-view', 'list')"
+            <a
+                role="button"
+                class="cancel"
+                @click="$emit('switch-view', 'list')"
                 >Close</a
             >
         </fieldset>

@@ -167,7 +167,7 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Submit" />
-                <a href="#" class="cancel" @click="$emit('switch-view', 'list')"
+                <a role="button" class="cancel" @click="$emit('switch-view', 'list')"
                     >Cancel</a
                 >
             </fieldset>
