@@ -46,6 +46,13 @@ the biblio the imported record matches (biblio.biblionumber)
 
 the match score
 
+=head2 chosen
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+whether this match has been allowed or denied
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -55,6 +62,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "score",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "chosen",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -89,8 +98,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-03 14:22:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jN0xJqlL5brcUwa3bvEHHQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-03 20:30:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1GMA3K9ZgtPGdsCWmDMFw
 
 __PACKAGE__->add_columns(
     '+chosen' => { is_boolean => 1 },
