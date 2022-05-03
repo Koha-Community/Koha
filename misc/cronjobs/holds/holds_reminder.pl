@@ -236,14 +236,14 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     # Check that this branch has the letter code specified or skip this branch
 
     # FIXME What if we don't want to default if the translated template does not exist?
-    my $template_exists = Koha::Notice::Templates->search(
+    my $template_exists = Koha::Notice::Templates->find_effective_template(
         {
             module     => 'reserves',
             code       => $lettercode,
             branchcode => $branchcode,
             lang       => 'default',
         }
-    )->count;
+    );
     unless ($template_exists) {
         $verbose and print qq|Message '$lettercode' content not found for $branchcode\n|;
         next;
