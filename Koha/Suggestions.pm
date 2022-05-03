@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Suggestion;
 
 use base qw(Koha::Objects);
@@ -61,6 +62,37 @@ sub search_limited {
     }
 
     return $resultset->search( $params, $attributes);
+}
+
+=head3 filter_by_pending
+
+    my $open = $suggestions->filter_by_pending;
+
+Filters the resultset on those that are considered pending (i.e. STATUS = ASKED).
+
+=cut
+
+sub filter_by_pending {
+    my ($self) = @_;
+
+    return $self->search( { STATUS => 'ASKED' } );
+}
+
+=head3 filter_by_suggested_days_range
+
+    my $suggestions = $suggestions->filter_by_suggested_days_range( $days );
+
+Filters the resultset on those placed within some I<$days> range.
+
+=cut
+
+sub filter_by_suggested_days_range {
+    my ( $self, $days ) = @_;
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    return $self->search(
+        { suggesteddate => { '>=' => $dtf->format_date( dt_from_string->subtract( days => $days ) ) } } );
 }
 
 =head2 Internal methods
