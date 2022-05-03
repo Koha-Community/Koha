@@ -57,6 +57,18 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/suggestion"
+      - name: x-koha-override
+        in: header
+        required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - any
+            - max_total
+            - max_pending
+        collectionFormat: csv
     produces:
       - application/json
     responses:
@@ -65,7 +77,11 @@
         schema:
           $ref: "../swagger.yaml#/definitions/suggestion"
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+          * `max_total_reached`
+          * `max_pending_reached`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
