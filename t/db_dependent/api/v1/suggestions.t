@@ -149,7 +149,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -236,6 +236,50 @@ subtest 'add() tests' => sub {
             }
         ]
           );
+
+    subtest 'x-koha-override tests' => sub {
+
+        plan tests => 14;
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        t::lib::Mocks::mock_preference( 'MaxTotalSuggestions',    4 );
+        t::lib::Mocks::mock_preference( 'MaxOpenSuggestions',     2 );
+        t::lib::Mocks::mock_preference( 'NumberOfSuggestionDays', 2 );
+
+        my $suggestion = $builder->build_object(
+            {   class => 'Koha::Suggestions',
+                value => { suggestedby => $patron->id, STATUS => 'ACCEPTED' }
+            }
+        );
+
+        my $suggestion_data = $suggestion->to_api;
+        delete $suggestion_data->{suggestion_id};
+        delete $suggestion_data->{status};
+
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+          ->status_is( 201, 'First pending suggestion' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+          ->status_is( 201, 'Second pending suggestion' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+          ->status_is(400)
+          ->json_is( '/error_code' => 'max_pending_reached' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions"
+             => { 'x-koha-override' => 'max_pending' }
+             => json => $suggestion_data )
+          ->status_is( 201, 'max_pending override does the job' );
+
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+          ->status_is(400)
+          ->json_is( '/error_code' => 'max_total_reached' );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/suggestions" => { 'x-koha-override' => 'any' } => json => $suggestion_data )
+          ->status_is( 201, 'any overrides anything' );
+    };
 
     $schema->storage->txn_rollback;
 };

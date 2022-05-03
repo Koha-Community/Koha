@@ -53,6 +53,16 @@
         required: true
         schema:
           $ref: ../definitions.yaml#/suggestion
+      - name: x-koha-override
+        in: header
+        required: false
+        description: |
+          Overrides list sent as a request header
+          Valid values:
+            * any
+            * max_total
+            * max_pending
+        type: string
     produces:
       - application/json
     responses:
