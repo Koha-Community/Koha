@@ -68,6 +68,7 @@ export default {
             map[e.authorised_value] = e
             return map
         }, {})
+        window['av_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
         $('#my_table').kohaTable({
             "ajax": {
@@ -176,6 +177,7 @@ export default {
                 $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_vendors')
                 $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_statuses')
                 $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_closure_reasons')
+                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'av_is_perpetual')
                 $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'av_renewal_priorities')
             }
 
