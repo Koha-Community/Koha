@@ -139,6 +139,15 @@
                 <a href="/cgi-bin/koha/opac-illrequests.pl">your interlibrary loan requests</a></li>
             [% END %]
 
+            [% IF Koha.Preference( 'CurbsidePickup' ) %]
+                [% IF ( ermview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-curbside-pickups.pl">your curbside pickups</a></li>
+            [% END %]
+
             [% IF Koha.Preference('UseRecalls') %]
                 [% IF ( recallsview ) %]
                     <li class="active">

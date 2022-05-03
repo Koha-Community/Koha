@@ -1,0 +1,354 @@
+[% USE raw %]
+[% USE To %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Branches %]
+[% USE AdditionalContents %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Your curbside pickups &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+
+<style>
+    .pickup_time input[type='radio'] {
+        display: none;
+    }
+    .pickup_time {
+        /*margin: .2em;*/
+    }
+    .pickup_time label {
+        background-color: #ffffcc;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .pickup_time input[type='radio']:checked + label {
+        background-color: #bcdb89;
+    }
+</style>
+
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+[% INCLUDE 'bodytag.inc' bodyid='opac-curside-pickups' bodyclass='scrollto' %]
+[% INCLUDE 'masthead.inc' %]
+<div class="main">
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+
+            <li class="breadcrumb-item active">
+                <a href="#" aria-current="page">Curbside pickups</a>
+            </li>
+        </ol> <!-- / .breadcrumb -->
+    </nav> <!-- /#breadcrumbs -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-10 order-1">
+                <div id='pickupdetails' class="maincontent">
+                    <h2>Curbside pickups</h2>
+
+                    [% FOR m IN messages %]
+                        <div class="dialog [% m.type | html %]">
+                            [% SWITCH m.code %]
+                            [% CASE 'too_many_pickups' %]
+                                <span>You already have a scheduled pickup for this library.</span>
+                            [% CASE 'cannot_checkout' %]
+                                <span>Unable to check the items out. Please contact the library.</span>
+                            [% CASE 'library_notified' %]
+                                <span>The library has been notified of your arrival.</span>
+                            [% CASE %]
+                                <span>[% m.code | html %]</span>
+                            [% END %]
+                        </div>
+                    [% END %]
+
+                    <div id="opac-pickups-views" class="toptabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation" id="tab-user-pickups"><a href="#user-pickups" class="nav-link" aria-controls="user-pickups" aria-selected="true" role="tab" data-toggle="tab">Your pickups</a></li>
+                            [% IF policies.count %]
+                                <li class="nav-item" role="presentation" id="tab-user-schedule-pickup"><a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" aria-selected="false" role="tab" data-toggle="tab">Schedule a pickup</a></li>
+                            [% END %]
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane" id="user-pickups" aria-labelledby="tab-user-pickups">
+                                [% IF patron_curbside_pickups.count %]
+                                    <table id="pickups-table" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Pickup library</td>
+                                                <th>Schedule</th>
+                                                <th>Notes</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            [% FOR p IN patron_curbside_pickups %]
+                                                <tr>
+                                                    <td>[% Branches.GetName(p.branchcode) | html %]</td>
+                                                    <td>[% p.scheduled_pickup_datetime | $KohaDates with_hours => 1 %]</td>
+                                                    <td>[% p.notes | html %]</td>
+                                                    <td>
+                                                        <form method="post">
+                                                            <input type="hidden" name="op" value="arrival-alert" />
+                                                            <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
+                                                            [% IF ! p.staged_datetime || p.arrival_datetime %]
+                                                            <button class="btn disabled" disabled href="#" >
+                                                            [% ELSE %]
+                                                            <button type="submit" class="btn" href="#" >
+                                                            [% END %]
+                                                            <i class="fa fa-bell" aria-hidden="true"></i> Alert staff of your arrival
+                                                            </button>
+                                                        </form>
+                                                        <p>
+                                                        <form method="post">
+                                                            <input type="hidden" name="op" value="cancel-pickup" />
+                                                            <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
+                                                            [% IF p.delivered_datetime %]
+                                                                <button class="btn disabled" disabled href="#" >
+                                                            [% ELSE %]
+                                                                <button type="submit" class="btn" href="#" >
+                                                            [% END %]
+                                                                <i class="fa fa-ban" aria-hidden="true"></i> Cancel this pickup</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        </tbody>
+                                    </table>
+                                [% ELSE %]
+                                    <div>No curbside pickups.</div>
+                                [% END %]
+                            </div>
+
+                            [% IF policies.count %]
+                                <div role="tabpanel" class="tab-pane" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
+                                    <form id="create-pickup" method="post">
+                                        <fieldset class="rows">
+                                            <ol>
+                                                <li>
+                                                    <label for="pickup_branch">Pickup library:</label>
+                                                    <select name="pickup_branch" id="pickup-branch">
+                                                        <option value="">Select a library</option>
+                                                        [% FOR p IN policies %]
+                                                            <option value="[% p.branchcode | html %]">[% Branches.GetName(p.branchcode) | html %]</option>
+
+                                                        [% END %]
+                                                    </select>
+                                                    <span id="existing-pickup-warning" class="required">You already have a pickup scheduled for this library.</span>
+                                                </li>
+                                                <li>
+                                                    <label for="pickup_date">Pickup date:</label>
+                                                    <input name="pickup_date" type="text" class="flatpickr" id="pickup-date" disabled required="required"/>
+                                                    <span class="required">Required</span>
+                                                </li>
+
+                                                <li id="pickup-times" class="radio"></li>
+
+                                                <li>
+                                                    <label for="notes">Notes:</label>
+                                                    <input name="notes" id="notes" />
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+
+                                        <fieldset class="action">
+                                            <input type="hidden" name="op" value="create-pickup" />
+                                            <input type="submit" id="schedule-pickup-button" class="btn btn-default" disabled value="Schedule pickup" />
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            [% END %]
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- / .col-lg-10 -->
+        </div> <!-- / .row -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+
+[% BLOCK jsinclude %]
+    [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
+    [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
+    [% INCLUDE 'calendar.inc' %]
+    <script>
+        [% SET pickup_exists_in = [] %]
+        [% FOR p IN patron_curbside_pickups %]
+            [% UNLESS p.delivered_by  %]
+                [% pickup_exists_in.push(p.branchcode) %]
+            [% END %]
+        [% END %]
+        let pickup_exists_in = [% To.json(pickup_exists_in.unique()) | $raw %];
+
+        let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
+        let policies = [% To.json(policies.unblessed) | $raw %];
+        policies = policies.reduce((map, e) => {
+            map[e.branchcode] = e;
+            return map;
+        }, {});
+        [% FOR p IN policies %]
+            var opening_slots = [% To.json(p.opening_slots.unblessed) | $raw %];
+            var slots_per_day = {};
+            opening_slots.forEach(function(slot){
+                let day = slot.day;
+                if(!slots_per_day[day]) slots_per_day[day] = [];
+                slots_per_day[day].push(slot);
+            });
+            policies['[% p.branchcode | html %]'].slots_per_day = slots_per_day;
+        [% END %]
+
+        let existingPickupMoments = [];
+        pickups.forEach(function(pickup){
+            let scheduled_pickup_datetime = pickup.scheduled_pickup_datetime;
+            let pickupMoment = dayjs(scheduled_pickup_datetime);
+
+            if(!existingPickupMoments[pickup.branchcode]) existingPickupMoments[pickup.branchcode] = [];
+            existingPickupMoments[pickup.branchcode].push(pickupMoment);
+        });
+
+        $('#pickup-branch').on('change', function() {
+            let branchcode = $(this).val();
+
+            let existing_pickup = pickup_exists_in.indexOf(branchcode) != -1;
+
+            $('#pickup-date').val("");
+            $('#pickup-time').val("");
+            $('#pickup-times').hide();
+            $('#schedule-pickup-button').prop('disabled', true);
+
+            if (existing_pickup) {
+                $('#existing-pickup-warning').show();
+                $('#pickup-date').prop("disabled", true);
+            } else {
+                $('#existing-pickup-warning').hide();
+                $('#pickup-date').prop("disabled", branchcode == "");
+            }
+        });
+
+        $("#pickup-date").on('change', function() {
+
+            $('#pickup-times').empty();
+            $('#schedule-pickup-button').prop( 'disabled', 1 );
+
+            var currentDate = $(this).val();
+            let branchcode = $("#pickup-branch").val();
+            let policy = policies[branchcode];
+
+            let selectedDate = dayjs(currentDate);
+
+            let pickupSlots = [];
+            let available_count = 0;
+            let dow = selectedDate.day(); // Sunday is 0 (at least for now)
+            if (!policy.slots_per_day[dow]){
+                $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                return;
+            }
+
+            policy.slots_per_day[dow].forEach(function(slot){
+                let pickup_interval = policy.pickup_interval;
+
+                let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
+                let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
+
+                let keep_going = true;
+                let now = dayjs();
+
+                // Initialize pickup slots starting at opening time
+                let pickupIntervalStartMoment = listStartMoment;
+                let pickupIntervalEndMoment   = listStartMoment.add(pickup_interval, 'minutes');
+                while (keep_going) {
+                    let available = true;
+
+                    if (pickupIntervalStartMoment.isBefore(now)) {
+                        // Slots in the past are unavailable
+                        available = false;
+                    }
+
+                    if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                        // Slots after the end of pickup times for the day are unavailable
+                        available = false;
+                    }
+
+                    let pickups_scheduled = 0;
+
+                    if (existingPickupMoments[branchcode]){
+                        existingPickupMoments[branchcode].forEach(function(pickupMoment){
+                            // An existing pickup time
+                            if (pickupMoment.isSameOrAfter(pickupIntervalStartMoment) && pickupMoment.isBefore(pickupIntervalEndMoment)) {
+                                // This calculated pickup is in use by another scheduled pickup
+                                pickups_scheduled++;
+                            }
+                        });
+                    }
+
+                    if (pickups_scheduled >= policy.patrons_per_interval) {
+                        available = false;
+                    }
+
+                    pickupSlots.push(
+                        {
+                            "available": available,
+                            "moment": pickupIntervalStartMoment,
+                            "pickups_scheduled": pickups_scheduled
+                        }
+                    );
+
+                    if ( available ) {
+                        available_count++;
+                    }
+
+                    pickupIntervalStartMoment = pickupIntervalEndMoment;
+                    pickupIntervalEndMoment = pickupIntervalStartMoment.add(pickup_interval, 'minutes');
+                    if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                        // This latest slot is after the end of pickup times for the day, so we can stop
+                        keep_going = false;
+                    }
+                }
+
+                $('#schedule-pickup-button').prop( 'disabled', available_count <= 0 );
+            });
+
+            for (let i = 0; i < pickupSlots.length; i++) {
+                let pickupSlot = pickupSlots[i];
+                let optText = pickupSlot.moment.format("HH:mm");
+                let optValue = pickupSlot.moment.format("YYYY-MM-DD HH:mm:ss");
+                let pickups_scheduled = pickupSlot.pickups_scheduled;
+                let disabled = pickupSlot.available ? "" : "disabled";
+                $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label for="slot_${i}">${optText} (${pickups_scheduled})</label></span>`);
+            }
+
+            $('#pickup-times').show();
+        });
+
+
+        $(document).ready(function() {
+            $("#existing-pickup-warning").hide();
+            $("#pickup-times").hide();
+            if( $("#opac-pickups-views .tab-pane.active").length < 1 ){
+                $("#opac-pickups-views a:first").tab("show");
+            }
+
+            $("#create-pickup").on('submit', function(){
+                if ( ! $("input[type='radio']:checked").length ) {
+                    alert(_("Please select a date and a pickup time"))
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+[% END %]
