@@ -80,7 +80,7 @@ sub import_bib {
         return $result;
     }
     if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
-        my @control_num = $record->field('001');
+        my @control_num = $marc_record->field('001');
         $marc_record->delete_fields(@control_num);
     }
 
