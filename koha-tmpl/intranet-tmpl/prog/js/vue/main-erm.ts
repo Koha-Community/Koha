@@ -8,14 +8,38 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faPlus, faPencil, faTrash);
 
 import App from "./components/ERM/ERMMain.vue";
+import ERMHome from "./components/ERM/ERMHome.vue";
 import Agreements from "./components/ERM/Agreements.vue";
 
 const Bar = { template: "<div>bar</div>" };
-const Foo = { template: "<div>foo</div>" };
 const routes = [
-    { path: "/cgi-bin/koha/erm/agreements", component: Agreements },
-    { path: "/cgi-bin/koha/erm/licenses", component: Bar },
-    { path: "/cgi-bin/koha/erm/erm.pl", component: Foo },
+    {
+        path: "/cgi-bin/koha/erm/erm.pl",
+        component: ERMHome,
+        meta: {
+            breadcrumb: [
+                { text: "Home", path: "/cgi-bin/koha/mainpage.pl" },
+                {
+                    text: "Electronic resources management",
+                    path: "/cgi-bin/koha/erm/erm.pl",
+                },
+            ],
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/agreements",
+        component: Agreements,
+        meta: {
+            breadcrumb: [
+                { text: "Home", path: "/cgi-bin/koha/mainpage.pl" },
+                {
+                    text: "Electronic resources management",
+                    path: "/cgi-bin/koha/erm/erm.pl",
+                },
+                { text: "Agreements", path: "/cgi-bin/koha/erm/agreements" },
+            ],
+        },
+    },
 ];
 
 const router = createRouter({ history: createWebHistory(), routes });
