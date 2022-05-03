@@ -315,6 +315,22 @@
                                 </div>
 
                                 <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="ermHeading">
+                                        <h2 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#erm" aria-expanded="false" aria-controls="collapseOne">
+                                                 Electronic resources management
+                                            </a>
+                                        </h2>
+                                    </div> <!-- /.panel-heading -->
+                                    <div id="erm" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ermHeading">
+                                        <div class="panel-body">
+                                            <h3>Electronic resources management tables</h3>
+                                            [% PROCESS pagelist module=modules.erm modulename="erm" %]
+                                        </div> <!-- /.panel-body -->
+                                    </div> <!-- /.panel-collapse -->
+                                </div>
+
+                                <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="illrequestsHeading">
                                         <h2 class="panel-title">
                                             <a id="illrequestsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#illrequests" aria-expanded="false" aria-controls="collapseOne">

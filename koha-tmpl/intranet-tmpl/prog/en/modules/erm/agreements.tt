@@ -73,7 +73,7 @@
         const agreement_renewal_priorities = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_RENEWAL_PRIORITY')) | $raw %];
         const agreement_user_roles = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_USER_ROLES')) | $raw %];
 
-        var columns_settings = [% TablesSettings.GetColumns( 'erm', 'agreements', 'table_agreements', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
         var agreements_table_url = '/api/v1/erm/agreements?';
 
         [% IF agreement_name_filter %]

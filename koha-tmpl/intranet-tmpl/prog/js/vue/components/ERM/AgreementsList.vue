@@ -179,7 +179,7 @@ export default {
                 $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'av_renewal_priorities')
             }
 
-        }, columns_settings, 1)
+        }, table_settings, 1)
     },
     beforeUnmount() {
         $('#my_table')
