@@ -225,6 +225,33 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements").contains("Agreement updated");
     });
 
+    it ("Show agreement", () => {
+        let agreement = get_agreement();
+        let agreements = [agreement];
+        // Click the "name" link from the list
+        cy.intercept("GET", "/api/v1/erm/agreements*", {
+            statusCode: 200,
+            body: agreements,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as("get-agreement");
+        cy.visit("/cgi-bin/koha/erm/agreements.pl");
+        let name_link = cy.get("#agreements table tbody tr:first td:first a");
+        name_link.should("have.text", agreement.name + " (#" + agreement.agreement_id + ")");
+        name_link.click();
+        cy.wait("@get-agreement");
+        cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
+        cy.get("#agreements h2").contains("Agreement #" + agreement.agreement_id);
+
+        // TODO There are more to test here:
+        // Dates correctly formatted
+        // Vendors displayed
+        // AV's libs displayed
+        // Tables for periods and users
+    });
     it ("Delete agreement", () => {
         let agreement = get_agreement();
         let agreements = [agreement];

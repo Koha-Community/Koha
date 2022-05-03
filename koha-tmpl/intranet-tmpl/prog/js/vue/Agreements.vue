@@ -12,6 +12,17 @@
         @switch-view="switchView"
         @set-error="setError"
     />
+    <Show
+        v-if="op == 'show'"
+        :agreement_id="agreement_id"
+        :vendors="vendors"
+        :av_statuses="statuses"
+        :av_closure_reasons="closure_reasons"
+        :av_renewal_priorities="renewal_priorities"
+        :av_user_roles="user_roles"
+        @switch-view="switchView"
+        @set-error="setError"
+    />
     <AddForm
         v-if="op == 'add-form'"
         :agreement_id="agreement_id"
@@ -22,21 +33,22 @@
         :av_user_roles="user_roles"
         @agreement-created="agreementCreated"
         @agreement-updated="agreementUpdated"
-        @set-error="setError"
         @switch-view="switchView"
+        @set-error="setError"
     />
     <ConfirmDeleteForm
         v-if="op == 'confirm-delete-form'"
         :agreement_id="agreement_id"
         @agreement-deleted="agreementDeleted"
-        @set-error="setError"
         @switch-view="switchView"
+        @set-error="setError"
     />
 </template>
 
 <script>
 import Toolbar from "./components/ERM/AgreementsToolbar.vue"
 import List from "./components/ERM/AgreementsList.vue"
+import Show from "./components/ERM/AgreementsShow.vue"
 import AddForm from "./components/ERM/AgreementsFormAdd.vue"
 import ConfirmDeleteForm from "./components/ERM/AgreementsFormConfirmDelete.vue"
 
@@ -108,6 +120,7 @@ export default {
     components: {
         Toolbar,
         List,
+        Show,
         AddForm,
         ConfirmDeleteForm,
     },
