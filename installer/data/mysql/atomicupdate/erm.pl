@@ -93,5 +93,30 @@ return {
                 ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist')
         });
 
+        unless ( TableExists('erm_agreement_licenses') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_agreement_licenses` (
+                    `agreement_license_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    `status` VARCHAR(80) NOT NULL COMMENT 'current status of the license',
+                    `controlling` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'is a controlling license',
+                    `physical_location` VARCHAR(80) NOT NULL COMMENT 'physical location of the license',
+                    `notes` mediumtext DEFAULT NULL COMMENT 'notes about this license',
+                    `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the license',
+                    CONSTRAINT `erm_agreement_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    PRIMARY KEY(`agreement_license_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
+            VALUES
+                ('ERM_AGREEMENT_LICENSE_STATUS', 'controlling', 'Controlling'),
+                ('ERM_AGREEMENT_LICENSE_STATUS', 'future', 'Future'),
+                ('ERM_AGREEMENT_LICENSE_STATUS', 'history', 'Historic'),
+                ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Filing cabinet'),
+                ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Cupboard');
+        });
+
     },
 };

@@ -79,7 +79,12 @@ VALUES
     ('ERM_AGREEMENT_STATUS', 1),
     ('ERM_AGREEMENT_CLOSURE_REASON', 1),
     ('ERM_AGREEMENT_RENEWAL_PRIORITY', 1),
-    ('ERM_AGREEMENT_USER_ROLES', 1);
+    ('ERM_AGREEMENT_USER_ROLES', 1),
+    ('ERM_LICENSE_TYPE', 1),
+    ('ERM_LICENSE_STATUS', 1),
+    ('ERM_AGREEMENT_LICENSE_STATUS', 1),
+    ('ERM_AGREEMENT_LICENSE_LOCATION', 1);
+
 INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
 VALUES
     ('ERM_AGREEMENT_STATUS', 'active', 'Active'),
@@ -91,4 +96,9 @@ VALUES
     ('ERM_AGREEMENT_RENEWAL_PRIORITY', 'renew', 'Renew'),
     ('ERM_AGREEMENT_RENEWAL_PRIORITY', 'cancel', 'Cancel'),
     ('ERM_AGREEMENT_USER_ROLES', 'librarian', 'ERM librarian'),
-    ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist');
+    ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist'),
+    ('ERM_AGREEMENT_LICENSE_STATUS', 'controlling', 'Controlling'),
+    ('ERM_AGREEMENT_LICENSE_STATUS', 'future', 'Future'),
+    ('ERM_AGREEMENT_LICENSE_STATUS', 'history', 'Historic'),
+    ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Filing cabinet'),
+    ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard');
