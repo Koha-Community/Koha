@@ -98,6 +98,55 @@ sub add {
     $body->{'status'} = 'ASKED'
         unless defined $body->{'status'};
 
+    my $overrides = $c->stash('koha.overrides');
+
+    unless ( $overrides->{any} ) {
+
+        unless ( $overrides->{max_total} ) {
+
+            if (   C4::Context->preference('MaxTotalSuggestions') ne ''
+                && C4::Context->preference('NumberOfSuggestionDays') ne '' )
+            {
+                my $max_total = C4::Context->preference('MaxTotalSuggestions');
+                my $days_range = C4::Context->preference('NumberOfSuggestionDays');
+
+                if ( $max_total and $days_range ) {
+
+                    my $total = Koha::Suggestions->search({ suggestedby => $body->{suggested_by} })
+                                                 ->filter_by_suggested_days_range( $days_range )
+                                                 ->count;
+
+                    if ( $total >= $max_total ) {
+                        return $c->render(
+                            status  => 400,
+                            openapi => {
+                                error       => "Reached the maximum suggestions limit",
+                                error_code  => 'max_total_reached'
+                            }
+                        );
+                    }
+                }
+            }
+        }
+
+        unless ( $overrides->{max_pending} ) {
+            if ( C4::Context->preference('MaxOpenSuggestions') ne '' ) {
+                my $total_pending = Koha::Suggestions->search({ suggestedby => $body->{suggested_by} })
+                                                  ->filter_by_pending
+                                                  ->count;
+                if ( $total_pending >= C4::Context->preference('MaxOpenSuggestions') ) {
+                    return $c->render(
+                        status  => 400,
+                        openapi => {
+                            error       => "Reached the maximum pending suggestions limit",
+                            error_code  => 'max_pending_reached'
+                        }
+                    );
+                }
+            }
+        }
+    }
+
     return try {
         my $suggestion = Koha::Suggestion->new_from_api( $body )->store;
         $suggestion->discard_changes;
