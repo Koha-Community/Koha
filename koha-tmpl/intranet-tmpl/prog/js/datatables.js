@@ -854,6 +854,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             $(this).find('thead tr:eq(1) th').each( function (i) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 $(this).removeClass('sorting');
+                $(this).data('th-id', i);
                 if ( is_searchable ) {
                     let input_type = 'input';
                     if ( $(this).data('filter') ) {
@@ -904,6 +905,18 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         }
 
         table.DataTable().on("column-visibility.dt", function(){
+            if ( add_filters ) {
+                let visible_columns = table_dt.columns().visible();
+                $(table).find('thead tr:eq(1) th').each( function (i) {
+                    let th_id = $(this).data('th-id');
+                    if ( visible_columns[th_id] == false ) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            }
+
             if( typeof columnsInit == 'function' ){
                 // This function can be created separately and used to trigger
                 // an event after the DataTable has loaded AND column visibility
