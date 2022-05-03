@@ -186,12 +186,8 @@
 <script>
     $(document).ready(function(){
         $(".level-option").show();
-        $("#cleartext").show();
         $("#items").hide();
         $("#expiration-hint").hide();
-        $("#cleartext").click(function(){
-            $(this).siblings("input").val("");
-        });
         $("#itemlevel").click(function(){
             if ( $("#itemlevel").is(':checked') ){
                 $("#items").show();
