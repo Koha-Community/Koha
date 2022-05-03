@@ -67,8 +67,8 @@ if ( $op eq 'add_form') {
             };
         } else {
             my $restriction = Koha::RestrictionTypes->find($code);
+            $restriction->display_text($display_text);
             unless ($restriction->is_system) {
-                $restriction->display_text($display_text);
                 $restriction->can_be_added_manually($can_be_added_manually);
             }
             $restriction->store;

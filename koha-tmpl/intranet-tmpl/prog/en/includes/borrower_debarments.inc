@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% PROCESS 'patron_restrictions.inc' %]
 <div id="reldebarments">
     [% IF ( not debarments.defined || debarments.size < 1 ) %]
         <p>Patron is currently unrestricted.</p>
@@ -21,14 +22,7 @@
                     [% dtype = d.type %]
                     <tr>
                         <td>
-                            [% ddisplay = restriction_types.$dtype.display_text %]
-                            [% SWITCH ddisplay %]
-                                [% CASE 'Manual' %]Manual
-                                [% CASE 'Overdues' %]Overdues
-                                [% CASE 'Suspension' %]Suspension
-                                [% CASE 'Discharge' %]Discharge
-                                [% CASE %][% ddisplay | html %]
-                            [% END %]
+                            [% PROCESS restriction_type_description restriction=restriction_types.$dtype %]
                         </td>
                         <td>
                             [% IF d.comment.search('OVERDUES_PROCESS') %]
@@ -65,7 +59,7 @@
                         <select name="debarred_type">
                             [% FOREACH code IN restriction_types.keys %]
                                 [% IF restriction_types.$code.can_be_added_manually %]
-                                    <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                                    <option value="[% code | html %]">[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
                                 [% END %]
                             [% END %]
                         </select>
