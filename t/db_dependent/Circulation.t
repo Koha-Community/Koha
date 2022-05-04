@@ -800,7 +800,7 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = undef (returned code is auto_too_soon)' );
-    is( $info->{soonest_renew_date} , $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
+    is( $info->{soonest_renew_date} , dt_from_string($issue->date_due), "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
     AddReserve(
         {
             branchcode       => $branch,
@@ -822,7 +822,7 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, undef, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'auto_too_soon', 'returned code is auto_too_soon, reserve not checked when checking for cron' );
-    is( $info->{soonest_renew_date}, $issue->date_due, "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
+    is( $info->{soonest_renew_date}, dt_from_string($issue->date_due), "Due date is returned as earliest renewal date when error is 'auto_too_soon'" );
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
