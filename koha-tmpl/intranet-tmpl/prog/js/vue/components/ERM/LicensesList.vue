@@ -32,21 +32,21 @@ export default {
         let show_license = this.show_license
         let edit_license = this.edit_license
         let delete_license = this.delete_license
-        window['licenses_av_types'] = this.av_types.map(e => {
+        window['av_license_types'] = this.av_license_types.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let types_map = this.av_types.reduce((map, e) => {
+        let av_license_types_map = this.av_license_types.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['licenses_av_statuses'] = this.av_statuses.map(e => {
+        window['av_license_statuses'] = this.av_license_statuses.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let statuses_map = this.av_statuses.reduce((map, e) => {
+        let av_license_statuses_map = this.av_license_statuses.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
@@ -85,7 +85,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(types_map[row.type].lib)
+                        return escape_str(av_license_types_map[row.type].lib)
                     }
                 },
                 {
@@ -94,7 +94,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(statuses_map[row.status].lib)
+                        return escape_str(av_license_statuses_map[row.status].lib)
                     }
                 },
                 {
@@ -161,8 +161,8 @@ export default {
             },
             preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
-                $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'licenses_av_types')
-                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'licenses_av_statuses')
+                $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_license_types')
+                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_license_statuses')
             }
 
         }, table_settings, 1)
@@ -193,8 +193,8 @@ export default {
         },
     },
     props: {
-        av_types: Array,
-        av_statuses: Array,
+        av_license_types: Array,
+        av_license_statuses: Array,
     },
     name: "LicensesList",
 }

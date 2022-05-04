@@ -102,7 +102,7 @@
                                 <td>{{ patron_to_html(role.patron) }}</td>
                                 <td>
                                     {{
-                                        av_user_roles.find(
+                                        av_agreement_user_roles.find(
                                             (r) =>
                                                 r.authorised_value == role.role
                                         ).lib
@@ -188,10 +188,10 @@ export default {
     props: {
         agreement_id: Number,
         vendors: Array,
-        av_statuses: Array,
-        av_closure_reasons: Array,
-        av_renewal_priorities: Array,
-        av_user_roles: Array,
+        av_agreement_statuses: Array,
+        av_agreement_closure_reasons: Array,
+        av_agreement_renewal_priorities: Array,
+        av_agreement_user_roles: Array,
     },
     components: {
         AgreementPeriods,

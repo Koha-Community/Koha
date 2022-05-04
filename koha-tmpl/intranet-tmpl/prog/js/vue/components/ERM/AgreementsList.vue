@@ -33,7 +33,7 @@ export default {
         let show_agreement = this.show_agreement
         let edit_agreement = this.edit_agreement
         let delete_agreement = this.delete_agreement
-        window['agreements_av_vendors'] = this.vendors.map(e => {
+        window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
             e['_str'] = e['name']
             return e
@@ -42,34 +42,34 @@ export default {
             map[e.id] = e
             return map
         }, {})
-        window['agreements_av_statuses'] = this.av_statuses.map(e => {
+        window['av_agreement_statuses'] = this.av_agreement_statuses.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let statuses_map = this.av_statuses.reduce((map, e) => {
+        let av_agreement_statuses_map = this.av_agreement_statuses.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['agreements_av_closure_reasons'] = this.av_closure_reasons.map(e => {
+        window['av_agreement_closure_reasons'] = this.av_agreement_closure_reasons.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let closure_reasons_map = this.av_closure_reasons.reduce((map, e) => {
+        let av_agreement_closure_reasons_map = this.av_agreement_closure_reasons.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['agreements_av_renewal_priorities'] = this.av_renewal_priorities.map(e => {
+        window['av_agreement_renewal_priorities'] = this.av_agreement_renewal_priorities.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let renewal_priorities_map = this.av_renewal_priorities.reduce((map, e) => {
+        let av_agreement_renewal_priorities_map = this.av_agreement_renewal_priorities.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['agreements_av_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
+        window['av_agreement_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
         $('#agreement_list').kohaTable({
             "ajax": {
@@ -114,7 +114,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(statuses_map[row.status].lib)
+                        return escape_str(av_agreement_statuses_map[row.status].lib)
                     }
                 },
                 {
@@ -123,7 +123,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return row.closure_reason != undefined && row.closure_reason != "" ? escape_str(closure_reasons_map[row.closure_reason].lib) : ""
+                        return row.closure_reason != undefined && row.closure_reason != "" ? escape_str(av_agreement_closure_reasons_map[row.closure_reason].lib) : ""
                     }
                 },
                 {
@@ -141,7 +141,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return row.renewal_priority != undefined && row.renewal_priority != "" ? escape_str(renewal_priorities_map[row.renewal_priority].lib) : ""
+                        return row.renewal_priority != undefined && row.renewal_priority != "" ? escape_str(av_agreement_renewal_priorities_map[row.renewal_priority].lib) : ""
                     }
                 },
                 {
@@ -174,8 +174,9 @@ export default {
                     render(n, e)
                 })
 
-                $.each($(this).find("tr td:eq(0)"), function (index, e) {
+                $.each($(this).find("tbody tr td:first-child"), function (index, e) {
                     let row = api.row(index).data()
+                    if (!row) return // Happen if the table is empty
                     let n = createVNode("a", {
                         role: "button",
                         onClick: () => {
@@ -189,11 +190,11 @@ export default {
             },
             preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
-                $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'agreements_av_vendors')
-                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'agreements_av_statuses')
-                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'agreements_av_closure_reasons')
-                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'agreements_av_is_perpetual')
-                $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'agreements_av_renewal_priorities')
+                $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
+                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_agreement_statuses')
+                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_agreement_closure_reasons')
+                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'av_agreement_is_perpetual')
+                $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'av_agreement_renewal_priorities')
             }
 
         }, table_settings, 1)
@@ -225,9 +226,9 @@ export default {
     },
     props: {
         vendors: Array,
-        av_statuses: Array,
-        av_closure_reasons: Array,
-        av_renewal_priorities: Array,
+        av_agreement_statuses: Array,
+        av_agreement_closure_reasons: Array,
+        av_agreement_renewal_priorities: Array,
     },
     name: "AgreementsList",
 }

@@ -19,8 +19,8 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::Agreements;
-use Koha::Licenses;
+use Koha::ERM::Agreements;
+use Koha::ERM::Licenses;
 
 use base qw(Koha::Object);
 

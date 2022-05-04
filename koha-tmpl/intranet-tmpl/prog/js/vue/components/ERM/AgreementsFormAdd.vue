@@ -60,7 +60,7 @@
                         >
                             <option value=""></option>
                             <option
-                                v-for="status in av_statuses"
+                                v-for="status in av_agreement_statuses"
                                 :key="status.authorised_values"
                                 :value="status.authorised_value"
                                 :selected="
@@ -87,7 +87,7 @@
                         >
                             <option value=""></option>
                             <option
-                                v-for="r in av_closure_reasons"
+                                v-for="r in av_agreement_closure_reasons"
                                 :key="r.authorised_values"
                                 :value="r.authorised_value"
                                 :selected="
@@ -133,7 +133,7 @@
                         <select v-model="agreement.renewal_priority">
                             <option value=""></option>
                             <option
-                                v-for="p in av_renewal_priorities"
+                                v-for="p in av_agreement_renewal_priorities"
                                 :key="p.authorised_values"
                                 :value="p.authorised_value"
                                 :selected="
@@ -161,13 +161,23 @@
                     <AgreementPeriods :periods="agreement.periods" />
                     <AgreementUserRoles
                         :user_roles="agreement.user_roles"
-                        :av_user_roles="av_user_roles"
+                        :av_agreement_user_roles="av_agreement_user_roles"
+                    />
+                    <AgreementLicenses
+                        :agreement_licenses="agreement.agreement_licenses"
+                        :av_agreement_license_statuses="av_agreement_license_statuses"
+                        :av_agreement_license_location="
+                            av_agreement_license_location
+                        "
                     />
                 </ol>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Submit" />
-                <a role="button" class="cancel" @click="$emit('switch-view', 'list')"
+                <a
+                    role="button"
+                    class="cancel"
+                    @click="$emit('switch-view', 'list')"
                     >Cancel</a
                 >
             </fieldset>
@@ -178,6 +188,7 @@
 <script>
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
+import AgreementLicenses from './AgreementLicenses.vue'
 
 export default {
     data() {
@@ -194,6 +205,7 @@ export default {
                 license_info: '',
                 periods: [],
                 user_roles: [],
+                agreement_licenses: [],
             }
         }
     },
@@ -203,7 +215,7 @@ export default {
 
         fetch(apiUrl, {
             headers: {
-                'x-koha-embed': 'periods,user_roles,user_roles.patron'
+                'x-koha-embed': 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'
             }
         })
             .then(res => res.json())
@@ -239,6 +251,8 @@ export default {
 
             agreement.user_roles = agreement.user_roles.map(({ patron, patron_str, ...keepAttrs }) => keepAttrs)
 
+            agreement.agreement_licenses = agreement.agreement_licenses.map(({ license, agreement_id, agreement_license_id, ...keepAttrs }) => keepAttrs)
+
             const options = {
                 method: method,
                 body: JSON.stringify(agreement),
@@ -272,14 +286,17 @@ export default {
     props: {
         agreement_id: Number,
         vendors: Array,
-        av_statuses: Array,
-        av_closure_reasons: Array,
-        av_renewal_priorities: Array,
-        av_user_roles: Array,
+        av_agreement_statuses: Array,
+        av_agreement_closure_reasons: Array,
+        av_agreement_renewal_priorities: Array,
+        av_agreement_user_roles: Array,
+        av_agreement_license_statuses: Array,
+        av_agreement_license_location: Array,
     },
     components: {
         AgreementPeriods,
-        AgreementUserRoles
+        AgreementUserRoles,
+        AgreementLicenses,
     },
     name: "AgreementsFormAdd",
 }

@@ -5,9 +5,9 @@
     <List
         v-if="op == 'list'"
         :vendors="vendors"
-        :av_statuses="statuses"
-        :av_closure_reasons="closure_reasons"
-        :av_renewal_priorities="renewal_priorities"
+        :av_agreement_statuses="agreement_statuses"
+        :av_agreement_closure_reasons="agreement_closure_reasons"
+        :av_agreement_renewal_priorities="agreement_renewal_priorities"
         @set-current-agreement-id="setCurrentAgreementID"
         @switch-view="switchView"
         @set-error="setError"
@@ -16,10 +16,12 @@
         v-if="op == 'show'"
         :agreement_id="agreement_id"
         :vendors="vendors"
-        :av_statuses="statuses"
-        :av_closure_reasons="closure_reasons"
-        :av_renewal_priorities="renewal_priorities"
-        :av_user_roles="user_roles"
+        :av_agreement_statuses="agreement_statuses"
+        :av_agreement_closure_reasons="agreement_closure_reasons"
+        :av_agreement_renewal_priorities="agreement_renewal_priorities"
+        :av_agreement_user_roles="agreement_user_roles"
+        :av_agreement_license_statuses="agreement_license_statuses"
+        :av_agreement_license_location="agreement_license_location"
         @switch-view="switchView"
         @set-error="setError"
     />
@@ -27,10 +29,12 @@
         v-if="op == 'add-form'"
         :agreement_id="agreement_id"
         :vendors="vendors"
-        :av_statuses="statuses"
-        :av_closure_reasons="closure_reasons"
-        :av_renewal_priorities="renewal_priorities"
-        :av_user_roles="user_roles"
+        :av_agreement_statuses="agreement_statuses"
+        :av_agreement_closure_reasons="agreement_closure_reasons"
+        :av_agreement_renewal_priorities="agreement_renewal_priorities"
+        :av_agreement_user_roles="agreement_user_roles"
+        :av_agreement_license_statuses="agreement_license_statuses"
+        :av_agreement_license_location="agreement_license_location"
         @agreement-created="agreementCreated"
         @agreement-updated="agreementUpdated"
         @switch-view="switchView"
@@ -62,10 +66,12 @@ export default {
             message: null,
             error: null,
             vendors: [],
-            statuses: agreement_statuses,
-            closure_reasons: agreement_closure_reasons,
-            renewal_priorities: agreement_renewal_priorities,
-            user_roles: agreement_user_roles,
+            agreement_statuses,
+            agreement_closure_reasons,
+            agreement_renewal_priorities,
+            agreement_user_roles,
+            agreement_license_statuses,
+            agreement_license_location,
         }
     },
     beforeCreate() {

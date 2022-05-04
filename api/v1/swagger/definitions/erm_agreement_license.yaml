@@ -1,0 +1,30 @@
+---
+type: object
+properties:
+  agreement_license_id:
+    type: integer
+    description: Internal agreement license identifier
+  agreement_id:
+    type: integer
+    description: Internal agreement identifier
+  license_id:
+    type: integer
+    description: Internal license identifier
+  status:
+    type: string
+  physical_location:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  uri:
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - license_id
+  - status

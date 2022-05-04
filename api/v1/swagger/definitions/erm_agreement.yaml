@@ -49,6 +49,12 @@ properties:
     description: role for users
     items:
       $ref: erm_agreement_user_role.yaml
+  agreement_licenses:
+    type: array
+    description: agreement licenses
+    items:
+      $ref: erm_agreement_license.yaml
+
 additionalProperties: false
 required:
   - agreement_id

@@ -4,8 +4,8 @@
     <div class="dialog alert" v-if="error">{{ error }}</div>
     <List
         v-if="op == 'list'"
-        :av_types="types"
-        :av_statuses="statuses"
+        :av_license_types="license_types"
+        :av_license_statuses="license_statuses"
         @set-current-license-id="setCurrentLicenseID"
         @switch-view="switchView"
         @set-error="setError"
@@ -13,16 +13,16 @@
     <Show
         v-if="op == 'show'"
         :license_id="license_id"
-        :av_types="types"
-        :av_statuses="statuses"
+        :av_license_types="license_types"
+        :av_license_statuses="license_statuses"
         @switch-view="switchView"
         @set-error="setError"
     />
     <AddForm
         v-if="op == 'add-form'"
         :license_id="license_id"
-        :av_types="types"
-        :av_statuses="statuses"
+        :av_license_types="license_types"
+        :av_license_statuses="license_statuses"
         @license-created="licenseCreated"
         @license-updated="licenseUpdated"
         @switch-view="switchView"
@@ -53,8 +53,8 @@ export default {
             op: "list",
             message: null,
             error: null,
-            types: license_types,
-            statuses: license_statuses,
+            license_types,
+            license_statuses,
         }
     },
     methods: {

@@ -18,13 +18,13 @@
                 <li>
                     <label>Type: </label>
                     <span>{{
-                        get_lib_from_av(av_types, license.type)
+                        get_lib_from_av(av_license_types, license.type)
                     }}</span>
                 </li>
                 <li>
                     <label>Status: </label>
                     <span>{{
-                        get_lib_from_av(av_statuses, license.status)
+                        get_lib_from_av(av_license_statuses, license.status)
                     }}</span>
                 </li>
 
@@ -104,8 +104,8 @@ export default {
     emits: ['set-error', 'switch-view'],
     props: {
         license_id: Number,
-        av_types: Array,
-        av_statuses: Array,
+        av_license_types: Array,
+        av_license_statuses: Array,
     },
     components: {
     },

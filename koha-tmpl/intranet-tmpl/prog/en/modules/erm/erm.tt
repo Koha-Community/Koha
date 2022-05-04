@@ -60,6 +60,9 @@
             licenses_table_url += 'q='+ encodeURIComponent(JSON.stringify(license_name_filter));
         [% END %]
 
+        const agreement_license_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_STATUS')) | $raw %];
+        const agreement_license_location = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_LOCATION')) | $raw %];
+
     </script>
 
     [% Asset.js("js/vue/dist/main.js") | $raw %]

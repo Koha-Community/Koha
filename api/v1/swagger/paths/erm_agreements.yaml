@@ -187,6 +187,8 @@
       - periods
       - user_roles
       - user_roles.patron
+      - agreement_licenses
+      - agreement_licenses.license
   put:
     x-mojo-to: ERM::Agreements#update
     operationId: updateErmAgreements
@@ -244,6 +246,7 @@
     x-koha-embed:
       - periods
       - user_roles
+      - agreement_licenses
   delete:
     x-mojo-to: ERM::Agreements#delete
     operationId: deleteErmAgreements

@@ -38,7 +38,7 @@
                         >
                             <option value=""></option>
                             <option
-                                v-for="type in av_types"
+                                v-for="type in av_license_types"
                                 :key="type.authorised_values"
                                 :value="type.authorised_value"
                                 :selected="
@@ -61,7 +61,7 @@
                         >
                             <option value=""></option>
                             <option
-                                v-for="status in av_statuses"
+                                v-for="status in av_license_statuses"
                                 :key="status.authorised_values"
                                 :value="status.authorised_value"
                                 :selected="
@@ -194,8 +194,8 @@ export default {
     emits: ['license-created', 'license-updated', 'set-error', 'switch-view'],
     props: {
         license_id: Number,
-        av_types: Array,
-        av_statuses: Array,
+        av_license_types: Array,
+        av_license_statuses: Array,
     },
     components: {
         flatPickr

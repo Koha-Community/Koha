@@ -30,7 +30,7 @@
                     <select v-model="user_role.role" required>
                         <option value=""></option>
                         <option
-                            v-for="r in av_user_roles"
+                            v-for="r in av_agreement_user_roles"
                             :key="r.authorised_values"
                             :value="r.authorised_value"
                             :selected="
@@ -61,7 +61,7 @@
 export default {
     name: 'AgreementUserRoles',
     props: {
-        av_user_roles: Array,
+        av_agreement_user_roles: Array,
         user_roles: Array,
     },
     beforeUpdate() {
