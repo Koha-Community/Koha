@@ -12,18 +12,17 @@ return {
                 code varchar(50) NOT NULL PRIMARY KEY,
                 display_text text NOT NULL,
                 is_system tinyint(1) NOT NULL DEFAULT 0,
-                default_value tinyint(1) NOT NULL DEFAULT 0,
-                can_be_added_manually tinyint(1) NOT NULL DEFAULT 0
+                is_default tinyint(1) NOT NULL DEFAULT 0
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         });
         say $out "Added debarment_types table";
 
         $dbh->do(q{
-            INSERT IGNORE INTO debarment_types (code, display_text, is_system, default_value, can_be_added_manually) VALUES
-            ('MANUAL', 'Manual', 1, 1, 0),
-            ('OVERDUES', 'Overdues', 1, 0, 0),
-            ('SUSPENSION', 'Suspension', 1, 0, 0),
-            ('DISCHARGE', 'Discharge', 1, 0, 0);
+            INSERT IGNORE INTO debarment_types (code, display_text, is_system, is_default) VALUES
+            ('MANUAL', 'Manual', 0, 1),
+            ('OVERDUES', 'Overdues', 1, 0),
+            ('SUSPENSION', 'Suspension', 1, 0),
+            ('DISCHARGE', 'Discharge', 1, 0);
         });
         say $out "Added system debarment_types";
 

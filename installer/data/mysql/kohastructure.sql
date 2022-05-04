@@ -2086,8 +2086,7 @@ CREATE TABLE debarment_types (
     code varchar(50) NOT NULL PRIMARY KEY,
     display_text text NOT NULL,
     is_system tinyint(1) NOT NULL DEFAULT 0,
-    default_value tinyint(1) NOT NULL DEFAULT 0,
-    can_be_added_manually tinyint(1) NOT NULL DEFAULT 0
+    is_default tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

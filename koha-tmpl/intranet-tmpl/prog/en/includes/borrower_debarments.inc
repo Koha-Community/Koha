@@ -58,8 +58,12 @@
                         <label for="debarred_type">Type:</label>
                         <select name="debarred_type">
                             [% FOREACH code IN restriction_types.keys %]
-                                [% IF restriction_types.$code.can_be_added_manually %]
-                                    <option value="[% code | html %]">[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
+                                [% IF !restriction_types.$code.is_system %]
+                                   [% IF restriction_types.$code.is_default %]
+                                   <option value="[% code | html %]" selected>[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
+                                   [% ELSE %]
+                                   <option value="[% code | html %]">[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
+                                   [% END %]
                                 [% END %]
                             [% END %]
                         </select>
