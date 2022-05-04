@@ -27,14 +27,14 @@
                 <li>
                     <label>Status: </label>
                     <span>{{
-                        get_lib_from_av(av_statuses, agreement.status)
+                        get_lib_from_av(av_agreement_statuses, agreement.status)
                     }}</span>
                 </li>
                 <li>
                     <label>Closure reason:</label>
                     <span>{{
                         get_lib_from_av(
-                            av_closure_reasons,
+                            av_agreement_closure_reasons,
                             agreement.closure_reason
                         )
                     }}</span>
@@ -48,7 +48,7 @@
                     <label>Renewal priority:</label>
                     <span>{{
                         get_lib_from_av(
-                            av_renewal_priorities,
+                            av_agreement_renewal_priorities,
                             agreement.renewal_priority
                         )
                     }}</span>
@@ -101,13 +101,49 @@
                             >
                                 <td>{{ patron_to_html(role.patron) }}</td>
                                 <td>
+                                    {{ get_lib_from_av(av_agreement_user_roles, role.role) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+
+                <li>
+                    <label>Licenses</label>
+                    <table>
+                        <thead>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Physical location</th>
+                            <th>Notes</th>
+                            <th>URI</th>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(
+                                    agreement_license, counter
+                                ) in agreement.agreement_licenses"
+                                v-bind:key="counter"
+                            >
+                                <td>{{ agreement_license.license.name }}</td>
+                                <td>
                                     {{
-                                        av_agreement_user_roles.find(
-                                            (r) =>
-                                                r.authorised_value == role.role
-                                        ).lib
+                                        get_lib_from_av(
+                                            av_agreement_license_statuses,
+                                            agreement_license.status
+                                        )
                                     }}
                                 </td>
+                                <td>
+                                    {{
+                                        get_lib_from_av(
+                                            av_agreement_license_location,
+                                            agreement_license.physical_location
+                                        )
+                                    }}
+                                </td>
+                                <td>{{ agreement_license.notes }}</td>
+                                <td>{{ agreement_license.uri }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,7 +205,7 @@ export default {
 
         fetch(apiUrl, {
             headers: {
-                'x-koha-embed': 'periods,user_roles,user_roles.patron'
+                'x-koha-embed': 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'
             }
         })
             .then(res => res.json())
@@ -192,6 +228,8 @@ export default {
         av_agreement_closure_reasons: Array,
         av_agreement_renewal_priorities: Array,
         av_agreement_user_roles: Array,
+        av_agreement_license_statuses: Array,
+        av_agreement_license_location: Array,
     },
     components: {
         AgreementPeriods,
