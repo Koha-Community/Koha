@@ -1186,6 +1186,8 @@ my $issn = $marcissns->[0] || '';
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{title} =~ s/\/+$//; # remove trailing slash
     $dat->{title} =~ s/\s+$//; # remove trailing space
+    my $oclc_no = $record->subfield('035','a') // q{};
+    $oclc_no =~ s/\([^)]*\)//;
     $search_for_title = parametrized_url(
         $search_for_title,
         {
@@ -1195,6 +1197,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             ISSN          => $issn,
             CONTROLNUMBER => $marccontrolnumber,
             BIBLIONUMBER  => $biblionumber,
+            OCLC_NO       => $oclc_no,
         }
     );
     $template->param('OPACSearchForTitleIn' => $search_for_title);
