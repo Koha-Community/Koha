@@ -866,7 +866,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         // FIXME eval here is bad and dangerous, how do we workaround that?
                         $(eval(filter_type)).each(function(){
                             let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
-                            if ( existing_search == this._id ) {
+                            if ( existing_search === this._id ) {
                                 o.prop("selected", "selected");
                             }
                             o.appendTo(select);
