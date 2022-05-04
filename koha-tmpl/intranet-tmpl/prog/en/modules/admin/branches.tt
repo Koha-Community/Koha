@@ -58,6 +58,16 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                 </a>
             </li>
 
+        [% ELSIF op == 'view' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    [% library.branchname | html %]
+                </a>
+            </li>
+
         [% ELSE %]
             <li>
                 <a href="#" aria-current="page">
@@ -117,9 +127,12 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     </div>
 [% END %]
 
-[% IF op == 'list' %]
+[% IF op == 'list' || op == 'view' %]
     <div id="toolbar" class="btn-toolbar">
         <a class="btn btn-default" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
+        [% IF op == 'view' %]
+            <a class="btn btn-default" id="editbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form&branchcode=[% library.branchcode | uri %]"><i class="fa fa-pencil"></i> Edit library</a>
+        [% END %]
     </div>
 [% END %]
 
@@ -324,6 +337,141 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     [% END %]
 [% END %]
 
+[% IF op == 'view' %]
+    <h1>[% library.branchname | html %]</h1>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="rows">
+                <ol>
+                    <li>
+                        <span class="label">Library code: </span>
+                        [% library.branchcode | html %]
+                    </li>
+                    <li>
+                        <span class="label">Name: </span>
+                        [% library.branchname | html %]
+                    </li>
+                    <li>
+                        <span class="label">Category:</span>
+                        [% category.categoryname | html %]
+                    </li>
+                    <li>
+                        <span class="label">Address line 1: </span>
+                        [% library.branchaddress1 | html %]
+                    </li>
+                    <li>
+                        <span class="label">Address line 2: </span>
+                        [% library.branchaddress2 | html %]
+                    </li>
+                    <li>
+                        <span class="label">Address line 3: </span>
+                        [% library.branchaddress3 | html %]
+                    </li>
+                    <li>
+                        <span class="label">City: </span>
+                        [% library.branchcity | html %]
+                    </li>
+                    <li>
+                        <span class="label">State: </span>
+                        [% library.branchstate | html %]
+                    </li>
+                    <li>
+                        <span class="label">ZIP/Postal code: </span>
+                        [% library.branchzip | html %]
+                    </li>
+                    <li>
+                        <span class="label">Country: </span>
+                        [% library.branchcountry | html %]
+                    </li>
+                    <li>
+                        <span class="label">Phone: </span>
+                        [% library.branchphone | html %]
+                    </li>
+                    <li>
+                        <span class="label">Fax: </span>
+                        [% library.branchfax | html %]
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="rows">
+                <ol>
+                    <li>
+                        <span class="label">Email: </span>
+                        [% IF ( library.branchemail ) %]
+                            <a href="mailto:[% library.branchemail | url %]">[% library.branchemail | html %]</a>
+                        [% END %]
+                    </li>
+                    <li>
+                        <span class="label">ILL staff email: </span>
+                        [% IF ( library.branchillemail ) %]
+                            <a href="mailto:[% library.branchillemail | url %]">[% library.branchillemail | html %]</a>
+                        [% END %]
+                    </li>
+                    <li>
+                        <span class="label">Reply-To: </span>
+                        [% IF ( library.branchreplyto ) %]
+                            <a href="mailto:[% library.branchreplyto | url %]">[% library.branchreplyto | html %]</a>
+                        [% END %]
+                    </li>
+                    <li>
+                        <span class="label">Return-Path: </span>
+                        [% library.branchreturnpath | html %]
+                    </li>
+                    <li>
+                        <span class="label">SMTP server: </span>
+                        [% smtp_server.name | html %]
+                    </li>
+                    <li>
+                        <span class="label">URL: </span>
+                        [% IF ( library.branchurl ) %]
+                            <a href="[% library.branchurl | url %]" target="_blank">[% library.branchurl | html %]</a>
+                        [% END %]
+                    </li>
+                    <li>
+                        <span class="label">IP: </span>
+                        [% library.branchip | html %]
+                    </li>
+                    <li>
+                        <span class="label">MARC organization code</span>
+                        [% library.marcorgcode | html %]
+                    </li>
+                    <li>
+                        <span class="label">Notes: </span>
+                        [% library.branchnotes | html %]
+                    </li>
+                    <li>
+                        <span class="label">Pickup location: </span>
+                        [% IF ( library.pickup_location ) %]
+                            Yes
+                        [% ELSE %]
+                            No
+                        [% END %]
+                    </li>
+                    <li>
+                        <span class="label">Public: </span>
+                        [% IF ( library.public ) %]
+                            Yes
+                        [% ELSE %]
+                            No
+                        [% END %]
+                    </li>
+                </ol>
+            </div> <!-- /.rows -->
+        </div> <!-- /.col-sm-6 -->
+    </div> <!-- /.row -->
+    [% IF ( library.opac_info ) %]
+        <hr />
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>OPAC information</h2>
+                [% library.opac_info | $raw %]
+            </div>
+        </div>
+    [% END %]
+[% END %]
+
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -369,7 +517,10 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     {
                         "data": "name",
                         "searchable": true,
-                        "orderable": true
+                        "orderable": true,
+                        "render": function( data, type, row, meta ) {
+                            return "<a href=\"/cgi-bin/koha/admin/branches.pl?op=view&branchcode=" + encodeURIComponent( row.library_id ) + "\">" + row.name.escapeHtml() + "</a>";
+                        }
                     },
                     {
                         "data": "library_id",

@@ -53,6 +53,11 @@ if ( $op eq 'add_form' ) {
         library      => Koha::Libraries->find($branchcode),
         smtp_servers => Koha::SMTP::Servers->search,
     );
+} elsif ( $branchcode && $op eq 'view' ) {
+    my $library = Koha::Libraries->find($branchcode);
+    $template->param(
+        library      => $library,
+    );
 } elsif ( $op eq 'add_validate' ) {
     my @fields = qw(
       branchname
