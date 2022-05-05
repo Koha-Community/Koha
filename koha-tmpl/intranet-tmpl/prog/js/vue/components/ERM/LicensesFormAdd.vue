@@ -99,7 +99,7 @@
                 <a
                     role="button"
                     class="cancel"
-                    @click="$emit('switch-view', 'list')"
+                    @click="this.setCurrentView('list')"
                     >Cancel</a
                 >
             </fieldset>
@@ -110,6 +110,7 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import { useAVStore } from "../../stores/authorised_values"
+import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -121,9 +122,13 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
+        const mainStore = useMainStore()
+        const { setMessage, setError, resetMessages, setCurrentView } = mainStore
+
         return {
             av_license_types,
             av_license_statuses,
+            setMessage, setError, resetMessages, setCurrentView,
         }
     },
     data() {
@@ -152,18 +157,14 @@ export default {
         if (!this.license_id) return
         const apiUrl = '/api/v1/erm/licenses/' + this.license_id
 
-        fetch(apiUrl, {
-            //headers: {
-            //    'x-koha-embed': 'periods,user_roles,user_roles.patron'
-            //}
-        })
+        fetch(apiUrl)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.license = result
                 },
                 (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }
             )
     },
@@ -195,18 +196,19 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.$emit('license-updated')
+                        this.setCurrentView('list')
+                        this.setMessage('License updated')
                     } else if (response.status == 201) {
-                        this.$emit('license-created')
+                        this.setCurrentView('list')
+                        this.setMessage('License created')
                     } else {
-                        this.$emit('set-error', response.message || response.statusText)
+                    this.setError( response.message || response.statusText)
                     }
                 }, (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }).catch(e => { console.log(e) })
         },
     },
-    emits: ['license-created', 'license-updated', 'set-error', 'switch-view'],
     props: {
         license_id: Number,
     },

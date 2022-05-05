@@ -13,6 +13,7 @@ import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
+import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -23,9 +24,14 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
+        const mainStore = useMainStore()
+        const { current_object_id } = storeToRefs(mainStore)
+        const { setCurrentView } = mainStore
+
         return {
             av_license_types,
             av_license_statuses,
+            setCurrentView, current_object_id,
         }
     },
     created() {
@@ -39,7 +45,7 @@ export default {
                     this.initialized = true
                 },
                 (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }
             )
     },
@@ -195,16 +201,16 @@ export default {
     },
     methods: {
         show_license: function (license_id) {
-            this.$emit('set-current-license-id', license_id)
-            this.$emit('switch-view', 'show')
+            this.setCurrentView('show')
+            this.current_object_id = license_id
         },
         edit_license: function (license_id) {
-            this.$emit('set-current-license-id', license_id)
-            this.$emit('switch-view', 'add-form')
+            this.setCurrentView('add-form')
+            this.current_object_id = license_id
         },
         delete_license: function (license_id) {
-            this.$emit('set-current-license-id', license_id)
-            this.$emit('switch-view', 'confirm-delete-form')
+            this.setCurrentView('confirm-delete-form')
+            this.current_object_id = license_id
         },
     },
     props: {

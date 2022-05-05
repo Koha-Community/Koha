@@ -37,14 +37,10 @@
                     <label>Ended on:</label>
                     <span>{{ format_date(license.ended_on) }}</span>
                 </li>
-
             </ol>
         </fieldset>
         <fieldset class="action">
-            <a
-                role="button"
-                class="cancel"
-                @click="$emit('switch-view', 'list')"
+            <a role="button" class="cancel" @click="this.setCurrentView('list')"
                 >Close</a
             >
         </fieldset>
@@ -53,6 +49,7 @@
 
 <script>
 import { useAVStore } from "../../stores/authorised_values"
+import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -71,11 +68,15 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
+        const mainStore = useMainStore()
+        const { setError, setCurrentView } = mainStore
+
         return {
             format_date,
             get_lib_from_av,
             av_license_types,
             av_license_statuses,
+            setError, setCurrentView,
         }
     },
     data() {
@@ -95,24 +96,19 @@ export default {
         if (!this.license_id) return
         const apiUrl = '/api/v1/erm/licenses/' + this.license_id
 
-        fetch(apiUrl, {
-            //headers: {
-            //    'x-koha-embed': 'periods,user_roles,user_roles.patron'
-            //}
-        })
+        fetch(apiUrl)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.license = result
                 },
                 (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }
             )
     },
     methods: {
     },
-    emits: ['set-error', 'switch-view'],
     props: {
         license_id: Number,
     },

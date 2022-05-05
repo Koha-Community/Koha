@@ -58,7 +58,13 @@
 </template>
 
 <script>
+import { useMainStore } from "../../stores/main"
 export default {
+    setup() {
+        const mainStore = useMainStore()
+        const { setError } = mainStore
+        return { setError }
+    },
     name: 'AgreementUserRoles',
     props: {
         av_agreement_user_roles: Array,
@@ -103,10 +109,9 @@ export default {
                         this.user_roles[c].user_id = result.patron_id
                     }).catch(
                         (error) => {
-                            this.$emit('set-error', error)
+                            this.setError(error)
                         }
                 )
-
         }
     },
 }

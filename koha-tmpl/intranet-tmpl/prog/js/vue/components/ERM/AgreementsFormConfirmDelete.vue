@@ -17,7 +17,10 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" variant="primary" value="Yes, delete" />
-                <a role="button" class="cancel" @click="$emit('switch-view', 'list')"
+                <a
+                    role="button"
+                    class="cancel"
+                    @click="this.setCurrentView('list')"
                     >No, do not delete</a
                 >
             </fieldset>
@@ -26,8 +29,16 @@
 </template>
 
 <script>
+import { useMainStore } from "../../stores/main"
 
 export default {
+    setup() {
+        const mainStore = useMainStore()
+        const { setMessage, setError, setCurrentView } = mainStore
+        return {
+            setMessage, setError, setCurrentView,
+        }
+    },
     data() {
         return {
             agreement: {},
@@ -44,7 +55,7 @@ export default {
                 },
             ).catch(
                 (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }
             )
     },
@@ -65,19 +76,19 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            this.$emit('agreement-deleted')
+                            this.setMessage("Agreement deleted")
+                            this.setCurrentView('list')
                         } else {
-                            this.$emit('set-error', response.message || response.statusText)
+                            this.setError(response.message || response.statusText)
                         }
                     }
                 ).catch(
                     (error) => {
-                        this.$emit('set-error', error)
+                        this.setError(error)
                     }
                 )
         }
     },
-    emits: ['agreement-deleted', 'set-error', 'switch-view'],
     props: {
         agreement_id: Number
     },

@@ -14,20 +14,26 @@ import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
+import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
+
         const AVStore = useAVStore()
         const { av_agreement_statuses, av_agreement_closure_reasons, av_agreement_renewal_priorities } = storeToRefs(AVStore)
 
+        const mainStore = useMainStore()
+        const { current_object_id } = storeToRefs(mainStore)
+        const { setCurrentView } = mainStore
         return {
             vendors,
             av_agreement_statuses,
             av_agreement_closure_reasons,
             av_agreement_renewal_priorities,
+            setCurrentView, current_object_id,
         }
     },
     created() {
@@ -42,7 +48,7 @@ export default {
                 },
             ).catch(
                 (error) => {
-                    this.$emit('set-error', error)
+                    this.setError(error)
                 }
             )
     },
@@ -229,16 +235,16 @@ export default {
     },
     methods: {
         show_agreement: function (agreement_id) {
-            this.$emit('set-current-agreement-id', agreement_id)
-            this.$emit('switch-view', 'show')
+            this.setCurrentView('show')
+            this.current_object_id = agreement_id
         },
         edit_agreement: function (agreement_id) {
-            this.$emit('set-current-agreement-id', agreement_id)
-            this.$emit('switch-view', 'add-form')
+            this.setCurrentView('add-form')
+            this.current_object_id = agreement_id
         },
         delete_agreement: function (agreement_id) {
-            this.$emit('set-current-agreement-id', agreement_id)
-            this.$emit('switch-view', 'confirm-delete-form')
+            this.setCurrentView('confirm-delete-form')
+            this.current_object_id = agreement_id
         },
     },
     props: {
