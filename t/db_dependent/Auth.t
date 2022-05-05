@@ -35,6 +35,9 @@ my $dbh     = C4::Context->dbh;
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 t::lib::Mocks::mock_preference( 'GDPR_Policy', '' ); # Disabled
 
+# To silence useless warnings
+$ENV{REMOTE_ADDR} = '127.0.0.1';
+
 $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
@@ -148,7 +151,7 @@ subtest 'checkauth() tests' => sub {
         }
 
         t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
-        $patron->secret('one_secret');
+        $patron->encode_secret('one_secret');
         $patron->auth_method('password');
         $patron->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
@@ -509,7 +512,8 @@ subtest 'Check value of login_attempts in checkpw' => sub {
 };
 
 subtest '_timeout_syspref' => sub {
-    plan tests => 5;
+
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference('timeout', "100");
     is( C4::Auth::_timeout_syspref, 100, );
@@ -524,7 +528,10 @@ subtest '_timeout_syspref' => sub {
     is( C4::Auth::_timeout_syspref, 10*3600, );
 
     t::lib::Mocks::mock_preference('timeout', "10x");
-    is( C4::Auth::_timeout_syspref, 600, );
+    warning_is
+        { is( C4::Auth::_timeout_syspref, 600, ); }
+        "The value of the system preference 'timeout' is not correct, defaulting to 600",
+        'Bad values throw a warning and fallback to 600';
 };
 
 subtest 'check_cookie_auth' => sub {
