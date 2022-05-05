@@ -28,6 +28,20 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template name="tag_210-214">
+    <xsl:choose>
+      <xsl:when test="marc:datafield[@tag=210] and marc:datafield[@tag=214]">
+	<xsl:call-template name="tag_214" />
+      </xsl:when>
+      <xsl:when test="marc:datafield[@tag=214]">
+	<xsl:call-template name="tag_214" />
+      </xsl:when>
+      <xsl:when test="marc:datafield[@tag=210]">
+	<xsl:call-template name="tag_210" />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="tag_210">
     <span class="results_summary publication">
       <span class="label">Publication: </span>
@@ -153,6 +167,45 @@
         </span>
       </span>
     </xsl:for-each>
+    <xsl:call-template name="tag_214_r" />
+    <xsl:call-template name="tag_214_s" />
+  </xsl:template>
+
+  <xsl:template name="tag_214_s">
+    <xsl:if test="marc:datafield[@tag=214]/marc:subfield[@code='s']">
+      <span class="results_summary tag_214_s">
+	<span class="label">Printing and/or Publishing Information Transcribed as Found in the Colophon: </span>
+	<xsl:for-each select="marc:datafield[@tag=214]">
+	  <xsl:value-of select="marc:subfield[@code='s']"/>
+	  <xsl:choose>
+	    <xsl:when test="position()=last()">
+	      <xsl:text>.</xsl:text>
+	    </xsl:when>
+	    <xsl:otherwise><xsl:text>, </xsl:text>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:for-each>
+      </span>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="tag_214_r">
+    <xsl:if test="marc:datafield[@tag=214]/marc:subfield[@code='r']">
+      <span class="results_summary tag_214_r">
+	<span class="label">Printing and/or Publishing Information Transcribed as Found in the Main Source of
+	Information: </span>
+	<xsl:for-each select="marc:datafield[@tag=214]">
+	  <xsl:value-of select="marc:subfield[@code='r']"/>
+	  <xsl:choose>
+	    <xsl:when test="position()=last()">
+	      <xsl:text>.</xsl:text>
+	    </xsl:when>
+	    <xsl:otherwise><xsl:text>, </xsl:text>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:for-each>
+      </span>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="tag_215">

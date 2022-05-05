@@ -151,9 +151,7 @@
     <xsl:with-param name="spanclass">piece_analytic_level</xsl:with-param>
   </xsl:call-template>
 
-  <xsl:call-template name="tag_210" />
-
-  <xsl:call-template name="tag_214" />
+  <xsl:call-template name="tag_210-214" />
 
   <xsl:call-template name="tag_215" />
 
