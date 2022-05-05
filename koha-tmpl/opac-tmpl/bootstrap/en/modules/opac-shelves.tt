@@ -198,9 +198,11 @@
                     [% IF shelf AND op == 'view' %]
                         <h1>
                             [% shelf.shelfname | html %]
-                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint" aria-label="Subscribe to this list">
-                                <i class="fa fa-fw fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this list"></i>
-                            </a>
+                            [%  IF ( public ) %]
+                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint" aria-label="Subscribe to this list">
+                                    <i class="fa fa-fw fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this list"></i>
+                                </a>
+                            [% END %]
                         </h1>
 
                         [% IF ( itemsloop ) %]
