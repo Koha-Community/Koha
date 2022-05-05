@@ -109,8 +109,23 @@
 
 <script>
 import flatPickr from 'vue-flatpickr-component'
+import { useAVStore } from "../../stores/authorised_values"
+import { storeToRefs } from "pinia"
 
 export default {
+
+    setup() {
+        const AVStore = useAVStore()
+        const {
+            av_license_types,
+            av_license_statuses,
+        } = storeToRefs(AVStore)
+
+        return {
+            av_license_types,
+            av_license_statuses,
+        }
+    },
     data() {
         return {
             fp_config: flatpickr_defaults, dates_fixed: 0,
@@ -194,8 +209,6 @@ export default {
     emits: ['license-created', 'license-updated', 'set-error', 'switch-view'],
     props: {
         license_id: Number,
-        av_license_types: Array,
-        av_license_statuses: Array,
     },
     components: {
         flatPickr

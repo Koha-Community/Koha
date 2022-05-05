@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { useAVStore } from "../../stores/authorised_values"
+import { storeToRefs } from "pinia"
 
 export default {
     setup() {
@@ -62,9 +64,18 @@ export default {
             )
             return o ? o.lib : ""
         }
+
+        const AVStore = useAVStore()
+        const {
+            av_license_types,
+            av_license_statuses,
+        } = storeToRefs(AVStore)
+
         return {
             format_date,
-            get_lib_from_av
+            get_lib_from_av,
+            av_license_types,
+            av_license_statuses,
         }
     },
     data() {
@@ -104,8 +115,6 @@ export default {
     emits: ['set-error', 'switch-view'],
     props: {
         license_id: Number,
-        av_license_types: Array,
-        av_license_statuses: Array,
     },
     components: {
     },

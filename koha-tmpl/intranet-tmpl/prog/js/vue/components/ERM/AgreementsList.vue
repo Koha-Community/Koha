@@ -13,14 +13,21 @@ import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
+import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 
 export default {
     setup() {
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
+        const AVStore = useAVStore()
+        const { av_agreement_statuses, av_agreement_closure_reasons, av_agreement_renewal_priorities } = storeToRefs(AVStore)
+
         return {
             vendors,
+            av_agreement_statuses,
+            av_agreement_closure_reasons,
+            av_agreement_renewal_priorities,
         }
     },
     created() {
@@ -235,9 +242,6 @@ export default {
         },
     },
     props: {
-        av_agreement_statuses: Array,
-        av_agreement_closure_reasons: Array,
-        av_agreement_renewal_priorities: Array,
     },
     name: "AgreementsList",
 }

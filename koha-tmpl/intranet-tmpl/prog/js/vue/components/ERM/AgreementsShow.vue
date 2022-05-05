@@ -170,6 +170,7 @@
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import { useVendorStore } from "../../stores/vendors"
+import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -185,11 +186,27 @@ export default {
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
 
+        const AVStore = useAVStore()
+        const {
+            av_agreement_statuses,
+            av_agreement_closure_reasons,
+            av_agreement_renewal_priorities,
+            av_agreement_user_roles,
+            av_agreement_license_statuses,
+            av_agreement_license_location,
+        } = storeToRefs(AVStore)
+
         return {
             format_date,
             patron_to_html,
             get_lib_from_av,
             vendors,
+            av_agreement_statuses,
+            av_agreement_closure_reasons,
+            av_agreement_renewal_priorities,
+            av_agreement_user_roles,
+            av_agreement_license_statuses,
+            av_agreement_license_location,
         }
     },
     data() {
@@ -234,12 +251,6 @@ export default {
     emits: ['set-error', 'switch-view'],
     props: {
         agreement_id: Number,
-        av_agreement_statuses: Array,
-        av_agreement_closure_reasons: Array,
-        av_agreement_renewal_priorities: Array,
-        av_agreement_user_roles: Array,
-        av_agreement_license_statuses: Array,
-        av_agreement_license_location: Array,
     },
     components: {
         AgreementPeriods,

@@ -12,7 +12,22 @@
 import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
+import { useAVStore } from "../../stores/authorised_values"
+import { storeToRefs } from "pinia"
+
 export default {
+    setup() {
+        const AVStore = useAVStore()
+        const {
+            av_license_types,
+            av_license_statuses,
+        } = storeToRefs(AVStore)
+
+        return {
+            av_license_types,
+            av_license_statuses,
+        }
+    },
     created() {
         const apiUrl = '/api/v1/erm/licenses'
 

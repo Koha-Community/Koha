@@ -4,9 +4,6 @@
     <div class="dialog alert" v-if="error">{{ error }}</div>
     <List
         v-if="op == 'list'"
-        :av_agreement_statuses="agreement_statuses"
-        :av_agreement_closure_reasons="agreement_closure_reasons"
-        :av_agreement_renewal_priorities="agreement_renewal_priorities"
         @set-current-agreement-id="setCurrentAgreementID"
         @switch-view="switchView"
         @set-error="setError"
@@ -14,24 +11,12 @@
     <Show
         v-if="op == 'show'"
         :agreement_id="agreement_id"
-        :av_agreement_statuses="agreement_statuses"
-        :av_agreement_closure_reasons="agreement_closure_reasons"
-        :av_agreement_renewal_priorities="agreement_renewal_priorities"
-        :av_agreement_user_roles="agreement_user_roles"
-        :av_agreement_license_statuses="agreement_license_statuses"
-        :av_agreement_license_location="agreement_license_location"
         @switch-view="switchView"
         @set-error="setError"
     />
     <AddForm
         v-if="op == 'add-form'"
         :agreement_id="agreement_id"
-        :av_agreement_statuses="agreement_statuses"
-        :av_agreement_closure_reasons="agreement_closure_reasons"
-        :av_agreement_renewal_priorities="agreement_renewal_priorities"
-        :av_agreement_user_roles="agreement_user_roles"
-        :av_agreement_license_statuses="agreement_license_statuses"
-        :av_agreement_license_location="agreement_license_location"
         @agreement-created="agreementCreated"
         @agreement-updated="agreementUpdated"
         @switch-view="switchView"
@@ -54,7 +39,6 @@ import AddForm from "./AgreementsFormAdd.vue"
 import ConfirmDeleteForm from "./AgreementsFormConfirmDelete.vue"
 import { ref, reactive, computed } from "vue"
 
-
 export default {
     data() {
         return {
@@ -62,12 +46,6 @@ export default {
             op: "list",
             message: null,
             error: null,
-            agreement_statuses,
-            agreement_closure_reasons,
-            agreement_renewal_priorities,
-            agreement_user_roles,
-            agreement_license_statuses,
-            agreement_license_location,
         }
     },
     methods: {
