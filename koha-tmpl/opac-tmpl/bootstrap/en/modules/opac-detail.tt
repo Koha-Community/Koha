@@ -1934,7 +1934,7 @@
                 var branchcode = $(this).data("branchcode");
                 var url = $(this).attr("href");
                 $.ajax({
-                    url: "/api/v1/libraries/" + branchcode,
+                    url: "/api/v1/public/libraries/" + branchcode,
                     type: 'GET',
                     dataType: 'json',
                     success: function(result) {
