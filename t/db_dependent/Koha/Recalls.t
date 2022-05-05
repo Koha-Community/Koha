@@ -146,19 +146,19 @@ is( $messages_count, 3, "RETURN_RECALLED_ITEM notice successfully sent to checko
 my $message = Koha::Recalls->move_recall;
 is( $message, 'no recall_id provided', "Can't move a recall without specifying which recall" );
 
-$message = Koha::Recalls->move_recall({ recall_id => $recall->id });
+$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id });
 is( $message, 'no action provided', "No clear action to perform on recall" );
-$message = Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'whatever' });
+$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'whatever' });
 is( $message, 'no action provided', "Legal action not provided to perform on recall" );
 
 $recall->set_waiting({ item => $item1 });
 ok( $recall->waiting, "Recall is waiting" );
-Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'revert' });
-$recall = Koha::Recalls->find( $recall->id );
+Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'revert' });
+$recall = Koha::Recalls->find( $recall->recall_id );
 ok( $recall->requested, "Recall reverted to requested with move_recall" );
 
-Koha::Recalls->move_recall({ recall_id => $recall->id, action => 'cancel' });
-$recall = Koha::Recalls->find( $recall->id );
+Koha::Recalls->move_recall({ recall_id => $recall->recall_id, action => 'cancel' });
+$recall = Koha::Recalls->find( $recall->recall_id );
 ok( $recall->cancelled, "Recall cancelled with move_recall" );
 
 ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
@@ -169,8 +169,8 @@ ok( $recall->cancelled, "Recall cancelled with move_recall" );
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
-$message = Koha::Recalls->move_recall({ recall_id => $recall->id, item => $item2, borrowernumber => $patron1->borrowernumber });
-$recall = Koha::Recalls->find( $recall->id );
+$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, item => $item2, borrowernumber => $patron1->borrowernumber });
+$recall = Koha::Recalls->find( $recall->recall_id );
 ok( $recall->fulfilled, "Recall fulfilled with move_recall" );
 
 $schema->storage->txn_rollback();
@@ -191,7 +191,7 @@ subtest 'filter_by_current() and filter_by_finished() tests' => sub {
 
     my $recalls = Koha::Recalls->search(
         {
-            id => [
+            recall_id => [
                 $in_transit->id,
                 $overdue->id,
                 $requested->id,
@@ -201,7 +201,7 @@ subtest 'filter_by_current() and filter_by_finished() tests' => sub {
                 $fulfilled->id,
             ]
         },
-        { order_by => [ 'id' ] }
+        { order_by => [ 'recall_id' ] }
     );
 
     is( $recalls->count, 7, 'Resultset count is correct' );

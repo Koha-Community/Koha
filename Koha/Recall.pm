@@ -354,7 +354,7 @@ sub set_waiting {
             biblio => $self->biblio_id,
             borrowers => $self->patron_id,
             items => $itemnumber,
-            recalls => $self->id,
+            recalls => $self->recall_id,
         },
     );
 
