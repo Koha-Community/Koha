@@ -1194,16 +1194,19 @@
                 }
             });
 
-            [% SET active = clubs ? 1 : 0 %]
-            /* Set active tab based on whether a club search was submitted */
-            var tabs = $("#circ_holds_select li:eq(" + [% active | $raw %] + ") a").tab("show");
-            $( tabs[0].hash ).find("input.focus").focus();
+            if( $("#circ_holds_select").length > 0 ){
+                [% SET active = clubs ? 1 : 0 %]
+                /* Set active tab based on whether a club search was submitted */
+                var tabs = $("#circ_holds_select li:eq(" + [% active | $raw %] + ") a").tab("show");
+                $( tabs[0].hash ).find("input.focus").focus();
 
-            /* Change active focus when tabs change */
-            $("#circ_holds_select a[data-toggle='tab']").on("shown.bs.tab", function (e) {
-                active_tab = e.target.hash;
-                $( active_tab ).find("input.focus").focus();
-            });
+                /* Change active focus when tabs change */
+                $("#circ_holds_select a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                    active_tab = e.target.hash;
+                    $( active_tab ).find("input.focus").focus();
+                });
+            }
+
 
             function ToggleHoldsToPlace() {
                 if ( $("#requestany").prop('checked') ) {
