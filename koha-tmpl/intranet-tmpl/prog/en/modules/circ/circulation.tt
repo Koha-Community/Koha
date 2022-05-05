@@ -789,37 +789,29 @@
                 <div id="patronlists" class="toptabs">
                     <ul>
                         <li>
-                            [% IF ( issuecount ) %]
-                                <a href="#checkouts">[% issuecount | html %] Checkout(s)</a>
-                            [% ELSE %]
-                                <a href="#checkouts">0 Checkouts</a>
-                            [% END %]
+                            <a href="#checkouts">Checkouts ([% issuecount || 0 | html %])</a>
                         </li>
 
                         [% IF relatives_issues_count %]
-                            <li><a id="relatives-issues-tab" href="#relatives-issues">[% relatives_issues_count | html %] Relatives' checkouts</a></li>
+                            <li>
+                                <a id="relatives-issues-tab" href="#relatives-issues">Relatives' checkouts ([% relatives_issues_count | html %])</a>
+                            </li>
                         [% END %]
 
                         <li>
-                            [% IF ( holds_count ) %]
-                                <a href="#reserves" id="holds-tab">[% holds_count | html %] Hold(s)</a>
-                            [% ELSE %]
-                                <a href="#reserves" id="holds-tab">0 Holds</a>
-                            [% END %]
+                            <a href="#reserves" id="holds-tab">Holds ([% holds_count || 0 | html %])</a>
                         </li>
 
                         [% IF Koha.Preference('UseRecalls') %]
                             <li>
-                                <a href="#recalls" id="recalls-tab">
-                                    [% recalls.count | html %] Recalls
-                                </a>
+                                <a href="#recalls" id="recalls-tab">Recalls ([% recalls.count || 0 | html %])</a>
                             </li>
                         [% END %]
 
                         [% IF Koha.Preference('ArticleRequests') %]
                             [% SET current_article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current' ) %]
                             <li>
-                                <a href="#article-requests" id="article-requests-tab"> [% current_article_requests.count | html %] Article requests</a>
+                                <a href="#article-requests" id="article-requests-tab">Article requests ([% current_article_requests.count || 0 | html %])</a>
                             </li>
                         [% END %]
 
@@ -827,8 +819,8 @@
                             <li>
                                 [% IF ( patron.return_claims.count ) %]
                                     <a href="#return-claims" id="return-claims-tab">
-                                        Claim(s)
-                                        [% IF patron.return_claims.resolved.count == 0 %]
+                                        Claims
+                                        ([% IF patron.return_claims.resolved.count == 0 %]
                                             <span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
                                         [% ELSE %]
                                             <span title="Resolved claims" class="label label-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
@@ -837,19 +829,19 @@
                                             <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
                                         [% ELSE %]
                                             <span title="Unresolved claims" class="label label-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
-                                        [% END %]
+                                        [% END %])
                                     </a>
                                 [% ELSE %]
                                     <a href="#return-claims" id="return-claims-tab">
-                                        Claim(s)
-                                        <span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">0</span>
-                                        <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">0</span>
+                                        Claims
+                                        (<span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">0</span>
+                                        <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">0</span>)
                                     </a>
                                 [% END %]
                             </li>
                         [% END %]
 
-                        <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.count | html %] Restrictions</a></li>
+                        <li><a id="debarments-tab-link" href="#reldebarments">Restrictions ([% debarments.count || 0 | html %])</a></li>
 
                         [% SET enrollments = patron.get_club_enrollments %]
                         [% SET enrollable  = patron.get_enrollable_clubs(0) %] <!-- 0 => not OPAC -->
