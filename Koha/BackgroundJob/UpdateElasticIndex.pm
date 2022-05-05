@@ -79,6 +79,7 @@ sub process {
 
         }
     } else {
+        $self->step;
         # FIXME This is not correct if some record_ids have been skipped
         $report->{total_success} = scalar @record_ids;
     }
