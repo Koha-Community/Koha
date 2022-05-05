@@ -148,7 +148,9 @@ subtest 'checkauth() tests' => sub {
         }
 
         t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
-        $patron->auth_method('password')->store;
+        $patron->secret('one_secret');
+        $patron->auth_method('password');
+        $patron->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
