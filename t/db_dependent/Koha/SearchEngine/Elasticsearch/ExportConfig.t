@@ -58,7 +58,7 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 0,
-        sort => undef
+        sort => 0
     } );
 
 $marc_field = Koha::SearchMarcMaps->find_or_create(
@@ -72,7 +72,7 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 0,
-        sort => undef
+        sort => 0
     } );
 
 $marc_field = Koha::SearchMarcMaps->find_or_create(
@@ -86,7 +86,7 @@ $search_field->add_to_search_marc_maps($marc_field,
     {
         facet => 0,
         suggestible => 1,
-        sort => undef
+        sort => 0
     } );
 
 my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings();
@@ -105,14 +105,14 @@ is( $f212_map->{marc_field}, 212, 'First mapping is on field 212');
 is( $f212_map->{marc_type}, 'marc21', 'First mapping is for marc21');
 is( $f212_map->{facet}, '', 'First mapping facet is empty');
 is( $f212_map->{suggestible}, '', 'First mapping is not suggestible');
-is( $f212_map->{sort}, undef, 'First mapping is not sortable');
+is( $f212_map->{sort}, 0, 'First mapping is not sortable');
 
 my $f247_map = $mappings->{biblios}{title}{mappings}[1];
 is( $f247_map->{marc_field}, 247, 'Second mapping is on field 247');
 is( $f247_map->{marc_type}, 'marc21', 'Second mapping is for marc21');
 is( $f247_map->{facet}, '', 'Second mapping facet is empty');
 is( $f247_map->{suggestible}, '', 'Second mapping is not suggestible');
-is( $f247_map->{sort}, undef, 'Second mapping is not sortable');
+is( $f247_map->{sort}, 0, 'Second mapping is not sortable');
 
 $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings('unimarc');
 
