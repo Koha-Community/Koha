@@ -4,7 +4,6 @@
     <div class="dialog alert" v-if="error">{{ error }}</div>
     <List
         v-if="op == 'list'"
-        :vendors="vendors"
         :av_agreement_statuses="agreement_statuses"
         :av_agreement_closure_reasons="agreement_closure_reasons"
         :av_agreement_renewal_priorities="agreement_renewal_priorities"
@@ -15,7 +14,6 @@
     <Show
         v-if="op == 'show'"
         :agreement_id="agreement_id"
-        :vendors="vendors"
         :av_agreement_statuses="agreement_statuses"
         :av_agreement_closure_reasons="agreement_closure_reasons"
         :av_agreement_renewal_priorities="agreement_renewal_priorities"
@@ -28,7 +26,6 @@
     <AddForm
         v-if="op == 'add-form'"
         :agreement_id="agreement_id"
-        :vendors="vendors"
         :av_agreement_statuses="agreement_statuses"
         :av_agreement_closure_reasons="agreement_closure_reasons"
         :av_agreement_renewal_priorities="agreement_renewal_priorities"
@@ -55,8 +52,8 @@ import List from "./AgreementsList.vue"
 import Show from "./AgreementsShow.vue"
 import AddForm from "./AgreementsFormAdd.vue"
 import ConfirmDeleteForm from "./AgreementsFormConfirmDelete.vue"
+import { ref, reactive, computed } from "vue"
 
-import { reactive, computed } from "vue"
 
 export default {
     data() {
@@ -65,7 +62,6 @@ export default {
             op: "list",
             message: null,
             error: null,
-            vendors: [],
             agreement_statuses,
             agreement_closure_reasons,
             agreement_renewal_priorities,
@@ -73,22 +69,6 @@ export default {
             agreement_license_statuses,
             agreement_license_location,
         }
-    },
-    beforeCreate() {
-        // FIXME it's not only called on setup, but setup() does not have 'this'.
-        const apiUrl = "/api/v1/acquisitions/vendors"
-
-        fetch(apiUrl)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    this.vendors = result
-            }).catch(
-                (error) => {
-                    this.$emit('set-error', error)
-                }
-            )
-
     },
     methods: {
         switchView(view) {

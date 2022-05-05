@@ -101,7 +101,12 @@
                             >
                                 <td>{{ patron_to_html(role.patron) }}</td>
                                 <td>
-                                    {{ get_lib_from_av(av_agreement_user_roles, role.role) }}
+                                    {{
+                                        get_lib_from_av(
+                                            av_agreement_user_roles,
+                                            role.role
+                                        )
+                                    }}
                                 </td>
                             </tr>
                         </tbody>
@@ -164,6 +169,8 @@
 <script>
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
 
 export default {
     setup() {
@@ -175,10 +182,14 @@ export default {
             )
             return o ? o.lib : ""
         }
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+
         return {
             format_date,
             patron_to_html,
-            get_lib_from_av
+            get_lib_from_av,
+            vendors,
         }
     },
     data() {
@@ -223,7 +234,6 @@ export default {
     emits: ['set-error', 'switch-view'],
     props: {
         agreement_id: Number,
-        vendors: Array,
         av_agreement_statuses: Array,
         av_agreement_closure_reasons: Array,
         av_agreement_renewal_priorities: Array,

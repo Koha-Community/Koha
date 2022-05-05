@@ -165,7 +165,9 @@
                     />
                     <AgreementLicenses
                         :agreement_licenses="agreement.agreement_licenses"
-                        :av_agreement_license_statuses="av_agreement_license_statuses"
+                        :av_agreement_license_statuses="
+                            av_agreement_license_statuses
+                        "
                         :av_agreement_license_location="
                             av_agreement_license_location
                         "
@@ -189,8 +191,17 @@
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
 
 export default {
+    setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+        return {
+            vendors,
+        }
+    },
     data() {
         return {
             agreement: {
@@ -285,7 +296,6 @@ export default {
     emits: ['agreement-created', 'agreement-updated', 'set-error', 'switch-view'],
     props: {
         agreement_id: Number,
-        vendors: Array,
         av_agreement_statuses: Array,
         av_agreement_closure_reasons: Array,
         av_agreement_renewal_priorities: Array,

@@ -30,7 +30,6 @@
                                         Licenses</router-link
                                     >
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -42,15 +41,34 @@
 
 <script>
 import Breadcrumb from "./Breadcrumb.vue"
-
-
+import { useVendorStore } from "../../stores/vendors"
 import { reactive, computed } from "vue"
 
 export default {
+    setup() {
+        const vendorStore = useVendorStore()
+        return {
+            vendorStore
+        }
+    },
     data() {
         return {
             component: "agreement",
         }
+    },
+    beforeCreate() {
+        const apiUrl = "/api/v1/acquisitions/vendors"
+
+        fetch(apiUrl)
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    this.vendorStore.vendors = result
+                },
+                (error) => {
+                    this.$emit("set-error", error)
+                }
+            )
     },
     methods: {
         switchComponent(component) {

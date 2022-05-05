@@ -12,7 +12,17 @@
 import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
+
 export default {
+    setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+        return {
+            vendors,
+        }
+    },
     created() {
         const apiUrl = '/api/v1/erm/agreements'
 
@@ -225,7 +235,6 @@ export default {
         },
     },
     props: {
-        vendors: Array,
         av_agreement_statuses: Array,
         av_agreement_closure_reasons: Array,
         av_agreement_renewal_priorities: Array,
