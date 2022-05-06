@@ -841,7 +841,9 @@
                             </li>
                         [% END %]
 
-                        <li><a id="debarments-tab-link" href="#reldebarments">Restrictions ([% debarments.count || 0 | html %])</a></li>
+                        <li>
+                            <a id="debarments-tab-link" href="#reldebarments">Restrictions ([% debarments.count || 0 | html %])</a>
+                        </li>
 
                         [% SET enrollments = patron.get_club_enrollments %]
                         [% SET enrollable  = patron.get_enrollable_clubs(0) %] <!-- 0 => not OPAC -->
