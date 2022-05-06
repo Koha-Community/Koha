@@ -2110,7 +2110,7 @@ sub AddReturn {
                 (!defined $item->location && $update_loc_rules->{_ALL_} ne "")
                ) {
                 $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
-                $item->location($update_loc_rules->{_ALL_})->store({ skip_record_index => 1, skip_holds_queue => 1});
+                $item->location($update_loc_rules->{_ALL_})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1});
             }
         }
         else {
@@ -2119,7 +2119,7 @@ sub AddReturn {
                 if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
                 if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
                     $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
-                    $item->location($update_loc_rules->{$key})->store({ skip_record_index => 1, skip_holds_queue => 1});
+                    $item->location($update_loc_rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1});
                     last;
                 }
             }
