@@ -16,14 +16,12 @@ return {
             $dbh->do(q{
                 ALTER TABLE borrowers ADD password_expiration_date DATE NULL DEFAULT NULL AFTER dateexpiry
             });
-            # Print useful stuff here
             say $out "Added password_expiration_date field to borrowers";
         }
         unless( column_exists('deletedborrowers', 'password_expiration_date') ){
             $dbh->do(q{
                 ALTER TABLE deletedborrowers ADD password_expiration_date DATE NULL DEFAULT NULL AFTER dateexpiry
             });
-            # Print useful stuff here
             say $out "Added password_expiration_date field to borrowers";
         }
     },
