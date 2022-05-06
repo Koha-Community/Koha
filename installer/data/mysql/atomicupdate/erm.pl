@@ -93,29 +93,62 @@ return {
                 ('ERM_AGREEMENT_USER_ROLES', 'subject_specialist', 'Subject specialist')
         });
 
+        unless ( TableExists('erm_licenses') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_licenses` (
+                    `license_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `name` VARCHAR(255) NOT NULL COMMENT 'name of the license',
+                    `description` LONGTEXT DEFAULT NULL COMMENT 'description of the license',
+                    `type` VARCHAR(80) NOT NULL COMMENT 'type of the license',
+                    `status` VARCHAR(80) NOT NULL COMMENT 'current status of the license',
+                    `started_on` DATE COMMENT 'start of the license',
+                    `ended_on` DATE COMMENT 'end of the license',
+                    PRIMARY KEY(`license_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
         unless ( TableExists('erm_agreement_licenses') ) {
             $dbh->do(q{
                 CREATE TABLE `erm_agreement_licenses` (
                     `agreement_license_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                     `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    `license_id` INT(11) NOT NULL COMMENT 'link to the license',
                     `status` VARCHAR(80) NOT NULL COMMENT 'current status of the license',
-                    `controlling` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'is a controlling license',
-                    `physical_location` VARCHAR(80) NOT NULL COMMENT 'physical location of the license',
+                    `physical_location` VARCHAR(80) DEFAULT NULL COMMENT 'physical location of the license',
                     `notes` mediumtext DEFAULT NULL COMMENT 'notes about this license',
                     `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the license',
-                    CONSTRAINT `erm_agreement_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_licenses_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     PRIMARY KEY(`agreement_license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
         $dbh->do(q{
+            INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+            VALUES
+                ('ERM_LICENSE_TYPE', 1),
+                ('ERM_LICENSE_STATUS', 1),
+                ('ERM_AGREEMENT_LICENSE_STATUS', 1),
+                ('ERM_AGREEMENT_LICENSE_LOCATION', 1);
+        });
+
+        $dbh->do(q{
             INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
             VALUES
+                ('ERM_LICENSE_TYPE', 'local', 'Local'),
+                ('ERM_LICENSE_TYPE', 'consortial', 'Consortial'),
+                ('ERM_LICENSE_TYPE', 'national', 'National'),
+                ('ERM_LICENSE_TYPE', 'alliance', 'Alliance'),
+                ('ERM_LICENSE_STATUS', 'in_negotiation', 'In negotiation'),
+                ('ERM_LICENSE_STATUS', 'not_yet_active', 'Not yet active'),
+                ('ERM_LICENSE_STATUS', 'active', 'Active'),
+                ('ERM_LICENSE_STATUS', 'rejected', 'Rejected'),
+                ('ERM_LICENSE_STATUS', 'expired', 'Expired'),
                 ('ERM_AGREEMENT_LICENSE_STATUS', 'controlling', 'Controlling'),
                 ('ERM_AGREEMENT_LICENSE_STATUS', 'future', 'Future'),
                 ('ERM_AGREEMENT_LICENSE_STATUS', 'history', 'Historic'),
                 ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Filing cabinet'),
-                ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Cupboard');
+                ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard');
         });
 
     },

@@ -101,7 +101,7 @@ VALUES
     ('ERM_LICENSE_TYPE', 'consortial', 'Consortial'),
     ('ERM_LICENSE_TYPE', 'national', 'National'),
     ('ERM_LICENSE_TYPE', 'alliance', 'Alliance'),
-    ('ERM_LICENSE_STATUS', 'in_negotiation', 'In negociation'),
+    ('ERM_LICENSE_STATUS', 'in_negotiation', 'In negotiation'),
     ('ERM_LICENSE_STATUS', 'not_yet_active', 'Not yet active'),
     ('ERM_LICENSE_STATUS', 'active', 'Active'),
     ('ERM_LICENSE_STATUS', 'rejected', 'Rejected'),
