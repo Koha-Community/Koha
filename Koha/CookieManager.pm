@@ -99,6 +99,7 @@ sub clear_unless {
         } else {
             $name = $c;
         }
+        next if !$name;
 
         if( !$self->{_remove_unless}->{$name} ) {
             next if $seen->{$name};
