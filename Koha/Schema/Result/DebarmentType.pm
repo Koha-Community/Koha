@@ -92,6 +92,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-04 11:05:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cRSViJItfpT3mxCX82/9eQ
 
+__PACKAGE__->add_columns(
+    '+is_system'  => { is_boolean => 1 },
+    '+is_default' => { is_boolean => 1 }
+);
+
 sub koha_object_class {
     'Koha::RestrictionType';
 }
