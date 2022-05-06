@@ -538,7 +538,7 @@ sub DelBiblio {
         {
             biblio_ids => [ $biblionumber ]
         }
-    );
+    ) unless $params->{skip_holds_queue};
 
     return;
 }

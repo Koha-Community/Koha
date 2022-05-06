@@ -108,7 +108,7 @@ sub process {
 
                     my $item = Koha::Items->find($record_id) || next;
 
-                    my $return = $item->safe_delete({ skip_record_index => 1 });
+                    my $return = $item->safe_delete({ skip_record_index => 1, skip_holds_queue => 1 });
                     unless ( $return ) {
 
                         # FIXME Do we need to rollback the whole transaction if a deletion failed?
@@ -141,7 +141,7 @@ sub process {
                       Koha::Biblios->find($biblionumber)->items->count;
                     if ( $delete_biblios && $items_count == 0 ) {
                         my $error = C4::Biblio::DelBiblio( $biblionumber,
-                            { skip_record_index => 1 } );
+                            { skip_record_index => 1, skip_holds_queue => 1 } );
                         unless ($error) {
                             push @deleted_biblionumbers, $biblionumber;
                         }
@@ -156,6 +156,12 @@ sub process {
 
                     $indexer->index_records( \@deleted_biblionumbers,
                         'recordDelete', "biblioserver", undef );
+
+                    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                        {
+                            biblio_ids => \@deleted_biblionumbers
+                        }
+                    );
                 }
 
                 if (@updated_biblionumbers) {
@@ -164,6 +170,12 @@ sub process {
 
                     $indexer->index_records( \@updated_biblionumbers,
                         'specialUpdate', "biblioserver", undef );
+
+                    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+                        {
+                            biblio_ids => \@updated_biblionumbers
+                        }
+                    );
                 }
             }
         );
