@@ -38,7 +38,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -111,11 +111,17 @@ subtest 'list() tests' => sub {
     };
 
     my $query = { "biblio.isbn" => { "-like" => "\%SOMETHING\%" } };
-
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?q=" . encode_json($query) => {'x-koha-embed' => 'biblio'} )
       ->status_is( 200, "Embedding biblio and searching on biblio.isbn doesn't make it explode" )
       ->json_has( "/0/biblio", "biblio object correctly embedded" )
       ->json_is( "/0/biblio/isbn", 'SOMETHING', 'Filtering by a biblioitems column works!' );
+
+    $query = { "biblio.isbn" => { "-like" => "\%SOMETHING\%" }, "biblio.title" => { -like => "\%\%" } };
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?q=" . encode_json($query) => {'x-koha-embed' => 'biblio'} )
+      ->status_is( 200, "Embedding biblio and searching on biblio.isbn and biblio.title doesn't make it explode" )
+      ->json_has( "/0/biblio", "biblio object correctly embedded" )
+      ->json_is( "/0/biblio/isbn", 'SOMETHING', 'Filtering by a biblioitem column works!' )
+      ->json_is( "/0/biblio/title", $biblio->title, 'Filtering by a biblioitem and biblio columns works!' );
 
     my $result = $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?biblio_id=" . $biblio->biblionumber )
       ->status_is( 200 );
