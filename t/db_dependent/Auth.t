@@ -151,9 +151,7 @@ subtest 'checkauth() tests' => sub {
         }
 
         t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
-        $patron->encode_secret('one_secret');
-        $patron->auth_method('password');
-        $patron->store;
+        $patron->auth_method('password')->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
@@ -166,13 +164,16 @@ subtest 'checkauth() tests' => sub {
         logout($cgi);
 
         t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 1 );
+        t::lib::Mocks::mock_config('encryption_key', '1234tH1s=t&st');
         $patron->auth_method('password')->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
         logout($cgi);
 
-        $patron->auth_method('two-factor')->store;
+        $patron->encode_secret('one_secret');
+        $patron->auth_method('two-factor');
+        $patron->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
         my $session = C4::Auth::get_session($sessionID);
@@ -192,6 +193,7 @@ subtest 'checkauth() tests' => sub {
         is( $userid, $patron->userid, 'Succesful login' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), 0, 'Second auth no longer required if OTP token has been verified' );
 
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
     };
 
     C4::Context->_new_userenv; # For next tests
