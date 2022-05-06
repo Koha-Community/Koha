@@ -197,7 +197,7 @@ $(document).ready(function() {
 
         if($(myListBox).find('option').length > 0) {
             $(myListBox).find('option').each( function (){
-                if ( $(this).attr('selected') && $(this).val().length > 0 ) {
+                if ( $(this).prop('selected') && $(this).val().length > 0 ) {
                     $(myQuery).insertAtCaret("<<" + $(this).val() + ">>");
                 }
             });
