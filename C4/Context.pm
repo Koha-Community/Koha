@@ -782,7 +782,7 @@ Destroys the hash for activeuser user environment variables.
 sub _unset_userenv
 {
     my ($sessionID)= @_;
-    undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
+    undef $context->{activeuser} if $sessionID && $context->{activeuser} && $context->{activeuser} eq $sessionID;
 }
 
 
