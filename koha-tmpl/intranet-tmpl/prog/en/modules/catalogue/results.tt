@@ -73,7 +73,7 @@
                         <form id="refine_search">
                             <label for="limit">Search within results</label>
                             [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                                [% INCLUDE 'search_indexes.inc' ms_kw = 1 %]
+                                [% INCLUDE 'search_indexes.inc' ms_kw = 1 refiner = 1 %]
                             [% END %]
                             <input name="limit" id="refiner" type="text"  title="Search results">
                             <input type="submit" id="refine" value="Search">
@@ -774,7 +774,7 @@
 
         $("#refine_search").on('submit',function(e){
             e.preventDefault();
-            var index = $("#refine_search #idx").val() || "";
+            var index = $("#refine_search #refiner_idx").val() || "";
             if( index){index += ":";}
             window.location.href = "/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %]&[% limit_cgi | $raw %]&[% sort_cgi | $raw %]&limit="+index+escape_str( $("#refiner").val() );
         });
