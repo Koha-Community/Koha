@@ -135,26 +135,35 @@ sub process {
                 }
 
                 # If there are no items left, delete the biblio
-                if ( $delete_biblios && @biblionumbers ) {
-                    for my $biblionumber ( uniq @biblionumbers ) {
-                        my $items_count =
-                          Koha::Biblios->find($biblionumber)->items->count;
-                        if ( $items_count == 0 ) {
-                            my $error = C4::Biblio::DelBiblio( $biblionumber,
-                                { skip_record_index => 1 } );
-                            unless ($error) {
-                                push @deleted_biblionumbers, $biblionumber;
-                            }
+                my @updated_biblionumbers;
+                for my $biblionumber ( uniq @biblionumbers ) {
+                    my $items_count =
+                      Koha::Biblios->find($biblionumber)->items->count;
+                    if ( $delete_biblios && $items_count == 0 ) {
+                        my $error = C4::Biblio::DelBiblio( $biblionumber,
+                            { skip_record_index => 1 } );
+                        unless ($error) {
+                            push @deleted_biblionumbers, $biblionumber;
                         }
+                    } else {
+                        push @updated_biblionumbers, $biblionumber;
                     }
+                }
 
-                    if (@deleted_biblionumbers) {
-                        my $indexer = Koha::SearchEngine::Indexer->new(
-                            { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+                if (@deleted_biblionumbers) {
+                    my $indexer = Koha::SearchEngine::Indexer->new(
+                        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-                        $indexer->index_records( \@deleted_biblionumbers,
-                            'recordDelete', "biblioserver", undef );
-                    }
+                    $indexer->index_records( \@deleted_biblionumbers,
+                        'recordDelete', "biblioserver", undef );
+                }
+
+                if (@updated_biblionumbers) {
+                    my $indexer = Koha::SearchEngine::Indexer->new(
+                        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
+                    $indexer->index_records( \@deleted_biblionumbers,
+                        'specialUpdate', "biblioserver", undef );
                 }
             }
         );
