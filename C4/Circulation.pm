@@ -2207,7 +2207,7 @@ sub AddReturn {
     # the holdingbranch is updated if the document is returned to another location.
     # this is always done regardless of whether the item was on loan or not
     if ($item->holdingbranch ne $branch) {
-        $item->holdingbranch($branch)->store({ skip_record_index => 1, skip_holds_queue => 1 });
+        $item->holdingbranch($branch)->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 });
     }
 
     my $item_was_lost = $item->itemlost;
