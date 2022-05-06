@@ -23,6 +23,9 @@ use C4::Letters;
 use Crypt::Eksblowfish::Bcrypt qw( en_base64 );
 use Koha::DateUtils qw( dt_from_string );
 
+use constant PATRON => 2;
+use constant STAFF  => 5;
+
 our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
@@ -115,7 +118,7 @@ sub SendPasswordRecoveryEmail {
     } while ( substr ( $uuid_str, -1, 1 ) eq '.' );
 
     # insert into database
-    my $days = $staff ? 5 : 2;
+    my $days = $staff ? STAFF : PATRON;
     my $expirydate =
       dt_from_string()->add( days => $days );
     if ($update) {
