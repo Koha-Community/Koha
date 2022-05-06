@@ -357,7 +357,8 @@ sub batch_update {
             my $indexer = Koha::SearchEngine::Indexer->new(
                 { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-            $indexer->update_index( \@biblionumbers );
+            $indexer->index_records( \@biblionumbers, 'specialUpdate',
+                "biblioserver", undef );
         }
     }
 
