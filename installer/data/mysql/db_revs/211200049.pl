@@ -11,7 +11,5 @@ return {
             INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
             VALUES ('RequireCashRegister', '0', NULL, 'Require a cash register when collecting a payment', 'YesNo')
         });
-
-        say $out 'System preference RequireCashRegister added';
     },
 };
