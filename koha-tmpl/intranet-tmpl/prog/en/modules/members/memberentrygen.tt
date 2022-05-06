@@ -350,7 +350,7 @@ legend:hover {
                                                         [% END %]
                                                         Date of birth:
                                                         </label>
-                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% borrower_data.dateofbirth | html UNLESS opduplicate %]" class="flatpickr" />
+                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% borrower_data.dateofbirth | html UNLESS opduplicate %]" class="flatpickr" data-flatpickr-pastinclusive="true" />
                                                          [% IF ( mandatorydateofbirth ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
