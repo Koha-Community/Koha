@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 48;
+use Test::More tests => 50;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -396,6 +396,9 @@ my $itemnumber = Koha::Item->new(
 )->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
+t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
+my $log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+
 AddReturn( 'barcode_3', $branchcode_1 );
 my $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
@@ -404,6 +407,8 @@ t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );
+my $log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged");
 
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
@@ -427,10 +432,13 @@ my $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'FIC', 'UpdateItemLocationOnCheckin does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', 'FIC: GEN' );
+$log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
 AddReturn( 'barcode_4', $branchcode_1 );
 $item2 = Koha::Items->find( $itemnumber2 );
 is( $item2->location, 'GEN', q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
 is( $item2->permanent_location, 'GEN', q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
+$log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged");
 AddReturn( 'barcode_4', $branchcode_1 );
 $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin does not update location value from 'GEN' with setting "FIC: GEN"} );
