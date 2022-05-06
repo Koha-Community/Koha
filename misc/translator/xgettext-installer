@@ -111,7 +111,7 @@ for my $file (@files) {
                         $mulc++;
 
                         # discard pure html, TT, empty
-                        next if ( $line =~ /^(\s*<.*?>\s*$|^\s*\[.*?\]\s*|\s*)$/ );
+                        next if ( $line =~ /^(\s*<\/*\w+\s*>|\s*\[.*\]|\s*<.*\[.*\].*>|\s*)$/ );
 
                         # put placeholders
                         $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/g;
