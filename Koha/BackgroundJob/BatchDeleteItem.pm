@@ -162,7 +162,7 @@ sub process {
                     my $indexer = Koha::SearchEngine::Indexer->new(
                         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-                    $indexer->index_records( \@deleted_biblionumbers,
+                    $indexer->index_records( \@updated_biblionumbers,
                         'specialUpdate', "biblioserver", undef );
                 }
             }
