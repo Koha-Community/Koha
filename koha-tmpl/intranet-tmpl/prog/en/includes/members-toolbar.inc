@@ -72,7 +72,7 @@
                     <li><a id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome email</a></li>
                 [% END %]
 
-                [% IF CAN_user_borrowers_edit_borrowers %]
+                [% IF CAN_user_borrowers_edit_borrowers && patron.category.effective_reset_password %]
                     <li><a id="resetpassword" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_password_reset">Send password reset</a></li>
                 [% END %]
 
