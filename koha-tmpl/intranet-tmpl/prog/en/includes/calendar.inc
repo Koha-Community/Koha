@@ -5,7 +5,7 @@
 [% FILTER collapse %]
 <script>
     var debug    = "[% debug | html %]";
-    var dateformat_pref = "[% Koha.Preference('dateformat ') | html %]";
+    var dateformat_pref = "[% Koha.Preference('dateformat') | html %]";
     var flatpickr_dateformat_string = "";
     switch ( dateformat_pref ){
         case "us":

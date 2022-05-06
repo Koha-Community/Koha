@@ -12,7 +12,7 @@
         longhand: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     };
     var debug    = "[% debug | html %]";
-    var dateformat_pref = "[% Koha.Preference('dateformat ') | html %]";
+    var dateformat_pref = "[% Koha.Preference('dateformat') | html %]";
     var sentmsg = 0;
     if (debug > 1) {alert("dateformat: " + dateformat_pref + "\ndebug is on (level " + debug + ")");}
     var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
