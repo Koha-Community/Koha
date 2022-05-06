@@ -54,6 +54,13 @@ number of months the patron is enrolled for (will be NULL if enrolmentperioddate
 
 date the patron is enrolled until (will be NULL if enrolmentperiod is set)
 
+=head2 password_expiry_days
+
+  data_type: 'smallint'
+  is_nullable: 1
+
+number of days after which the patron must reset their password
+
 =head2 upperagelimit
 
   data_type: 'smallint'
@@ -201,6 +208,8 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", is_nullable => 1 },
   "enrolmentperioddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "password_expiry_days",
+  { data_type => "smallint", is_nullable => 1 },
   "upperagelimit",
   { data_type => "smallint", is_nullable => 1 },
   "dateofbirthrequired",
@@ -344,8 +353,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-25 12:50:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vEpp1HRkUOvPyWd/yAsxng
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-06 19:32:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:swAluUTlYu57KPUYB+00Dw
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },

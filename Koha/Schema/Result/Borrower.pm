@@ -296,6 +296,14 @@ date the patron was added to Koha (YYYY-MM-DD)
 
 date the patron/borrower's card is set to expire (YYYY-MM-DD)
 
+=head2 password_expiration_date
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+date the patron/borrower's password is set to expire (YYYY-MM-DD)
+
 =head2 date_renewed
 
   data_type: 'date'
@@ -711,6 +719,8 @@ __PACKAGE__->add_columns(
   "dateenrolled",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "password_expiration_date",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "date_renewed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
@@ -1955,8 +1965,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-29 11:09:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pQqp6+XsKkDrnO57fQ9dmg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-06 19:32:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lGlRQ4XvRdsrqTye6sDpYg
 
 __PACKAGE__->has_many(
   "extended_attributes",
