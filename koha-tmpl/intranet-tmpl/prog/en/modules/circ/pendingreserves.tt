@@ -189,7 +189,7 @@
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
 
                 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                [% IF hold_cancellation %]
+                [% IF hold_cancellation.count %]
                     <div class="form-group">
                         <label for="cancellation-reason">Cancellation reason:</label>
                         <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">

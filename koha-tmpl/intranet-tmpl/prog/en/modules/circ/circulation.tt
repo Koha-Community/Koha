@@ -902,7 +902,7 @@
                                     <input type="submit" class="cancel" name="submit" value="Cancel marked holds" />
 
                                     [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                                    [% IF hold_cancellation %]
+                                    [% IF hold_cancellation.count %]
                                         <select name="cancellation-reason">
                                             <option value="">No reason given</option>
                                             [% FOREACH reason IN hold_cancellation %]

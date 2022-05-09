@@ -48,7 +48,7 @@
 
 [% BLOCK 'address-style_roadtypes' %]
     [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
-    [% IF roadtypes %]
+    [% IF roadtypes.count %]
         [% UNLESS nostreettype %]
             <li>
                 [% IF ( mandatorystreettype ) %]

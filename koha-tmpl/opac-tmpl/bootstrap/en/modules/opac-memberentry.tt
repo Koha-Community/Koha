@@ -427,7 +427,7 @@
                                         [% IF Koha.Preference('AddressFormat') != 'de' %][% INCLUDE streetnumber %][% END %]
 
                                         [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
-                                        [% IF roadtypes %]
+                                        [% IF roadtypes.count %]
                                             [% UNLESS hidden.defined('streettype') %]
                                                 <li>
                                                     <label for="borrower_streettype" class="[% required.streettype | html %]">Street type:</label>
@@ -651,7 +651,7 @@
 
                                     <ol>
                                         [% SET roadtypes = AuthorisedValues.GetAuthValueDropbox('ROADTYPE') %]
-                                        [% IF roadtypes %]
+                                        [% IF roadtypes.count %]
                                             [% UNLESS hidden.defined('B_streettype') %]
                                                 <li>
                                                     <label for="borrower_B_streettype" class="[% required.B_streettype | html %]">Street type:</label>

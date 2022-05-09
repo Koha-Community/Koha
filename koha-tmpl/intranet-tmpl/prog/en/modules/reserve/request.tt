@@ -935,7 +935,7 @@
                             <input type="submit" name="submit" value="Update hold(s)" /> <button class="cancel_selected_holds" data-bulk="true"></button>
                         <fieldset id="cancellation-reason-fieldset" class="action">
                             [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                            [% IF hold_cancellation %]
+                            [% IF hold_cancellation.count %]
                                 <label for="cancellation-reason">Cancellation reason: </label>
                                 <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
                                     <option value="">No reason given</option>
@@ -1121,7 +1121,7 @@
 
                     <fieldset class="action">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                        [% IF hold_cancellation %]
+                        [% IF hold_cancellation.count %]
                             <label for="cancellation-reason">Cancellation reason: </label>
                             <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
                                 <option value="">No reason given</option>
