@@ -708,7 +708,8 @@ Note that permanent location is a code, and location may be an authval.
         [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
         <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
         [% END %]
-</div>
+    </div> <!-- /.content_set -->
+</div> <!-- /#components -->
 
 [% END %]
 
