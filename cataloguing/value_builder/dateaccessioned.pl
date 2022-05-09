@@ -27,7 +27,14 @@ my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
 
-    my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+    my $date = output_pref({ dt => dt_from_string, dateonly => 1 });
+
+    my $dateformat_pref = C4::Context->preference('dateformat');
+    my $dateformat =
+        $dateformat_pref eq 'us'     ? 'm/d/Y'
+      : $dateformat_pref eq 'metric' ? 'd/m/Y'
+      : $dateformat_pref eq 'dmydot' ? 'd.m.Y'
+      :                                'Y-m-d';
 
     my $res  = <<END_OF_JS;
 <script>
@@ -35,6 +42,9 @@ my $builder = sub {
 
 \$(document).ready(function(){
     \$("#$function_name").flatpickr({
+        altInput: true,
+        altFormat: "$dateformat",
+        altInputClass: "input_marceditor flatpickr-input",
         dateFormat: "Y-m-d"
     });
     /* Set current date on page load */
@@ -53,8 +63,10 @@ function Click$function_name(event) {
 function set_to_today( id, force ) {
     /* The force parameter is used in Click but not in Focus ! */
     if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
-    if (\$("#" + id).val() == '' || force ) {
-        \$("#" + id).val("$date");
+    var elt = document.querySelector("#" + id);
+    if ( elt.value == '' || force ) {
+        const fp = document.querySelector("#" + id)._flatpickr;
+        fp.setDate(new Date());
     }
 }
 </script>
