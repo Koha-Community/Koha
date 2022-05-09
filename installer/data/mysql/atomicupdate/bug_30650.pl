@@ -156,6 +156,11 @@ return {
                 }
             );
         }
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES ('reserves','NEW_CURBSIDE_PICKUP','',0,"You have schedule a curbside pickup for [% branch.branchname %]","[%- USE KohaDates -%]\n[%- SET cp = curbside_pickup -%]\n\nYou have a curbside pickup scheduled for [% cp.scheduled_pickup_datetime | $KohaDates with_hours => 1 %] at [% cp.library.branchname %].\n\nAny holds waiting for you at the pickup time will be included in this pickup. At this time, that list includes:\n[%- FOREACH h IN cp.patron.holds %]\n    [%- IF h.branchcode == cp.branchcode && h.found == 'W' %]\n* [% h.biblio.title %], [% h.biblio.author %] ([% h.item.barcode %])\n    [%- END %]\n[%- END %]\n\nOnce you have arrived, please call your library or log into your account and click the \"Alert staff of your arrival\" button to let them know you are there.",'email','default');
+            }
+        );
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type` )

@@ -84,14 +84,15 @@ elsif ( $op eq 'create-pickup' ) {
     my $notes                     = $input->param('notes');
 
     try {
-        Koha::CurbsidePickup->new(
+        my $pickup = Koha::CurbsidePickup->new(
             {
                 branchcode                => $branchcode,
                 borrowernumber            => $borrowernumber,
                 scheduled_pickup_datetime => dt_from_string($scheduled_pickup_datetime),
                 notes                     => $notes,
             }
-        )->store();
+        )->store;
+        $pickup->notify_new_pickup;
     } catch {
         if ( $_->isa('Koha::Exceptions::CurbsidePickup::TooManyPickups') ) {
             push @messages, {
@@ -107,7 +108,6 @@ elsif ( $op eq 'create-pickup' ) {
             };
         }
     }
-        # $self->_notify_new_pickup($curbside_pickup); TODO
 }
 elsif ( $op eq 'cancel' ) {
     my $id              = $input->param('id');

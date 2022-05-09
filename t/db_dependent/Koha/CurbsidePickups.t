@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use Koha::City;
@@ -193,6 +193,8 @@ subtest 'workflow' => sub {
     $cp->mark_as_delivered;
     is( $cp->status, 'delivered' );
     is( $pickups->filter_by_delivered->count, 1 );
+
+    $cp->delete;
 };
 
 subtest 'mark_as_delivered' => sub {
@@ -230,7 +232,65 @@ subtest 'mark_as_delivered' => sub {
 
     is( $hold->get_from_storage, undef, 'Hold has been filled' );
     my $checkout = Koha::Checkouts->find({ itemnumber => $item->itemnumber });
-    is( $checkout->borrowernumber, $patron->borrowernumber, 'Item has correctly been checked out' )
+    is( $checkout->borrowernumber, $patron->borrowernumber, 'Item has correctly been checked out' );
+
+    $cp->delete;
+};
+
+subtest 'notify_new_pickup' => sub {
+    plan tests => 2;
+
+    my $item =
+      $builder->build_sample_item( { library => $library->branchcode } );
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    my $hold = Koha::Holds->find($reserve_id);
+    $hold->set_waiting;
+
+    my $next_monday =
+      $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
+    my $schedule_dt =
+      $next_monday->set_hour(15)->set_minute(00)->set_second(00);
+    my $cp = Koha::CurbsidePickup->new(
+        {
+            branchcode                => $library->branchcode,
+            borrowernumber            => $patron->borrowernumber,
+            scheduled_pickup_datetime => $schedule_dt,
+            notes                     => 'just a note'
+        }
+    )->store;
+
+    $patron->set( { email => 'test@example.org' } )->store;
+    my $dbh = C4::Context->dbh;
+    $dbh->do( q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ?)|,
+        undef, $patron->borrowernumber, 4
+    );
+    my $borrower_message_preference_id =
+      $dbh->last_insert_id( undef, undef, "borrower_message_preferences", undef );
+    $dbh->do(
+        q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|,
+        undef, $borrower_message_preference_id, 'email'
+    );
+
+    $cp->notify_new_pickup;
+
+    my $messages = C4::Letters::GetQueuedMessages(
+        { borrowernumber => $patron->borrowernumber } );
+    is(
+        $messages->[0]->{subject},
+        sprintf ("You have schedule a curbside pickup for %s.", $library->branchname),
+        "Notice correctly generated"
+    );
+    my $biblio_title = $item->biblio->title;
+    like( $messages->[0]->{content},
+        qr{$biblio_title}, "Content contains the list of waiting holds" );
 };
 
 $schema->storage->txn_rollback;

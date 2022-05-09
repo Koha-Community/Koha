@@ -24,6 +24,8 @@ use Koha::Database;
 use base qw(Koha::Object);
 
 use C4::Circulation qw( CanBookBeIssued AddIssue );
+use C4::Members::Messaging qw( GetMessagingPreferences );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron;
 use Koha::Library;
@@ -75,6 +77,37 @@ sub new {
     }
 
     return $self->SUPER::new($params);
+}
+
+=head3 notify_new_pickup
+
+$pickup->notify_new_pickup
+
+Will notify the patron that the pickup has been created.
+Letter 'NEW_CURBSIDE_PICKUP will be used', and depending on 'Hold_Filled' configuration.
+
+=cut
+
+sub notify_new_pickup {
+    my ( $self ) = @_;
+
+    my $patron = $self->patron;
+
+    my $library = $self->library;
+
+    $patron->queue_notice({ letter_params => {
+        module     => 'reserves',
+        letter_code => 'NEW_CURBSIDE_PICKUP',
+        borrowernumber => $patron->borrowernumber,
+        branchcode => $self->branchcode,
+        tables     => {
+            'branches'  => $library->unblessed,
+            'borrowers' => $patron->unblessed,
+        },
+        substitute => {
+            curbside_pickup => $self,
+        }
+    }, message_name => 'Hold_Filled' });
 }
 
 =head3 checkouts
