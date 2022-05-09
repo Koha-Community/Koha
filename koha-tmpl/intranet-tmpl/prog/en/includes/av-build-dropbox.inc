@@ -11,7 +11,7 @@
 [% SET avs = AuthorisedValues.GetAuthValueDropbox( category ) %]
 [% DEFAULT class = '' size = 20 %]
 
-[% IF avs %]
+[% IF avs.count %]
   <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" >
   [% IF all %]<option value="">All</option>[% END %]
   [% IF empty %]<option value=""></option>[% END %]
