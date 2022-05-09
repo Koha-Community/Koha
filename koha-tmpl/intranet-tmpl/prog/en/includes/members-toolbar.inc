@@ -38,6 +38,10 @@
 
     <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa fa-comment-o"></i> Add message</a>
 
+    [% IF Koha.Preference('CurbsidePickup') %]
+        <a id="curbsidePickupLabel" href="/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=[% patron.borrowernumber | html %]" class="btn btn-default"><i class="fa fa-refresh"></i> Schedule pickup</a>
+    [% END %]
+
          <div class="btn-group">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-right">
