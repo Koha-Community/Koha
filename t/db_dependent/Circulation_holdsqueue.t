@@ -42,6 +42,7 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
 
     t::lib::Mocks::mock_userenv({ branchcode => $library->id });
     t::lib::Mocks::mock_preference( 'UpdateTotalIssuesOnCirc', 1 );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     my $action;
 
@@ -55,6 +56,14 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
             "$action triggers a holds queue update for the related biblio from $package at line $line"
         );
     } );
+
+    $action = 'AddIssue';
+    AddIssue( $patron->unblessed, $item->barcode, );
+
+    $action = 'AddReturn';
+    AddReturn( $item->barcode );
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     $action = 'AddIssue';
     AddIssue( $patron->unblessed, $item->barcode, );

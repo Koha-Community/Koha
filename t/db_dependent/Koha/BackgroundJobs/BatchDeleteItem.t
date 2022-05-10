@@ -25,6 +25,7 @@ use JSON qw( encode_json );
 use Koha::Database;
 use Koha::BackgroundJob::BatchDeleteItem;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -32,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -47,12 +48,14 @@ subtest "process() tests" => sub {
         $counter++;
     });
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
     my $job = Koha::BackgroundJob::BatchDeleteItem->new(
         {
             status         => 'new',
             size           => 2,
             borrowernumber => undef,
-            type           => 'batch_biblio_record_modification',
+            type           => 'batch_item_record_deletion',
             data           => encode_json {
                 record_ids     => [ $item_1->id, $item_2->id ],
                 delete_biblios => 1,
@@ -68,6 +71,33 @@ subtest "process() tests" => sub {
     );
 
     is( $counter, 1, 'Holds queue update is enqueued only once' );
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    $biblio = $builder->build_sample_biblio;
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->id });
+
+    $job = Koha::BackgroundJob::BatchDeleteItem->new(
+        {
+            status         => 'new',
+            size           => 2,
+            borrowernumber => undef,
+            type           => 'batch_item_record_deletion',
+            data           => encode_json {
+                record_ids     => [ $item->id ],
+                delete_biblios => 1,
+            }
+        }
+    );
+
+    $job->process(
+        {
+            record_ids     => [ $item->id ],
+            delete_biblios => 1,
+        }
+    );
+
+    is( $counter, 1, 'Counter untouched with RealTimeHoldsQueue disabled' );
 
     $schema->storage->txn_rollback;
 };

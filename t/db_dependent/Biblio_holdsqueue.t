@@ -36,6 +36,8 @@ subtest 'ModBiblio() + holds_queue update tests' => sub {
 
     my $biblio = $builder->build_sample_biblio;
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
     $mock->mock( 'enqueue', sub {
         my ( $self, $args ) = @_;
@@ -69,6 +71,20 @@ subtest 'ModBiblio() + holds_queue update tests' => sub {
         $biblio->frameworkcode, { skip_holds_queue => 1 }
     );
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    # this call should not trigger the mocked 'enqueue'
+    C4::Biblio::ModBiblio(
+        $biblio->metadata->record, $biblio->id,
+        $biblio->frameworkcode, { skip_holds_queue => 0 }
+    );
+
+    # this call shoul not trigger the mocked 'enqueue'
+    C4::Biblio::ModBiblio(
+        $biblio->metadata->record, $biblio->id,
+        $biblio->frameworkcode, { skip_holds_queue => 1 }
+    );
+
     $schema->storage->txn_rollback;
 };
 
@@ -77,6 +93,8 @@ subtest 'DelBiblio + holds_queue update tests' => sub {
     plan tests => 1;
 
     $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     my $biblio = $builder->build_sample_biblio;
 
@@ -99,6 +117,12 @@ subtest 'DelBiblio + holds_queue update tests' => sub {
             }
         }
     );
+
+    C4::Biblio::DelBiblio( $biblio->id );
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    $biblio = $builder->build_sample_biblio;
 
     C4::Biblio::DelBiblio( $biblio->id );
 

@@ -961,6 +961,8 @@ subtest 'reserves.item_level_hold' => sub {
             );
         } );
 
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
         # Revert the waiting status
         C4::Reserves::RevertWaitingStatus(
             { itemnumber => $item->itemnumber } );
@@ -968,6 +970,14 @@ subtest 'reserves.item_level_hold' => sub {
         $hold = Koha::Holds->find($reserve_id);
 
         is( $hold->itemnumber, $item->itemnumber, 'Itemnumber should not be removed when the waiting status is revert' );
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+        $hold->set_waiting;
+
+        # Revert the waiting status, RealTimeHoldsQueue => shouldn't add a test
+        C4::Reserves::RevertWaitingStatus(
+            { itemnumber => $item->itemnumber } );
 
         $hold->delete;    # cleanup
     };
@@ -1428,6 +1438,18 @@ subtest 'AddReserve() tests' => sub {
         );
     } );
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
     AddReserve(
         {
             branchcode     => $library->branchcode,
@@ -1483,12 +1505,17 @@ subtest 'AlterPriorty() tests' => sub {
         );
     } );
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     AlterPriority( "bottom", $reserve_id, 1, 2, 1, 3 );
 
     my $hold = Koha::Holds->find($reserve_id);
 
     is($hold->priority,3,'Successfully altered priority to bottom');
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    AlterPriority( "bottom", $reserve_id, 1, 2, 1, 3 );
 
     $schema->storage->txn_rollback;
 };

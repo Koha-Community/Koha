@@ -251,8 +251,7 @@ sub run_tests {
     # roll back ES index changes.
     t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
 
-    my $bgj_mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $bgj_mock->mock( 'enqueue', undef );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     my $isbn = '0590353403';
     my $title = 'Foundation';
@@ -639,8 +638,7 @@ subtest 'IsMarcStructureInternal' => sub {
 subtest 'deletedbiblio_metadata' => sub {
     plan tests => 2;
 
-    my $bgj_mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $bgj_mock->mock( 'enqueue', undef );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
     my $biblio_metadata = C4::Biblio::GetXmlBiblio( $biblionumber );
@@ -655,8 +653,7 @@ subtest 'DelBiblio' => sub {
 
     plan tests => 5;
 
-    my $bgj_mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
-    $bgj_mock->mock( 'enqueue', undef );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio(MARC::Record->new, '');
     my $deleted = C4::Biblio::DelBiblio( $biblionumber );

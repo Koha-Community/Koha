@@ -1243,11 +1243,17 @@ subtest 'store() tests' => sub {
             );
         } );
 
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
         # new item
         my $item = $builder->build_sample_item({ biblionumber => $biblio->id });
 
         # updated item
         $item->set({ reserves => 1 })->store;
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+        # updated item
+        $item->set({ reserves => 0 })->store;
 
         $schema->storage->txn_rollback;
     };

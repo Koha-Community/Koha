@@ -28,6 +28,7 @@ use Koha::Database;
 use Koha::BackgroundJob::BatchDeleteBiblio;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -35,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -72,6 +73,8 @@ subtest "process() tests" => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
     $job->process(
         {
             record_ids => [ $biblio->id ],
@@ -79,6 +82,30 @@ subtest "process() tests" => sub {
     );
 
     is( $counter, 1, 'Holds queue update is enqueued only once' );
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    $biblio = $builder->build_sample_biblio;
+
+    $job = Koha::BackgroundJob::BatchDeleteBiblio->new(
+        {
+            status         => 'new',
+            size           => 1,
+            borrowernumber => undef,
+            type           => 'batch_biblio_record_deletion',
+            data           => encode_json {
+                record_ids     => [ $biblio->id ],
+            }
+        }
+    );
+
+    $job->process(
+        {
+            record_ids => [ $biblio->id ],
+        }
+    );
+
+    is( $counter, 1, 'Counter untouched with RealTimeHoldsQueue disabled' );
 
     $schema->storage->txn_rollback;
 };

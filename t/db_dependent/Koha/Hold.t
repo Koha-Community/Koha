@@ -249,6 +249,19 @@ subtest 'fill() tests' => sub {
             );
         } );
 
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        )->fill;
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+        # this call shouldn't add a new test
         $builder->build_object(
             {
                 class => 'Koha::Holds',
@@ -558,6 +571,8 @@ subtest 'cancel() tests' => sub {
 
         my $biblio = $builder->build_sample_biblio;
 
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+
         my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
         $mock->mock( 'enqueue', sub {
             my ( $self, $args ) = @_;
@@ -586,6 +601,17 @@ subtest 'cancel() tests' => sub {
                 }
             }
         )->cancel({ skip_holds_queue => 1 });
+
+        t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+        $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    biblionumber   => $biblio->id,
+                }
+            }
+        )->cancel({ skip_holds_queue => 0 });
     };
 
     $schema->storage->txn_rollback;
@@ -599,6 +625,8 @@ subtest 'suspend_hold() and resume() tests' => sub {
 
     my $biblio = $builder->build_sample_biblio;
     my $action;
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
     $mock->mock( 'enqueue', sub {
@@ -615,6 +643,7 @@ subtest 'suspend_hold() and resume() tests' => sub {
             class => 'Koha::Holds',
             value => {
                 biblionumber => $biblio->id,
+                found        => undef,
             }
         }
     );
