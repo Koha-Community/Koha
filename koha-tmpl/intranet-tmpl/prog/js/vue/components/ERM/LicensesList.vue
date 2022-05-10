@@ -13,7 +13,6 @@ import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, defineComponent, render, resolveComponent } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -24,14 +23,9 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
-        const mainStore = useMainStore()
-        const { current_object_id } = storeToRefs(mainStore)
-        const { setCurrentView } = mainStore
-
         return {
             av_license_types,
             av_license_statuses,
-            setCurrentView, current_object_id,
         }
     },
     created() {
@@ -201,16 +195,13 @@ export default {
     },
     methods: {
         show_license: function (license_id) {
-            this.setCurrentView('show')
-            this.current_object_id = license_id
+            this.$router.push("/cgi-bin/koha/erm/licenses/" + license_id)
         },
         edit_license: function (license_id) {
-            this.setCurrentView('add-form')
-            this.current_object_id = license_id
+            this.$router.push("/cgi-bin/koha/erm/licenses/edit/" + license_id)
         },
         delete_license: function (license_id) {
-            this.setCurrentView('confirm-delete-form')
-            this.current_object_id = license_id
+            this.$router.push("/cgi-bin/koha/erm/licenses/delete/" + license_id)
         },
     },
     props: {

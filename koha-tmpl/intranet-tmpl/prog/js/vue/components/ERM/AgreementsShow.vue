@@ -156,11 +156,11 @@
             </ol>
         </fieldset>
         <fieldset class="action">
-            <a
+            <router-link
+                to="/cgi-bin/koha/erm/agreements"
                 role="button"
                 class="cancel"
-                @click="this.setCurrentView('list')"
-                >Close</a
+                >Close</router-link
             >
         </fieldset>
     </div>
@@ -172,6 +172,7 @@ import AgreementUserRoles from './AgreementUserRoles.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { useMainStore } from "../../stores/main"
+import { fetchAgreement } from "../../fetch"
 import { storeToRefs } from "pinia"
 
 export default {
@@ -198,7 +199,7 @@ export default {
         } = storeToRefs(AVStore)
 
         const mainStore = useMainStore()
-        const { setError, setCurrentView } = mainStore
+        const { setError } = mainStore
         return {
             format_date,
             patron_to_html,
@@ -210,7 +211,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
-            setError, setCurrentView,
+            setError,
         }
     },
     data() {
@@ -231,29 +232,16 @@ export default {
             }
         }
     },
-    created() {
-        if (!this.agreement_id) return
-        const apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
-
-        fetch(apiUrl, {
-            headers: {
-                'x-koha-embed': 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'
-            }
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getAgreement(to.params.agreement_id)
         })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.agreement = result
-                },
-                (error) => {
-                    this.setError(error)
-                }
-            )
     },
     methods: {
-    },
-    props: {
-        agreement_id: Number,
+        async getAgreement(agreement_id) {
+            const agreement = await fetchAgreement(agreement_id)
+            this.agreement = agreement
+        },
     },
     components: {
         AgreementPeriods,

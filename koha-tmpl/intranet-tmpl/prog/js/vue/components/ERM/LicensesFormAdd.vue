@@ -96,11 +96,11 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Submit" />
-                <a
+                <router-link
+                    to="/cgi-bin/koha/erm/licenses"
                     role="button"
                     class="cancel"
-                    @click="this.setCurrentView('list')"
-                    >Cancel</a
+                    >Cancel</router-link
                 >
             </fieldset>
         </form>
@@ -111,6 +111,7 @@
 import flatPickr from 'vue-flatpickr-component'
 import { useAVStore } from "../../stores/authorised_values"
 import { useMainStore } from "../../stores/main"
+import { fetchLicense } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -123,12 +124,12 @@ export default {
         } = storeToRefs(AVStore)
 
         const mainStore = useMainStore()
-        const { setMessage, setError, resetMessages, setCurrentView } = mainStore
+        const { setMessage, setError, resetMessages } = mainStore
 
         return {
             av_license_types,
             av_license_statuses,
-            setMessage, setError, resetMessages, setCurrentView,
+            setMessage, setError, resetMessages,
         }
     },
     data() {
@@ -153,22 +154,20 @@ export default {
             this.dates_fixed = 1
         }
     },
-    created() {
-        if (!this.license_id) return
-        const apiUrl = '/api/v1/erm/licenses/' + this.license_id
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.license = result
-                },
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    beforeRouteEnter(to, from, next) {
+        if (to.params.license_id) {
+            next(vm => {
+                vm.license = vm.getLicense(to.params.license_id)
+            })
+        } else {
+            next()
+        }
     },
     methods: {
+        async getLicense(license_id) {
+            const license = await fetchLicense(license_id)
+            this.license = license
+        },
         onSubmit(e) {
             e.preventDefault()
 
@@ -196,13 +195,13 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.setCurrentView('list')
+                        this.$router.push("/cgi-bin/koha/erm/licenses")
                         this.setMessage('License updated')
                     } else if (response.status == 201) {
-                        this.setCurrentView('list')
+                        this.$router.push("/cgi-bin/koha/erm/licenses")
                         this.setMessage('License created')
                     } else {
-                    this.setError( response.message || response.statusText)
+                        this.setError(response.message || response.statusText)
                     }
                 }, (error) => {
                     this.setError(error)

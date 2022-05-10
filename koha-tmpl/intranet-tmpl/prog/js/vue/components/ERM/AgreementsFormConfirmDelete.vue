@@ -17,11 +17,11 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" variant="primary" value="Yes, delete" />
-                <a
+                <router-link
+                    to="/cgi-bin/koha/erm/agreements"
                     role="button"
                     class="cancel"
-                    @click="this.setCurrentView('list')"
-                    >No, do not delete</a
+                    >No, do not delete</router-link
                 >
             </fieldset>
         </form>
@@ -30,13 +30,14 @@
 
 <script>
 import { useMainStore } from "../../stores/main"
+import { fetchAgreement } from "../../fetch"
 
 export default {
     setup() {
         const mainStore = useMainStore()
-        const { setMessage, setError, setCurrentView } = mainStore
+        const { setMessage, setError } = mainStore
         return {
-            setMessage, setError, setCurrentView,
+            setMessage, setError,
         }
     },
     data() {
@@ -44,22 +45,16 @@ export default {
             agreement: {},
         }
     },
-    created() {
-        const apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.agreement = result
-                },
-            ).catch(
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.agreement = vm.getAgreement(to.params.agreement_id)
+        })
     },
     methods: {
+        async getAgreement(agreement_id) {
+            const agreement = await fetchAgreement(agreement_id)
+            this.agreement = agreement
+        },
         onSubmit(e) {
             e.preventDefault()
 
@@ -77,7 +72,7 @@ export default {
                     (response) => {
                         if (response.status == 204) {
                             this.setMessage("Agreement deleted")
-                            this.setCurrentView('list')
+                            this.$router.push("/cgi-bin/koha/erm/agreements")
                         } else {
                             this.setError(response.message || response.statusText)
                         }

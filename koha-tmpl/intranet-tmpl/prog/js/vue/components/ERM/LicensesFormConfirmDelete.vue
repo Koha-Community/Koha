@@ -16,11 +16,11 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" variant="primary" value="Yes, delete" />
-                <a
+                <router-link
+                    to="/cgi-bin/koha/erm/licenses"
                     role="button"
                     class="cancel"
-                    @click="this.setCurrentView('list')"
-                    >No, do not delete</a
+                    >No, do not delete</router-link
                 >
             </fieldset>
         </form>
@@ -29,13 +29,14 @@
 
 <script>
 import { useMainStore } from "../../stores/main"
+import { fetchLicense } from "../../fetch"
 
 export default {
     setup() {
         const mainStore = useMainStore()
-        const { setMessage, setError, setCurrentView } = mainStore
+        const { setMessage, setError } = mainStore
         return {
-            setMessage, setError, setCurrentView,
+            setMessage, setError,
         }
     },
     data() {
@@ -43,22 +44,20 @@ export default {
             license: {},
         }
     },
-    created() {
-        const apiUrl = '/api/v1/erm/licenses/' + this.license_id
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.license = result
-                },
-            ).catch(
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    beforeRouteEnter(to, from, next) {
+        if (to.params.license_id) {
+            next(vm => {
+                vm.license = vm.getLicense(to.params.license_id)
+            })
+        } else {
+            next()
+        }
     },
     methods: {
+        async getLicense(license_id) {
+            const license = await fetchLicense(license_id)
+            this.license = license
+        },
         onSubmit(e) {
             e.preventDefault()
 
@@ -75,8 +74,8 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
+                            this.$router.push("/cgi-bin/koha/erm/agreements")
                             this.setMessage("License deleted")
-                            this.setCurrentView('list')
                         } else {
                             this.setError(response.message || response.statusText)
                         }
@@ -87,9 +86,6 @@ export default {
                     }
                 )
         }
-    },
-    props: {
-        license_id: Number
     },
     name: "LicensesFormConfirmDelete",
 }

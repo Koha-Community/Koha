@@ -71,6 +71,8 @@ export default {
         user_roles: Array,
     },
     beforeUpdate() {
+        if (!this.user_roles) return
+
         this.user_roles.forEach(u => {
             u.patron_str = $patron_to_html(u.patron)
         })

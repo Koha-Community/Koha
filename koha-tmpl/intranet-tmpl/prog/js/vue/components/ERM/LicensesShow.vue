@@ -40,8 +40,11 @@
             </ol>
         </fieldset>
         <fieldset class="action">
-            <a role="button" class="cancel" @click="this.setCurrentView('list')"
-                >Close</a
+            <router-link
+                to="/cgi-bin/koha/erm/licenses"
+                role="button"
+                class="cancel"
+                >Close</router-link
             >
         </fieldset>
     </div>
@@ -51,6 +54,7 @@
 import { useAVStore } from "../../stores/authorised_values"
 import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
+import { fetchLicense } from "../../fetch"
 
 export default {
     setup() {
@@ -69,14 +73,14 @@ export default {
         } = storeToRefs(AVStore)
 
         const mainStore = useMainStore()
-        const { setError, setCurrentView } = mainStore
+        const { setError } = mainStore
 
         return {
             format_date,
             get_lib_from_av,
             av_license_types,
             av_license_statuses,
-            setError, setCurrentView,
+            setError,
         }
     },
     data() {
@@ -92,25 +96,20 @@ export default {
             }
         }
     },
-    created() {
-        if (!this.license_id) return
-        const apiUrl = '/api/v1/erm/licenses/' + this.license_id
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.license = result
-                },
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    beforeRouteEnter(to, from, next) {
+        if (to.params.license_id) {
+            next(vm => {
+                vm.license = vm.getLicense(to.params.license_id)
+            })
+        } else {
+            next()
+        }
     },
     methods: {
-    },
-    props: {
-        license_id: Number,
+        async getLicense(license_id) {
+            const license = await fetchLicense(license_id)
+            this.license = license
+        },
     },
     components: {
     },

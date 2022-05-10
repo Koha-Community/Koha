@@ -176,11 +176,11 @@
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Submit" />
-                <a
+                <router-link
+                    to="/cgi-bin/koha/erm/agreements"
                     role="button"
                     class="cancel"
-                    @click="this.setCurrentView('list')"
-                    >Cancel</a
+                    >Cancel</router-link
                 >
             </fieldset>
         </form>
@@ -194,6 +194,7 @@ import AgreementLicenses from './AgreementLicenses.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { useMainStore } from "../../stores/main"
+import { fetchAgreement } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -211,7 +212,7 @@ export default {
         } = storeToRefs(AVStore)
 
         const mainStore = useMainStore()
-        const { setMessage, setError, resetMessages, setCurrentView } = mainStore
+        const { setMessage, setError, resetMessages } = mainStore
 
         return {
             vendors,
@@ -221,7 +222,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
-            setMessage, setError, resetMessages, setCurrentView,
+            setMessage, setError, resetMessages,
         }
     },
     data() {
@@ -242,26 +243,20 @@ export default {
             }
         }
     },
-    created() {
-        if (!this.agreement_id) return
-        const apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
-
-        fetch(apiUrl, {
-            headers: {
-                'x-koha-embed': 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'
-            }
-        })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.agreement = result
-                },
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    beforeRouteEnter(to, from, next) {
+        if (to.params.agreement_id) {
+            next(vm => {
+                vm.agreement = vm.getAgreement(to.params.agreement_id)
+            })
+        } else {
+            next()
+        }
     },
     methods: {
+        async getAgreement(agreement_id) {
+            const agreement = await fetchAgreement(agreement_id)
+            this.agreement = agreement
+        },
         onSubmit(e) {
             e.preventDefault()
 
@@ -300,10 +295,10 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.setCurrentView('list')
+                        this.$router.push("/cgi-bin/koha/erm/agreements")
                         this.setMessage('Agreement updated')
                     } else if (response.status == 201) {
-                        this.setCurrentView('list')
+                        this.$router.push("/cgi-bin/koha/erm/agreements")
                         this.setMessage('Agreement created')
                     } else {
                         this.setError(response.message || response.statusText)

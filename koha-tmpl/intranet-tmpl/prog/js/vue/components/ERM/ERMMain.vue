@@ -17,7 +17,6 @@
                                 <li>
                                     <router-link
                                         to="/cgi-bin/koha/erm/agreements"
-                                        @click="this.setCurrentView('list')"
                                     >
                                         <i class="fa fa-upload"></i>
                                         Agreements</router-link
@@ -26,7 +25,6 @@
                                 <li>
                                     <router-link
                                         to="/cgi-bin/koha/erm/licenses"
-                                        @click="this.setCurrentView('list')"
                                     >
                                         <i class="fa fa-file-text-o"></i>
                                         Licenses</router-link
@@ -45,7 +43,6 @@
 import Breadcrumb from "./Breadcrumb.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
 import { reactive, computed } from "vue"
 
 export default {
@@ -61,12 +58,8 @@ export default {
         AVStore.av_agreement_license_statuses = agreement_license_statuses
         AVStore.av_agreement_license_location = agreement_license_location
 
-        const mainStore = useMainStore()
-        const { setCurrentView } = mainStore
-
         return {
             vendorStore,
-            setCurrentView,
         }
     },
     data() {

@@ -68,12 +68,17 @@ import flatPickr from 'vue-flatpickr-component'
 export default {
     name: 'AgreementPeriods',
     data() {
-        return { fp_config: flatpickr_defaults, dates_fixed: 0 }
+        return {
+            fp_config: flatpickr_defaults,
+            dates_fixed: 0,
+        }
     },
     props: {
         periods: Array
     },
     beforeUpdate() {
+        if (!this.periods) return
+
         if (!this.dates_fixed) {
             this.periods.forEach(p => {
                 p.started_on = $date(p.started_on)
