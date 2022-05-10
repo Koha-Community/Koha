@@ -34,6 +34,7 @@ use Koha::ProblemReports;
 use Koha::Quotes;
 use Koha::Suggestions;
 use Koha::BackgroundJobs;
+use Koha::CurbsidePickups;
 
 my $query = CGI->new;
 
@@ -106,6 +107,17 @@ unless ( $logged_in_user->has_permission( { parameters => 'manage_background_job
     my $already_ran_jobs = Koha::BackgroundJobs->search(
         { borrowernumber => $logged_in_user->borrowernumber } )->count ? 1 : 0;
     $template->param( already_ran_jobs => $already_ran_jobs );
+}
+
+if ( C4::Context->preference('CurbsidePickup') ) {
+    $template->param(
+        new_curbside_pickups => Koha::CurbsidePickups->search(
+            {
+                branchcode                => $homebranch,
+                scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
+            }
+        )->filter_by_to_be_staged
+    );
 }
 
 $template->param(
