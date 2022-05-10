@@ -39,6 +39,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Encryption;
 use Koha::Exceptions::Password;
 use Koha::Holds;
+use Koha::CurbsidePickups;
 use Koha::Old::Checkouts;
 use Koha::Patron::Attributes;
 use Koha::Patron::Categories;
@@ -1309,6 +1310,20 @@ sub old_holds {
     my ($self) = @_;
     my $old_holds_rs = $self->_result->old_reserves->search( {}, { order_by => 'reservedate' } );
     return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
+}
+
+=head3 curbside_pickups
+
+my $curbside_pickups = $patron->curbside_pickups;
+
+Return all the curbside pickups for this patron
+
+=cut
+
+sub curbside_pickups {
+    my ($self) = @_;
+    my $curbside_pickups_rs = $self->_result->curbside_pickups_borrowernumbers->search;
+    return Koha::CurbsidePickups->_new_from_dbic($curbside_pickups_rs);
 }
 
 =head3 return_claims

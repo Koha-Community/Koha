@@ -77,7 +77,7 @@ $policy->add_opening_slot('1-12:00-18:00');
 my $today = dt_from_string;
 
 subtest 'Create a pickup' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     # Day and datetime are ok
     my $next_monday =
@@ -108,6 +108,7 @@ subtest 'Create a pickup' => sub {
     $policy->enable_waiting_holds_only(0)->store;
     my $cp = Koha::CurbsidePickup->new($params)->store;
     is( $cp->status, 'to-be-staged' );
+    is( $patron->curbside_pickups->count, 1, 'Koha::Patron->curbside_pickups' );
 
     throws_ok {
         Koha::CurbsidePickup->new($params)->store

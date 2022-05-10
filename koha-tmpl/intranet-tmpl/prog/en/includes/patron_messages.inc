@@ -1,3 +1,4 @@
+[% USE raw %]
 [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
 [% SET return_claims = patron.return_claims %]
 [% SET logged_in_branchcode = Branches.GetLoggedInBranchcode() %]
@@ -245,6 +246,36 @@
         [% END %]
     </div>
 [% END # /IF WaitingHolds.count %]
+
+[% IF Koha.Preference("CurbsidePickup") %]
+    [% SET curbside_pickups = patron.curbside_pickups.search( branchcode => logged_in_user.branchcode ) %]
+    [% IF curbside_pickups.count %]
+        <div id="curbside_pickups" class="circmessage">
+            <h4>Curbside pickups scheduled here</h4>
+            <ul>
+            [% FOR cp IN curbside_pickups %]
+                <li>On [% cp.scheduled_pickup_datetime | $KohaDates %]:
+                    [% SWITCH cp.status %]
+                    [% CASE 'to-be-staged' %]
+                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=to-be-staged">
+                        To be staged</a>
+                    [% CASE 'staged-and-ready' %]
+                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=staged-and-ready">
+                        Staged and ready</a>
+                    [% CASE 'patron-is-outside' %]
+                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=patron-is-outside">
+                        Patron is outside!</a>
+                    [% CASE 'delivered' %]
+                        <a href="/cgi-bin/koha/circ/curbside_pickups.pl?tab=delivered-today">
+                        Delivered</a>
+                    [% CASE %]<span>Unknown status "[% cp.status | html %]"</span>
+                    [% END %]
+                </li>
+            [% END %]
+            </ul>
+        </div>
+    [% END %]
+[% END %]
 
 [% IF ( patron.borrowernotes ) %]
     <div id="circnotes" class="circmessage">
