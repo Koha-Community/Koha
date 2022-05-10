@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::CurbsidePickup;
 
@@ -80,6 +81,17 @@ Filter by pickups that have been delivered already
 sub filter_by_delivered {
     my ($self) = @_;
     return $self->search( { delivered_datetime => { -not => undef } } );
+}
+
+=head3 filter_by_scheduled_today
+
+Filter by pickups that are scheduled today
+
+=cut
+sub filter_by_scheduled_today {
+    my ($self) = @_;
+    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    return $self->search( { scheduled_pickup_datetime => { '>' => $dtf->format_date(dt_from_string) } } );
 }
 
 =head2 Internal Methods

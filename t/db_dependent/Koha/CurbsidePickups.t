@@ -147,7 +147,7 @@ subtest 'Create a pickup' => sub {
 };
 
 subtest 'workflow' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     my $pickups =
       Koha::CurbsidePickups->search( { branchcode => $library->branchcode } );
@@ -183,6 +183,10 @@ subtest 'workflow' => sub {
     $cp->mark_as_delivered;
     is( $cp->status, 'delivered' );
     is( $pickups->filter_by_delivered->count, 1 );
+
+    is( $pickups->filter_by_scheduled_today->count, 1 );
+    $cp->scheduled_pickup_datetime($today->clone->subtract(days => 1))->store;
+    is( $pickups->filter_by_scheduled_today->count, 0 );
 
     $cp->delete;
 };

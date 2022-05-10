@@ -114,9 +114,8 @@ if ( C4::Context->preference('CurbsidePickup') ) {
         new_curbside_pickups => Koha::CurbsidePickups->search(
             {
                 branchcode                => $homebranch,
-                scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
             }
-        )->filter_by_to_be_staged
+        )->filter_by_to_be_staged->filter_by_scheduled_today,
     );
 }
 

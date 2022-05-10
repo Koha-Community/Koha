@@ -108,20 +108,17 @@ $template->param(
     patron_curbside_pickups => Koha::CurbsidePickups->search(
         {
             borrowernumber            => $logged_in_patron->borrowernumber,
-            scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
         },
         {
             order_by => { -asc => 'scheduled_pickup_datetime' }
         }
-    ),
+    )->filter_by_scheduled_today,
     curbside_pickups => Koha::CurbsidePickups->search(
-        {
-            scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
-        },
+        {},
         {
             order_by => { -asc => 'scheduled_pickup_datetime' }
         }
-    ),
+    )->filter_by_scheduled_today,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output, undef,

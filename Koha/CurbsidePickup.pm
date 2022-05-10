@@ -68,9 +68,8 @@ sub new {
             branchcode                => $params->{branchcode},
             borrowernumber            => $params->{borrowernumber},
             delivered_datetime        => undef,
-            scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
         }
-    );
+    )->filter_by_scheduled_today;
     Koha::Exceptions::CurbsidePickup::TooManyPickups->throw(
         branchcode     => $params->{branchcode},
         borrowernumber => $params->{borrowernumber}

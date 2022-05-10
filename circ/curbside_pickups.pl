@@ -61,9 +61,8 @@ if ( $op eq 'find-patron' ) {
                 branchcode                => $branchcode,
                 borrowernumber            => $patron->id,
                 delivered_datetime        => undef,
-                scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
             }
-        );
+        )->filter_by_scheduled_today;
     } else {
         push @messages, {
             type => 'error',
@@ -143,10 +142,9 @@ $template->param(
     policy => Koha::CurbsidePickupPolicies->find({ branchcode => $branchcode }),
     curbside_pickups => Koha::CurbsidePickups->search(
         {
-            branchcode                => $branchcode,
-            scheduled_pickup_datetime => { '>' => \'DATE(NOW())' },
+            branchcode => $branchcode,
         }
-      ),
+      )->filter_by_scheduled_today,
 );
 
 
