@@ -173,5 +173,12 @@ return {
             VALUES
             (3, 'manage_curbside_pickups', 'Manage curbside pickups')
         });
+
+        unless ( column_exists('curbside_pickup_policy', 'enable_waiting_holds_only') ) {
+            $dbh->do(q{
+                ALTER table curbside_pickup_policy
+                ADD COLUMN enable_waiting_holds_only INT(1) NOT NULL DEFAULT 0 AFTER enabled
+            });
+        }
     }
   }

@@ -2333,6 +2333,7 @@ CREATE TABLE `curbside_pickup_policy` (
   `id` int(11) NOT NULL auto_increment,
   `branchcode` varchar(10) NOT NULL,
   `enabled` TINYINT(1) NOT NULL DEFAULT 0,
+  `enable_waiting_holds_only` TINYINT(1) NOT NULL DEFAULT 0,
   `pickup_interval` INT(2) NOT NULL DEFAULT 0,
   `patrons_per_interval` INT(2) NOT NULL DEFAULT 0,
   `patron_scheduled_pickup` TINYINT(1) NOT NULL DEFAULT 0,
