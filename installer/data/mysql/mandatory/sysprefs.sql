@@ -556,6 +556,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('QueryWeightFields','1',NULL,'If ON, enables field weighting','YesNo'),
 ('QuoteOfTheDay','','intranet,opac','Enable or disable display of Quote of the Day on the OPAC and staff interface home page','multiple'),
 ('RandomizeHoldsQueueWeight','0',NULL,'if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight','YesNo'),
+('RealTimeHoldsQueue', '1', NULL, 'Enable updating the holds queue in real', 'YesNo')
 ('RecallsLog','1',NULL,'If ON, log create/cancel/expire/fulfill actions on recalls','YesNo'),
 ('RecallsMaxPickUpDelay','7',NULL,'Define the maximum time a recall can be awaiting pickup','Integer'),
 ('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
