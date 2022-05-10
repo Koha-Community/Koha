@@ -319,7 +319,7 @@ sub AddReserve {
         {
             biblio_ids => [ $biblionumber ]
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 
     return $reserve_id;
 }
@@ -1446,7 +1446,7 @@ sub AlterPriority {
         {
             biblio_ids => [ $hold->biblionumber ]
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
     # FIXME Should return the new priority
 }
 
@@ -2099,7 +2099,7 @@ sub RevertWaitingStatus {
         {
             biblio_ids => [ $hold->biblionumber ]
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 
 
     return $hold;

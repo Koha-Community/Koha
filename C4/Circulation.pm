@@ -1779,7 +1779,7 @@ sub AddIssue {
                 {
                     biblio_ids => [ $item_object->biblionumber ]
                 }
-            );
+            ) if C4::Context->preference('RealTimeHoldsQueue');
         }
     }
     return $issue;
@@ -2445,7 +2445,7 @@ sub AddReturn {
             {
                 biblio_ids => [ $item->biblionumber ]
             }
-        );
+        ) if C4::Context->preference('RealTimeHoldsQueue');
     }
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ));

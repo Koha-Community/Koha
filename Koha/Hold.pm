@@ -130,7 +130,7 @@ sub suspend_hold {
         {
             biblio_ids => [ $self->biblionumber ]
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 
     return $self;
 }
@@ -164,7 +164,7 @@ sub resume {
         {
             biblio_ids => [ $self->biblionumber ]
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 
     return $self;
 }
@@ -627,7 +627,7 @@ sub cancel {
                 {
                     biblio_ids => [ $old_me->biblionumber ]
                 }
-            ) unless $params->{skip_holds_queue};
+            ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
         }
     );
     return $self;
@@ -697,7 +697,7 @@ sub fill {
                 {
                     biblio_ids => [ $old_me->biblionumber ]
                 }
-            );
+            ) if C4::Context->preference('RealTimeHoldsQueue');
         }
     );
     return $self;

@@ -164,7 +164,7 @@ sub process {
             {
                 biblio_ids => \@deleted_biblionumbers
             }
-        );
+        ) if C4::Context->preference('RealTimeHoldsQueue');
     }
 
     my $job_data = decode_json $self->data;

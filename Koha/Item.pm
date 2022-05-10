@@ -217,7 +217,7 @@ sub store {
         {
             biblio_ids => [ $self->biblionumber ]
         }
-    ) unless $params->{skip_holds_queue};
+    ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
 
     return $result;
 }
@@ -248,7 +248,7 @@ sub delete {
         {
             biblio_ids => [ $self->biblionumber ]
         }
-    ) unless $params->{skip_holds_queue};
+    ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
 
     return $result;
 }

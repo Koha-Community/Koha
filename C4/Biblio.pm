@@ -347,7 +347,7 @@ us to not relink records when the authority linker is saving modifications.
 =item C<skip_holds_queue>
 
 Unless C<skip_holds_queue> is passed, ModBiblio will trigger the BatchUpdateBiblioHoldsQueue
-task to rebuild the holds queue for the biblio.
+task to rebuild the holds queue for the biblio if I<RealTimeHoldsQueue> is enabled.
 
 =back
 
@@ -440,7 +440,7 @@ sub ModBiblio {
         {
             biblio_ids => [ $biblionumber ]
         }
-    ) unless $options->{skip_holds_queue};
+    ) unless $options->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
 
     return 1;
 }
@@ -547,7 +547,7 @@ sub DelBiblio {
         {
             biblio_ids => [ $biblionumber ]
         }
-    ) unless $params->{skip_holds_queue};
+    ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
 
     return;
 }

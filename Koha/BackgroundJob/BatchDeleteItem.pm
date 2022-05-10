@@ -161,7 +161,7 @@ sub process {
                         {
                             biblio_ids => \@deleted_biblionumbers
                         }
-                    );
+                    ) if C4::Context->preference('RealTimeHoldsQueue');
                 }
 
                 if (@updated_biblionumbers) {
@@ -175,7 +175,7 @@ sub process {
                         {
                             biblio_ids => \@updated_biblionumbers
                         }
-                    );
+                    ) if C4::Context->preference('RealTimeHoldsQueue');
                 }
             }
         );
