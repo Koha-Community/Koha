@@ -5,6 +5,7 @@ use JSON qw( encode_json decode_json );
 
 use C4::Biblio;
 
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
@@ -91,7 +92,7 @@ sub process {
         my $holds = $biblio->holds;
         while ( my $hold = $holds->next ) {
             eval{
-                $hold->cancel;
+                $hold->cancel({ skip_holds_queue => 1 });
             };
             if ( $@ ) {
                 push @messages, {
@@ -110,7 +111,7 @@ sub process {
         # Delete items
         my $items = Koha::Items->search({ biblionumber => $biblionumber });
         while ( my $item = $items->next ) {
-            my $deleted = $item->safe_delete({ skip_record_index => 1 });
+            my $deleted = $item->safe_delete({ skip_record_index => 1, skip_holds_queue => 1 });
             unless ( $deleted ) {
                 push @messages, {
                     type => 'error',
@@ -127,7 +128,7 @@ sub process {
 
         # Finally, delete the biblio
         my $error = eval {
-            C4::Biblio::DelBiblio( $biblionumber, { skip_record_index => 1 } );
+            C4::Biblio::DelBiblio( $biblionumber, { skip_record_index => 1, skip_holds_queue => 1 } );
         };
         if ( $error or $@ ) {
             push @messages, {
@@ -158,6 +159,12 @@ sub process {
     if ( @deleted_biblionumbers ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( \@deleted_biblionumbers, "recordDelete", "biblioserver" );
+
+        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
+            {
+                biblio_ids => \@deleted_biblionumbers
+            }
+        );
     }
 
     my $job_data = decode_json $self->data;
