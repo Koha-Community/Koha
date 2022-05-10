@@ -2,26 +2,27 @@ package Koha::CurbsidePickupPolicy;
 
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Carp;
 
 use Koha::Database;
 use Koha::Library;
 use Koha::CurbsidePickupOpeningSlots;
+
+use Koha::Result::Boolean;
+use Koha::Exceptions::CurbsidePickup;
 
 use base qw(Koha::Object);
 
@@ -70,6 +71,54 @@ sub add_opening_slot {
             end_minute                => $end_minute,
         }
     )->store;
+}
+
+=head3 is_valid_pickup_datetime
+
+=cut
+
+sub is_valid_pickup_datetime {
+    my ( $self, $datetime ) = @_;
+
+    my $opening_slots =
+      $self->opening_slots->search( { day => $datetime->dow % 7 } );
+    my $matching_slot;
+    while ( my $opening_slot = $opening_slots->next ) {
+        my $start = $datetime->clone->set_hour( $opening_slot->start_hour )
+          ->set_minute( $opening_slot->start_minute );
+        my $end = $datetime->clone->set_hour( $opening_slot->end_hour )
+          ->set_minute( $opening_slot->start_minute );
+        my $keep_going = 1;
+        my $slot_start = $start->clone;
+        my $slot_end = $slot_start->clone->add(minutes => $self->pickup_interval);
+        while ($slot_end <= $end) {
+            if ( $slot_start == $datetime ) {
+                $matching_slot = $slot_start;
+                last;
+            }
+            $slot_start->add( minutes => $self->pickup_interval);
+            $slot_end->add( minutes => $self->pickup_interval);
+        }
+    }
+
+    return Koha::Result::Boolean->new(0)
+      ->add_message( { message => 'no_matching_slots' } )
+      unless $matching_slot;
+
+    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    # Check too many users for this slot
+    my $existing_pickups = Koha::CurbsidePickups->search(
+        {
+            branchcode                => $self->branchcode,
+            scheduled_pickup_datetime => $dtf->format_datetime($matching_slot),
+        }
+    );
+
+    return Koha::Result::Boolean->new(0)
+      ->add_message( { message => 'no_more_available' } )
+      if $existing_pickups->count >= $self->patrons_per_interval;
+
+    return 1;
 }
 
 =head2 Internal methods
