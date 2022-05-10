@@ -470,7 +470,7 @@ sub _strip_item_fields {
 
 =head2 DelBiblio
 
-  my $error = &DelBiblio($biblionumber);
+  my $error = &DelBiblio($biblionumber, $params);
 
 Exported function (core API) for deleting a biblio in koha.
 Deletes biblio record from Zebra and Koha tables (biblio & biblioitems)
@@ -479,6 +479,15 @@ Checks to make sure that the biblio has no items attached.
 return:
 C<$error> : undef unless an error occurs
 
+I<$params> is a hashref containing extra parameters. Valid keys are:
+
+=over 4
+
+=item B<skip_holds_queue>: used when the holds queue update will be handled by the caller
+
+=item B<skip_record_index>: used when the indexing schedulling will be handled by the caller
+
+=back
 =cut
 
 sub DelBiblio {
