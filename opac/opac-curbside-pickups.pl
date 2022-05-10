@@ -64,11 +64,37 @@ if ( $op eq 'create-pickup' ) {
         )->store;
         $pickup->notify_new_pickup;
     } catch {
-        if ( $_->isa('Koha::Exceptions::CurbsidePickup::TooManyPickups') ) {
+        if ( $_->isa('Koha::Exceptions::CurbsidePickup::NotEnabled') ) {
+            push @messages, {
+                type   => 'error',
+                code   => 'not_enabled',
+            };
+        } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::LibraryIsClosed') ) {
+            push @messages, {
+                type   => 'error',
+                code   => 'library_is_closed',
+                patron => Koha::Patrons->find($borrowernumber)
+            };
+        } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoWaitingHolds') ) {
+            push @messages, {
+                type   => 'error',
+                code   => 'no_waiting_holds',
+            };
+        } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::TooManyPickups') ) {
             push @messages, {
                 type   => 'error',
                 code   => 'too_many_pickups',
                 patron => Koha::Patrons->find($borrowernumber)
+            };
+        } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoMatchingSlots') ) {
+            push @messages, {
+                type   => 'error',
+                code   => 'no_matching_slots',
+            };
+        } elsif ( $_->isa('Koha::Exceptions::CurbsidePickup::NoMorePickupsAvailable') ) {
+            push @messages, {
+                type   => 'error',
+                code   => 'no_more_pickups_available',
             };
         } else {
             warn $_;
@@ -99,6 +125,7 @@ elsif ( $op eq 'arrival-alert' ) {
 }
 
 $template->param(
+    messages => \@messages,
     policies => Koha::CurbsidePickupPolicies->search(
         {
             enabled                 => 1,

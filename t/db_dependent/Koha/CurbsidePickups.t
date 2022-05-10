@@ -20,9 +20,10 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::Exception;
 
-use Koha::City;
+use C4::Calendar;
 use Koha::CurbsidePickups;
 use Koha::CurbsidePickupPolicies;
+use Koha::Calendar;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -77,7 +78,7 @@ $policy->add_opening_slot('1-12:00-18:00');
 my $today = dt_from_string;
 
 subtest 'Create a pickup' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     # Day and datetime are ok
     my $next_monday =
@@ -144,6 +145,22 @@ subtest 'Create a pickup' => sub {
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
 'Cannot create a pickup on a time that is not matching the start of an interval';
 
+    # Day is a holiday
+    Koha::Caches->get_instance->flush_all;
+    C4::Calendar->new( branchcode => $library->branchcode )->insert_week_day_holiday(
+        weekday     => 1,
+        title       => '',
+        description => 'Mondays',
+    );
+    my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+    throws_ok {
+        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
+    }
+    'Koha::Exceptions::CurbsidePickup::LibraryIsClosed',
+      'Cannot create a pickup on a holiday';
+
+    C4::Context->dbh->do(q{DELETE FROM repeatable_holidays});
+    Koha::Caches->get_instance->flush_all;
 };
 
 subtest 'workflow' => sub {

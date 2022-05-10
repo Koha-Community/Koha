@@ -28,6 +28,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::CurbsidePickup',
         description => 'Curbside pickups are not enable for this library',
     },
+    'Koha::Exceptions::CurbsidePickup::LibraryIsClosed' => {
+        isa         => 'Koha::Exceptions::CurbsidePickup',
+        description => 'Cannot create a pickup on a closed day',
+    },
     'Koha::Exceptions::CurbsidePickup::TooManyPickups' => {
         isa         => 'Koha::Exceptions::CurbsidePickup',
         description => 'Patron already has a scheduled pickup for this library',

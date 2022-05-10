@@ -59,12 +59,26 @@
                     <h2>Curbside pickups</h2>
 
                     [% FOR m IN messages %]
-                        <div class="dialog [% m.type | html %]">
+                        [% IF m.type == "error" %]
+                        <div class="alert alert-warning">
+                        [% ELSE %]
+                        <div class="alert alert-info">
+                        [% END %]
                             [% SWITCH m.code %]
+                            [% CASE 'not_enabled' %]
+                                <span>The curbside pickup feature is not enabled for this library.</span>
+                            [% CASE 'library_is_closed' %]
+                                <span>Cannot create a curbside pickup for this day, it is an holiday.</span>
+                            [% CASE 'no_waiting_holds' %]
+                                <span>This patron does not have waiting holds.</span>
                             [% CASE 'too_many_pickups' %]
                                 <span>You already have a scheduled pickup for this library.</span>
+                            [% CASE 'no_matching_slots' %]
+                                <span>Wrong slot selected.</span>
+                            [% CASE 'no_more_pickups_available' %]
+                                <span>There are no more pickups available for this slot. Please choose another one.</span>
                             [% CASE 'cannot_checkout' %]
-                                <span>Unable to check the items out. Please contact the library.</span>
+                                <span>Unable to check the items out to [% INCLUDE 'patron-title.inc' patron=m.patron %]</span>
                             [% CASE 'library_notified' %]
                                 <span>The library has been notified of your arrival.</span>
                             [% CASE %]

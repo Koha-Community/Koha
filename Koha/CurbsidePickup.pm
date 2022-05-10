@@ -26,6 +26,7 @@ use base qw(Koha::Object);
 use C4::Circulation qw( CanBookBeIssued AddIssue );
 use C4::Members::Messaging qw( GetMessagingPreferences );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use Koha::Calendar;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron;
 use Koha::Library;
@@ -54,6 +55,10 @@ sub new {
 
     Koha::Exceptions::CurbsidePickup::NotEnabled->throw
       unless $policy && $policy->enabled;
+
+    my $calendar = Koha::Calendar->new( branchcode => $params->{branchcode} );
+    Koha::Exceptions::CurbsidePickup::LibraryIsClosed->throw
+      if $calendar->is_holiday( $params->{scheduled_pickup_datetime} );
 
     if ( $policy->enable_waiting_holds_only ) {
         my $patron        = Koha::Patrons->find( $params->{borrowernumber} );
