@@ -40,7 +40,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "about.tt",
         query           => $query,
         type            => "intranet",
-        flagsrequired   => { reserveforothers => [ 'place_holds', 'modify_holds_priority' ] },
+        flagsrequired   => { reserveforothers => '*' },
     }
 );
 
