@@ -70,6 +70,7 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 use Koha::DateUtils qw( output_pref );
+use Koha::Util::MARC;
 
 my $query = CGI->new();
 
@@ -352,8 +353,7 @@ my $issn = $marcissns->[0] || '';
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{title} =~ s/\/+$//; # remove trailing slash
     $dat->{title} =~ s/\s+$//; # remove trailing space
-    my $oclc_no = $record->subfield('035','a') // q{};
-    $oclc_no =~ s/\([^)]*\)//;
+    my $oclc_no = Koha::Util::MARC::oclc_number( $record );
     $search_for_title = parametrized_url(
         $search_for_title,
         {
