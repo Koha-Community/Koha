@@ -203,26 +203,27 @@
         var newValue = textObj.value;
         var decAmount = "";
         var dolAmount = "";
-        var decFlag   = false;
+        var dolFlag   = false;
         var aChar     = "";
 
-        for(var i=0; i < newValue.length; i++) {
-            aChar = newValue.substring(i, i+1);
-            if (aChar >= "0" && aChar <= "9") {
-                if(decFlag) {
-                    decAmount = "" + decAmount + aChar;
+        for(var i = newValue.length; 0 < i; i--) {
+            aChar = newValue.substring(i-1, i);
+            if ("0" <= aChar && aChar <= "9") {
+                if(dolFlag) {
+                    dolAmount = "" + aChar + dolAmount;
                 }
                 else {
-                    dolAmount = "" + dolAmount + aChar;
+                    decAmount = "" + aChar + decAmount;
                 }
             }
-            if (aChar == ".") {
-                if (decFlag) {
-                    dolAmount = "";
-                    break;
-                }
-                decFlag = true;
+            if (aChar == "." || aChar == ",") {
+                dolFlag = true;
             }
+        }
+
+        if (!dolFlag) {
+            dolAmount = decAmount;
+            decAmount = "";
         }
 
         if (dolAmount == "") {
