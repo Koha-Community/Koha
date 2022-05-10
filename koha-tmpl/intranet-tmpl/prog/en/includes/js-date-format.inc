@@ -57,7 +57,7 @@
 
         window.$time = function(value, options) {
             if(!value) return '';
-            var tz = (opitons&&options.tz)||def_tz;
+            var tz = (options&&options.tz)||def_tz;
             var m = moment(value);
             if(tz) m.tz(tz);
 
