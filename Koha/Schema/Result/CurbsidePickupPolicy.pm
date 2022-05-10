@@ -148,5 +148,10 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RyZGROB1+g3kb2bo6mwrUQ
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+enabled' => { is_boolean => 1 },
+    '+enable_waiting_holds_only' => { is_boolean => 1 },
+    '+patron_scheduled_pickup' => { is_boolean => 1 },
+);
+
 1;
