@@ -45,6 +45,7 @@ if ( $op eq 'save' ) {
         my $params = {
             branchcode      => $branchcode,
             enabled         => scalar $input->param("enable-$branchcode") || 0,
+            enable_waiting_holds_only => scalar $input->param("enable-waiting-holds-only-$branchcode") || 0,
             pickup_interval => scalar $input->param("interval-$branchcode"),
             patrons_per_interval    => scalar $input->param("max-per-interval-$branchcode"),
             patron_scheduled_pickup => scalar $input->param("patron-scheduled-$branchcode") || 0,

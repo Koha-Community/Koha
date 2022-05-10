@@ -41,6 +41,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::CurbsidePickup',
         description => 'No more pickups available for this slot',
     },
+    'Koha::Exceptions::CurbsidePickup::NoWaitingHolds' => {
+        isa         => 'Koha::Exceptions::CurbsidePickup',
+        description => 'Cannot create a pickup, patron does not have waiting holds',
+    },
 );
 
 1;

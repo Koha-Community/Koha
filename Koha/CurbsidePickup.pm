@@ -49,6 +49,20 @@ Koha::CurbsidePickup - Koha Curbside Pickup Object class
 sub new {
     my ( $self, $params ) = @_;
 
+    my $policy =
+      Koha::CurbsidePickupPolicies->find( { branchcode => $params->{branchcode} } );
+
+    Koha::Exceptions::CurbsidePickup::NotEnabled->throw
+      unless $policy && $policy->enabled;
+
+    if ( $policy->enable_waiting_holds_only ) {
+        my $patron        = Koha::Patrons->find( $params->{borrowernumber} );
+        my $waiting_holds = $patron->holds->search(
+            { found => 'W', branchcode => $params->{branchcode} } );
+
+        Koha::Exceptions::CurbsidePickup::NoWaitingHolds->throw
+          unless $waiting_holds->count;
+    }
     my $existing_curbside_pickups = Koha::CurbsidePickups->search(
         {
             branchcode                => $params->{branchcode},
@@ -62,8 +76,6 @@ sub new {
         borrowernumber => $params->{borrowernumber}
     ) if $existing_curbside_pickups->count;
 
-    my $policy =
-      Koha::CurbsidePickupPolicies->find( { branchcode => $params->{branchcode} } );
     my $is_valid =
       $policy->is_valid_pickup_datetime( $params->{scheduled_pickup_datetime} );
     unless ($is_valid) {

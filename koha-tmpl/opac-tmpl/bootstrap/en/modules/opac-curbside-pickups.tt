@@ -200,6 +200,7 @@
             map[e.branchcode] = e;
             return map;
         }, {});
+        let can_schedule_at = {};
         [% FOR p IN policies %]
             var opening_slots = [% To.json(p.opening_slots.unblessed) | $raw %];
             var slots_per_day = {};
@@ -209,6 +210,13 @@
                 slots_per_day[day].push(slot);
             });
             policies['[% p.branchcode | html %]'].slots_per_day = slots_per_day;
+
+            [% IF p.enable_waiting_holds_only %]
+                [% SET waiting_holds = logged_in_user.holds.search( found => 'W', branchcode => p.branchcode ) %]
+                [% UNLESS waiting_holds.count %]
+                    policies['[% p.branchcode | html %]'].enabled = 0;
+                [% END %]
+            [% END %]
         [% END %]
 
         let existingPickupMoments = [];
@@ -218,6 +226,13 @@
 
             if(!existingPickupMoments[pickup.branchcode]) existingPickupMoments[pickup.branchcode] = [];
             existingPickupMoments[pickup.branchcode].push(pickupMoment);
+        });
+
+        $("#pickup-branch option").each(function(){
+            if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
+                $(this).prop("disabled", "disabled");
+                $(this).attr("title", _("You don't have waiting holds at this location"));
+            }
         });
 
         $('#pickup-branch').on('change', function() {

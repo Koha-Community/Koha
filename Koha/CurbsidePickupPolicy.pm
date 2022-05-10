@@ -47,12 +47,28 @@ sub library {
     return Koha::Library->_new_from_dbic( $rs );
 }
 
+=head3 opening_slots
+
+$policy->opening_slots
+
+Return the list of opening slots (Koha::CurbsidePickupOpeningSlots object)
+
+=cut
+
 sub opening_slots {
     my ( $self ) = @_;
     my $rs = $self->_result->curbside_pickup_opening_slots;
     return unless $rs;
     return Koha::CurbsidePickupOpeningSlots->_new_from_dbic( $rs );
 }
+
+=head3 add_opening_slot
+
+$policy->add("$d-12:00-15:00");
+
+Add a new opening slot for this library. It must be formatted "day:start:end" with 'start' and 'end' in 24-hour format.
+
+=cut
 
 sub add_opening_slot {
     my ( $self, $slot ) = @_;

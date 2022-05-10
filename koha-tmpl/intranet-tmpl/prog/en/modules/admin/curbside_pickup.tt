@@ -112,6 +112,16 @@
                                     [% END %]
                                     <span class="hint">Enable patrons to schedule their own curbside pickups.</span>
                                 </li>
+
+                                <li>
+                                    <label for="enable-waiting-holds-only-[% l.branchcode | html %]">Enable for waiting holds only: </label>
+                                    [% IF policies.$branchcode.enable_waiting_holds_only %]
+                                        <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox" checked>
+                                    [% ELSE %]
+                                        <input name="enable-waiting-holds-only-[% l.branchcode | html %]" id="enable-waiting-holds-only-[% l.branchcode | html %]" value="1" type="checkbox">
+                                    [% END %]
+                                    <span class="hint">Enable only if the patron has waiting holds.</span>
+                                </li>
                             </ol>
                         </fieldset>
 

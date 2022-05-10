@@ -54,6 +54,7 @@ my $policy = Koha::CurbsidePickupPolicy->new(
     {
         branchcode              => $library->branchcode,
         enabled                 => 1,
+        enable_waiting_holds_only => 0,
         pickup_interval         => 30,
         patrons_per_interval    => 2,
         patron_scheduled_pickup => 1
@@ -63,6 +64,7 @@ my $policy_disabled = Koha::CurbsidePickupPolicy->new(
     {
         branchcode              => $library_disabled->branchcode,
         enabled                 => 0,
+        enable_waiting_holds_only => 0,
         pickup_interval         => 30,
         patrons_per_interval    => 2,
         patron_scheduled_pickup => 1
@@ -75,32 +77,40 @@ $policy->add_opening_slot('1-12:00-18:00');
 my $today = dt_from_string;
 
 subtest 'Create a pickup' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     # Day and datetime are ok
     my $next_monday =
       $today->clone->add( days => ( 1 - $today->day_of_week ) % 7 );
     my $schedule_dt =
       $next_monday->set_hour(15)->set_minute(00)->set_second(00);
-    my $cp = Koha::CurbsidePickup->new(
+    my $params =
         {
             branchcode                => $library->branchcode,
             borrowernumber            => $patron->borrowernumber,
             scheduled_pickup_datetime => $schedule_dt,
             notes                     => 'just a note'
-        }
-    )->store;
+        };
+
+    throws_ok {
+        Koha::CurbsidePickup->new({%$params, branchcode => $library_disabled->branchcode})->store;
+    }
+    'Koha::Exceptions::CurbsidePickup::NotEnabled',
+      'Cannot create pickup if the policy does not allow it';
+
+    $policy->enable_waiting_holds_only(1)->store;
+    throws_ok {
+        Koha::CurbsidePickup->new($params)->store;
+    }
+    'Koha::Exceptions::CurbsidePickup::NoWaitingHolds',
+      'Cannot create pickup for a patron without waiting hold if flag is set';
+
+    $policy->enable_waiting_holds_only(0)->store;
+    my $cp = Koha::CurbsidePickup->new($params)->store;
     is( $cp->status, 'to-be-staged' );
 
     throws_ok {
-        Koha::CurbsidePickup->new(
-            {
-                branchcode                => $library->branchcode,
-                borrowernumber            => $patron->borrowernumber,
-                scheduled_pickup_datetime => $schedule_dt,
-                notes                     => 'just a note'
-            }
-          )->store
+        Koha::CurbsidePickup->new($params)->store
     }
     'Koha::Exceptions::CurbsidePickup::TooManyPickups',
       'Cannot create 2 pickups for the same patron';
@@ -112,14 +122,7 @@ subtest 'Create a pickup' => sub {
       $today->clone->add( days => ( 2 - $today->day_of_week ) % 7 );
     $schedule_dt = $next_tuesday->set_hour(15)->set_minute(00)->set_second(00);
     throws_ok {
-        Koha::CurbsidePickup->new(
-            {
-                branchcode                => $library->branchcode,
-                borrowernumber            => $patron->borrowernumber,
-                scheduled_pickup_datetime => $schedule_dt,
-                notes                     => 'just a note'
-            }
-          )->store
+        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
       'Cannot create a pickup on a day without opening slots defined';
@@ -127,14 +130,7 @@ subtest 'Create a pickup' => sub {
     # Day ok but datetime not ok
     $schedule_dt = $next_monday->set_hour(19)->set_minute(00)->set_second(00);
     throws_ok {
-        Koha::CurbsidePickup->new(
-            {
-                branchcode                => $library->branchcode,
-                borrowernumber            => $patron->borrowernumber,
-                scheduled_pickup_datetime => $schedule_dt,
-                notes                     => 'just a note'
-            }
-          )->store
+        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
       'Cannot create a pickup on a time without opening slots defined';
@@ -142,14 +138,7 @@ subtest 'Create a pickup' => sub {
     # Day ok, datetime inside the opening slot, but wrong (15:15 for instance)
     $schedule_dt = $next_monday->set_hour(15)->set_minute(15)->set_second(00);
     throws_ok {
-        Koha::CurbsidePickup->new(
-            {
-                branchcode                => $library->branchcode,
-                borrowernumber            => $patron->borrowernumber,
-                scheduled_pickup_datetime => $schedule_dt,
-                notes                     => 'just a note'
-            }
-          )->store
+        Koha::CurbsidePickup->new({%$params, scheduled_pickup_datetime => $schedule_dt})->store;
     }
     'Koha::Exceptions::CurbsidePickup::NoMatchingSlots',
 'Cannot create a pickup on a time that is not matching the start of an interval';
