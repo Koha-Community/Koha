@@ -41,8 +41,10 @@ use C4::Installer::PerlModules;
 use Koha;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Currencies;
+use Koha::Authorities;
 use Koha::BackgroundJob;
 use Koha::BiblioFrameworks;
+use Koha::Biblios;
 use Koha::Email;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -354,6 +356,7 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
     my $es_status;
     my $es_config_error;
     my $es_running = 1;
+    my $es_has_missing = 0;
 
     my $es_conf;
     try {
@@ -378,15 +381,15 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
         my $es_status->{version} = $es->info->{version}->{number};
 
         foreach my $index ( @indexes ) {
-            my $count;
+            my $index_count;
             try {
-                $count = $es->indices->stats( index => $index )
+                $index_count = $es->indices->stats( index => $index )
                       ->{_all}{primaries}{docs}{count};
             }
             catch {
                 if ( ref($_) eq 'Search::Elasticsearch::Error::Missing' ) {
                     push @{ $es_status->{errors} }, "Index not found ($index)";
-                    $count = -1;
+                    $index_count = -1;
                 }
                 elsif ( ref($_) eq 'Search::Elasticsearch::Error::NoNodes' ) {
                     $es_running = 0;
@@ -397,15 +400,31 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
                 }
             };
 
+            my $db_count = -1;
+            my $missing_count = 0;
+            if ( $index eq $biblios_index_name ) {
+                $db_count = Koha::Biblios->search->count;
+            } elsif ( $index eq $authorities_index_name ) {
+                $db_count = Koha::Authorities->search->count;
+            }
+            if ( $db_count != -1 && $index_count != -1 ) {
+                $missing_count = $db_count - $index_count;
+                $es_has_missing = 1 if $missing_count > 0;
+            }
             push @{ $es_status->{indexes} },
               {
-                index_name => $index,
-                count      => $count
+                index_name    => $index,
+                index_count   => $index_count,
+                db_count      => $db_count,
+                missing_count => $missing_count,
               };
         }
         $es_status->{running} = $es_running;
 
-        $template->param( elasticsearch_status => $es_status );
+        $template->param(
+            elasticsearch_status      => $es_status,
+            elasticsearch_has_missing => $es_has_missing,
+        );
     }
 }
 
