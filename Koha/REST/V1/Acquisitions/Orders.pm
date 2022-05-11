@@ -344,7 +344,7 @@ UI.
 sub table_name_fixer {
     my ( $self, $q ) = @_;
 
-    $q =~ s|biblio\.|biblio\.biblioitem\.|g
+    $q =~ s{biblio\.(?=isbn|ean|publisher)}{biblio\.biblioitem\.}g
       if $q =~ m/.*(isbn|ean|publisher).*/;
 
     return $q;
