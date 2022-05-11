@@ -487,11 +487,9 @@ $(document).ready(function() {
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_unseen" ) {
-                            msg += "<span class='renewals-disabled'>"
+                            msg += "<span>"
                                     + __("Must be renewed at the library")
                                     + "</span>";
-
-                            span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "restriction" ) {
                             msg += "<span class='renewals-disabled'>"
@@ -570,7 +568,7 @@ $(document).ready(function() {
                         var can_force_renew = ( oObj.onsite_checkout == 0 ) &&
                             ( oObj.can_renew_error != "on_reserve" || (oObj.can_renew_error == "on_reserve" && AllowRenewalOnHoldOverride))
                             ? true : false;
-                        var can_renew = ( oObj.renewals_remaining > 0  && !oObj.can_renew_error );
+                        var can_renew = ( oObj.renewals_remaining > 0 && ( !oObj.can_renew_error || oObj.can_renew_error == "too_unseen" ));
                         content += "<span>";
                         if ( can_renew || can_force_renew ) {
                             content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
