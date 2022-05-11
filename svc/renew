@@ -67,10 +67,12 @@ if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference
     $data->{error} = undef;
 }
 
-if ( $data->{renew_okay} ) {
+if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen') ) {
     try{
         $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due, undef, undef, $seen );
         $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
+        $data->{renew_okay} = 1;
+        $data->{error} = undef;
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Checkout::FailedRenewal' ) {
             $data->{error} = 'renewal_failed';
