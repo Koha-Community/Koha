@@ -157,17 +157,19 @@ if (@patron_attr_filter_loop) {
     #              too resource intensive, MySQL can be used to do the filtering, i.e. rewire the
     #              SQL below to select only those attribute values that match the filters.
 
-    my $sql = q(SELECT borrowernumber AS bn, b.code, attribute AS val, category AS avcategory, lib AS avdescription
+    my $sql = q{
+        SELECT b.borrowernumber AS bn, b.code AS attrcode, b.attribute AS attrval, a.lib AS avdescription
         FROM borrower_attributes b
         JOIN borrower_attribute_types bt ON (b.code = bt.code)
-        LEFT JOIN authorised_values a ON (a.category = bt.authorised_value_category AND a.authorised_value = b.attribute));
+        LEFT JOIN authorised_values a ON (a.category = bt.authorised_value_category AND a.authorised_value = b.attribute)
+    };
     my $sth = $dbh->prepare($sql);
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref) {
         my $pattrs = $borrowernumber_to_attributes{$row->{bn}} ||= { };
-        push @{ $pattrs->{$row->{code}} }, [
-            $row->{val},
-            defined $row->{avdescription} ? $row->{avdescription} : $row->{val},
+        push @{ $pattrs->{$row->{attrcode}} }, [
+            $row->{attrval},
+            defined $row->{avdescription} ? $row->{avdescription} : $row->{attrval},
         ];
     }
 
@@ -178,8 +180,7 @@ if (@patron_attr_filter_loop) {
             # discard patrons that do not match (case insensitive) at least one of each attribute filter value
             my $discard = 1;
             for my $attrval (map { lc $_ } @{ $cgi_attrcode_to_attrvalues{$code} }) {
-                ## if (grep { $attrval eq lc($_->[0]) } @{ $pattrs->{$code} })
-                if (grep { $attrval eq lc($_->[1]) } @{ $pattrs->{$code} }) {
+                if (grep { $attrval eq lc($_->[0]) } @{ $pattrs->{$code} }) {
                     $discard = 0;
                     last;
                 }
