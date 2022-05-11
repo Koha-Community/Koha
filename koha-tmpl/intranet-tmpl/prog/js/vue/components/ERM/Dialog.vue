@@ -5,17 +5,13 @@
 
 <script>
 import { storeToRefs } from "pinia"
-import { useMainStore } from '../../stores/main';
+import { useMainStore } from "../../stores/main"
 
 export default {
     setup(){
         const mainStore = useMainStore()
         const { message, error } = storeToRefs(mainStore)
-        const { removeMessages } = mainStore
-        return { message, error, removeMessages }
+        return { message, error }
     },
-    beforeUnmount() {
-        this.removeMessages()
-    }
 };
 </script>

@@ -58,21 +58,15 @@
 </template>
 
 <script>
-import { useMainStore } from "../../stores/main"
+import { fetchPatron } from "../../fetch"
+
 export default {
-    setup() {
-        const mainStore = useMainStore()
-        const { setError } = mainStore
-        return { setError }
-    },
     name: 'AgreementUserRoles',
     props: {
         av_agreement_user_roles: Array,
         user_roles: Array,
     },
-    beforeUpdate() {
-        if (!this.user_roles) return
-
+    beforeCreate() {
         this.user_roles.forEach(u => {
             u.patron_str = $patron_to_html(u.patron)
         })
@@ -102,19 +96,15 @@ export default {
         newUserSelected(e) {
             let c = e.currentTarget.counter
             let selected_patron_id = document.getElementById("selected_patron_id").value
-            fetch('/api/v1/patrons/' + selected_patron_id)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        this.user_roles[c].patron = result
-                        this.user_roles[c].patron_str = $patron_to_html(result)
-                        this.user_roles[c].user_id = result.patron_id
-                    }).catch(
-                        (error) => {
-                            this.setError(error)
-                        }
-                )
-        }
+            let patron
+            // FIXME We are missing a "loading..."
+            fetchPatron(selected_patron_id).then((p) => {
+                patron = p
+                this.user_roles[c].patron = patron
+                this.user_roles[c].patron_str = $patron_to_html(patron)
+                this.user_roles[c].user_id = patron.patron_id
+            })
+        },
     },
 }
 </script>

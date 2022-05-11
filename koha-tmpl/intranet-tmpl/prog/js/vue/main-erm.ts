@@ -14,8 +14,15 @@ import { routes } from "./routes";
 
 const router = createRouter({ history: createWebHistory(), routes });
 
+import { useMainStore } from "./stores/main";
 createApp(App)
     .use(createPinia())
     .use(router)
     .component("font-awesome-icon", FontAwesomeIcon)
     .mount("#erm");
+
+const mainStore = useMainStore();
+const { removeMessages } = mainStore;
+router.beforeEach((to, from) => {
+    removeMessages(); // This will actually flag the messages as displayed already
+});

@@ -1,9 +1,9 @@
 import ERMHome from "./components/ERM/ERMHome.vue";
-import Agreements from "./components/ERM/Agreements.vue";
+import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "./components/ERM/AgreementsFormConfirmDelete.vue";
-import Licenses from "./components/ERM/Licenses.vue";
+import LicensesList from "./components/ERM/LicensesList.vue";
 import LicensesShow from "./components/ERM/LicensesShow.vue";
 import LicensesFormAdd from "./components/ERM/LicensesFormAdd.vue";
 import LicensesFormConfirmDelete from "./components/ERM/LicensesFormConfirmDelete.vue";
@@ -27,7 +27,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/agreements",
-        component: Agreements,
+        component: AgreementsList,
         meta: {
             breadcrumb: [
                 breadcrumbs.home,
@@ -87,7 +87,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/erm/licenses",
-        component: Licenses,
+        component: LicensesList,
         meta: {
             breadcrumb: [
                 breadcrumbs.home,

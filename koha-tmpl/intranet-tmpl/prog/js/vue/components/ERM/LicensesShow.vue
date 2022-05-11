@@ -55,7 +55,6 @@
 
 <script>
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
 import { storeToRefs } from "pinia"
 import { fetchLicense } from "../../fetch"
 
@@ -75,15 +74,11 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
-        const mainStore = useMainStore()
-        const { setError } = mainStore
-
         return {
             format_date,
             get_lib_from_av,
             av_license_types,
             av_license_statuses,
-            setError,
         }
     },
     data() {

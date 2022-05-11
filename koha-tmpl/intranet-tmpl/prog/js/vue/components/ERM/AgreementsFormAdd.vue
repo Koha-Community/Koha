@@ -201,7 +201,7 @@ import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
+import { setMessage, setError } from "../../messages"
 import { fetchAgreement } from '../../fetch'
 import { storeToRefs } from "pinia"
 
@@ -219,9 +219,6 @@ export default {
             av_agreement_license_location,
         } = storeToRefs(AVStore)
 
-        const mainStore = useMainStore()
-        const { setMessage, setError, resetMessages } = mainStore
-
         return {
             vendors,
             av_agreement_statuses,
@@ -230,7 +227,6 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
-            setMessage, setError, resetMessages,
         }
     },
     data() {
@@ -306,12 +302,12 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        this.setMessage('Agreement updated')
+                        setMessage('Agreement updated')
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        this.setMessage('Agreement created')
+                        setMessage('Agreement created')
                     } else {
-                        this.setError(response.message || response.statusText)
+                        setError(response.message || response.statusText)
                     }
                 }).catch(
                     (error) => {

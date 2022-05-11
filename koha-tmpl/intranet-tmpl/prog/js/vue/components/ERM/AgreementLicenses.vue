@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { fetchLicenses } from '../../fetch'
 export default {
     name: 'AgreementLicenses',
     data() {
@@ -114,20 +115,8 @@ export default {
         av_agreement_license_location: Array,
         agreement_licenses: Array,
     },
-    beforeCreate() {
-        // FIXME it's not called on setup, but setup() does not have 'this'.
-        const apiUrl = "/api/v1/erm/licenses"
-
-        fetch(apiUrl)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    this.licenses = result
-                },
-                (error) => {
-                    this.$emit("set-error", error)
-                }
-            )
+    beforeCreate(){
+        fetchLicenses().then((licenses) => this.licenses = licenses )
     },
     methods: {
         addLicense() {

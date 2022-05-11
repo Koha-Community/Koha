@@ -36,17 +36,10 @@
 </template>
 
 <script>
-import { useMainStore } from "../../stores/main"
 import { fetchAgreement } from "../../fetch"
+import { setMessage, setError } from "../../messages"
 
 export default {
-    setup() {
-        const mainStore = useMainStore()
-        const { setMessage, setError } = mainStore
-        return {
-            setMessage, setError,
-        }
-    },
     data() {
         return {
             agreement: {},
@@ -55,7 +48,7 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.agreement = vm.getAgreement(to.params.agreement_id)
+            vm.getAgreement(to.params.agreement_id)
         })
     },
     methods: {
@@ -67,7 +60,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/agreements/' + this.agreement_id
+            let apiUrl = '/api/v1/erm/agreements/' + this.agreement.agreement_id
 
             const options = {
                 method: 'DELETE',
@@ -80,21 +73,18 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            this.setMessage("Agreement deleted")
+                            setMessage("Agreement deleted")
                             this.$router.push("/cgi-bin/koha/erm/agreements")
                         } else {
-                            this.setError(response.message || response.statusText)
+                            setError(response.message || response.statusText)
                         }
                     }
                 ).catch(
                     (error) => {
-                        this.setError(error)
+                        setError(error)
                     }
                 )
         }
-    },
-    props: {
-        agreement_id: Number
     },
     name: "AgreementsFormConfirmDelete",
 }

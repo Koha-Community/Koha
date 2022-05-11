@@ -4,6 +4,7 @@
         <div class="row">
             <div class="col-sm-10 col-sm-push-2">
                 <main>
+                    <Dialog />
                     <router-view />
                 </main>
             </div>
@@ -41,9 +42,10 @@
 
 <script>
 import Breadcrumb from "./Breadcrumb.vue"
+import Dialog from "./Dialog.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { reactive, computed } from "vue"
+import { fetchVendors } from "../../fetch"
 
 export default {
     setup() {
@@ -68,26 +70,11 @@ export default {
         }
     },
     beforeCreate() {
-        const apiUrl = "/api/v1/acquisitions/vendors"
-
-        fetch(apiUrl)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    this.vendorStore.vendors = result
-                },
-                (error) => {
-                    this.$emit("set-error", error)
-                }
-            )
-    },
-    methods: {
-        switchComponent(component) {
-            this.component = component
-        },
+        fetchVendors().then((vendors) => this.vendorStore.vendors = vendors)
     },
     components: {
         Breadcrumb,
+        Dialog,
     },
 };
 </script>

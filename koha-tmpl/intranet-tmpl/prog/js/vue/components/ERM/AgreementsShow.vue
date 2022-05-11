@@ -185,7 +185,6 @@ import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
 import { fetchAgreement } from "../../fetch"
 import { storeToRefs } from "pinia"
 
@@ -212,8 +211,6 @@ export default {
             av_agreement_license_location,
         } = storeToRefs(AVStore)
 
-        const mainStore = useMainStore()
-        const { setError } = mainStore
         return {
             format_date,
             patron_to_html,
@@ -225,7 +222,6 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
-            setError,
         }
     },
     data() {

@@ -1,6 +1,7 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
     <div v-else>
+        <Toolbar />
         <table v-if="licenses.length" id="license_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
             There are no licenses defined.
@@ -9,11 +10,13 @@
 </template>
 
 <script>
+import Toolbar from "./LicensesToolbar.vue"
 import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
-import { createVNode, defineComponent, render, resolveComponent } from 'vue'
+import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
+import { fetchLicenses } from "../../fetch"
 
 export default {
     setup() {
@@ -27,21 +30,6 @@ export default {
             av_license_types,
             av_license_statuses,
         }
-    },
-    created() {
-        const apiUrl = '/api/v1/erm/licenses'
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.licenses = result
-                    this.initialized = true
-                },
-                (error) => {
-                    this.setError(error)
-                }
-            )
     },
     updated() {
         let show_license = this.show_license
@@ -193,7 +181,17 @@ export default {
             initialized: false,
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getLicenses()
+        })
+    },
     methods: {
+        async getLicenses() {
+            const licenses = await fetchLicenses()
+            this.licenses = licenses
+            this.initialized = true
+        },
         show_license: function (license_id) {
             this.$router.push("/cgi-bin/koha/erm/licenses/" + license_id)
         },
@@ -208,6 +206,7 @@ export default {
         av_license_types: Array,
         av_license_statuses: Array,
     },
+    components: { Toolbar },
     name: "LicensesList",
 }
 </script>

@@ -76,9 +76,7 @@ export default {
     props: {
         periods: Array
     },
-    beforeUpdate() {
-        if (!this.periods) return
-
+    beforeCreate() {
         if (!this.dates_fixed) {
             this.periods.forEach(p => {
                 p.started_on = $date(p.started_on)

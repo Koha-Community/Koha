@@ -35,17 +35,10 @@
 </template>
 
 <script>
-import { useMainStore } from "../../stores/main"
 import { fetchLicense } from "../../fetch"
+import { setMessage, setError } from "../../messages"
 
 export default {
-    setup() {
-        const mainStore = useMainStore()
-        const { setMessage, setError } = mainStore
-        return {
-            setMessage, setError,
-        }
-    },
     data() {
         return {
             license: {},
@@ -67,7 +60,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/licenses/' + this.license_id
+            let apiUrl = '/api/v1/erm/licenses/' + this.license.license_id
 
             const options = {
                 method: 'DELETE',
@@ -80,15 +73,15 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            this.$router.push("/cgi-bin/koha/erm/agreements")
-                            this.setMessage("License deleted")
+                            this.$router.push("/cgi-bin/koha/erm/licenses")
+                            setMessage("License deleted")
                         } else {
-                            this.setError(response.message || response.statusText)
+                            setError(response.message || response.statusText)
                         }
                     }
                 ).catch(
                     (error) => {
-                        this.setError(error)
+                        setError(error)
                     }
                 )
         }

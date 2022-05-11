@@ -118,7 +118,7 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import { useAVStore } from "../../stores/authorised_values"
-import { useMainStore } from "../../stores/main"
+import { setMessage, setError } from "../../messages"
 import { fetchLicense } from '../../fetch'
 import { storeToRefs } from "pinia"
 
@@ -131,13 +131,9 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
-        const mainStore = useMainStore()
-        const { setMessage, setError, resetMessages } = mainStore
-
         return {
             av_license_types,
             av_license_statuses,
-            setMessage, setError, resetMessages,
         }
     },
     data() {
@@ -206,15 +202,15 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        this.setMessage('License updated')
+                        setMessage('License updated')
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        this.setMessage('License created')
+                        setMessage('License created')
                     } else {
-                        this.setError(response.message || response.statusText)
+                        setError(response.message || response.statusText)
                     }
                 }, (error) => {
-                    this.setError(error)
+                    setError(error)
                 }).catch(e => { console.log(e) })
         },
     },

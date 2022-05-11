@@ -1,6 +1,7 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
     <div v-else>
+        <Toolbar />
         <table v-if="agreements.length" id="agreement_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
             There are no agreements defined.
@@ -9,9 +10,10 @@
 </template>
 
 <script>
+import Toolbar from "./AgreementsToolbar.vue"
 import ButtonEdit from "./ButtonEdit.vue"
 import ButtonDelete from "./ButtonDelete.vue"
-import { createVNode, defineComponent, render, resolveComponent } from 'vue'
+import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
@@ -32,21 +34,11 @@ export default {
             av_agreement_renewal_priorities,
         }
     },
-    created() {
-        const apiUrl = '/api/v1/erm/agreements'
-
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.agreements = result
-                    this.initialized = true
-                },
-            ).catch(
-                (error) => {
-                    this.setError(error)
-                }
-            )
+    data: function () {
+        return {
+            agreements: [],
+            initialized: false,
+        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -57,6 +49,16 @@ export default {
         async getAgreements() {
             const agreements = await fetchAgreements()
             this.agreements = agreements
+            this.initialized = true
+        },
+        show_agreement: function (agreement_id) {
+            this.$router.push("/cgi-bin/koha/erm/agreements/" + agreement_id)
+        },
+        edit_agreement: function (agreement_id) {
+            this.$router.push("/cgi-bin/koha/erm/agreements/edit/" + agreement_id)
+        },
+        delete_agreement: function (agreement_id) {
+            this.$router.push("/cgi-bin/koha/erm/agreements/delete/" + agreement_id)
         },
     },
     updated() {
@@ -234,25 +236,7 @@ export default {
             .DataTable()
             .destroy(true)
     },
-    data: function () {
-        return {
-            agreements: [],
-            initialized: false,
-        }
-    },
-    methods: {
-        show_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/" + agreement_id)
-        },
-        edit_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/edit/" + agreement_id)
-        },
-        delete_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/delete/" + agreement_id)
-        },
-    },
-    props: {
-    },
+    components: {Toolbar},
     name: "AgreementsList",
 }
 </script>
