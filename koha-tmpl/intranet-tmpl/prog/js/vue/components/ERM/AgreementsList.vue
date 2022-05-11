@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div v-if="!this.initialized">Loading...</div>
+    <div v-else>
         <table v-if="agreements.length" id="agreement_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
             There are no agreements defined.
         </div>
-        <div v-else>Loading...</div>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ import { createVNode, defineComponent, render, resolveComponent } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
+import { fetchAgreements } from "../../fetch"
 
 export default {
     setup() {
@@ -46,6 +47,17 @@ export default {
                     this.setError(error)
                 }
             )
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getAgreements()
+        })
+    },
+    methods: {
+        async getAgreements() {
+            const agreements = await fetchAgreements()
+            this.agreements = agreements
+        },
     },
     updated() {
         let show_agreement = this.show_agreement

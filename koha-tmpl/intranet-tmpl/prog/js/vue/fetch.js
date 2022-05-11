@@ -20,6 +20,22 @@ export const fetchAgreement = async function (agreement_id) {
     return agreement;
 };
 
+export const fetchAgreements = async function () {
+    const apiUrl = "/api/v1/erm/agreements"
+    let agreements;
+    await fetch(apiUrl)
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                agreements = result;
+            },
+            (error) => {
+                this.setError(error);
+            }
+        );
+    return agreements;
+};
+
 export const fetchLicense = async function (license_id) {
     if (!license_id) return;
     const apiUrl = "/api/v1/erm/licenses/" + license_id;

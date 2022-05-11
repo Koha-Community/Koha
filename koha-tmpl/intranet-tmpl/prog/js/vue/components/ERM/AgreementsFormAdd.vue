@@ -1,189 +1,197 @@
 <template>
-    <h2 v-if="agreement.agreement_id">Edit agreement</h2>
-    <h2 v-else>New agreement</h2>
-    <div>
-        <form @submit="onSubmit($event)">
-            <fieldset class="rows">
-                <ol>
-                    <li>
-                        <label class="required" for="agreement_name"
-                            >Agreement name:</label
-                        >
-                        <input
-                            id="agreement_name"
-                            v-model="agreement.name"
-                            placeholder="Agreement name"
-                            required
-                        />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
-                        <label for="agreement_vendor_id">Vendor:</label>
-                        <select
-                            id="agreement_vendor_id"
-                            v-model="agreement.vendor_id"
-                        >
-                            <option value=""></option>
-                            <option
-                                v-for="vendor in vendors"
-                                :key="vendor.vendor_id"
-                                :value="vendor.id"
-                                :selected="
-                                    vendor.id == agreement.vendor_id
-                                        ? true
-                                        : false
-                                "
+    <div v-if="!this.initialized">Loading...</div>
+    <div v-else>
+        <h2 v-if="agreement.agreement_id">
+            Edit agreement #{{ agreement.agreement_id }}
+        </h2>
+        <h2 v-else>New agreement</h2>
+        <div>
+            <form @submit="onSubmit($event)">
+                <fieldset class="rows">
+                    <ol>
+                        <li>
+                            <label class="required" for="agreement_name"
+                                >Agreement name:</label
                             >
-                                {{ vendor.name }}
-                            </option>
-                        </select>
-                    </li>
-                    <li>
-                        <label for="agreement_description">Description: </label>
-                        <textarea
-                            id="agreement_description"
-                            v-model="agreement.description"
-                            placeholder="Description"
-                            rows="10"
-                            cols="50"
-                            required
-                        />
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
-                        <label for="agreement_status">Status: </label>
-                        <select
-                            id="agreement_status"
-                            v-model="agreement.status"
-                            @change="onStatusChange($event)"
-                            required
-                        >
-                            <option value=""></option>
-                            <option
-                                v-for="status in av_agreement_statuses"
-                                :key="status.authorised_values"
-                                :value="status.authorised_value"
-                                :selected="
-                                    status.authorised_value == agreement.status
-                                        ? true
-                                        : false
-                                "
-                            >
-                                {{ status.lib }}
-                            </option>
-                        </select>
-                        <span class="required">Required</span>
-                    </li>
-                    <li>
-                        <label for="agreement_closure_reason"
-                            >Closure reason:</label
-                        >
-                        <select
-                            id="agreement_closure_reason"
-                            v-model="agreement.closure_reason"
-                            :disabled="
-                                agreement.status == 'closed' ? false : true
-                            "
-                        >
-                            <option value=""></option>
-                            <option
-                                v-for="r in av_agreement_closure_reasons"
-                                :key="r.authorised_values"
-                                :value="r.authorised_value"
-                                :selected="
-                                    r.authorised_value ==
-                                    agreement.closure_reason
-                                        ? true
-                                        : false
-                                "
-                            >
-                                {{ r.lib }}
-                            </option>
-                        </select>
-                    </li>
-                    <li>
-                        <label for="agreement_is_perpetual" class="radio"
-                            >Is perpetual:</label
-                        >
-                        <label for="agreement_is_perpetual_yes">
                             <input
-                                type="radio"
-                                name="is_perpetual"
-                                id="agreement_is_perpetual_yes"
-                                :value="true"
-                                v-model="agreement.is_perpetual"
+                                id="agreement_name"
+                                v-model="agreement.name"
+                                placeholder="Agreement name"
+                                required
                             />
-                            Yes
-                        </label>
-                        <label for="agreement_is_perpetual_no">
-                            <input
-                                type="radio"
-                                name="is_perpetual"
-                                id="agreement_is_perpetual_no"
-                                :value="false"
-                                v-model="agreement.is_perpetual"
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="agreement_vendor_id">Vendor:</label>
+                            <select
+                                id="agreement_vendor_id"
+                                v-model="agreement.vendor_id"
+                            >
+                                <option value=""></option>
+                                <option
+                                    v-for="vendor in vendors"
+                                    :key="vendor.vendor_id"
+                                    :value="vendor.id"
+                                    :selected="
+                                        vendor.id == agreement.vendor_id
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ vendor.name }}
+                                </option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="agreement_description"
+                                >Description:
+                            </label>
+                            <textarea
+                                id="agreement_description"
+                                v-model="agreement.description"
+                                placeholder="Description"
+                                rows="10"
+                                cols="50"
+                                required
                             />
-                            No
-                        </label>
-                    </li>
-                    <li>
-                        <label for="agreement_renewal_priority"
-                            >Renewal priority:</label
-                        >
-                        <select v-model="agreement.renewal_priority">
-                            <option value=""></option>
-                            <option
-                                v-for="p in av_agreement_renewal_priorities"
-                                :key="p.authorised_values"
-                                :value="p.authorised_value"
-                                :selected="
-                                    p.authorised_value ==
-                                    agreement.renewal_priority
-                                        ? true
-                                        : false
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="agreement_status">Status: </label>
+                            <select
+                                id="agreement_status"
+                                v-model="agreement.status"
+                                @change="onStatusChange($event)"
+                                required
+                            >
+                                <option value=""></option>
+                                <option
+                                    v-for="status in av_agreement_statuses"
+                                    :key="status.authorised_values"
+                                    :value="status.authorised_value"
+                                    :selected="
+                                        status.authorised_value ==
+                                        agreement.status
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ status.lib }}
+                                </option>
+                            </select>
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="agreement_closure_reason"
+                                >Closure reason:</label
+                            >
+                            <select
+                                id="agreement_closure_reason"
+                                v-model="agreement.closure_reason"
+                                :disabled="
+                                    agreement.status == 'closed' ? false : true
                                 "
                             >
-                                {{ p.lib }}
-                            </option>
-                        </select>
-                    </li>
-                    <li>
-                        <label for="agreement_license_info"
-                            >License info:
-                        </label>
-                        <textarea
-                            id="agreement_license_info"
-                            v-model="agreement.license_info"
-                            placeholder="License info"
-                        />
-                    </li>
+                                <option value=""></option>
+                                <option
+                                    v-for="r in av_agreement_closure_reasons"
+                                    :key="r.authorised_values"
+                                    :value="r.authorised_value"
+                                    :selected="
+                                        r.authorised_value ==
+                                        agreement.closure_reason
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ r.lib }}
+                                </option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="agreement_is_perpetual" class="radio"
+                                >Is perpetual:</label
+                            >
+                            <label for="agreement_is_perpetual_yes">
+                                <input
+                                    type="radio"
+                                    name="is_perpetual"
+                                    id="agreement_is_perpetual_yes"
+                                    :value="true"
+                                    v-model="agreement.is_perpetual"
+                                />
+                                Yes
+                            </label>
+                            <label for="agreement_is_perpetual_no">
+                                <input
+                                    type="radio"
+                                    name="is_perpetual"
+                                    id="agreement_is_perpetual_no"
+                                    :value="false"
+                                    v-model="agreement.is_perpetual"
+                                />
+                                No
+                            </label>
+                        </li>
+                        <li>
+                            <label for="agreement_renewal_priority"
+                                >Renewal priority:</label
+                            >
+                            <select v-model="agreement.renewal_priority">
+                                <option value=""></option>
+                                <option
+                                    v-for="p in av_agreement_renewal_priorities"
+                                    :key="p.authorised_values"
+                                    :value="p.authorised_value"
+                                    :selected="
+                                        p.authorised_value ==
+                                        agreement.renewal_priority
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ p.lib }}
+                                </option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="agreement_license_info"
+                                >License info:
+                            </label>
+                            <textarea
+                                id="agreement_license_info"
+                                v-model="agreement.license_info"
+                                placeholder="License info"
+                            />
+                        </li>
 
-                    <AgreementPeriods :periods="agreement.periods" />
-                    <AgreementUserRoles
-                        :user_roles="agreement.user_roles"
-                        :av_agreement_user_roles="av_agreement_user_roles"
-                    />
-                    <AgreementLicenses
-                        :agreement_licenses="agreement.agreement_licenses"
-                        :av_agreement_license_statuses="
-                            av_agreement_license_statuses
-                        "
-                        :av_agreement_license_location="
-                            av_agreement_license_location
-                        "
-                    />
-                </ol>
-            </fieldset>
-            <fieldset class="action">
-                <input type="submit" value="Submit" />
-                <router-link
-                    to="/cgi-bin/koha/erm/agreements"
-                    role="button"
-                    class="cancel"
-                    >Cancel</router-link
-                >
-            </fieldset>
-        </form>
+                        <AgreementPeriods :periods="agreement.periods" />
+                        <AgreementUserRoles
+                            :user_roles="agreement.user_roles"
+                            :av_agreement_user_roles="av_agreement_user_roles"
+                        />
+                        <AgreementLicenses
+                            :agreement_licenses="agreement.agreement_licenses"
+                            :av_agreement_license_statuses="
+                                av_agreement_license_statuses
+                            "
+                            :av_agreement_license_location="
+                                av_agreement_license_location
+                            "
+                        />
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Submit" />
+                    <router-link
+                        to="/cgi-bin/koha/erm/agreements"
+                        role="button"
+                        class="cancel"
+                        >Cancel</router-link
+                    >
+                </fieldset>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -240,22 +248,24 @@ export default {
                 periods: [],
                 user_roles: [],
                 agreement_licenses: [],
-            }
+            },
+            initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
-        if (to.params.agreement_id) {
-            next(vm => {
+        next(vm => {
+            if (to.params.agreement_id) {
                 vm.agreement = vm.getAgreement(to.params.agreement_id)
-            })
-        } else {
-            next()
-        }
+            } else {
+                vm.initialized = true
+            }
+        })
     },
     methods: {
         async getAgreement(agreement_id) {
             const agreement = await fetchAgreement(agreement_id)
             this.agreement = agreement
+            this.initialized = true
         },
         onSubmit(e) {
             e.preventDefault()

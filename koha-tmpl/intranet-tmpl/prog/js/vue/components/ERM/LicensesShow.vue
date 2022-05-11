@@ -1,52 +1,55 @@
 <template>
-    <h2>License #{{ license.license_id }}</h2>
-    <div>
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    <label>License name:</label>
-                    <span>
-                        {{ license.name }}
-                    </span>
-                </li>
-                <li>
-                    <label>Description: </label>
-                    <span>
-                        {{ license.description }}
-                    </span>
-                </li>
-                <li>
-                    <label>Type: </label>
-                    <span>{{
-                        get_lib_from_av(av_license_types, license.type)
-                    }}</span>
-                </li>
-                <li>
-                    <label>Status: </label>
-                    <span>{{
-                        get_lib_from_av(av_license_statuses, license.status)
-                    }}</span>
-                </li>
+    <div v-if="!this.initialized">Loading...</div>
+    <div v-else>
+        <h2>License #{{ license.license_id }}</h2>
+        <div>
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label>License name:</label>
+                        <span>
+                            {{ license.name }}
+                        </span>
+                    </li>
+                    <li>
+                        <label>Description: </label>
+                        <span>
+                            {{ license.description }}
+                        </span>
+                    </li>
+                    <li>
+                        <label>Type: </label>
+                        <span>{{
+                            get_lib_from_av(av_license_types, license.type)
+                        }}</span>
+                    </li>
+                    <li>
+                        <label>Status: </label>
+                        <span>{{
+                            get_lib_from_av(av_license_statuses, license.status)
+                        }}</span>
+                    </li>
 
-                <li>
-                    <label>Started on:</label>
-                    <span>{{ format_date(license.started_on) }}</span>
-                </li>
+                    <li>
+                        <label>Started on:</label>
+                        <span>{{ format_date(license.started_on) }}</span>
+                    </li>
 
-                <li>
-                    <label>Ended on:</label>
-                    <span>{{ format_date(license.ended_on) }}</span>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <router-link
-                to="/cgi-bin/koha/erm/licenses"
-                role="button"
-                class="cancel"
-                >Close</router-link
-            >
-        </fieldset>
+                    <li>
+                        <label>Ended on:</label>
+                        <span>{{ format_date(license.ended_on) }}</span>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <router-link
+                    to="/cgi-bin/koha/erm/licenses"
+                    role="button"
+                    class="cancel"
+                    >Close</router-link
+                >
+            </fieldset>
+        </div>
     </div>
 </template>
 
@@ -93,22 +96,21 @@ export default {
                 status: '',
                 started_on: undefined,
                 ended_on: undefined,
-            }
+            },
+            initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
-        if (to.params.license_id) {
-            next(vm => {
-                vm.license = vm.getLicense(to.params.license_id)
-            })
-        } else {
-            next()
-        }
+        next(vm => {
+            vm.license = vm.getLicense(to.params.license_id)
+            vm.initialized = true
+        })
     },
     methods: {
         async getLicense(license_id) {
             const license = await fetchLicense(license_id)
             this.license = license
+            this.initialized = true
         },
     },
     components: {

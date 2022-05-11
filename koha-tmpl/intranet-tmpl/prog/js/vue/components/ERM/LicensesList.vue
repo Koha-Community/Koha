@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div v-if="!this.initialized">Loading...</div>
+    <div v-else>
         <table v-if="licenses.length" id="license_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
             There are no licenses defined.
         </div>
-        <div v-else>Loading...</div>
     </div>
 </template>
 
