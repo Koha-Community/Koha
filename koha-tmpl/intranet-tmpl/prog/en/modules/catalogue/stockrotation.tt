@@ -68,9 +68,9 @@
                                         <span class="highlighted-row">
                                     [% END %]
                                         [% IF item.rota.active %]
-                                            Active
+                                            <span>Active</span>
                                         [% ELSE %]
-                                            Inactive
+                                            <span>Inactive</span>
                                         [% END %]
                                     [% IF !item.rota.active %]
                                         </span>
@@ -79,9 +79,9 @@
                             </td>
                             <td>
                                 [% IF item.bib_item.get_transfer %]
-                                    Yes
+                                    <span>Yes</span>
                                 [% ELSE %]
-                                    No
+                                    <span>No</span>
                                 [% END %]
                             </td>
                             <td>

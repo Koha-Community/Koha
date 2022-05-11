@@ -45,16 +45,16 @@
                                     <div><i class="fa fa-exclamation error"></i>
                                 [% END %]
                                 [% IF message.code == 'no_action_defined_for_the_template' %]
-                                    The selected template (id=[% message.mmtid | html %]) does not exist or no action is defined.
+                                    <span>The selected template (id=[% message.mmtid | html %]) does not exist or no action is defined.</span>
                                 [% ELSIF message.code == 'biblio_not_exists' %]
-                                    Bibliographic record [% message.biblionumber | html %] does not exist in the database.
+                                    <span>Bibliographic record [% message.biblionumber | html %] does not exist in the database.</span>
                                 [% ELSIF message.code == 'authority_not_exists' %]
-                                    Authority record [% message.authid | html %] does not exist in the database.
+                                    <span>Authority record [% message.authid | html %] does not exist in the database.</span>
                                 [% ELSIF message.code == 'cannot_enqueue_job' %]
-                                    Cannot enqueue this job.
+                                    <span>Cannot enqueue this job.</span>
                                 [% END %]
                                 [% IF message.error %]
-                                    (The error was: [% message.error | html %]. See the Koha logfile for more information).
+                                    <span>(The error was: [% message.error | html %]. See the Koha logfile for more information).</span>
                                 [% END %]
                                 </div>
                             [% END %]

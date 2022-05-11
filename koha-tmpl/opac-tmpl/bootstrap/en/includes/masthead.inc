@@ -339,9 +339,9 @@
                     <li class="nav-item">
                         <a id="library_page" href="/cgi-bin/koha/opac-library.pl">
                             [% IF ( singleBranchMode ) %]
-                                Library
+                                <span>Library</span>
                             [% ELSE %]
-                                Libraries
+                                <span>Libraries</span>
                             [% END %]
                         </a>
                     </li>

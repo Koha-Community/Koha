@@ -108,7 +108,7 @@
                                 <li>
                                     <label for="can_be_added_manually">Can be manually added ? </label>
                                     [% IF credit_type && credit_type.is_system %]
-                                        [% IF credit_type.can_be_added_manually %]Yes[% ELSE %]No[% END %]
+                                        [% IF credit_type.can_be_added_manually %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                                     [% ELSIF credit_type.can_be_added_manually %]
                                         <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" checked="checked" value="1" />
                                     [% ELSE %]

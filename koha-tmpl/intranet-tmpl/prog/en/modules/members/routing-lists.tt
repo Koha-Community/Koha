@@ -46,11 +46,11 @@
 [% SET routinglists = patron.get_routing_lists %]
 <h2>
 [% UNLESS ( routinglists ) %]
-0 subscription routing lists
+<span>0 subscription routing lists</span>
 [% ELSIF ( routinglists.count == 1 ) %]
-[% routinglists.count | html %] subscription routing list
+<span>[% routinglists.count | html %] subscription routing list</span>
 [% ELSE %]
-[% routinglists.count | html %] subscription routing lists
+<span>[% routinglists.count | html %] subscription routing lists</span>
 [% END %]
 </h2>
 

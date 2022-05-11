@@ -338,13 +338,13 @@
             [% ELSE %]
                 <strong>Tab:</strong>[% loo.tab | html %],
                 [% IF ( loo.kohafield ) %] | <strong>Koha field:</strong> [% loo.kohafield | html %], [% END %]
-                [% IF ( loo.repeatable ) %]Repeatable, [% ELSE %]Not repeatable,
+                [% IF ( loo.repeatable ) %]<span>Repeatable</span>, [% ELSE %]<span>Not repeatable</span>,
                 [% END %]
-                        [% IF ( loo.mandatory ) %]Mandatory, [% ELSE %]Not mandatory,
+                        [% IF ( loo.mandatory ) %]<span>Mandatory</span>, [% ELSE %]<span>Not mandatory</span>,
                 [% END %]
-                        [% IF ( loo.hidden ) %]hidden,
+                        [% IF ( loo.hidden ) %]<span>hidden</span>,
                 [% END %]
-                        [% IF ( loo.isurl ) %]is a url,
+                        [% IF ( loo.isurl ) %]<span>is a url</span>,
                 [% END %]
                         [% IF ( loo.authorised_value ) %] | <strong>Auth value:</strong>[% loo.authorised_value | html %],
                 [% END %]

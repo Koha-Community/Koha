@@ -148,7 +148,7 @@
                                 [% END %]
                                 [% IF ( borrower.gonenoaddress ) %]
                                     <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date contact information. Please contact the library.
-                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]Update your contact information[% ELSE %]Go to your contact information[% END %]</a>
+                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]<span>Update your contact information</span>[% ELSE %]<span>Go to your contact information</span>[% END %]</a>
                                 [% IF ( Koha.Preference('OPACPatronDetails') ) %]<em>(Please note: there may be a delay in restoring your account if you submit online.)</em>[% END %]
                                     </li>
                                 [% END %]
@@ -431,11 +431,11 @@
                                                     <td class="fines">
                                                         <span class="tdlabel">Fines:</span>
                                                         [% IF ( ISSUE.charges ) %]
-                                                            Yes (Item overdue or lost)
+                                                            <span>Yes (Item overdue or lost)</span>
                                                         [% ELSIF ( ISSUE.rentalfines ) %]
-                                                            Yes (Rental fees)
+                                                            <span>Yes (Rental fees)</span>
                                                         [% ELSE %]
-                                                            No
+                                                            <span>No</span>
                                                         [% END %]
                                                     </td>
                                                 [% END %]
@@ -724,9 +724,9 @@
                                                         [% ELSIF ( OVERDUE.norenew_overdue ) %]
                                                             Not allowed<span class="renewals">(overdue)</span>
                                                         [% ELSIF ( OVERDUE.onreserve ) %]
-                                                            On hold
+                                                            <span>On hold</span>
                                                         [% ELSE %]
-                                                            No renewals left
+                                                            <span>No renewals left</span>
                                                         [% END %]
                                                     </td>
                                                 [% END %]
@@ -795,13 +795,13 @@
                                             <td class="status">
                                                 <span class="tdlabel">Status:</span>
                                                 [% IF ( RECALL.requested ) %]
-                                                    Requested
+                                                    <span>Requested</span>
                                                 [% ELSIF ( RECALL.overdue ) %]
-                                                    Overdue to be returned
+                                                    <span>Overdue to be returned</span>
                                                 [% ELSIF ( RECALL.in_transit ) %]
-                                                    In transit to [% RECALL.library.branchname | html %]
+                                                    <span>In transit to [% RECALL.library.branchname | html %]</span>
                                                 [% ELSIF ( RECALL.waiting ) %]
-                                                    Ready for pickup
+                                                    <span>Ready for pickup</span>
                                                 [% END %]
                                             </td>
                                             <td class="cancelrecall">
@@ -897,19 +897,19 @@
                                                     [% ar.patron_notes | html %]
                                                 </td>
 
-                                                <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
+                                                <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>[% ELSIF ar.format == 'SCAN' %]<span>Scan</span>[% END %]</td>
 
                                                 <td class="article-request-status">
                                                     [% IF ar.status == 'PENDING' %]
-                                                        Pending
+                                                        <span>Pending</span>
                                                     [% ELSIF ar.status == 'PROCESSING' %]
-                                                        Processing
+                                                        <span>Processing</span>
                                                     [% ELSIF ar.status == 'REQUESTED' %]
-                                                        New
+                                                        <span>New</span>
                                                     [% ELSIF ar.status == 'COMPLETED' %]
-                                                        Completed
+                                                        <span>Completed</span>
                                                     [% ELSIF ar.status == 'CANCELED' %]
-                                                        Canceled
+                                                        <span>Canceled</span>
                                                     [% END %]
                                                 </td>
 

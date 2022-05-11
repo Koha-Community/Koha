@@ -60,7 +60,7 @@
 
 [% IF ( overdueloop ) %]
 
-  <h2>[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate | html %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
+  <h2>[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]<span>Items</span>[% ELSE %]Item[% END %] overdue as of [% todaysdate | html %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
 
   <p>
     [% IF ( isfiltered ) %]

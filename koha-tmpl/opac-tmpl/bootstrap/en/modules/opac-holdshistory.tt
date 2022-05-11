@@ -149,15 +149,15 @@
                                         [% END %]
                                         <td>
                                         [% IF hold.found == 'F' %]
-                                            Fulfilled
+                                            <span>Fulfilled</span>
                                         [% ELSIF hold.cancellationdate %]
-                                            Cancelled
+                                            <span>Cancelled</span>
                                         [% ELSIF hold.found == 'W' %]
-                                            Waiting
+                                            <span>Waiting</span>
                                         [% ELSIF hold.found == 'T' %]
-                                            In transit
+                                            <span>In transit</span>
                                         [% ELSE %]
-                                            Pending
+                                            <span>Pending</span>
                                         [% END %]
                                         </td>
                                         </tr>

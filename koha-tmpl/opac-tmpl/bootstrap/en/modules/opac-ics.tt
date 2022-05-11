@@ -2,8 +2,8 @@
 [%- newline="\n" | html -%]
 [%- IF overdue == 1 -%]
 [% title | html %] is overdue
-[%- newline | html -%]Your copy of [% title | html %] (barcode [% barcode | html %]) is overdue
+[%- newline | html -%]<span>Your copy of [% title | html %] (barcode [% barcode | html %]) is overdue</span>
 [%- ELSE -%]
 [% title | html %] is due
-[%- newline | html -%]Your copy of [% title | html %] (barcode [% barcode | html %]) is due back at the library today
+[%- newline | html -%]<span>Your copy of [% title | html %] (barcode [% barcode | html %]) is due back at the library today</span>
 [%- END -%]

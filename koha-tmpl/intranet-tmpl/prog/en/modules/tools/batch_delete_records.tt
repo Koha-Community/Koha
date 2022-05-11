@@ -40,19 +40,19 @@
       <div class="dialog alert" style="margin:auto;">
     [% END %]
     [% IF message.code == 'biblio_not_exists' %]
-      The biblionumber [% message.biblionumber | html %] does not exist in the database.
+      <span>The biblionumber [% message.biblionumber | html %] does not exist in the database.</span>
     [% ELSIF message.code == 'authority_not_exists' %]
-      The authority id [% message.authid | html %] does not exist in the database.
+      <span>The authority id [% message.authid | html %] does not exist in the database.</span>
     [% ELSIF message.code == 'cannot_enqueue_job' %]
-        Cannot enqueue this job.
+        <span>Cannot enqueue this job.</span>
     [% ELSIF message.code == 'biblio_not_exists' %]
-        Bibliographic record [% message.biblionumber | html %] does not exist in the database.
+        <span>Bibliographic record [% message.biblionumber | html %] does not exist in the database.</span>
     [% ELSIF message.code == 'authority_not_exists' %]
-        Authority record [% message.authid | html %] does not exist in the database.
+        <span>Authority record [% message.authid | html %] does not exist in the database.</span>
     [% END %]
 
     [% IF message.error %]
-      (The error was: [% message.error | html %], see the Koha log file for more information).
+      <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
     [% END %]
     </div>
   [% END %]

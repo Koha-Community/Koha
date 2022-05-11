@@ -83,27 +83,27 @@
                                                     <td class="status">
                                                         <span class="tdlabel">Status:</span>
                                                         [% IF ( RECALL.in_transit ) %]
-                                                            In transit to [% RECALL.library.branchname | html %]
+                                                            <span>In transit to [% RECALL.library.branchname | html %]</span>
                                                         [% ELSIF ( RECALL.waiting ) %]
-                                                            Ready for pickup
+                                                            <span>Ready for pickup</span>
                                                         [% ELSIF ( RECALL.overdue ) %]
-                                                            Overdue to be returned
+                                                            <span>Overdue to be returned</span>
                                                         [% ELSIF ( RECALL.expired ) %]
-                                                            Expired on [% RECALL.expiration_date | $KohaDates %]
+                                                            <span>Expired on [% RECALL.expiration_date | $KohaDates %]</span>
                                                         [% ELSIF ( RECALL.cancelled ) %]
-                                                            Cancelled on [% RECALL.completed_date | $KohaDates %]
+                                                            <span>Cancelled on [% RECALL.completed_date | $KohaDates %]</span>
                                                         [% ELSIF ( RECALL.fulfilled ) %]
-                                                            Fulfilled
+                                                            <span>Fulfilled</span>
                                                         [% ELSE %]
-                                                            Requested
+                                                            <span>Requested</span>
                                                         [% END %]
                                                     </td>
                                                     <td class="due_date">
                                                         <span class="tdlabel">Due date</span>
                                                         [% IF ( RECALL.requested ) %]
-                                                            Due to be returned by [% RECALL.checkout.date_due | $KohaDates %]
+                                                            <span>Due to be returned by [% RECALL.checkout.date_due | $KohaDates %]</span>
                                                         [% ELSIF ( RECALL.waiting and RECALL.expiration_date ) %]
-                                                            Pick up by [% RECALL.expiration_date | $KohaDates %]
+                                                            <span>Pick up by [% RECALL.expiration_date | $KohaDates %]</span>
                                                         [% ELSE %]
                                                             -
                                                         [% END %]
@@ -125,10 +125,10 @@
                                     <table>
                                 </div>
                             [% ELSE %]
-                                No recalls have been made.
+                                <span>No recalls have been made.</span>
                             [% END # / # RECALLS.count %]
                         [% ELSE %]
-                            Recalls have not been enabled. Please contact your library.
+                            <span>Recalls have not been enabled. Please contact your library.</span>
                         [% END %]
                         </div> <!-- /#recalls -->
                     </div> <!-- /.col-md-12 -->

@@ -61,17 +61,17 @@
                                             <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.content | html | html_line_break %]"></iframe>
                                         </td>
                                         <td>
-                                            [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]email
-                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]print
-                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]feed
-                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]sms
+                                            [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]<span>email</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]<span>print</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]<span>feed</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]<span>sms</span>
                                             [% ELSE %][% QUEUED_MESSAGE.message_transport_type | html %][% END %]
                                         </td>
                                         <td>
-                                            [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]sent
-                                            [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]pending
-                                            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed
-                                            [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
+                                            [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]<span>sent</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]<span>pending</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]<span>failed</span>
+                                            [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]<span>deleted</span>
                                             [% ELSE %][% QUEUED_MESSAGE.status | html %][% END %]
                                             [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
                                                 <div class="notice">

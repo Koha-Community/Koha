@@ -49,18 +49,18 @@
         <li>
             <a href="#" aria-current="page">
                 [% IF ( pay_individual ) %]
-                    Pay an individual fine
+                    <span>Pay an individual fine</span>
                 [% ELSIF ( writeoff_individual ) %]
-                    Write off an individual fine
+                    <span>Write off an individual fine</span>
                 [% ELSE %]
                     [% IF ( selected_accts ) %]
                         [% IF type == 'WRITEOFF' %]
-                            Write off an amount toward selected fines
+                            <span>Write off an amount toward selected fines</span>
                         [% ELSE %]
-                            Pay an amount toward selected fines
+                            <span>Pay an amount toward selected fines</span>
                         [% END %]
                     [% ELSE %]
-                        Pay an amount toward all fines
+                        <span>Pay an amount toward all fines</span>
                     [% END %]
                 [% END %]
             </a>
@@ -75,18 +75,18 @@
 
             <h1>
                 [% IF ( pay_individual ) %]
-                    Pay an individual fine
+                    <span>Pay an individual fine</span>
                 [% ELSIF ( writeoff_individual ) %]
-                    Write off an individual fine
+                    <span>Write off an individual fine</span>
                 [% ELSE %]
                     [% IF ( selected_accts ) %]
                         [% IF type == 'WRITEOFF' %]
-                            Write off an amount toward selected fines
+                            <span>Write off an amount toward selected fines</span>
                         [% ELSE %]
-                            Pay an amount toward selected fines
+                            <span>Pay an amount toward selected fines</span>
                         [% END %]
                     [% ELSE %]
-                        Pay an amount toward all fines
+                        <span>Pay an amount toward all fines</span>
                     [% END %]
                 [% END %]
             </h1>

@@ -816,21 +816,21 @@
                                                 </td>
                                                 <td>
                                                     [% IF ( suggestions_loo.ASKED ) %]
-                                                        Pending
+                                                        <span>Pending</span>
                                                     [% ELSIF ( suggestions_loo.ACCEPTED ) %]
-                                                        Accepted
+                                                        <span>Accepted</span>
                                                     [% ELSIF ( suggestions_loo.ORDERED ) %]
-                                                        Ordered
+                                                        <span>Ordered</span>
                                                     [% ELSIF ( suggestions_loo.REJECTED ) %]
-                                                        Rejected
+                                                        <span>Rejected</span>
                                                     [% ELSIF ( suggestions_loo.CHECKED ) %]
-                                                        Checked
+                                                        <span>Checked</span>
                                                     [% ELSIF ( suggestions_loo.AVAILABLE ) %]
-                                                        Available
+                                                        <span>Available</span>
                                                     [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
                                                         [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) | html %]
                                                     [% ELSE %]
-                                                        Status unknown
+                                                        <span>Status unknown</span>
                                                     [% END %]
 
                                                     [% IF ( suggestions_loo.reason ) %]

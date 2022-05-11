@@ -336,11 +336,11 @@
                         </td>
                         <td>
                             [% IF c.category == 'news' %]
-                                [% IF c.location == 'staff_and_opac' %]All
-                                [% ELSIF c.location == 'staff_only' %]Librarian interface
-                                [% ELSIF c.location == 'opac_only' %]OPAC
-                                [% ELSIF c.location == 'slip' %]Slip
-                                [% ELSE %]Unknown ('[% location | html %]')
+                                [% IF c.location == 'staff_and_opac' %]<span>All</span>
+                                [% ELSIF c.location == 'staff_only' %]<span>Librarian interface</span>
+                                [% ELSIF c.location == 'opac_only' %]<span>OPAC</span>
+                                [% ELSIF c.location == 'slip' %]<span>Slip</span>
+                                [% ELSE %]<span>Unknown ('[% location | html %]')</span>
                                 [% END %]
                             [% ELSE %]
                                 [% c.location | html %]

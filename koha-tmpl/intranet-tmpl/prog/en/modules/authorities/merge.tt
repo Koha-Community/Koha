@@ -44,15 +44,15 @@ div#result { margin-top: 1em; }
     [% FOREACH error IN errors %]
         <div class="dialog alert">
             [% IF error.code == 'WRONG_COUNT' %]
-                Number of records provided for merging: [% error.value | html %]. Currently only 2 records can be merged at a time.
+                <span>Number of records provided for merging: [% error.value | html %]. Currently only 2 records can be merged at a time.</span>
             [% ELSIF error.code == 'DESTRUCTIVE_MERGE' %]
-                You cannot merge a record with itself. Please select two different authorities.
+                <span>You cannot merge a record with itself. Please select two different authorities.</span>
             [% ELSIF error.code == 'WRONG_FRAMEWORK' %]
-                The default framework cannot be used, or the framework does not exist. Please select another framework for merging.
+                <span>The default framework cannot be used, or the framework does not exist. Please select another framework for merging.</span>
             [% ELSIF error.code == 'EMPTY_MARC' %]
-                Sorry, but we did not find any MARC tags in the reference record.
+                <span>Sorry, but we did not find any MARC tags in the reference record.</span>
             [% ELSIF error.code == 'MISSING_RECORD' %]
-                Sorry, but we did not find a record for number: [% error.value | html %].
+                <span>Sorry, but we did not find a record for number: [% error.value | html %].</span>
             [% ELSE %]
                 [% error | html %]
             [% END %]

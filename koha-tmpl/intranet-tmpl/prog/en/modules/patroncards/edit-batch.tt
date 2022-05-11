@@ -27,11 +27,11 @@
             <li>
                 <a href="#" aria-current="page">
                     [% IF description %]
-                        Edit [% description | html %]
+                        <span>Edit [% description | html %]</span>
                     [% ELSIF batch_id %]
-                        Edit ([% batch_id | html %])
+                        <span>Edit ([% batch_id | html %])</span>
                     [% ELSE %]
-                        New
+                        <span>New</span>
                     [% END %]
                 </a>
             </li>
@@ -45,7 +45,7 @@
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
 
-                    <h1>[% IF description %]Edit [% ELSIF batch_id %]Edit [% ELSE %]New [% END %]patron card batches</h1>
+                    <h1>[% IF description %]<span>Edit</span> [% ELSIF batch_id %]<span>Edit</span> [% ELSE %]<span>New</span> [% END %]<span>patron card batches</span></h1>
 
                 [% IF ( duplicate_message ) %]
                     <div class="dialog message">

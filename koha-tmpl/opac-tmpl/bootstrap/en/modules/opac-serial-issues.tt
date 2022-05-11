@@ -59,72 +59,72 @@
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
                                     <caption><h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2><caption>
                                     <p>
-                                        The current subscription began on [% subscription_LOO.startdate | html %] and is issued
+                                        <span>The current subscription began on [% subscription_LOO.startdate | html %] and is issued</span>
                                         [% IF ( subscription_LOO.periodicity1 ) %]
-                                                twice per day
+                                                <span>twice per day</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity2 ) %]
-                                                every day
+                                                <span>every day</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity3 ) %]
-                                                three times per week
+                                                <span>three times per week</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity4 ) %]
-                                                every week
+                                                <span>every week</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity5 ) %]
-                                                every 2 weeks
+                                                <span>every 2 weeks</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity6 ) %]
-                                                every 3 weeks
+                                                <span>every 3 weeks</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity7 ) %]
-                                                every month
+                                                <span>every month</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity8 ) %]
-                                                every 2 months
+                                                <span>every 2 months</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity9 ) %]
-                                                every quarter
+                                                <span>every quarter</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity10 ) %]
-                                                twice per year
+                                                <span>twice per year</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity11 ) %]
-                                                every year
+                                                <span>every year</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity12 ) %]
-                                                every 2 years
+                                                <span>every 2 years</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.periodicity13 ) %]
-                                                irregularly
+                                                <span>irregularly</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival1 ) %]
-                                            on Monday
+                                                <span>on Monday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival2 ) %]
-                                                on Tuesday
+                                                <span>on Tuesday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival3 ) %]
-                                                on Wednesday
+                                                <span>on Wednesday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival4 ) %]
-                                                on Thursday
+                                                <span>on Thursday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival5 ) %]
-                                                on Friday
+                                                <span>on Friday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival6 ) %]
-                                                on Saturday
+                                                <span>on Saturday</span>
                                         [% END %]
                                         [% IF ( subscription_LOO.arrival7 ) %]
-                                                on Sunday
+                                                <span>on Sunday</span>
                                         [% END %]
 
-                                        for
-                                            [% IF ( subscription_LOO.numberlength ) %][% subscription_LOO.numberlength | html %] issues[% END %]
-                                            [% IF ( subscription_LOO.weeklength ) %][% subscription_LOO.weeklength | html %] weeks[% END %]
-                                            [% IF ( subscription_LOO.monthlength ) %][% subscription_LOO.monthlength | html %] months[% END %]
+                                        <span>for</span>
+                                            [% IF ( subscription_LOO.numberlength ) %][% subscription_LOO.numberlength | html %] <span>issues</span>[% END %]
+                                            [% IF ( subscription_LOO.weeklength ) %][% subscription_LOO.weeklength | html %] <span>weeks</span>[% END %]
+                                            [% IF ( subscription_LOO.monthlength ) %][% subscription_LOO.monthlength | html %] <span>months</span>[% END %]
                                     </p>
                                     <p>The first subscription was started on  [% subscription_LOO.histstartdate | html %]</p>
                                     [% IF ( subscription_LOO.histenddate ) %]

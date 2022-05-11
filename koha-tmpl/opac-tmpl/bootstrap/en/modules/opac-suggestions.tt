@@ -281,12 +281,12 @@
                         [% IF ( op_else ) %]
                             <h1>
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
-                                    Purchase suggestions
+                                    <span>Purchase suggestions</span>
                                 [% ELSE %]
                                     [% IF ( loggedinusername ) %]
-                                        Your purchase suggestions
+                                        <span>Your purchase suggestions</span>
                                     [% ELSE %]
-                                        Purchase suggestions
+                                        <span>Purchase suggestions</span>
                                     [% END %]
                                 [% END %]
                             </h1>
@@ -437,12 +437,12 @@
                                                     [% END %]
                                                     <td>
                                                         <span class="tdlabel">Status:</span>
-                                                        [% IF ( suggestions_loo.ASKED ) %]Requested
-                                                        [% ELSIF ( suggestions_loo.CHECKED ) %]Checked by the library
-                                                        [% ELSIF ( suggestions_loo.ACCEPTED ) %]Accepted by the library
-                                                        [% ELSIF ( suggestions_loo.ORDERED ) %]Ordered by the library
-                                                        [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
-                                                        [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
+                                                        [% IF ( suggestions_loo.ASKED ) %]<span>Requested</span>
+                                                        [% ELSIF ( suggestions_loo.CHECKED ) %]<span>Checked by the library</span>
+                                                        [% ELSIF ( suggestions_loo.ACCEPTED ) %]<span>Accepted by the library</span>
+                                                        [% ELSIF ( suggestions_loo.ORDERED ) %]<span>Ordered by the library</span>
+                                                        [% ELSIF ( suggestions_loo.REJECTED ) %]<span>Suggestion declined</span>
+                                                        [% ELSIF ( suggestions_loo.AVAILABLE ) %]<span>Available in the library</span>
                                                         [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html %] [% END %]
                                                         [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason | html %])[% END %]
                                                     </td>

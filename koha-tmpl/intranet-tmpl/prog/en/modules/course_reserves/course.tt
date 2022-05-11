@@ -161,9 +161,9 @@
     <h1>No DEPARTMENT authorized values found!</h1>
     <p>
         [% IF ( CAN_user_parameters ) %]
-            Please <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=DEPARTMENT">create one or more authorized values</a> with the category DEPARTMENT.
+            <span>Please <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=DEPARTMENT">create one or more authorized values</a> with the category DEPARTMENT.</span>
         [% ELSE %]
-            An administrator must create one or more authorized values with the category DEPARTMENT.
+            <span>An administrator must create one or more authorized values with the category DEPARTMENT.</span>
         [% END %]
     </p>
 </div>

@@ -103,9 +103,9 @@
 
                 [% IF op == 'add_form' %]
                     <h1>
-                        [% IF ( action_modify ) %]Modify authorized value[% END %]
-                        [% IF ( action_add_value ) %]New authorized value[% END %]
-                        [% IF ( action_add_category ) %]New category[% END %]
+                        [% IF ( action_modify ) %]<span>Modify authorized value</span>[% END %]
+                        [% IF ( action_add_value ) %]<span>New authorized value</span>[% END %]
+                        [% IF ( action_add_category ) %]<span>New category</span>[% END %]
                     </h1>
 
                     [% IF ( action_modify ) %]
@@ -352,12 +352,12 @@
                                                     [% END %]
                                                     <span class="library_limitation" title="[% branches_str | html %]">
                                                         [% IF loo.branches.size > 1 %]
-                                                            [% loo.branches.size | html %] library limitations
+                                                            <span>[% loo.branches.size | html %] library limitations</span>
                                                         [% ELSE %]
-                                                            [% loo.branches.size | html %] library limitation
+                                                            <span>[% loo.branches.size | html %] library limitation</span>
                                                         [% END %]
                                                 [% ELSE %]
-                                                    No limitation
+                                                    <span>No limitation</span>
                                                 [% END # /IF loo.branches.size > 0 %]
                                             </td>
                                             <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>

@@ -63,11 +63,11 @@
 
 [% IF ( run_report ) %]
     [% IF ( total ) %]
-        <div class="results">[% total | html %] items found for
-            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]All libraries[% END %]
-            [% IF ( itemtypeslimit ) %] and item type: [% ItemTypes.GetDescription( itemtypeslimit ) | html %][% END %]
-            [% IF ( ccodeslimit ) %] and collection: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %][% END %]
-            [% IF ( locationslimit ) %] and shelving location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %][% END %]
+        <div class="results">[% total | html %] <span>items found for</span>
+            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]<span>All libraries</span>[% END %]
+            [% IF ( itemtypeslimit ) %] <span>and item type: [% ItemTypes.GetDescription( itemtypeslimit ) | html %]</span>[% END %]
+            [% IF ( ccodeslimit ) %] <span>and collection: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode' authorised_value = ccodeslimit ) | html %]</span>[% END %]
+            [% IF ( locationslimit ) %] <span>and shelving location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location' authorised_value = locationslimit ) | html %]</span>[% END %]
         </div>
     [% ELSE %]
         <div class="dialog message">No items found.</div>
@@ -175,7 +175,7 @@
 
                         [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') | html %][% END %]
 
-                        [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn | html %][% END %]
+                        [% IF ( itemsloo.isbn ) %]<span>ISBN: [% itemsloo.isbn | html %]</span>[% END %]
                     </div>
                 </p>
             </td>

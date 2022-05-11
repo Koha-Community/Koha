@@ -38,21 +38,21 @@
                 <div id="recall" class="maincontent">
                     <h1>Confirm recalls for: [% INCLUDE 'patron-title.inc' patron = logged_in_user %] ([% logged_in_user.cardnumber | html %])</h1>
                     [% IF nosyspref %]
-                        Recalls have not been enabled. Please contact your library.
+                        <span>Recalls have not been enabled. Please contact your library.</span>
                     [% ELSIF error == 'unavailable' %]
-                        There are no items available for recall.
+                        <span>There are no items available for recall.</span>
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Return to [% biblio.title | html %]</a>
                     [% ELSE %]
                         [% IF error %]
                             <div class="dialog alert">
                                 [% IF error == 'duplicate' %]
-                                    You have reached the maximum number of recalls on this record.
+                                    <span>You have reached the maximum number of recalls on this record.</span>
                                 [% ELSIF error == 'unavailable' %]
-                                    There are no items available for recall.
+                                    <span>There are no items available for recall.</span>
                                 [% ELSIF error == 'cannot' %]
-                                    You cannot place a recall on this item.
+                                    <span>You cannot place a recall on this item.</span>
                                 [% ELSE %]
-                                    An error has occurred while attempting to place a recall. Please contact your library.
+                                    <span>An error has occurred while attempting to place a recall. Please contact your library.</span>
                                 [% END %]
                             </div>
                         [% END %]
@@ -142,9 +142,9 @@
                                                         [% IF ( item.recall ) %]
                                                             <span class="waiting">
                                                             [% IF ( item.recall.waiting_date ) %]
-                                                                Waiting for patron at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %].
+                                                                <span>Waiting for patron at</span> [% Branches.GetName( item.recall.pickup_library_id ) | html %] <span>since</span> [% item.recall.waiting_date | $KohaDates %].
                                                             [% ELSE %]
-                                                                Recalled by patron expected at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.created_date | $KohaDates %].
+                                                                <span>Recalled by patron expected at</span> [% Branches.GetName( item.recall.pickup_library_id ) | html %] <span>since</span> [% item.recall.created_date | $KohaDates %].
                                                             [% END %]
                                                             </span>
                                                         [% ELSIF ( hold.waitingdate ) %]

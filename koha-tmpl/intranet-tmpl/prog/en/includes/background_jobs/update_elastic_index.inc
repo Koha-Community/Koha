@@ -10,7 +10,7 @@
         [% ELSE %]
             <div class="dialog message">
                 [% report.total_success | html %] / [% report.total_records | html %] records have successfully been reindexed. Some errors occurred.
-                [% IF job.status == 'cancelled' %]The job has been cancelled before it finished.[% END %]
+                [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             </div>
         [% END %]
     [% END %]

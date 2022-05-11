@@ -243,9 +243,9 @@
 [% IF op == 'add_form' && !error_not_authorised_to_modify %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" id="edit_fund" name="Aform" method="post">
     <fieldset class="rows">
-        <legend><h1>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
+        <legend><h1>[% IF ( budget_id ) %]<span>Modify</span>[% ELSE %]<span>Add</span>[% END %] <span>Fund</span>
     [% IF ( budget_period_description ) %]
-        [% budget_name | html %] for Budget '[% budget_period_description | html %]'
+        [% budget_name | html %] <span>for Budget</span> '[% budget_period_description | html %]'
     [% END %]
             </h1>
     </legend>

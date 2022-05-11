@@ -81,7 +81,7 @@
                             [% IF ( ordersloo.author ) %] by [% ordersloo.author | html %][% END %]
                             [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn | html %][% END %]
                             [% IF ( ordersloo.publishercode ) %]
-                                <br />Publisher: [% ordersloo.publishercode | html %]
+                                <br /><span>Publisher: [% ordersloo.publishercode | html %]</span>
                                 [%- IF    ( ordersloo.publicationyear > 0) -%], [% ordersloo.publicationyear | html %]
                                 [%- ELSIF ( ordersloo.copyrightdate   > 0) -%] [% ordersloo.copyrightdate | html %]
                                 [% END %]

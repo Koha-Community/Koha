@@ -43,22 +43,22 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 <div class="col-sm-8 col-sm-push-2">
 <h1>Tags</h1>
 <form method="post" action="/cgi-bin/koha/tags/review.pl">
-  <h4>Displaying 
-	[% IF ( filter_approved_all ) %]all[% END %]
-	[% IF ( filter_approved_ok ) %]approved[% END %]
-	[% IF ( filter_approved_pending ) %]pending[% END %]
-	[% IF ( filter_approved_rej ) %]rejected[% END %]
-	terms
-  </h4>
+    <h4><span>Displaying</span>
+    [% IF ( filter_approved_all ) %]<span>all</span>[% END %]
+    [% IF ( filter_approved_ok ) %]<span>approved</span>[% END %]
+    [% IF ( filter_approved_pending ) %]<span>pending</span>[% END %]
+    [% IF ( filter_approved_rej ) %]<span>rejected</span>[% END %]
+    terms
+    </h4>
 
   [% IF ( op_count ) %]
   <div class="dialog message" id="main_status">
-  		[% IF ( op == 'approve' ) %]		Approved
-  		[% ELSIF ( op == 'reject' ) %]	Rejected
-  		[% ELSIF ( op == 'test' ) %]		Tested
-        [% ELSE %]Unknown operation ([% op | html %]) on
-  		[% END %]
-	[% op_count | html %] Term(s).
+      [% IF ( op == 'approve' ) %]   <span>Approved</span>
+      [% ELSIF ( op == 'reject' ) %] <span>Rejected</span>
+      [% ELSIF ( op == 'test' ) %]   <span>Tested</span>
+      [% ELSE %]<span>Unknown operation ([% op | html %]) on</span>
+      [% END %]
+      <span>[% op_count | html %] Term(s).</span>
   </div>
   [% END %]
   [% IF ( message_loop ) %]
@@ -193,15 +193,15 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <input type="text" size="14" name="test" id="test" />
    <fieldset class="action"><button type="submit" value="Test" class="approval_btn btn btn-default btn-sm" id="test_button" name="op-test"><i class="fa fa-check-square-o" aria-hidden="true"></i> Test</button></fieldset>
    <div id="verdict">
-	[% IF ( test_term ) %]
-	[% IF ( verdict_ok ) %]
-		&quot;[% test_term | html %]&quot; is permitted.
-	[% ELSIF ( verdict_rej ) %]
-		&quot;[% test_term | html %]&quot; is prohibited.
-	[% ELSIF ( verdict_indeterminate ) %]
-		&quot;[% test_term | html %]&quot; is neither permitted nor prohibited.
-	[% END %]
-	[% END %]
+    [% IF ( test_term ) %]
+    [% IF ( verdict_ok ) %]
+        <span>&quot;[% test_term | html %]&quot; is permitted.</span>
+    [% ELSIF ( verdict_rej ) %]
+        <span>&quot;[% test_term | html %]&quot; is prohibited.</span>
+    [% ELSIF ( verdict_indeterminate ) %]
+        <span>&quot;[% test_term | html %]&quot; is neither permitted nor prohibited.</span>
+    [% END %]
+    [% END %]
    </div>
    </form>
   </fieldset>

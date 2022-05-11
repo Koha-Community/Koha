@@ -123,16 +123,16 @@
                                                 <li class="status">
                                                     <span class="match">
                                                         [% IF ( biblio_lis.overlay_status == 'no_match' ) %]
-                                                            No match
+                                                            <span>No match</span>
                                                         [% ELSIF ( biblio_lis.overlay_status == 'match_applied' ) %]
-                                                            Match applied
+                                                            <span>Match applied</span>
                                                         [% ELSIF ( biblio_lis.overlay_status == 'auto_match' ) %]
-                                                            Match found
+                                                            <span>Match found</span>
                                                         [% ELSE %]
                                                             [% biblio_lis.overlay_status | html %]
                                                         [% END %]
                                                         [% IF ( biblio.match_biblionumber ) %]
-                                                            Matches biblio [% biblio.match_biblionumber | uri %] (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | uri %]">[% biblio.match_citation | html %]</a>
+                                                            <span>Matches biblio [% biblio.match_biblionumber | uri %]</span> (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | uri %]">[% biblio.match_citation | html %]</a>
                                                         [% END %]
                                                     </span>
                                                 </li>
@@ -485,17 +485,17 @@
                                         <td>[% batch_lis.comments | html %]</td>
                                         <td>
                                             [% IF ( batch_lis.import_status == 'cleaned' ) %]
-                                                Cleaned
+                                                <span>Cleaned</span>
                                             [% ELSIF ( batch_lis.import_status == 'imported' ) %]
-                                                Imported
+                                                <span>Imported</span>
                                             [% ELSIF ( batch_lis.import_status == 'importing' ) %]
-                                                Importing
+                                                <span>Importing</span>
                                             [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
-                                                Reverted
+                                                <span>Reverted</span>
                                             [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
-                                                Reverting
+                                                <span>Reverting</span>
                                             [% ELSIF ( batch_lis.import_status == 'staged' ) %]
-                                                Staged
+                                                <span>Staged</span>
                                             [% ELSE %]
                                                 [% batch_lis.import_status | html %]
                                             [% END %]

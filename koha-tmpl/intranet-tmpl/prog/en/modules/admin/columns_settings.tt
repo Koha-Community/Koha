@@ -5,7 +5,7 @@
 [% SET panel_id = 0 %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 0 %]
-        Jump to:
+        <span>Jump to</span>:
         [% FOR pagename IN module.keys.sort %]
             <a href="#[% pagename | url %]">[% pagename | html %]</a>
             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
@@ -32,11 +32,11 @@
                                 <table>
                                     <caption>
                                         [% IF tablename == 'currencies-table' %]
-                                            Currency
+                                            <span>Currency</span>
                                         [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
-                                            Items editor
+                                            <span>Items editor</span>
                                         [% ELSE %]
-                                            Table id: [% tablename | html %]
+                                            <span>Table id: [% tablename | html %]</span>
                                         [% END %]
                                     </caption>
                                     <thead>

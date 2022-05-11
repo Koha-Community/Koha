@@ -414,9 +414,9 @@
                                         [% IF Koha.Preference( 'OPACPrivacy') %]
                                             <li id="patron-privacypref">
                                                 <span class="label">Privacy pref:</span>
-                                                    [% IF ( patron.privacy == 0 ) %]Forever[% END %]
-                                                    [% IF ( patron.privacy == 1 ) %]Default[% END %]
-                                                    [% IF ( patron.privacy == 2 ) %]Never[% END %]
+                                                    [% IF ( patron.privacy == 0 ) %]<span>Forever</span>[% END %]
+                                                    [% IF ( patron.privacy == 1 ) %]<span>Default</span>[% END %]
+                                                    [% IF ( patron.privacy == 2 ) %]<span>Never</span>[% END %]
                                             </li>
                                         [% END %]
 
@@ -456,7 +456,7 @@
                                                 [% IF ( patron.password_expiration_date ) %]
                                                     [% patron.password_expiration_date | $KohaDates %]
                                                 [% ELSE %]
-                                                    Never
+                                                    <span>Never</span>
                                                 [% END %]
                                             </li>
                                         [% END %]
@@ -479,11 +479,11 @@
                                             <li id="patron-checkprev">
                                                 <span class="label">Check previous checkouts: </span>
                                                 [% IF ( patron.checkprevcheckout == 'yes' ) %]
-                                                    Yes
+                                                    <span>Yes</span>
                                                 [% ELSIF ( patron.checkprevcheckout == 'no' ) %]
-                                                    No
+                                                    <span>No</span>
                                                 [% ELSE %]
-                                                    Inherited
+                                                    <span>Inherited</span>
                                                 [% END %]
                                             </li>
                                         [% END %]

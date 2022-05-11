@@ -59,11 +59,11 @@ legend:hover {
                 <li>
                     <a href="#" aria-current="page">
                         [% IF ( opadd ) %]
-                            Add patron
+                            <span>Add patron</span>
                         [% ELSIF ( opduplicate ) %]
-                            Duplicate patron
+                            <span>Duplicate patron</span>
                         [% ELSE %]
-                            Modify patron
+                            <span>Modify patron</span>
                         [% END %]
                         [% IF categoryname %]
                             ([% categoryname | html %])
@@ -111,11 +111,11 @@ legend:hover {
                     [% UNLESS ( no_add ) %]
                         <h1>
                             [% IF ( opadd ) %]
-                                Add patron
+                                <span>Add patron</span>
                             [% ELSIF ( opduplicate ) %]
-                                Duplicate patron
+                                <span>Duplicate patron</span>
                             [% ELSE %]
-                                Modify patron
+                                <span>Modify patron</span>
                             [% END %]
                             [% INCLUDE 'patron-title.inc' %]
                             [% IF categoryname %]([% categoryname | html %])[% END %]
@@ -269,7 +269,7 @@ legend:hover {
                             [% IF ( step_1 ) %]
                                 [% UNLESS notitle && nosurname && nofirstname && nodateofbirth && noinitials && noothernames &&nosex %]
                                     <fieldset class="rows" id="memberentry_identity">
-                                        <legend id="identity_lgd">[% IF ( I ) %]Organization [% ELSE %]Patron [% END %]identity</legend>
+                                        <legend id="identity_lgd">[% IF ( I ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
                                         <ol>
                                             [% UNLESS ( I ) %]
                                                 [% UNLESS notitle %]
@@ -1316,7 +1316,7 @@ legend:hover {
                                                                 No
                                                         </label>
                                                     [% ELSE %]
-                                                        [% IF flagloo.yes %]Yes[% ELSE %]No[% END %]
+                                                        [% IF flagloo.yes %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                                                     [% END # /IF CAN_user_circulate_manage_restrictions %]
                                                 </li>
                                             [% END # /FOREACH flagloo %]

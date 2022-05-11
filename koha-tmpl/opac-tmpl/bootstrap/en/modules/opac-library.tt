@@ -132,7 +132,7 @@
 
                 [% ELSE %]
                     <div id="library_info" class="maincontent">
-                        <h1>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h1>
+                        <h1>[% IF ( singleBranchMode ) %]<span>Library</span>[% ELSE %]<span>Libraries</span>[% END %]</h1>
 
                         [% FOREACH library IN libraries %]
                             <div class="section_library" id="section_[% library.branchcode | html %]">

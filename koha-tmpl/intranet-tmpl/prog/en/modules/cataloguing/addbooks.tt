@@ -151,11 +151,11 @@
                                             </span>
                                         [% END %]
                                         <span class="unavailable">
-                                            [% IF ( resultsloo.onloancount ) %] Checked out ([% resultsloo.onloancount | html %]),<br /> [% END %]
-                                            [% IF ( resultsloo.withdrawncount ) %] Withdrawn ([% resultsloo.withdrawncount | html %]),<br /> [% END %]
-                                            [% IF ( resultsloo.itemlostcount ) %] Lost ([% resultsloo.itemlostcount | html %])<br />[% END %]
-                                            [% IF ( resultsloo.recalledcount ) %] Waiting to fill recall ([% resultsloo.recalled | html %])[% END %]
-                                            [% IF ( resultsloo.onholdcount ) %] Waiting on hold ([% resultsloo.onholdcount | html %])[% END %]
+                                            [% IF ( resultsloo.onloancount ) %] <span>Checked out ([% resultsloo.onloancount | html %])</span>,<br /> [% END %]
+                                            [% IF ( resultsloo.withdrawncount ) %] <span>Withdrawn ([% resultsloo.withdrawncount | html %])</span>,<br /> [% END %]
+                                            [% IF ( resultsloo.itemlostcount ) %] <span>Lost ([% resultsloo.itemlostcount | html %])</span><br />[% END %]
+                                            [% IF ( resultsloo.recalledcount ) %] <span>Waiting to fill recall ([% resultsloo.recalled | html %])</span>[% END %]
+                                            [% IF ( resultsloo.onholdcount ) %] <span>Waiting on hold ([% resultsloo.onholdcount | html %])</span>[% END %]
                                         </span>
                                         <span class="notforloan">
                                             [% IF ( resultsloo.other_items_loop ) %]

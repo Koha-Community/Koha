@@ -348,7 +348,7 @@
                                     <td>
                                         [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
                                             [% IF loopro.patron %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]Member [% loopro.object | html %][% END %][% END %] </a>
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]<span>Member</span> [% loopro.object | html %][% END %][% END %] </a>
                                             [% ELSE %]
                                                 [% loopro.object | html %]
                                             [% END %]
@@ -373,7 +373,7 @@
                                             [% END %]
                                         [% ELSIF ( loopro.module == 'RECALLS' ) %]
                                             [% IF loopro.recall.item_level %]
-                                                Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
+                                                <span>Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a></span>
                                             [% ELSE %]
                                                 Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
                                             [% END %]

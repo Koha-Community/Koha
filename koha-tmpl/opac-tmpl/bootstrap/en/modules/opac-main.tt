@@ -128,15 +128,15 @@
                                 <i class="fa fa-rss" aria-hidden="true"></i>
                                 [% IF Branches.all.size == 1 %]
                                     [% IF branchcode %]
-                                        RSS feed for [% Branches.GetName( branchcode ) | html %] library news
+                                        <span>RSS feed for [% Branches.GetName( branchcode ) | html %] library news</span>
                                     [% ELSE %]
-                                        RSS feed for library news
+                                        <span>RSS feed for library news</span>
                                     [% END %]
                                 [% ELSE %]
                                     [% IF branchcode %]
-                                        RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news
+                                        <span>RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news</span>
                                     [% ELSE %]
-                                        RSS feed for system-wide library news
+                                        <span>RSS feed for system-wide library news</span>
                                     [% END %]
                                 [% END %]
                             </a>

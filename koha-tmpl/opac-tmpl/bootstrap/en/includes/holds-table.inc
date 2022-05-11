@@ -113,17 +113,17 @@
                             [% ELSE %]
                                 [% IF ( HOLD.is_in_transit ) %]
                                     [% SET transfer = HOLD.item.get_transfer %]
-                                    Item in transit from <strong> [% Branches.GetName( transfer.frombranch ) | html %]</strong> since
+                                    <span>Item in transit from <strong> [% Branches.GetName( transfer.frombranch ) | html %]</strong> since</span>
                                     [% transfer.datesent | $KohaDates %]
                                 [% ELSIF ( HOLD.is_in_processing ) %]
-                                    Item in processing
+                                    <span>Item in processing</span>
                                 [% ELSIF ( HOLD.suspend ) %]
-                                    Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | $KohaDates %] [% END %]
+                                    <span>Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | $KohaDates %] [% END %]</span>
                                 [% ELSE %]
                                     [% IF HOLD.itemtype %]
-                                        Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'
+                                        <span>Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'</span>
                                     [% ELSE %]
-                                        Pending
+                                        <span>Pending</span>
                                     [% END %]
                                 [% END %]
                             [% END %]

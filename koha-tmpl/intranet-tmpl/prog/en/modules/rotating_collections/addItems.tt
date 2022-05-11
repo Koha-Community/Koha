@@ -55,11 +55,11 @@
                     <p>Failed to add item with barcode <em>[% barcode | html %]</em>:
                     <p>
                         [% IF failureMessage == "NO_ITEM" %]
-                            No item with matching barcode found
+                            <span>No item with matching barcode found</span>
                         [% ELSIF failureMessage == "IN_COLLECTION_OTHER" %]
-                            Item is already in a different rotating collection
+                            <span>Item is already in a different rotating collection</span>
                         [% ELSIF failureMessage == "IN_COLLECTION" %]
-                            Item is already in this collection
+                            <span>Item is already in this collection</span>
                         [% ELSE %]
                             [% failureMessage | html %]
                         [% END %]
@@ -76,9 +76,9 @@
                     Failed to remove item with barcode <em>[% barcode | html %]</em>:
                     <p>
                         [% IF failureMessage == "NO_ITEM" %]
-                            No item with matching barcode found
+                            <span>No item with matching barcode found</span>
                         [% ELSIF failureMessage == "NOT_IN_COLLECTION" %]
-                            Item is not in this collection
+                            <span>Item is not in this collection</span>
                         [% ELSE %]
                             [% failureMessage | html %]
                         [% END %]

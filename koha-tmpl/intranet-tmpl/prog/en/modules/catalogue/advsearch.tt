@@ -182,10 +182,10 @@
                         [% FOREACH advsearchloo IN advancedsearchesloop %]
                             <li role="presentation" id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
                                 <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]" aria-controls="advsearch-[% advsearchloo.advanced_search_type | uri %]" role="tab" data-toggle="tab">
-                                    [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
-                                    [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
-                                    [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
-                                    [% ELSE %]Something else
+                                    [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
+                                    [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
+                                    [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
+                                    [% ELSE %]<span>Something else</span>
                                     [% END %]
                                 </a>
                             </li>

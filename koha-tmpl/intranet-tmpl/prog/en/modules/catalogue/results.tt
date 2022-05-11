@@ -570,7 +570,7 @@
                                                                 <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
                                                             [% END %]
 
-                                                            [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] available:[% ELSE %], None available[% END %]
+                                                            [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] <span>available</span>:[% ELSE %], <span>None available</span>[% END %]
 
                                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                                 </span>
@@ -618,10 +618,10 @@
                                                                                     ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => items_loo.damaged ) | html %])
                                                                                 [% END %]
                                                                                 [% IF ( items_loo.intransit ) %]
-                                                                                    (In transit)
+                                                                                    (<span>In transit</span>)
                                                                                 [% END %]
                                                                                 [% IF ( items_loo.onhold ) %]
-                                                                                    (On hold)
+                                                                                    (<span>On hold</span>)
                                                                                 [% END %]
                                                                                 [% IF ( items_loo.notforloan ) %]
                                                                                     [% items_loo.notforloan | html %]

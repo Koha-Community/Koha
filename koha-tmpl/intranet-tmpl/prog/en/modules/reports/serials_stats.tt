@@ -63,9 +63,9 @@
                     <td data-order="[% data.enddate | html %]">[% data.enddate | $KohaDates %]</td>
                     <td>
                         [% IF data.closed %]
-                            Closed
+                            <span>Closed</span>
                         [% ELSIF data.expired %]
-                            Expired
+                            <span>Expired</span>
                         [% END %]
                     </td>
                 </tr>

@@ -49,16 +49,16 @@
             <a href="#" aria-current="page">
                 [% UNLESS ( basketno ) %]
                     [% IF ( delete_confirmed ) %]
-                        Deleted
+                        <span>Deleted</span>
                     [% ELSE %]
-                        New
+                        <span>New</span>
                     [% END %]
                 [% END %]
-                Basket [% basketname | html %]
+                <span>Basket [% basketname | html %]
                 [% IF ( basketno ) %]
                     ([% basketno | html %])
                 [% END %]
-                for [% booksellername | html %]
+                for [% booksellername | html %]</span>
             </a>
         </li>
     </ol>
