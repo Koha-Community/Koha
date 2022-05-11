@@ -80,7 +80,7 @@
                     |
                     Indices:
                   [% FOREACH index IN elasticsearch_status.indexes %]
-                      [% index.index_name | html %] (count: <emph>[% index.count | html %]</emph>)[% UNLESS loop.last %], [% END %]
+                      [% index.index_name | html %] (count: <emph>[% index.index_count | html %]</emph>)[% UNLESS loop.last %], [% END %]
                   [% END %]
                 [% ELSE %]
                     <span class="bg-warning">not running</span>
@@ -216,7 +216,7 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -507,6 +507,22 @@
                         [% unit.rule_value | html %].
                     </td>
                 </tr>
+                [% END %]
+            </table>
+        [% END %]
+
+        [% IF elasticsearch_has_missing %]
+            <table>
+                <caption>Records are missing in Elasticsearch search engine</caption>
+                [% FOREACH index IN elasticsearch_status.indexes %]
+                    [% IF index.missing_count %]
+                    <tr>
+                        <th scope="row"><strong>Warning</strong></th>
+                        <td>
+                            [% index.missing_count | html %] record(s) missing on a total of [% index.index_count | html %] in indice [% index.index_name | html %].
+                        </td>
+                    </tr>
+                    [% END %]
                 [% END %]
             </table>
         [% END %]
