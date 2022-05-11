@@ -1,5 +1,5 @@
 use Modern::Perl;
- 
+
 return {
     bug_number => "13412",
     description => "Add GenerateAuthorityField667 and GenerateAuthorityField670 system preferences",
