@@ -36,10 +36,10 @@
             <li>
                 <a href="#" aria-current="page">
                     [% IF debit_type.code %]
-                        Modify
+                        <span>Modify debit type</span>
                     [% ELSE %]
-                        New
-                    [% END %] debit type
+                        <span>New debit type</span>
+                    [% END %]
                 </a>
             </li>
 
@@ -189,12 +189,12 @@
                                             [% END %]
                                             <span class="library_limitation" title="[% library_limits_str | html %]">
                                                 [% IF debit_type.library_limits.count > 1 %]
-                                                    [% debit_type.library_limits.count | html %] library limitations
+                                                    <span>[% debit_type.library_limits.count | html %] library limitations</span>
                                                 [% ELSE %]
-                                                    [% debit_type.library_limits.count | html %] library limitation
+                                                    <span>[% debit_type.library_limits.count | html %] library limitation</span>
                                                 [% END %]
                                         [% ELSE %]
-                                            No limitation
+                                            <span>No limitation</span>
                                         [% END %]
                                     </td>
                                     <td class="actions">

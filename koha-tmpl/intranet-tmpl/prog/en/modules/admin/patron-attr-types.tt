@@ -317,9 +317,9 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                     <span title="[% branches_str | html %]">
                         [% IF libraries.count > 1 %]
-                            [% libraries.count | html %] library limitations
+                            <span>[% libraries.count | html %] library limitations</span>
                         [% ELSE %]
-                            [% libraries.count | html %] library limitation
+                            <span>[% libraries.count | html %] library limitation</span>
                         [% END %]
                     </span>
                 [% ELSE %]
@@ -334,9 +334,9 @@ Patron attribute types &rsaquo; Administration &rsaquo; Koha
                 [% END %]
             <td>
                 [% IF ( item.mandatory ) -%]
-                   Yes
+                   <span>Yes</span>
                 [% ELSE -%]
-                   No
+                   <span>No</span>
                 [% END %]
             </td>
             <td class="actions">

@@ -58,11 +58,11 @@
         [% ELSE %]
             <h3>
                 [% IF ( label_ids ) %]
-                    [% IF ( label_count == 1 ) %]Exporting [% label_count | html %] label[% ELSE %]Exporting [% label_count | html %] labels[% END %]
+                    [% IF ( label_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% label_count | html %] labels</span>[% END %]
                 [% ELSIF ( item_numbers ) %]
-                    [% IF ( item_count == 1 ) %]Exporting [% item_count | html %] label[% ELSE %]Exporting [% item_count | html %] labels[% END %]
+                    [% IF ( item_count == 1 ) %]<span>Exporting 1 label</span>[% ELSE %]<span>Exporting [% item_count | html %] labels</span>[% END %]
                 [% ELSE %]
-                    [% IF ( multi_batch_count == 1 ) %][% multi_batch_count | html %] batch to export[% ELSE %][% multi_batch_count | html %] batches to export[% END %]
+                    [% IF ( multi_batch_count == 1 ) %]<span>1 batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
                 [% END %]
             </h3>
             <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">

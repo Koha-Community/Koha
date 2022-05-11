@@ -108,26 +108,26 @@
             [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li> [% END %]
 	    [% IF ITEM_DAT.materials %]<li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %] </li> [% END %]
             </ol></div></div>
-           <div class="listgroup"><h4>Statuses [% IF ( ITEM_DAT.status_advisory ) %](
+           <div class="listgroup"><h4><span>Statuses</span> [% IF ( ITEM_DAT.status_advisory ) %](
                 [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]
-                [% IF ( ITEM_DAT.itemlost ) %]Lost[% END %]
-                [% IF ( ITEM_DAT.damaged ) %]Damaged[% END %]
-                [% IF ( ITEM_DAT.withdrawn ) %]Withdrawn[% END %]
+                [% IF ( ITEM_DAT.itemlost ) %]<span>Lost</span>[% END %]
+                [% IF ( ITEM_DAT.damaged ) %]<span>Damaged</span>[% END %]
+                [% IF ( ITEM_DAT.withdrawn ) %]<span>Withdrawn</span>[% END %]
             )[% END %]</h4>
 
             <div class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
-            [% IF ( ITEM_DAT.issue ) %]Checked out to
-                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]
+            [% IF ( ITEM_DAT.issue ) %]<span>Checked out to
+                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]</span>
                 [% IF ( ITEM_DAT.lastreneweddate ) %]
-                    Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %],
+                    <span>Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %]</span>,
                 [% END %]
                 [% IF ( ITEM_DAT.datedue ) %]
-                    Due back on [% ITEM_DAT.datedue | $KohaDates %]
+                    <span>Due back on [% ITEM_DAT.datedue | $KohaDates %]</span>
                 [% ELSE %]
-                    Not checked out
+                    <span>Not checked out</span>
                 [% END %]
             [% END %]
             &nbsp;</li>

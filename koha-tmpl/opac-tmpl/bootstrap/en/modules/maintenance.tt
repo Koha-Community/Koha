@@ -41,7 +41,7 @@
                     [% ELSE %]
                         <h1>System maintenance</h1>
                             <p>
-                                The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon!
+                                <span>The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon!</span>
                                 [% IF ( Koha.Preference( 'ReplytoDefault' ) ) %]
                                     If you have any questions, please contact the <a href="mailto:[% Koha.Preference( 'ReplytoDefault' ) | $raw %]">site administrator</a>
                                 [% ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) %]

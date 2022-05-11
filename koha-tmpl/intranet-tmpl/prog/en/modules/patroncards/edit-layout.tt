@@ -41,7 +41,9 @@
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
 
-                    <h1>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card layout</h1>
+                    <h1>[% IF ( layout_id ) %]<span>Edit patron card layout</span> [% layout_id | html %]
+                        [% ELSE %]<span>Create patron card layout</span>[% END %]
+                    </h1>
 
                 <!-- NOTE: The order of the elements on this form is crictical to correct processing. You've been warned...  -->
                 <form name="input" action="/cgi-bin/koha/patroncards/edit-layout.pl" method="get">
@@ -279,7 +281,9 @@
                 </div>
                 <div class="col-sm-6">
                     <fieldset class="rows">
-                    <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card graphic layout</legend>
+                    <legend>[% IF ( layout_id ) %]<span>Edit patron card graphic layout</span>
+                            [% ELSE %]<span>Create patron card graphic layout</span>[% END %]
+                    </legend>
                     <ol>
 <!--
                             <li>

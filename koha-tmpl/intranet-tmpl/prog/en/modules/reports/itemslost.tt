@@ -75,9 +75,9 @@
         [% ELSE %]
             <div class="dialog message">
                 [% IF ( CAN_user_tools_manage_csv_profiles ) %]
-                    To enable the export of selected items, <a href="/cgi-bin/koha/tools/csv-profiles.pl">create a CSV profile</a> of the type "SQL" with usage option "Export lost items in report."
+                    <span>To enable the export of selected items, <a href="/cgi-bin/koha/tools/csv-profiles.pl">create a CSV profile</a> of the type "SQL" with usage option "Export lost items in report."</span>
                 [% ELSE %]
-                    To enable the export of selected items, your administrator must create a CSV profile of the type "SQL" with usage option "Export lost items in report."
+                    <span>To enable the export of selected items, your administrator must create a CSV profile of the type "SQL" with usage option "Export lost items in report."</span>
                 [% END %]
             </div>
             <div class="lostitems-table_table_controls">

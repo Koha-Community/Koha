@@ -88,10 +88,10 @@
                                             [% END %]
                                             <span class="commenter">
                                                 [% IF review.your_comment %]
-                                                    Added [% review.datereviewed | $KohaDates %] by you
+                                                    <span>Added [% review.datereviewed | $KohaDates %] by you</span>
                                                 [% ELSE %]
                                                     [% IF ( review.borrowernumber && ShowReviewer != "none" ) %]
-                                                        Added [% review.datereviewed | $KohaDates %] by
+                                                        <span>Added [% review.datereviewed | $KohaDates %] by</span>
                                                         [% SWITCH ShowReviewer %]
                                                             [% CASE 'full' %]
                                                                 [% review.borrtitle | html %] [% review.firstname | html %] [% review.surname | html %]

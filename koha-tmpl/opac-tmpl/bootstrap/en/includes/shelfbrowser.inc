@@ -2,11 +2,11 @@
     [% IF OpenOPACShelfBrowser %]
         <div id="shelfbrowser">
             <h5 style="text-align: center;" tabindex="-1">
-                [%- IF ( starting_homebranch ) %]Browsing [% starting_homebranch | html %] shelves[% END -%]
+                [%- IF ( starting_homebranch ) %]<span>Browsing [% starting_homebranch | html %] shelves</span>[% END -%]
                 [%- IF ( starting_homebranch && starting_location ) %], [% END %]
-                [%- IF ( starting_location ) %]Shelving location: [%- starting_location | html -%][% END -%]
+                [%- IF ( starting_location ) %]<span>Shelving location:</span> [%- starting_location | html -%][% END -%]
                 [%- IF ( starting_homebranch && starting_ccode ) %], [% END %]
-                [%- IF ( starting_ccode ) %]Collection: [%- starting_ccode | html -%][% END -%]
+                    [%- IF ( starting_ccode ) %]<span>Collection: [%- starting_ccode | html -%]</span>[% END -%]
                 <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" class="close_shelf" >Close shelf browser <span class="sr-only">(Hides shelf browser)</span></a>
             </h5>
 

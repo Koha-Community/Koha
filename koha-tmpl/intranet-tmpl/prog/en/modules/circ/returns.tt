@@ -10,11 +10,11 @@
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
     [% IF ( bormessagepref ) %]
-        <li class="notification_method">Patron notification:
+        <li class="notification_method"><span>Patron notification:</span>
             [% FOREACH mtt IN bormessagepref.keys %]
-                [%~ IF ( mtt == 'email' ) %] Email[% END ~%]
-                [%~ IF ( mtt == 'phone' ) %] Phone[% END ~%]
-                [%~ IF ( mtt == 'sms' ) %] SMS[% END ~%]
+                [%~ IF ( mtt == 'email' ) %] <span>Email</span>[% END ~%]
+                [%~ IF ( mtt == 'phone' ) %] <span>Phone</span>[% END ~%]
+                [%~ IF ( mtt == 'sms' ) %] <span>SMS</span>[% END ~%]
                 [%~ UNLESS loop.last %], [% ELSE %].[% END ~%]
             [% END %]
         </li>
@@ -249,18 +249,18 @@
                                         [% IF ( errmsgloo.ItemLocationUpdated ) %]
                                              <p class="problem ret_location_update">
                                                  Item shelving location updated.
-                                                <br />Old value:
+                                                <br /><span>Old value:</span>
                                                 [% IF errmsgloo.ItemLocationUpdated.from %]
                                                     [% SET av_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => errmsgloo.ItemLocationUpdated.from ) %]
                                                     [% IF errmsgloo.ItemLocationUpdated.from == '' %]
-                                                        empty
+                                                        <span>empty</span>
                                                     [% ELSIF av_description == '' %]
-                                                        [% errmsgloo.ItemLocationUpdated.from | html %] (No description available)
+                                                        [% errmsgloo.ItemLocationUpdated.from | html %] (<span>No description available</span>)
                                                     [% ELSE %]
                                                         [% av_description | html %]
                                                     [% END %]
                                                 [% ELSE %]
-                                                    "Blank"
+                                                    <span>"Blank"</span>
                                                 [% END %]
                                                 <br />New value:
                                                 [% IF errmsgloo.ItemLocationUpdated.to %]

@@ -64,10 +64,10 @@ Your cart
 
             [% IF BIBLIO_RESULT.publishercode %]
             <span>
-                Published by: [% BIBLIO_RESULT.publishercode | $raw %]
+                <span>Published by: [% BIBLIO_RESULT.publishercode | $raw %]
                 [% IF ( BIBLIO_RESULT.publicationyear ) %]
                     in [% BIBLIO_RESULT.publicationyear | $raw %]
-                [% END %]
+                [% END %]</span>
                 [% IF ( BIBLIO_RESULT.pages ) %]
                     , [% BIBLIO_RESULT.pages | $raw %]
                 [% END %]

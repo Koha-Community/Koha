@@ -147,47 +147,47 @@
 
                                         <td>[% ActionsLoo.ordering | html %]</td>
                                         <td>
-                                            [% IF ( ActionsLoo.action_delete_field ) %] Delete [% END %]
-                                            [% IF ( ActionsLoo.action_add_field ) %] Add new [% END %]
-                                            [% IF ( ActionsLoo.action_update_field ) %] Update existing or add new [% END %]
-                                            [% IF ( ActionsLoo.action_move_field ) %] Move [% END %]
-                                            [% IF ( ActionsLoo.action_copy_field ) %] Copy [% END %]
-                                            [% IF ( ActionsLoo.action_copy_and_replace_field ) %] Copy and replace [% END %]
+                                            [% IF ( ActionsLoo.action_delete_field ) %] <span>Delete</span> [% END %]
+                                            [% IF ( ActionsLoo.action_add_field ) %] <span>Add new</span> [% END %]
+                                            [% IF ( ActionsLoo.action_update_field ) %] <span>Update existing or add new</span> [% END %]
+                                            [% IF ( ActionsLoo.action_move_field ) %] <span>Move</span> [% END %]
+                                            [% IF ( ActionsLoo.action_copy_field ) %] <span>Copy</span> [% END %]
+                                            [% IF ( ActionsLoo.action_copy_and_replace_field ) %] <span>Copy and replace</span> [% END %]
 
                                             [% UNLESS ( ActionsLoo.action_update_field ) %]
                                                 [% IF ( ActionsLoo.field_number ) %]
-                                                    1st
+                                                    <span>1st</span>
                                                 [% END %]
                                             [% END %]
 
-                                            field
+                                            <span>field</span>
 
                                             [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield.length ) %]$[% ActionsLoo.from_subfield | html %][% END %]
 
                                             [% IF ( ActionsLoo.field_value ) %]
-                                                with value <em>[% ActionsLoo.field_value | html %]</em>
+                                                <span>with value</span> <em>[% ActionsLoo.field_value | html %]</em>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.to_field ) %]
-                                                to [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield.length ) %]$[% ActionsLoo.to_subfield | html %][% END %]
+                                                <span>to</span> [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield.length ) %]$[% ActionsLoo.to_subfield | html %][% END %]
 
                                                 [% IF ( ActionsLoo.to_regex_search ) %]
-                                                     using RegEx s<strong>/[% ActionsLoo.to_regex_search | html %]/[% ActionsLoo.to_regex_replace | html %]/[% ActionsLoo.to_regex_modifiers | html %]</strong>
+                                                     <span>using RegEx</span> s<strong>/[% ActionsLoo.to_regex_search | html %]/[% ActionsLoo.to_regex_replace | html %]/[% ActionsLoo.to_regex_modifiers | html %]</strong>
                                                 [% END %]
                                             [% END %]
 
                                             [% IF ( ActionsLoo.conditional ) %]
-                                                [% IF ( ActionsLoo.conditional_if ) %] if [% END %]
-                                                [% IF ( ActionsLoo.conditional_unless ) %] unless [% END %]
+                                                [% IF ( ActionsLoo.conditional_if ) %] <span>if</span> [% END %]
+                                                [% IF ( ActionsLoo.conditional_unless ) %] <span>unless</span> [% END %]
 
                                                 [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield.length ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
 
-                                                [% IF ( ActionsLoo.conditional_comparison_exists ) %] exists [% END %]
-                                                [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] does not exist [% END %]
-                                                [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
-                                                [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_exists ) %] <span>exists</span> [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] <span>does not exist</span> [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_equals ) %] <span>matches</span> [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] <span>does not match</span> [% END %]
 
-                                                [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]<strong>[% ActionsLoo.conditional_value | html %]</strong>[% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
+                                                [% IF ( ActionsLoo.conditional_regex ) %] <span>RegEx</span> m/[% END %]<strong>[% ActionsLoo.conditional_value | html %]</strong>[% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
                                             [% END %]
                                         </td>
                                         <td>[% ActionsLoo.description | html %]</td>

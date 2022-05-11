@@ -1009,12 +1009,12 @@
                                                 [% IF ( listitem.biblionumber == biblionumber ) %]
                                                     <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail">
                                                         <span class="li_pag_index"><i class="fa fa-arrow-left" aria-hidden="true"></i> [% loop.count  + offset | html %]</span>
-                                                        <a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]by [% author | html %][% END %]
+                                                        <a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]<span>by</span> [% author | html %][% END %]
                                                     </li>
                                                 [% ELSE %]
                                                     <li id="li_pag_[% loop.count | html %]" title="Go to detail">
                                                         <span class="li_pag_index">[% loop.count + offset | html %]</span>
-                                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]by [% listitem.author | html %][% END %]
+                                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]<span>by</span> [% listitem.author | html %][% END %]
                                                     </li>
                                                 [% END # /IF listitem.biblionumber %]
                                             [% END # /FOREACH listitem %]

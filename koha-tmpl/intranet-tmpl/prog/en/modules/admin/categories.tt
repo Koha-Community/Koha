@@ -431,9 +431,9 @@
             <legend>
                 <h1>
                     [% IF patrons_in_category > 0 %]
-                        Category [% categorycode | html %] is in use.  Deletion not possible!
+                        <span>Category [% categorycode | html %] is in use. Deletion not possible!</span>
                     [% ELSE %]
-                        Confirm deletion of category [% categorycode | html %]
+                        <span>Confirm deletion of category [% categorycode | html %]</span>
                     [% END %]
             </h1>
             </legend>
@@ -618,7 +618,7 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                    None
+                                    <span>None</span>
                                 [% END %]
                             </td>
                         [% END %]
@@ -635,12 +635,12 @@
                                 [% END %]
                                 <span class="library_limitation" title="[% library_str | html %]">
                                     [% IF library_limits.count > 1 %]
-                                        [% library_limits.count | html %] library limitations
+                                        <span>[% library_limits.count | html %] library limitations</span>
                                     [% ELSE %]
-                                        [% library_limits.count | html %] library limitation
+                                        <span>[% library_limits.count | html %] library limitation</span>
                                     [% END %]
                             [% ELSE %]
-                                No limitation
+                                <span>No limitation</span>
                             [% END %]
                         </td>
                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]

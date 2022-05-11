@@ -12,9 +12,9 @@
                         [% IF ( authorized ) %]
                             [% UNLESS ( newshelf ) %]
                                 [% IF ( multiple ) %]
-                                    <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
+                                    <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]<span>a list:</span>[% END %]</h1>
                                 [% ELSE %]
-                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
+                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]<span>a list:</span>[% END %]</h1>
                                 [% END %]
                                 <ul>
                                     [% FOREACH biblio IN biblios %]
@@ -99,9 +99,9 @@
                         [% ELSE %]
                             <p>
                                 [% IF (errcode==1) %]
-                                    Could not create new list. Please check if the name is unique.
+                                    <span>Could not create new list. Please check if the name is unique.</span>
                                 [% ELSE %]
-                                    Sorry, you cannot add items to this list.
+                                    <span>Sorry, you cannot add items to this list.</span>
                                 [% END %]
                             </p>
                         [% END # IF authorized %]

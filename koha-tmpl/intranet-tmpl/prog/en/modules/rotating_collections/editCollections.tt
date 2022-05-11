@@ -62,11 +62,11 @@
                     <p>Collection <em>[% createdTitle | html %]</em> failed to be added</p>
                     <p>
                         [% IF failureMessage == "NO_TITLE" %]
-                            No title entered.
+                            <span>No title entered.</span>
                         [% ELSIF failureMessage == "DUPLICATE_TITLE" %]
-                            Title already in use.
+                            <span>Title already in use.</span>
                         [% ELSIF failureMessage == "NO_DESCRIPTION" %]
-                            No description entered.
+                            <span>No description entered.</span>
                         [% ELSE %]
                             [% failureMessage | html %]
                         [% END %]

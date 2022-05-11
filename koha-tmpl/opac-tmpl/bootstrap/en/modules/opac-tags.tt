@@ -64,21 +64,21 @@
                         [% IF ( ERRORS ) %]
                             [% FOREACH ERROR IN ERRORS %]
                                 <div class="alert alert-warning">
-                                    There was a problem with this operation:
+                                    <span>There was a problem with this operation:</span>
                                     [% IF ( ERROR.badparam ) %]
-                                        ERROR: illegal parameter [% ERROR.badparam | html %]
+                                        <span>ERROR: illegal parameter [% ERROR.badparam | html %]</span>
                                     [% ELSIF ( ERROR.login ) %]
-                                        ERROR: You must log in to complete that action.
+                                        <span>ERROR: You must log in to complete that action.</span>
                                     [% ELSIF ( ERROR.failed_delete ) %]
-                                        ERROR: You cannot delete the tag [% ERROR.failed_delete | html %].
-                                        <br />Note: you can only delete your own tags.
+                                        <span>ERROR: You cannot delete the tag [% ERROR.failed_delete | html %].</span>
+                                        <br /><span>Note: you can only delete your own tags.</span>
                                     [% ELSIF ( ERROR.scrubbed ) %]
-                                        Note: your tag contained markup code that was removed.
-                                        <br />The tag was added as &quot;[% ERROR.scrubbed | html %]&quot;.
+                                        <span>Note: your tag contained markup code that was removed.</span>
+                                        <br /><span>The tag was added as &quot;[% ERROR.scrubbed | html %]&quot;.</span>
                                     [% ELSIF ( ERROR.scrubbed_all_bad ) %]
-                                        Note: your tag was entirely markup code.  It was NOT added.
-                                        <br />Please try again with plain text.
-                                    [% ELSE %]Unrecognized error.
+                                        <span>Note: your tag was entirely markup code.  It was NOT added.</span>
+                                        <br /><span>Please try again with plain text.</span>
+                                    [% ELSE %]<span>Unrecognized error.</span>
                                     [% END %]
                                 </div>
                             [% END %]
@@ -89,9 +89,9 @@
                                 <div class="form-inline">
                                     <label>
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                            Tags to show from other users:
+                                            <span>Tags to show from other users:</span>
                                         [% ELSE %]
-                                            Tags to show:
+                                            <span>Tags to show:</span>
                                         [% END %]
                                     </label>
                                     <input type="text" name="limit" class="form-control form-control-sm mr-2" maxlength="4" size="4" value="[% limit or '100' | html %]" />
@@ -127,7 +127,7 @@
                                 <div class="dialog message">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
                             [% END %]
                             [% IF ( deleted_count ) %]
-                            <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                                <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
                             [% END %]
                         [% END # /add_op %]
 

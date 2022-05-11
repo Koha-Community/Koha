@@ -575,12 +575,12 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     [% END %]
                     <span class="library_limitation" title="[% library_str | html %]">
                         [% IF library_limits.count > 1 %]
-                            [% library_limits.count | html %] library limitations
+                            <span>[% library_limits.count | html %] library limitations</span>
                         [% ELSE %]
-                            [% library_limits.count | html %] library limitation
+                            <span>[% library_limits.count | html %] library limitation</span>
                         [% END %]
                 [% ELSE %]
-                    No limitation
+                    <span>No limitation</span>
                 [% END %]
             </td>
             <td>[% IF ( itemtype.automatic_checkin ) %]Yes[% ELSE %]&nbsp;[% END %]</td>

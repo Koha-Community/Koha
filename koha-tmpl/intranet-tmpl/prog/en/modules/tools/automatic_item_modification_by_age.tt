@@ -226,9 +226,9 @@
                                 <tr>
                                     <td>
                                         [% IF rule.age.defined and rule.age.length > 0 %]
-                                            [% rule.age | html %] days
+                                            <span>[% rule.age | html %] days</span>
                                         [% ELSE %]
-                                            There is no age for this rule.
+                                            <span>There is no age for this rule.</span>
                                         [% END %]
                                     </td>
                                     <td>

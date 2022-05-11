@@ -54,8 +54,8 @@
                                   <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
                                 [% END %]</p>
                   <p class="resultcount">
-                          [% IF ( total ) %]Results [% from | html %] to [% to | html %] of [% total | html %]
-                          [% ELSE %]No results found
+                          [% IF ( total ) %]<span>Results [% from | html %] to [% to | html %] of [% total | html %]</span>
+                          [% ELSE %]<span>No results found</span>
                           [% END %]</p></div>
             <div id="resultlist">
                   <table>

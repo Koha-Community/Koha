@@ -532,9 +532,9 @@
                             </div> <!-- / #toolbar -->
 
                             <div class="alert alert-info">
-                                This list is empty.
+                                <span>This list is empty.</span>
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    You can add to your lists from the results of any <a href="opac-main.pl">search</a>.
+                                    <span>You can add to your lists from the results of any <a href="opac-main.pl">search</a>.</span>
                                 [% END %]
                             </div>
 
@@ -689,12 +689,12 @@
                                             [% SET contents = s.get_contents %]
                                             <tr>
                                                 <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a></td>
-                                                <td>[% IF contents.count %][% contents.count | html %] [% IF contents.count == 1 %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
+                                                <td>[% IF contents.count %][% contents.count | html %] [% IF contents.count == 1 %]<span>item</span>[% ELSE %]<span>items</span>[% END %][% ELSE %]<span>Empty</span>[% END %]</td>
                                                 <td>
                                                     [% IF s.is_private %]
-                                                        [% IF s.is_shared %]Shared[% ELSE %]Private[% END %]
+                                                        [% IF s.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]
                                                     [% ELSE %]
-                                                        Public
+                                                        <span>Public</span>
                                                     [% END %]
                                                 </td>
                                                 <td>

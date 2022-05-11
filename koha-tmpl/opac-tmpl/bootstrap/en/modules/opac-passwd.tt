@@ -43,20 +43,20 @@
                             <h2>There was a problem with your submission</h2>
                             <p>
                                 [% IF ( passwords_mismatch ) %]
-                                Passwords do not match.  Please re-type your new password.
+                                   <span>Passwords do not match.  Please re-type your new password.</span>
                                 [% END %]
                                 [% IF password_too_short %]
-                                    Password must be at least [% minPasswordLength | html %] characters long.
+                                    <span>Password must be at least [% minPasswordLength | html %] characters long.</span>
                                 [% END %]
                                 [% IF password_too_weak %]
-                                    Password must contain at least one digit, one lowercase and one uppercase.
+                                    <span>Password must contain at least one digit, one lowercase and one uppercase.</span>
                                 [% END %]
                                 [% IF password_has_whitespaces %]
-                                    Password must not contain leading or trailing whitespaces.
+                                    <span>Password must not contain leading or trailing whitespaces.</span>
                                 [% END %]
 
                                 [% IF ( WrongPass ) %]
-                                Your current password was entered incorrectly.  If this problem persists, please ask a librarian to reset your password for you.
+                                   <span>Your current password was entered incorrectly. If this problem persists, please ask a librarian to reset your password for you.</span>
                                 [% END %]
                             </p>
                         </div>

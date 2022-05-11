@@ -85,9 +85,9 @@
                                             <td>[% invoice.receiveditems | html %]</td>
                                             <td>
                                                 [% IF invoice.closedate %]
-                                                    Closed on [% invoice.closedate | $KohaDates %]
+                                                    <span>Closed on [% invoice.closedate | $KohaDates %]</span>
                                                 [% ELSE %]
-                                                    Open
+                                                    <span>Open</span>
                                                 [% END %]
                                             </td>
                                             <td>
@@ -235,12 +235,12 @@
                                 [% END %]
                                 [% IF shipmentdatefrom %]
                                     <li>
-                                        Shipment date:
+                                        <span>Shipment date:</span>
                                         [% IF shipmentdateto %]
-                                            From [% shipmentdatefrom | $KohaDates %]
-                                            To [% shipmentdateto | $KohaDates %]
+                                            <span>From [% shipmentdatefrom | $KohaDates %]</span>
+                                            <span>To [% shipmentdateto | $KohaDates %]</span>
                                         [% ELSE %]
-                                            All since [% shipmentdatefrom | $KohaDates %]
+                                            <span>All since [% shipmentdatefrom | $KohaDates %]</span>
                                         [% END %]
                                     </li>
                                 [% ELSE %]
@@ -253,12 +253,12 @@
                                 [% END %]
                                 [% IF billingdatefrom %]
                                     <li>
-                                        Billing date:
+                                        <span>Billing date:</span>
                                         [% IF billingdateto %]
-                                            From [% billingdatefrom | $KohaDates %]
-                                            To [% billingdateto | $KohaDates %]
+                                            <span>From [% billingdatefrom | $KohaDates %]</span>
+                                            <span>To [% billingdateto | $KohaDates %]</span>
                                         [% ELSE %]
-                                            All since [% billingdatefrom | $KohaDates %]
+                                            <span>All since [% billingdatefrom | $KohaDates %]</span>
                                         [% END %]
                                     </li>
                                 [% ELSE %]

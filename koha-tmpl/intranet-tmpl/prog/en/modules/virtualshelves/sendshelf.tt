@@ -41,7 +41,7 @@ Your list: [% shelfname | $raw %]
 
             <p>
             [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
-            <span>Author(s): [% IF ( BIBLIO_RESULT.author ) %][% BIBLIO_RESULT.author | $raw %][% END %]
+            <span><span>Author(s): [% IF ( BIBLIO_RESULT.author ) %][% BIBLIO_RESULT.author | $raw %][% END %]</span>
 
             [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
                 [% IF ( BIBLIO_RESULT.author ) %]; [% END %]

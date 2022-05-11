@@ -55,7 +55,7 @@
                         [% IF ( recall.expiration_date ) %]
                             [% recall.expiration_date | $KohaDates %]
                         [% ELSIF ( !recall.completed ) %]
-                            Never expires
+                            <span>Never expires</span>
                         [% ELSE %]
                             -
                         [% END %]
@@ -67,28 +67,28 @@
 
                     <td class="recall-status">
                         [% IF ( recall.in_transit ) %]
-                            In transit to [% recall.library.branchname | html %]
+                            <span>In transit to [% recall.library.branchname | html %]</span>
                         [% ELSIF ( recall.waiting ) %]
-                            Ready for pickup
+                            <span>Ready for pickup</span>
                         [% ELSIF ( recall.expired ) %]
-                            Expired on [% recall.expiration_date | $KohaDates %]
+                            <span>Expired on [% recall.expiration_date | $KohaDates %]</span>
                         [% ELSIF ( recall.cancelled ) %]
-                            Cancelled on [% recall.completed_date | $KohaDates %]
+                            <span>Cancelled on [% recall.completed_date | $KohaDates %]</span>
                         [% ELSIF ( recall.overdue ) %]
-                            Overdue to be returned
+                            <span>Overdue to be returned</span>
                         [% ELSIF ( recall.fulfilled ) %]
-                            Fulfilled
+                            <span>Fulfilled</span>
                         [% ELSE %]
-                            Requested
+                            <span>Requested</span>
                         [% END %]
                     </td>
 
                     [% UNLESS viewing_old %]
                     <td class="recall-duedate">
                         [% IF recall.requested and recall.checkout %]
-                            Due to be returned by [% recall.checkout.date_due | $KohaDates %]
+                            <span>Due to be returned by [% recall.checkout.date_due | $KohaDates %]</span>
                         [% ELSIF recall.waiting and RECALL.expiration_date %]
-                            Pick up by [% RECALL.expiration_date | $KohaDates %]
+                            <span>Pick up by [% RECALL.expiration_date | $KohaDates %]</span>
                         [% ELSE %]
                             -
                         [% END %]

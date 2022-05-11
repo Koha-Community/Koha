@@ -351,10 +351,10 @@
                 [% IF subscription %]
                     <br/>
                     <div class="hint">
-                        Frequency: [% subscription.frequency.description | html %] |
-                        [% IF subscription.numberlength %]Number of issues: [% subscription.numberlength | html %][% END %]
-                        [% IF subscription.weeklength   %]Number of weeks: [% subscription.weeklength | html %][% END %]
-                        [% IF subscription.monthlength  %]Number of months: [% subscription.monthlength | html %][% END %]
+                        <span>Frequency:</span> [% subscription.frequency.description | html %] |
+                        [% IF subscription.numberlength %]<span>Number of issues: [% subscription.numberlength | html %]</span>[% END %]
+                        [% IF subscription.weeklength   %]<span>Number of weeks: [% subscription.weeklength | html %]</span>[% END %]
+                        [% IF subscription.monthlength  %]<span>Number of months: [% subscription.monthlength | html %]</span>[% END %]
                     </div>
                 [% END %]
             </li>

@@ -306,15 +306,15 @@
                                         </td>
                                         <td>
                                             [% IF ar.status == 'PENDING' %]
-                                                Pending
+                                                <span>Pending</span>
                                             [% ELSIF ar.status == 'PROCESSING' %]
-                                                Processing
+                                                <span>Processing</span>
                                             [% ELSIF ar.status == 'REQUESTED' %]
-                                                New
+                                                <span>New</span>
                                             [% ELSIF ar.status == 'COMPLETED' %]
-                                                Completed
+                                                <span>Completed</span>
                                             [% ELSIF ar.status == 'CANCELED' %]
-                                                Canceled
+                                                <span>Canceled</span>
                                             [% END %]
                                         </td>
                                         <td>

@@ -348,7 +348,7 @@
                                     <td>
                                         [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
                                             [% IF loopro.patron %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]Member [% loopro.object | html %][% END %][% END %] </a>
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | uri %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]<span>Member</span> [% loopro.object | html %][% END %][% END %] </a>
                                             [% ELSE %]
                                                 [% loopro.object | html %]
                                             [% END %]

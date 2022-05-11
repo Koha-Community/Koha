@@ -35,7 +35,7 @@
                         [% IF ( GNA ) %]
                             <li id="gna">
                                 According to our records, we don't have up-to-date contact information. Please contact the library.
-                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]Update your contact information[% ELSE %]Go to your contact information[% END %]</a>
+                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]<span>Update your contact information</span>[% ELSE %]<span>Go to your contact information</span>[% END %]</a>
                                 [% IF ( Koha.Preference('OPACPatronDetails') ) %]<em>(Please note: there may be a delay in restoring your account if you submit online.)</em>[% END %]
                             </li>
                         [% END %]
@@ -144,9 +144,9 @@
                 [% IF (RESERVE_CHARGE) %]
                     <div class="alert" id="reserve_fee">
                         [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
-                            You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] when you collect this item
+                            <span>You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] when you collect this item</span>
                         [% ELSE %]
-                            You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] for placing this hold
+                            <span>You will be charged a hold fee of [% RESERVE_CHARGE | $Price %] for placing this hold</span>
                         [% END %]
                     </div>
                 [% END %]
@@ -170,11 +170,11 @@
                                 [% IF bibitemloo.forced_hold_level %]
                                     <div class="alert alert-info forced_hold_level">
                                         [% IF bibitemloo.forced_hold_level == 'item' %]
-                                            You already have at least one item level hold on this title.
-                                            All further holds must be item level.
+                                            <span>You already have at least one item level hold on this title.
+                                            All further holds must be item level.</span>
                                         [% ELSE %]
-                                            You already have at least one record level hold on this title.
-                                            All further holds must be record level.
+                                            <span>You already have at least one record level hold on this title.
+                                            All further holds must be record level.</span>
                                         [% END %]
                                     </div>
                                 [% END %]
@@ -439,17 +439,17 @@
                                                                 [% IF ( itemLoo.reservedate ) %]
                                                                     <span class="waiting">
                                                                         [% IF ( itemLoo.waitingdate ) %]
-                                                                            Waiting
+                                                                            <span>Waiting</span>
                                                                         [% ELSE %]
-                                                                            On hold
+                                                                            <span>On hold</span>
                                                                         [% END %]
-                                                                        for patron
+                                                                            <span>for patron</span>
                                                                         [% IF ( itemLoo.waitingdate ) %]
-                                                                            at
+                                                                            <span>at</span>
                                                                         [% ELSE %]
-                                                                            expected at
+                                                                            <span>expected at</span>
                                                                         [% END %]
-                                                                        [% itemLoo.ExpectedAtLibrary | html %] since
+                                                                        [% itemLoo.ExpectedAtLibrary | html %] <span>since</span>
                                                                         [% IF ( itemLoo.waitingdate ) %]
                                                                             [% itemLoo.waitingdate | $KohaDates %]
                                                                         [% ELSE %]

@@ -246,9 +246,9 @@
                                 <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid | html %]');">
                                     <legend><h2>
                                         [% IF ( Koha.Preference('SCOAllowCheckin') ) %]
-                                            Check out, return, or renew an item:
+                                            <span>Check out, return, or renew an item:</span>
                                         [% ELSE %]
-                                            Check out or renew an item:
+                                            <span>Check out or renew an item:</span>
                                         [% END %]
                                         </h2></legend>
                                     <div class="row">

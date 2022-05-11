@@ -66,9 +66,9 @@
                         [% END %]
                             <p><strong>
                                 [% IF ( label_batch_msg == "error" ) %]
-                                    Error attempting to create label batch. Please ask your system administrator to check the log for more details.
+                                    <span>Error attempting to create label batch. Please ask your system administrator to check the log for more details.</span>
                                 [% ELSE %]
-                                    Label <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% label_batch_msg | uri %]" >batch #[% label_batch_msg | html %]</a> created.
+                                    <span>Label</span> <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% label_batch_msg | uri %]" >batch #[% label_batch_msg | html %]</a> created.
                                 [% END %]
                             </strong></p>
                         </div>
@@ -130,17 +130,17 @@
                                 <li><span class="label">Staged:</span> [% upload_timestamp | $KohaDates with_hours=1 %]</li>
                                 <li><span class="label">Status:</span>
                                     [% IF ( import_status == 'cleaned' ) %]
-                                        Cleaned
+                                        <span>Cleaned</span>
                                     [% ELSIF ( import_status == 'imported' ) %]
-                                        Imported
+                                        <span>Imported</span>
                                     [% ELSIF ( import_status == 'importing' ) %]
-                                        Importing
+                                        <span>Importing</span>
                                     [% ELSIF ( import_status == 'reverted' ) %]
-                                        Reverted
+                                        <span>Reverted</span>
                                     [% ELSIF ( import_status == 'reverting' ) %]
-                                        Reverting
+                                        <span>Reverting</span>
                                     [% ELSIF ( import_status == 'staged' ) %]
-                                        Staged
+                                        <span>Staged</span>
                                     [% ELSE %]
                                         [% import_status | html %]
                                     [% END %]

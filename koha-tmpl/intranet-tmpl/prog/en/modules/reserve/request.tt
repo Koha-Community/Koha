@@ -127,12 +127,12 @@
             [% ELSE %]
                 <h2>
                     [% IF ( patron ) %]
-                        Place holds
+                        <span>Place holds</span>
                     [% ELSE %]
                         [% IF clubcount %]
-                            Search patrons or clubs
+                            <span>Search patrons or clubs</span>
                         [% ELSE %]
-                            Search patrons
+                            <span>Search patrons</span>
                         [% END %]
                     [% END %]
                 </h2>
@@ -729,21 +729,21 @@
                                                 [% ELSE %]
                                                     <td>
                                                         [% IF ( itemloo.transfertwhen ) %]
-                                                            In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
-                                                            to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
+                                                            <span>In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
+                                                            to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]</span>
                                                         [% END %]
                                                 [% END %]
 
                                                     [% IF ( itemloo.reservedate ) %]
                                                         [% IF ( itemloo.nocancel ) %]
-                                                                Can't be cancelled when item is in transit
+                                                                <span>Can't be cancelled when item is in transit</span>
                                                         [% ELSE %]
-                                                            [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
+                                                            [% IF ( itemloo.waitingdate ) %]<span>Waiting</span>[% ELSE %]<span>On hold</span>[% END %]
                                                             [% IF ( itemloo.canreservefromotherbranches ) %]
-                                                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>
+                                                                <span>for</span> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>
                                                             [% END %]
                                                             [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %]
-                                                            [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since
+                                                            [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] <span>since</span>
                                                             [% IF ( itemloo.waitingdate ) %]
                                                                 [% itemloo.waitingdate | $KohaDates %]
                                                             [% ELSE %]

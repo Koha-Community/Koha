@@ -81,13 +81,13 @@
                     [% FOREACH f IN feedback %]
                         <li>
                             [% IF ( f.filename ) %]
-                                Parsing upload file <span class="filename">[% f.filename | html %]</span>
+                                <span>Parsing upload file</span> <span class="filename">[% f.filename | html %]</span>
                             [% ELSIF ( f.backend ) %]
-                                Upload parsed using [% f.backend | html %]
+                                <span>Upload parsed using [% f.backend | html %]</span>
                             [% ELSIF ( f.headerrow ) %]
-                                These fields found: [% f.value | html %]
+                                <span>These fields found: [% f.value | html %]</span>
                             [% ELSIF ( f.already_in_db ) %]
-                                Patron already in database: [% f.value | html %]
+                                <span>Patron already in database: [% f.value | html %]</span>
                             [% ELSE %]
                                 [% f.name | html %] : [% f.value | html %]
                             [% END %]
@@ -111,21 +111,21 @@
                             Line <span class="linenumber">[% missing_critical.line | html %]</span>
 
                             [% IF ( missing_critical.badparse ) %]
-                                could not be parsed!
+                                <span>could not be parsed!</span>
                             [% ELSIF ( missing_critical.bad_date ) %]
-                                has &quot;[% missing_critical.key | html %]&quot; in unrecognized format: &quot;[% missing_critical.value | html %]&quot;
+                                <span>has &quot;[% missing_critical.key | html %]&quot; in unrecognized format:</span> &quot;[% missing_critical.value | html %]&quot;
                             [% ELSE %]
-                                Critical field &quot;[% missing_critical.key | html %]&quot;
+                                <span>Critical field &quot;[% missing_critical.key | html %]&quot;</span>
 
                                 [% IF ( missing_critical.branch_map ) %]
-                                    has unrecognized value &quot;[% missing_critical.value | html %]&quot;
+                                    <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
                                 [% ELSIF ( missing_critical.category_map ) %]
-                                    has unrecognized value &quot;[% missing_critical.value | html %]&quot;
+                                    <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
                                 [% ELSE %]
-                                    missing
+                                    <span>missing</span>
                                 [% END %]
 
-                                (borrowernumber: [% missing_critical.borrowernumber | html %]; surname: [% missing_critical.surname | html %]).
+                                (<span>borrowernumber: [% missing_critical.borrowernumber | html %]</span>; <span>surname: [% missing_critical.surname | html %]</span>).
                             [% END %]
 
                             <br/>
@@ -172,27 +172,27 @@
                     [% IF e.patron_attribute_unique_id_constraint %]
                         <li class="line_error">
                             [% IF e.borrowernumber %]
-                                Patron attribute [% e.attribute.code | html %] must be unique for patron with borrowernumber [% e.borrowernumber | html %].
+                                <span>Patron attribute [% e.attribute.code | html %] must be unique for patron with borrowernumber [% e.borrowernumber | html %].</span>
                             [% ELSE %]
-                                Patron attribute [% e.attribute.code | html %] must be unique for patron [% e.patron_id | html %].
+                                <span>Patron attribute [% e.attribute.code | html %] must be unique for patron [% e.patron_id | html %].</span>
                             [% END %]
                         </li>
                     [% END %]
                     [% IF e.patron_attribute_invalid_type %]
                         <li class="line_error">
                             [% IF e.borrowernumber %]
-                                Patron attribute [% e.attribute_type_code | html %] is invalid for patron with borrowernumber [% e.borrowernumber | html %].
+                                <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron with borrowernumber [% e.borrowernumber | html %].</span>
                             [% ELSE %]
-                                Patron attribute [% e.attribute_type_code | html %] is invalid for patron [% e.patron_id | html %].
+                                <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron [% e.patron_id | html %].</span>
                             [% END %]
                         </li>
                     [% END %]
                     [% IF e.patron_attribute_non_repeatable %]
                         <li class="line_error">
                             [% IF e.borrowernumber %]
-                                Patron attribute [% e.attribute.code | html %] is non-repeatable for patron with borrowernumber [% e.borrowernumber | html %].
+                                <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron with borrowernumber [% e.borrowernumber | html %].</span>
                             [% ELSE %]
-                                Patron attribute [% e.attribute.code | html %] is non-repeatable for patron [% e.patron_id | html %].
+                                <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron [% e.patron_id | html %].</span>
                             [% END %]
                         </li>
                     [% END %]

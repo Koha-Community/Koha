@@ -516,14 +516,15 @@ Note that permanent location is a code, and location may be an authval.
 
                         [% IF item.recalled %]
                             [% IF item.recall.waiting_date %]
-                                Waiting at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %]
+                                <span>Waiting at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %]</span>
                             [% ELSE %]
-                                Item recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a> on [% item.recall.created_date | $KohaDates %]
+                                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a>[% END %]
+                                <span>Item recalled by [% patron_link| $raw %] on [% item.recall.created_date | $KohaDates %]</span>
                             [% END %]
                         [% END %]
 
                         [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || item.recalled ) %]
-                            Available
+                            <span>Available</span>
                         [% END %]
 
                         [% IF ( item.restricted ) %]
@@ -744,18 +745,18 @@ Note that permanent location is a code, and location may be an authval.
                     <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
                     <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
                     <td>
-                      [% IF ( latestserial.status1 ) %]Expected[% END %]
-                      [% IF ( latestserial.status2 ) %]Arrived[% END %]
-                      [% IF ( latestserial.status3 ) %]Late[% END %]
-                      [% IF ( latestserial.status4 ) %]Missing[% END %]
-                      [% IF ( latestserial.status41 ) %]Missing (never received)[% END %]
-                      [% IF ( latestserial.status42 ) %]Missing (sold out)[% END %]
-                      [% IF ( latestserial.status43 ) %]Missing (damaged)[% END %]
-                      [% IF ( latestserial.status44 ) %]Missing (lost)[% END %]
-                      [% IF ( latestserial.status5 ) %]Not issued[% END %]
-                      [% IF ( latestserial.status6 ) %]Delete[% END %]
-                      [% IF ( latestserial.status7 ) %]Claimed[% END %]
-                      [% IF ( latestserial.status8 ) %]Stopped[% END %]
+                      [% IF ( latestserial.status1 ) %]<span>Expected</span>[% END %]
+                      [% IF ( latestserial.status2 ) %]<span>Arrived</span>[% END %]
+                      [% IF ( latestserial.status3 ) %]<span>Late</span>[% END %]
+                      [% IF ( latestserial.status4 ) %]<span>Missing</span>[% END %]
+                      [% IF ( latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
+                      [% IF ( latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
+                      [% IF ( latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
+                      [% IF ( latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
+                      [% IF ( latestserial.status5 ) %]<span>Not issued</span>[% END %]
+                      [% IF ( latestserial.status6 ) %]<span>Delete</span>[% END %]
+                      [% IF ( latestserial.status7 ) %]<span>Claimed</span>[% END %]
+                      [% IF ( latestserial.status8 ) %]<span>Stopped</span>[% END %]
                     </td>
                     <td>[% latestserial.notes | html %]</td>
                 </tr>
@@ -907,15 +908,15 @@ Note that permanent location is a code, and location may be an authval.
                         [% suggestion.fund.budget_name | html %]
                     </td>
                     <td>
-                        [% IF    suggestion.STATUS == 'ASKED'     %]Pending
-                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]Accepted
-                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]Ordered
-                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]Rejected
-                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]Checked
-                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]Available
+                        [% IF    suggestion.STATUS == 'ASKED'     %]<span>Pending</span>
+                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]<span>Accepted</span>
+                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]<span>Ordered</span>
+                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]<span>Rejected</span>
+                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]<span>Checked</span>
+                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]<span>Available</span>
                         [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
                             [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
-                        [% ELSE %]Status unknown
+                        [% ELSE %]<span>Status unknown</span>
                         [% END %]
                         [% IF suggestion.reason %]
                             <br />([% suggestion.reason | html %])
@@ -933,7 +934,7 @@ Note that permanent location is a code, and location may be an authval.
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
-<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
+<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode | html %] [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
     [% END %]

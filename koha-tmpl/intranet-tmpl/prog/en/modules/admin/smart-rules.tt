@@ -253,11 +253,11 @@
                                     </td>
                                     <td>
                                         [% IF ( lengthunit == 'days' ) %]
-                                            Days
+                                            <span>Days</span>
                                         [% ELSIF ( lengthunit == 'hours') %]
-                                            Hours
+                                            <span>Hours</span>
                                         [% ELSE %]
-                                            Undefined
+                                            <span>Undefined</span>
                                         [% END %]
                                     </td>
                                     <td>
@@ -1006,13 +1006,13 @@
                                 <option value="*">
                             [% END %]
                               [% IF defaultRefundRule == 'refund' %]
-                                Use default (Refund lost item charge)
+                                <span>Use default (Refund lost item charge)</span>
                               [% ELSIF defaultRefundRule == 'charge' %]
-                                Use default (Refund lost item charge and restore overdue fine)
+                                <span>Use default (Refund lost item charge and restore overdue fine)</span>
                               [% ELSIF defaultRefundRule == 'restore' %]
-                                Use default (Refund lost item charge and charge new overdue fine)
+                                <span>Use default (Refund lost item charge and charge new overdue fine)</span>
                               [% ELSE %]
-                                Use default (Leave lost item charge)
+                                <span>Use default (Leave lost item charge)</span>
                               [% END %]
                                 </option>
                             [% IF ( not refundLostItemFeeRule ) %]

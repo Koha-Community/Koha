@@ -119,19 +119,19 @@
 [% END %]
 
 [% BLOCK type_description %]
-    [% IF type_code == 'marc' %] MARC
-    [% ELSIF type_code == 'sql' %] SQL
-    [% ELSE %] Unknown type
+    [% IF type_code == 'marc' %] <span>MARC</span>
+    [% ELSIF type_code == 'sql' %] <span>SQL</span>
+    [% ELSE %] <span>Unknown type</span>
     [% END %]
 [% END %]
 
 [% BLOCK used_for_description %]
-    [% IF used_for_code == 'export_records' %]<span> Export records</span>
-    [% ELSIF used_for_code == 'late_issues' %]<span> Late serial issues claims</span>
-    [% ELSIF used_for_code == 'late_orders' %]<span> Export late orders</span>
-    [% ELSIF used_for_code == 'export_basket' %]<span> Basket export in acquisition</span>
-    [% ELSIF used_for_code == 'export_lost_items' %]<span> Export lost items in report</span>
-    [% ELSE %]<span> Unknown usage</span>
+    [% IF used_for_code == 'export_records' %] <span>Export records</span>
+    [% ELSIF used_for_code == 'late_issues' %] <span>Late serial issues claims</span>
+    [% ELSIF used_for_code == 'late_orders' %] <span>Export late orders</span>
+    [% ELSIF used_for_code == 'export_basket' %] <span>Basket export in acquisition</span>
+    [% ELSIF used_for_code == 'export_lost_items' %] <span>Export lost items in report</span>
+    [% ELSE %] <span>Unknown usage</span>
     [% END %]
 [% END %]
 
