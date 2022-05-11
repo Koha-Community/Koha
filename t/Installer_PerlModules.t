@@ -5,23 +5,26 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 3;
+use Test::Warn;
 
 BEGIN {
         use_ok('C4::Installer::PerlModules');
 }
 
-my $modules;
-ok ($modules = C4::Installer::PerlModules->new(), 'Tests modules object');
-my $prereq_pm = $modules->prereq_pm();
-ok (exists($prereq_pm->{"DBI"}), 'DBI required for installer to run');
-ok (exists($prereq_pm->{"CGI"}), 'CGI required for installer to run' );
-ok (exists($prereq_pm->{"YAML::XS"}), 'YAML::XS required for installer to run');
+subtest 'prereq_pm' => sub {
+    my $modules;
+    ok ($modules = C4::Installer::PerlModules->new(), 'Tests modules object');
+    my $prereq_pm = $modules->prereq_pm();
+    ok (exists($prereq_pm->{"DBI"}), 'DBI required for installer to run');
+    ok (exists($prereq_pm->{"CGI"}), 'CGI required for installer to run' );
+    ok (exists($prereq_pm->{"YAML::XS"}), 'YAML::XS required for installer to run');
+};
 
 subtest 'versions_info' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $modules = C4::Installer::PerlModules->new;
-    $modules->versions_info;
+    warning_is { $modules->versions_info } undef, 'No warnings from versions_info';
     ok( exists $modules->{missing_pm}, 'versions_info fills the missing_pm key' );
     ok( exists $modules->{upgrade_pm}, 'versions_info fills the upgrade_pm key' );
     ok( exists $modules->{current_pm}, 'versions_info fills the current_pm key' );
