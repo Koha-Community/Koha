@@ -1,6 +1,6 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else id="licenses_show">
         <h2>License #{{ license.license_id }}</h2>
         <div>
             <fieldset class="rows">

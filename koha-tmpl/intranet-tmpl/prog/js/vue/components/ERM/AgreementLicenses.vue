@@ -2,6 +2,7 @@
     <fieldset class="rows" id="agreement_licenses">
         <legend>Licenses</legend>
         <fieldset
+            :id="`agreement_license_${counter}`"
             class="rows"
             v-for="(agreement_license, counter) in agreement_licenses"
             v-bind:key="counter"
@@ -115,8 +116,8 @@ export default {
         av_agreement_license_location: Array,
         agreement_licenses: Array,
     },
-    beforeCreate(){
-        fetchLicenses().then((licenses) => this.licenses = licenses )
+    beforeCreate() {
+        fetchLicenses().then((licenses) => this.licenses = licenses)
     },
     methods: {
         addLicense() {

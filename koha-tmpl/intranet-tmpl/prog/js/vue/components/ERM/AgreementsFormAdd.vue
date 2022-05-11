@@ -1,6 +1,6 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else id="agreements_add">
         <h2 v-if="agreement.agreement_id">
             Edit agreement #{{ agreement.agreement_id }}
         </h2>

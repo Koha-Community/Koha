@@ -1,6 +1,6 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else id="agreements_show">
         <h2>Agreement #{{ agreement.agreement_id }}</h2>
         <div>
             <fieldset class="rows">

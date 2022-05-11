@@ -1,6 +1,6 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else id="agreements_confirm_delete">
         <h2>Delete agreement</h2>
         <div>
             <form @submit="onSubmit($event)">

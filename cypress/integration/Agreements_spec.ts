@@ -34,6 +34,7 @@ function get_agreement() {
             },
         ],
         user_roles: [],
+        agreement_licenses: [],
     };
 }
 
@@ -45,17 +46,20 @@ describe("Agreement CRUD operations", () => {
 
     it("List agreements", () => {
         // GET agreements returns 500
-        cy.intercept("GET", "/api/v1/erm/agreements*", {
+        cy.intercept("GET", "/api/v1/erm/agreements", {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
-        cy.get("#agreements").contains("Something went wrong");
+        cy.visit("/cgi-bin/koha/erm/erm.pl");
+        cy.get("#navmenulist").contains("Agreements").click();
+        cy.get("main div[class='dialog alert']").contains(
+            /Something went wrong/
+        );
 
         // GET agreements returns empty list
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
-        cy.get("#agreements").contains("There are no agreements defined.");
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.get("#agreements_list").contains("There are no agreements defined.");
 
         // GET agreements returns something
         let agreement = get_agreement();
@@ -70,30 +74,39 @@ describe("Agreement CRUD operations", () => {
             },
         });
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement);
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
-        cy.get("#agreements").contains("Showing 1 to 1 of 1 entries");
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.get("#agreements_list").contains("Showing 1 to 1 of 1 entries");
     });
 
-    it ("Add agreement", () => {
+    it("Add agreement", () => {
         // Click the button in the toolbar
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
+        cy.visit("/cgi-bin/koha/erm/agreements");
         cy.contains("New agreement").click();
-        cy.get("#agreements h2").contains("New agreement");
+        cy.get("#agreements_add h2").contains("New agreement");
 
         // Fill in the form for normal attributes
         let agreement = get_agreement();
 
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("input:invalid,textarea:invalid,select:invalid").should("have.length", 3);
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("input:invalid,textarea:invalid,select:invalid").should(
+            "have.length",
+            3
+        );
         cy.get("#agreement_name").type(agreement.name);
         cy.get("#agreement_description").type(agreement.description);
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("input:invalid,textarea:invalid,select:invalid").should("have.length", 1); // name, description, status
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("input:invalid,textarea:invalid,select:invalid").should(
+            "have.length",
+            1
+        ); // name, description, status
         cy.get("#agreement_status").select(agreement.status);
 
         cy.contains("Add new period").click();
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("input:invalid,textarea:invalid,select:invalid").should("have.length", 1); // Start date
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("input:invalid,textarea:invalid,select:invalid").should(
+            "have.length",
+            1
+        ); // Start date
 
         // Add new periods
         cy.contains("Add new period").click();
@@ -154,8 +167,8 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("#agreements").contains(
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Internal Server Error"
         );
 
@@ -164,11 +177,13 @@ describe("Agreement CRUD operations", () => {
             statusCode: 201,
             body: agreement,
         });
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("#agreements").contains("Agreement created");
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("main div[class='dialog message']").contains(
+            "Agreement created"
+        );
     });
 
-    it ("Edit agreement", () => {
+    it("Edit agreement", () => {
         let agreement = get_agreement();
         let agreements = [agreement];
         // Click the 'Edit' button from the list
@@ -180,12 +195,16 @@ describe("Agreement CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as("get-agreement");
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
-        cy.get("#agreements table tbody tr:first").contains("Edit").click();
+        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
+            "get-agreement"
+        );
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        cy.get("#agreements_list table tbody tr:first")
+            .contains("Edit")
+            .click();
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#agreements h2").contains("Edit agreement");
+        cy.get("#agreements_add h2").contains("Edit agreement");
 
         // Form has been correctly filled in
         cy.get("#agreement_name").should("have.value", agreements[0].name);
@@ -211,8 +230,8 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
             error: "Something went wrong",
         });
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("#agreements").contains(
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Internal Server Error"
         );
 
@@ -221,11 +240,13 @@ describe("Agreement CRUD operations", () => {
             statusCode: 200,
             body: agreement,
         });
-        cy.get("#agreements").contains("Submit").click();
-        cy.get("#agreements").contains("Agreement updated");
+        cy.get("#agreements_add").contains("Submit").click();
+        cy.get("main div[class='dialog message']").contains(
+            "Agreement updated"
+        );
     });
 
-    it ("Show agreement", () => {
+    it("Show agreement", () => {
         let agreement = get_agreement();
         let agreements = [agreement];
         // Click the "name" link from the list
@@ -237,14 +258,23 @@ describe("Agreement CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as("get-agreement");
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
-        let name_link = cy.get("#agreements table tbody tr:first td:first a");
-        name_link.should("have.text", agreement.name + " (#" + agreement.agreement_id + ")");
+        cy.intercept("GET", "/api/v1/erm/agreements/*", agreement).as(
+            "get-agreement"
+        );
+        cy.visit("/cgi-bin/koha/erm/agreements");
+        let name_link = cy.get(
+            "#agreements_list table tbody tr:first td:first a"
+        );
+        name_link.should(
+            "have.text",
+            agreement.name + " (#" + agreement.agreement_id + ")"
+        );
         name_link.click();
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
-        cy.get("#agreements h2").contains("Agreement #" + agreement.agreement_id);
+        cy.get("#agreements_show h2").contains(
+            "Agreement #" + agreement.agreement_id
+        );
 
         // TODO There are more to test here:
         // Dates correctly formatted
@@ -252,7 +282,7 @@ describe("Agreement CRUD operations", () => {
         // AV's libs displayed
         // Tables for periods and users
     });
-    it ("Delete agreement", () => {
+    it("Delete agreement", () => {
         let agreement = get_agreement();
         let agreements = [agreement];
 
@@ -266,10 +296,12 @@ describe("Agreement CRUD operations", () => {
             },
         });
         cy.intercept("GET", "/api/v1/erm/agreements/*", agreement);
-        cy.visit("/cgi-bin/koha/erm/agreements.pl");
+        cy.visit("/cgi-bin/koha/erm/agreements");
 
-        cy.get("#agreements table tbody tr:first").contains("Delete").click();
-        cy.get("#agreements h2").contains("Delete agreement");
+        cy.get("#agreements_list table tbody tr:first")
+            .contains("Delete")
+            .click();
+        cy.get("#agreements_confirm_delete h2").contains("Delete agreement");
         cy.contains("Agreement name: " + agreement.name);
 
         // Submit the form, get 500
@@ -278,7 +310,7 @@ describe("Agreement CRUD operations", () => {
             error: "Something went wrong",
         });
         cy.contains("Yes, delete").click();
-        cy.get("#agreements").contains(
+        cy.get("main div[class='dialog alert']").contains(
             "Something went wrong: Internal Server Error"
         );
 
@@ -288,6 +320,8 @@ describe("Agreement CRUD operations", () => {
             body: null,
         });
         cy.contains("Yes, delete").click();
-        cy.get("#agreements").contains("Agreement deleted");
+        cy.get("main div[class='dialog message']").contains(
+            "Agreement deleted"
+        );
     });
 });

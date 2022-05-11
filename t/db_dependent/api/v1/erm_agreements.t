@@ -110,7 +110,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -139,6 +139,14 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id )->status_is(200)
       ->json_is( $agreement->to_api );
+
+    $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
+          . $agreement->agreement_id  => {'x-koha-embed' => 'periods,user_roles,agreement_licenses'} )->status_is(200)
+      ->json_is( { %{ $agreement->to_api }, periods => [], user_roles => [], agreement_licenses => [] });
+
+    $t->get_ok( "//$userid:$password@/api/v1/erm/agreements/"
+          . $agreement->agreement_id  => {'x-koha-embed' => 'periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license'} )->status_is(200)
+      ->json_is( { %{ $agreement->to_api }, periods => [], user_roles => [], agreement_licenses => [] });
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/agreements/"
           . $agreement->agreement_id )->status_is(403);

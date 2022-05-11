@@ -1,6 +1,6 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else-if="this.licenses" id="licenses_list">
         <Toolbar />
         <table v-if="licenses.length" id="license_list"></table>
         <div v-else-if="this.initialized" class="dialog message">

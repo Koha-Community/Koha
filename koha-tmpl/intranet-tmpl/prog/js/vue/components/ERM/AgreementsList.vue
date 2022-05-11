@@ -1,8 +1,8 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
-    <div v-else>
+    <div v-else-if="this.agreements" id="agreements_list">
         <Toolbar />
-        <table v-if="agreements.length" id="agreement_list"></table>
+        <table v-if="this.agreements.length" id="agreement_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
             There are no agreements defined.
         </div>

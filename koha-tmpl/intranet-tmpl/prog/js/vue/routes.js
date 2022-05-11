@@ -18,6 +18,7 @@ const breadcrumbs = {
     licenses: { text: "Licenses", path: "/cgi-bin/koha/erm/licenses" },
 };
 export const routes = [
+    { path: "/cgi-bin/koha/mainpage.pl" },
     {
         path: "/cgi-bin/koha/erm/erm.pl",
         component: ERMHome,

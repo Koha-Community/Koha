@@ -15,7 +15,7 @@ export const useMainStore = defineStore("main", {
             this.displayed_already = false;
         },
         setError(error) {
-            this.error = "Something went wrong: " + error;
+            this.error = error;
             this.message = null;
             this.displayed_already = false;
         },
