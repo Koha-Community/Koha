@@ -248,17 +248,35 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </select>
                                 </li>
                                 [% END %]
-                                    <li>
+                                <li>
                                     <label for="graceperiod">Grace period:</label>
                                     <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod | html %]" size="5"/> day(s)
                                 </li>
                                 <li>
                                      <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
                                      <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
+                                     <div class="hint">
+                                        Default:
+                                        [% Koha.Preference('StaffSerialIssueDisplayCount') | html %]
+                                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                            (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=StaffSerialIssueDisplayCount">StaffSerialIssueDisplayCount</a> system preference)
+                                        [% ELSE %]
+                                            (StaffSerialIssueDisplayCount system preference)
+                                        [% END %]
+                                    </div>
                                  </li>
                                  <li>
                                     <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
                                     <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
+                                    <div class="hint">
+                                        Default:
+                                        [% Koha.Preference('OPACSerialIssueDisplayCount') | html %]
+                                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                            (<a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=OPACSerialIssueDisplayCount">OPACSerialIssueDisplayCount</a>  system preference)
+                                        [% ELSE %]
+                                            (OPACSerialIssueDisplayCount system preference)
+                                        [% END %]
+                                    </div>
                                 </li>
                             </ol>
                         </fieldset>
