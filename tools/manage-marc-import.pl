@@ -35,6 +35,8 @@ use C4::BackgroundJob;
 use C4::Labels::Batch;
 use Koha::BiblioFrameworks;
 
+use Koha::Logger;
+
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
 my $input = CGI->new;
@@ -330,6 +332,11 @@ sub put_in_background {
         # we're now running in the background
         close STDOUT;
         close STDERR;
+        $SIG{__WARN__} = sub {
+            my ($msg) = @_;
+            my $logger = Koha::Logger->get;
+            $logger->warn($msg);
+        }
     } else {
         # fork failed, so exit immediately
         warn "fork failed while attempting to run tools/manage-marc-import.pl as a background job";
