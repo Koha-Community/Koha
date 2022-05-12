@@ -245,7 +245,7 @@ Returns the decoded JSON contents from $self->data.
 sub decoded_data {
     my ($self) = @_;
 
-    return decode_json($self->data);
+    return $self->data ? decode_json( $self->data ) : undef;
 }
 
 =head3 set_encoded_data
@@ -259,7 +259,7 @@ Serializes I<$data> as a JSON string and sets the I<data> attribute with it.
 sub set_encoded_data {
     my ( $self, $data ) = @_;
 
-    return $self->data( encode_json($data) );
+    return $self->data( $data ? encode_json($data) : undef );
 }
 
 =head3 job_type
