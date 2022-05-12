@@ -58,29 +58,38 @@ my $display_columns = [ {_add                   => {label => "Add Item", link_fi
 if ( $op eq "do_search" ) {
     $idx         = $query->param('idx');
     $ccl_textbox = $query->param('ccl_textbox');
-    if ( $ccl_textbox && $idx ) {
-        $ccl_query = "$idx:$ccl_textbox";
-    }
 
     $datefrom = $query->param('datefrom');
     $dateto   = $query->param('dateto');
 
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
+    my @limits;
     if ($datefrom) {
-        $ccl_query .= ' AND ' if $ccl_textbox;
-        $ccl_query .= "acqdate,ge,st-date-normalized=" . $datefrom;
+        push(@limits, "acqdate,ge,st-date-normalized=$datefrom");
     }
 
     if ($dateto) {
-        $ccl_query .= ' AND ' if ( $ccl_textbox || $datefrom );
-        $ccl_query .= "acqdate,le,st-date-normalized=" . $dateto;
+        push(@limits, "acqdate,le,st-date-normalized=$dateto");
     }
 
-    my $offset = $startfrom > 1 ? $startfrom - 1 : 0;
-    my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
-    ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($ccl_query, $offset, $resultsperpage);
+    my ( $error, $query, $simple_query, $query_cgi,
+        $query_desc, $limit, $limit_cgi, $limit_desc,
+        $query_type )
+        = $builder->build_query_compat( undef, [$ccl_textbox], [$idx], \@limits);
 
-    if (!defined $error && @{$marcresults} ) {
-        $show_results = @{$marcresults};
+    my $offset = $startfrom > 1 ? $startfrom - 1 : 0;
+
+    my ( $error, $marcresults, $facets ) = $searcher->search_compat(
+        $query, $simple_query, undef, ['biblioserver'], $resultsperpage, $offset,
+        undef, undef, $query_type, undef
+   );
+
+    if (!defined $error && $marcresults->{biblioserver}{RECORDS} ) {
+        $show_results = $marcresults->{biblioserver}{RECORDS};
     }
     else {
         Koha::Logger->get->warn("ERROR label-item-search: no results from simple_search_compat");
