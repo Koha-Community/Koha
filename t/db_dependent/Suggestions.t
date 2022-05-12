@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 106;
+use Test::More tests => 107;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -668,6 +668,6 @@ subtest 'Suggestion with ISBN' => sub {
 
     my ($author_tag, $author_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.author', '');
     is($record->field( $author_tag), undef, "Record from suggestion author should be emtpy");
-}
+};
 
 $schema->storage->txn_rollback;
