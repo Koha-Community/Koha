@@ -739,4 +739,24 @@ $(document).ready(function() {
         });
     });
 
+    if( $("#serialsadditems-yes").prop("checked") ){
+        $(".use_items").show();
+    }
+
+    $("#serialsadditems-yes").on("change", function(){
+        if( $(this).prop("checked") ){
+            $(".use_items").show();
+        } else {
+            $(".use_items").hide().find("select").val("");
+        }
+    });
+
+    $("#serialsadditems-no").on("change", function(){
+        if( $(this).prop("checked") ){
+            $(".use_items").hide().find("select").val("");
+        } else {
+            $(".use_items").show();
+        }
+    });
+
 });
