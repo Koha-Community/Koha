@@ -30,10 +30,10 @@ use Try::Tiny qw( catch try );
 use C4::Context;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Suggestions;
 use Koha::Patrons;
 use Koha::Token;
 use Koha::Patron::Categories;
+use Koha::Suggestions;
 
 my $input = CGI->new;
 
@@ -99,11 +99,7 @@ my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borr
 
 # Add warning if patron has pending suggestions
 $template->param(
-    pending_suggestions => scalar @{
-    C4::Suggestions::SearchSuggestion(
-            { suggestedby => $member, STATUS => 'ASKED' }
-        )
-    }
+    pending_suggestions => Koha::Suggestions->search({ suggestedby => $member, STATUS => 'ASKED' })->count,
 );
 
 $template->param(

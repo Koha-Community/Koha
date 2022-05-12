@@ -92,7 +92,7 @@ my $displayby       = $input->param('displayby') || '';
 my $tabcode         = $input->param('tabcode');
 my $save_confirmed  = $input->param('save_confirmed') || 0;
 my $notify          = $input->param('notify');
-my $filter_archived = $input->param('filter_archived');
+my $filter_archived = $input->param('filter_archived') || 0;
 
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
@@ -109,6 +109,12 @@ delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode notif
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
 }
+delete $suggestion_only->{branchcode} if $suggestion_only->{branchcode} eq '__ANY__';
+delete $suggestion_only->{budgetid}   if $suggestion_only->{budgetid}   eq '__ANY__';
+while ( my ( $k, $v ) = each %$suggestion_only ) {
+    delete $suggestion_only->{$k} if $v eq '';
+}
+
 my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
         {
             template_name   => "suggestion/suggestion.tt",
@@ -214,13 +220,12 @@ if ( $op =~ /save/i ) {
             }
         } else {
             ###FIXME:Search here if suggestion already exists.
-            my $suggestions_loop =
-                SearchSuggestion( $suggestion_only );
-            if (@$suggestions_loop>=1){
+            my $suggestions= Koha::Suggestions->search_limited( $suggestion_only );
+            if ( $suggestions->count ) {
                 #some suggestion are answering the request Donot Add
                 my @messages;
-                for my $suggestion ( @$suggestions_loop ) {
-                    push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+                while ( my $suggestion = $suggestions->next ) {
+                    push @messages, { type => 'error', code => 'already_exists', id => $suggestion->suggestionid };
                 }
                 $template->param( messages => \@messages );
             }
@@ -363,31 +368,65 @@ if ($op=~/else/) {
         unshift @criteria_dv, 'ASKED';
     }
 
+    unless ( exists $suggestion_ref->{branchcode} ) {
+        $suggestion_ref->{branchcode} = C4::Context->userenv->{'branch'};
+    }
+
     my @allsuggestions;
     foreach my $criteriumvalue ( @criteria_dv ) {
+        my $search_params = {%$suggestion_ref};
         # By default, display suggestions from current working branch
-        unless ( exists $$suggestion_ref{'branchcode'} ) {
-            $$suggestion_ref{'branchcode'} = C4::Context->userenv->{'branch'};
-        }
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
 
         next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue ) and ($displayby ne 'branchcode' && $branchfilter ne '__ANY__' );
-        $$suggestion_ref{$displayby} = $criteriumvalue;
 
-        my $suggestions = &SearchSuggestion({ %$suggestion_ref, archived => $filter_archived });
-        foreach my $suggestion (@$suggestions) {
-            if ($suggestion->{budgetid}){
-                my $bud = GetBudget( $suggestion->{budgetid} );
-                $suggestion->{budget_name} = $bud->{budget_name} if $bud;
+        $search_params->{$displayby} = $criteriumvalue;
+
+        # filter on date fields
+        foreach my $field (qw( suggesteddate manageddate accepteddate )) {
+            my $from = $field . "_from";
+            my $to   = $field . "_to";
+            my $from_dt =
+              $suggestion_ref->{$from}
+              ? eval { dt_from_string( $suggestion_ref->{$from} ) }
+              : undef;
+            my $to_dt =
+              $suggestion_ref->{$to}
+              ? eval { dt_from_string( $suggestion_ref->{$to} ) }
+              : undef;
+
+            if ( $from_dt || $to_dt ) {
+                my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+                if ( $from_dt && $to_dt ) {
+                    $search_params->{$field} = { -between => [ $from_dt, $to_dt ] };
+                } elsif ( $from_dt ) {
+                    $search_params->{$field} = { '>=' => $from_dt };
+                } elsif ( $to_dt ) {
+                    $search_params->{$field} = { '<=' => $to_dt };
+                }
             }
         }
-        push @allsuggestions,{
-                            "suggestiontype"=>$criteriumvalue||"suggest",
-                            "suggestiontypelabel"=>GetCriteriumDesc($criteriumvalue,$displayby)||"",
-                            "suggestionscount"=>scalar(@$suggestions),             
-                            'suggestions_loop'=>$suggestions,
-                            'reasonsloop'     => $reasonsloop,
-                            } if @$suggestions;
+        if ( $search_params->{budgetid} && $search_params->{budgetid} eq '__NONE__' ) {
+            $search_params->{budgetid} = [undef, '' ];
+        }
+        for my $f (qw (branchcode budgetid)) {
+            delete $search_params->{$f}
+              if $search_params->{$f} eq '__ANY__'
+              || $search_params->{$f} eq '';
+        }
+
+        my @suggestions =
+          Koha::Suggestions->search_limited(
+            { %$search_params, archived => $filter_archived } )->as_list;
+
+        push @allsuggestions,
+          {
+            "suggestiontype"      => $criteriumvalue || "suggest",
+            "suggestiontypelabel" => GetCriteriumDesc( $criteriumvalue, $displayby ) || "",
+            'suggestions'         => \@suggestions,
+            'reasonsloop'         => $reasonsloop,
+          }
+          if scalar @suggestions > 0;
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }

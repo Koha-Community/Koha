@@ -93,10 +93,11 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Suggestions qw( ConnectSuggestionAndBiblio SearchSuggestion );
+use C4::Suggestions qw( ConnectSuggestionAndBiblio );
 use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;
+use Koha::Suggestions;
 
 my $input = CGI->new;
 
@@ -127,23 +128,22 @@ if ( $op eq 'connectDuplicate' ) {
     ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
 }
 
-# getting all suggestions.
-my $suggestions_loop = SearchSuggestion(
+my $suggestions = [ Koha::Suggestions->search_limited(
     {
-        author        => $author,
-        title         => $title,
-        publishercode => $publishercode,
-        STATUS        => 'ACCEPTED'
-    }
-);
+        ( $author        ? ( author        => $author )        : () ),
+        ( $title         ? ( title         => $title )         : () ),
+        ( $publishercode ? ( publishercode => $publishercode ) : () ),
+        STATUS => 'ACCEPTED'
+    },
+    { prefetch => ['managedby', 'suggestedby'] },
+)->as_list ];
 
 my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
 $template->param(
-    suggestions_loop        => $suggestions_loop,
+    suggestions             => $suggestions,
     basketno                => $basketno,
     booksellerid              => $booksellerid,
     name                    => $vendor->name,
-    loggedinuser            => $borrowernumber,
     "op_$op"                => 1,
 );
 

@@ -41,7 +41,7 @@
             <main>
 
 <h1>Suggestions</h1>
-    [% IF ( suggestions_loop ) %]
+    [% IF suggestions.size %]
     <a href="#" id="show_only_mine">Show only mine</a> | <a href="#" id="show_all">Show all suggestions</a>
     <table id="suggestionst">
         <thead>
@@ -59,49 +59,45 @@
         </tr>
         </thead>
         <tbody>
-        [% FOREACH suggestions_loo IN suggestions_loop %]
+        [% FOREACH suggestion IN suggestions %]
             <tr>
-                <td>[% suggestions_loo.managedby | html %]</td>
+                <td>[% suggestion.managedby | html %]</td>
                 <td>
-                    <p>[% suggestions_loo.title | html %] - [% suggestions_loo.author | html %]</p>
+                    <p>[% suggestion.title | html %] - [% suggestion.author | html %]</p>
                     <p>
-                        [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]volume: <em>[% suggestions_loo.volumedesc | html %]</em> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]ISBN: <em>[% suggestions_loo.isbn | html %]</em> [% END %]
-                        [% IF ( suggestions_loo.publishercode ) %]<br />published by: [% suggestions_loo.publishercode | html %] [% END %]
-                        [% IF ( suggestions_loo.publicationyear ) %] in <em>[% suggestions_loo.publicationyear | html %]</em> [% END %]
-                        [% IF ( suggestions_loo.place ) %] in <em>[% suggestions_loo.place | html %]</em> [% END %]
-                        [% IF ( suggestions_loo.note ) %]<p><em>([% suggestions_loo.note | html %])</em></p> [% END %]
+                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
+                        [% IF ( suggestion.volumedesc ) %]volume: <em>[% suggestion.volumedesc | html %]</em> [% END %]
+                        [% IF ( suggestion.isbn ) %]ISBN: <em>[% suggestion.isbn | html %]</em> [% END %]
+                        [% IF ( suggestion.publishercode ) %]<br />published by: [% suggestion.publishercode | html %] [% END %]
+                        [% IF ( suggestion.publicationyear ) %] in <em>[% suggestion.publicationyear | html %]</em> [% END %]
+                        [% IF ( suggestion.place ) %] in <em>[% suggestion.place | html %]</em> [% END %]
+                        [% IF ( suggestion.note ) %]<p><em>([% suggestion.note | html %])</em></p> [% END %]
                     </p>
                 </td>
+                <td>[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</td>
+                <td>[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</td>
                 <td>
-                    [% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %],[% END %] [% suggestions_loo.firstnamesuggestedby | html %]
+                    [% Branches.GetName(suggestion.branchcode) | html %]
                 </td>
                 <td>
-                    [% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby | html %]
+                    [% suggestion.fund.budget_name | html %]
                 </td>
                 <td>
-                    [% Branches.GetName(suggestions_loo.branchcode) | html %]
+                    [% suggestion.price | $Price %]
                 </td>
                 <td>
-                    [% suggestions_loo.budget_name | html %]
-                </td>
-                <td>
-                    [% suggestions_loo.price | $Price %]
-                </td>
-                <td>
-                    [% IF (suggestions_loo.quantity > 0) %]
-                        [% suggestions_loo.quantity | html %]
+                    [% IF (suggestion.quantity > 0) %]
+                        [% suggestion.quantity | html %]
                     [% END %]
                 </td>
                 <td>
-                    [% suggestions_loo.total | $Price %]
+                    [% suggestion.total | $Price %]
                 </td>
                 <td class="actions">
-                    [% IF ( suggestions_loo.biblionumber ) %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;biblio=[% suggestions_loo.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
+                    [% IF ( suggestion.biblionumber ) %]
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestion.suggestionid | uri %]&amp;biblio=[% suggestion.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
                     [% ELSE %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestion.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
                     [% END %]
                 </td>
             </tr>
@@ -136,7 +132,7 @@
         }));
         $("#show_only_mine").on('click', function(e){
             e.preventDefault();
-            suggestionst.fnFilter('^[% loggedinuser | html %]$', 0, true);
+            suggestionst.fnFilter('^[% logged_in_user.borrowernumber | html %]$', 0, true);
         });
         $("#show_all").on('click', function(e){
             e.preventDefault();

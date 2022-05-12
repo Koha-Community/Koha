@@ -28,7 +28,6 @@ use C4::Suggestions qw(
     DelSuggestion
     MarcRecordFromNewSuggestion
     NewSuggestion
-    SearchSuggestion
 );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Scrubber;
@@ -100,35 +99,42 @@ else {
     );
 }
 
+my $suggested_by;
 if ( $op eq 'else' ) {
     if ( C4::Context->preference("OPACViewOthersSuggestions") ) {
         if ( $borrowernumber ) {
             # A logged in user is able to see suggestions from others
-            $suggestion->{suggestedby} = $suggested_by_anyone
+            $suggested_by = $suggested_by_anyone
                 ? undef
                 : $borrowernumber;
         }
-        else {
-            # Non logged in user is able to see all suggestions
-            $suggestion->{suggestedby} = undef;
-        }
+        # else: Non logged in user is able to see all suggestions
     }
     else {
         if ( $borrowernumber ) {
-            $suggestion->{suggestedby} = $borrowernumber;
+            $suggested_by = $borrowernumber;
         }
         else {
-            $suggestion->{suggestedby} = -1;
+            $suggested_by = -1;
         }
     }
 } else {
     if ( $borrowernumber ) {
-        $suggestion->{suggestedby} = $borrowernumber;
+        $suggested_by = $borrowernumber;
     }
     else {
-        $suggestion->{suggestedby} = C4::Context->preference("AnonymousPatron");
+        $suggested_by = C4::Context->preference("AnonymousPatron");
     }
 }
+
+$suggestion = {
+    map {
+        my $p = $suggestion->{$_};
+        # Keep parameters that are not an empty string
+        ( defined $p && $p ne '' ? ( $_ => $p ) : () )
+    } keys %$suggestion
+};
+$suggestion->{suggestedby} = $borrowernumber;
 
 if ( $op eq "add_validate" && not $biblionumber ) { # If we are creating the suggestion from an existing record we do not want to search for duplicates
     $op = 'add_confirm';
@@ -155,7 +161,7 @@ if ( $borrowernumber ){
 }
 
 if ( $op eq "add_confirm" ) {
-    my $suggestions_loop = &SearchSuggestion($suggestion);
+    my $suggestions = Koha::Suggestions->search($suggestion);
     if ( C4::Context->preference("MaxTotalSuggestions") ne '' && $patrons_total_suggestions_count >= C4::Context->preference("MaxTotalSuggestions") )
     {
         push @messages, { type => 'error', code => 'total_suggestions' };
@@ -164,15 +170,15 @@ if ( $op eq "add_confirm" ) {
     {
         push @messages, { type => 'error', code => 'too_many' };
     }
-    elsif ( @$suggestions_loop >= 1 ) {
+    elsif ( $suggestions->count >= 1 ) {
 
         #some suggestion are answering the request Donot Add
-        for my $s (@$suggestions_loop) {
+        while ( my $suggestion = $suggestions->next ) {
             push @messages,
               {
                 type => 'error',
                 code => 'already_exists',
-                id   => $s->{suggestionid}
+                id   => $suggestion->suggestionid
               };
             last;
         }
@@ -197,24 +203,23 @@ if ( $op eq "add_confirm" ) {
         $patrons_pending_suggestions_count++;
         $patrons_total_suggestions_count++;
 
-        # delete empty fields, to avoid filter in "SearchSuggestion"
-        foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
-            delete $suggestion->{$field}; #clear search filters (except borrower related) to show all suggestions after placing a new one
-        }
-        $suggestions_loop = &SearchSuggestion($suggestion);
-
         push @messages, { type => 'info', code => 'success_on_inserted' };
 
     }
     $op = 'else';
 }
 
-my $suggestions_loop = &SearchSuggestion(
+my $suggestions = [ Koha::Suggestions->search_limited(
     {
-        suggestedby => $suggestion->{suggestedby},
-        title       => $title_filter,
+        $suggestion->{suggestedby}
+        ? ( suggestedby => $suggestion->{suggestedby} )
+        : (),
+        $title_filter
+        ? ( title       => $title_filter )
+        : (),
     }
-);
+)->as_list ];
+
 if ( $op eq "delete_confirm" ) {
     my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
@@ -223,24 +228,6 @@ if ( $op eq "delete_confirm" ) {
     $op = 'else';
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else");
     exit;
-}
-
-map{
-    my $s = $_;
-    my $library = Koha::Libraries->find($s->{branchcodesuggestedby});
-    $library ? $s->{branchcodesuggestedby} = $library->branchname : ()
-} @$suggestions_loop;
-
-foreach my $suggestion(@$suggestions_loop) {
-    if($suggestion->{'suggestedby'} == $borrowernumber) {
-        $suggestion->{'showcheckbox'} = $borrowernumber;
-    } else {
-        $suggestion->{'showcheckbox'} = 0;
-    }
-    if($suggestion->{'patronreason'}){
-        my $av = Koha::AuthorisedValues->search({ category => 'OPAC_SUG', authorised_value => $suggestion->{patronreason} });
-        $suggestion->{'patronreason'} = $av->count ? $av->next->opac_description : '';
-    }
 }
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG", "opac");
@@ -279,7 +266,7 @@ my @unwantedfields;
 
 $template->param(
     %$suggestion,
-    suggestions_loop      => $suggestions_loop,
+    suggestions           => $suggestions,
     patron_reason_loop    => $patron_reason_loop,
     "op_$op"              => 1,
     $op                   => 1,

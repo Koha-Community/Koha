@@ -309,7 +309,8 @@
 
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
 
-                            [% IF suggestions_loop OR title_filter %]
+                            [% IF suggestions.size > 0 OR title_filter %]
+                                [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
                                     <div class="form-row">
                                         <label for="title_filter">Search for:</label>
@@ -336,7 +337,7 @@
                                     </div>
                                 </form>
                             [% END %]
-                            [% IF suggestions_loop %]
+                            [% IF suggestions.size > 0 %]
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     <input type="hidden" name="op" value="delete_confirm" />
@@ -380,74 +381,73 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            [% FOREACH suggestions_loo IN suggestions_loop %]
+                                            [% FOREACH suggestion IN suggestions %]
                                                 <tr>
-                                                    [% IF ( loggedinusername ) %]
+                                                    [% IF logged_in_user %]
                                                         <td class="selectcol">
-                                                            [% IF ( suggestions_loo.showcheckbox ) %]
+                                                            [% IF logged_in_user.borrowernumber == suggestion.suggester.borrowernumber %]
                                                                 [% SET can_delete_suggestion = 1 %]
-                                                                <input type="checkbox" class="cb" id="id[% suggestions_loo.suggestionid | html %]" name="delete_field" data-title="[% suggestions_loo.title | html %]" value="[% suggestions_loo.suggestionid | html %]" />
+                                                                <input type="checkbox" class="cb" id="id[% suggestion.suggestionid | html %]" name="delete_field" data-title="[% suggestion.title | html %]" value="[% suggestion.suggestionid | html %]" />
                                                             [% END %]
                                                         </td>
                                                     [% END %]
                                                     <td>
                                                         <p>
                                                             <label for="id[% suggestions_loo.suggestionid | html %]">
-                                                                [% IF suggestions_loo.biblionumber %]
-                                                                    <strong><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% suggestions_loo.biblionumber | uri %]">[% suggestions_loo.title | html %]</a></strong>
+                                                                [% IF suggestion.biblionumber %]
+                                                                    <strong><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% suggestion.biblionumber | uri %]">[% suggestion.title | html %]</a></strong>
                                                                 [% ELSE %]
-                                                                    <strong>[% suggestions_loo.title | html %]</strong>
+                                                                    <strong>[% suggestion.title | html %]</strong>
                                                                 [% END %]
                                                             </label>
                                                         </p>
-                                                            <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author | html %],[% END %]
-                                                                [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate | html %],[% END %]
-                                                                [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode | html %][% END %]
-                                                                [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place | html %])[% END %]
-                                                                [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle | html %][% END %]
-                                                                [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) | html %][% END %]
+                                                            <p>[% IF ( suggestion.author ) %][% suggestion.author | html %],[% END %]
+                                                                [% IF ( suggestion.copyrightdate ) %] - [% suggestion.copyrightdate | html %],[% END %]
+                                                                [% IF ( suggestion.publishercode ) %] - [% suggestion.publishercode | html %][% END %]
+                                                                [% IF ( suggestion.place ) %]([% suggestion.place | html %])[% END %]
+                                                                [% IF ( suggestion.collectiontitle ) %] , [% suggestion.collectiontitle | html %][% END %]
+                                                                [% IF ( suggestion.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 1 ) | html %][% END %]
                                                         </p>
                                                     </td>
                                                     <td>
-                                                        [% IF ( suggestions_loo.suggesteddate ) %][% suggestions_loo.suggesteddate |$KohaDates %][% END %]
+                                                        [% IF ( suggestion.suggesteddate ) %][% suggestion.suggesteddate |$KohaDates %][% END %]
                                                     </td>
                                                     <td>
-                                                        [% IF ( suggestions_loo.note ) %]
+                                                        [% IF ( suggestion.note ) %]
                                                             <span class="tdlabel">Note: </span>
-                                                            [% suggestions_loo.note | html %]
+                                                            [% suggestion.note | html %]
                                                         [% END %]
                                                     </td>
                                                     [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                                         <td>
-                                                            [% IF ( suggestions_loo.branchcodesuggestedby ) %]
+                                                            [% IF suggestion.suggestedby %]
                                                                 <span class="tdlabel">Suggested for:</span>
-                                                                [% suggestions_loo.branchcodesuggestedby | html %]
+                                                                [% Branches.GetName(suggestion.suggester.branchcode) | html %]
                                                             [% END %]
                                                         </td>
                                                     [% END %]
                                                     [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]
                                                     <td>
-                                                        [% IF ( suggestions_loo.surnamemanagedby ) %]
+                                                        [% IF suggestion.managedby %]
                                                             <span class="tdlabel">Managed by:</span>
-                                                            [% suggestions_loo.surnamemanagedby | html %]
-                                                            [% IF ( suggestions_loo.firstnamemanagedby ) %]    , [% suggestions_loo.firstnamemanagedby | html %]
-                                                            [% END %]
+                                                            [% INCLUDE 'patron-title.inc' patron = suggestion.manager %]
+                                                            [% IF ( suggestion.manageddate ) %] - [% suggestion.manageddate | $KohaDates %][% END %]
                                                         [% END %]
                                                     </td>
                                                     [% END %]
                                                     <td>
                                                         <span class="tdlabel">Status:</span>
-                                                        [% IF ( suggestions_loo.ASKED ) %]<span>Requested</span>
-                                                        [% ELSIF ( suggestions_loo.CHECKED ) %]<span>Checked by the library</span>
-                                                        [% ELSIF ( suggestions_loo.ACCEPTED ) %]<span>Accepted by the library</span>
-                                                        [% ELSIF ( suggestions_loo.ORDERED ) %]<span>Ordered by the library</span>
-                                                        [% ELSIF ( suggestions_loo.REJECTED ) %]<span>Suggestion declined</span>
-                                                        [% ELSIF ( suggestions_loo.AVAILABLE ) %]<span>Available in the library</span>
-                                                        [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html %] [% END %]
-                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason | html %])[% END %]
+                                                        [% IF ( suggestion.STATUS == 'ASKED' ) %]<span>Requested</span>
+                                                        [% ELSIF ( suggestion.STATUS == 'CHECKED' ) %]<span>Checked by the library</span>
+                                                        [% ELSIF ( suggestion.STATUS == 'ACCEPTED' ) %]<span>Accepted by the library</span>
+                                                        [% ELSIF ( suggestion.STATUS == 'ORDERED' ) %]<span>Ordered by the library</span>
+                                                        [% ELSIF ( suggestion.STATUS == 'REJECTED' ) %]<span>Suggestion declined</span>
+                                                        [% ELSIF ( suggestion.STATUS == 'AVAILABLE' ) %]<span>Available in the library</span>
+                                                        [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS, 1 ) | html %] [% END %]
+                                                        [% IF ( suggestion.reason ) %]([% suggestion.reason | html %])[% END %]
                                                     </td>
                                                 </tr>
-                                            [% END # / FOREACH suggestions_loo %]
+                                            [% END # / FOREACH suggestions %]
                                         </tbody>
                                     </table>
 
@@ -486,7 +486,7 @@
                                         <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus" aria-hidden="true"></i> New purchase suggestion</a></p>
                                     [% END %]
                                 [% END %]
-                            [% END # / IF suggestions_loop %]
+                            [% END # / IF suggestions.size %]
 
                         [% END # IF op_else %]
                     </div> <!-- / #usersuggestions -->

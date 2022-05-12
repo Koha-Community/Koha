@@ -42,7 +42,7 @@
                     <a class="btn btn-default" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% patron.borrowernumber | html %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
                 </div>
 
-                [% IF suggestions %]
+                [% IF suggestions.size %]
                   <table id="suggestions">
                     <thead>
                         <tr>
@@ -79,13 +79,7 @@
                                 </td>
                                 <td>[% s.note | html %]
                                 <td>
-                                    [% IF ( s.surnamemanagedby ) %]
-                                        [% s.surnamemanagedby | html %]
-                                        [% IF ( s.firstnamemanagedby ) %],[% END %]
-                                        [% s.firstnamemanagedby | html %]
-                                    [% ELSE %]
-                                        &nbsp;
-                                    [% END %]
+                                    [% INCLUDE 'patron-title.inc' patron => s.manager %]
                                 </td>
                                 <td data-order="[% s.manageddate | html %]">
                                     [% s.manageddate | $KohaDates %]

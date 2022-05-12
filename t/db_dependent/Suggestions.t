@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 107;
+use Test::More tests => 91;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -34,7 +34,7 @@ use Koha::Patrons;
 use Koha::Suggestions;
 
 BEGIN {
-    use_ok('C4::Suggestions', qw( NewSuggestion GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio SearchSuggestion DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan ));
+    use_ok('C4::Suggestions', qw( NewSuggestion GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan ));
 }
 
 my $schema  = Koha::Database->new->schema;
@@ -328,73 +328,6 @@ my $connect_suggestion_and_biblio = ConnectSuggestionAndBiblio($my_suggestionid,
 is( $connect_suggestion_and_biblio, '1', 'ConnectSuggestionAndBiblio returns 1' );
 $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{biblionumber}, $biblio_2->biblionumber, 'ConnectSuggestionAndBiblio updates the biblio number correctly' );
-
-my $search_suggestion = SearchSuggestion();
-is( @$search_suggestion, 3, 'SearchSuggestion without arguments returns all suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    title => $mod_suggestion1->{title},
-});
-is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    title => 'another title',
-});
-is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    author => $mod_suggestion1->{author},
-});
-is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    author => 'another author',
-});
-is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    publishercode => $mod_suggestion1->{publishercode},
-});
-is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    publishercode => 'another publishercode',
-});
-is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    STATUS => $mod_suggestion3->{STATUS},
-});
-is( @$search_suggestion, 2, 'SearchSuggestion returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    STATUS => q||
-});
-is( @$search_suggestion, 0, 'SearchSuggestion should not return all suggestions if we want the suggestions with a STATUS=""' );
-$search_suggestion = SearchSuggestion({
-    STATUS => 'REJECTED',
-});
-is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({
-    budgetid => '',
-});
-is( @$search_suggestion, 3, 'SearchSuggestion (budgetid = "") returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    budgetid => $budget_id,
-});
-is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = $budgetid) returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    budgetid => '__NONE__',
-});
-is( @$search_suggestion, 1, 'SearchSuggestion (budgetid = "__NONE__") returns the correct number of suggestions' );
-$search_suggestion = SearchSuggestion({
-    budgetid => '__ANY__',
-});
-is( @$search_suggestion, 3, 'SearchSuggestion (budgetid = "__ANY__") returns the correct number of suggestions' );
-
-$search_suggestion = SearchSuggestion({ budgetid => $budget_id });
-is( @$search_suggestion[0]->{budget_name}, GetBudget($budget_id)->{budget_name}, 'SearchSuggestion returns the correct budget name');
-$search_suggestion = SearchSuggestion({ budgetid => "__NONE__" });
-is( @$search_suggestion[0]->{budget_name}, undef, 'SearchSuggestion returns the correct budget name');
-
 
 my $del_suggestion = {
     title => 'my deleted title',
