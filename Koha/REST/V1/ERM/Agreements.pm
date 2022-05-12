@@ -94,11 +94,13 @@ sub add {
                 my $periods    = delete $body->{periods} // [];
                 my $user_roles = delete $body->{user_roles} // [];
                 my $agreement_licenses = delete $body->{agreement_licenses} // [];
+                my $agreement_relationships = delete $body->{agreement_relationships} // [];
 
                 my $agreement = Koha::ERM::Agreement->new_from_api($body)->store;
                 $agreement->periods($periods);
                 $agreement->user_roles($user_roles);
                 $agreement->agreement_licenses($agreement_licenses);
+                $agreement->agreement_relationships($agreement_relationships);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(
@@ -173,11 +175,13 @@ sub update {
                 my $periods    = delete $body->{periods} // [];
                 my $user_roles = delete $body->{user_roles} // [];
                 my $agreement_licenses = delete $body->{agreement_licenses} // [];
+                my $agreement_relationships = delete $body->{agreement_relationships} // [];
 
                 $agreement->set_from_api($body)->store;
                 $agreement->periods($periods);
                 $agreement->user_roles($user_roles);
                 $agreement->agreement_licenses($agreement_licenses);
+                $agreement->agreement_relationships($agreement_relationships);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(

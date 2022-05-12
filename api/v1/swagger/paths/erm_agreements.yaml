@@ -189,6 +189,9 @@
       - user_roles.patron
       - agreement_licenses
       - agreement_licenses.license
+      - agreement_relationships
+      - agreement_relationships.agreement
+      - agreement_relationships.related_agreement
   put:
     x-mojo-to: ERM::Agreements#update
     operationId: updateErmAgreements
@@ -247,6 +250,7 @@
       - periods
       - user_roles
       - agreement_licenses
+      - agreement_relationships
   delete:
     x-mojo-to: ERM::Agreements#delete
     operationId: deleteErmAgreements

@@ -1,0 +1,30 @@
+---
+type: object
+properties:
+  agreement_id:
+    type: integer
+    description: Internal agreement identifier
+  related_agreement_id:
+    type: integer
+    description: Internal related agreement identifier
+  relationship:
+    description: relationship between the agreements
+    type: string
+    enum:
+      - supersedes
+      - is-superseded-by
+      - provides_post-cancellation_access_for
+      - has-post-cancellation-access-in
+      - tracks_demand-driven_acquisitions_for
+      - has-demand-driven-acquisitions-in
+      - has_backfile_in
+      - has_frontfile_in
+      - related_to
+  notes:
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - related_agreement_id
+  - relationship
