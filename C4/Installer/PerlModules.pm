@@ -72,8 +72,6 @@ sub versions_info {
                 }
 
                 my $attr;
-
-                $Readonly::XS::MAGIC_COOKIE="Do NOT use or require Readonly::XS unless you're me.";
                 {
                     # ignore warnings from noisy modules
                     local $SIG{__WARN__} = sub {};
