@@ -24,6 +24,7 @@ use base qw(Koha::Object);
 use Koha::ERM::Agreement::Periods;
 use Koha::ERM::Agreement::UserRoles;
 use Koha::ERM::Agreement::Licenses;
+use Koha::ERM::Agreement::Relationships;
 
 =head1 NAME
 
@@ -109,6 +110,31 @@ sub agreement_licenses {
     }
     my $agreement_licenses_rs = $self->_result->erm_agreement_licenses;
     return Koha::ERM::Agreement::Licenses->_new_from_dbic($agreement_licenses_rs);
+}
+
+=head3 agreement_relationships
+
+Returns the agreement relationships of this agreement
+
+=cut
+
+sub agreement_relationships {
+    my ( $self, $relationships ) = @_;
+
+    if ( $relationships ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->agreement_relationships->delete;
+
+                for my $relationship (@$relationships) {
+                    $self->_result->add_to_erm_agreement_relationships_agreements($relationship);
+                }
+            }
+        );
+    }
+    my $related_agreements_rs = $self->_result->erm_agreement_relationships_agreements;
+    return Koha::ERM::Agreement::Relationships->_new_from_dbic($related_agreements_rs);
 }
 
 =head2 Internal methods

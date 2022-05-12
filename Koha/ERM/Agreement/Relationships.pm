@@ -1,4 +1,4 @@
-package Koha::ERM::Agreement::RelatedAgreements;
+package Koha::ERM::Agreement::Relationships;
 
 # This file is part of Koha.
 #
@@ -20,13 +20,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::ERM::Agreement::RelatedAgreement;
+use Koha::ERM::Agreement::Relationship;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::ERM::Agreement::RelatedAgreements- Koha Agreement RelatedAgreement Object set class
+Koha::ERM::Agreement::Relationships- Koha Agreement RelatedAgreement Object set class
 
 =head1 API
 
@@ -42,8 +42,12 @@ sub _type {
     return 'ErmAgreementRelationship';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
-    return 'Koha::ERM::Agreement::RelatedAgreement';
+    return 'Koha::ERM::Agreement::Relationship';
 }
 
 1;

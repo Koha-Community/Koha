@@ -35,13 +35,25 @@ Koha::ERM::Agreement::Relationship - Koha Agreement Relationship Object class
 
 =head3 agreement
 
-Return the agreement linked to this relationship
+Return the agreement of this relationship
 
 =cut
 
 sub agreement {
     my ( $self ) = @_;
     my $agreement_rs = $self->_result->agreement;
+    return Koha::ERM::Agreement->_new_from_dbic($agreement_rs);
+}
+
+=head3 related_agreement
+
+Return the agreement linked to this relationship
+
+=cut
+
+sub related_agreement {
+    my ( $self ) = @_;
+    my $agreement_rs = $self->_result->related_agreement;
     return Koha::ERM::Agreement->_new_from_dbic($agreement_rs);
 }
 
