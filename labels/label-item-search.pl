@@ -32,6 +32,7 @@ use C4::Creators::Lib qw( html_table );
 use Koha::Logger;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Search;
 
 my $query = CGI->new;
@@ -76,20 +77,21 @@ if ( $op eq "do_search" ) {
         push(@limits, "acqdate,le,st-date-normalized=$dateto");
     }
 
-    my ( $error, $query, $simple_query, $query_cgi,
+    my ( $build_error, $query, $simple_query, $query_cgi,
         $query_desc, $limit, $limit_cgi, $limit_desc,
         $query_type )
         = $builder->build_query_compat( undef, [$ccl_textbox], [$idx], \@limits);
 
     my $offset = $startfrom > 1 ? $startfrom - 1 : 0;
 
-    my ( $error, $marcresults, $facets ) = $searcher->search_compat(
-        $query, $simple_query, undef, ['biblioserver'], $resultsperpage, $offset,
+    my ( $error, $results, $facets ) = $searcher->search_compat(
+        $query, $simple_query, [], ['biblioserver'], $resultsperpage, $offset,
         undef, undef, $query_type, undef
-   );
+    );
 
-    if (!defined $error && $marcresults->{biblioserver}{RECORDS} ) {
-        $show_results = $marcresults->{biblioserver}{RECORDS};
+    if (!defined $error && @{$results->{biblioserver}{RECORDS}} ) {
+        $show_results = @{$results->{biblioserver}{RECORDS}};
+        $marcresults = $results->{biblioserver}{RECORDS};
     }
     else {
         Koha::Logger->get->warn("ERROR label-item-search: no results from simple_search_compat");

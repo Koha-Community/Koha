@@ -1098,6 +1098,7 @@ sub _fix_limit_special_cases {
     my ( $self, $limits ) = @_;
 
     my @new_lim;
+    my $ranges;
     foreach my $l (@$limits) {
         # This is set up by opac-search.pl
         if ( $l =~ /^yr,st-numeric,ge[=:]/ ) {
@@ -1165,6 +1166,16 @@ sub _fix_limit_special_cases {
                 push @new_lim, $term;
             }
         }
+        elsif ($l =~ /^acqdate,(ge|le),st-date-normalized=/ ) {
+            my ($fromdate) = ( $l =~ /^acqdate,ge,st-date-normalized=(.*)$/ );
+            my ($todate) = ( $l =~ /^acqdate,le,st-date-normalized=(.*)$/ );
+            $fromdate ||= '*';
+            $todate ||= '*';
+            $ranges->{'date-of-acquisition.raw'} = {
+                from => $fromdate,
+                to => $todate
+            }
+        }
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
             $field =~ s/,phr$//; #We are quoting all the limits as phrase, this prevents from quoting again later
@@ -1173,6 +1184,12 @@ sub _fix_limit_special_cases {
             }
             else {
                 push @new_lim, $l;
+            }
+        }
+
+        if ( $ranges ) {
+            foreach my $index ( keys %$ranges ) {
+                push @new_lim, "$index:[$ranges->{$index}{from} TO $ranges->{$index}{to}]"
             }
         }
     }
