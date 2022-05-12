@@ -151,5 +151,18 @@ return {
                 ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard');
         });
 
+        unless ( TableExists('erm_agreement_relationships') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_agreement_relationships` (
+                    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    `related_agreement_id` INT(11) NOT NULL COMMENT 'link to the related agreement',
+                    `relationship` ENUM('supersedes', 'is-superseded-by', 'provides_post-cancellation_access_for', 'has-post-cancellation-access-in', 'tracks_demand-driven_acquisitions_for', 'has-demand-driven-acquisitions-in', 'has_backfile_in', 'has_frontfile_in', 'related_to') NOT NULL COMMENT 'relationship between the two agreements',
+                    `notes` mediumtext DEFAULT NULL COMMENT 'notes about this relationship',
+                    CONSTRAINT `erm_agreement_relationships_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_agreement_relationships_ibfk_2` FOREIGN KEY (`related_agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    PRIMARY KEY(`agreement_id`, `related_agreement_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
     },
 };
