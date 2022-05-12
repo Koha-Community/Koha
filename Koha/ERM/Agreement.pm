@@ -123,12 +123,32 @@ sub agreement_relationships {
 
     if ( $relationships ) {
         my $schema = $self->_result->result_source->schema;
+        # FIXME naming - is "back link" ok?
+        my $back_links = {
+            'supersedes'       => 'is-superseded-by',
+            'is-superseded-by' => 'supersedes',
+            'provides_post-cancellation_access_for' => 'has-post-cancellation-access-in',
+            'has-post-cancellation-access-in'       => 'provides_post-cancellation_access_for',
+            'tracks_demand-driven_acquisitions_for' => 'has-demand-driven-acquisitions-in',
+            'has-demand-driven-acquisitions-in'     => 'tracks_demand-driven_acquisitions_for',
+            'has_backfile_in'  => 'has_frontfile_in',
+            'has_frontfile_in' => 'has_backfile_in',
+            'related_to'       => 'related_to',
+        };
         $schema->txn_do(
             sub {
                 $self->agreement_relationships->delete;
+                $self->agreement_back_relationships->delete;
 
                 for my $relationship (@$relationships) {
                     $self->_result->add_to_erm_agreement_relationships_agreements($relationship);
+                    my $back_link = {
+                        agreement_id => $relationship->{related_agreement_id},
+                        related_agreement_id => $self->agreement_id,
+                        relationship => $back_links->{$relationship->{relationship}},
+                        notes        => $relationship->{notes}, # FIXME Is it correct, do we keep the note here?
+                    };
+                    $self->_result->add_to_erm_agreement_relationships_related_agreements($back_link);
                 }
             }
         );
@@ -136,6 +156,20 @@ sub agreement_relationships {
     my $related_agreements_rs = $self->_result->erm_agreement_relationships_agreements;
     return Koha::ERM::Agreement::Relationships->_new_from_dbic($related_agreements_rs);
 }
+
+=head3 agreement_back_relationships
+
+# FIXME Naming - how is it called?
+Returns the reverse relationship
+
+=cut
+
+sub agreement_back_relationships {
+    my ( $self ) = @_;
+    my $rs = $self->_result->erm_agreement_relationships_related_agreements;
+    return Koha::ERM::Agreement::Relationships->_new_from_dbic($rs);
+}
+
 
 =head2 Internal methods
 

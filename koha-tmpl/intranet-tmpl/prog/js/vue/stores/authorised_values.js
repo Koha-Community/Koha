@@ -10,6 +10,29 @@ export const useAVStore = defineStore("authorised_values", {
         av_license_statuses: [],
         av_agreement_license_statuses: [],
         av_agreement_license_location: [],
+        av_agreement_relationships: [
+            { authorised_value: "supersedes", lib: "supersedes" },
+            { authorised_value: "is-superseded-by", lib: "is superseded by" },
+            {
+                authorised_value: "provides_post-cancellation_access_for",
+                lib: "provides_post-cancellation_access_for",
+            },
+            {
+                authorised_value: "has-post-cancellation-access-in",
+                lib: "has-post-cancellation-access-in",
+            },
+            {
+                authorised_value: "tracks_demand-driven_acquisitions_for",
+                lib: "tracks_demand-driven_acquisitions_for",
+            },
+            {
+                authorised_value: "has-demand-driven-acquisitions-in",
+                lib: "has-demand-driven-acquisitions-in",
+            },
+            { authorised_value: "has_backfile_in", lib: "has_backfile_in" },
+            { authorised_value: "has_frontfile_in", lib: "has_frontfile_in" },
+            { authorised_value: "related_to", lib: "related_to" },
+        ],
     }),
     // FIXME We could move get_lib_from_av here
 });

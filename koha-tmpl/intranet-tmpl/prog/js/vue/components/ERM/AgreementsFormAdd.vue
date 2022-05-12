@@ -179,6 +179,13 @@
                                 av_agreement_license_location
                             "
                         />
+                        <AgreementRelationships
+                            :agreement_id="agreement.agreement_id"
+                            :relationships="agreement.agreement_relationships"
+                            :av_agreement_relationships="
+                                av_agreement_relationships
+                            "
+                        />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -199,6 +206,7 @@
 import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
+import AgreementRelationships from './AgreementRelationships.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
@@ -217,6 +225,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
+            av_agreement_relationships,
         } = storeToRefs(AVStore)
 
         return {
@@ -227,6 +236,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
+            av_agreement_relationships,
         }
     },
     data() {
@@ -244,6 +254,7 @@ export default {
                 periods: [],
                 user_roles: [],
                 agreement_licenses: [],
+                agreement_relationships: [],
             },
             initialized: false,
         }
@@ -290,6 +301,8 @@ export default {
 
             agreement.agreement_licenses = agreement.agreement_licenses.map(({ license, agreement_id, agreement_license_id, ...keepAttrs }) => keepAttrs)
 
+            agreement.agreement_relationships = agreement.agreement_relationships.map(({ related_agreement, ...keepAttrs }) => keepAttrs)
+
             const options = {
                 method: method,
                 body: JSON.stringify(agreement),
@@ -328,6 +341,7 @@ export default {
         AgreementPeriods,
         AgreementUserRoles,
         AgreementLicenses,
+        AgreementRelationships,
     },
     name: "AgreementsFormAdd",
 }

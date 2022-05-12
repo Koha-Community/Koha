@@ -166,6 +166,30 @@
                             </tbody>
                         </table>
                     </li>
+
+                    <li>
+                        <label>Related agreements</label>
+                        <div
+                            v-for="relationship in agreement.agreement_relationships"
+                            v-bind:key="relationship.related_agreement_id"
+                        >
+                            <span
+                                ><router-link
+                                    :to="`/cgi-bin/koha/erm/agreements/${relationship.related_agreement.agreement_id}`"
+                                    >{{
+                                        relationship.related_agreement.name
+                                    }}</router-link
+                                ></span
+                            >
+                            {{
+                                get_lib_from_av(
+                                    av_agreement_relationships,
+                                    relationship.relationship
+                                )
+                            }}
+                            {{ agreement.name }}
+                        </div>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="action">
@@ -209,6 +233,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
+            av_agreement_relationships,
         } = storeToRefs(AVStore)
 
         return {
@@ -222,6 +247,7 @@ export default {
             av_agreement_user_roles,
             av_agreement_license_statuses,
             av_agreement_license_location,
+            av_agreement_relationships,
         }
     },
     data() {
