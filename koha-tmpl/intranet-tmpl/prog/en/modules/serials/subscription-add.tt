@@ -246,11 +246,11 @@ fieldset.rows table { clear: none; margin: 0; }
                                 </li>
                                 <li>
                                      <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
-                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" size="4"/>
+                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
                                  </li>
                                  <li>
                                     <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
-                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" size="4"/>
+                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" inputmode="numeric" pattern="[0-9]*"  size="4"/>
                                 </li>
                             </ol>
                         </fieldset>
