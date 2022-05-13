@@ -1,16 +1,17 @@
 [% USE CGI %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK translate_card_element %]
 [%-  SWITCH element -%]
-[%-  CASE 'layout'    -%]<span>layout</span>
-[%-  CASE 'Layouts'   -%]<span>Layouts</span>
-[%-  CASE 'template'  -%]<span>template</span>
-[%-  CASE 'Templates' -%]<span>Templates</span>
-[%-  CASE 'profile'   -%]<span>profile</span>
-[%-  CASE 'Profiles'  -%]<span>Profiles</span>
-[%-  CASE 'batch'     -%]<span>batch</span>
-[%-  CASE 'Batches'   -%]<span>Batches</span>
-[%-  CASE 'Actions'   -%]<span>Actions</span>
+[%-  CASE 'layout'    -%][% t('layout') | html %]
+[%-  CASE 'Layouts'   -%][% t('Layouts') | html %]
+[%-  CASE 'template'  -%][% t('template') | html %]
+[%-  CASE 'Templates' -%][% t('Templates') | html %]
+[%-  CASE 'profile'   -%][% t('profile') | html %]
+[%-  CASE 'Profiles'  -%][% t('Profiles') | html %]
+[%-  CASE 'batch'     -%][% t('batch') | html %]
+[%-  CASE 'Batches'   -%][% t('Batches') | html %]
+[%-  CASE 'Actions'   -%][% t('Actions') | html %]
 [%-  END -%]
 [% END %]
 [% BLOCK translate_card_elements %]
