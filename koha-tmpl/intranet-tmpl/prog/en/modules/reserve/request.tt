@@ -399,6 +399,8 @@
                                         <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]"> [% biblioloo.title | html %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% max_holds_for_record | html %] hold(s) on this record.</li>
                                     [% END %]
                                 [% END %]
+                            [% ELSIF ( none_available ) %]
+                                <li><strong>No items available: </strong>One or more records have no items that can be held</li>
                             [% END # /IF exceeded_maxreserves %]
                         [% END # /UNLESS multi_hold %]
                     </div>
@@ -663,6 +665,8 @@
                                                                     <span>Library is not a pickup location</span>
                                                                 [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
                                                                     <span>No valid pickup location</span>
+                                                                [% ELSIF itemloo.not_holdable == 'notforloan' %]
+                                                                    <span>Not for loan</span>
                                                                 [% ELSE %]
                                                                     <span>[% itemloo.not_holdable | html %]</span>
                                                                 [% END %]
@@ -769,6 +773,8 @@
 
                                                     [% IF ( itemloo.notforloan ) %]
                                                        <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
+                                                    [% ELSIF ( itemloo.notforloanitype ) %]
+                                                       <span class="nfl">Not for loan (Itemtype not for loan)</span>
                                                     [% END %]
                                                 </td>
                                             </tr>
@@ -883,13 +889,21 @@
 
                         <fieldset class="action">
                             [% IF ( patron AND patron.borrowernumber ) %]
-                                [% IF ( override_required ) %]
-                                    <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place holds</button>
-                                [% ELSIF ( none_available ) %]
-                                    <button class="btn btn-default" type="submit">Place holds</button>
-                                [% ELSE %]
-                                    [% IF ( multi_hold ) %]
+                                [% IF ( multi_hold ) %]
+                                    [% IF ( override_required ) %]
+                                        <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place holds</button>
+                                    [% ELSIF ( no_bibs_available ) %]
+                                        <button type="submit" class="btn btn-default btn-disabled" disabled="disabled">Place holds</button>
+                                    [% ELSIF ( none_available ) %]
+                                        <button type="submit" class="btn btn-default">Place holds</button>
+                                    [% ELSE %]
                                         <button type="submit" class="btn btn-default" id="multi_hold_submit">Place holds</button>
+                                    [% END %]
+                                [% ELSE %]
+                                    [% IF ( override_required ) %]
+                                        <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                    [% ELSIF ( none_available ) %]
+                                        <button type="submit" class="btn btn-default btn-disabled" disabled="disabled">Place hold</button>
                                     [% ELSE %]
                                         <button type="submit" class="btn btn-default">Place hold</button>
                                     [% END %]
