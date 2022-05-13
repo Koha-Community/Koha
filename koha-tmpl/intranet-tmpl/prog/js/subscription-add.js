@@ -68,8 +68,21 @@ function Check_page1() {
 
     var bib_exists = $("input[name='title']").val().length;
 
-    if (!bib_exists) alert( __("Bibliographic record does not exist!") );
-    return bib_exists;
+    if (!bib_exists){
+        alert( __("Bibliographic record does not exist!") );
+        return false;
+    }
+
+    if( isNaN( $("#staffdisplaycount").val() ) ){
+        alert( __("Number of issues to display to staff must be a number") );
+        return false;
+    }
+    if( isNaN( $("#opacdisplaycount").val() ) ){
+        alert( __("Number of issues to display to the public must be a number") );
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function Check_page2(){
