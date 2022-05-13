@@ -9,7 +9,7 @@ return {
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-            ('RealTimeHoldsQueue', '0', NULL, 'Enable updating the holds queue in real', 'YesNo')
+            ('RealTimeHoldsQueue', '0', NULL, 'Enable updating the holds queue in real time', 'YesNo')
         });
     },
 };
