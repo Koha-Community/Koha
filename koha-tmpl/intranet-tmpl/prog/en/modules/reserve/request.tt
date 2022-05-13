@@ -200,11 +200,13 @@
                     <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
 
                         [% IF ( multi_hold ) %]
-                            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
-                                <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
-                                <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% UNLESS biblioloo.none_avail %]
+                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
+                                    <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+                                    <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
@@ -446,15 +448,17 @@
                         <input type="hidden" name="type" value="str8" />
 
                         [% FOREACH biblionumber IN biblionumbers %]
-                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                         [% END %]
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
-                            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
-                                <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
-                                <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% UNLESS biblioloo.none_avail %]
+                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
+                                    <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+                                    <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
@@ -1410,15 +1414,6 @@
                 alert( _("Please select at least one title" + "\n") );
                 return false;
             }
-
-            var badSpans = $(".not_holdable");
-            var badBibs = "";
-            $(badSpans).each(function() {
-                var bibnum = $(this).attr("title");
-                badBibs += bibnum + "/";
-            });
-
-            $("#bad_bibs").val(badBibs);
 
             $('#hold-request-form').preventDoubleFormSubmit();
 
