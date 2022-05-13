@@ -37,6 +37,7 @@ checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
 my @reqbib         = $input->multi_param('reqbib');
 my @biblionumbers   = $input->multi_param('biblionumber');
+my @holdable_bibs  = $input->multi_param('holdable_bibs');
 my $borrowernumber = $input->param('borrowernumber');
 my $notes          = $input->param('notes');
 my $branch         = $input->param('pickup');
@@ -51,12 +52,10 @@ my $non_priority   = $input->param('non_priority');
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 
-my $bad_bibs_param = $input->param('bad_bibs');
-my @bad_bibs = split '/', $bad_bibs_param;
 my $holds_to_place_count = $input->param('holds_to_place_count') || 1;
 
 my %bibinfos = ();
-foreach my $bibnum (@biblionumbers) {
+foreach my $bibnum ( @holdable_bibs ) {
     my %bibinfo = ();
     $bibinfo{title}  = $input->param("title_$bibnum");
     $bibinfo{rank}   = $input->param("rank_$bibnum");
@@ -148,9 +147,6 @@ if ( $type eq 'str8' && $patron ) {
         }
     }
 
-    if (@bad_bibs) {
-        push @biblionumbers, @bad_bibs;
-    }
     my $redirect_url = URI->new("request.pl");
     $redirect_url->query_form( biblionumber => [@biblionumbers]);
     print $input->redirect($redirect_url);
