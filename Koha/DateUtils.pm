@@ -30,6 +30,7 @@ BEGIN {
         dt_from_string
         output_pref
         format_sqldatetime
+        flatpickr_date_format
     );
 }
 
@@ -374,6 +375,28 @@ sub format_sqldatetime {
         });
     }
     return q{};
+}
+
+=head2 flatpickr_date_format
+
+$date_format = flatpickr_date_format( $koha_date_format );
+
+Converts Koha's date format to Flatpickr's. E.g. 'us' returns 'm/d/Y'.
+
+If no argument is given, the dateformat preference is assumed.
+
+Returns undef if format is unknown.
+
+=cut
+
+sub flatpickr_date_format {
+    my $arg = shift // C4::Context->preference('dateformat');
+    return {
+        us     => 'm/d/Y',
+        metric => 'd/m/Y',
+        dmydot => 'd.m.Y',
+        iso    => 'Y-m-d',
+    }->{$arg};
 }
 
 1;

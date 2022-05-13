@@ -4,14 +4,14 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 82;
+use Test::More tests => 83;
 
 use Test::MockModule;
 use Test::Warn;
 use Time::HiRes qw/ gettimeofday /;
 use Try::Tiny;
 
-use Koha::DateUtils qw( dt_from_string output_pref format_sqldatetime );
+use Koha::DateUtils qw( dt_from_string output_pref format_sqldatetime flatpickr_date_format );
 
 use t::lib::Mocks;
 
@@ -387,6 +387,16 @@ try {
     ok( 0, 'output_pref should carp if str and dt parameters are passed together' );
 } catch {
     is( ref($_), 'Koha::Exceptions::WrongParameter', 'output_pref should throw an exception if str and dt parameters are passed together' );
+};
+
+subtest 'flatpickr_date_format' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference('dateformat', 'iso');
+    is( flatpickr_date_format(), 'Y-m-d', 'check fallback to pref' );
+    is( flatpickr_date_format(q{}), undef, 'empty string' );
+    is( flatpickr_date_format('metric'), 'd/m/Y', 'check valid arg' );
+    is( flatpickr_date_format('zz'), undef, 'wrong arg' );
 };
 
 # End of tests
