@@ -70,6 +70,17 @@ function Check_page1() {
 
     if (!bib_exists) alert(MSG_BIBLIO_NOT_EXIST);
     return bib_exists;
+
+    if( isNaN( $("#staffdisplaycount").val() ) ){
+        alert( __("Number of issues to display to staff must be a number") );
+        return false;
+    }
+    if( isNaN( $("#opacdisplaycount").val() ) ){
+        alert( __("Number of issues to display to the public must be a number") );
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function Check_page2(){
