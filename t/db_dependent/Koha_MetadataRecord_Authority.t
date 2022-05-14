@@ -20,7 +20,6 @@
 
 use Modern::Perl;
 use Test::More tests => 3;
-use Data::Dumper qw/Dumper/;
 
 use MARC::File::XML;
 
