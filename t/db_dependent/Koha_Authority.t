@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# Copyright 2022 Koha Development Team, Marcel de Rooy
 # Copyright 2012 C & P Bibliography Services
 #
 # This file is part of Koha.
@@ -19,15 +20,12 @@
 
 use Modern::Perl;
 use Test::More tests => 3;
+use Data::Dumper qw/Dumper/;
 
-use File::Basename;
-use MARC::Batch;
-use MARC::File;
-use IO::File;
+use MARC::File::XML;
 
-use C4::Context;
-use C4::Charset qw( MarcToUTF8Record );
-use C4::AuthoritiesMarc qw( AddAuthority );
+use t::lib::TestBuilder;
+
 use Koha::Database;
 use Koha::Authorities;
 
@@ -37,71 +35,60 @@ BEGIN {
 
 our $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-our $dbh = C4::Context->dbh;
+our $builder = t::lib::TestBuilder->new;
 
-subtest 'Part 1' => sub {
-    # TODO Move this part to a t/lib packages
-    my $sourcedir = dirname(__FILE__) . "/data";
-    my $input_marc_file = "$sourcedir/marc21/zebraexport/authority/exported_records";
+our $record1 = MARC::Record->new;
+$record1->add_fields(
+    [ '001', '1234' ],
+    [ '150', ' ', ' ', a => 'Cooking' ],
+    [ '450', ' ', ' ', a => 'Cookery' ],
+);
+our $record2 = MARC::Record->new;
+$record2->add_fields(
+    [ '001', '2345' ],
+    [ '150', ' ', ' ', a => 'Baking' ],
+    [ '450', ' ', ' ', a => 'Bakery' ],
+);
 
-    my $fh = IO::File->new($input_marc_file);
-    my $batch = MARC::Batch->new( 'USMARC', $fh );
-    while ( my $record = $batch->next ) {
-        C4::Charset::MarcToUTF8Record($record, 'MARC21');
-        AddAuthority($record, '', '');
-    }
+subtest 'Test new, authorized_heading, authid, get_from_authid' => sub {
+    plan tests => 7;
 
-    my $record = MARC::Record->new;
-    $record->add_fields(
-            [ '001', '1234' ],
-            [ '150', ' ', ' ', a => 'Cooking' ],
-            [ '450', ' ', ' ', a => 'Cookery' ],
-            );
-    my $authority = Koha::MetadataRecord::Authority->new($record);
+    my $auth1 = $builder->build_object({ class => 'Koha::Authorities',
+        value => { marcxml => $record1->as_xml },
+    });
+    my $auth2 = $builder->build_object({ class => 'Koha::Authorities',
+        value => { marcxml => $record2->as_xml },
+    });
 
+    my $authority = Koha::MetadataRecord::Authority->new( $record1 );
     is(ref($authority), 'Koha::MetadataRecord::Authority', 'Created valid Koha::MetadataRecord::Authority object');
-
     is($authority->authorized_heading(), 'Cooking', 'Authorized heading was correct');
+    is_deeply($authority->record, $record1, 'Saved record');
 
-    is_deeply($authority->record, $record, 'Saved record');
-
-    my $authid = Koha::Authorities->search->next->authid;
-
-    $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
-
+    $authority = Koha::MetadataRecord::Authority->get_from_authid( $auth2->id );
     is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
-
-    is($authority->authid, $authid, 'Object authid is correct');
-
-    is($authority->record->field('001')->data(), $authid, 'Retrieved correct record');
+    is($authority->authid, $auth2->id, 'Object authid is correct');
+    is($authority->record->field('001')->data(), '2345', 'Retrieved original 001'); # Note: not created via AddAuthority
 
     $authority = Koha::MetadataRecord::Authority->get_from_authid('alphabetsoup');
     is($authority, undef, 'No invalid record is retrieved');
 };
 
-subtest 'Part2' => sub {
-    SKIP: {
-        my $sth = $dbh->prepare("SELECT import_record_id FROM import_records WHERE record_type = 'auth' LIMIT 1;");
-        $sth->execute();
+subtest 'Test get_from_breeding' => sub {
+    plan tests => 4;
 
-        my $import_record_id;
-        for my $row ($sth->fetchrow_hashref) {
-            $import_record_id = $row->{'import_record_id'};
-        }
+    my $import = $builder->build({ source => 'ImportRecord',
+        value => { marcxml => $record1->as_xml, record_type => 'auth' },
+    });
+    my $import_record_id = $import->{import_record_id};
 
-        skip 'No authorities in reservoir', 3 unless $import_record_id;
-        my $authority = Koha::MetadataRecord::Authority->get_from_breeding($import_record_id);
+    my $authority = Koha::MetadataRecord::Authority->get_from_breeding($import_record_id);
+    is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
+    is($authority->authid, undef, 'Records in reservoir do not have an authid');
+    is(ref($authority->record), 'MARC::Record', 'MARC record attached to authority');
 
-        is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
-
-        is($authority->authid, undef, 'Records in reservoir do not have an authid');
-
-        is(ref($authority->record), 'MARC::Record', 'MARC record attached to authority');
-
-        $authority = Koha::MetadataRecord::Authority->get_from_breeding('alphabetsoup');
-        is($authority, undef, 'No invalid record is retrieved from reservoir');
-    }
-    done_testing();
+    $authority = Koha::MetadataRecord::Authority->get_from_breeding('alphabetsoup');
+    is($authority, undef, 'No invalid record is retrieved from reservoir');
 };
 
 $schema->storage->txn_rollback;
