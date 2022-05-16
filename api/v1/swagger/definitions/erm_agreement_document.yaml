@@ -1,0 +1,56 @@
+---
+type: object
+properties:
+  document_id:
+    type: integer
+    description: internally assigned identifier
+    readOnly: true
+  agreement_id:
+    type: integer
+    description: Internal agreement identifier
+  file_name:
+    type:
+      - string
+      - "null"
+    description: Name of the file
+  file_type:
+    type:
+      - string
+      - "null"
+    description: Name of the file
+  file_description:
+    type:
+      - string
+      - "null"
+    description: Description of the file
+  file_content:
+    type:
+      - string
+      - "null"
+    description: Content of the file
+  uploaded_on:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: Datetime of the upload
+  file_type:
+    type:
+      - string
+      - "null"
+    description: Name of the file
+  physical_location:
+    type:
+      - string
+      - "null"
+    description: Physical location of the document
+  uri:
+    description: URI of the document
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+additionalProperties: false
