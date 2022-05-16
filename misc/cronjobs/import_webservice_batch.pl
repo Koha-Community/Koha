@@ -23,7 +23,7 @@ use utf8;
 
 use Getopt::Long qw( GetOptions );
 use Koha::Script -cron;
-use C4::ImportBatch qw( BatchCommitRecords );
+use C4::ImportBatch qw( BatchCommitRecords GetStagedWebserviceBatches );
 
 my ($help, $framework);
 
