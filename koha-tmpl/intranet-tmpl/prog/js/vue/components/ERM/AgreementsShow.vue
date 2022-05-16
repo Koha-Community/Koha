@@ -274,6 +274,9 @@ export default {
             vm.getAgreement(to.params.agreement_id)
         })
     },
+    beforeRouteUpdate(to, from) {
+        this.agreement = this.getAgreement(to.params.agreement_id)
+    },
     methods: {
         async getAgreement(agreement_id) {
             const agreement = await fetchAgreement(agreement_id)
