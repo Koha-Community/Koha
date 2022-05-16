@@ -96,9 +96,10 @@
                 </li>
             </ol>
         </fieldset>
-        <a class="btn btn-default" @click="addLicense"
+        <a v-if="licenses.length" class="btn btn-default" @click="addLicense"
             ><font-awesome-icon icon="plus" /> Add new license</a
         >
+        <span v-else>There are licenses created yet.</span>
     </fieldset>
 </template>
 

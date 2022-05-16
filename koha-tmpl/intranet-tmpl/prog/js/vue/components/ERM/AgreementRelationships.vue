@@ -74,9 +74,10 @@
                 </li>
             </ol>
         </fieldset>
-        <a class="btn btn-default" @click="addRelationship"
+        <a v-if="agreements.length" class="btn btn-default" @click="addRelationship"
             ><font-awesome-icon icon="plus" /> Add new related agreement</a
         >
+        <span v-else>There are no other agreements created yet.</span>
     </fieldset>
 </template>
 
