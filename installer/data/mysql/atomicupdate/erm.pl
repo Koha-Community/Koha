@@ -164,5 +164,24 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
+
+        unless ( TableExists('erm_agreement_documents') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_agreement_documents` (
+                    `document_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    `file_name` varchar(255) DEFAULT NULL COMMENT 'name of the file',
+                    `file_type` varchar(255) DEFAULT NULL COMMENT 'type of the file',
+                    `file_description` varchar(255) DEFAULT NULL COMMENT 'description of the file',
+                    `file_content` longblob DEFAULT NULL COMMENT 'the content of the file',
+                    `uploaded_on` datetime DEFAULT NULL COMMENT 'datetime when the file as attached',
+                    `physical_location` VARCHAR(255) DEFAULT NULL COMMENT 'physical location of the document',
+                    `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the document',
+                    `notes` mediumtext DEFAULT NULL COMMENT 'notes about this relationship',
+                    CONSTRAINT `erm_agreement_documents_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    PRIMARY KEY(`document_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
     },
 };
