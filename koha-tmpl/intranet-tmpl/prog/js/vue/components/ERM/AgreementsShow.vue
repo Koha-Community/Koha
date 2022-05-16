@@ -142,7 +142,11 @@
                                     v-bind:key="counter"
                                 >
                                     <td>
-                                        {{ agreement_license.license.name }}
+                                        <router-link
+                                            :to="`/cgi-bin/koha/erm/licenses/${agreement_license.license_id}`"
+                                        >
+                                            {{ agreement_license.license.name }}
+                                        </router-link>
                                     </td>
                                     <td>
                                         {{
