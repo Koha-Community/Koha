@@ -328,20 +328,6 @@ sub AddAuthToBatch {
     return $import_record_id;
 }
 
-=head2 ModAuthInBatch
-
-  ModAuthInBatch($import_record_id, $marc_record);
-
-=cut
-
-sub ModAuthInBatch {
-    my ($import_record_id, $marc_record) = @_;
-
-    my $marcflavour = C4::Context->preference('marcflavour');
-    _update_import_record_marc($import_record_id, $marc_record, $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : 'USMARC');
-
-}
-
 =head2 BatchStageMarcRecords
 
 ( $batch_id, $num_records, $num_items, @invalid_records ) =
