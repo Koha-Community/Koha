@@ -425,7 +425,6 @@ sub AddItemsToImportBiblio {
 
     if ($#import_items_ids > -1) {
         _update_batch_record_counts($batch_id) if $update_counts;
-        _update_import_record_marc($import_record_id, $marc_record, C4::Context->preference('marcflavour'));
     }
     return @import_items_ids;
 }
