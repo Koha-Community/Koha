@@ -18,6 +18,7 @@ package Koha::ERM::Agreement;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
@@ -25,6 +26,7 @@ use Koha::ERM::Agreement::Periods;
 use Koha::ERM::Agreement::UserRoles;
 use Koha::ERM::Agreement::Licenses;
 use Koha::ERM::Agreement::Relationships;
+use Koha::ERM::Agreement::Documents;
 
 =head1 NAME
 
@@ -170,6 +172,33 @@ sub agreement_back_relationships {
     return Koha::ERM::Agreement::Relationships->_new_from_dbic($rs);
 }
 
+=head3 documents
+
+Returns the documents for this agreement
+
+=cut
+
+sub documents {
+    my ( $self, $documents ) = @_;
+
+    if ($documents) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->documents->delete;
+                for my $document (@$documents) {
+                    if ( $document->{file_content} ) {
+                        $document->{file_type}    = 'unknown'; # FIXME How to detect file type from base64?
+                        $document->{uploaded_on}  //= dt_from_string;
+                    }
+                    $self->_result->add_to_erm_agreement_documents($document);
+                }
+            }
+        );
+    }
+    my $documents_rs = $self->_result->erm_agreement_documents;
+    return Koha::ERM::Agreement::Documents->_new_from_dbic($documents_rs);
+}
 
 =head2 Internal methods
 

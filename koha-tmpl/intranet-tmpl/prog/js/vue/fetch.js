@@ -7,7 +7,7 @@ export const fetchAgreement = async function (agreement_id) {
     await fetch(apiUrl, {
         headers: {
             "x-koha-embed":
-                "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement",
+                "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents",
         },
     })
         .then((res) => res.json())

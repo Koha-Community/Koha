@@ -36,6 +36,7 @@ function get_agreement() {
         user_roles: [],
         agreement_licenses: [],
         agreement_relationships: [],
+        documents: [],
     };
 }
 

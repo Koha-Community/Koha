@@ -186,6 +186,7 @@
                                 av_agreement_relationships
                             "
                         />
+                        <AgreementDocuments :documents="agreement.documents" />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -207,6 +208,7 @@ import AgreementPeriods from './AgreementPeriods.vue'
 import AgreementUserRoles from './AgreementUserRoles.vue'
 import AgreementLicenses from './AgreementLicenses.vue'
 import AgreementRelationships from './AgreementRelationships.vue'
+import AgreementDocuments from './AgreementDocuments.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
@@ -255,6 +257,7 @@ export default {
                 user_roles: [],
                 agreement_licenses: [],
                 agreement_relationships: [],
+                documents: [],
             },
             initialized: false,
         }
@@ -303,6 +306,8 @@ export default {
 
             agreement.agreement_relationships = agreement.agreement_relationships.map(({ related_agreement, ...keepAttrs }) => keepAttrs)
 
+            agreement.documents = agreement.documents.map(({ document_id, ...keepAttrs }) => keepAttrs)
+
             const options = {
                 method: method,
                 body: JSON.stringify(agreement),
@@ -342,6 +347,7 @@ export default {
         AgreementUserRoles,
         AgreementLicenses,
         AgreementRelationships,
+        AgreementDocuments,
     },
     name: "AgreementsFormAdd",
 }
