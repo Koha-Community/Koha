@@ -158,7 +158,7 @@ if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 }
 $record->append_fields(@fields);
 $original_record->append_fields(@fields);
-my $import_record_id = AddBiblioToBatch( $id_import_batch1, 0, $record, 'utf8', int(rand(99999)), 0 );
+my $import_record_id = AddBiblioToBatch( $id_import_batch1, 0, $record, 'utf8', 0 );
 AddItemsToImportBiblio( $id_import_batch1, $import_record_id, $record, 0 );
 
 my $import_record = Koha::Import::Records->find($import_record_id);
