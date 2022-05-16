@@ -54,7 +54,6 @@ BEGIN {
       AddBiblioToBatch
       AddItemsToImportBiblio
       ModAuthorityInBatch
-      ModBiblioInBatch
 
       BatchStageMarcRecords
       BatchFindDuplicates
@@ -304,20 +303,6 @@ sub AddBiblioToBatch {
     _add_biblio_fields($import_record_id, $marc_record);
     _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
-}
-
-=head2 ModBiblioInBatch
-
-  ModBiblioInBatch($import_record_id, $marc_record);
-
-=cut
-
-sub ModBiblioInBatch {
-    my ($import_record_id, $marc_record) = @_;
-
-    _update_import_record_marc($import_record_id, $marc_record, C4::Context->preference('marcflavour'));
-    _update_biblio_fields($import_record_id, $marc_record);
-
 }
 
 =head2 AddAuthToBatch
