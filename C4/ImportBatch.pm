@@ -375,13 +375,13 @@ sub BatchStageMarcRecords {
 
             $num_valid++;
             if ($record_type eq 'biblio') {
-                $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
+                $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, 0);
                 if ($parse_items) {
                     my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 0);
                     $num_items += scalar(@import_items_ids);
                 }
             } elsif ($record_type eq 'auth') {
-                $import_record_id = AddAuthToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0, $marc_type);
+                $import_record_id = AddAuthToBatch($batch_id, $rec_num, $marc_record, $encoding, 0, $marc_type);
             }
         }
     }
