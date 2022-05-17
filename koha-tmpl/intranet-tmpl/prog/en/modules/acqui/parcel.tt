@@ -279,7 +279,7 @@
                         [%# FIXME Here we block the cancellation if holds exist. Actually it could be possible if items will be exist after the deletion %]
                         [%# Some additional checks should be added in the pl file %]
                         [% span_title = BLOCK %]
-                          <span>Cannot cancel receipt of this order line because at least one reservation exists on the records.</span>
+                          <span>Cannot cancel receipt of this order line because at least one hold exists on the records.</span>
                         [% END %]
                       [% END %]
                       <span title="[% span_title | collapse | html %]">
