@@ -71,11 +71,11 @@
 
         [% IF ( erm ) %]
             <li class="active">
-                <a title="Electronic resources management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">Electronic resources management</a>
+                <a title="E-Resource management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">E-Resource management</a>
                 [% PROCESS subtabs  %]
         [% ELSE %]
             <li>
-                <a title="Electronic resources management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">Electronic resources management</a>
+                <a title="E-Resource management" href="/cgi-bin/koha/admin/preferences.pl?tab=erm">E-Resource management</a>
         [% END %]
         </li>
 

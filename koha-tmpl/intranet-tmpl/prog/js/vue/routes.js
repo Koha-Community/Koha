@@ -11,7 +11,7 @@ import LicensesFormConfirmDelete from "./components/ERM/LicensesFormConfirmDelet
 const breadcrumbs = {
     home: { text: "Home", path: "/cgi-bin/koha/mainpage.pl" },
     erm_home: {
-        text: "Electronic resources management",
+        text: "E-Resource management",
         path: "/cgi-bin/koha/erm/erm.pl",
     },
     agreements: { text: "Agreements", path: "/cgi-bin/koha/erm/agreements" },
