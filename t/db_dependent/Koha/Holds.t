@@ -426,7 +426,7 @@ subtest 'get_items_that_can_fill' => sub {
     my $item_5 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_2->itemtype } );
     my $lost       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1 } );
     my $withdrawn  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
-    my $notforloan = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
+    my $notforloan = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -466,6 +466,15 @@ subtest 'get_items_that_can_fill' => sub {
         }
     );
 
+    my $notforloan_reserve_id = C4::Reserves::AddReserve(
+        {
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 0,
+            itemnumber     => $notforloan->itemnumber,
+        }
+    );
+
     # item 3 is on loan
     AddIssue( $patron_3->unblessed, $item_3->barcode );
 
@@ -483,7 +492,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     $holds = Koha::Holds->search(
         {
-            reserve_id => [ $reserve_id_1, $reserve_id_2, $waiting_reserve_id, ]
+            reserve_id => [ $reserve_id_1, $reserve_id_2, $waiting_reserve_id, $notforloan_reserve_id, ]
         }
     );
 
