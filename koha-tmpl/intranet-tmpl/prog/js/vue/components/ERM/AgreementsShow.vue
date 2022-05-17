@@ -1,7 +1,22 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
     <div v-else id="agreements_show">
-        <h2>Agreement #{{ agreement.agreement_id }}</h2>
+        <h2>
+            Agreement #{{ agreement.agreement_id }}
+            <span class="action_links">
+                <router-link
+                    :to="`/cgi-bin/koha/erm/agreements/edit/${agreement.agreement_id}`"
+                    title="Edit"
+                    ><i class="fa fa-pencil"></i
+                ></router-link>
+
+                <router-link
+                    :to="`/cgi-bin/koha/erm/agreements/delete/${agreement.agreement_id}`"
+                    title="Delete"
+                    ><i class="fa fa-trash"></i
+                ></router-link>
+            </span>
+        </h2>
         <div>
             <fieldset class="rows">
                 <ol>
@@ -295,3 +310,9 @@ export default {
     name: "AgreementsShow",
 }
 </script>
+<style scoped>
+.action_links a {
+    padding-left: .2em;
+    font-size: 11px;
+}
+</style>

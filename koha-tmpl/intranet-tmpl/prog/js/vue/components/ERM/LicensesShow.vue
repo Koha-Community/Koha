@@ -1,7 +1,21 @@
 <template>
     <div v-if="!this.initialized">Loading...</div>
     <div v-else id="licenses_show">
-        <h2>License #{{ license.license_id }}</h2>
+        <h2>
+            License #{{ license.license_id }}
+            <span class="action_links">
+                <router-link
+                    :to="`/cgi-bin/koha/erm/licenses/edit/${license.license_id}`"
+                    title="Edit"
+                    ><i class="fa fa-pencil"></i
+                ></router-link>
+                <router-link
+                    :to="`/cgi-bin/koha/erm/licenses/delete/${license.license_id}`"
+                    title="Delete"
+                    ><i class="fa fa-trash"></i
+                ></router-link>
+            </span>
+        </h2>
         <div>
             <fieldset class="rows">
                 <ol>
@@ -113,3 +127,9 @@ export default {
     name: "LicensesShow",
 }
 </script>
+<style scoped>
+.action_links a {
+    padding-left: 0.2em;
+    font-size: 11px;
+}
+</style>
