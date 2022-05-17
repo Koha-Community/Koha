@@ -235,7 +235,7 @@ SKIP: {
         $driver->find_element('//fieldset[@id="circ_circulation_issue"]/button[@type="submit"]')->click;
         $nb_of_checkouts++;
         like( $driver->get_title(), qr(Checking out to $sample_data->{patron}{surname}) );
-        is( $driver->find_element('//a[@href="#checkouts"]')->get_attribute('text'), $nb_of_checkouts.' Checkout(s)', );
+        is( $driver->find_element('//a[@href="#checkouts"]')->get_attribute('text'), 'Checkouts ('.$nb_of_checkouts.')' );
     }
 
     time_diff("checkout");
