@@ -31,7 +31,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <h1>
-i               [% IF is_edit || course_reserve %]Edit [% ELSE %]Reserve [% END %]<em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em>
+                [% IF is_edit || course_reserve %]Edit [% ELSE %]Reserve [% END %]<em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em>
             </h1>
 
         [% IF course_reserve && !is_edit%]<div class="dialog message" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
@@ -252,7 +252,6 @@ i               [% IF is_edit || course_reserve %]Edit [% ELSE %]Reserve [% END 
 
 [% MACRO jsinclude BLOCK %]
     <script>
-    //<![CDATA[
         $(document).ready(function(){
             $('.field-toggle').change(function() {
                 if( this.checked ) {
@@ -263,7 +262,6 @@ i               [% IF is_edit || course_reserve %]Edit [% ELSE %]Reserve [% END 
                 }
             });
         });
-    //]]>
     </script>
 [% END %]
 
