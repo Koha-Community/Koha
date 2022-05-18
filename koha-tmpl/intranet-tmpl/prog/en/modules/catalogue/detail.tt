@@ -1405,12 +1405,14 @@ Note that permanent location is a code, and location may be an authval.
             [% END %]
         });
 
-        $(document).ready(function() {
-            var search_index = localStorage.getItem("cat_search_pulldown_selection");
-            var search_value = localStorage.getItem("searchbox_value");
-            if ( search_index ){ $('#cat-search-block select.advsearch').val(search_index)};
-            if ( search_value ){ $('#cat-search-block #search-form').val(search_value)};
-        });
+        [% IF (found1) %]
+            $(document).ready(function() {
+                var search_index = localStorage.getItem("cat_search_pulldown_selection");
+                var search_value = localStorage.getItem("searchbox_value");
+                if ( search_index ){ $('#cat-search-block select.advsearch').val(search_index)};
+                if ( search_value ){ $('#cat-search-block #search-form').val(search_value)};
+            });
+        [% END %]
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

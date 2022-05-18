@@ -619,6 +619,8 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     $template->param( course_reserves => $course_reserves );
 }
 
+$template->param(found1 => $query->param('found1') );
+
 $template->param(biblio => $biblio);
 
 output_html_with_http_headers $query, $cookie, $template->output;
