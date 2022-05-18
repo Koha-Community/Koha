@@ -519,7 +519,7 @@
                                                     [% ELSE %]
                                                         [% IF CAN_user_reserveforothers_place_holds %]
                                                             <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
-                                                            [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></span>[% END %]
+                                                            [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></span>[% END %]
                                                             [% IF ( holdforclub ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;club=[% holdforclub | uri %]">Place hold for [% holdforclub_name | html %]</a></span>[% END %]
                                                         [% ELSE %]
                                                             <span>Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</span>
@@ -724,7 +724,7 @@
         var PREF_StaffHighlightedWords = "[% Koha.Preference('StaffHighlightedWords') | html %]";
         var PREF_NotHighlightedWords = "[% Koha.Preference('NotHighlightedWords') | html %]";
         var biblionumber = "[% biblionumber | html %]";
-        var holdfor_cardnumber = "[% holdfor_cardnumber | html %]";
+        var holdfor_cardnumber = "[% holdfor_patron.cardnumber | html %]";
         var holdforclub = "[% holdforclub | html %]";
         [% IF SEARCH_RESULTS %]
             var SEARCH_RESULTS = 1;

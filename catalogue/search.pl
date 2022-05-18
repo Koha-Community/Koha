@@ -203,9 +203,8 @@ if($cgi->cookie("holdfor")){
     my $holdfor_patron = Koha::Patrons->find( $cgi->cookie("holdfor") );
     if ( $holdfor_patron ) { # may have been deleted in the meanwhile
         $template->param(
-            holdfor            => $cgi->cookie("holdfor"),
-            holdfor_patron     => $holdfor_patron,
-            holdfor_cardnumber => $holdfor_patron->cardnumber,
+            holdfor        => $cgi->cookie("holdfor"),
+            holdfor_patron => $holdfor_patron,
         );
     }
 }

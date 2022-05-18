@@ -49,9 +49,8 @@ my @items = GetItemsInfo($biblionumber);
 if ( $query->cookie("holdfor") ) {
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
-        holdfor            => $query->cookie("holdfor"),
-        holdfor_patron     => $holdfor_patron,
-        holdfor_cardnumber => $holdfor_patron->cardnumber,
+        holdfor        => $query->cookie("holdfor"),
+        holdfor_patron => $holdfor_patron,
     );
 }
 

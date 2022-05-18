@@ -103,9 +103,8 @@ if($query->cookie("holdfor")){
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     if ( $holdfor_patron ) {
         $template->param(
-            holdfor => $query->cookie("holdfor"),
+            holdfor        => $query->cookie("holdfor"),
             holdfor_patron => $holdfor_patron,
-            holdfor_cardnumber => $holdfor_patron->cardnumber,
         );
     }
 }
