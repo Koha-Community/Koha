@@ -33,11 +33,18 @@ return {
             });
             say $out "Added middle name column to borrower_modifications table";
         }
-        my @default_patron_search_fields = split(',',C4::Context->preference('DefaultPatronSearchFields'));
+
+        my ($default_patron_search_fields) = $dbh->selectrow_array( q{
+            SELECT value FROM systempreferences WHERE variable='DefaultPatronSearchFields';
+        });
+        my @default_patron_search_fields = split(',',$default_patron_search_fields);
         unless( grep /middle_name/, @default_patron_search_fields ){
             if( grep /firstname/, @default_patron_search_fields ){
                 push @default_patron_search_fields,'middle_name';
-                C4::Context->set_preference('DefaultPatronSearchFields', join(',',@default_patron_search_fields) );
+                my $new_patron_search_fields = join(',',@default_patron_search_fields);
+                $dbh->do(q{
+                    UPDATE systempreferences SET value=? WHERE variable='DefaultPatronSearchFields'
+                }, undef, $new_patron_search_fields);
                 say $out "Added middle name to DefaultPatronSearchFields";
             } else {
                 say $out "Please add 'middlename' to DefaultPatronSearchFields if you want it searched by default";
