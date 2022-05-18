@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 9;
 
 use Test::Exception;
 use Test::MockModule;
@@ -683,6 +683,183 @@ subtest 'suspend_hold() and resume() tests' => sub {
 
     $action = 'resume';
     $hold->resume;
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancellation_requests() and add_cancellation_request() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    my $hold = $builder->build_object( { class => 'Koha::Holds', } );
+
+    is( $hold->cancellation_requests->count, 0 );
+
+    # Add two cancellation requests
+    my $request_1 = $hold->add_cancellation_request;
+    isnt( $request_1->creation_date, undef, 'creation_date is set' );
+
+    my $requester     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $creation_date = '2021-06-25 14:05:35';
+
+    my $request_2 = $hold->add_cancellation_request(
+        {
+            creation_date => $creation_date,
+        }
+    );
+
+    is( $request_2->creation_date, $creation_date, 'Passed creation_date set' );
+
+    is( $hold->cancellation_requests->count, 2 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancellation_requestable_from_opac() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $category =
+      $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $item_home_library =
+      $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_home_library =
+      $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $item =
+      $builder->build_sample_item( { library => $item_home_library->id } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $patron_home_library->id }
+        }
+    );
+
+    subtest 'Exception cases' => sub {
+
+        plan tests => 4;
+
+        my $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    itemnumber     => undef,
+                    found          => undef,
+                    borrowernumber => $patron->id
+                }
+            }
+        );
+
+        throws_ok { $hold->cancellation_requestable_from_opac; }
+        'Koha::Exceptions::InvalidStatus',
+          'Exception thrown because hold is not waiting';
+
+        is( $@->invalid_status, 'hold_not_waiting' );
+
+        $hold = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => {
+                    itemnumber     => undef,
+                    found          => 'W',
+                    borrowernumber => $patron->id
+                }
+            }
+        );
+
+        throws_ok { $hold->cancellation_requestable_from_opac; }
+        'Koha::Exceptions::InvalidStatus',
+          'Exception thrown because waiting hold has no item linked';
+
+        is( $@->invalid_status, 'no_item_linked' );
+    };
+
+    # set default rule to enabled
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rule_name    => 'waiting_hold_cancellation',
+            rule_value   => 1,
+        }
+    );
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                itemnumber     => $item->id,
+                found          => 'W',
+                borrowernumber => $patron->id
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch',
+        'ItemHomeLibrary' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $item->homebranch,
+            rule_name    => 'waiting_hold_cancellation',
+            rule_value   => 0,
+        }
+    );
+
+    ok( !$hold->cancellation_requestable_from_opac );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $item->homebranch,
+            rule_name    => 'waiting_hold_cancellation',
+            rule_value   => 1,
+        }
+    );
+
+    ok(
+        $hold->cancellation_requestable_from_opac,
+        'Make sure it is picking the right circulation rule'
+    );
+
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $patron->branchcode,
+            rule_name    => 'waiting_hold_cancellation',
+            rule_value   => 0,
+        }
+    );
+
+    ok( !$hold->cancellation_requestable_from_opac );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $patron->branchcode,
+            rule_name    => 'waiting_hold_cancellation',
+            rule_value   => 1,
+        }
+    );
+
+    ok(
+        $hold->cancellation_requestable_from_opac,
+        'Make sure it is picking the right circulation rule'
+    );
 
     $schema->storage->txn_rollback;
 };

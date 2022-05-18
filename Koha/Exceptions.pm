@@ -15,6 +15,11 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'Same object already exists',
     },
+    'Koha::Exceptions::InvalidStatus' => {
+        isa         => 'Koha::Exception',
+        description => 'The current status is not valid in context',
+        fields      => ['invalid_status'],
+    },
     'Koha::Exceptions::ObjectNotFound' => {
         isa => 'Koha::Exception',
         description => 'The required object doesn\'t exist',

@@ -486,4 +486,11 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->has_many(
+  "cancellation_requests",
+  "Koha::Schema::Result::HoldCancellationRequest",
+  { "foreign.hold_id" => "self.reserve_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;

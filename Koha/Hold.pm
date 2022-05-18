@@ -30,6 +30,7 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::Biblios;
+use Koha::Hold::CancellationRequests;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Holds;
@@ -38,6 +39,7 @@ use Koha::Plugins;
 
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
+use Koha::Exceptions;
 use Koha::Exceptions::Hold;
 
 use base qw(Koha::Object);
@@ -416,6 +418,57 @@ sub is_cancelable_from_opac {
     return 0; # if ->is_in_transit or if ->is_waiting or ->is_in_processing
 }
 
+=head3 cancellation_requestable_from_opac
+
+    if ( $hold->cancellation_requestable_from_opac ) { ... }
+
+Returns a I<boolean> representing if a cancellation request can be placed on the hold
+from the OPAC. It targets holds that cannot be cancelled from the OPAC (see the
+B<is_cancelable_from_opac> method above), but for which circulation rules allow
+requesting cancellation.
+
+Throws a B<Koha::Exceptions::InvalidStatus> exception with the following I<invalid_status>
+values:
+
+=over 4
+
+=item B<'hold_not_waiting'>: the hold is expected to be waiting and it is not.
+
+=item B<'no_item_linked'>: the waiting hold doesn't have an item properly linked.
+
+=back
+
+=cut
+
+sub cancellation_requestable_from_opac {
+    my ( $self ) = @_;
+
+    Koha::Exceptions::InvalidStatus->throw( invalid_status => 'hold_not_waiting' )
+      unless $self->is_waiting;
+
+    my $item = $self->item;
+
+    Koha::Exceptions::InvalidStatus->throw( invalid_status => 'no_item_linked' )
+      unless $item;
+
+    my $patron = $self->patron;
+
+    my $controlbranch = $patron->branchcode;
+
+    if ( C4::Context->preference('ReservesControlBranch') eq 'ItemHomeLibrary' ) {
+        $controlbranch = $item->homebranch;
+    }
+
+    return Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $controlbranch,
+            rule_name    => 'waiting_hold_cancellation',
+        }
+    )->rule_value ? 1 : 0;
+}
+
 =head3 is_at_destination
 
 Returns true if hold is waiting
@@ -525,6 +578,42 @@ sub is_suspended {
     return $self->suspend();
 }
 
+=head3 add_cancellation_request
+
+    my $cancellation_request = $hold->add_cancellation_request({ [ creation_date => $creation_date ] });
+
+Adds a cancellation request to the hold. Returns the generated
+I<Koha::Hold::CancellationRequest> object.
+
+=cut
+
+sub add_cancellation_request {
+    my ( $self, $params ) = @_;
+
+    my $request = Koha::Hold::CancellationRequest->new(
+        {   hold_id      => $self->id,
+            ( $params->{creation_date} ? ( creation_date => $params->{creation_date} ) : () ),
+        }
+    )->store;
+
+    $request->discard_changes;
+
+    return $request;
+}
+
+=head3 cancellation_requests
+
+    my $cancellation_requests = $hold->cancellation_requests;
+
+Returns related a I<Koha::Hold::CancellationRequests> resultset.
+
+=cut
+
+sub cancellation_requests {
+    my ($self) = @_;
+
+    return Koha::Hold::CancellationRequests->search( { hold_id => $self->id } );
+}
 
 =head3 cancel
 
