@@ -1367,13 +1367,12 @@ Note that permanent location is a code, and location may be an authval.
         browser.show();
 
         $(document).ready(function() {
-            var ids = ['holdings_table', 'otherholdings_table'];
+            var table_names = [ 'holdings_table', 'otherholdings_table' ];
             var table_settings = [ [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
-            var has_images = ["[% itemloop_has_images | html %]", "[% otheritemloop_has_images | html %]"];
-            for (var i in ids) {
-                var id = ids[i];
-                if ( !has_images[i] ) { // remove the cover_image column
-                    table_settings.splice(1,1);
+            var has_images = [ "[% itemloop_has_images | html %]", "[% otheritemloop_has_images | html %]" ];
+            table_names.forEach( function( table_name, index ) {
+                if ( !has_images[index] ) {
+                    table_settings[index].columns.splice(1,1);
                 }
                 var dt_parameters = {
                     'sDom': 't',
@@ -1382,8 +1381,8 @@ Note that permanent location is a code, and location may be an authval.
                     "bKohaColumnsUseNames": true,
                     "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 };
-                var table = KohaTable(id, dt_parameters, table_settings[i], 'with_filters');
-            }
+                var table = KohaTable( table_name, dt_parameters, table_settings[index], 'with_filters' );
+            });
 
             [% IF Koha.Preference('AcquisitionDetails') %]
                 var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
