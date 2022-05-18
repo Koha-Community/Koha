@@ -493,6 +493,16 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
                     $item->{item_level_holds} = Koha::CirculationRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
+                    my $default_hold_pickup_location_pref = C4::Context->preference('DefaultHoldPickupLocation');
+                    my $default_pickup_branch;
+                    if( $default_hold_pickup_location_pref eq 'homebranch' ){
+                        $default_pickup_branch = $item->{homebranch};
+                    } elsif ( $default_hold_pickup_location_pref eq 'holdingbranch' ){
+                        $default_pickup_branch = $item->{holdingbranch};
+                    } else {
+                        $default_pickup_branch = C4::Context->userenv->{branch};
+                    }
+
                     if (
                            !$item->{cantreserve}
                         && !$exceeded_maxreserves
@@ -509,7 +519,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             $num_items_available++;
                             $item->{available} = 1;
                             # pass the holding branch for use as default
-                            my $default_pickup_location = $pickup_locations->search({ branchcode => $item->{holdingbranch} })->next;
+                            my $default_pickup_location = $pickup_locations->search({ branchcode => $default_pickup_branch })->next;
                             $item->{default_pickup_location} = $default_pickup_location;
                         }
                         else {
@@ -533,10 +543,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
                                 my $default_pickup_location;
 
-                                # Default to logged-in, if valid
-                                if ( C4::Context->userenv->{branch} ) {
-                                    ($default_pickup_location) = grep { $_->branchcode eq C4::Context->userenv->{branch} } @pickup_locations;
-                                }
+                                ($default_pickup_location) = grep { $_->branchcode eq $default_pickup_branch } @pickup_locations;
 
                                 $item->{default_pickup_location} = $default_pickup_location;
                             }
