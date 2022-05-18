@@ -316,6 +316,7 @@ sub add_to_bundle {
     return $c->render_resource_not_found("Bundle item")
         unless $bundle_item;
 
+    my $add_link = $c->validation->param('body')->{'marc_link'} // 0;
     return try {
         my $options = {
             force_checkin => $body->{force_checkin},
@@ -323,6 +324,10 @@ sub add_to_bundle {
         };
 
         my $link = $item->add_to_bundle($bundle_item, $options);
+        if ($add_link) {
+            $bundle_item->biblio->link_marc_host(
+                { biblionumber => $item->biblio->biblionumber } );
+        }
         return $c->render(
             status  => 201,
             openapi => $bundle_item

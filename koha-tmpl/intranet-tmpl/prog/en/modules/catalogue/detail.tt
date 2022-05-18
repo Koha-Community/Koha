@@ -1074,6 +1074,10 @@
                                         <input type="text" id="external_id" name="external_id" required="required">
                                         <span class="required">Required</span>
                                     </li>
+                                    <li>
+                                        <label for="bundle_link">Add MARC link: </label>
+                                        <input type="checkbox" name="bundle_link"/>
+                                    </li>
                                 </ol>
                             </fieldset>
                         </div>
@@ -1712,6 +1716,7 @@
                     });
 
                     const barcode = data.external_id;
+                    const marc_link = data.marc_link;
 
                     /* Report the results */
                     posting.done(function(data) {
@@ -1731,7 +1736,7 @@
                                     .addClass('btn btn-xs')
                                     .text(_("Check in and add to bundle"))
                                     .on('click', function () {
-                                        addToBundle(url, { external_id: barcode, force_checkin: true });
+                                        addToBundle(url, { external_id: barcode, force_checkin: true, marc_link: marc_link });
                                     });
                                 $('#addResult')
                                     .empty()
@@ -1748,7 +1753,7 @@
                                     .addClass('btn btn-xs')
                                     .text(_("Ignore holds and add to bundle"))
                                     .on('click', function () {
-                                        addToBundle(url, { external_id: barcode, ignore_holds: true });
+                                        addToBundle(url, { external_id: barcode, ignore_holds: true, marc_link: marc_link });
                                     });
                                 $('#addResult')
                                     .empty()
@@ -1779,7 +1784,7 @@
                     event.preventDefault();
 
                     const url = this.action;
-                    const data = { external_id: this.elements.external_id.value };
+                    const data = { external_id: this.elements.external_id.value, marc_link: this.elements.bundle_link.checked };
 
                     addToBundle(url, data);
                 });
