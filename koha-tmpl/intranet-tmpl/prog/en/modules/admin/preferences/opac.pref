@@ -102,12 +102,12 @@ OPAC:
               class: file
             - '<br />Options:<ul><li>Enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default stylesheet</li><li>Put a path to define an xslt file</li><li>Put a URL for an external specific stylesheet.</li><li>NOTE: The system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes data in the item fields</li></ul>If you have multiple stylesheets for different languages the placeholder {langcode} will be replaced with current interface language.'
         -
-            - "Show itemtype icons in the OPAC: "
             - pref: OpacNoItemTypeImages
               default: 0
               choices:
-                  1: "No"
-                  0: "Yes"
+                  1: "Don't show"
+                  0: "Show"
+            - "itemtype icons in the OPAC."
         -
             - pref: DisplayOPACiconsXSLT
               choices:
@@ -449,7 +449,7 @@ OPAC:
             - pref: ShowReviewerPhoto
               choices:
                   1: Show
-                  0: Hide
+                  0: Don't show
             - reviewer's avatar beside comments in OPAC. The avatar will be searched on <a href="https://www.libravatar.org" target="_blank">Libravatar</a> using the patron's e-mail address.
         -
             - pref: OPACHoldRequests
@@ -490,8 +490,8 @@ OPAC:
             - pref: OPACPopupAuthorsSearch
               default: 0
               choices:
-                1: Display
-                0: Don't display
+                1: Show
+                0: Don't show
             - the list of authors/subjects in a popup for a combined search on OPAC detail pages.
         -
             - pref: OpacHoldNotes
@@ -504,15 +504,15 @@ OPAC:
             - pref: OPACAcquisitionDetails
               default: 0
               choices:
-                  1: Display
-                  0: Don't display
+                  1: Show
+                  0: Don't show
             - the acquisition details on OPAC detail pages.
         -
             - pref: OpacNewsLibrarySelect
               default: 0
               choices:
-                  1: Display
-                  0: Don't display
+                  1: Show
+                  0: Don't show
             - a library selection list for news items in the OPAC.
         -
             - pref: OPACSuggestionAutoFill
@@ -841,8 +841,8 @@ OPAC:
         -
             - pref: PatronSelfRegistrationPrefillForm
               choices:
-                  1: "Display and prefill"
-                  0: "Don't display and prefill"
+                  1: "Show and prefill"
+                  0: "Don't show and prefill"
             - "password and login form after a patron has self registered."
         -
             - pref: PatronSelfRegistrationConfirmEmail
