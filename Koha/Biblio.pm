@@ -1764,6 +1764,166 @@ sub get_marc_hostinfo_only {
     return $hostinfo;
 }
 
+=head3 link_marc_host
+
+=cut
+
+sub link_marc_host {
+    my ( $self, $params ) = @_;
+
+    my $host = Koha::Biblios->find( $params->{biblionumber} );
+    return unless $host;
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $marc_host = $host->metadata->record;
+    my %sfd;
+    my $field;
+    my $host_field;
+
+    if ( $marcflavour eq 'MARC21' ) {
+        # Author
+        if ( $field =
+            $marc_host->field('100') || $marc_host->field('110') || $marc_host->field('111') )
+        {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        # Title
+        if ( $field = $marc_host->field('245') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{t} = $s;
+            }
+        }
+        # Uniform title
+        if ( $field = $marc_host->field('240') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{s} = $s;
+            }
+        }
+        # Publication
+        if ( $field = $marc_host->field('260') ) {
+            my $s = $field->as_string('abc');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+        # Edition
+        if ( $field = $marc_host->field('250') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{b} = $s;
+            }
+        }
+        # ISSN
+        if ( $field = $marc_host->field('022') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        # ISBN
+        if ( $field = $marc_host->field('020') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{z} = $s;
+            }
+        }
+        if ( C4::Context->preference('UseControlNumber') ) {
+            # Control number
+            if ( $field = $marc_host->field('001') ) {
+                $sfd{w} = $field->data(),;
+            }
+            # Control number identifier
+            if ( $field = $marc_host->field('003') ) {
+                $sfd{w} = '('.$field->data().')'.$sfd{w};
+            }
+        }
+        $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+    }
+    elsif ( $marcflavour eq 'UNIMARC' ) {
+
+        #author
+        if ( $field =
+            $marc_host->field('700') || $marc_host->field('710') || $marc_host->field('720') )
+        {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+
+        #title
+        if ( $field = $marc_host->field('200') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{t} = $s;
+            }
+        }
+
+        #place of publicaton
+        if ( $field = $marc_host->field('210') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{c} = $s;
+            }
+        }
+
+        #date of publication
+        if ( $field = $marc_host->field('210') ) {
+            my $s = $field->as_string('d');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+
+        #edition statement
+        if ( $field = $marc_host->field('205') ) {
+            my $s = $field->as_string();
+            if ($s) {
+                $sfd{e} = $s;
+            }
+        }
+
+        #URL
+        if ( $field = $marc_host->field('856') ) {
+            my $s = $field->as_string('u');
+            if ($s) {
+                $sfd{u} = $s;
+            }
+        }
+
+        #ISSN
+        if ( $field = $marc_host->field('011') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+
+        #ISBN
+        if ( $field = $marc_host->field('010') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{y} = $s;
+            }
+        }
+        if ( $field = $marc_host->field('001') ) {
+            $sfd{0} = $field->data(),;
+        }
+        $host_field = MARC::Field->new( 461, '0', ' ', %sfd );
+    }
+
+    my $marc_record = $self->metadata->record;
+    $marc_record->append_fields($host_field);
+
+    C4::Biblio::ModBiblioMarc($marc_record, $self->biblionumber);
+    return $self;
+}
+
 =head3 recalls
 
     my $recalls = $biblio->recalls;
