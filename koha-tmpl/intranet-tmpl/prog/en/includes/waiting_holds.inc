@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 <table class="holds_table" id="[% table_name | html %]">
@@ -6,6 +7,9 @@
             <th class="NoSort"><input type="checkbox" class="select_hold_all"/></th>
             <th>Waiting since</th>
             <th>Date hold placed</th>
+          [% IF table_name == 'holdscr' %]
+            <th>Date cancellation requested</th>
+          [% END %]
             <th>Expiration date</th>
             <th class="anti-the">Title</th>
             <th>Patron</th>
@@ -24,6 +28,13 @@
                 <th><input type="checkbox" class="select_hold" data-id="[% reserveloo.reserve_id | html %]"/></th>
                 <td><span data-order="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                 <td><span data-order="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
+              [% IF table_name == 'holdscr' %]
+                <td>
+                [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
+                    <span>[% cancellation_request.creation_date | $KohaDates %]</span>
+                [% END %]
+                </td>
+              [% END %]
                 <td><span data-order="[% reserveloo.expirationdate | html %]">[% reserveloo.expirationdate | $KohaDates %]</span></td>
                 <td>
                     [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio link = 1 %]

@@ -48,6 +48,15 @@
             View all libraries</a></span>
             [% END %]
         </h2>
+    [% IF reject_result_error %]
+        <div class="error message">
+        [% IF reject_result_error.invalid_status %]
+            <p>There was a problem rejecting the cancellation request. Cannot reject an already completed cancellation request.</p>
+        [% ELSE %]
+            <p>Some error occurred while rejecting the cancellation request. Please check the logs</p>
+        [% END %]
+        </div>
+    [% END %]
     [% IF ( cancel_result ) %]
         [% FOREACH cancel_result %]
             [% IF ( messagetransfert ) %]
@@ -88,6 +97,11 @@
                         Holds waiting over [% Koha.Preference('ReservesMaxPickUpDelay') | html %] days: [% overcount | html %]
                     </a>
                 </li>
+                <li role="presentation">
+                    <a href="#holdscr" aria-controls="holdscr" role="tab" data-toggle="tab">
+                        Holds with cancellation requests: [% cancel_reqs_count | html %]
+                    </a>
+                </li>
             </ul>
             <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="holdswaiting">
@@ -121,6 +135,13 @@
 
                 </span>
                [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
+            [% ELSE %]
+                <div class="dialog message">No holds found.</div>
+            [% END %]
+        </div>
+        <div role="tabpanel" class="tab-pane" id="holdscr">
+            [% IF cancel_reqs_count %]
+                [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
             [% ELSE %]
                 <div class="dialog message">No holds found.</div>
             [% END %]
@@ -180,8 +201,9 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
-        var holdst_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
-        var holdso_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
+        var holdst_table_settings  = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdst',  'json' ) | $raw %];
+        var holdso_table_settings  = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdso',  'json' ) | $raw %];
+        var holdscr_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdscr', 'json' ) | $raw %];
 
         $(document).ready(function() {
 
@@ -194,6 +216,11 @@
                 "sPaginationType": "full",
                 "order": [[1, 'asc']]
             }, holdso_table_settings);
+
+            KohaTable("holdscr", {
+                "sPaginationType": "full",
+                "order": [[1, 'asc']]
+            }, holdscr_table_settings);
 
             let cancel_link;
 

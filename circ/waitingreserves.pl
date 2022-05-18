@@ -116,6 +116,8 @@ while ( my $hold = $holds->next ) {
     
 }
 
+my $holds_with_cancellation_requests = Koha::Holds->waiting->filter_by_has_cancellation_requests;
+
 $template->param(cancel_result => \@cancel_result) if @cancel_result;
 
 $template->param(
@@ -123,6 +125,8 @@ $template->param(
     reservecount => scalar @reserve_loop,
     overloop    => \@over_loop,
     overcount   => scalar @over_loop,
+    cancel_reqs_count => $holds_with_cancellation_requests->count,
+    cancel_reqs => $holds_with_cancellation_requests,
     show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     tab => $tab,
 );
