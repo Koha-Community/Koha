@@ -4,6 +4,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %] &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 [% INCLUDE 'select2.inc' %]
 <script>
