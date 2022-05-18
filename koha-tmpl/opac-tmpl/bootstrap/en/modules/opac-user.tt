@@ -1056,6 +1056,19 @@
                 );
             });
 
+            $(".btn-req-delete-hold").on("click", function(e){
+                e.preventDefault();
+                var hold_title = $(this).data("title");
+                var reserve_id = $(this).data("reserve_id");
+                confirmModal( hold_title, _("Are you sure you want to request cancelling this hold?"), _("Yes"), _("No"), function( result ){
+                        $("#bootstrap-confirm-box-modal").remove()
+                        if( result ){
+                            $("#req_cancel_hold_" + reserve_id ).submit();
+                        }
+                    }
+                );
+            });
+
             $(".btn-delete-article-request").on("click", function(e){
                 e.preventDefault();
                 var article_request = $(this).data("title");

@@ -26,9 +26,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Reserves qw( CanReserveBeCanceledFromOpac );
 use C4::Auth qw( get_template_and_user );
 use Koha::Holds;
+
 my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -40,11 +40,26 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $reserve_id = $query->param('reserve_id');
+my $cancellation_request = $query->param('cancellation_request');
 
-if ($reserve_id && $borrowernumber) {
-    if ( CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber) ) {
-        my $hold = Koha::Holds->find( $reserve_id );
-        $hold->cancel if $hold;
+if ( $reserve_id && $borrowernumber ) {
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    unless ( $hold->borrowernumber == $borrowernumber ) {
+
+        # whatcha tryin to do?
+        print $query->redirect('/cgi-bin/koha/errors/403.pl');
+        exit;
+    }
+
+    if ($cancellation_request) {
+        $hold->add_cancellation_request
+          if $hold->cancellation_requestable_from_opac;
+    }
+    else {
+        $hold->cancel
+          if $hold->is_cancelable_from_opac;
     }
 }
 

@@ -152,10 +152,19 @@
                             <td class="modify">
                                 [% IF ( HOLD.is_cancelable_from_opac ) %]
                                     <form id="delete_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
-                                    <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
-                                    <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                    <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
-                                </form>
+                                        <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
+                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
+                                    </form>
+                                [% ELSIF HOLD.cancellation_requests.count > 0 %]
+                                    <button type="submit" class="btn btn-sm btn-danger disabled"><i class="fa fa-remove" aria-hidden="true"></i> [% t('Cancellation requested') | html %]</button>
+                                [% ELSIF HOLD.is_waiting && HOLD.cancellation_requestable_from_opac %]
+                                    <form id="req_cancel_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                        <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
+                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                                        <input type="hidden" name="cancellation_request" value="1" />
+                                        <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancellation request hold button', 'Request cancellation') | html %]</button>
+                                    </form>
                                 [% END %]
                             </td>
                         [% END # / IF onlyinfo %]
