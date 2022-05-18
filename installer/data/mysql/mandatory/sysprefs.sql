@@ -164,6 +164,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DefaultHoldExpirationdate','0','','Automatically set expiration date for holds','YesNo'),
 ('DefaultHoldExpirationdatePeriod','0','','How long into the future default expiration date is set to be.','integer'),
 ('DefaultHoldExpirationdateUnitOfTime','days','days|months|years','Which unit of time is used when setting the default expiration date. ','choice'),
+('DefaultHoldPickupLocation','loggedinlibrary','loggedinlibrary|homelibrary','Which branch should a hold pickup location default to. ','choice'),
 ('DefaultLanguageField008','','','Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)','Free'),
 ('DefaultLongOverdueSkipLostStatuses', '', NULL, 'Skip these lost statuses by default in longoverdue.pl', 'Free'),
 ('DefaultLongOverdueChargeValue', '', NULL, "Charge a lost item to the borrower's account when the LOST value of the item changes to n.", 'integer'),
