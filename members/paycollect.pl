@@ -87,14 +87,12 @@ if ( $pay_individual || $writeoff_individual ) {
     my $amountoutstanding = $input->param('amountoutstanding');
     my $itemnumber  = $input->param('itemnumber');
     my $description  = $input->param('description');
-    my $title        = $input->param('title');
     $total_due = $amountoutstanding;
     $template->param(
         debit_type_code    => $debit_type_code,
         accountlines_id    => $accountlines_id,
         amount            => $amount,
         amountoutstanding => $amountoutstanding,
-        title             => $title,
         itemnumber        => $itemnumber,
         individual_description => $description,
         payment_note    => $payment_note,
