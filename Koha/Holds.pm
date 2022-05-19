@@ -134,19 +134,13 @@ sub get_items_that_can_fill {
             collapse => 1,
         }
     )->get_column('itemnumber');
-    my @notforloan = Koha::Items->search(
-        { notforloan => { '!=' => 0 } },
-        {
-            columns  => ['itemnumber'],
-            collapse => 1,
-        }
-    )->get_column('itemnumber');
 
     return Koha::Items->search(
         {
             -or => \@bibs_or_items,
-            itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds, @notforloan ] },
+            itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
             onloan       => undef,
+            notforloan   => 0,
         }
     )->filter_by_for_hold();
 }
