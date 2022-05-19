@@ -9,7 +9,7 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Make a payment for  [% patron.firstname | html %] [% patron.surname | html %] &rsaquo; Patrons &rsaquo; Koha</title>
+<title>Make a payment for [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; Patrons &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -27,7 +27,7 @@
         </li>
         <li>
             <a href="#" aria-current="page">
-                Make a payment for [% patron.firstname | html %] [% patron.surname | html %]
+                Make a payment for [% INCLUDE 'patron-title.inc' %]
             </a>
         </li>
     </ol>
@@ -171,7 +171,7 @@
 </fieldset>
 </form>
 [% ELSE %]
-    <p>[% patron.firstname | html %] [% patron.surname | html %] has no outstanding fines.</p>
+    <p>[% INCLUDE 'patron-title.inc' %] has no outstanding fines.</p>
 [% END %]
 </div></div>
 

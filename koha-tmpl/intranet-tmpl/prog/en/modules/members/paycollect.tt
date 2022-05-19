@@ -23,9 +23,9 @@
 [% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
 <title>
     [% IF type == 'WRITEOFF' %]
-        Write off an amount for [% patron.firstname | html %] [% patron.surname | html %]
+        Write off an amount for [% INCLUDE 'patron-title.inc' no_html = 1 %]
     [% ELSE %]
-        Collect fine payment for [% patron.firstname | html %] [% patron.surname | html %]
+        Collect fine payment for [% INCLUDE 'patron-title.inc' no_html = 1 %]
     [% END %] &rsaquo; Patrons &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -44,7 +44,7 @@
             <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Pay charges for [% patron.firstname | html %] [% patron.surname | html %]</a>
+            <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Pay charges for [% INCLUDE 'patron-title.inc' %]</a>
         </li>
         <li>
             <a href="#" aria-current="page">
@@ -141,7 +141,6 @@
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
-    <input type="hidden" name="title" id="title" value="[% patron.title | html %]" />
     <input type="hidden" name="change_given" id="change_given" />
 
 <fieldset class="rows">
@@ -235,7 +234,6 @@
     <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
-    <input type="hidden" name="title" id="title" value="[% patron.title | html %]" />
     <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="confirm_writeoff" id="confirm_writeoff" value="1" />
