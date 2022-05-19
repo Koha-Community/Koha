@@ -2307,6 +2307,7 @@ sub TransformMarcToKoha {
 
     my $record = $params->{record};
     my $limit_table = $params->{limit_table} // q{};
+    my $kohafields = $params->{kohafields};
 
     my $result = {};
     if (!defined $record) {
@@ -2324,13 +2325,34 @@ sub TransformMarcToKoha {
     # The next call acknowledges Default as the authoritative framework
     # for Koha to MARC mappings.
     my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # Do not change framework
-    foreach my $kohafield ( keys %{ $mss } ) {
+    @{$kohafields} = keys %{ $mss } unless $kohafields;
+    foreach my $kohafield ( @{$kohafields} ) {
         my ( $table, $column ) = split /[.]/, $kohafield, 2;
         next unless $tables{$table};
-        my $val = TransformMarcToKohaOneField( $kohafield, $record );
-        next if !defined $val;
+        my ( $value, @values );
+        foreach my $fldhash ( @{$mss->{$kohafield}} ) {
+            my $tag = $fldhash->{tagfield};
+            my $sub = $fldhash->{tagsubfield};
+            foreach my $fld ( $record->field($tag) ) {
+                if( $sub eq '@' || $fld->is_control_field ) {
+                    push @values, $fld->data if $fld->data;
+                } else {
+                    push @values, grep { $_ } $fld->subfield($sub);
+                }
+            }
+        }
+        if ( @values ){
+            $value = join ' | ', uniq(@values);
+
+            # Additional polishing for individual kohafields
+            if( $kohafield =~ /copyrightdate|publicationyear/ ) {
+                $value = _adjust_pubyear( $value );
+            }
+        }
+
+        next if !defined $value;
         my $key = _disambiguate( $table, $column );
-        $result->{$key} = $val;
+        $result->{$key} = $value;
     }
     return $result;
 }
