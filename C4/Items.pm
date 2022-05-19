@@ -166,7 +166,7 @@ sub AddItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $source_item_marc->field($itemtag) );
 
-    my $item_values = C4::Biblio::TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    my $item_values = C4::Biblio::TransformMarcToKoha({ record => $localitemmarc, limit_table => 'items' });
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_values->{more_subfields_xml} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     $item_values->{biblionumber} = $biblionumber;
@@ -244,7 +244,7 @@ sub AddItemBatchFromMarc {
         $temp_item_marc->append_fields($item_field);
     
         # add biblionumber and biblioitemnumber
-        my $item = TransformMarcToKoha( $temp_item_marc, $frameworkcode, 'items' );
+        my $item = TransformMarcToKoha({ record => $temp_item_marc, limit_table => 'items' });
         my $unlinked_item_subfields = _get_unlinked_item_subfields($temp_item_marc, $frameworkcode);
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
         $item->{'biblionumber'} = $biblionumber;
@@ -301,7 +301,7 @@ sub ModItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item_object = Koha::Items->find($itemnumber);
-    my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    my $item = TransformMarcToKoha({ record => $localitemmarc, limit_table => 'items' });
 
     # When importing items we blank this column, we need to set it to the existing value
     # to prevent it being blanked by set_or_blank
@@ -409,7 +409,7 @@ sub ModDateLastSeen {
 
 =head2 CheckItemPreSave
 
-    my $item_ref = TransformMarcToKoha($marc, 'items');
+    my $item_ref = TransformMarcToKoha({ record => $marc, limit_table => 'items' });
     # do stuff
     my %errors = CheckItemPreSave($item_ref);
     if (exists $errors{'duplicate_barcode'}) {

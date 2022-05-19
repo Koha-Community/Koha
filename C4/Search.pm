@@ -85,7 +85,7 @@ This function attempts to find duplicate records using a hard-coded, fairly simp
 sub FindDuplicate {
     my ($record) = @_;
     my $dbh = C4::Context->dbh;
-    my $result = TransformMarcToKoha( $record, '' );
+    my $result = TransformMarcToKoha({ record => $record });
     my $sth;
     my $query;
 
@@ -128,7 +128,7 @@ sub FindDuplicate {
                 $possible_duplicate_record
             );
 
-            my $result = TransformMarcToKoha( $marcrecord, '' );
+            my $result = TransformMarcToKoha({ record => $marcrecord });
 
             # FIXME :: why 2 $biblionumber ?
             if ($result) {
@@ -185,7 +185,7 @@ my @results;
 
 for my $r ( @{$marcresults} ) {
     my $marcrecord = MARC::File::USMARC::decode($r);
-    my $biblio = TransformMarcToKoha($marcrecord,q{});
+    my $biblio = TransformMarcToKoha({ record => $marcrecord });
 
     #build the iarray of hashs for the template.
     push @results, {
@@ -1718,7 +1718,7 @@ sub searchResults {
                : GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
 
         SetUTF8Flag($marcrecord);
-        my $oldbiblio = TransformMarcToKoha( $marcrecord, $fw, 'no_items' );
+        my $oldbiblio = TransformMarcToKoha({ record => $marcrecord, limit_table => 'no_items' });
         $oldbiblio->{result_number} = $i + 1;
 
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);

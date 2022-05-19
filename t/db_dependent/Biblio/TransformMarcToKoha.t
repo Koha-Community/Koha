@@ -42,7 +42,7 @@ Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '500', tagsu
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
 subtest 'Test a few mappings' => sub {
-    plan tests => 7;
+    plan tests => 6;
 
     my $marc = MARC::Record->new;
     $marc->append_fields(
@@ -50,7 +50,7 @@ subtest 'Test a few mappings' => sub {
         MARC::Field->new( '300', '', '', a => 'a2', b => 'b2' ),
         MARC::Field->new( '500', '', '', a => 'note1', a => 'note2' ),
     );
-    my $result = C4::Biblio::TransformMarcToKoha( $marc );
+    my $result = C4::Biblio::TransformMarcToKoha({ record => $marc });
         # Note: TransformMarcToKoha stripped the table prefix biblio.
     is( keys %{$result}, 3, 'Found all three mappings' );
     is( $result->{field1}, 'a1 | a2', 'Check field1 results' );
@@ -62,12 +62,6 @@ subtest 'Test a few mappings' => sub {
     is( C4::Biblio::TransformMarcToKohaOneField( 'field4', $marc ),
         undef, 'TransformMarcToKohaOneField returns undef' );
 
-    # Bug 19096 Default is authoritative now
-    # Test passing another framework
-    # CAUTION: This parameter of TransformMarcToKoha will be removed later
-    my $new_fw = t::lib::TestBuilder->new->build({source => 'BiblioFramework'});
-    $result = C4::Biblio::TransformMarcToKoha($marc, $new_fw->{frameworkcode});
-    is( keys %{$result}, 3, 'Still found all three mappings' );
 };
 
 subtest 'Multiple mappings for one kohafield' => sub {
@@ -80,13 +74,13 @@ subtest 'Multiple mappings for one kohafield' => sub {
 
     my $marc = MARC::Record->new;
     $marc->append_fields( MARC::Field->new( '300', '', '', a => '3a' ) );
-    my $result = C4::Biblio::TransformMarcToKoha( $marc );
+    my $result = C4::Biblio::TransformMarcToKoha({ record => $marc });
     is_deeply( $result, { field1 => '3a' }, 'Simple start' );
     $marc->append_fields( MARC::Field->new( '510', '', '', a => '' ) );
-    $result = C4::Biblio::TransformMarcToKoha( $marc );
+    $result = C4::Biblio::TransformMarcToKoha({ record => $marc });
     is_deeply( $result, { field1 => '3a' }, 'An empty 510a makes no difference' );
     $marc->append_fields( MARC::Field->new( '510', '', '', a => '51' ) );
-    $result = C4::Biblio::TransformMarcToKoha( $marc );
+    $result = C4::Biblio::TransformMarcToKoha({ record =>  $marc });
     is_deeply( $result, { field1 => '3a | 51' }, 'Got 300a and 510a' );
 
     is( C4::Biblio::TransformMarcToKohaOneField( 'biblio.field1', $marc ),
@@ -128,7 +122,7 @@ subtest 'Test repeatable subfields' => sub {
 
     my $marc = MARC::Record->new;
     $marc->append_fields( MARC::Field->new( '510', '', '', x => '1', x => '2', y => '3 | 4', y => '5' ) ); # actually, we should only have one $y (BZ 24652)
-    my $result = C4::Biblio::TransformMarcToKoha( $marc );
+    my $result = C4::Biblio::TransformMarcToKoha({ record => $marc });
     is( $result->{test}, '1 | 2', 'Check 510x for two values' );
     is( $result->{norepeat}, '3 | 4 | 5', 'Check 510y too' );
 
@@ -136,7 +130,7 @@ subtest 'Test repeatable subfields' => sub {
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
     $marc->append_fields( MARC::Field->new( '510', '', '', a => '1' ) ); # actually, we should only have one $y (BZ 24652)
 
-    $result = C4::Biblio::TransformMarcToKoha( $marc, '', 'no_items' );
+    $result = C4::Biblio::TransformMarcToKoha({ record => $marc, limit_table => 'no_items' });
     is( $result->{test}, undef, 'Item field not returned when "no_items" passed' );
     is( $result->{norepeat}, undef, 'Item field not returned when "no_items" passed' );
     is( $result->{field1}, 1, 'Biblio field returned when "no_items" passed' );

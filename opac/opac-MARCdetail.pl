@@ -343,7 +343,7 @@ if ( C4::Context->preference("OPACISBD") ) {
 
 #Search for title in links
 my $marcflavour  = C4::Context->preference("marcflavour");
-my $dat = TransformMarcToKoha( $record );
+my $dat = TransformMarcToKoha({ record => $record });
 my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
 my $marccontrolnumber   = GetMarcControlnumber ($record, $marcflavour);
 my $marcissns = GetMarcISSN( $record, $marcflavour );

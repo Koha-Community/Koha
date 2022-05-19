@@ -142,7 +142,7 @@ $template->param(
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my $dat                 = TransformMarcToKoha( $record );
+my $dat                 = TransformMarcToKoha({ record => $record });
 
 my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
 my @subs;

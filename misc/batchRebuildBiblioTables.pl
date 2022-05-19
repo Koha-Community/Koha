@@ -66,7 +66,7 @@ while (my ($biblionumber, $frameworkcode) = $sth->fetchrow) {
         next;
     }
 
-    my $biblio = TransformMarcToKoha($record);
+    my $biblio = TransformMarcToKoha({ record => $record });
     C4::Biblio::_koha_modify_biblio($dbh, $biblio, $frameworkcode);
     C4::Biblio::_koha_modify_biblioitem_nonmarc($dbh, $biblio);
 

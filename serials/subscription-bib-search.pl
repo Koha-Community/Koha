@@ -114,7 +114,7 @@ if ( $op eq "do_search" && $query ) {
     for ( my $i = 0 ; $i < $total ; $i++ ) {
         my %resultsloop;
         my $marcrecord = C4::Search::new_record_from_zebra( 'biblioserver', $marcrecords->[$i] );
-        my $biblio = TransformMarcToKoha( $marcrecord, '' );
+        my $biblio = TransformMarcToKoha({ record => $marcrecord });
 
         #build the hash for the template.
         $resultsloop{highlight}       = ( $i % 2 ) ? (1) : (0);

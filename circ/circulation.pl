@@ -345,7 +345,7 @@ if (@$barcodes) {
             my @barcodes;
             foreach my $hit ( @{$results} ) {
                 my $chosen = # Maybe easier to retrieve the itemnumber from $hit?
-                  TransformMarcToKoha( C4::Search::new_record_from_zebra('biblioserver',$hit) );
+                  TransformMarcToKoha({ record => C4::Search::new_record_from_zebra('biblioserver',$hit) });
 
                 # offer all barcodes individually
                 if ( $chosen->{barcode} ) {

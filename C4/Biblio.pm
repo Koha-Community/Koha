@@ -220,7 +220,7 @@ sub AddBiblio {
 
             # transform the data into koha-table style data
             SetUTF8Flag($record);
-            my $olddata = TransformMarcToKoha( $record, $frameworkcode, 'no_items' );
+            my $olddata = TransformMarcToKoha({ record => $record, limit_table => 'no_items' });
 
             my $biblio = Koha::Biblio->new(
                 {
@@ -417,7 +417,7 @@ sub ModBiblio {
     _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
 
     # load the koha-table data object
-    my $oldbiblio = TransformMarcToKoha( $record, $frameworkcode );
+    my $oldbiblio = TransformMarcToKoha({ record => $record });
 
     # update MARC subfield that stores biblioitems.cn_sort
     _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
@@ -2292,7 +2292,7 @@ sub TransformHtmlToMarc {
 
 =head2 TransformMarcToKoha
 
-    $result = TransformMarcToKoha( $record, undef, $limit )
+    $result = TransformMarcToKoha({ record => $record, limit_table => $limit })
 
 Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields.
@@ -2303,9 +2303,10 @@ hash_ref.
 =cut
 
 sub TransformMarcToKoha {
-    my ( $record, $frameworkcode, $limit_table ) = @_;
-    # FIXME  Parameter $frameworkcode is obsolete and will be removed
-    $limit_table //= q{};
+    my ( $params ) = @_;
+
+    my $record = $params->{record};
+    my $limit_table = $params->{limit_table} // q{};
 
     my $result = {};
     if (!defined $record) {
