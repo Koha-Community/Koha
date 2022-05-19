@@ -37,9 +37,14 @@ return {
         my ($default_patron_search_fields) = $dbh->selectrow_array( q{
             SELECT value FROM systempreferences WHERE variable='DefaultPatronSearchFields';
         });
-        my @default_patron_search_fields = split(',',$default_patron_search_fields);
+        my @default_patron_search_fields = split(',', $default_patron_search_fields);
         unless( grep /middle_name/, @default_patron_search_fields ){
-            if( grep /firstname/, @default_patron_search_fields ){
+            if ( $default_patron_search_fields eq 'firstname,surname,othernames,cardnumber,userid' ) {
+                $dbh->do(q{
+                    UPDATE systempreferences SET value=? WHERE variable='DefaultPatronSearchFields'
+                }, undef, 'firstname,middle_name,surname,othernames,cardnumber,userid');
+                say $out "Added middle name to DefaultPatronSearchFields";
+            } elsif( grep /firstname/, @default_patron_search_fields ){
                 push @default_patron_search_fields,'middle_name';
                 my $new_patron_search_fields = join(',',@default_patron_search_fields);
                 $dbh->do(q{
