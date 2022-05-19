@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 87;
+use Test::More tests => 89;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -325,6 +325,20 @@ $prepared_letter = GetPreparedLetter((
 ));
 $my_content_letter = qq|This is a SMS for an $substitute->{status}|;
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
+
+warning_is {
+    $prepared_letter = GetPreparedLetter((
+        module                 => 'my module',
+        branchcode             => $library->{branchcode},
+        letter_code            => 'my code',
+        tables                 => $tables,
+        substitute             => { status => undef },
+        repeat                 => $repeat,
+        message_transport_type => 'sms',
+    ));
+}
+undef, "No warning if GetPreparedLetter called with substitute containing undefined value";
+is( $prepared_letter->{content}, q|This is a SMS for an |, 'GetPreparedLetter returns the content correctly when substitute contains undefined value' );
 
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','A title with a timestamp: <<biblio.timestamp>>','This one only contains the date: <<biblio.timestamp | dateonly>>.');});
 $prepared_letter = GetPreparedLetter((
