@@ -45,7 +45,7 @@
                         <label>Status: </label>
                         <span>{{
                             get_lib_from_av(
-                                av_agreement_statuses,
+                                'av_agreement_statuses',
                                 agreement.status
                             )
                         }}</span>
@@ -54,7 +54,7 @@
                         <label>Closure reason:</label>
                         <span>{{
                             get_lib_from_av(
-                                av_agreement_closure_reasons,
+                                'av_agreement_closure_reasons',
                                 agreement.closure_reason
                             )
                         }}</span>
@@ -68,7 +68,7 @@
                         <label>Renewal priority:</label>
                         <span>{{
                             get_lib_from_av(
-                                av_agreement_renewal_priorities,
+                                'av_agreement_renewal_priorities',
                                 agreement.renewal_priority
                             )
                         }}</span>
@@ -129,7 +129,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                av_agreement_user_roles,
+                                                'av_agreement_user_roles',
                                                 role.role
                                             )
                                         }}
@@ -166,7 +166,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                av_agreement_license_statuses,
+                                                'av_agreement_license_statuses',
                                                 agreement_license.status
                                             )
                                         }}
@@ -174,7 +174,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                av_agreement_license_location,
+                                                'av_agreement_license_location',
                                                 agreement_license.physical_location
                                             )
                                         }}
@@ -202,7 +202,7 @@
                             >
                             {{
                                 get_lib_from_av(
-                                    av_agreement_relationships,
+                                    'av_agreement_relationships',
                                     relationship.relationship
                                 )
                             }}
@@ -235,38 +235,18 @@ export default {
     setup() {
         const format_date = $date
         const patron_to_html = $patron_to_html
-        const get_lib_from_av = function (arr, av) {
-            let o = arr.find(
-                (e) => e.authorised_value == av
-            )
-            return o ? o.lib : ""
-        }
+
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
-        const {
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_agreement_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
-        } = storeToRefs(AVStore)
+        const { get_lib_from_av } = AVStore
 
         return {
             format_date,
             patron_to_html,
             get_lib_from_av,
             vendors,
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_agreement_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
         }
     },
     data() {
@@ -312,7 +292,7 @@ export default {
 </script>
 <style scoped>
 .action_links a {
-    padding-left: .2em;
+    padding-left: 0.2em;
     font-size: 11px;
 }
 </style>

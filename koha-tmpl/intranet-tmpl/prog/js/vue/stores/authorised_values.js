@@ -34,5 +34,10 @@ export const useAVStore = defineStore("authorised_values", {
             { authorised_value: "related_to", lib: "related_to" },
         ],
     }),
-    // FIXME We could move get_lib_from_av here
+    actions: {
+        get_lib_from_av(arr_name, av) {
+            let o = this[arr_name].find((e) => e.authorised_value == av);
+            return o ? o.lib : "";
+        },
+    },
 });

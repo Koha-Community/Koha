@@ -34,13 +34,13 @@
                     <li>
                         <label>Type: </label>
                         <span>{{
-                            get_lib_from_av(av_license_types, license.type)
+                            get_lib_from_av('av_license_types', license.type)
                         }}</span>
                     </li>
                     <li>
                         <label>Status: </label>
                         <span>{{
-                            get_lib_from_av(av_license_statuses, license.status)
+                            get_lib_from_av('av_license_statuses', license.status)
                         }}</span>
                     </li>
 
@@ -75,24 +75,13 @@ import { fetchLicense } from "../../fetch"
 export default {
     setup() {
         const format_date = $date
-        const get_lib_from_av = function (arr, av) {
-            let o = arr.find(
-                (e) => e.authorised_value == av
-            )
-            return o ? o.lib : ""
-        }
 
         const AVStore = useAVStore()
-        const {
-            av_license_types,
-            av_license_statuses,
-        } = storeToRefs(AVStore)
+        const { get_lib_from_av } = AVStore
 
         return {
             format_date,
             get_lib_from_av,
-            av_license_types,
-            av_license_statuses,
         }
     },
     data() {
