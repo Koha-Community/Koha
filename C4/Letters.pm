@@ -599,6 +599,7 @@ sub GetPreparedLetter {
 
     if (%$substitute) {
         while ( my ($token, $val) = each %$substitute ) {
+            $val //= q{};
             if ( $token eq 'items.content' ) {
                 $val =~ s|\n|<br/>|g if $letter->{is_html};
             }
