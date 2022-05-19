@@ -1,42 +1,42 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="licenses_add">
         <h2 v-if="license.license_id">
-            Edit license #{{ license.license_id }}
+            {{ $t("Edit license.id", { id: license.license_id }) }}
         </h2>
-        <h2 v-else>New license</h2>
+        <h2 v-else>{{ $t("New license") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="license_name"
-                                >License name:</label
-                            >
+                            <label class="required" for="license_name">{{
+                                $t("License name:")
+                            }}</label>
                             <input
                                 id="license_name"
                                 v-model="license.name"
-                                placeholder="License name"
+                                :placeholder="$t('License name')"
                                 required
                             />
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
                             <label for="license_description"
-                                >Description:
+                                >{{ $t("Description") }}:
                             </label>
                             <textarea
                                 id="license_description"
                                 v-model="license.description"
-                                placeholder="Description"
+                                :placeholder="$t('Description')"
                                 rows="10"
                                 cols="50"
                                 required
                             />
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="license_type">Type: </label>
+                            <label for="license_type">{{ $t("Type:") }}</label>
                             <select
                                 id="license_type"
                                 v-model="license.type"
@@ -56,10 +56,12 @@
                                     {{ type.lib }}
                                 </option>
                             </select>
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="license_status">Status: </label>
+                            <label for="license_status">{{
+                                $t("Status:")
+                            }}</label>
                             <select
                                 id="license_status"
                                 v-model="license.status"
@@ -80,10 +82,12 @@
                                     {{ status.lib }}
                                 </option>
                             </select>
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="started_on">Start date: </label>
+                            <label for="started_on">{{
+                                $t("Start date:")
+                            }}</label>
                             <flat-pickr
                                 id="started_on"
                                 v-model="license.started_on"
@@ -92,7 +96,7 @@
                             />
                         </li>
                         <li>
-                            <label for="ended_on">End date: </label>
+                            <label for="ended_on">{{ $t("End date:") }}</label>
                             <flat-pickr
                                 id="ended_on"
                                 v-model="license.ended_on"
@@ -102,12 +106,12 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" :value="$t('Submit')" />
                     <router-link
                         to="/cgi-bin/koha/erm/licenses"
                         role="button"
                         class="cancel"
-                        >Cancel</router-link
+                        >{{ $t("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>

@@ -1,18 +1,16 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else-if="this.agreements" id="agreements_list">
         <Toolbar />
         <table v-if="this.agreements.length" id="agreement_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
-            There are no agreements defined.
+            {{ $t("There are no agreements defined") }}
         </div>
     </div>
 </template>
 
 <script>
 import Toolbar from "./AgreementsToolbar.vue"
-import ButtonEdit from "./ButtonEdit.vue"
-import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
@@ -192,16 +190,20 @@ export default {
 
                 $.each($(this).find("td .actions"), function (index, e) {
                     let agreement_id = api.row(index).data().agreement_id
-                    let editButton = createVNode(ButtonEdit, {
-                        onClick: () => {
+                    let editButton = createVNode("a", {
+                        class: "btn btn-default btn-xs", role: "button", onClick: () => {
                             edit_agreement(agreement_id)
                         }
-                    })
-                    let deleteButton = createVNode(ButtonDelete, {
-                        onClick: () => {
+                    },
+                        [createVNode("i", { class: "fa fa-pencil", 'aria-hidden': "true" }), __("Edit")])
+
+                    let deleteButton = createVNode("a", {
+                        class: "btn btn-default btn-xs", role: "button", onClick: () => {
                             delete_agreement(agreement_id)
                         }
-                    })
+                    },
+                        [createVNode("i", { class: "fa fa-trash", 'aria-hidden': "true" }), __("Delete")])
+
                     let n = createVNode('span', {}, [editButton, " ", deleteButton])
                     render(n, e)
                 })
@@ -236,7 +238,7 @@ export default {
             .DataTable()
             .destroy(true)
     },
-    components: {Toolbar},
+    components: { Toolbar },
     name: "AgreementsList",
 }
 </script>

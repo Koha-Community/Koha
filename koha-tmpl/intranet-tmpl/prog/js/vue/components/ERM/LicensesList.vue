@@ -1,18 +1,16 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else-if="this.licenses" id="licenses_list">
         <Toolbar />
         <table v-if="licenses.length" id="license_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
-            There are no licenses defined.
+            {{ $t("There are no licenses defined") }}
         </div>
     </div>
 </template>
 
 <script>
 import Toolbar from "./LicensesToolbar.vue"
-import ButtonEdit from "./ButtonEdit.vue"
-import ButtonDelete from "./ButtonDelete.vue"
 import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
@@ -134,16 +132,20 @@ export default {
 
                 $.each($(this).find("td .actions"), function (index, e) {
                     let license_id = api.row(index).data().license_id
-                    let editButton = createVNode(ButtonEdit, {
-                        onClick: () => {
+                    let editButton = createVNode("a", {
+                        class: "btn btn-default btn-xs", role: "button", onClick: () => {
                             edit_license(license_id)
                         }
-                    })
-                    let deleteButton = createVNode(ButtonDelete, {
-                        onClick: () => {
+                    },
+                        [createVNode("i", { class: "fa fa-pencil", 'aria-hidden': "true" }), __("Edit")])
+
+                    let deleteButton = createVNode("a", {
+                        class: "btn btn-default btn-xs", role: "button", onClick: () => {
                             delete_license(license_id)
                         }
-                    })
+                    },
+                        [createVNode("i", { class: "fa fa-trash", 'aria-hidden': "true" }), __("Delete")])
+
                     let n = createVNode('span', {}, [editButton, " ", deleteButton])
                     render(n, e)
                 })

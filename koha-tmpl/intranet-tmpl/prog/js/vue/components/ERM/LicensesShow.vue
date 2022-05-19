@@ -1,17 +1,17 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="licenses_show">
         <h2>
-            License #{{ license.license_id }}
+            {{ $t("License.id", { id: license.license_id }) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/licenses/edit/${license.license_id}`"
-                    title="Edit"
+                    :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
                 <router-link
                     :to="`/cgi-bin/koha/erm/licenses/delete/${license.license_id}`"
-                    title="Delete"
+                    :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -20,37 +20,40 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>License name:</label>
+                        <label>{{ $t("License name:") }}</label>
                         <span>
                             {{ license.name }}
                         </span>
                     </li>
                     <li>
-                        <label>Description: </label>
+                        <label>{{ $t("Description:") }}</label>
                         <span>
                             {{ license.description }}
                         </span>
                     </li>
                     <li>
-                        <label>Type: </label>
+                        <label>{{ $t("Type:") }}</label>
                         <span>{{
-                            get_lib_from_av('av_license_types', license.type)
+                            get_lib_from_av("av_license_types", license.type)
                         }}</span>
                     </li>
                     <li>
-                        <label>Status: </label>
+                        <label>{{ $t("Status:") }}</label>
                         <span>{{
-                            get_lib_from_av('av_license_statuses', license.status)
+                            get_lib_from_av(
+                                "av_license_statuses",
+                                license.status
+                            )
                         }}</span>
                     </li>
 
                     <li>
-                        <label>Started on:</label>
+                        <label>{{ $t("Started on:") }}</label>
                         <span>{{ format_date(license.started_on) }}</span>
                     </li>
 
                     <li>
-                        <label>Ended on:</label>
+                        <label>{{ $t("Ended on:") }}</label>
                         <span>{{ format_date(license.ended_on) }}</span>
                     </li>
                 </ol>
@@ -60,7 +63,7 @@
                     to="/cgi-bin/koha/erm/licenses"
                     role="button"
                     class="cancel"
-                    >Close</router-link
+                    >{{ $t("Close") }}</router-link
                 >
             </fieldset>
         </div>

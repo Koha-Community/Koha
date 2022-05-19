@@ -1,6 +1,6 @@
 <template>
     <fieldset class="rows" id="agreement_licenses">
-        <legend>Licenses</legend>
+        <legend>{{ $t("Licenses") }}</legend>
         <fieldset
             :id="`agreement_license_${counter}`"
             class="rows"
@@ -8,14 +8,17 @@
             v-bind:key="counter"
         >
             <legend>
-                Agreement license {{ counter + 1 }}
+                {{ $t("Agreement license.counter", { counter: counter + 1 }) }}
                 <a href="#" @click.prevent="deleteLicense(counter)"
-                    ><i class="fa fa-trash"></i> Remove this license</a
+                    ><i class="fa fa-trash"></i>
+                    {{ $t("Remove this license") }}</a
                 >
             </legend>
             <ol>
                 <li>
-                    <label :for="`license_id_${counter}`">License: </label>
+                    <label :for="`license_id_${counter}`">{{
+                        $t("License: ")
+                    }}</label>
                     <select
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
@@ -36,10 +39,12 @@
                             {{ license.name }}
                         </option>
                     </select>
-                    <span class="required">Required</span>
+                    <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`license_status_${counter}`">Status: </label>
+                    <label :for="`license_status_${counter}`">{{
+                        $t("Status: ")
+                    }}</label>
                     <select v-model="agreement_license.status" required>
                         <option value=""></option>
                         <option
@@ -55,11 +60,11 @@
                             {{ r.lib }}
                         </option>
                     </select>
-                    <span class="required">Required</span>
+                    <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`license_location_${counter}`"
-                        >Physical location:
+                        >{{ $t("Physical location:") }}
                     </label>
                     <select v-model="agreement_license.physical_location">
                         <option value=""></option>
@@ -79,27 +84,31 @@
                     </select>
                 </li>
                 <li>
-                    <label :for="`license_notes_${counter}`">Notes:</label>
+                    <label :for="`license_notes_${counter}`">{{
+                        $t("Notes:")
+                    }}</label>
                     <input
                         :id="`license_notes_${counter}`"
                         v-model="agreement_license.notes"
-                        placeholder="Notes"
+                        :placeholder="$t('Notes')"
                     />
                 </li>
                 <li>
-                    <label :for="`license_uri_${counter}`">URI:</label>
+                    <label :for="`license_uri_${counter}`">{{
+                        $t("URI:")
+                    }}</label>
                     <input
                         :id="`license_uri_${counter}`"
                         v-model="agreement_license.uri"
-                        placeholder="URI"
+                        :placeholder="$t('URI')"
                     />
                 </li>
             </ol>
         </fieldset>
         <a v-if="licenses.length" class="btn btn-default" @click="addLicense"
-            ><font-awesome-icon icon="plus" /> Add new license</a
+            ><font-awesome-icon icon="plus" /> {{ $t("Add new license") }}</a
         >
-        <span v-else>There are licenses created yet.</span>
+        <span v-else>{{ $t("There are no licenses created yet") }}</span>
     </fieldset>
 </template>
 

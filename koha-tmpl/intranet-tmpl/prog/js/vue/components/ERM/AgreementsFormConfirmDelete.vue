@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="agreements_confirm_delete">
-        <h2>Delete agreement</h2>
+        <h2>{{ $t("Delete agreement") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            Agreement name:
+                            {{ $t("Agreement name:") }}
                             {{ agreement.name }}
                         </li>
-                        <li>Vendor:{{ agreement.vendor_id }}</li>
+                        <li>{{ $t("Vendor:") }} {{ agreement.vendor_id }}</li>
                         <li>
-                            Description:
+                            {{ $t("Description:") }}
                             {{ agreement.description }}
                         </li>
                     </ol>
@@ -21,13 +21,13 @@
                     <input
                         type="submit"
                         variant="primary"
-                        value="Yes, delete"
+                        :value="$t('Yes, delete')"
                     />
                     <router-link
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
                         class="cancel"
-                        >No, do not delete</router-link
+                        >{{ $t("No, do not delete") }}</router-link
                     >
                 </fieldset>
             </form>

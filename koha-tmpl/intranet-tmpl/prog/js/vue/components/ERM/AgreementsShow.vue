@@ -1,18 +1,18 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="agreements_show">
         <h2>
-            Agreement #{{ agreement.agreement_id }}
+            {{ $t("Agreement.id", { id: agreement.agreement_id }) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/agreements/edit/${agreement.agreement_id}`"
-                    title="Edit"
+                    :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
                     :to="`/cgi-bin/koha/erm/agreements/delete/${agreement.agreement_id}`"
-                    title="Delete"
+                    :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
             </span>
@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>Agreement name:</label>
+                        <label>{{ $t("Agreement name:") }}</label>
                         <span>
                             {{ agreement.name }}
                         </span>
                     </li>
                     <li>
-                        <label>Vendor:</label>
+                        <label>{{ $t("Vendor:") }}</label>
                         <span v-if="agreement.vendor_id">
                             {{
                                 vendors.find((e) => e.id == agreement.vendor_id)
@@ -36,56 +36,56 @@
                         </span>
                     </li>
                     <li>
-                        <label>Description: </label>
+                        <label>{{ $t("Description:") }}</label>
                         <span>
                             {{ agreement.description }}
                         </span>
                     </li>
                     <li>
-                        <label>Status: </label>
+                        <label>{{ $t("Status:") }}</label>
                         <span>{{
                             get_lib_from_av(
-                                'av_agreement_statuses',
+                                "av_agreement_statuses",
                                 agreement.status
                             )
                         }}</span>
                     </li>
                     <li>
-                        <label>Closure reason:</label>
+                        <label>{{ $t("Closure reason:") }}</label>
                         <span>{{
                             get_lib_from_av(
-                                'av_agreement_closure_reasons',
+                                "av_agreement_closure_reasons",
                                 agreement.closure_reason
                             )
                         }}</span>
                     </li>
                     <li>
-                        <label>Is perpetual:</label>
+                        <label>{{ $t("Is perpetual:") }}</label>
                         <span v-if="agreement.is_perpetual">Yes</span>
                         <span v-else>No</span>
                     </li>
                     <li>
-                        <label>Renewal priority:</label>
+                        <label>{{ $t("Renewal priority:") }}</label>
                         <span>{{
                             get_lib_from_av(
-                                'av_agreement_renewal_priorities',
+                                "av_agreement_renewal_priorities",
                                 agreement.renewal_priority
                             )
                         }}</span>
                     </li>
                     <li>
-                        <label>License info: </label>
+                        <label>{{ $t("License info:") }}</label>
                         <span>{{ agreement.license_info }}</span>
                     </li>
 
                     <li>
-                        <label>Periods</label>
+                        <label>{{ $t("Periods") }}</label>
                         <table>
                             <thead>
-                                <th>Period start</th>
-                                <th>Period end</th>
-                                <th>Cancellation deadline</th>
-                                <th>Period note</th>
+                                <th>{{ $t("Period start") }}</th>
+                                <th>{{ $t("Period end") }}</th>
+                                <th>{{ $t("Cancellation deadline") }}</th>
+                                <th>{{ $t("Period note") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -112,11 +112,11 @@
                     </li>
 
                     <li>
-                        <label>Users</label>
+                        <label>{{ $t("Users") }}</label>
                         <table>
                             <thead>
-                                <th>Name</th>
-                                <th>Role</th>
+                                <th>{{ $t("Name") }}</th>
+                                <th>{{ $t("Role") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -129,7 +129,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                'av_agreement_user_roles',
+                                                "av_agreement_user_roles",
                                                 role.role
                                             )
                                         }}
@@ -140,14 +140,14 @@
                     </li>
 
                     <li>
-                        <label>Licenses</label>
+                        <label>{{ $t("Licenses") }}</label>
                         <table>
                             <thead>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Physical location</th>
-                                <th>Notes</th>
-                                <th>URI</th>
+                                <th>{{ $t("Name") }}</th>
+                                <th>{{ $t("Status") }}</th>
+                                <th>{{ $t("Physical location") }}</th>
+                                <th>{{ $t("Notes") }}</th>
+                                <th>{{ $t("URI") }}</th>
                             </thead>
                             <tbody>
                                 <tr
@@ -166,7 +166,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                'av_agreement_license_statuses',
+                                                "av_agreement_license_statuses",
                                                 agreement_license.status
                                             )
                                         }}
@@ -174,7 +174,7 @@
                                     <td>
                                         {{
                                             get_lib_from_av(
-                                                'av_agreement_license_location',
+                                                "av_agreement_license_location",
                                                 agreement_license.physical_location
                                             )
                                         }}
@@ -187,7 +187,7 @@
                     </li>
 
                     <li>
-                        <label>Related agreements</label>
+                        <label>{{ $t("Related agreements") }}</label>
                         <div
                             v-for="relationship in agreement.agreement_relationships"
                             v-bind:key="relationship.related_agreement_id"
@@ -202,7 +202,7 @@
                             >
                             {{
                                 get_lib_from_av(
-                                    'av_agreement_relationships',
+                                    "av_agreement_relationships",
                                     relationship.relationship
                                 )
                             }}
@@ -216,7 +216,7 @@
                     to="/cgi-bin/koha/erm/agreements"
                     role="button"
                     class="cancel"
-                    >Close</router-link
+                    >{{ $t("Close") }}</router-link
                 >
             </fieldset>
         </div>

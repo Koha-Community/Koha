@@ -13,14 +13,14 @@
                 <aside>
                     <div id="navmenu">
                         <div id="navmenulist">
-                            <h5>ERM</h5>
+                            <h5>{{ $t("E-Resource management") }}</h5>
                             <ul>
                                 <li>
                                     <router-link
                                         to="/cgi-bin/koha/erm/agreements"
                                     >
                                         <i class="fa fa-upload"></i>
-                                        Agreements</router-link
+                                        {{ $t("Agreements") }}</router-link
                                     >
                                 </li>
                                 <li>
@@ -28,7 +28,7 @@
                                         to="/cgi-bin/koha/erm/licenses"
                                     >
                                         <i class="fa fa-file-text-o"></i>
-                                        Licenses</router-link
+                                        {{ $t("Licenses") }}</router-link
                                     >
                                 </li>
                             </ul>

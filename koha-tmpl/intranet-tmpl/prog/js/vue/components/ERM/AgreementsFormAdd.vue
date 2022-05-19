@@ -1,28 +1,30 @@
 <template>
-    <div v-if="!this.initialized">Loading...</div>
+    <div v-if="!this.initialized">{{ $t("Loading")}}</div>
     <div v-else id="agreements_add">
         <h2 v-if="agreement.agreement_id">
-            Edit agreement #{{ agreement.agreement_id }}
+            {{ $t("Edit agreement.id", { id: agreement.agreement_id }) }}
         </h2>
-        <h2 v-else>New agreement</h2>
+        <h2 v-else>{{ $t("New agreement") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="agreement_name"
-                                >Agreement name:</label
-                            >
+                            <label class="required" for="agreement_name">{{
+                                $t("Agreement name:")
+                            }}</label>
                             <input
                                 id="agreement_name"
                                 v-model="agreement.name"
-                                placeholder="Agreement name"
+                                :placeholder="$t('Agreement name')"
                                 required
                             />
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="agreement_vendor_id">Vendor:</label>
+                            <label for="agreement_vendor_id">{{
+                                $t("Vendor:")
+                            }}</label>
                             <select
                                 id="agreement_vendor_id"
                                 v-model="agreement.vendor_id"
@@ -44,20 +46,22 @@
                         </li>
                         <li>
                             <label for="agreement_description"
-                                >Description:
+                                >{{ $t("Description:") }}
                             </label>
                             <textarea
                                 id="agreement_description"
                                 v-model="agreement.description"
-                                placeholder="Description"
+                                :placeholder="$t('Description')"
                                 rows="10"
                                 cols="50"
                                 required
                             />
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="agreement_status">Status: </label>
+                            <label for="agreement_status">{{
+                                $t("Status: ")
+                            }}</label>
                             <select
                                 id="agreement_status"
                                 v-model="agreement.status"
@@ -79,12 +83,12 @@
                                     {{ status.lib }}
                                 </option>
                             </select>
-                            <span class="required">Required</span>
+                            <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="agreement_closure_reason"
-                                >Closure reason:</label
-                            >
+                            <label for="agreement_closure_reason">{{
+                                $t("Closure reason:")
+                            }}</label>
                             <select
                                 id="agreement_closure_reason"
                                 v-model="agreement.closure_reason"
@@ -109,9 +113,9 @@
                             </select>
                         </li>
                         <li>
-                            <label for="agreement_is_perpetual" class="radio"
-                                >Is perpetual:</label
-                            >
+                            <label for="agreement_is_perpetual" class="radio">{{
+                                $t("Is perpetual:")
+                            }}</label>
                             <label for="agreement_is_perpetual_yes">
                                 <input
                                     type="radio"
@@ -134,9 +138,9 @@
                             </label>
                         </li>
                         <li>
-                            <label for="agreement_renewal_priority"
-                                >Renewal priority:</label
-                            >
+                            <label for="agreement_renewal_priority">{{
+                                $t("Renewal priority:")
+                            }}</label>
                             <select v-model="agreement.renewal_priority">
                                 <option value=""></option>
                                 <option
@@ -156,7 +160,7 @@
                         </li>
                         <li>
                             <label for="agreement_license_info"
-                                >License info:
+                                >{{ $t("License info:") }}
                             </label>
                             <textarea
                                 id="agreement_license_info"
@@ -195,7 +199,7 @@
                         to="/cgi-bin/koha/erm/agreements"
                         role="button"
                         class="cancel"
-                        >Cancel</router-link
+                        >{{ $t("Cancel") }}</router-link
                     >
                 </fieldset>
             </form>
