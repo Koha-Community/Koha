@@ -304,16 +304,14 @@ sub _handle_one_result {
     my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0);
         #Last zero indicates: no update for batch record counts
 
-
-    #call to TransformMarcToKoha replaced by next call
-    #we only need six fields from the marc record
     my $row;
-    $row = _add_rowdata(
-        {
-            biblionumber => $bib,
-            server       => $servhref->{servername},
-            breedingid   => $breedingid,
-        }, $marcrecord) if $breedingid;
+    if( $breedingid ){
+        my @kohafields = ('biblio.title','biblio.author','biblioitems.isbn','biblioitems.lccn','biblioitems.editionstatement');
+        push @kohafields, C4::Context->preference('marcflavour') eq "MARC21" ? 'biblio.copyrightdate' : 'biblioitems.publicationyear';
+        $row = TransformMarcToKoha({ record => $marcrecord, kohafields => \@kohafields, limit_table => 'no_items' });
+        $row->{isbn}=_isbn_replace($row->{isbn});
+        $row = _add_custom_field_rowdata($row, $marcrecord);
+    }
     return ( $row, $error );
 }
 
@@ -339,28 +337,6 @@ sub _do_xslt_proc {
     } else {
         return ( $marc, $xslh->err ); #original record in case of errors
     }
-}
-
-sub _add_rowdata {
-    my ($row, $record)=@_;
-    my %fetch= (
-        title => 'biblio.title',
-        author => 'biblio.author',
-        isbn =>'biblioitems.isbn',
-        lccn =>'biblioitems.lccn', #LC control number (not call number)
-        edition =>'biblioitems.editionstatement'
-    );
-    $fetch{date} = C4::Context->preference('marcflavour') eq "MARC21" ? 'biblio.copyrightdate' : 'biblioitems.publicationyear';
-
-    foreach my $k (keys %fetch) {
-        $row->{$k} = C4::Biblio::TransformMarcToKohaOneField( $fetch{$k}, $record );
-    }
-    $row->{date}//= $row->{date2};
-    $row->{isbn}=_isbn_replace($row->{isbn});
-
-    $row = _add_custom_field_rowdata($row, $record);
-
-    return $row;
 }
 
 sub _add_custom_field_rowdata

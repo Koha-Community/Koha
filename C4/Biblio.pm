@@ -65,7 +65,6 @@ BEGIN {
         TransformHtmlToMarc
         TransformHtmlToXml
         prepare_host_field
-        TransformMarcToKohaOneField
     );
 
     # Internal functions
@@ -2396,44 +2395,9 @@ sub _disambiguate {
 
 }
 
-=head2 TransformMarcToKohaOneField
-
-    $val = TransformMarcToKohaOneField( 'biblio.title', $marc );
-
-    Note: The authoritative Default framework is used implicitly.
-
-=cut
-
-sub TransformMarcToKohaOneField {
-    my ( $kohafield, $marc ) = @_;
-
-    my ( @rv, $retval );
-    my @mss = GetMarcSubfieldStructureFromKohaField($kohafield);
-    foreach my $fldhash ( @mss ) {
-        my $tag = $fldhash->{tagfield};
-        my $sub = $fldhash->{tagsubfield};
-        foreach my $fld ( $marc->field($tag) ) {
-            if( $sub eq '@' || $fld->is_control_field ) {
-                push @rv, $fld->data if $fld->data;
-            } else {
-                push @rv, grep { $_ } $fld->subfield($sub);
-            }
-        }
-    }
-    return unless @rv;
-    $retval = join ' | ', uniq(@rv);
-
-    # Additional polishing for individual kohafields
-    if( $kohafield =~ /copyrightdate|publicationyear/ ) {
-        $retval = _adjust_pubyear( $retval );
-    }
-
-    return $retval;
-}
-
 =head2 _adjust_pubyear
 
-    Helper routine for TransformMarcToKohaOneField
+    Helper routine for TransformMarcToKoha
 
 =cut
 

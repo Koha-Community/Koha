@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Tests for C4::Biblio::TransformMarcToKoha, TransformMarcToKohaOneField
+# Tests for C4::Biblio::TransformMarcToKoha
 
 # Copyright 2017 Rijksmuseum
 #
@@ -28,7 +28,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
-use C4::Biblio qw( TransformMarcToKoha TransformMarcToKohaOneField );
+use C4::Biblio qw( TransformMarcToKoha );
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -57,10 +57,10 @@ subtest 'Test a few mappings' => sub {
     is( $result->{field2}, 'b1 | b2', 'Check field2 results' );
     is( $result->{field3}, 'note1 | note2', 'Check field3 results' );
 
-    is( C4::Biblio::TransformMarcToKohaOneField( 'biblio.field1', $marc ),
-        $result->{field1}, 'TransformMarcToKohaOneField returns biblio.field1');
-    is( C4::Biblio::TransformMarcToKohaOneField( 'field4', $marc ),
-        undef, 'TransformMarcToKohaOneField returns undef' );
+    is_deeply( C4::Biblio::TransformMarcToKoha({ record => $marc, kohafields => ['biblio.field1'] }),
+        {field1 => 'a1 | a2'}, 'TransformMarcToKoha returns biblio.field1 if kohafields specified');
+    is_deeply( C4::Biblio::TransformMarcToKoha({ record => $marc, kohafields => ['field4'] }),
+            {} , 'TransformMarcToKoha returns empty hashref on unknown kohafields' );
 
 };
 
@@ -83,8 +83,8 @@ subtest 'Multiple mappings for one kohafield' => sub {
     $result = C4::Biblio::TransformMarcToKoha({ record =>  $marc });
     is_deeply( $result, { field1 => '3a | 51' }, 'Got 300a and 510a' );
 
-    is( C4::Biblio::TransformMarcToKohaOneField( 'biblio.field1', $marc ),
-        '3a | 51', 'TransformMarcToKohaOneField returns biblio.field1' );
+    is_deeply( C4::Biblio::TransformMarcToKoha({ kohafields => ['biblio.field1'], record => $marc }),
+        { 'field1' => '3a | 51'}, 'TransformMarcToKoha returns biblio.field1 when kohafields specified' );
 };
 
 subtest 'Testing _adjust_pubyear' => sub {

@@ -58,26 +58,13 @@ sub new {
 sub handle_hit {
     my ( $self, $index, $server, $marcrecord ) = @_;
 
-    my $record = Koha::MetadataRecord->new( { schema => 'marc', record => $marcrecord } );
-
-    my %fetch = (
-        title => 'biblio.title',
-        subtitle => 'biblio.subtitle',
-        seriestitle => 'biblio.seriestitle',
-        author => 'biblio.author',
-        isbn =>'biblioitems.isbn',
-        issn =>'biblioitems.issn',
-        lccn =>'biblioitems.lccn', #LC control number (not call number)
-        edition =>'biblioitems.editionstatement',
-        date => 'biblio.copyrightdate', #MARC21
-        date2 => 'biblioitems.publicationyear', #UNIMARC
-    );
-
-    my $metadata = {};
-    while ( my ( $key, $kohafield ) = each %fetch ) {
-        $metadata->{$key} = $record->getKohaField($kohafield);
-    }
-    $metadata->{date} //= $metadata->{date2};
+    my @kohafields = ('biblio.title','biblio.subtitle','biblio.seriestitle','biblio.author',
+            'biblioitems.isbn','biblioitems.issn','biblioitems.lccn','biblioitems.editionstatement',
+            'biblio.copyrightdate','biblioitems.publicationyear');
+    my $metadata =  C4::Biblio::TransformMarcToKoha({ kohafields => \@kohafields, record => $marcrecord});
+    $metadata->{edition} = delete $metadata->{editionstatement};
+    $metadata->{date} = delete $metadata->{copyrightdate};
+    $metadata->{date} //= delete $metadata->{publicationyear};
 
     push @{ $self->{results} }, {
         server => $server,
