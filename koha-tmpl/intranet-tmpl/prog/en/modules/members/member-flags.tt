@@ -5,7 +5,7 @@
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    Set permissions for [% patron.surname | html %], [% patron.firstname | html %] &rsaquo; Patrons &rsaquo; Koha
+    Set permissions for [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; Patrons &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -24,7 +24,7 @@
         </li>
         <li>
             <a href="#" aria-current="page">
-                Set permissions for [% patron.surname | html %], [% patron.firstname | html %]
+                Set permissions for [% INCLUDE 'patron-title.inc' %]
             </a>
         </li>
     </ol>
@@ -41,7 +41,7 @@
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
     <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="newflags" value="1" />
-    <h1>Set permissions for [% patron.surname | html %], [% patron.firstname | html %]</h1>
+    <h1>Set permissions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
 
     <div id="permissionstree">
         <div id="permissions_toolbar" class="btn-toolbar">
