@@ -220,7 +220,7 @@ sub AddBiblio {
 
             # transform the data into koha-table style data
             SetUTF8Flag($record);
-            my $olddata = TransformMarcToKoha( $record, $frameworkcode );
+            my $olddata = TransformMarcToKoha( $record, $frameworkcode, 'no_items' );
 
             my $biblio = Koha::Biblio->new(
                 {
