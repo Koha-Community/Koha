@@ -620,7 +620,7 @@ sub BatchCommitRecords {
                 ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework);
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
-                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
+                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result, $biblioitemnumber);
                     $num_items_added += $bib_items_added;
                     $num_items_replaced += $bib_items_replaced;
                     $num_items_errored += $bib_items_errored;
@@ -706,12 +706,12 @@ sub BatchCommitRecords {
 =head2 BatchCommitItems
 
   ($num_items_added, $num_items_errored) = 
-         BatchCommitItems($import_record_id, $biblionumber);
+         BatchCommitItems($import_record_id, $biblionumber, [$action, $biblioitemnumber]);
 
 =cut
 
 sub BatchCommitItems {
-    my ( $import_record_id, $biblionumber, $action ) = @_;
+    my ( $import_record_id, $biblionumber, $action, $biblioitemnumber ) = @_;
 
     my $dbh = C4::Context->dbh;
 
@@ -736,7 +736,7 @@ sub BatchCommitItems {
         my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan' );
         $item_marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
 
-        my $item = TransformMarcToKoha({ record => $item_marc });
+        my $item = TransformMarcToKoha({ record => $item_marc, kohafields => ['items.barcode','items.itemnumber'] });
 
         my $duplicate_barcode = exists( $item->{'barcode'} ) && Koha::Items->find({ barcode => $item->{'barcode'} });
         my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
@@ -774,7 +774,7 @@ sub BatchCommitItems {
             my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
             $item_marc->field($itemtag)->delete_subfield( code => $itemsubfield );
 
-            my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber );
+            my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber, {biblioitemnumber => $biblioitemnumber} );
             if( $itemnumber ) {
                 $updsth->bind_param( 1, 'imported' );
                 $updsth->bind_param( 2, $itemnumber );

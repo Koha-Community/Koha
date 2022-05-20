@@ -162,7 +162,6 @@ sub AddItemFromMarc {
     # parse item hash from MARC
     my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
-
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $source_item_marc->field($itemtag) );
 
@@ -170,6 +169,7 @@ sub AddItemFromMarc {
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_values->{more_subfields_xml} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     $item_values->{biblionumber} = $biblionumber;
+    $item_values->{biblioitemnumber} = $params->{biblioitemnumber};
     $item_values->{cn_source} = delete $item_values->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item_values->{cn_sort}   = delete $item_values->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
     my $item = Koha::Item->new( $item_values )->store({ skip_record_index => $params->{skip_record_index} });
