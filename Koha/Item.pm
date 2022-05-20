@@ -483,6 +483,25 @@ sub holds {
     return Koha::Holds->_new_from_dbic( $holds_rs );
 }
 
+=head3 holds_control_library
+
+    my $control_library = $item->holds_control_library( $patron );
+
+Given a I<Koha::Patron> object, this method returns a library id, for
+the library that is to be used for calculating circulation rules. It relies
+on the B<ReservesControlBranch> system preference.
+
+=cut
+
+sub holds_control_library {
+    my ( $self, $patron ) = @_;
+
+    return (
+        C4::Context->preference('ReservesControlBranch') eq 'ItemHomeLibrary' )
+      ? $self->homebranch
+      : $patron->branchcode;
+}
+
 =head3 request_transfer
 
   my $transfer = $item->request_transfer(
@@ -740,8 +759,7 @@ sub pickup_locations {
 
     my $patron = $params->{patron};
 
-    my $circ_control_branch =
-      C4::Reserves::GetReservesControlBranch( $self->unblessed(), $patron->unblessed );
+    my $circ_control_branch = $self->holds_control_library( $patron );
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
