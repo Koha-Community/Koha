@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::Warn;
 
 use C4::Context;
 use C4::Overdues qw( CalcFine );
@@ -96,6 +97,46 @@ subtest 'Test basic functionality' => sub {
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
 
     is( $amount, 29, 'Amount is calculated correctly' );
+
+    teardown();
+};
+
+subtest 'Test with fine amount empty' => sub {
+    plan tests => 1;
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                fine                          => '',
+                lengthunit                    => 'days',
+                finedays                      => 0,
+                firstremind                   => 0,
+                chargeperiod                  => 1,
+                overduefinescap               => undef,
+                cap_fine_to_replacement_price => 1,
+            },
+        }
+    );
+
+    my $start_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 1,
+    );
+
+    my $end_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 30,
+    );
+
+    warning_is {
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    }
+    undef, "No warning when fine amount is ''";
 
     teardown();
 };
