@@ -1,0 +1,275 @@
+---
+/erm/packages:
+  get:
+    x-mojo-to: ERM::packages#list
+    operationId: listErmpackages
+    tags:
+      - package
+    summary: List packages
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on package package_id
+        in: query
+        name: package_id
+        required: false
+        type: integer
+      - description: Case insensitive search on package vendor_id
+        in: query
+        name: vendor_id
+        required: false
+        type: integer
+      - description: Case insensitive search on package name
+        in: query
+        name: name
+        required: false
+        type: string
+      - description: Case insensitive search on package external_package_id
+        in: query
+        name: external_package_id
+        required: false
+        type: integer
+      - description: Case insensitive search on package type
+        in: query
+        name: package_type
+        required: false
+        type: string
+      - description: Case insensitive search on package content_type
+        in: query
+        name: content_type
+        required: false
+        type: string
+      - description: Case insensitive search on package creation date
+        in: query
+        name: created_on
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of package
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_package"
+          type: array
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  post:
+    x-mojo-to: ERM::packages#add
+    operationId: addErmpackages
+    tags:
+      - package
+    summary: Add package
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new package
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/erm_package"
+    responses:
+      201:
+        description: A successfully created package
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_package"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/packages/{package_id}":
+  get:
+    x-mojo-to: ERM::packages#get
+    operationId: getErmpackages
+    tags:
+      - package
+    summary: Get package
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+    responses:
+      200:
+        description: Anpackage
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_package"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  put:
+    x-mojo-to: ERM::packages#update
+    operationId: updateErmpackages
+    tags:
+      - package
+    summary: Update package
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing package
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/erm_package"
+
+    responses:
+      200:
+        description: A successfully updated package
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_package"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  delete:
+    x-mojo-to: ERM::packages#delete
+    operationId: deleteErmpackages
+    tags:
+      - package
+    summary: Delete package
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+    responses:
+      204:
+        description: package deleted
+      400:
+        description: package deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

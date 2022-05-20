@@ -26,6 +26,8 @@ definitions:
     $ref: ./definitions/erm_agreement.yaml
   erm_license:
     $ref: ./definitions/erm_license.yaml
+  erm_package:
+    $ref: ./definitions/erm_package.yaml
   error:
     $ref: ./definitions/error.yaml
   fund:
@@ -169,6 +171,10 @@ paths:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":
     $ref: "./paths/erm_licenses.yaml#/~1erm~1licenses~1{license_id}"
+  /erm/packages:
+    $ref: ./paths/erm_packages.yaml#/~1erm~1packages
+  "/erm/packages/{package_id}":
+    $ref: "./paths/erm_packages.yaml#/~1erm~1packages~1{package_id}"
   /erm/users:
     $ref: ./paths/erm_users.yaml#/~1erm~1users
   /holds:
@@ -410,6 +416,12 @@ parameters:
     description: Internal order identifier
     in: path
     name: order_id
+    required: true
+    type: integer
+  package_id_pp:
+    description: Package internal identifier
+    in: path
+    name: package_id
     required: true
     type: integer
   page:

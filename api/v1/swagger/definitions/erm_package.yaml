@@ -1,0 +1,39 @@
+---
+type: object
+properties:
+  package_id:
+    type: integer
+    description: internally assigned package identifier
+    readOnly: true
+  vendor_id:
+    description: foreign key to aqbooksellers
+    type:
+      - integer
+      - "null"
+  name:
+    description: name of the package
+    type: string
+  external_package_id:
+    description: external id of the package
+    type:
+      - string
+      - "null"
+  package_type:
+    description: type of the package
+    type:
+      - string
+      - "null"
+  content_type:
+    description: content type of the package
+    type:
+      - string
+      - "null"
+  created_on:
+    description: date of creation
+    type:
+      - string
+      - "null"
+
+additionalProperties: false
+required:
+  - name
