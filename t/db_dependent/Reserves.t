@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 78;
+use Test::More tests => 76;
 use Test::MockModule;
 use Test::Warn;
 
@@ -32,7 +32,7 @@ use C4::Items;
 use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::HoldsQueue;
 use C4::Members;
-use C4::Reserves qw( AddReserve AlterPriority CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
+use C4::Reserves qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Biblios;
 use Koha::Caches;
@@ -128,23 +128,6 @@ ok(exists($reserve->{reserve_id}), 'CheckReserves() include reserve_id in its re
 
 ($status, $reserve, $all_reserves) = CheckReserves( $item );
 is($status, "Reserved", "CheckReserves Test 2");
-
-my $ReservesControlBranch = C4::Context->preference('ReservesControlBranch');
-t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
-ok(
-    'ItemHomeLib' eq GetReservesControlBranch(
-        { homebranch => 'ItemHomeLib' },
-        { branchcode => 'PatronHomeLib' }
-    ), "GetReservesControlBranch returns item home branch when set to ItemHomeLibrary"
-);
-t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
-ok(
-    'PatronHomeLib' eq GetReservesControlBranch(
-        { homebranch => 'ItemHomeLib' },
-        { branchcode => 'PatronHomeLib' }
-    ), "GetReservesControlBranch returns patron home branch when set to PatronLibrary"
-);
-t::lib::Mocks::mock_preference( 'ReservesControlBranch', $ReservesControlBranch );
 
 ###
 ### Regression test for bug 10272
