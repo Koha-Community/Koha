@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2292,6 +2292,29 @@ subtest 'current_branchtransfers relationship' => sub {
 
     is( $item->_result->current_branchtransfers()->count,
         1, "One transfer found for item" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'holds_control_library() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library_1->id } });
+    my $item   = $builder->build_sample_item({ library => $library_2->id });
+
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+
+    is( $item->holds_control_library( $patron ), $library_2->id );
+
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+
+    is( $item->holds_control_library( $patron ), $library_1->id );
 
     $schema->storage->txn_rollback;
 };
