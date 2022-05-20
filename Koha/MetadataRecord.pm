@@ -109,17 +109,4 @@ sub createMergeHash {
     }
 }
 
-=head2 getKohaField
-
-    $metadata->{$key} = $record->getKohaField($kohafield);
-
-=cut
-
-sub getKohaField {
-    my ($self, $kohafield) = @_;
-    if ($self->schema =~ m/marc/) {
-        return C4::Biblio::TransformMarcToKoha({ kohafields => [$kohafield], record => $self->record});
-    }
-}
-
 1;
