@@ -25,6 +25,14 @@
                                 </li>
                                 <li>
                                     <router-link
+                                        to="/cgi-bin/koha/erm/packages"
+                                    >
+                                        <i class="fa fa-file-text-o"></i>
+                                        {{ $t("Packages") }}</router-link
+                                    >
+                                </li>
+                                <li>
+                                    <router-link
                                         to="/cgi-bin/koha/erm/licenses"
                                     >
                                         <i class="fa fa-file-text-o"></i>
@@ -59,6 +67,8 @@ export default {
         AVStore.av_license_statuses = license_statuses
         AVStore.av_agreement_license_statuses = agreement_license_statuses
         AVStore.av_agreement_license_location = agreement_license_location
+        AVStore.av_package_types = package_types
+        AVStore.av_package_content_types = package_content_types
 
         return {
             vendorStore,

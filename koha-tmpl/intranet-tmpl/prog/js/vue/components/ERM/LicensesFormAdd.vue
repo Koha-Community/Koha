@@ -218,9 +218,6 @@ export default {
                 }).catch(e => { console.log(e) })
         },
     },
-    props: {
-        license_id: Number,
-    },
     components: {
         flatPickr
     },

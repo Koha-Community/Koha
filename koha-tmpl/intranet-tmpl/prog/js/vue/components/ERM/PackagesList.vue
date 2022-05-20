@@ -1,21 +1,21 @@
 <template>
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="this.agreements" id="agreements_list">
+    <div v-else-if="this.packages" id="packages_list">
         <Toolbar />
-        <table v-if="this.agreements.length" id="agreement_list"></table>
+        <table v-if="this.packages.length" id="package_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
-            {{ $t("There are no agreements defined") }}
+            {{ $t("There are no packages defined") }}
         </div>
     </div>
 </template>
 
 <script>
-import Toolbar from "./AgreementsToolbar.vue"
+import Toolbar from "./PackagesToolbar.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
-import { fetchAgreements } from "../../fetch"
+import { fetchPackages } from "../../fetch"
 
 export default {
     setup() {
@@ -23,46 +23,45 @@ export default {
         const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
-        const { av_agreement_statuses, av_agreement_closure_reasons, av_agreement_renewal_priorities } = storeToRefs(AVStore)
+        const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
 
         return {
             vendors,
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
+            av_package_types,
+            av_package_content_types,
         }
     },
     data: function () {
         return {
-            agreements: [],
+            packages: [],
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getAgreements()
+            vm.getPackages()
         })
     },
     methods: {
-        async getAgreements() {
-            const agreements = await fetchAgreements()
-            this.agreements = agreements
+        async getPackages() {
+            const packages = await fetchPackages()
+            this.packages = packages
             this.initialized = true
         },
-        show_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/" + agreement_id)
+        show_package: function (package_id) {
+            this.$router.push("/cgi-bin/koha/erm/packages/" + package_id)
         },
-        edit_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/edit/" + agreement_id)
+        edit_package: function (package_id) {
+            this.$router.push("/cgi-bin/koha/erm/packages/edit/" + package_id)
         },
-        delete_agreement: function (agreement_id) {
-            this.$router.push("/cgi-bin/koha/erm/agreements/delete/" + agreement_id)
+        delete_package: function (package_id) {
+            this.$router.push("/cgi-bin/koha/erm/packages/delete/" + package_id)
         },
     },
     updated() {
-        let show_agreement = this.show_agreement
-        let edit_agreement = this.edit_agreement
-        let delete_agreement = this.delete_agreement
+        let show_package = this.show_package
+        let edit_package = this.edit_package
+        let delete_package = this.delete_package
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
             e['_str'] = e['name']
@@ -72,38 +71,28 @@ export default {
             map[e.id] = e
             return map
         }, {})
-        window['av_agreement_statuses'] = this.av_agreement_statuses.map(e => {
+        window['av_package_types'] = this.av_package_types.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let av_agreement_statuses_map = this.av_agreement_statuses.reduce((map, e) => {
+        let av_package_types_map = this.av_package_types.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['av_agreement_closure_reasons'] = this.av_agreement_closure_reasons.map(e => {
+        window['av_package_content_types'] = this.av_package_content_types.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
             return e
         })
-        let av_agreement_closure_reasons_map = this.av_agreement_closure_reasons.reduce((map, e) => {
+        let av_package_content_types_map = this.av_package_content_types.reduce((map, e) => {
             map[e.authorised_value] = e
             return map
         }, {})
-        window['av_agreement_renewal_priorities'] = this.av_agreement_renewal_priorities.map(e => {
-            e['_id'] = e['authorised_value']
-            e['_str'] = e['lib']
-            return e
-        })
-        let av_agreement_renewal_priorities_map = this.av_agreement_renewal_priorities.reduce((map, e) => {
-            map[e.authorised_value] = e
-            return map
-        }, {})
-        window['av_agreement_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
-        $('#agreement_list').kohaTable({
+        $('#package_list').kohaTable({
             "ajax": {
-                "url": agreements_table_url,
+                "url": packages_table_url,
             },
             "order": [[1, "asc"]],
             "columnDefs": [{
@@ -118,7 +107,7 @@ export default {
             "columns": [
                 {
                     "title": __("Name"),
-                    "data": ["me.agreement_id", "me.name"],
+                    "data": ["me.package_id", "me.name"],
                     "searchable": true,
                     "orderable": true,
                     // Rendering done in drawCallback
@@ -133,45 +122,30 @@ export default {
                     }
                 },
                 {
-                    "title": __("Description"),
-                    "data": "description",
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "title": __("Status"),
-                    "data": "status",
+                    "title": __("Type"),
+                    "data": "package_type",
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(av_agreement_statuses_map[row.status].lib)
+                        return row.package_type != undefined && row.package_type != "" ? escape_str(av_package_types_map[row.package_type].lib) : ""
                     }
                 },
                 {
-                    "title": __("Closure reason"),
-                    "data": "closure_reason",
+                    "title": __("Content type"),
+                    "data": "package_type",
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return row.closure_reason != undefined && row.closure_reason != "" ? escape_str(av_agreement_closure_reasons_map[row.closure_reason].lib) : ""
+                        return row.content_type != undefined && row.content_type != "" ? escape_str(av_package_content_types_map[row.content_type].lib) : ""
                     }
                 },
                 {
-                    "title": __("Is perpetual"),
-                    "data": "is_perpetual",
+                    "title": __("Created on"),
+                    "data": "created_on",
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(row.is_perpetual ? _("Yes") : _("No"))
-                    }
-                },
-                {
-                    "title": __("Renewal priority"),
-                    "data": "renewal_priority",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function (data, type, row, meta) {
-                        return row.renewal_priority != undefined && row.renewal_priority != "" ? escape_str(av_agreement_renewal_priorities_map[row.renewal_priority].lib) : ""
+                        return $date(row.created_on)
                     }
                 },
                 {
@@ -189,17 +163,17 @@ export default {
                 var api = new $.fn.dataTable.Api(settings)
 
                 $.each($(this).find("td .actions"), function (index, e) {
-                    let agreement_id = api.row(index).data().agreement_id
+                    let package_id = api.row(index).data().package_id
                     let editButton = createVNode("a", {
                         class: "btn btn-default btn-xs", role: "button", onClick: () => {
-                            edit_agreement(agreement_id)
+                            edit_package(package_id)
                         }
                     },
                         [createVNode("i", { class: "fa fa-pencil", 'aria-hidden': "true" }), __("Edit")])
 
                     let deleteButton = createVNode("a", {
                         class: "btn btn-default btn-xs", role: "button", onClick: () => {
-                            delete_agreement(agreement_id)
+                            delete_package(package_id)
                         }
                     },
                         [createVNode("i", { class: "fa fa-trash", 'aria-hidden': "true" }), __("Delete")])
@@ -214,10 +188,10 @@ export default {
                     let n = createVNode("a", {
                         role: "button",
                         onClick: () => {
-                            show_agreement(row.agreement_id)
+                            show_package(row.package_id)
                         }
                     },
-                        escape_str(`${row.name} (#${row.agreement_id})`)
+                        escape_str(`${row.name} (#${row.package_id})`)
                     )
                     render(n, e)
                 })
@@ -225,20 +199,18 @@ export default {
             preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
                 $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
-                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_agreement_statuses')
-                $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_agreement_closure_reasons')
-                $("#" + table_id).find("thead th").eq(5).attr('data-filter', 'av_agreement_is_perpetual')
-                $("#" + table_id).find("thead th").eq(6).attr('data-filter', 'av_agreement_renewal_priorities')
+                $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_package_types')
+                $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_package_content_types')
             }
 
-        }, agreement_table_settings, 1)
+        }, package_table_settings, 1)
     },
     beforeUnmount() {
-        $('#agreement_list')
+        $('#package_list')
             .DataTable()
             .destroy(true)
     },
     components: { Toolbar },
-    name: "AgreementsList",
+    name: "packagesList",
 }
 </script>

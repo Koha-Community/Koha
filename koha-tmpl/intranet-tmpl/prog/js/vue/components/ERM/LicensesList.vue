@@ -104,7 +104,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(row.started_on)
+                        return $date(row.started_on)
                     }
                 },
                 {
@@ -113,7 +113,7 @@ export default {
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {
-                        return escape_str(row.ended_on)
+                        return $date(row.ended_on)
                     }
                 },
                 {
@@ -170,7 +170,7 @@ export default {
                 $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_license_statuses')
             }
 
-        }, table_settings, 1)
+        }, license_table_settings, 1)
     },
     beforeUnmount() {
         $('#license_list')

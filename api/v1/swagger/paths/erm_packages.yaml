@@ -1,8 +1,8 @@
 ---
 /erm/packages:
   get:
-    x-mojo-to: ERM::packages#list
-    operationId: listErmpackages
+    x-mojo-to: ERM::Packages#list
+    operationId: listErmPackages
     tags:
       - package
     summary: List packages
@@ -76,8 +76,8 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::packages#add
-    operationId: addErmpackages
+    x-mojo-to: ERM::Packages#add
+    operationId: addErmPackages
     tags:
       - package
     summary: Add package
@@ -133,8 +133,8 @@
         erm: 1
 "/erm/packages/{package_id}":
   get:
-    x-mojo-to: ERM::packages#get
-    operationId: getErmpackages
+    x-mojo-to: ERM::Packages#get
+    operationId: getErmPackages
     tags:
       - package
     summary: Get package
@@ -174,8 +174,8 @@
       permissions:
         erm: 1
   put:
-    x-mojo-to: ERM::packages#update
-    operationId: updateErmpackages
+    x-mojo-to: ERM::Packages#update
+    operationId: updateErmPackages
     tags:
       - package
     summary: Update package
@@ -228,8 +228,8 @@
       permissions:
         erm: 1
   delete:
-    x-mojo-to: ERM::packages#delete
-    operationId: deleteErmpackages
+    x-mojo-to: ERM::Packages#delete
+    operationId: deleteErmPackages
     tags:
       - package
     summary: Delete package

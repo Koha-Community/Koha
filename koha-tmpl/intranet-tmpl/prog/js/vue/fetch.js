@@ -103,3 +103,36 @@ export const fetchVendors = async function () {
         );
     return vendors;
 };
+
+export const fetchPackage = async function (package_id) {
+    if (!package_id) return;
+    const apiUrl = "/api/v1/erm/packages/" + package_id;
+    let erm_package;
+    await fetch(apiUrl)
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                erm_package = result;
+            },
+            (error) => {
+                setError(error);
+            }
+        );
+    return erm_package;
+};
+
+export const fetchPackages = async function () {
+    const apiUrl = "/api/v1/erm/packages";
+    let packages;
+    await fetch(apiUrl)
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                packages = result;
+            },
+            (error) => {
+                setError(error);
+            }
+        );
+    return packages;
+};

@@ -3,6 +3,10 @@ import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "./components/ERM/AgreementsFormConfirmDelete.vue";
+import PackagesList from "./components/ERM/PackagesList.vue";
+import PackagesShow from "./components/ERM/PackagesShow.vue";
+import PackagesFormAdd from "./components/ERM/PackagesFormAdd.vue";
+import PackagesFormConfirmDelete from "./components/ERM/PackagesFormConfirmDelete.vue";
 import LicensesList from "./components/ERM/LicensesList.vue";
 import LicensesShow from "./components/ERM/LicensesShow.vue";
 import LicensesFormAdd from "./components/ERM/LicensesFormAdd.vue";
@@ -16,6 +20,7 @@ const breadcrumbs = {
     },
     agreements: { text: "Agreements", path: "/cgi-bin/koha/erm/agreements" },
     licenses: { text: "Licenses", path: "/cgi-bin/koha/erm/licenses" },
+    packages: { text: "Packages", path: "/cgi-bin/koha/erm/packages" },
 };
 export const routes = [
     { path: "/cgi-bin/koha/mainpage.pl" },
@@ -82,6 +87,66 @@ export const routes = [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
                 breadcrumbs.agreements,
+            ],
+            view: "edit",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/packages",
+        component: PackagesList,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.packages,
+            ],
+            view: "list",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/packages/:package_id",
+        component: PackagesShow,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.packages,
+            ],
+            view: "show",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/packages/delete/:package_id",
+        component: PackagesFormConfirmDelete,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.packages,
+            ],
+            view: "confirm-delete-form",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/packages/add",
+        component: PackagesFormAdd,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.packages,
+            ],
+            view: "add",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/packages/edit/:package_id",
+        component: PackagesFormAdd,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.packages,
             ],
             view: "edit",
         },

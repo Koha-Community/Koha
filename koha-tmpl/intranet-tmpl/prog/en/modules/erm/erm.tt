@@ -33,7 +33,7 @@
         const agreement_renewal_priorities = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_RENEWAL_PRIORITY')) | $raw %];
         const agreement_user_roles = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_USER_ROLES')) | $raw %];
 
-        var table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
+        var agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
 
         var agreements_table_url = '/api/v1/erm/agreements?';
         [% IF agreement_name_filter %]
@@ -48,7 +48,7 @@
         const license_types = [% To.json(AuthorisedValues.Get('ERM_LICENSE_TYPE')) | $raw %];
         const license_statuses = [% To.json(AuthorisedValues.Get('ERM_LICENSE_STATUS')) | $raw %];
 
-        var table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
+        var license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
 
         var licenses_table_url = '/api/v1/erm/licenses?';
         [% IF license_name_filter %]
@@ -62,6 +62,21 @@
 
         const agreement_license_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_STATUS')) | $raw %];
         const agreement_license_location = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_LOCATION')) | $raw %];
+
+        const package_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_TYPE')) | $raw %];
+        const package_content_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_CONTENT_TYPE')) | $raw %];
+
+        var package_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'packages', 'packages', 'json' ) | $raw %];
+
+        var packages_table_url = '/api/v1/erm/packages?';
+        [% IF package_name_filter %]
+            var package_name_filter = {
+                'name': {
+                    "like": '%[%- package_name_filter | html -%]%'
+                }
+            };
+            packages_table_url += 'q='+ encodeURIComponent(JSON.stringify(package_name_filter));
+        [% END %]
 
     </script>
 

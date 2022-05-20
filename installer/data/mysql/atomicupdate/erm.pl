@@ -265,5 +265,28 @@ return {
                 AFTER `deliverytime`
             });
         }
+
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+            VALUES
+                ('ERM_PACKAGE_TYPE', 1),
+                ('ERM_PACKAGE_CONTENT_TYPE', 1)
+        });
+
+        $dbh->do(q{
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
+            VALUES
+                ('ERM_PACKAGE_TYPE', 'local', 'Local'),
+                ('ERM_PACKAGE_TYPE', 'complete', 'Complete'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Aggregated full'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Abstract and index'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'e_book', 'E-book'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Mixed content'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'e_journal', 'E-journal'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'online_reference', 'Online reference'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'print', 'Print'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'streaming_media', 'Streaming media'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'unknown', 'Unknown')
+        });
     }
 };

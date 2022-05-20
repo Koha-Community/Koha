@@ -83,7 +83,9 @@ VALUES
     ('ERM_LICENSE_TYPE', 1),
     ('ERM_LICENSE_STATUS', 1),
     ('ERM_AGREEMENT_LICENSE_STATUS', 1),
-    ('ERM_AGREEMENT_LICENSE_LOCATION', 1);
+    ('ERM_AGREEMENT_LICENSE_LOCATION', 1),
+    ('ERM_PACKAGE_TYPE', 1),
+    ('ERM_PACKAGE_CONTENT_TYPE', 1);
 
 INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
 VALUES
@@ -110,4 +112,16 @@ VALUES
     ('ERM_AGREEMENT_LICENSE_STATUS', 'future', 'Future'),
     ('ERM_AGREEMENT_LICENSE_STATUS', 'history', 'Historic'),
     ('ERM_AGREEMENT_LICENSE_LOCATION', 'filing_cabinet', 'Filing cabinet'),
-    ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard');
+    ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard'),
+    ('ERM_PACKAGE_TYPE', 'local', 'Local'),
+    ('ERM_PACKAGE_TYPE', 'complete', 'Complete'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Aggregated full'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Abstract and index'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'e_book', 'E-book'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Mixed content'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'e_journal', 'E-journal'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'online_reference', 'Online reference'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'print', 'Print'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'streaming_media', 'Streaming media'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'unknown', 'Unknown');
+

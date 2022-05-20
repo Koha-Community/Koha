@@ -33,9 +33,19 @@ export const useAVStore = defineStore("authorised_values", {
             { authorised_value: "has_frontfile_in", lib: "has_frontfile_in" },
             { authorised_value: "related_to", lib: "related_to" },
         ],
+        av_package_types: [],
+        av_package_content_types: [],
     }),
     actions: {
         get_lib_from_av(arr_name, av) {
+            if (this[arr_name] === undefined) {
+                console.warn(
+                    "The authorised value category for '%s' is not defined.".format(
+                        arr_name
+                    )
+                );
+                return;
+            }
             let o = this[arr_name].find((e) => e.authorised_value == av);
             return o ? o.lib : "";
         },
