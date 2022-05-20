@@ -183,5 +183,87 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
-    },
+
+        unless ( TableExists('erm_packages') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_packages` (
+                    `package_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `vendor_id` INT(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
+                    `name` VARCHAR(255) NOT NULL COMMENT 'name of the package',
+                    `external_package_id` VARCHAR(255) DEFAULT NULL COMMENT 'External key',
+                    `package_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
+                    `content_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
+                    `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date of creation of the package',
+                    CONSTRAINT `erm_packages_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+                    PRIMARY KEY(`package_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+
+        unless ( TableExists('erm_packages_agreements') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_packages_agreements` (
+                    `package_id` INT(11) NOT NULL COMMENT 'link to the package',
+                    `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    CONSTRAINT `erm_packages_agreements_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `erm_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+
+        unless ( TableExists('erm_eholdings') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_eholdings` (
+                    `eholding_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `publication_title` VARCHAR(255) DEFAULT NULL,
+                    `print_identifier` VARCHAR(255) DEFAULT NULL,
+                    `online_identifier` VARCHAR(255) DEFAULT NULL,
+                    `date_first_issue_online` VARCHAR(255) DEFAULT NULL,
+                    `num_first_vol_online` VARCHAR(255) DEFAULT NULL,
+                    `num_first_issue_online` VARCHAR(255) DEFAULT NULL,
+                    `date_last_issue_online` VARCHAR(255) DEFAULT NULL,
+                    `num_last_vol_online` VARCHAR(255) DEFAULT NULL,
+                    `num_last_issue_online` VARCHAR(255) DEFAULT NULL,
+                    `title_url` VARCHAR(255) DEFAULT NULL,
+                    `first_author` VARCHAR(255) DEFAULT NULL,
+                    `title_id` VARCHAR(255) DEFAULT NULL,
+                    `embargo_info` VARCHAR(255) DEFAULT NULL,
+                    `coverage_depth` VARCHAR(255) DEFAULT NULL,
+                    `notes` VARCHAR(255) DEFAULT NULL,
+                    `publisher_name` VARCHAR(255) DEFAULT NULL,
+                    `publication_type` VARCHAR(255) DEFAULT NULL,
+                    `date_monograph_published_print` VARCHAR(255) DEFAULT NULL,
+                    `date_monograph_published_online` VARCHAR(255) DEFAULT NULL,
+                    `monograph_volume` VARCHAR(255) DEFAULT NULL,
+                    `monograph_edition` VARCHAR(255) DEFAULT NULL,
+                    `first_editor` VARCHAR(255) DEFAULT NULL,
+                    `parent_publication_title_id` VARCHAR(255) DEFAULT NULL,
+                    `preceeding_publication_title_id` VARCHAR(255) DEFAULT NULL,
+                    `access_type` VARCHAR(255) DEFAULT NULL,
+                    PRIMARY KEY(`eholding_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+        unless ( TableExists('erm_eholdings_packages') ) {
+            $dbh->do(q{
+                CREATE TABLE `erm_eholdings_packages` (
+                    `eholding_id` INT(11) NOT NULL,
+                    `package_id` INT(11) NOT NULL,
+                    `started_on` DATE,
+                    `ended_on` DATE,
+                    `proxy` VARCHAR(80) DEFAULT NULL,
+                    CONSTRAINT `erm_eholdings_packages_ibfk_1` FOREIGN KEY (`eholding_id`) REFERENCES `erm_eholdings` (`eholding_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_eholdings_packages_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            });
+        }
+
+        unless ( column_exists('aqbooksellers', 'external_id') ) {
+            $dbh->do(q{
+                ALTER TABLE `aqbooksellers`
+                ADD COLUMN `external_id` VARCHAR(255) DEFAULT NULL
+                AFTER `deliverytime`
+            });
+        }
+    }
 };
