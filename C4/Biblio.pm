@@ -186,30 +186,28 @@ The first argument is a C<MARC::Record> object containing the
 bib to add, while the second argument is the desired MARC
 framework code.
 
-This function also accepts a third, optional argument: a hashref
-to additional options.  The only defined option is C<defer_marc_save>,
-which if present and mapped to a true value, causes C<AddBiblio>
-to omit the call to save the MARC in C<biblio_metadata.metadata>
-This option is provided B<only>
-for the use of scripts such as C<bulkmarcimport.pl> that may need
-to do some manipulation of the MARC record for item parsing before
-saving it and which cannot afford the performance hit of saving
-the MARC record twice.  Consequently, do not use that option
-unless you can guarantee that C<ModBiblioMarc> will be called.
+The C<$options> argument is a hashref with additional parameters:
+
+=over 4
+
+=item B<defer_marc_save>: used when ModBiblioMarc is handled by the caller
+
+=item B<skip_record_index>: used when the indexing schedulling will be handled by the caller
+
+=back
 
 =cut
 
 sub AddBiblio {
-    my $record          = shift;
-    my $frameworkcode   = shift;
-    my $options         = @_ ? shift : undef;
-    my $defer_marc_save = 0;
+    my ( $record, $frameworkcode, $options ) = @_;
+
+    $options //= {};
+    my $skip_record_index = $options->{skip_record_index} || 0;
+    my $defer_marc_save   = $options->{defer_marc_save}   || 0;
+
     if (!$record) {
         carp('AddBiblio called with undefined record');
         return;
-    }
-    if ( defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'} ) {
-        $defer_marc_save = 1;
     }
 
     my $schema = Koha::Database->schema;
@@ -291,7 +289,7 @@ sub AddBiblio {
             }
 
             # now add the record
-            ModBiblioMarc( $record, $biblionumber ) unless $defer_marc_save;
+            ModBiblioMarc( $record, $biblionumber, { skip_record_index => $skip_record_index } ) unless $defer_marc_save;
 
             # update OAI-PMH sets
             if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {

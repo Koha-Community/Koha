@@ -35,6 +35,8 @@ use C4::Charset qw( MarcToUTF8Record SetUTF8Flag StripNonXmlChars );
 use C4::AuthoritiesMarc qw( AddAuthority GuessAuthTypeCode GetAuthorityXML ModAuthority DelAuthority );
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use Koha::Items;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 use Koha::Plugins::Handler;
 use Koha::Logger;
 
@@ -578,6 +580,7 @@ sub BatchCommitRecords {
     my $logged_in_patron = Koha::Patrons->find( $userenv->{number} );
 
     my $rec_num = 0;
+    my @biblio_ids;
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
         $rec_num++;
@@ -617,7 +620,8 @@ sub BatchCommitRecords {
             $num_added++;
             if ($record_type eq 'biblio') {
                 my $biblioitemnumber;
-                ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework);
+                ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework, { skip_record_index => 1 });
+                push @biblio_ids, $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
                     my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result, $biblioitemnumber);
@@ -656,9 +660,16 @@ sub BatchCommitRecords {
                     $context->{userid} = $logged_in_patron->userid;
                 }
 
-                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {
-                    overlay_context => $context
-                });
+                ModBiblio(
+                    $marc_record,
+                    $recordid,
+                    $oldbiblio->frameworkcode,
+                    {
+                        overlay_context   => $context,
+                        skip_record_index => 1
+                    }
+                );
+                push @biblio_ids, $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
@@ -686,6 +697,7 @@ sub BatchCommitRecords {
             $num_ignored++;
             if ($record_type eq 'biblio' and defined $recordid and ( $item_result eq 'create_new' || $item_result eq 'replace' ) ) {
                 my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
+                push @biblio_ids, $recordid if $bib_items_added || $bib_items_replaced;
                 $num_items_added += $bib_items_added;
          $num_items_replaced += $bib_items_replaced;
                 $num_items_errored += $bib_items_errored;
@@ -699,6 +711,12 @@ sub BatchCommitRecords {
         }
     }
     $sth->finish();
+
+    if ( @biblio_ids ) {
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( \@biblio_ids, "specialUpdate", "biblioserver" );
+    }
+
     SetImportBatchStatus($batch_id, 'imported');
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }
@@ -744,7 +762,7 @@ sub BatchCommitItems {
         my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ?, import_error = ? WHERE import_items_id = ?");
         if ( $action eq "replace" && $duplicate_itemnumber ) {
             # Duplicate itemnumbers have precedence, that way we can update barcodes by overlaying
-            ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber} );
+            ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber}, { skip_record_index => 1 } );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
             $updsth->bind_param( 3, undef );
@@ -754,7 +772,7 @@ sub BatchCommitItems {
             $num_items_replaced++;
         } elsif ( $action eq "replace" && $duplicate_barcode ) {
             my $itemnumber = $duplicate_barcode->itemnumber;
-            ModItemFromMarc( $item_marc, $biblionumber, $itemnumber );
+            ModItemFromMarc( $item_marc, $biblionumber, $itemnumber, { skip_record_index => 1 } );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
             $updsth->bind_param( 3, undef );
@@ -774,7 +792,7 @@ sub BatchCommitItems {
             my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
             $item_marc->field($itemtag)->delete_subfield( code => $itemsubfield );
 
-            my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber, {biblioitemnumber => $biblioitemnumber} );
+            my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber, { biblioitemnumber => $biblioitemnumber, skip_record_index => 1 } );
             if( $itemnumber ) {
                 $updsth->bind_param( 1, 'imported' );
                 $updsth->bind_param( 2, $itemnumber );
