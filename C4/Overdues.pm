@@ -274,7 +274,7 @@ sub CalcFine {
             # biblio-level recall
             $amount = $charge_periods * $issuing_rule->{recall_overdue_fine};
         }
-        if ( scalar @recalls == 0 ) {
+        if ( scalar @recalls == 0 && $issuing_rule->{fine}) {
             # no recall, use normal fine amount
             $amount = $charge_periods * $issuing_rule->{fine};
         }
