@@ -43,7 +43,6 @@ my $notes          = $input->param('notes');
 my $branch         = $input->param('pickup');
 my $startdate      = $input->param('reserve_date') || '';
 my @rank           = $input->multi_param('rank-request');
-my $type           = $input->param('type');
 my $title          = $input->param('title');
 my $checkitem      = $input->param('checkitem');
 my $expirationdate = $input->param('expiration_date');
@@ -70,7 +69,7 @@ foreach my $bibnum (@biblionumbers) {
 
 my $found;
 
-if ( $type eq 'str8' && $borrower ) {
+if ( $borrower ) {
 
     foreach my $biblionumber ( keys %bibinfos ) {
         my $count = @bibitems;

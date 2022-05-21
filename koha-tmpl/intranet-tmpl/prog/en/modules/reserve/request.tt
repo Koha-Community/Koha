@@ -450,8 +450,6 @@
                     <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
 
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                        <input type="hidden" name="type" value="str8" />
-
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
