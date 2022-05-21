@@ -445,8 +445,6 @@
                     <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
 
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                        <input type="hidden" name="type" value="str8" />
-
                         [% FOREACH biblionumber IN biblionumbers %]
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
                         [% END %]
