@@ -10,12 +10,7 @@ use utf8;
 
 use Koha::Patrons;
 
-use open ':encoding(utf8)';
-binmode STDOUT, ':utf8';
-
-
 print "\nTHE FOLLOWING STATISTIC ENTRIES HAVE BEEN UPDATED\n------------------------------------------------\n";
-
 
 ##Caches all the loaded Borrowers
 my $borrowers = {};
