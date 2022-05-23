@@ -23832,6 +23832,11 @@ if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 20.11.18 release" );
 }
 
+$DBversion = '20.11.19.000';
+if ( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.19 release" );
+}
+
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
