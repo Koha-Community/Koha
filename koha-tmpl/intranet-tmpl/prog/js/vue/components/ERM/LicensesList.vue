@@ -159,7 +159,7 @@ export default {
                             show_license(row.license_id)
                         }
                     },
-                        escape_str(`${row.name} (#${row.license_id})`)
+                        `${row.name} (#${row.license_id})`
                     )
                     render(n, e)
                 })

@@ -191,7 +191,7 @@ export default {
                             show_package(row.package_id)
                         }
                     },
-                        escape_str(`${row.name} (#${row.package_id})`)
+                       `${row.name} (#${row.package_id})`
                     )
                     render(n, e)
                 })

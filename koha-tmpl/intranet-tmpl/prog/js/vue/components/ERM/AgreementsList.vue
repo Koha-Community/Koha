@@ -217,7 +217,7 @@ export default {
                             show_agreement(row.agreement_id)
                         }
                     },
-                        escape_str(`${row.name} (#${row.agreement_id})`)
+                        `${row.name} (#${row.agreement_id})`
                     )
                     render(n, e)
                 })
