@@ -605,6 +605,10 @@ sub _gen_default_values {
             issue_id => undef, # It should be a FK but we removed it
                                # We don't want to generate a random value
         },
+        ImportItem => {
+            status => 'staged',
+            import_error => undef
+        },
     };
 }
 
