@@ -1110,6 +1110,20 @@ tables:
             - ""
             - "If you have any problems or questions regarding your account, please contact the library."
 
+        - module: members
+          code: 2FA_OTP_TOKEN
+          branchcode: ""
+          name: "two-authentication step token"
+          is_html: 1
+          title: "Two-authentication token"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])"
+            - ""
+            - "Your authentication token is [% otp_token %]."
+            - "It is valid one minute."
+
         - module: orderacquisition
           code: ACQORDER
           branchcode: ""

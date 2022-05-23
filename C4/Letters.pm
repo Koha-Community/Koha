@@ -36,6 +36,7 @@ use Koha::Email;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Auth::TwoFactorAuth;
 use Koha::Patrons;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
@@ -1608,6 +1609,11 @@ sub _process_tt {
 
     $content = add_tt_filters( $content );
     $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
+
+    if ( $content =~ m|\[% otp_token %\]| ) {
+        my $patron = Koha::Patrons->find(C4::Context->userenv->{number});
+        $tt_params->{otp_token} = Koha::Auth::TwoFactorAuth->new({patron => $patron})->code;
+    }
 
     my $output;
     my $schema = Koha::Database->new->schema;

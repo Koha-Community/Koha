@@ -155,12 +155,15 @@
             <div id="login_error">Invalid two-factor code</div>
         [% END %]
 
+        <div id="email_error" class="dialog alert" style="display: none;"></div>
+        <div id="email_success" class="dialog message" style="display: none;"></div>
         <p>
             <label for="otp_token">Two-factor authentication code:</label>
             <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />
         </p>
         <p>
             <input id="submit-button" type="submit" value="Verify code" />
+            <a class="send_otp" id="send_otp" href="#">Send the code by email</a>
             <a class="cancel" id="logout" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Cancel</a>
         </p>
 
@@ -189,6 +192,26 @@
             }
             // Clear last borrowers, rememberd sql reports, carts, etc.
             logOut();
+
+            $("#send_otp").on("click", function(e){
+                e.preventDefault();
+                $("#email_success").hide();
+                $("#email_error").hide();
+                $.ajax({
+                    url: '/api/v1/auth/send_otp_token',
+                    type: 'POST',
+                    success: function(data){
+                        let message = _("The code has been sent by email, please check your inbox.")
+                        $("#email_success").show().html(message);
+                    },
+                    error: function(data){
+                        let error = data.responseJSON && data.responseJSON.error == "email_not_sent"
+                            ? _("Email not sent, maybe you don't have an email address defined?")
+                            : _("Email not sent");
+                        $("#email_error").show().html(error);
+                    }
+                });
+            });
         });
     </script>
 [% END %]

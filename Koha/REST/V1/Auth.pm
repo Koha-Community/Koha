@@ -82,6 +82,7 @@ sub under {
         }
 
         if ( $c->req->url->to_abs->path eq '/api/v1/oauth/token' ) {
+            #|| $c->req->url->to_abs->path eq '/api/v1/auth/send_otp_token' ) {
             # Requesting a token shouldn't go through the API authenticaction chain
             $status = 1;
         }
@@ -161,6 +162,7 @@ sub authenticate_api_request {
     $c->stash_overrides();
 
     my $cookie_auth = 0;
+    my $pending_auth;
 
     my $authorization = $spec->{'x-koha-authorization'};
 
@@ -229,6 +231,13 @@ sub authenticate_api_request {
         elsif ($status eq "anon") {
             $cookie_auth = 1;
         }
+        elsif ($status eq "additional-auth-needed") {
+            if ( $c->req->url->to_abs->path eq '/api/v1/auth/send_otp_token' ) {
+                $user = Koha::Patrons->find( $session->param('number') );
+                $cookie_auth = 1;
+                $pending_auth = 1;
+            }
+        }
         elsif ($status eq "maintenance") {
             Koha::Exceptions::UnderMaintenance->throw(
                 error => 'System is under maintenance.'
@@ -261,7 +270,9 @@ sub authenticate_api_request {
     if ( !$authorization and
          ( $params->{is_public} and
           ( C4::Context->preference('RESTPublicAnonymousRequests') or
-            $user) or $params->{is_plugin} ) ) {
+            $user) or $params->{is_plugin} )
+        or $pending_auth
+    ) {
         # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );

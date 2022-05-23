@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -94,7 +94,6 @@ SKIP: {
             $driver->get($mainpage . q|?logout.x=1|);
             $driver->get($s->base_url . q|circ/circulation.pl?borrowernumber=|.$patron->borrowernumber);
             like( $driver->get_title, qr(Log in to Koha), 'Must be on the first auth screen' );
-            $driver->capture_screenshot('selenium_failure_2.png');
             fill_login_form($s);
             like( $driver->get_title, qr(Two-factor authentication), 'Must be on the second auth screen' );
             is( login_error($s), undef );
@@ -148,6 +147,56 @@ SKIP: {
             $driver->find_element('//input[@type="submit"]')->click;
             like( $driver->get_title, qr(Checking out to ), 'Must be redirected to the original page' );
         }
+    };
+
+    subtest "Send OTP code" => sub {
+        plan tests => 4;
+
+        # Make sure the send won't fail because of invalid email addresses
+        $patron->library->set(
+            {
+                branchemail      => 'from@example.org',
+                branchreturnpath => undef,
+                branchreplyto    => undef,
+            }
+        )->store;
+        $patron->auth_method('two-factor');
+        $patron->email(undef);
+        $patron->store;
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get( $mainpage . q|?logout.x=1| );
+        like(
+            $driver->get_title,
+            qr(Log in to Koha),
+            'Must be on the first auth screen'
+        );
+        fill_login_form($s);
+        like(
+            $driver->get_title,
+            qr(Two-factor authentication),
+            'Must be on the second auth screen'
+        );
+        $driver->find_element('//a[@id="send_otp"]')->click;
+        $s->wait_for_ajax;
+        my $error = $driver->find_element('//div[@id="email_error"]')->get_text;
+        like(
+            $error,
+            qr{Email not sent},
+            'Email not sent will display an error'
+        );
+
+        $patron->email('test@example.org');
+        $patron->store;
+        $driver->find_element('//a[@id="send_otp"]')->click;
+        $s->wait_for_ajax;
+        my $message =
+          $driver->find_element('//div[@id="email_success"]')->get_text;
+        is(
+            $message,
+            "The code has been sent by email, please check your inbox.",
+            'The email must have been sent correctly'
+        );
     };
 
     subtest "Disable" => sub {

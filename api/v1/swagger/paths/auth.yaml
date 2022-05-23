@@ -1,0 +1,38 @@
+---
+/auth/send_otp_token:
+  post:
+    x-mojo-to: TwoFactorAuth#send_otp_token
+    operationId: send_otp_token
+    tags:
+      - 2fa
+    summary: Send OTP token for second step authentication
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: OK
+        schema:
+          type: object
+          properties:
+            access_token:
+              type: string
+            token_type:
+              type: string
+            expires_in:
+              type: integer
+          additionalProperties: false
+      "400":
+        description: Bad Request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
