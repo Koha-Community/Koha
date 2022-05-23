@@ -91,7 +91,10 @@ sub add {
 
                 my $body = $c->validation->param('body');
 
+                my $package_agreements = delete $body->{package_agreements} // [];
+
                 my $package = Koha::ERM::Package->new_from_api($body)->store;
+                $package->package_agreements($package_agreements);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(
@@ -163,7 +166,10 @@ sub update {
 
                 my $body = $c->validation->param('body');
 
+                my $package_agreements = delete $body->{package_agreements} // [];
+
                 $package->set_from_api($body)->store;
+                $package->package_agreements($package_agreements);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(

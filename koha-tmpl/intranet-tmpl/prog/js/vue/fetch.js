@@ -108,7 +108,11 @@ export const fetchPackage = async function (package_id) {
     if (!package_id) return;
     const apiUrl = "/api/v1/erm/packages/" + package_id;
     let erm_package;
-    await fetch(apiUrl)
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "package_agreements,package_agreements.agreement",
+        },
+    })
         .then((res) => res.json())
         .then(
             (result) => {

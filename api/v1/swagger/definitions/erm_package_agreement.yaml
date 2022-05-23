@@ -1,0 +1,14 @@
+---
+type: object
+properties:
+  package_id:
+    type: integer
+    description: foreign key to package
+    readOnly: true
+  agreement_id:
+    description: foreign key to agreement
+    type: integer
+
+additionalProperties: false
+required:
+  - agreement_id

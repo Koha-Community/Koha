@@ -21,6 +21,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::ERM::Package::Agreements;
+
 =head1 NAME
 
 Koha::ERM::Package - Koha ERM Package Object class
@@ -29,7 +31,31 @@ Koha::ERM::Package - Koha ERM Package Object class
 
 =head2 Class Methods
 
+=head3 package_agreements
+
+Returns the package agreements link for this package
+
 =cut
+
+sub package_agreements {
+    my ( $self, $package_agreements ) = @_;
+
+    if ( $package_agreements ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->package_agreements->delete;
+
+                for my $package_agreement (@$package_agreements) {
+                    $self->_result->add_to_erm_packages_agreements($package_agreement);
+                }
+            }
+        );
+    }
+
+    my $agreements_rs = $self->_result->erm_packages_agreements;
+    return Koha::ERM::Package::Agreements->_new_from_dbic($agreements_rs);
+}
 
 =head2 Internal methods
 

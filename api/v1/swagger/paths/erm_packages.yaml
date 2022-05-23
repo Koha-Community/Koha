@@ -173,6 +173,8 @@
     x-koha-authorization:
       permissions:
         erm: 1
+    x-koha-embed:
+      - agreements
   put:
     x-mojo-to: ERM::Packages#update
     operationId: updateErmPackages
@@ -191,7 +193,6 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/erm_package"
-
     responses:
       200:
         description: A successfully updated package
@@ -227,6 +228,8 @@
     x-koha-authorization:
       permissions:
         erm: 1
+    x-koha-embed:
+      - agreements
   delete:
     x-mojo-to: ERM::Packages#delete
     operationId: deleteErmPackages

@@ -92,7 +92,7 @@
                         </li>
 
                         <PackageAgreements
-                            :package_agreements="erm_package.agreements"
+                            :package_agreements="erm_package.package_agreements"
                         />
                     </ol>
                 </fieldset>
@@ -142,6 +142,7 @@ export default {
                 external_package_id: null,
                 package_type: '',
                 content_type: '',
+                package_agreements: [],
             },
             initialized: false,
         }
@@ -174,6 +175,8 @@ export default {
             }
             delete erm_package.package_id
 
+            erm_package.package_agreements = erm_package.package_agreements.map(({ package_id, agreement, ...keepAttrs }) => keepAttrs)
+
             const options = {
                 method: method,
                 body: JSON.stringify(erm_package),
@@ -198,9 +201,9 @@ export default {
                 }).catch(e => { console.log(e) })
         },
     },
-    components: [
+    components: {
         PackageAgreements,
-    ],
+    },
     name: "PackagesFormAdd",
 }
 </script>
