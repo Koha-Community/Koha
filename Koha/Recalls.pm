@@ -164,14 +164,17 @@ sub add_recall {
 
         $item = Koha::Items->find( $itemnumber );
         # add to statistics table
-        C4::Stats::UpdateStats({
-            branch => C4::Context->userenv->{'branch'},
-            type => 'recall',
-            itemnumber => $itemnumber,
-            borrowernumber => $recall->patron_id,
-            itemtype => $item->effective_itemtype,
-            ccode => $item->ccode,
-        });
+        C4::Stats::UpdateStats(
+            {
+                branch         => C4::Context->userenv->{'branch'},
+                type           => 'recall',
+                itemnumber     => $itemnumber,
+                borrowernumber => $recall->patron_id,
+                itemtype       => $item->effective_itemtype,
+                ccode          => $item->ccode,
+                categorycode   => $checkout->patron->categorycode
+            }
+        );
 
         # add action log
         C4::Log::logaction( 'RECALLS', 'CREATE', $recall->id, "Recall requested by borrower #" . $recall->patron_id, $interface ) if ( C4::Context->preference('RecallsLog') );
