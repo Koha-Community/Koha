@@ -684,7 +684,9 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     order.forEach(function (e,i) {
                                         var order_col      = e.column;
                                         var order_by       = options.columns[order_col].data;
-                                        order_by           = order_by.split(':');
+                                        if (!Array.isArray(order_by)) {
+                                            order_by           = order_by.split(':');
+                                        }
                                         var order_dir      = e.dir == 'asc' ? '+' : '-';
                                         Array.prototype.push.apply(orderArray,order_by.map(x => order_dir + (!x.includes('.')?'me.'+x:x)));
                                     });
