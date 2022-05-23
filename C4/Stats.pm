@@ -65,7 +65,7 @@ C<$params> is an hashref whose expected keys are:
     other              : sipmode
     itemtype           : the type of the item
     ccode              : the collection code of the item
-    usercode           : the categorycode of the patron
+    categorycode           : the categorycode of the patron
 
 type key is mandatory.
 For types used in C4::Circulation (renew,issue,localuse,return), the following other keys are mandatory:
@@ -83,7 +83,7 @@ sub UpdateStats {
 # make some controls
     return () if ! defined $params;
 # change these arrays if new types of transaction or new parameters are allowed
-    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber ccode location usercode);
+    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber ccode location categorycode);
     my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout recall);
     my @allowed_accounts_types = qw (writeoff payment);
     my @circulation_mandatory_keys = qw (type branch borrowernumber itemnumber ccode itemtype);
@@ -124,7 +124,7 @@ sub UpdateStats {
     my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype}       : '';
     my $location          = exists $params->{location}       ? $params->{location}       : undef;
     my $ccode             = exists $params->{ccode}          ? $params->{ccode}          : '';
-    my $usercode          = exists $params->{usercode}       ? $params->{usercode}       : undef;
+    my $categorycode      = exists $params->{categorycode}   ? $params->{categorycode}   : undef;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $statistic = Koha::Statistic->new(
@@ -139,7 +139,7 @@ sub UpdateStats {
             location       => $location,
             borrowernumber => $borrowernumber,
             ccode          => $ccode,
-            usercode       => $usercode,
+            categorycode   => $categorycode,
         }
     )->store;
 
