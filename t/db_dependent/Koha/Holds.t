@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );
@@ -644,4 +644,67 @@ subtest 'set_waiting+patron_expiration_date' => sub {
 
 $schema->storage->txn_rollback;
 
-1;
+subtest 'filter_by_has_cancellation_requests() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $item_1 = $builder->build_sample_item;
+    my $item_2 = $builder->build_sample_item;
+    my $item_3 = $builder->build_sample_item;
+
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => 'W',
+                itemnumber     => $item_1->id,
+                biblionumber   => $item_1->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => 'W',
+                itemnumber     => $item_2->id,
+                biblionumber   => $item_2->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+    my $hold_3 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                found          => 'W',
+                itemnumber     => $item_3->id,
+                biblionumber   => $item_3->biblionumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+
+    my $rs = Koha::Holds->search(
+        { reserve_id => [ $hold_1->id, $hold_2->id, $hold_3->id ] } );
+
+    is( $rs->count, 3 );
+
+    my $filtered_rs = $rs->filter_by_has_cancellation_requests;
+
+    is( $filtered_rs->count, 0 );
+
+    $hold_2->add_cancellation_request;
+
+    $filtered_rs = $rs->filter_by_has_cancellation_requests;
+
+    is( $filtered_rs->count,    1 );
+    is( $filtered_rs->next->id, $hold_2->id );
+
+    $schema->storage->txn_rollback;
+};

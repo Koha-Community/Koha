@@ -32,7 +32,7 @@ Koha::Holds - Koha Hold object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -148,7 +148,24 @@ sub get_items_that_can_fill {
     )->filter_by_for_hold();
 }
 
-=head3 type
+=head3 filter_by_has_cancellation_requests
+
+    my $with_cancellation_reqs = $holds->filter_by_has_cancellation_requests;
+
+Returns a filtered resultset only containing holds that have cancellation requests.
+
+=cut
+
+sub filter_by_has_cancellation_requests {
+    my ($self) = @_;
+
+    return $self->search( { 'hold_cancellation_request_id' => { '!=' => undef } },
+        { join => 'cancellation_requests' } );
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
