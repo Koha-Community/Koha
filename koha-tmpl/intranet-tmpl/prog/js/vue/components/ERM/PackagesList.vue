@@ -94,9 +94,9 @@ export default {
             "ajax": {
                 "url": packages_table_url,
             },
-            "order": [[1, "asc"]],
+            "order": [[0, "asc"]],
             "columnDefs": [{
-                "targets": [0, 2],
+                "targets": [0],
                 "render": function (data, type, row, meta) {
                     if (type == 'display') {
                         return escape_str(data)

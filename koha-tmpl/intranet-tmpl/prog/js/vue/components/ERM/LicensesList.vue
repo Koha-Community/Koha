@@ -56,7 +56,7 @@ export default {
             "ajax": {
                 "url": licenses_table_url,
             },
-            "order": [[1, "asc"]],
+            "order": [[0, "asc"]],
             "columnDefs": [{
                 "targets": [0, 1],
                 "render": function (data, type, row, meta) {
