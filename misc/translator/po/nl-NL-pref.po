@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: compendium-nl_NL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-03-28 12:46+0000\n"
+"PO-Revision-Date: 2022-05-23 10:16+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1648471591.796897\n"
+"X-POOTLE-MTIME: 1653301012.040078\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -5675,6 +5675,9 @@ msgid ""
 "AutoSelfCheckAllowed you should set SelfCheckAllowByIPRanges to prevent "
 "brute force attacks to gain patron information outside the library."
 msgstr ""
+".</br>LET OP: Bij gebruik van 'kaartnummer' en AutoSelfCheckAllowed zou "
+"SelfCheckAllowByIPRanges ook ingesteld moeten zijn om brute kracht "
+"hackaanvallen af te slaan."
 
 # Circulation > Self Checkout
 msgid ""
@@ -10142,14 +10145,14 @@ msgstr ""
 "dat leners hun e-mailadres bevestingen door deze twee maal in te voeren."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
-msgstr "als de standaard lenercategorie voor leners geregistreerd via de OPAC."
+msgstr ""
+" <br><strong>WAARSCHUWING: Gebruik geen reguliere lenercategorie voor "
+"zelfregistratie.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
@@ -10159,18 +10162,16 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br><strong>WAARSCHUWING: Gebruik geen gewone lenercategorie voor "
-"zelfregistratie.</strong> Als de <code>misc/cronjobs/cleanup_database.pl</"
-"code> cronjob is ingesteld om ongecontroleerde en onvolledige "
-"zelfregistraties te verwijderen, worden onvoorwaardelijk en onherstelbaar "
-"alle leners verwijderd die zich meer dan "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay dagen geleden "
-"geregistreerd hebben."
+"<br>Als de <code>misc/cronjobs/cleanup_database.pl</code> cronjob is "
+"ingesteld om ongeverifieerde en onvolledige OPAC zelfregistraties te "
+"verwijderen, worden alle leners verwijderd die langer dan <a href='/cgi-bin/k"
+"oha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationExpireTe"
+"mporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</a> "
+"dagen geleden geregistreerd hebben (tenzij deze periode leeg of nul is)."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
-msgstr "Gebruik de lenercategoriecode"
+msgstr "Gebruik"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10196,7 +10197,6 @@ msgstr ""
 "geregistreerde adressen worden niet geaccepteerd."
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -10204,9 +10204,10 @@ msgid ""
 "to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
 "make it empty."
 msgstr ""
-"<br><strong>LET OP:</strong> Deze systeemvoorkeur vereist de <code>misc/"
-"cronjobs/cleanup_database.pl</code> cronjob. Vraag de systeembeheerder deze "
-"in te plannen."
+"<br><strong>LET OP:</strong> Deze systeemvoorkeur vereist de "
+"<code>misc/cronjobs/cleanup_database.pl</code> cronjob. Vraag de "
+"systeembeheerder deze in te plannen.<br>Er worden geen leners verwijderd als "
+"de voorkeur nul of leeg is."
 
 # OPAC > Self registration and modification
 msgid ""

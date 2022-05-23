@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-04-22 09:05+0000\n"
+"PO-Revision-Date: 2022-05-04 09:12+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1650618340.303268\n"
+"X-POOTLE-MTIME: 1651655550.731372\n"
 "X-Pootle-Path: /zh_TW/20.11/zh-Hant-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -9693,14 +9693,12 @@ msgid ""
 msgstr "讀者們透過輸入兩次來確認他們的電子郵件."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
-msgstr "做為經由 OPAC 註冊讀者的預設讀者類型。"
+msgstr "<br><strong>警告: 自行註冊請勿使用一般使用的讀者類型.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
@@ -9710,10 +9708,11 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br><strong>警告：請勿使用登入的讀者類型進行自我註冊。</strong>如果將<code> "
-"misc/cronjobs/cleanup_database.pl</code> cronjob 設定為刪除未經驗證和未完成"
-"的 OPAC 自我註冊，它將永久且不可恢復地刪除所有已註冊超過天數 "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay 的讀者。"
+"<br>如果 <code>misc/cronjobs/cleanup_database.pl</code> "
+"工作排程設定來刪除未確認及未完成的OPAC自我註冊, 工作排程會刪除所有完成註冊但超過<a href='/cgi-bin/koha/admin/prefe"
+"rences.pl?op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccounts"
+"Delay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</a> 天未啟動者 "
+"(除排延後欄位是留空或填0)."
 
 # OPAC > Self registration and modification
 #, fuzzy
@@ -9744,7 +9743,6 @@ msgstr ""
 "子郵件帳號。"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -9752,8 +9750,9 @@ msgid ""
 "to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
 "make it empty."
 msgstr ""
-"<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/"
-"cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
+"<br><strong>說明：</strong> 此系統偏好必須用到 "
+"<code>misc/cronjobs/cleanup_database.pl</code> 工作排程。請洽您的系統管理員以便排程。<br>"
+"如您設0或留空, 沒有讀者會被刪除."
 
 # OPAC > Self registration and modification
 msgid ""

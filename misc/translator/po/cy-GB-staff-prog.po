@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2022-04-17 20:08-0300\n"
+"POT-Creation-Date: 2022-05-19 08:58-0300\n"
 "PO-Revision-Date: 2019-01-06 22:01+0000\n"
 "Last-Translator: lvharvey <lucy.vaux-harvey@ptfs-europe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -409,20 +409,6 @@ msgstr "%s %s gan %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgid "%s %s %s %s %s %s %s Jump to: %s "
 msgstr "%s %s %s %s %s Dim teitl %s %s %s %s "
 
-#. %1$s: - USE ItemTypes -
-#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
-#. %3$s: - INCLUDE empty_line.inc -
-#. %4$s: - FOREACH row IN rows -
-#. %5$s: - FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END -
-#. %6$s: - INCLUDE empty_line.inc -
-#. %7$s: - END -
-#. %8$s: - INCLUDE empty_line.inc -
-#. %9$s: - FOREACH field IN total; field; sep IF !loop.last; END -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
-#, fuzzy, c-format
-msgid "%s %s %s %s %s %s %s TOTAL%s %s "
-msgstr "%s %s %s %s %s Dim teitl %s %s %s %s "
-
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  END 
@@ -612,6 +598,18 @@ msgstr "%s %s gan %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (inactive) %s "
 msgstr "%s %s (ni chymeradwywyd) %s "
+
+#. %1$s: - USE ItemTypes -
+#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
+#. %3$s: - FOREACH row IN rows 
+#. %4$s:  FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END 
+#. %5$s: - END 
+#. %6$s:  sep | html 
+#. %7$s: - FOREACH field IN total; field; sep IF !loop.last; END -
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s %s %s TOTAL%s%s "
+msgstr "%s %s %s %s %s Dim teitl %s %s %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
@@ -13034,7 +13032,6 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:163
 #, fuzzy, c-format
 msgid "All payments to the library"
 msgstr "Tagiau o'r llyfrgell hon:"
@@ -22677,7 +22674,7 @@ msgid "Dates"
 msgstr "Dyddiadau"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:204
 #, fuzzy
 msgid "Dates cannot be empty"
 msgstr "Ni ellir allgofnodi'r eitem."
@@ -27985,7 +27982,7 @@ msgstr "Dirwyon a thaliadau"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:576
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:400
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/cataloging_additem.inc:3
 msgid "Form not submitted because of the following problem(s)"
@@ -48806,9 +48803,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:63
-#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:287
@@ -48883,7 +48880,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:114
-#: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:411
@@ -48892,6 +48888,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:321
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:120
@@ -54706,7 +54703,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:56
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:35
@@ -65576,6 +65573,10 @@ msgid ""
 "Kouider Bounama, Sham Bajaa, Ghofran Alshami, Chrestian Aboud, Fatema Salem "
 "and Duaa Bazzazi. "
 msgstr ""
+
+#, fuzzy
+#~ msgid "%s %s %s %s %s %s %s TOTAL%s %s "
+#~ msgstr "%s %s %s %s %s Dim teitl %s %s %s %s "
 
 #, fuzzy
 #~ msgid "%s %s On order (%s)"

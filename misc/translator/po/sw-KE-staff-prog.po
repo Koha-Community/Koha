@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2022-04-17 20:38-0300\n"
+"POT-Creation-Date: 2022-05-19 09:29-0300\n"
 "PO-Revision-Date: 2014-02-16 18:28-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -404,20 +404,6 @@ msgstr ""
 msgid "%s %s %s %s %s %s %s Jump to: %s "
 msgstr ""
 
-#. %1$s: - USE ItemTypes -
-#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
-#. %3$s: - INCLUDE empty_line.inc -
-#. %4$s: - FOREACH row IN rows -
-#. %5$s: - FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END -
-#. %6$s: - INCLUDE empty_line.inc -
-#. %7$s: - END -
-#. %8$s: - INCLUDE empty_line.inc -
-#. %9$s: - FOREACH field IN total; field; sep IF !loop.last; END -
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
-#, c-format
-msgid "%s %s %s %s %s %s %s TOTAL%s %s "
-msgstr ""
-
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  END 
@@ -601,6 +587,18 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:206
 #, c-format
 msgid "%s %s %s %s %s (inactive) %s "
+msgstr ""
+
+#. %1$s: - USE ItemTypes -
+#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
+#. %3$s: - FOREACH row IN rows 
+#. %4$s:  FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END 
+#. %5$s: - END 
+#. %6$s:  sep | html 
+#. %7$s: - FOREACH field IN total; field; sep IF !loop.last; END -
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
+#, c-format
+msgid "%s %s %s %s %s TOTAL%s%s "
 msgstr ""
 
 #. %1$s:  INCLUDE 'header.inc' 
@@ -11458,10 +11456,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:65
@@ -12829,11 +12827,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:354
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:186
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:198
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:198
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:236
@@ -12993,7 +12991,6 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:163
 #, c-format
 msgid "All payments to the library"
 msgstr ""
@@ -13413,6 +13410,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:60
@@ -13420,7 +13418,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:148
 #, c-format
 msgid "Amount"
@@ -15328,6 +15325,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
@@ -15335,7 +15333,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:833
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:64
@@ -17104,6 +17101,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:234
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:236
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:163
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
@@ -17162,8 +17161,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:638
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:642
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:646
@@ -17783,9 +17780,9 @@ msgstr ""
 msgid "Card number must not be more than %s characters."
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:41
 #, c-format
 msgid "Card number: "
 msgstr ""
@@ -19571,10 +19568,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:213
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -22247,13 +22244,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:383
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:457
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:85
@@ -22505,7 +22502,7 @@ msgid "Dates"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:204
 msgid "Dates cannot be empty"
 msgstr ""
 
@@ -22615,10 +22612,10 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:946
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:946
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:386
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:230
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:31
@@ -23057,12 +23054,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:401
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:105
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:345
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:96
@@ -23718,11 +23715,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
@@ -23819,12 +23816,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:40
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:40
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:47
@@ -23941,8 +23938,8 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:88
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -27486,8 +27483,8 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:644
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:644
 #, c-format
 msgid "First name: "
 msgstr ""
@@ -27773,7 +27770,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:576
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:400
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:210
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/cataloging_additem.inc:3
 msgid "Form not submitted because of the following problem(s)"
@@ -29553,6 +29550,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/errors/errorpage.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -29561,7 +29559,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/errors/errorpage.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:28
@@ -29571,6 +29568,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -29597,9 +29597,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:13
@@ -29610,12 +29607,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/home.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/pos/registers.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:11
@@ -32209,11 +32206,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:894
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:117
@@ -36190,9 +36187,9 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:504
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:92
@@ -39330,8 +39327,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
@@ -40112,13 +40109,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:152
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:569
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:549
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:552
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:130
@@ -41530,8 +41527,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:209
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:242
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:63
@@ -43427,8 +43424,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:174
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:540
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:89
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:540
 #, c-format
 msgid "Password: "
 msgstr ""
@@ -47648,13 +47645,13 @@ msgstr ""
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:307
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:131
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:274
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:159
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:486
@@ -48454,6 +48451,29 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:742
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:36
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:42
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:30
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:91
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:29
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:56
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:73
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:235
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:287
@@ -48495,29 +48515,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1194
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1403
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:47
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:29
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:56
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:282
@@ -49568,6 +49565,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:128
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:254
@@ -49601,7 +49599,6 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:362
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:585
@@ -50837,11 +50834,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:211
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:282
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
@@ -53500,13 +53497,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:444
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:747
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:179
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:145
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:177
@@ -54062,8 +54059,8 @@ msgstr ""
 msgid "Surname"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:638
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:638
 #, c-format
 msgid "Surname: "
 msgstr ""
@@ -54291,7 +54288,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:56
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:35
@@ -59020,9 +59017,9 @@ msgstr ""
 msgid "Upload directory: "
 msgstr ""
 
-#. INPUT type=submit name=upload
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:78
+#. INPUT type=button
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:88
 #, c-format
@@ -59543,8 +59540,8 @@ msgid "Username:"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:536
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:84
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:536
 #, c-format
 msgid "Username: "
 msgstr ""
@@ -60944,14 +60941,14 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:567
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:550
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:553
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:565
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:333
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427

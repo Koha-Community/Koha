@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2021-12-09 20:27+0000\n"
+"PO-Revision-Date: 2022-05-03 10:21+0000\n"
 "Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bg\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/20.11/bg-Cyrl-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1639081636.308683\n"
+"X-POOTLE-MTIME: 1651573296.733884\n"
 
 msgid "accounting.pref"
 msgstr "Транзакции"
@@ -10279,15 +10279,14 @@ msgid ""
 msgstr "потребителите да потвърдят своя имейл адрес, като го въведат два пъти."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
 msgstr ""
-"като категория читател по подразбиране за читатели, регистрирани чрез OPAC."
+"<br><strong>ПРЕДУПРЕЖДЕНИЕ: Не използвайте обикновена категория читатели за "
+"саморегистрация.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br>If the <code>misc/"
 "cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified "
@@ -10297,12 +10296,12 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"<br> <strong> ПРЕДУПРЕЖДЕНИЕ: Не използвайте обикновения тип четец за "
-"саморегистриране. </strong> Ако задачата cron <code> misc / cronjobs / "
-"cleanup_database.pl </code> е конфигурирана да изтрива непроверени и непълни "
-"EC саморегистрации, тя е за постоянно и ще изтрие завинаги всички читатели, "
-"които са регистрирали повече от "
-"PatronSelfRegistrationExpireTemporaryAccountsDelay преди дни."
+"<br> Ако задачата cron <code> misc / cronjobs / cleanup_database.pl </code> "
+"е конфигурирана да изтрива непроверени и непълни OPAC саморегистрации, тя е "
+"за постоянно и ще изтрие завинаги всички читатели, които са регистрирали "
+"повече от <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=P"
+"atronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpi"
+"reTemporaryAccountsDelay</a> преди дни."
 
 # OPAC > Self registration and modification
 #, fuzzy
@@ -10334,7 +10333,6 @@ msgstr ""
 "Имейл няма да бъде приет, ако вече съществува в базата данни."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -10344,7 +10342,8 @@ msgid ""
 msgstr ""
 "<br><strong>ЗАБЕЛЕЖКА:</strong> За тази системна настройка се изисква <code> "
 "misc/cronjobs/cleanup_database.pl</code> cronjob. Помолете системния си "
-"администратор да го планира."
+"администратор да го планира.<br>Няма да бъдат изтрити потребители, ако за "
+"pref зададете нула или го оставите празен."
 
 # OPAC > Self registration and modification
 msgid ""
