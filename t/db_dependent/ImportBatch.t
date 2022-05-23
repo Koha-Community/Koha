@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -182,6 +182,39 @@ is( $import_record, "0E0", "Batch 3 has been cleaned" );
 C4::ImportBatch::DeleteBatch( $id_import_batch3 );
 my $import_batch = C4::ImportBatch::GetImportBatch( $id_import_batch3 );
 is( $import_batch, undef, "Batch 3 has been deleted");
+
+subtest "BatchCommitItems" => sub {
+    plan tests => 3;
+
+    my $exist_item = $builder->build_sample_item;
+    my $import_item = $builder->build_object({ class => 'Koha::Import::Record::Items', value => {
+        marcxml => q{<?xml version="1.0" encoding="UTF-8"?>
+<collection
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
+  xmlns="http://www.loc.gov/MARC21/slim">
+
+<record>
+  <leader>00000    a              </leader>
+  <datafield tag="952" ind1=" " ind2=" ">
+    <subfield code="a">CPL</subfield>
+    <subfield code="b">CPL</subfield>
+    <subfield code="c">GEN</subfield>
+    <subfield code="p">}.$exist_item->barcode.q{</subfield>
+    <subfield code="y">BK</subfield>
+  </datafield>
+</record>
+</collection>
+        },
+    }});
+
+    my ( $num_items_added, $num_items_replaced, $num_items_errored ) =
+        C4::ImportBatch::BatchCommitItems( $import_item->import_record_id, 32, 'always_add',64 );
+    is( $num_items_errored, 1, "Item with duplicate barcode fails when action always_add" );
+    $import_item->discard_changes();
+    is( $import_item->status, 'error', "Import item marked as error when duplicate barcode and action always_add");
+    is( $import_item->import_error, 'duplicate item barcode', 'Error correctly set when import item has duplicate barcode and action always_add' );
+};
 
 subtest "RecordsFromMarcPlugin" => sub {
     plan tests => 5;
