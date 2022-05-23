@@ -324,10 +324,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage('Agreement updated')
+                        setMessage(this.$t("Agreement updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/agreements")
-                        setMessage('Agreement created')
+                        setMessage(this.$t("Agreement created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

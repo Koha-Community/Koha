@@ -189,10 +189,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/packages")
-                        setMessage('Package updated')
+                        setMessage(this.$t("Package updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/packages")
-                        setMessage('Package created')
+                        setMessage(this.$t("Package created"))
                     } else {
                         setError(response.message || response.statusText)
                     }

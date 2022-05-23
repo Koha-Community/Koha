@@ -68,7 +68,7 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            setMessage("Package deleted")
+                            setMessage(this.$t("Package deleted"))
                             this.$router.push("/cgi-bin/koha/erm/packages")
                         } else {
                             setError(response.message || response.statusText)

@@ -73,7 +73,7 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            setMessage("Agreement deleted")
+                            setMessage(this.$t("Agreement deleted"))
                             this.$router.push("/cgi-bin/koha/erm/agreements")
                         } else {
                             setError(response.message || response.statusText)

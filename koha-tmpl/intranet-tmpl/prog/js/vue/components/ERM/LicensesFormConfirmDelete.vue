@@ -74,7 +74,7 @@ export default {
                     (response) => {
                         if (response.status == 204) {
                             this.$router.push("/cgi-bin/koha/erm/licenses")
-                            setMessage("License deleted")
+                            setMessage(this.$t("License deleted"))
                         } else {
                             setError(response.message || response.statusText)
                         }

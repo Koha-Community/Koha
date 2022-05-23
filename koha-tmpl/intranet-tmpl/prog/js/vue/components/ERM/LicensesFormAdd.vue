@@ -206,10 +206,10 @@ export default {
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage('License updated')
+                        setMessage(this.$t("License updated"))
                     } else if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/licenses")
-                        setMessage('License created')
+                        setMessage(this.$t("License created"))
                     } else {
                         setError(response.message || response.statusText)
                     }
