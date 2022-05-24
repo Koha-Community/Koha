@@ -23,6 +23,7 @@ use CGI qw( -utf8 );
 use List::MoreUtils qw( uniq );
 
 use C4::Auth qw( get_template_and_user );
+use C4::Circulation qw( barcodedecode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::CourseReserves qw( GetCourse GetCourseItem GetItemCourseReservesInfo DelCourse DelCourseReserve );
 
@@ -52,6 +53,7 @@ elsif ( $action eq 'batch_rm' ) {
     my @item_and_count;
 
     foreach my $bar (@barcodes) {
+        $bar = barcodedecode($bar) if $bar;
         my $item = Koha::Items->find( { barcode => $bar } );
         if($item) {
             my $courseitem = GetCourseItem(itemnumber => $item->id);

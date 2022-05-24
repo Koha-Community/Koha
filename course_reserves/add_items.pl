@@ -23,6 +23,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
+use C4::Circulation qw( barcodedecode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Koha qw( GetAuthorisedValues );
 use Koha::Items;
@@ -43,6 +44,7 @@ my $is_edit      = $cgi->param('is_edit')      || '';
 my $biblionumber = $cgi->param('biblionumber') || '';
 
 $barcode =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
+$barcode = barcodedecode($barcode) if $barcode;
 $biblionumber =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
 
 my ( $item, $biblio );
