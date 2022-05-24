@@ -141,14 +141,18 @@ sub CartToShelf {
 Given a MARC::Record object containing an embedded item
 record and a biblionumber, create a new item record.
 
-The final optional parameter, C<$params>, expected to contain
+The final optional parameter, C<$params>, may contain
 'skip_record_index' key, which relayed down to Koha::Item/store,
 there it prevents calling of index_records,
 which takes most of the time in batch adds/deletes: index_records
 to be called later in C<additem.pl> after the whole loop.
 
+You may also optionally pass biblioitemnumber in the params hash to
+boost performance of inserts by preventing a lookup in Koha::Item.
+
 $params:
     skip_record_index => 1|0
+    biblioitemnumber => $biblioitemnumber
 
 =cut
 
