@@ -24,6 +24,8 @@ definitions:
     $ref: ./definitions/city.yaml
   erm_agreement:
     $ref: ./definitions/erm_agreement.yaml
+  erm_eholding:
+    $ref: ./definitions/erm_eholding.yaml
   erm_license:
     $ref: ./definitions/erm_license.yaml
   erm_package:
@@ -167,6 +169,10 @@ paths:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
   "/erm/agreements/{agreement_id}":
     $ref: "./paths/erm_agreements.yaml#/~1erm~1agreements~1{agreement_id}"
+  /erm/eholdings:
+    $ref: ./paths/erm_eholdings.yaml#/~1erm~1eholdings
+  "/erm/eholdings/{eholding_id}":
+    $ref: "./paths/erm_eholdings.yaml#/~1erm~1eholdings~1{eholding_id}"
   /erm/licenses:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":
@@ -342,6 +348,12 @@ parameters:
     description: Internal club identifier
     in: path
     name: club_id
+    required: true
+    type: integer
+  eholding_id_pp:
+    description: eHoldings internal identifier
+    in: path
+    name: eholding_id
     required: true
     type: integer
   fund_id_pp:

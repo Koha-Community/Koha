@@ -1,0 +1,373 @@
+---
+/erm/eholdings:
+  get:
+    x-mojo-to: ERM::EHoldings#list
+    operationId: listErmEHoldings
+    tags:
+      - eholding
+    summary: List eholdings
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on eholding eholding_id
+        in: query
+        name: eholding_id
+        required: false
+        type: integer
+      - description: Case insensitive search on eholding publication_title
+        in: query
+        name: publication_title
+        required: false
+        type: string
+      - description: Case insensitive search on eholding print_identifier
+        in: query
+        name: print_identifier
+        required: false
+        type: string
+      - description: Case insensitive search on eholding online_identifier
+        in: query
+        name: online_identifier
+        required: false
+        type: string
+      - description: Case insensitive search on eholding date_first_issue_online
+        in: query
+        name: date_first_issue_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding num_first_vol_online
+        in: query
+        name: num_first_vol_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding num_first_issue_online
+        in: query
+        name: num_first_issue_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding date_last_issue_online
+        in: query
+        name: date_last_issue_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding num_last_vol_online
+        in: query
+        name: num_last_vol_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding num_last_issue_online
+        in: query
+        name: num_last_issue_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding title_url
+        in: query
+        name: title_url
+        required: false
+        type: string
+      - description: Case insensitive search on eholding first_author
+        in: query
+        name: first_author
+        required: false
+        type: string
+      - description: Case insensitive search on eholding title_id
+        in: query
+        name: title_id
+        required: false
+        type: string
+      - description: Case insensitive search on eholding embargo_info
+        in: query
+        name: embargo_info
+        required: false
+        type: string
+      - description: Case insensitive search on eholding coverage_depth
+        in: query
+        name: coverage_depth
+        required: false
+        type: string
+      - description: Case insensitive search on eholding notes
+        in: query
+        name: notes
+        required: false
+        type: string
+      - description: Case insensitive search on eholding publisher_name
+        in: query
+        name: publisher_name
+        required: false
+        type: string
+      - description: Case insensitive search on eholding publication_type
+        in: query
+        name: publication_type
+        required: false
+        type: string
+      - description: Case insensitive search on eholding date_monograph_published_print
+        in: query
+        name: date_monograph_published_print
+        required: false
+        type: string
+      - description: Case insensitive search on eholding date_monograph_published_online
+        in: query
+        name: date_monograph_published_online
+        required: false
+        type: string
+      - description: Case insensitive search on eholding monograph_volume
+        in: query
+        name: monograph_volume
+        required: false
+        type: string
+      - description: Case insensitive search on eholding monograph_edition
+        in: query
+        name: monograph_edition
+        required: false
+        type: string
+      - description: Case insensitive search on eholding first_editor
+        in: query
+        name: first_editor
+        required: false
+        type: string
+      - description: Case insensitive search on eholding parent_publication_title_id
+        in: query
+        name: parent_publication_title_id
+        required: false
+        type: string
+      - description: Case insensitive search on eholding preceeding_publication_title_id
+        in: query
+        name: preceeding_publication_title_id
+        required: false
+        type: string
+      - description: Case insensitive search on eholding access_type
+        in: query
+        name: access_type
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+    responses:
+      200:
+        description: A list of eholding
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_eholding"
+          type: array
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+  post:
+    x-mojo-to: ERM::EHoldings#add
+    operationId: addErmEHoldings
+    tags:
+      - eholding
+    summary: Add eholding
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new eholding
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/erm_eholding"
+    responses:
+      201:
+        description: A successfully created eholding
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_eholding"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/eholdings/{eholding_id}":
+  get:
+    x-mojo-to: ERM::EHoldings#get
+    operationId: getErmEHoldings
+    tags:
+      - eholding
+    summary: Get eholding
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+    responses:
+      200:
+        description: Aneholding
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_eholding"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - agreements
+  put:
+    x-mojo-to: ERM::EHoldings#update
+    operationId: updateErmEHoldings
+    tags:
+      - eholding
+    summary: Update eholding
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing eholding
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/erm_eholding"
+    responses:
+      200:
+        description: A successfully updated eholding
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_eholding"
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+    x-koha-embed:
+      - agreements
+  delete:
+    x-mojo-to: ERM::EHoldings#delete
+    operationId: deleteErmEHoldings
+    tags:
+      - eholding
+    summary: Delete eholding
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+    responses:
+      204:
+        description: eholding deleted
+      400:
+        description: eholding deletion failed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
