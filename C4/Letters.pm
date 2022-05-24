@@ -1488,6 +1488,7 @@ sub _is_duplicate {
 sub _send_message_by_sms {
     my $message = shift or return;
     my $patron = Koha::Patrons->find( $message->{borrowernumber} );
+    _update_message_to_address($message->{message_id}, $patron->smsalertnumber) if $patron;
 
     unless ( $patron and $patron->smsalertnumber ) {
         _set_message_status( { message_id => $message->{'message_id'},
