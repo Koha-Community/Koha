@@ -7,6 +7,10 @@ import PackagesList from "./components/ERM/PackagesList.vue";
 import PackagesShow from "./components/ERM/PackagesShow.vue";
 import PackagesFormAdd from "./components/ERM/PackagesFormAdd.vue";
 import PackagesFormConfirmDelete from "./components/ERM/PackagesFormConfirmDelete.vue";
+import EHoldingsList from "./components/ERM/EHoldingsList.vue";
+import EHoldingsShow from "./components/ERM/EHoldingsShow.vue";
+import EHoldingsFormAdd from "./components/ERM/EHoldingsFormAdd.vue";
+import EHoldingsFormConfirmDelete from "./components/ERM/EHoldingsFormConfirmDelete.vue";
 import LicensesList from "./components/ERM/LicensesList.vue";
 import LicensesShow from "./components/ERM/LicensesShow.vue";
 import LicensesFormAdd from "./components/ERM/LicensesFormAdd.vue";
@@ -19,8 +23,9 @@ const breadcrumbs = {
         path: "/cgi-bin/koha/erm/erm.pl",
     },
     agreements: { text: "Agreements", path: "/cgi-bin/koha/erm/agreements" },
-    licenses: { text: "Licenses", path: "/cgi-bin/koha/erm/licenses" },
     packages: { text: "Packages", path: "/cgi-bin/koha/erm/packages" },
+    eholdings: { text: "eHoldings", path: "/cgi-bin/koha/erm/eholdings" },
+    licenses: { text: "Licenses", path: "/cgi-bin/koha/erm/licenses" },
 };
 export const routes = [
     { path: "/cgi-bin/koha/mainpage.pl" },
@@ -147,6 +152,66 @@ export const routes = [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
                 breadcrumbs.packages,
+            ],
+            view: "edit",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings",
+        component: EHoldingsList,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings,
+            ],
+            view: "list",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings/:eholding_id",
+        component: EHoldingsShow,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings,
+            ],
+            view: "show",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings/delete/:eholding_id",
+        component: EHoldingsFormConfirmDelete,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings,
+            ],
+            view: "confirm-delete-form",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings/add",
+        component: EHoldingsFormAdd,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings,
+            ],
+            view: "add",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings/edit/:eholding_id",
+        component: EHoldingsFormAdd,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings,
             ],
             view: "edit",
         },

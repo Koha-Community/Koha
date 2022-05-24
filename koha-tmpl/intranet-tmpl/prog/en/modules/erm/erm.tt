@@ -78,6 +78,18 @@
             packages_table_url += 'q='+ encodeURIComponent(JSON.stringify(package_name_filter));
         [% END %]
 
+        var eholding_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'eholdings', 'json' ) | $raw %];
+
+        var eholdings_table_url = '/api/v1/erm/eholdings?';
+        [% IF eholding_name_filter %]
+            var eholding_name_filter = {
+                'name': {
+                    "like": '%[%- eholding_name_filter | html -%]%'
+                }
+            };
+            eholdings_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholding_name_filter));
+        [% END %]
+
     </script>
 
     [% Asset.js("js/vue/dist/main.js") | $raw %]
