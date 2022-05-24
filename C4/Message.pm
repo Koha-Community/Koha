@@ -185,9 +185,6 @@ sub _to_address {
             || $borrower->{B_email};
     } elsif ($transport eq 'sms') {
         $address = $borrower->{smsalertnumber}
-            || $borrower->{phone}
-            || $borrower->{phonepro}
-            || $borrower->{B_phone};
     } else {
         warn "'$transport' is an unknown message transport.";
     }
