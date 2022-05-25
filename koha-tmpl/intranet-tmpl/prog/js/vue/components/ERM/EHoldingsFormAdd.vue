@@ -23,6 +23,30 @@
                         </li>
 
                         <li>
+                            <label for="eholding_vendor_id">{{
+                                $t("Vendor:")
+                            }}</label>
+                            <select
+                                id="eholding_vendor_id"
+                                v-model="eholding.vendor_id"
+                            >
+                                <option value=""></option>
+                                <option
+                                    v-for="vendor in vendors"
+                                    :key="vendor.vendor_id"
+                                    :value="vendor.id"
+                                    :selected="
+                                        vendor.id == eholding.vendor_id
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ vendor.name }}
+                                </option>
+                            </select>
+                        </li>
+
+                        <li>
                             <label for="eholding_print_identifier">{{
                                 $t("Print-format identifier:")
                             }}</label>
@@ -366,17 +390,26 @@
 </template>
 
 <script>
+import { useVendorStore } from "../../stores/vendors"
 import EHoldingPackages from "./EHoldingPackages.vue"
 import { setMessage, setError } from "../../messages"
 import { fetchEHolding } from '../../fetch'
+import { storeToRefs } from "pinia"
 
 export default {
     setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+
+        return {
+            vendors,
+        }
     },
     data() {
         return {
             eholding: {
                 eholding_id: null,
+                vendor_id: null,
                 publication_title: '',
                 print_identifier: '',
                 online_identifier: '',

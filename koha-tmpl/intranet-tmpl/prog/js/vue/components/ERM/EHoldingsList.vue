@@ -12,9 +12,19 @@
 <script>
 import Toolbar from "./EHoldingsToolbar.vue"
 import { createVNode, render } from 'vue'
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
 import { fetchEHoldings } from "../../fetch"
 
 export default {
+    setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+
+        return {
+            vendors,
+        }
+    },
     data: function () {
         return {
             eholdings: [],
@@ -48,6 +58,16 @@ export default {
         let edit_eholding = this.edit_eholding
         let delete_eholding = this.delete_eholding
 
+        window['vendors'] = this.vendors.map(e => {
+            e['_id'] = e['id']
+            e['_str'] = e['name']
+            return e
+        })
+        let vendors_map = this.vendors.reduce((map, e) => {
+            map[e.id] = e
+            return map
+        }, {})
+
         $('#eholding_list').kohaTable({
             "ajax": {
                 "url": eholdings_table_url,
@@ -71,6 +91,15 @@ export default {
                     // Rendering done in drawCallback
                 },
                 {
+                    "title": __("Vendor"),
+                    "data": "vendor_id",
+                    "searchable": true,
+                    "orderable": true,
+                    "render": function (data, type, row, meta) {
+                        return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
+                    }
+                },
+                {
                     "title": __("Publication type"),
                     "data": "publication_type",
                     "searchable": true,
@@ -84,8 +113,8 @@ export default {
                     "render": function (data, type, row, meta) {
                         let print_identifier = row.print_identifier
                         let online_identifier = row.online_identifier
-                        return ( print_identifier ? escape_str(_("ISBN (Print): %s").format(print_identifier)) : "" ) + 
-                               ( online_identifier ? escape_str(_("ISBN (Online): %s").format(online_identifier)) : "" )
+                        return (print_identifier ? escape_str(_("ISBN (Print): %s").format(print_identifier)) : "") +
+                            (online_identifier ? escape_str(_("ISBN (Online): %s").format(online_identifier)) : "")
                     }
                 },
                 {
@@ -136,6 +165,10 @@ export default {
                     render(n, e)
                 })
             },
+            preDrawCallback: function (settings) {
+                var table_id = settings.nTable.id
+                $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'vendors')
+            }
         }, eholding_table_settings, 1)
     },
     beforeUnmount() {

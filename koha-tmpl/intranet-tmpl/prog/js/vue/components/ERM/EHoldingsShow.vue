@@ -27,6 +27,15 @@
                         </span>
                     </li>
                     <li>
+                        <label>{{ $t("Vendor:") }}</label>
+                        <span v-if="eholding.vendor_id">
+                            {{
+                                vendors.find((e) => e.id == eholding.vendor_id)
+                                    .name
+                            }}
+                        </span>
+                    </li>
+                    <li>
                         <label>{{ $t("Print-format identifier:") }}</label>
                         <span>
                             {{ eholding.print_identifier }}
@@ -186,14 +195,22 @@
 
 <script>
 import { fetchEHolding } from "../../fetch"
-
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
 export default {
     setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+
+        return {
+            vendors,
+        }
     },
     data() {
         return {
             eholding: {
                 eholding_id: null,
+                vendor_id: null,
                 publication_title: '',
                 print_identifier: '',
                 online_identifier: '',
