@@ -39,50 +39,48 @@ $se->mock( 'get_elasticsearch_mappings', sub {
     my %all_mappings;
 
     my $mappings = {
-        data => {
-            properties => {
-                title => {
-                    type => 'text'
-                },
-                title__sort => {
-                    type => 'text'
-                },
-                subject => {
-                    type => 'text',
-                    facet => 1
-                },
-                'subject-heading-thesaurus' => {
-                    type => 'text',
-                    facet => 1
-                },
-                itemnumber => {
-                    type => 'integer'
-                },
-                sortablenumber => {
-                    type => 'integer'
-                },
-                sortablenumber__sort => {
-                    type => 'integer'
-                },
-                heading => {
-                    type => 'text'
-                },
-                'heading-main' => {
-                    type => 'text'
-                },
-                heading__sort => {
-                    type => 'text'
-                },
-                match => {
-                    type => 'text'
-                },
-                'match-heading' => {
-                    type => 'text'
-                },
-                'match-heading-see-from' => {
-                    type => 'text'
-                },
-            }
+        properties => {
+            title => {
+                type => 'text'
+            },
+            title__sort => {
+                type => 'text'
+            },
+            subject => {
+                type => 'text',
+                facet => 1
+            },
+            'subject-heading-thesaurus' => {
+                type => 'text',
+                facet => 1
+            },
+            itemnumber => {
+                type => 'integer'
+            },
+            sortablenumber => {
+                type => 'integer'
+            },
+            sortablenumber__sort => {
+                type => 'integer'
+            },
+            heading => {
+                type => 'text'
+            },
+            'heading-main' => {
+                type => 'text'
+            },
+            heading__sort => {
+                type => 'text'
+            },
+            match => {
+                type => 'text'
+            },
+            'match-heading' => {
+                type => 'text'
+            },
+            'match-heading-see-from' => {
+                type => 'text'
+            },
         }
     };
     $all_mappings{$self->index} = $mappings;
