@@ -167,18 +167,9 @@ foreach my $biblioNumber (@biblionumbers) {
 
     # Compute the priority rank.
     $biblioData->{object} = $biblio;
-    my $holds = $biblio->holds;
-    my $rank = $holds->count;
-    $biblioData->{reservecount} = 1;    # new reserve
-    while ( my $hold = $holds->next ) {
-        if ( $hold->is_waiting ) {
-            $rank--;
-        }
-        else {
-            $biblioData->{reservecount}++;
-        }
-    }
-    $biblioData->{rank} = $rank + 1;
+    my $reservecount = $biblio->holds->search({ found => [ {"!=" => "W"},undef] })->count;
+    $biblioData->{reservecount} = $reservecount;
+    $biblioData->{rank} = $reservecount + 1;
 }
 
 #
