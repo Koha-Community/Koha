@@ -561,7 +561,7 @@ if ($tag) {
     #        displays search results which should be hidden.
     # FIXME: No facets for tags search.
 } else {
-    $pasarParams .= '&amp;query=' . uri_escape_utf8($query);
+    $pasarParams .= '&amp;query=' . uri_escape_utf8(encode_json($query));
     $pasarParams .= '&amp;count=' . uri_escape_utf8($results_per_page);
     $pasarParams .= '&amp;simple_query=' . uri_escape_utf8($simple_query);
     $pasarParams .= '&amp;query_type=' . uri_escape_utf8($query_type) if ($query_type);
