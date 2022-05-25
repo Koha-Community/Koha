@@ -129,6 +129,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-01 07:44:13
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RkK5cQWFEmcrDioAfjOVWQ
 
+sub koha_object_class {
+    'Koha::ERM::Agreement::UserRole';
+}
+sub koha_objects_class {
+    'Koha::ERM::Agreement::UserRoles';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

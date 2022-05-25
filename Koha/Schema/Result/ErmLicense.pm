@@ -190,6 +190,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-01 07:44:13
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Fs4bmI/N6Cvicv3RW2qwXQ
 
+sub koha_object_class {
+    'Koha::ERM::License';
+}
+sub koha_objects_class {
+    'Koha::ERM::Licenses';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

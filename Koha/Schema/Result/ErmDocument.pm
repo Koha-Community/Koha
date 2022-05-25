@@ -198,6 +198,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-21 09:22:27
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rbU2G4zjKlEcOtuwVBSXaw
 
+sub koha_object_class {
+    'Koha::ERM::Document';
+}
+sub koha_objects_class {
+    'Koha::ERM::Documents';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

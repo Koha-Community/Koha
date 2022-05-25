@@ -191,6 +191,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-19 09:25:48
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KbZxONSm/pxXvUFi3PuZiQ
 
+sub koha_object_class {
+    'Koha::ERM::EHoldings::Package';
+}
+sub koha_objects_class {
+    'Koha::ERM::EHoldings::Packages';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
