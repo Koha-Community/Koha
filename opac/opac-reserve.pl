@@ -60,12 +60,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my ($show_holds_count, $show_priority);
-for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
-    m/holds/o and $show_holds_count = 1;
-    m/priority/ and $show_priority = 1;
-}
-
 my $patron = Koha::Patrons->find( $borrowernumber, { prefetch => ['categorycode'] } );
 my $category = $patron->category;
 
