@@ -20,25 +20,25 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("License name:") }}</label>
+                        <label>{{ $t("License name") }}:</label>
                         <span>
                             {{ license.name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Description:") }}</label>
+                        <label>{{ $t("Description") }}:</label>
                         <span>
                             {{ license.description }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Type:") }}</label>
+                        <label>{{ $t("Type") }}:</label>
                         <span>{{
                             get_lib_from_av("av_license_types", license.type)
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Status:") }}</label>
+                        <label>{{ $t("Status") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_license_statuses",
@@ -48,12 +48,12 @@
                     </li>
 
                     <li>
-                        <label>{{ $t("Started on:") }}</label>
+                        <label>{{ $t("Started on") }}:</label>
                         <span>{{ format_date(license.started_on) }}</span>
                     </li>
 
                     <li>
-                        <label>{{ $t("Ended on:") }}</label>
+                        <label>{{ $t("Ended on") }}:</label>
                         <span>{{ format_date(license.ended_on) }}</span>
                     </li>
                 </ol>

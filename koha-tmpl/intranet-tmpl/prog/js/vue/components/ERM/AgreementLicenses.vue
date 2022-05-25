@@ -16,9 +16,9 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`license_id_${counter}`">{{
-                        $t("License: ")
-                    }}</label>
+                    <label :for="`license_id_${counter}`"
+                        >{{ $t("License") }}:</label
+                    >
                     <select
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
@@ -42,9 +42,9 @@
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`license_status_${counter}`">{{
-                        $t("Status: ")
-                    }}</label>
+                    <label :for="`license_status_${counter}`"
+                        >{{ $t("Status") }}:</label
+                    >
                     <select v-model="agreement_license.status" required>
                         <option value=""></option>
                         <option
@@ -64,7 +64,7 @@
                 </li>
                 <li>
                     <label :for="`license_location_${counter}`"
-                        >{{ $t("Physical location:") }}
+                        >{{ $t("Physical location") }}:
                     </label>
                     <select v-model="agreement_license.physical_location">
                         <option value=""></option>
@@ -84,9 +84,9 @@
                     </select>
                 </li>
                 <li>
-                    <label :for="`license_notes_${counter}`">{{
-                        $t("Notes:")
-                    }}</label>
+                    <label :for="`license_notes_${counter}`"
+                        >{{ $t("Notes") }}:</label
+                    >
                     <input
                         :id="`license_notes_${counter}`"
                         v-model="agreement_license.notes"
@@ -94,9 +94,9 @@
                     />
                 </li>
                 <li>
-                    <label :for="`license_uri_${counter}`">{{
-                        $t("URI:")
-                    }}</label>
+                    <label :for="`license_uri_${counter}`"
+                        >{{ $t("URI") }}:</label
+                    >
                     <input
                         :id="`license_uri_${counter}`"
                         v-model="agreement_license.uri"

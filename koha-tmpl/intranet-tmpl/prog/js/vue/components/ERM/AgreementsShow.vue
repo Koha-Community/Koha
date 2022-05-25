@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Agreement name:") }}</label>
+                        <label>{{ $t("Agreement name") }}:</label>
                         <span>
                             {{ agreement.name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Vendor:") }}</label>
+                        <label>{{ $t("Vendor") }}:</label>
                         <span v-if="agreement.vendor_id">
                             {{
                                 vendors.find((e) => e.id == agreement.vendor_id)
@@ -36,13 +36,13 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Description:") }}</label>
+                        <label>{{ $t("Description") }}:</label>
                         <span>
                             {{ agreement.description }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Status:") }}</label>
+                        <label>{{ $t("Status") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_statuses",
@@ -51,7 +51,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Closure reason:") }}</label>
+                        <label>{{ $t("Closure reason") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_closure_reasons",
@@ -60,12 +60,12 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Is perpetual:") }}</label>
+                        <label>{{ $t("Is perpetual") }}:</label>
                         <span v-if="agreement.is_perpetual">Yes</span>
                         <span v-else>No</span>
                     </li>
                     <li>
-                        <label>{{ $t("Renewal priority:") }}</label>
+                        <label>{{ $t("Renewal priority") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_agreement_renewal_priorities",
@@ -74,7 +74,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("License info:") }}</label>
+                        <label>{{ $t("License info") }}:</label>
                         <span>{{ agreement.license_info }}</span>
                     </li>
 

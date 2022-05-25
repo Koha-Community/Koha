@@ -7,11 +7,11 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("License name:") }}
+                            {{ $t("License name") }}:
                             {{ license.name }}
                         </li>
                         <li>
-                            {{ $t("Description:") }}
+                            {{ $t("Description") }}:
                             {{ license.description }}
                         </li>
                     </ol>

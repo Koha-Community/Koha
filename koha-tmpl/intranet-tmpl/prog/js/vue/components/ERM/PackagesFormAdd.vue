@@ -10,9 +10,9 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="package_name">{{
-                                $t("Package name:")
-                            }}</label>
+                            <label class="required" for="package_name"
+                                >{{ $t("Package name") }}:</label
+                            >
                             <input
                                 id="package_name"
                                 v-model="erm_package.name"
@@ -22,9 +22,9 @@
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="package_vendor_id">{{
-                                $t("Vendor:")
-                            }}</label>
+                            <label for="package_vendor_id"
+                                >{{ $t("Vendor") }}:</label
+                            >
                             <select
                                 id="package_vendor_id"
                                 v-model="erm_package.vendor_id"
@@ -45,7 +45,7 @@
                             </select>
                         </li>
                         <li>
-                            <label for="package_type">{{ $t("Type: ") }}</label>
+                            <label for="package_type">{{ $t("Type") }}:</label>
                             <select
                                 id="package_type"
                                 v-model="erm_package.package_type"

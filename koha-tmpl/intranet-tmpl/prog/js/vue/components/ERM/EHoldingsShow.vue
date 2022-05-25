@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Publication title:") }}</label>
+                        <label>{{ $t("Publication title") }}:</label>
                         <span>
                             {{ eholding.publication_title }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Vendor:") }}</label>
+                        <label>{{ $t("Vendor") }}:</label>
                         <span v-if="eholding.vendor_id">
                             {{
                                 vendors.find((e) => e.id == eholding.vendor_id)
@@ -36,145 +36,197 @@
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Print-format identifier:") }}</label>
+                        <label>{{ $t("Print-format identifier") }}:</label>
                         <span>
                             {{ eholding.print_identifier }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Online-format identifier:") }}</label>
+                        <label>{{ $t("Online-format identifier") }}:</label>
                         <span>
                             {{ eholding.online_identifier }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Date of first serial issue available online:") }}</label>
+                        <label
+                            >{{
+                                $t(
+                                    "Date of first serial issue available online"
+                                )
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.date_first_issue_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Number of first volume available online:") }}</label>
+                        <label
+                            >{{
+                                $t("Number of first volume available online")
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.num_first_vol_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Number of first issue available online:") }}</label>
+                        <label
+                            >{{
+                                $t("Number of first issue available online")
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.num_first_issue_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Date of last issue available online:") }}</label>
+                        <label
+                            >{{
+                                $t("Date of last issue available online")
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.date_last_issue_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Number of last volume available online:") }}</label>
+                        <label
+                            >{{
+                                $t("Number of last volume available online")
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.num_last_vol_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Number of last issue available online:") }}</label>
+                        <label
+                            >{{
+                                $t("Number of last issue available online")
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.num_last_issue_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Title-level URL:") }}</label>
+                        <label>{{ $t("Title-level URL") }}:</label>
                         <span>
                             {{ eholding.title_url }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("First author:") }}</label>
+                        <label>{{ $t("First author") }}:</label>
                         <span>
                             {{ eholding.first_author }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Title identifier:") }}</label>
+                        <label>{{ $t("Title identifier") }}:</label>
                         <span>
                             {{ eholding.title_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Embargo information:") }}</label>
+                        <label>{{ $t("Embargo information") }}:</label>
                         <span>
                             {{ eholding.embargo_info }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Coverage depth:") }}</label>
+                        <label>{{ $t("Coverage depth") }}:</label>
                         <span>
                             {{ eholding.coverage_depth }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Notes:") }}</label>
+                        <label>{{ $t("Notes") }}:</label>
                         <span>
                             {{ eholding.notes }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Publisher name:") }}</label>
+                        <label>{{ $t("Publisher name") }}:</label>
                         <span>
                             {{ eholding.publisher_name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Publication type:") }}</label>
+                        <label>{{ $t("Publication type") }}:</label>
                         <span>
                             {{ eholding.publication_type }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Date the monograph is first published in print:") }}</label>
+                        <label
+                            >{{
+                                $t(
+                                    "Date the monograph is first published in print"
+                                )
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.date_monograph_published_print }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Date the monograph is first published online:") }}</label>
+                        <label
+                            >{{
+                                $t(
+                                    "Date the monograph is first published online"
+                                )
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.date_monograph_published_online }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Number of volume for monograph:") }}</label>
+                        <label
+                            >{{ $t("Number of volume for monograph") }}:</label
+                        >
                         <span>
                             {{ eholding.monograph_volume }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Edition of the monograph:") }}</label>
+                        <label>{{ $t("Edition of the monograph") }}:</label>
                         <span>
                             {{ eholding.monograph_edition }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("First editor:") }}</label>
+                        <label>{{ $t("First editor") }}:</label>
                         <span>
                             {{ eholding.first_editor }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Title identifier of the parent publication:") }}</label>
+                        <label
+                            >{{
+                                $t(
+                                    "Title identifier of the parent publication"
+                                )
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.parent_publication_title_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Title identifier of any preceding publication title:") }}</label>
+                        <label
+                            >{{
+                                $t(
+                                    "Title identifier of any preceding publication title"
+                                )
+                            }}:</label
+                        >
                         <span>
                             {{ eholding.preceeding_publication_title_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Acces type:") }}</label>
+                        <label>{{ $t("Acces type") }}:</label>
                         <span>
                             {{ eholding.access_type }}
                         </span>

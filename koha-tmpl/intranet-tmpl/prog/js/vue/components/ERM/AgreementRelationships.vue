@@ -16,7 +16,7 @@
             <ol>
                 <li>
                     <label :for="`related_agreement_id_${counter}`"
-                        >{{ $t("Related agreement:") }}
+                        >{{ $t("Related agreement") }}:
                     </label>
                     <select
                         v-model="relationship.related_agreement_id"
@@ -40,7 +40,7 @@
                 </li>
                 <li>
                     <label :for="`related_agreement_relationship_${counter}`"
-                        >{{ $t("Relationship:") }}
+                        >{{ $t("Relationship") }}:
                     </label>
                     <select
                         v-model="relationship.relationship"
@@ -64,9 +64,9 @@
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`related_agreement_notes_${counter}`">{{
-                        $t("Notes:")
-                    }}</label>
+                    <label :for="`related_agreement_notes_${counter}`"
+                        >{{ $t("Notes") }}:</label
+                    >
                     <input
                         :id="`related_agreement_notes_${counter}`"
                         v-model="relationship.notes"

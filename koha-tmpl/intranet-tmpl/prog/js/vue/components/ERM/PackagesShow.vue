@@ -21,13 +21,13 @@
             <fieldset class="rows">
                 <ol>
                     <li>
-                        <label>{{ $t("Package name:") }}</label>
+                        <label>{{ $t("Package name") }}:</label>
                         <span>
                             {{ erm_package.name }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Vendor:") }}</label>
+                        <label>{{ $t("Vendor") }}:</label>
                         <span v-if="erm_package.vendor_id">
                             {{
                                 vendors.find(
@@ -37,13 +37,13 @@
                         </span>
                     </li>
                     <li v-if="erm_package.external_package_id">
-                        <label>{{ $t("External ID:") }}</label>
+                        <label>{{ $t("External ID") }}:</label>
                         <span>
                             {{ erm_package.external_package_id }}
                         </span>
                     </li>
                     <li>
-                        <label>{{ $t("Package type:") }}</label>
+                        <label>{{ $t("Package type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_types",
@@ -52,7 +52,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Content type:") }}</label>
+                        <label>{{ $t("Content type") }}:</label>
                         <span>{{
                             get_lib_from_av(
                                 "av_package_content_types",
@@ -61,7 +61,7 @@
                         }}</span>
                     </li>
                     <li>
-                        <label>{{ $t("Created on:") }}</label>
+                        <label>{{ $t("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
                 </ol>

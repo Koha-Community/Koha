@@ -14,7 +14,7 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`user_id_${counter}`">{{ $t("User:") }}</label>
+                    <label :for="`user_id_${counter}`">{{ $t("User") }}:</label>
                     <span class="user">
                         {{ user_role.patron_str }}
                     </span>
@@ -26,9 +26,9 @@
                     >)
                 </li>
                 <li>
-                    <label :for="`user_role_${counter}`">{{
-                        $t("Role:")
-                    }}</label>
+                    <label :for="`user_role_${counter}`"
+                        >{{ $t("Role") }}:</label
+                    >
                     <select v-model="user_role.role" required>
                         <option value=""></option>
                         <option

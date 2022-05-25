@@ -10,9 +10,9 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="license_name">{{
-                                $t("License name:")
-                            }}</label>
+                            <label class="required" for="license_name"
+                                >{{ $t("License name") }}:</label
+                            >
                             <input
                                 id="license_name"
                                 v-model="license.name"
@@ -36,7 +36,7 @@
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="license_type">{{ $t("Type:") }}</label>
+                            <label for="license_type">{{ $t("Type") }}:</label>
                             <select
                                 id="license_type"
                                 v-model="license.type"
@@ -59,9 +59,9 @@
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="license_status">{{
-                                $t("Status:")
-                            }}</label>
+                            <label for="license_status"
+                                >{{ $t("Status") }}:</label
+                            >
                             <select
                                 id="license_status"
                                 v-model="license.status"
@@ -85,9 +85,9 @@
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
-                            <label for="started_on">{{
-                                $t("Start date:")
-                            }}</label>
+                            <label for="started_on"
+                                >{{ $t("Start date") }}:</label
+                            >
                             <flat-pickr
                                 id="started_on"
                                 v-model="license.started_on"
@@ -96,7 +96,7 @@
                             />
                         </li>
                         <li>
-                            <label for="ended_on">{{ $t("End date:") }}</label>
+                            <label for="ended_on">{{ $t("End date") }}:</label>
                             <flat-pickr
                                 id="ended_on"
                                 v-model="license.ended_on"

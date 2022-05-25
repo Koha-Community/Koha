@@ -7,12 +7,12 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("Agreement name:") }}
+                            {{ $t("Agreement name") }}:
                             {{ agreement.name }}
                         </li>
-                        <li>{{ $t("Vendor:") }} {{ agreement.vendor_id }}</li>
+                        <li>{{ $t("Vendor") }}: {{ agreement.vendor_id }}</li>
                         <li>
-                            {{ $t("Description:") }}
+                            {{ $t("Description") }}:
                             {{ agreement.description }}
                         </li>
                     </ol>

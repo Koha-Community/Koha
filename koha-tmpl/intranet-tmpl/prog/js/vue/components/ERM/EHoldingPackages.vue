@@ -18,7 +18,7 @@
                     <label
                         :for="`eholding_package_id_${counter}`"
                         class="required"
-                        >{{ $t("Package:") }}
+                        >{{ $t("Package") }}:
                     </label>
                     <select
                         v-model="eholding_package.package_id"
@@ -43,7 +43,7 @@
                 </li>
                 <li>
                     <label :for="`started_on_${counter}`"
-                        >{{ $t("Start date:") }}
+                        >{{ $t("Start date") }}:
                     </label>
                     <flat-pickr
                         :id="`started_on_${counter}`"
@@ -53,9 +53,9 @@
                     />
                 </li>
                 <li>
-                    <label :for="`ended_on_${counter}`">{{
-                        $t("End date:")
-                    }}</label>
+                    <label :for="`ended_on_${counter}`"
+                        >{{ $t("End date") }}:</label
+                    >
                     <flat-pickr
                         :id="`ended_on_${counter}`"
                         v-model="eholding_package.ended_on"
@@ -63,7 +63,7 @@
                     />
                 </li>
                 <li>
-                    <label :for="`${counter}`">{{ $t("Proxy:") }}</label>
+                    <label :for="`${counter}`">{{ $t("Proxy") }}:</label>
                     <input
                         :id="`proxy_${counter}`"
                         v-model="eholding_package.proxy"

@@ -17,7 +17,7 @@
             <ol>
                 <li>
                     <label :for="`started_on_${counter}`" class="required"
-                        >{{ $t("Start date:") }}
+                        >{{ $t("Start date") }}:
                     </label>
                     <flat-pickr
                         :id="`started_on_${counter}`"
@@ -29,9 +29,9 @@
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
-                    <label :for="`ended_on_${counter}`">{{
-                        $t("End date:")
-                    }}</label>
+                    <label :for="`ended_on_${counter}`"
+                        >{{ $t("End date") }}:</label
+                    >
                     <flat-pickr
                         :id="`ended_on_${counter}`"
                         v-model="period.ended_on"
@@ -40,7 +40,7 @@
                 </li>
                 <li>
                     <label :for="`cancellation_deadline_${counter}`"
-                        >{{ $t("Cancellation deadline:") }}
+                        >{{ $t("Cancellation deadline") }}:
                     </label>
                     <flat-pickr
                         :id="`cancellation_deadline_${counter}`"
@@ -49,7 +49,7 @@
                     />
                 </li>
                 <li>
-                    <label :for="`notes_${counter}`">{{ $t("Notes:") }}</label>
+                    <label :for="`notes_${counter}`">{{ $t("Notes") }}:</label>
                     <input
                         :id="`notes_${counter}`"
                         type="text"

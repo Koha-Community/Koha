@@ -7,7 +7,7 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("Package name:") }}
+                            {{ $t("Package name") }}:
                             {{ erm_package.name }}
                         </li>
                     </ol>

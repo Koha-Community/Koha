@@ -16,7 +16,7 @@
             </legend>
             <ol>
                 <li>
-                    <label>{{ $t("File:") }}</label>
+                    <label>{{ $t("File") }}:</label>
                     <div class="file_information">
                         <span v-if="!document.file_name">
                             {{ $t("Select a file") }}
@@ -38,15 +38,15 @@
                         </span>
                         <ol>
                             <li v-show="document.file_name">
-                                {{ $t("File name:") }}
+                                {{ $t("File name") }}:
                                 <span>{{ document.file_name }}</span>
                             </li>
                             <li v-show="document.file_type">
-                                {{ $t("File type:") }}
+                                {{ $t("File type") }}:
                                 <span>{{ document.file_type }}</span>
                             </li>
                             <li v-show="document.file_name">
-                                {{ $t("File description:") }}
+                                {{ $t("File description") }}:
                                 <input
                                     :id="`file_description_${counter}`"
                                     type="text"
@@ -57,7 +57,7 @@
                                 />
                             </li>
                             <li v-show="document.uploaded_on">
-                                {{ $t("Uploaded on:") }}
+                                {{ $t("Uploaded on") }}:
                                 <span>{{
                                     format_date(document.uploaded_on)
                                 }}</span>
@@ -67,7 +67,7 @@
                 </li>
                 <li>
                     <label :for="`physical_location_${counter}`"
-                        >{{ $t("Physical location:") }}
+                        >{{ $t("Physical location") }}:
                     </label>
                     <input
                         :id="`physical_location_${counter}`"
@@ -79,7 +79,7 @@
                     />
                 </li>
                 <li>
-                    <label :for="`uri_${counter}`">{{ $t("URI:") }}</label>
+                    <label :for="`uri_${counter}`">{{ $t("URI") }}:</label>
                     <input
                         :id="`uri_${counter}`"
                         v-model="document.uri"
@@ -87,7 +87,7 @@
                     />
                 </li>
                 <li>
-                    <label :for="`notes_${counter}`">{{ $t("Notes:") }} </label>
+                    <label :for="`notes_${counter}`">{{ $t("Notes") }}:</label>
                     <input
                         :id="`notes_${counter}`"
                         type="text"

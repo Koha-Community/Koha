@@ -7,7 +7,7 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("eHolding title:") }}
+                            {{ $t("eHolding title") }}:
                             {{ eholding.publication_title }}
                         </li>
                     </ol>

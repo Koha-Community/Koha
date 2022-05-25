@@ -10,9 +10,9 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label class="required" for="eholding_name">{{
-                                $t("Publication title:")
-                            }}</label>
+                            <label class="required" for="eholding_name"
+                                >{{ $t("Publication title") }}:</label
+                            >
                             <input
                                 id="eholding_publication_title"
                                 v-model="eholding.publication_title"
@@ -23,9 +23,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_vendor_id">{{
-                                $t("Vendor:")
-                            }}</label>
+                            <label for="eholding_vendor_id"
+                                >{{ $t("Vendor") }}:</label
+                            >
                             <select
                                 id="eholding_vendor_id"
                                 v-model="eholding.vendor_id"
@@ -47,9 +47,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_print_identifier">{{
-                                $t("Print-format identifier:")
-                            }}</label>
+                            <label for="eholding_print_identifier"
+                                >{{ $t("Print-format identifier") }}:</label
+                            >
                             <input
                                 id="eholding_print_identifier"
                                 v-model="eholding.print_identifier"
@@ -58,9 +58,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_online_identifier">{{
-                                $t("Online-format identifier:")
-                            }}</label>
+                            <label for="eholding_online_identifier"
+                                >{{ $t("Online-format identifier") }}:</label
+                            >
                             <input
                                 id="eholding_online_identifier"
                                 v-model="eholding.online_identifier"
@@ -69,11 +69,13 @@
                         </li>
 
                         <li>
-                            <label for="eholding_date_first_issue_online">{{
-                                $t(
-                                    "Date of first serial issue available online:"
-                                )
-                            }}</label>
+                            <label for="eholding_date_first_issue_online"
+                                >{{
+                                    $t(
+                                        "Date of first serial issue available online"
+                                    )
+                                }}:</label
+                            >
                             <input
                                 id="eholding_date_first_issue_online"
                                 v-model="eholding.date_first_issue_online"
@@ -86,9 +88,13 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_first_vol_online">{{
-                                $t("Number of first volume available online:")
-                            }}</label>
+                            <label for="eholding_num_first_vol_online"
+                                >{{
+                                    $t(
+                                        "Number of first volume available online"
+                                    )
+                                }}:</label
+                            >
                             <input
                                 id="eholding_num_first_vol_online"
                                 v-model="eholding.num_first_vol_online"
@@ -101,9 +107,13 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_first_issue_online">{{
-                                $t("Number of first issue available online:")
-                            }}</label>
+                            <label for="eholding_num_first_issue_online"
+                                >{{
+                                    $t(
+                                        "Number of first issue available online"
+                                    )
+                                }}:</label
+                            >
                             <input
                                 id="eholding_num_first_issue_online"
                                 v-model="eholding.num_first_issue_online"
@@ -114,9 +124,11 @@
                         </li>
 
                         <li>
-                            <label for="eholding_date_last_issue_online">{{
-                                $t("Date of last issue available online:")
-                            }}</label>
+                            <label for="eholding_date_last_issue_online"
+                                >{{
+                                    $t("Date of last issue available online")
+                                }}:</label
+                            >
                             <input
                                 id="eholding_date_last_issue_online"
                                 v-model="eholding.date_last_issue_online"
@@ -127,9 +139,13 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_last_vol_online">{{
-                                $t("Number of last volume available online:")
-                            }}</label>
+                            <label for="eholding_num_last_vol_online"
+                                >{{
+                                    $t(
+                                        "Number of last volume available online"
+                                    )
+                                }}:</label
+                            >
                             <input
                                 id="eholding_num_last_vol_online"
                                 v-model="eholding.num_last_vol_online"
@@ -140,9 +156,11 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_last_issue_online">{{
-                                $t("Number of last issue available online:")
-                            }}</label>
+                            <label for="eholding_num_last_issue_online"
+                                >{{
+                                    $t("Number of last issue available online")
+                                }}:</label
+                            >
                             <input
                                 id="eholding_num_last_issue_online"
                                 v-model="eholding.num_last_issue_online"
@@ -153,9 +171,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_title_url">{{
-                                $t("Title-level URL:")
-                            }}</label>
+                            <label for="eholding_title_url"
+                                >{{ $t("Title-level URL") }}:</label
+                            >
                             <input
                                 id="eholding_title_url"
                                 v-model="eholding.title_url"
@@ -164,9 +182,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_first_author">{{
-                                $t("First author:")
-                            }}</label>
+                            <label for="eholding_first_author"
+                                >{{ $t("First author") }}:</label
+                            >
                             <input
                                 id="eholding_first_author"
                                 v-model="eholding.first_author"
@@ -175,9 +193,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_title_id">{{
-                                $t("Title identifier:")
-                            }}</label>
+                            <label for="eholding_title_id"
+                                >{{ $t("Title identifier") }}:</label
+                            >
                             <input
                                 id="eholding_title_id"
                                 v-model="eholding.title_id"
@@ -186,9 +204,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_embargo_info">{{
-                                $t("Embargo information:")
-                            }}</label>
+                            <label for="eholding_embargo_info"
+                                >{{ $t("Embargo information") }}:</label
+                            >
                             <input
                                 id="eholding_embargo_info"
                                 v-model="eholding.embargo_info"
@@ -197,9 +215,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_coverage_depth">{{
-                                $t("Coverage depth:")
-                            }}</label>
+                            <label for="eholding_coverage_depth"
+                                >{{ $t("Coverage depth") }}:</label
+                            >
                             <input
                                 id="eholding_coverage_depth"
                                 v-model="eholding.coverage_depth"
@@ -208,9 +226,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_notes">{{
-                                $t("Notes:")
-                            }}</label>
+                            <label for="eholding_notes"
+                                >{{ $t("Notes") }}:</label
+                            >
                             <input
                                 id="eholding_notes"
                                 v-model="eholding.notes"
@@ -219,9 +237,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_publisher_name">{{
-                                $t("Publisher name:")
-                            }}</label>
+                            <label for="eholding_publisher_name"
+                                >{{ $t("Publisher name") }}:</label
+                            >
                             <input
                                 id="eholding_publisher_name"
                                 v-model="eholding.publisher_name"
@@ -230,9 +248,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_publication_type">{{
-                                $t("Publication type:")
-                            }}</label>
+                            <label for="eholding_publication_type"
+                                >{{ $t("Publication type") }}:</label
+                            >
                             <input
                                 id="eholding_publication_type"
                                 v-model="eholding.publication_type"
@@ -241,13 +259,12 @@
                         </li>
 
                         <li>
-                            <label
-                                for="eholding_date_monograph_published_print"
+                            <label for="eholding_date_monograph_published_print"
                                 >{{
                                     $t(
-                                        "Date the monograph is first published in print:"
+                                        "Date the monograph is first published in print"
                                     )
-                                }}</label
+                                }}:</label
                             >
                             <input
                                 id="eholding_date_monograph_published_print"
@@ -267,9 +284,9 @@
                                 for="eholding_date_monograph_published_online"
                                 >{{
                                     $t(
-                                        "Date the monograph is first published online:"
+                                        "Date the monograph is first published online"
                                     )
-                                }}</label
+                                }}:</label
                             >
                             <input
                                 id="eholding_date_monograph_published_online"
@@ -285,9 +302,11 @@
                         </li>
 
                         <li>
-                            <label for="eholding_monograph_volume">{{
-                                $t("Number of volume for monograph:")
-                            }}</label>
+                            <label for="eholding_monograph_volume"
+                                >{{
+                                    $t("Number of volume for monograph")
+                                }}:</label
+                            >
                             <input
                                 id="eholding_monograph_volume"
                                 v-model="eholding.monograph_volume"
@@ -298,9 +317,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_monograph_edition">{{
-                                $t("Edition of the monograph:")
-                            }}</label>
+                            <label for="eholding_monograph_edition"
+                                >{{ $t("Edition of the monograph") }}:</label
+                            >
                             <input
                                 id="eholding_monograph_edition"
                                 v-model="eholding.monograph_edition"
@@ -309,9 +328,9 @@
                         </li>
 
                         <li>
-                            <label for="eholding_first_editor">{{
-                                $t("First editor:")
-                            }}</label>
+                            <label for="eholding_first_editor"
+                                >{{ $t("First editor") }}:</label
+                            >
                             <input
                                 id="eholding_first_editor"
                                 v-model="eholding.first_editor"
@@ -320,11 +339,13 @@
                         </li>
 
                         <li>
-                            <label for="eholding_parent_publication_title_id">{{
-                                $t(
-                                    "Title identifier of the parent publication:"
-                                )
-                            }}</label>
+                            <label for="eholding_parent_publication_title_id"
+                                >{{
+                                    $t(
+                                        "Title identifier of the parent publication"
+                                    )
+                                }}:</label
+                            >
                             <input
                                 id="eholding_parent_publication_title_id"
                                 v-model="eholding.parent_publication_title_id"
@@ -341,9 +362,9 @@
                                 for="eholding_preceeding_publication_title_id"
                                 >{{
                                     $t(
-                                        "Title identifier of any preceding publication title:"
+                                        "Title identifier of any preceding publication title"
                                     )
-                                }}</label
+                                }}:</label
                             >
                             <input
                                 id="eholding_preceeding_publication_title_id"
@@ -359,10 +380,12 @@
                         </li>
 
                         <li>
-                            <label for="eholding_access_type">{{
-                                // FIXME May be fee-based (P) or Open Access (F).
-                                $t("Access type:")
-                            }}</label>
+                            <label for="eholding_access_type"
+                                >{{
+                                    // FIXME May be fee-based (P) or Open Access (F).
+                                    $t("Access type")
+                                }}:</label
+                            >
                             <input
                                 id="eholding_access_type"
                                 v-model="eholding.access_type"
@@ -469,7 +492,7 @@ export default {
             delete eholding.eholding_id
 
             // Cannot use the map/keepAttrs because of the reserved keywork 'package'
-            eholding.eholding_packages.forEach(function(e){ delete e.package });
+            eholding.eholding_packages.forEach(function (e) { delete e.package })
 
             const options = {
                 method: method,

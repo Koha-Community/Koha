@@ -16,7 +16,7 @@
             <ol>
                 <li>
                     <label :for="`agreement_id_${counter}`"
-                        >{{ $t("Agreement:") }}
+                        >{{ $t("Agreement") }}:
                     </label>
                     <select
                         v-model="package_agreement.agreement_id"
@@ -46,12 +46,9 @@
             v-if="agreements.length"
             class="btn btn-default"
             @click="addAgreement"
-            ><font-awesome-icon icon="plus" />
-            {{ $t("Add new agreement") }}</a
+            ><font-awesome-icon icon="plus" /> {{ $t("Add new agreement") }}</a
         >
-        <span v-else>{{
-            $t("There are no agreements created yet")
-        }}</span>
+        <span v-else>{{ $t("There are no agreements created yet") }}</span>
     </fieldset>
 </template>
 
