@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-04-17 19:03-0300\n"
+"POT-Creation-Date: 2022-05-19 08:08-0300\n"
 "PO-Revision-Date: 2021-10-26 05:47+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -411,33 +411,34 @@ msgstr ""
 #. %10$s:  CASE "finished" 
 #. %11$s:  CASE "started" 
 #. %12$s:  CASE "running" 
-#. %13$s:  CASE # Default case 
-#. %14$s:  job.status | html 
-#. %15$s:  END -
-#. %16$s:  END 
-#. %17$s:  BLOCK show_job_type 
-#. %18$s:  SWITCH job_type 
-#. %19$s:  CASE 'batch_biblio_record_modification' 
-#. %20$s:  CASE 'batch_biblio_record_deletion' 
-#. %21$s:  CASE 'batch_authority_record_modification' 
-#. %22$s:  CASE 'batch_authority_record_deletion' 
-#. %23$s:  CASE 'batch_item_record_modification' 
-#. %24$s:  CASE 'batch_item_record_deletion' 
-#. %25$s:  CASE "batch_hold_cancel" 
-#. %26$s:  CASE 
-#. %27$s:  job_type | html 
-#. %28$s:  END 
+#. %13$s:  CASE "failed" 
+#. %14$s:  CASE # Default case 
+#. %15$s:  job.status | html 
+#. %16$s:  END -
+#. %17$s:  END 
+#. %18$s:  BLOCK show_job_type 
+#. %19$s:  SWITCH job_type 
+#. %20$s:  CASE 'batch_biblio_record_modification' 
+#. %21$s:  CASE 'batch_biblio_record_deletion' 
+#. %22$s:  CASE 'batch_authority_record_modification' 
+#. %23$s:  CASE 'batch_authority_record_deletion' 
+#. %24$s:  CASE 'batch_item_record_modification' 
+#. %25$s:  CASE 'batch_item_record_deletion' 
+#. %26$s:  CASE "batch_hold_cancel" 
+#. %27$s:  CASE 
+#. %28$s:  job_type | html 
 #. %29$s:  END 
-#. %30$s:  INCLUDE 'doc-head-open.inc' 
+#. %30$s:  END 
+#. %31$s:  INCLUDE 'doc-head-open.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:1
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s New %s Cancelled %s Finished %s Started %s Running "
-"%s %s %s %s %s %s %s Batch bibliographic record modification %s Batch "
-"bibliographic record record deletion %s Batch authority record modification "
-"%s Batch authority record deletion %s Batch item record modification %s "
-"Batch item record deletion %s Batch hold cancellation %sUnknown job type "
-"'%s' %s %s %s "
+"%s Failed %s %s %s %s %s %s %s Batch bibliographic record modification %s "
+"Batch bibliographic record record deletion %s Batch authority record "
+"modification %s Batch authority record deletion %s Batch item record "
+"modification %s Batch item record deletion %s Batch hold cancellation "
+"%sUnknown job type '%s' %s %s %s "
 msgstr ""
 "%s %s %s %s %s %s %s కొత్త %s రద్దు %s పూర్తయింది %s ప్రారంభమైంది %s నడుస్తోంది %s %s %s "
 "%s %s %s %s బ్యాచ్ బిబ్లియోగ్రాఫిక్ రికార్డ్ సవరణ %s బ్యాచ్ అథారిటీ రికార్డ్ సవరణ %s %s %s %s %s "
@@ -4978,7 +4979,7 @@ msgstr "%s (ఖాళీగా ఉంటే బహుశా సరే)"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:299
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1041
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1044
 msgid "%s - Click to Expand this Tag"
 msgstr "%s - ఈ ట్యాగ్‌ను విస్తరించడానికి క్లిక్ చేయండి"
 
@@ -5689,7 +5690,7 @@ msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s రోజులు %s గంటలు %s వివరించలేని %s "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:916
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:919
 #, c-format
 msgid "%s Default "
 msgstr "%s డిఫాల్ట్ "
@@ -5759,7 +5760,7 @@ msgstr ""
 #. %1$s:  IF op == 'view' 
 #. %2$s:  job.id | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:45
 #, c-format
 msgid ""
 "%s Details of job #%s &rsaquo; %s Background jobs &rsaquo; Administration "
@@ -5839,8 +5840,8 @@ msgstr "%s ప్రింటర్ ప్రొఫైల్‌ను సవర�
 
 #. For the first occurrence,
 #. %1$s:  IF ( biblionumber ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:813
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:816
 #, c-format
 msgid "%s Editing "
 msgstr "%s సవరించడం "
@@ -10817,7 +10818,7 @@ msgstr "సెట్ చేయలేదు "
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:818
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(రికార్డ్ సంఖ్య %s) %s మార్క్ రికార్డును జోడించండి %s"
@@ -10825,7 +10826,7 @@ msgstr "(రికార్డ్ సంఖ్య %s) %s మార్క్ ర�
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:798
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:801
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr "(రికార్డ్ సంఖ్య %s) %s మార్క్ రికార్డును జోడించండి %s "
@@ -10959,7 +10960,7 @@ msgstr "(సంఖ్యలలో మొత్తాన్ని నమోదు
 msgid "(exclusive) "
 msgstr "(ప్రత్యేకమైన) "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:817
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:820
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:151
 #, c-format
 msgid "(fast cataloging)"
@@ -11812,15 +11813,15 @@ msgstr "అకడమిక్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:870
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:872
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1071
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1073
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1081
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1083
 #, c-format
 msgid "Accepted"
 msgstr "ఆమోదించబడిన"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:52
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1006
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1008
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1016
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1018
 #, c-format
 msgid "Accepted by"
 msgstr "ఆమోదించబడిన చేత"
@@ -11830,12 +11831,12 @@ msgstr "ఆమోదించబడిన చేత"
 msgid "Accepted by the library"
 msgstr "లైబ్రరీ అంగీకరించింది"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1147
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1157
 #, c-format
 msgid "Accepted by:"
 msgstr "అంగీకరించారు:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1170
 #, c-format
 msgid "Accepted date from:"
 msgstr "అంగీకరించిన తేదీ నుండి:"
@@ -12086,7 +12087,7 @@ msgstr "సముపార్జన వివరాలు"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:286
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:577
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1185
 #, c-format
 msgid "Acquisition information"
 msgstr "సముపార్జన సమాచారం"
@@ -12180,8 +12181,8 @@ msgstr "సముపార్జన గణాంకాల విజార్డ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:382
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:48
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:103
@@ -12231,7 +12232,7 @@ msgstr "సరిపోలిక కనిపించకపోతే చర్�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:166
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:535
@@ -12285,6 +12286,7 @@ msgstr "సరిపోలిక కనిపించకపోతే చర్�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:313
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:183
@@ -12293,7 +12295,6 @@ msgstr "సరిపోలిక కనిపించకపోతే చర్�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:210
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:44
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
@@ -12541,7 +12542,7 @@ msgstr "క్రొత్త అంశాన్ని జోడించండ�
 msgid "Add a new message"
 msgstr "క్రొత్త సందేశాన్ని జోడించండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "Add a new record"
 msgstr "క్రొత్త రికార్డ్‌ను జోడించండి"
@@ -12804,8 +12805,8 @@ msgstr "అంశం రకాన్ని జోడించండి "
 msgid "Add item(s)"
 msgstr "వస్తువు జోడించు(s)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:12
 #, c-format
 msgid "Add items"
@@ -13539,8 +13540,8 @@ msgstr "సర్దుబాట్లు ప్లస్ షిప్పిం�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:66
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
@@ -14507,6 +14508,7 @@ msgstr "అమెరికన్ న్యూమిస్మాటిక్ స�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:75
@@ -14514,7 +14516,6 @@ msgstr "అమెరికన్ న్యూమిస్మాటిక్ స�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
@@ -14810,11 +14811,11 @@ msgstr "యాంటెన్నా.ఐఓ"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:582
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:589
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:669
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1063
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1107
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1128
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1149
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1073
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1138
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1159
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:58
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:68
@@ -15052,9 +15053,15 @@ msgstr "ఆర్కాడియా పబ్లిక్ లైబ్రరీ,
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:204
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/debit_types.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:842
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:965
 #, c-format
 msgid "Archive"
 msgstr "ఆర్కైవ్"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:961
+#, fuzzy, c-format
+msgid "Archive selected"
+msgstr "ముందుగా ఎంచుకున్నారు"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/currency.tt:220
@@ -15100,7 +15107,7 @@ msgid "Are you sure you want to cancel this order (%s)"
 msgstr "మీరు ఖచ్చితంగా ఈ ఆర్డర్‌ను రద్దు చేయాలనుకుంటున్నారా (%s)"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1096
 msgid "Are you sure you want to cancel your changes?"
 msgstr "మీరు ఖచ్చితంగా మీ మార్పులను రద్దు చేయాలనుకుంటున్నారా?"
 
@@ -15112,7 +15119,7 @@ msgid ""
 msgstr "మీరు ఖచ్చితంగా పికప్ లైబ్రరీని మార్చాలనుకుంటున్నారా %s కు %s ఈ అభ్యర్థన కోసం?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1096
 msgid ""
 "Are you sure you want to clone this circulation and fine rule from %s to %s "
 "library? This will override the existing rules in this library."
@@ -15121,7 +15128,7 @@ msgstr ""
 "ఈ లైబ్రరీలో ఉన్న నియమాలను భర్తీ చేస్తుంది."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1096
 msgid ""
 "Are you sure you want to clone this standard rule to %s library? This will "
 "override the existing rules in this library."
@@ -15239,7 +15246,7 @@ msgid "Are you sure you want to delete the selected search history entry?"
 msgstr "మీరు ఎంచుకున్న నివేదికలను ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1314
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "మీరు ఖచ్చితంగా ఈ సూచనలను తొలగించాలనుకుంటున్నారా?"
 
@@ -15411,7 +15418,7 @@ msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "మీరు ఖచ్చితంగా ఈ నివేదికను తొలగించాలనుకుంటున్నారా? దీన్ని రద్దు చేయలేము."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1096
 msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "మీరు ఖచ్చితంగా ఈ నియమాన్ని తొలగించాలనుకుంటున్నారా? దీన్ని రద్దు చేయలేము."
 
@@ -15437,8 +15444,8 @@ msgstr "మీరు ఖచ్చితంగా ఈ సభ్యత్వ ఫ�
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1293
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1314
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "మీరు ఖచ్చితంగా ఈ సూచనను తొలగించాలనుకుంటున్నారా?"
 
@@ -15466,7 +15473,7 @@ msgid "Are you sure you want to do this?"
 msgstr "మీరు దీన్ని ఖచ్చితంగా చేయాలనుకుంటున్నారా?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1095
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1096
 msgid "Are you sure you want to edit another rule?"
 msgstr "మీరు ఖచ్చితంగా మరొక నియమాన్ని సవరించాలనుకుంటున్నారా?"
 
@@ -15895,11 +15902,11 @@ msgstr "ప్రమాణం పేరు"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/result.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:311
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:348
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:420
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-availability-table.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:10
@@ -15996,7 +16003,7 @@ msgstr "రచయిత(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1343
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:366
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1027
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1037
 #: koha-tmpl/intranet-tmpl/prog/en/includes/suggestions-add-search.inc:10
 #, c-format
 msgid "Author:"
@@ -16543,9 +16550,9 @@ msgid "Background color"
 msgstr "నేపథ్య రంగు"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:72
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #, c-format
@@ -16605,6 +16612,7 @@ msgstr "బార్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
@@ -16612,7 +16620,6 @@ msgstr "బార్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:779
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:296
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:78
@@ -17418,7 +17425,7 @@ msgstr "మార్క్ బిబ్లియోగ్రాఫిక్ ఫ�
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:358
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1020
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1030
 #, c-format
 msgid "Bibliographic information"
 msgstr "బిబ్లియోగ్రాఫిక్ సమాచారం"
@@ -17660,7 +17667,7 @@ msgstr "బుక్ డ్రాప్ మోడ్"
 msgid "Book drop mode. "
 msgstr "బుక్ డ్రాప్ మోడ్. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1189
 #, c-format
 msgid "Book fund:"
 msgstr "పుస్తక నిధి:"
@@ -17828,7 +17835,7 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:58
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
@@ -17882,7 +17889,7 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:787
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -17931,6 +17938,9 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:25
@@ -17957,9 +17967,6 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:9
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:13
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:14
@@ -18019,6 +18026,7 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
@@ -18051,7 +18059,6 @@ msgstr "బ్రాంచ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:19
 msgid "Breadcrumb"
 msgstr "బ్రెడ్‌క్రంబ్"
@@ -18565,11 +18572,11 @@ msgstr "కాలిఫోర్నియా కాలేజ్ ఆఫ్ ఆర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:250
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:26
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
@@ -18814,7 +18821,7 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:184
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:186
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
@@ -18860,11 +18867,11 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:939
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:943
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:947
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:951
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:942
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:946
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:950
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:959
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -18936,6 +18943,13 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:378
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:171
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:57
@@ -18966,13 +18980,6 @@ msgstr "కింది ఫీల్డ్ నింపబడనందున ఈ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:432
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:35
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:375
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:378
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:380
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:478
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:68
@@ -19828,7 +19835,7 @@ msgstr "కాటలాగ్ గణాంకాలు "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:796
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
@@ -20084,7 +20091,7 @@ msgstr "వర్గాన్ని మార్చండి"
 msgid "Change currency"
 msgstr "ద్రవ్యం మార్చండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:913
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:63
 #, c-format
 msgid "Change framework"
@@ -20588,8 +20595,8 @@ msgstr "చెక్-ఇన్ తేదీ నుండి:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:439
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:876
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:878
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1077
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1079
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1087
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1089
 #, c-format
 msgid "Checked"
 msgstr "తనిఖీ"
@@ -21657,6 +21664,7 @@ msgstr "నిశ్చితమైన"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:129
@@ -21667,7 +21675,6 @@ msgstr "నిశ్చితమైన"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:201
 #, c-format
@@ -21821,7 +21828,7 @@ msgstr "సెలవుదినాన్ని జోడించడాని�
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:359
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1082
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1085
 msgid "Click to Expand this Tag"
 msgstr "ఈ ట్యాగ్‌ను విస్తరించడానికి క్లిక్ చేయండి"
 
@@ -21871,7 +21878,7 @@ msgstr "క్లిప్బోర్డ్కు"
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -21899,7 +21906,7 @@ msgstr "ఈ నియమాలను క్లోన్ చేయండి:"
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:462
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1190
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:268
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:184
@@ -21969,6 +21976,7 @@ msgstr "సర్క్యులేషన్ మరియు జరిమాన�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:534
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:540
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:359
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:107
@@ -21980,7 +21988,6 @@ msgstr "సర్క్యులేషన్ మరియు జరిమాన�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:435
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:451
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/chart.inc:106
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:185
@@ -22301,7 +22308,7 @@ msgstr "సేకరణ శీర్షిక"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1043
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1053
 #, c-format
 msgid "Collection title:"
 msgstr "సేకరణ శీర్షిక:"
@@ -23410,7 +23417,7 @@ msgstr "కాపీరైట్ &కాపీ; 2012-2016 "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:370
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1039
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1049
 #, c-format
 msgid "Copyright date:"
 msgstr "కాపీరైట్ తేదీ:"
@@ -24714,13 +24721,13 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:393
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:2341
@@ -24755,10 +24762,10 @@ msgstr "పొందిన తేదీ"
 msgid "Date acquired (item)"
 msgstr "పొందిన తేదీ (అంశం)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:206
 #, c-format
 msgid "Date added"
 msgstr "తేదీ జోడించబడింది"
@@ -25541,18 +25548,18 @@ msgstr "చర్య ప్రారంభించబడటానికి మ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:212
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:214
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/housebound.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:290
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
@@ -26007,8 +26014,8 @@ msgstr "ఒకే సెలవులను పరిధిలో తొలగి
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:367
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:368
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1092
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1094
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1095
 msgid "Delete this Tag"
 msgstr "ఈ ట్యాగ్‌ను తొలగించండి"
 
@@ -26045,7 +26052,7 @@ msgstr "ఈ సేవ్ చేసిన నివేదికను తొల�
 
 #. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:465
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1196
 msgid "Delete this subfield"
 msgstr "ఈ ఉప ఫీల్డ్‌ను తొలగించండి"
 
@@ -26489,7 +26496,7 @@ msgstr "గమ్యం లైబ్రరీ: "
 msgid "Destination record"
 msgstr "గమ్యం రికార్డు"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:138
 #, c-format
 msgid "Detailed messages: "
 msgstr "వివరణాత్మక సందేశాలు: "
@@ -26585,8 +26592,8 @@ msgstr "ఉద్యోగ వివరాలు #%s"
 
 #. For the first occurrence,
 #. %1$s:  job.id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:75
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:107
 #, c-format
 msgid "Details of job #%s"
 msgstr "ఉద్యోగ వివరాలు #%s"
@@ -27413,7 +27420,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "బ్యాచ్ సంఖ్య నుండి నకిలీ పోషకులు తొలగించబడ్డారు %s: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:227
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:825
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:828
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "నకిలీ రికార్డు అనుమానం"
@@ -27932,8 +27939,8 @@ msgid "Edit item #%s%s / Barcode %s%s"
 msgstr "అంశాన్ని సవరించండి #%s%s / బార్కోడ్ %s%s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:530
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:286
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cat-toolbar.inc:43
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #, c-format
@@ -28441,12 +28448,12 @@ msgstr "తేదీ పరిధి ముగింపు "
 msgid "End of interval"
 msgstr "విరామం ముగింపు"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:165
 #, c-format
 msgid "Ended"
 msgstr "ముగిసింది"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:130
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
 #, c-format
 msgid "Ended: "
 msgstr "ముగిసింది: "
@@ -29826,7 +29833,7 @@ msgid "Field 3"
 msgstr "ఫీల్డ్ 3"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
 msgid "Field autofilled by plugin"
 msgstr "ఫీల్డ్ ప్లగ్ఇన్ ద్వారా ఆటోఫిల్ చేయబడింది"
 
@@ -30127,7 +30134,7 @@ msgstr "బార్‌కోడ్‌ను ఫిల్టర్ చేయం�
 msgid "Filter by library"
 msgstr "లైబ్రరీ ద్వారా ఫిల్టర్ చేయండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1016
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1026
 #, c-format
 msgid "Filter by: "
 msgstr "దీని ద్వారా ఫిల్టర్ చేయండి: "
@@ -31357,10 +31364,10 @@ msgstr "గ్లైఫికాన్లు ఉచితం"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:246
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:177
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/dictionary.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1011
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1044
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1021
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1054
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1178
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1207
 msgid "Go"
 msgstr "వెళ్ళండి"
 
@@ -32211,12 +32218,12 @@ msgstr "పట్టుకొనుట:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:72
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reports-home.tt:66
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:205
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:353
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:235
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-menu.inc:28
 #, c-format
@@ -32503,7 +32510,7 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
@@ -32557,7 +32564,7 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:36
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:790
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:793
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:24
@@ -32607,6 +32614,9 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-home.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:28
@@ -32633,9 +32643,6 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/routing-lists.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/list.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/lists.tt:17
@@ -32695,6 +32702,7 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/access_files.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
@@ -32727,7 +32735,6 @@ msgstr "సెలవులు ఒక పరిధిలో సంవత్సర
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:19
 #, c-format
@@ -33138,7 +33145,7 @@ msgstr "ISBN/EAN/ISSN: %s"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:162
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1031
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1041
 #, c-format
 msgid "ISBN:"
 msgstr "ఐ స్ బి న:"
@@ -34073,7 +34080,7 @@ msgid "Import this batch into the catalog"
 msgstr "ఈ బ్యాచ్‌ను కేటలాగ్‌లోకి దిగుమతి చేయండి"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1171
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:172
 #, c-format
 msgid "Important"
@@ -34216,12 +34223,12 @@ msgid "Include all rows (ignore pagination):"
 msgstr "అన్ని అడ్డు వరుసలను చేర్చండి (ignore pagination):"
 
 #. INPUT type=checkbox name=filter_archived
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1055
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1057
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1065
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1067
 msgid "Include archived suggestions in the search"
 msgstr "శోధనలో ఆర్కైవ్ చేసిన సూచనలను చేర్చండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1053
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1063
 #, c-format
 msgid "Include archived:"
 msgstr "ఆర్కైవ్ చేయండి:"
@@ -34648,7 +34655,7 @@ msgstr "బోధకులు"
 msgid "Instructors:"
 msgstr "బోధకులు:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:97
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:99
 #, c-format
 msgid "Insufficient permission to see this job."
 msgstr "ఈ ఉద్యోగాన్ని చూడటానికి తగినంత అనుమతి లేదు."
@@ -35062,7 +35069,7 @@ msgid "Is new"
 msgstr "క్రొత్తది"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:826
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:829
 #, c-format
 msgid "Is this a duplicate of "
 msgstr "ఇది యొక్క నకిలీనా "
@@ -35667,11 +35674,11 @@ msgstr "అంశం ట్యాగ్‌లు ప్రస్తుతం స
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:604
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:799
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:47
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:996
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:998
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1006
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1008
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:185
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:19
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #, c-format
@@ -36048,12 +36055,12 @@ msgstr "జెంకిన్స్ నిర్వహణ:"
 msgid "Jo Ransom"
 msgstr "జో రాన్సమ్"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:159
 #, c-format
 msgid "Job ID"
 msgstr "ఉద్యోగ ఐడి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:113
 #, c-format
 msgid "Job ID: "
 msgstr "ఉద్యోగ ఐడి: "
@@ -37058,8 +37065,8 @@ msgstr "అన్ని గ్రంథాలయాలు: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:737
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:991
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1001
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1003
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:306
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:177
@@ -37475,7 +37482,7 @@ msgstr "వలయము"
 msgid "Link a host record to "
 msgstr "హోస్ట్ రికార్డ్‌ను లింక్ చేయండి "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:896
 #, c-format
 msgid "Link authorities automatically"
 msgstr "అధికారులను స్వయంచాలకంగా లింక్ చేయండి"
@@ -37734,7 +37741,7 @@ msgid "Loading records, please wait..."
 msgstr "రికార్డులు లోడ్ అవుతున్నాయి, దయచేసి వేచి ఉండండి..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:782
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:785
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
 #, c-format
 msgid "Loading, please wait..."
@@ -38177,10 +38184,10 @@ msgstr "MALMARC"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:176
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:12
 #, c-format
 msgid "MARC"
@@ -39268,8 +39275,8 @@ msgstr "విక్రేతలను నిర్వహించండి "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:51
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:732
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1001
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1003
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1011
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1013
 #, c-format
 msgid "Managed by"
 msgstr "నిర్వహించేది"
@@ -39282,7 +39289,7 @@ msgstr "నిర్వహించేది - ఆన్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1136
 #, c-format
 msgid "Managed by:"
 msgstr "నిర్వహించేది:"
@@ -39322,7 +39329,7 @@ msgid ""
 "Managed staged MARC records, including completing and reversing imports "
 msgstr "దిగుమతులను పూర్తి చేయడం మరియు తిప్పికొట్టడం సహా స్టేజ్డ్ మార్క్ రికార్డులను నిర్వహించింది "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1139
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1149
 #, c-format
 msgid "Management date from:"
 msgstr "నిర్వహణ తేదీ నుండి:"
@@ -40931,8 +40938,8 @@ msgstr "పేరు:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:330
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
@@ -42696,7 +42703,7 @@ msgstr "ఏ ఫలితాలు కనబడలేదు."
 msgid "No results match your search %sfor "
 msgstr "ఫలితాలు మీ శోధనకు సరిపోలడం లేదు %sకోసం "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:962
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:972
 #, c-format
 msgid "No results."
 msgstr "ఫలితాలు లేవు."
@@ -42856,8 +42863,8 @@ msgstr "లేదు, పునరుద్ధరించవద్దు (N)"
 msgid "No, let me think about it"
 msgstr "లేదు, దాని గురించి ఆలోచిద్దాం"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:842
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:843
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:845
 #, c-format
 msgid "No, save as new record"
 msgstr "లేదు, క్రొత్త రికార్డ్‌గా సేవ్ చేయండి"
@@ -42968,8 +42975,8 @@ msgstr "నాన్ బ్రేకింగ్ స్పేస్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:192
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1185
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1195
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:132
 #: koha-tmpl/intranet-tmpl/prog/en/includes/auth-finder-search.inc:134
 #: koha-tmpl/intranet-tmpl/prog/en/includes/authorities-search.inc:53
@@ -44769,8 +44776,8 @@ msgstr "ఆర్డర్ మొత్తం (%s) అందుబాటుల�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:888
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:890
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1089
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1091
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1099
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1101
 #: koha-tmpl/intranet-tmpl/prog/en/includes/filter-orders.inc:60
 #: koha-tmpl/intranet-tmpl/prog/en/includes/filter-orders.inc:62
 #, c-format
@@ -44924,7 +44931,7 @@ msgstr "వ్యవస్థ"
 msgid "Organization:"
 msgstr "సంస్థ:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:983
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:993
 #, c-format
 msgid "Organize by: "
 msgstr "Organize by: "
@@ -46740,8 +46747,8 @@ msgstr "పోషకులకు చెల్లింపు క్రెడి�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:427
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:864
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:866
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1065
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1067
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1075
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1077
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:179
 #, c-format
@@ -47784,7 +47791,7 @@ msgid "Please select a date range to display transactions for: "
 msgstr "లావాదేవీలను ప్రదర్శించడానికి దయచేసి తేదీ పరిధిని ఎంచుకోండి: "
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1314
 msgid "Please select a manager to assign to the selected suggestions"
 msgstr "దయచేసి ఎంచుకున్న సూచనలకు కేటాయించడానికి నిర్వాహకుడిని ఎంచుకోండి"
 
@@ -47862,7 +47869,7 @@ msgid "Please select at least one record to process"
 msgstr "ప్రాసెస్ చేయడానికి కనీసం ఒక రికార్డ్ అయినా ఎంచుకోండి"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1314
 msgid "Please select at least one suggestion"
 msgstr "దయచేసి కనీసం ఒక సూచనను ఎంచుకోండి"
 
@@ -48861,12 +48868,12 @@ msgstr "ప్రొఫైల్స్"
 msgid "Programmed texts"
 msgstr "ప్రోగ్రామ్ చేసిన పాఠాలు"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:159
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:161
 #, c-format
 msgid "Progress"
 msgstr "పురోగతి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:116
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:118
 #, c-format
 msgid "Progress: "
 msgstr "పురోగతి: "
@@ -48894,10 +48901,10 @@ msgstr "తొలగింపును నిర్ధారించండి"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:125
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:276
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:361
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:208
 #, c-format
 msgid "Public"
 msgstr "ప్రజా"
@@ -49142,7 +49149,7 @@ msgstr "ప్రచురణకర్త సంఖ్య:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:384
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:150
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:378
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1035
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1045
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/suggestions-add-search.inc:11
 #, c-format
@@ -49298,7 +49305,7 @@ msgstr "అందుకున్న పరిమాణం: "
 msgid "Quantity: "
 msgstr "మొత్తము: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:163
 #, c-format
 msgid "Queued"
 msgstr "క్యూడ్"
@@ -49308,7 +49315,7 @@ msgstr "క్యూడ్"
 msgid "Queued request"
 msgstr "క్యూ అభ్యర్థన"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:124
 #, c-format
 msgid "Queued: "
 msgstr "క్యూడ్: "
@@ -50008,8 +50015,8 @@ msgstr "తిరస్కరించు"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:882
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:884
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1083
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1085
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1093
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1095
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
@@ -50623,8 +50630,8 @@ msgstr ""
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:364
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1087
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1088
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1090
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1091
 msgid "Repeat this Tag"
 msgstr "ఈ ట్యాగ్‌ను పునరావృతం చేయండి"
 
@@ -50682,7 +50689,7 @@ msgid "Replace record via Z39.50/SRU"
 msgstr "ద్వారా రికార్డును భర్తీ చేయండి Z39.50/SRU"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:253
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:888
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:891
 #, c-format
 msgid "Replace record via Z39.50/SRU search"
 msgstr "రికార్డును భర్తీ చేయండి Z39.50/SRU వెతకండి"
@@ -50823,7 +50830,7 @@ msgstr "ఉప సమూహాన్ని నివేదించండి:"
 msgid "Report:"
 msgstr "నివేదించండి:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:133
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:135
 #, c-format
 msgid "Report: "
 msgstr "నివేదన: "
@@ -51079,7 +51086,7 @@ msgstr "Require.js JS మాడ్యూల్ సిస్టమ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1167
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:61
@@ -51088,6 +51095,7 @@ msgstr "Require.js JS మాడ్యూల్ సిస్టమ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:766
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:199
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:256
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:308
@@ -51131,7 +51139,6 @@ msgstr "Require.js JS మాడ్యూల్ సిస్టమ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1213
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1270
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1479
-#: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
@@ -51172,8 +51179,9 @@ msgstr "Require.js JS మాడ్యూల్ సిస్టమ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:411
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:56
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:331
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:169
@@ -51191,7 +51199,6 @@ msgstr "Require.js JS మాడ్యూల్ సిస్టమ్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:340
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:345
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:120
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:331
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:34
@@ -51691,7 +51698,7 @@ msgstr "బుట్టకు తిరిగి వెళ్ళు"
 msgid "Return to the basket without making a new order."
 msgstr "క్రొత్త ఆర్డర్ చేయకుండా బుట్టకు తిరిగి వెళ్ళు."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:144
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:146
 #, c-format
 msgid "Return to the job list"
 msgstr "ఉద్యోగ జాబితాకు తిరిగి వెళ్ళు"
@@ -52350,9 +52357,9 @@ msgstr "శనివారాలు"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:866
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:869
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:873
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:886
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:138
@@ -52380,6 +52387,11 @@ msgstr "శనివారాలు"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:373
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:477
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:199
@@ -52393,11 +52405,6 @@ msgstr "శనివారాలు"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:431
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:571
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:373
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:477
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:466
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:127
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cataloguing_create_av.inc:37
@@ -52425,13 +52432,13 @@ msgstr "సేవ్ చేయండి (సేవ్ చేసిన ప్ల�
 msgid "Save all %s preferences"
 msgstr "అన్నీ సేవ్ %s ప్రాధాన్యతలను"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:877
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:880
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:266
 #, c-format
 msgid "Save and continue editing"
 msgstr "సేవ్ చేసి, సవరించడం కొనసాగించండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:876
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:879
 #, c-format
 msgid "Save and edit items"
 msgstr "అంశాలను సేవ్ చేయండి మరియు సవరించండి"
@@ -52446,7 +52453,7 @@ msgstr "సేవ్ చేసి చెల్లించండి"
 msgid "Save and preview routing slip"
 msgstr "రౌటింగ్ స్లిప్‌ను సేవ్ చేయండి మరియు ప్రివ్యూ చేయండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:875
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:878
 #, c-format
 msgid "Save and view record"
 msgstr "రికార్డును సేవ్ చేసి చూడండి"
@@ -53447,7 +53454,7 @@ msgid "Section"
 msgstr "విభాగం"
 
 #. %1$s:  BIG_LOO.number | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1018
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1021
 #, c-format
 msgid "Section %s"
 msgstr "విభాగం %s"
@@ -53742,6 +53749,7 @@ msgstr "సమయాన్ని ఎంచుకోండి"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:128
@@ -53752,7 +53760,6 @@ msgstr "సమయాన్ని ఎంచుకోండి"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/problem-reports.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:504
 #: koha-tmpl/intranet-tmpl/prog/en/includes/branch-selector.inc:3
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:201
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -54737,7 +54744,7 @@ msgstr "వర్చువల్ కీబోర్డ్ లేఅవుట్�
 msgid "Settings"
 msgstr "సెట్టింగులు "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:898
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:59
 #, c-format
 msgid "Settings "
@@ -55027,7 +55034,7 @@ msgstr "పరిష్కరించని వాదనలు"
 msgid "Show MARC"
 msgstr "మార్క్ చూపించు"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:905
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:908
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "మార్క్ ట్యాగ్ డాక్యుమెంటేషన్ లింక్‌లను చూపించు"
@@ -55324,7 +55331,7 @@ msgstr "సభ్యత్వాలను చూపించు"
 msgid "Show suggestion #%s "
 msgstr "సూచన చూపించు #%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:907
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:910
 #, c-format
 msgid "Show tags"
 msgstr "ట్యాగ్‌లను చూపించు"
@@ -56211,12 +56218,12 @@ msgstr "శోధనను ప్రారంభించండి"
 msgid "Start using Koha"
 msgstr "కోహా ఉపయోగించడం ప్రారంభించండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:162
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:164
 #, c-format
 msgid "Started"
 msgstr "ప్రారంభమైంది"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:126
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:128
 #, c-format
 msgid "Started: "
 msgstr "ప్రారంభమైంది: "
@@ -56345,7 +56352,7 @@ msgstr "గణాంకాల విజార్డ్స్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:324
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:711
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:757
@@ -56369,8 +56376,8 @@ msgstr "గణాంకాల విజార్డ్స్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:325
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:413
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:739
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:986
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:988
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:996
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:998
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:353
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:420
@@ -56400,14 +56407,14 @@ msgstr "స్థితి మార్చబడింది"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:635
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:420
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1061
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1071
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:130
 #, c-format
 msgid "Status:"
 msgstr "స్థాయి:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:115
 #, c-format
 msgid "Status: "
 msgstr "స్థితి: "
@@ -57169,7 +57176,7 @@ msgstr "ద్వారా సూచించబడింది"
 msgid "Suggested by - on"
 msgstr "సూచించబడింది - ఆన్"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1115
 #, c-format
 msgid "Suggested by:"
 msgstr "సూచించినది:"
@@ -57192,7 +57199,7 @@ msgstr "సూచించినది: "
 msgid "Suggested by: %s%s, %s %s ("
 msgstr "సూచించబడింది: %s%s, %s %s ("
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1128
 #, c-format
 msgid "Suggested date from:"
 msgstr "దీని నుండి సూచించిన తేదీ:"
@@ -57227,7 +57234,7 @@ msgstr "సూచన తగ్గింది"
 msgid "Suggestion details"
 msgstr "సూచన వివరాలు"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1050
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1060
 #, c-format
 msgid "Suggestion information"
 msgstr "సూచన సమాచారం"
@@ -57429,7 +57436,7 @@ msgid "Switch languages"
 msgstr "భాషలను మార్చండి"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:901
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:904
 #, c-format
 msgid "Switch to advanced editor"
 msgstr "అధునాతన ఎడిటర్‌కు మారండి"
@@ -57846,8 +57853,8 @@ msgstr "ట్యాగ్ తొలగించబడింది"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:451
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:456
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1186
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:117
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:127
 #, c-format
@@ -59244,7 +59251,7 @@ msgstr "రికార్డు (%s) జాబితాకు జోడిం�
 msgid "The record id "
 msgstr "రికార్డ్ ఐడి "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:994
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr "మీరు సవరించడానికి ప్రయత్నిస్తున్న రికార్డ్ ఉనికిలో లేదు."
@@ -59490,7 +59497,7 @@ msgstr "పోషకుల జాబితాలు లేవు."
 msgid "There are no authorized values defined for %s"
 msgstr "దీని కోసం అధీకృత విలువలు నిర్వచించబడలేదు %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:192
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:194
 #, c-format
 msgid "There are no background jobs yet. "
 msgstr "ఇంకా నేపథ్య ఉద్యోగాలు లేవు. "
@@ -60790,6 +60797,9 @@ msgstr "TinyMCE WYSIWYG ఎడిటర్ v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:229
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:347
+#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:310
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:136
@@ -60801,9 +60811,6 @@ msgstr "TinyMCE WYSIWYG ఎడిటర్ v5.0.16 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:358
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:244
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:444
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:229
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:347
-#: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:17
@@ -60890,7 +60897,7 @@ msgstr "శీర్షిక పదబంధం"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:370
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:361
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1023
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1033
 #: koha-tmpl/intranet-tmpl/prog/en/includes/serials-search.inc:17
 #: koha-tmpl/intranet-tmpl/prog/en/includes/subscriptions-search.inc:13
 #: koha-tmpl/intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
@@ -61120,9 +61127,9 @@ msgstr "చిత్రాన్ని నవీకరించడానిక�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:97
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1164
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1174
 #, c-format
 msgid "To:"
 msgstr "కు:"
@@ -62027,7 +62034,7 @@ msgstr "టర్కోయీస్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:449
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:160
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:162
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:152
@@ -62036,9 +62043,9 @@ msgstr "టర్కోయీస్"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:268
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:400
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:403
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: koha-tmpl/intranet-tmpl/prog/en/includes/ill-list-table.inc:17
@@ -62055,7 +62062,7 @@ msgstr "రకం"
 msgid "Type:"
 msgstr "రకం:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:118
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:24
 #, c-format
@@ -62750,7 +62757,7 @@ msgstr "డేటాబేస్ నిర్మాణాన్ని నవీ�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:943
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:287
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:55
@@ -62850,8 +62857,8 @@ msgstr "అప్‌లోడ్ డైరెక్టరీని: "
 
 #. INPUT type=submit name=upload
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:70
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload-images.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:296
@@ -63842,7 +63849,7 @@ msgstr "నిలువుగా: "
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:461
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -65115,7 +65122,7 @@ msgstr "అవును, ఈ ఉప ఫీల్డ్‌ను తొలగి�
 msgid "Yes, delete this tag"
 msgstr "అవును, ఈ ట్యాగ్‌ను తొలగించండి"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:830
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:833
 #, c-format
 msgid "Yes, edit existing items"
 msgstr "అవును, ఇప్పటికే ఉన్న అంశాలను సవరించండి"
@@ -65146,7 +65153,7 @@ msgid "Yes: Edit existing authority"
 msgstr "అవును: ఉన్న అథారిటీ సవరించండి"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:835
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:838
 msgid "Yes: View existing items"
 msgstr "అవును: ఇప్పటికే ఉన్న అంశాలను చూడండి"
 
@@ -66171,7 +66178,7 @@ msgstr "వివిధ ఆకృతిలో రికార్డులు. �
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:320
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:893
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #, c-format
 msgid "Z39.50/SRU search"
@@ -66286,11 +66293,6 @@ msgstr "పెద్దది చెయ్యి"
 msgid "[ New list ]"
 msgstr "[ క్రొత్త జాబితా ]"
 
-#. INPUT type=text name=discount
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:300
-msgid "[% discount | format ("
-msgstr "[% డిస్కౌంట్ | ఫార్మాట్ ("
-
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:371
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
@@ -66381,7 +66383,7 @@ msgstr "[విస్మరించవచ్చు] "
 msgid "[Previous page]"
 msgstr "[ముందు పేజి]"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1016
+#: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1026
 #, c-format
 msgid "[clear]"
 msgstr "[స్పష్టమైన]"
@@ -67180,7 +67182,7 @@ msgstr "నిలిపివేస్తుంది 'మన' సిస్ట�
 msgid "display detail for this librarian."
 msgstr "ఈ లైబ్రేరియన్ కోసం వివరాలను ప్రదర్శించండి."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #, c-format
 msgid "do a catalog search"
 msgstr "కేటలాగ్ శోధన చేయండి"
@@ -68269,7 +68271,7 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "లేదా"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:993
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:996
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:438
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:443
@@ -68820,7 +68822,7 @@ msgid "system preference if you wish to enable this feature."
 msgstr "మీరు ఈ లక్షణాన్ని ప్రారంభించాలనుకుంటే సిస్టమ్ ప్రాధాన్యత."
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:981
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:984
 msgid "tag_anchor_%s_%s%s"
 msgstr "tag_anchor_%s_%s%s"
 
@@ -72151,6 +72153,9 @@ msgstr ""
 #~ "You should enable the TalkingTechItivaPhoneNotification preference to use "
 #~ "the phone templates."
 #~ msgstr "ఫోన్ టెంప్లేట్‌లను ఉపయోగించడానికి మీరు టాకింగ్‌టెక్ఇటివాఫోన్ నోటిఫికేషన్ ప్రాధాన్యతను ప్రారంభించాలి."
+
+#~ msgid "[% discount | format ("
+#~ msgstr "[% డిస్కౌంట్ | ఫార్మాట్ ("
 
 #~ msgid ""
 #~ "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "

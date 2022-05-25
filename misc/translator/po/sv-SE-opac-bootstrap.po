@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-17 08:25-0300\n"
-"PO-Revision-Date: 2022-03-09 10:02+0000\n"
+"POT-Creation-Date: 2022-05-09 19:52-0300\n"
+"PO-Revision-Date: 2022-05-02 09:15+0000\n"
 "Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1646820145.085167\n"
+"X-POOTLE-MTIME: 1651482915.953017\n"
 "X-Pootle-Path: /sv/21.05/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -306,7 +306,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:86
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s Inga träffar. %s "
@@ -559,6 +559,13 @@ msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s och %s "
 msgid "%s (Record no. %s)"
 msgstr "%s (Post nr. %s)"
 
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:115
+#, fuzzy, c-format
+msgid "%s 0 records %s "
+msgstr "%s (Post nr. %s)"
+
 #. %1$s:  USE raw -
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
 #, c-format
@@ -631,9 +638,9 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
-msgstr "Automatiskt omlån"
+msgstr "%s Automatiskt omlån "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
@@ -801,17 +808,19 @@ msgstr ""
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
-msgstr "Automatiskt förnyelse misslyckades, du har obetalda avgifter. "
+msgstr ""
+"%s Kan inte längre lånas om %s Automatiskt omlån misslyckades, du har "
+"obetalda avgifter. "
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#, fuzzy, c-format
+#, c-format
 msgid "%s No renewal before %s "
-msgstr "Kan inte lånas om före %s"
+msgstr "%s Kan inte lånas om före %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -845,20 +854,22 @@ msgstr "%s Inte tillåtet"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "Kan ej omlånas"
+msgstr "%s Kan ej lånas om "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.too_unseen ) 
 #. %3$s:  ISSUE.renewsleft | html 
 #. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
-msgstr "Exemplaret måste lånas om på biblioteket. %s omlån kvarstår"
+msgstr ""
+"%s Kan inte lånas om %s Exemplaret måste lånas om på biblioteket. %s omlån "
+"kvarstår %s Inte tillåtet "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -1123,12 +1134,6 @@ msgid ""
 msgstr ""
 "%s Det tillkommer en reservationsavgift %s när du hämtar detta exemplar %s "
 "Det tillkommer en reservationsavgift %s för denna reservation %s "
-
-#. %1$s:  resul.used | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:113
-#, c-format
-msgid "%s biblios"
-msgstr "%s biblios"
 
 #. %1$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:57
@@ -1431,13 +1436,6 @@ msgstr "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
 msgid "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:113
-#, c-format
-msgid "%s0 biblios%s "
-msgstr "%s0 biblios%s "
-
 #. %1$s:  IF ( total ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -1445,7 +1443,7 @@ msgstr "%s0 biblios%s "
 #. %5$s:  LibraryNameTitle | html 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:40
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:41
 #, c-format
 msgid ""
 "%sAuthority search result%sNo results found%s &rsaquo; %s%s%sKoha online%s "
@@ -3486,7 +3484,7 @@ msgstr "Auktoritet"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:42
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #, c-format
 msgid "Authority search"
@@ -3501,8 +3499,8 @@ msgstr "Auktoritetssökning"
 msgid "Authority search &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Auktoritetssökning &rsaquo; %s%s%sKoha online%s-katalog"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:96
 #, c-format
 msgid "Authority search results"
 msgstr "Auktoritetssökresultat"
@@ -3512,7 +3510,7 @@ msgstr "Auktoritetssökresultat"
 msgid "Authority type: "
 msgstr "Auktoritetstyp: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:99
 #, c-format
 msgid "Authorized headings"
 msgstr "Auktoriserade rubriker"
@@ -3645,11 +3643,6 @@ msgstr ""
 msgid "BibTeX"
 msgstr "BibTeX"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:101
-#, c-format
-msgid "Biblio records"
-msgstr "Biblio-poster"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:383
 #, c-format
 msgid "Bibliographies"
@@ -3687,7 +3680,7 @@ msgstr "Punktskrift"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:14
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:14
@@ -4741,7 +4734,7 @@ msgid "Current library"
 msgstr "Aktuellt bibliotek"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:21
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:19
 msgid "Current page: Page %s"
 msgstr "Aktuell sida: Sida %s"
@@ -4975,7 +4968,7 @@ msgstr "Avd."
 msgid "Description"
 msgstr "Beskrivning"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:110
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:137
 #, c-format
 msgid "Details"
@@ -5948,7 +5941,7 @@ msgid "Go to detail"
 msgstr "Gå till detaljvy"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:25
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
 msgstr "Gå till sida %s"
@@ -5964,13 +5957,13 @@ msgid "Go to the last page"
 msgstr "Gå till den sista sidan"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 msgid "Go to the next page"
 msgstr "Gå till nästa sida"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:13
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
 msgid "Go to the previous page"
 msgstr "Gå till föregående sida"
@@ -6183,7 +6176,7 @@ msgstr "Reservationshistorik"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:17
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:17
@@ -7736,7 +7729,7 @@ msgstr "Nyheter från %s%s%sbiblioteket%s"
 msgid "Next"
 msgstr "Nästa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
@@ -9106,7 +9099,7 @@ msgstr "Föregående"
 msgid "Previous"
 msgstr "Föregående"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:14
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:15
 #, c-format
 msgid "Previous "
 msgstr "Föregående "
@@ -9463,6 +9456,11 @@ msgstr "RecordedBooks-sökning efter '%s'"
 msgid "RecordedBooks search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "RecordedBooks-sökning för '%s' &rsaquo; %s%s%sKoha online%s-katalog"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:102
+#, fuzzy, c-format
+msgid "Records"
+msgstr "GetRecords"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
@@ -9818,7 +9816,7 @@ msgstr "Obligatoriskt"
 msgid "Resort list"
 msgstr "Sortera om lista"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:57
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:58
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:303
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:75
@@ -9833,7 +9831,7 @@ msgstr "Resultat"
 #. %1$s:  from | html 
 #. %2$s:  to | html 
 #. %3$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:86
 #, c-format
 msgid "Results %s to %s of %s"
 msgstr "Resultat %s till %s av %s"
@@ -10166,7 +10164,7 @@ msgid "Search results"
 msgstr "Sökresultat"
 
 #. NAV
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:9
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:47
@@ -10648,7 +10646,7 @@ msgstr "Visa år: "
 
 #. %1$s:  resultcount | html 
 #. %2$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:84
 #, c-format
 msgid "Showing %s of about %s results"
 msgstr "Visar %s av cirka %s resultat"
@@ -12150,7 +12148,7 @@ msgstr "Tisdag"
 msgid "Type"
 msgstr "Typ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:100
 #, c-format
 msgid "Type of heading"
 msgstr "Typ av rubrik"
@@ -13585,11 +13583,6 @@ msgstr "[ Fler listor ]"
 msgid "[ New list ]"
 msgstr "[ Ny lista ]"
 
-#. INPUT type=text name=limit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:97
-msgid "[% limit or"
-msgstr "[% begränsning eller"
-
 #. %1$s:  HTML5MediaParent | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:911
 #, c-format
@@ -14507,6 +14500,9 @@ msgstr "×"
 #~ "%s Väntar %s Reserverad %s för låntagare %s den %s förväntas den %s %s "
 #~ "sedan %s %s %s %s %s %s %s. "
 
+#~ msgid "%s biblios"
+#~ msgstr "%s biblios"
+
 #~ msgid ""
 #~ "%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging "
 #~ "settings"
@@ -14709,6 +14705,9 @@ msgstr "×"
 #~ msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 #~ msgstr "%s%s%sKoha online%s katalog &rsaquo; Din sökhistorik"
 
+#~ msgid "%s0 biblios%s "
+#~ msgstr "%s0 biblios%s "
+
 #~ msgid "(%s of %s renewals remaining)"
 #~ msgstr "(%s av %s omlån kvar)"
 
@@ -14745,6 +14744,9 @@ msgstr "×"
 #, fuzzy
 #~ msgid "Are you sure you want to remove this recall?"
 #~ msgstr "Är du säker på att du vill ta bort den här delningen?"
+
+#~ msgid "Biblio records"
+#~ msgstr "Biblio-poster"
 
 #~ msgid "CGI debug is on."
 #~ msgstr "CGI-felsökning är aktiverat."
@@ -15126,6 +15128,9 @@ msgstr "×"
 #, fuzzy
 #~ msgid "Your recalls history &rsaquo; %s%s%sKoha online%s catalog"
 #~ msgstr "Din reservationshistorik &rsaquo; %s%s%sKoha online%s-katalog"
+
+#~ msgid "[% limit or"
+#~ msgstr "[% begränsning eller"
 
 #, fuzzy
 #~ msgid "breadcrumb"

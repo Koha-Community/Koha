@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2021-10-01 11:46+0000\n"
+"PO-Revision-Date: 2022-05-18 20:41+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1633088779.329424\n"
+"X-POOTLE-MTIME: 1652906508.106291\n"
 "X-Pootle-Path: /cs/21.05/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -86,6 +86,9 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters"
 "\">UseCashRegisters</a>)"
 msgstr ""
+"  funkci prodejního místa, která umožňuje zaúčtovat anonymní finanční "
+"transakce. (Vyžaduje <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -533,7 +536,6 @@ msgid "admin.pref Share anonymous usage statistics"
 msgstr "Sdílet anonymní statistiky využití"
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# Email address failed overdue "
 "notices are sent to: "
@@ -967,7 +969,7 @@ msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#SendAllEmailsTo# Email to redirect all messages to: "
-msgstr "E-mail kam budou přeposílány všechny zrpávy:"
+msgstr "E-mail, kam budou přeposílány všechny zprávy:"
 
 # Administration > Login options
 msgid ""
@@ -3403,7 +3405,7 @@ msgstr "MVS"
 
 # Circulation > Return claims
 msgid "circulation.pref Return claims"
-msgstr "Reklamace vrácení"
+msgstr "Sporné výpůjčky"
 
 # Circulation > Self check-in module
 msgid "circulation.pref Self check-in module"
@@ -4239,7 +4241,7 @@ msgstr ""
 msgid ""
 "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims "
 "returned\","
-msgstr "Pokud bude výpůjčka označena jako \"reklamace vrácení\","
+msgstr "Pokud bude výpůjčka označena jako \"Sporná výpůjčka\","
 
 # Circulation > Return claims
 msgid ""
@@ -4289,9 +4291,8 @@ msgid ""
 msgstr ""
 
 # Circulation > Return claims
-#, fuzzy
 msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
-msgstr "Reklamace vrácení"
+msgstr "dní."
 
 # Circulation > Holds policy
 msgid ""
@@ -4520,11 +4521,11 @@ msgstr "možnost vytvořit ve výsledku hledání rezervace na více záznamů "
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
-msgstr ""
+msgstr "Ignorovat kalendář"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
-msgstr ""
+msgstr "Používat kalendář"
 
 # Circulation > Holds policy
 msgid ""
@@ -5012,7 +5013,7 @@ msgstr "Upřednostňovat"
 
 # Circulation > Holds policy
 msgid "circulation.pref#LocalHoldsPriority# holding library"
-msgstr "aktuální knihovna"
+msgstr "aktuální umístění"
 
 # Circulation > Holds policy
 # Circulation > Holds policy
@@ -5182,7 +5183,6 @@ msgid "circulation.pref#OPACAllowHoldDateInFuture# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that "
 "don't enter the waiting list until a certain future date. (<a href=\"/cgi-"
@@ -5190,7 +5190,9 @@ msgid ""
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
 "čtenářům vytvářet rezervaci s počátečním datem platnosti v budoucnu. "
-"(parametr AllowHoldDateInFuture musí být povolen)."
+"(Parametr <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> musí "
+"být povolen)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -5289,11 +5291,11 @@ msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
-msgstr ""
+msgstr "Ignorovat kalendář"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Use calendar"
-msgstr ""
+msgstr "Použít kalendář"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5597,11 +5599,13 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr ""
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
-"interface."
-msgstr "prodloužení výpůjček."
+"interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
+"cronjob."
+msgstr ""
+"prodlužování výpůjček z rozhraní pro knihovníky a prostřednictvím cronjobu "
+"<code>misc/cronjobs/automatic_renewals.pl</code>."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -5948,7 +5952,7 @@ msgstr "zrušení rezervací on-line katalogu."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
-msgstr ""
+msgstr "Ignorovat kalendář"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
@@ -6885,12 +6889,10 @@ msgid "enhanced_content.pref#CustomCoverImages# Don't display"
 msgstr ""
 
 # Enhanced content > Local or remote cover images
-#, fuzzy
 msgid ""
 "enhanced_content.pref#CustomCoverImages# For control fields you can use just "
 "{field}, like {001}."
-msgstr ""
-"obrázky obálek ve výsledcích vyhledávání a v detailu titulu v katalogu."
+msgstr "Pro kontrolní pole je možné použít pouze {tag_pole}, např. {001}"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -7552,7 +7554,6 @@ msgid "enhanced_content.pref#SyndeticsEditions# Show"
 msgstr "Zobrazovat"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsEditions# information about other editions of "
 "a title from Syndetics on item detail pages on the OPAC (when <a href=\"/cgi-"
@@ -7560,7 +7561,8 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on)."
 msgstr ""
 "informace o jiných vydáních ze Syndetics v detailu titulu v katalogu (pokud "
-"je parametr OPACFRBRizeEditions zapnut)."
+"je parametr <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACFRBRizeEditions\">OPACFRBRizeEditions</a> zapnut)."
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsEnabled# Don't use"
@@ -7756,7 +7758,6 @@ msgid "enhanced_content.pref#ThingISBN# Use"
 msgstr "Používat"
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "enhanced_content.pref#ThingISBN# the ThingISBN service to show other "
 "editions of a title (when either <a href=\"/cgi-bin/koha/admin/preferences."
@@ -7765,8 +7766,11 @@ msgid ""
 "\">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for "
 "Libraries."
 msgstr ""
-"službu ThingISBN k zobrazení dalších vydání titulu (je nutné mít aktivní "
-"FRBRizeEditions nebo OPACFRBRizeEditions). Toto nezávislé na službě Library "
+"službu ThingISBN k zobrazení dalších vydání titulu (je nutné mít aktivní <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> nebo <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
+"\">OPACFRBRizeEditions</a>). Toto nastavení je nezávislé na službě Library "
 "Thing pro knihovny."
 
 # I18N/L10N
@@ -7809,7 +7813,7 @@ msgstr "Pondělí"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Saturday"
-msgstr "Sobota"
+msgstr "Sobotu"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Sunday"
@@ -8165,8 +8169,9 @@ msgid "logs.pref#IllLog# Log"
 msgstr ""
 
 # Logging > Logging
+#, fuzzy
 msgid "logs.pref#IllLog# when changes to ILL requests take place."
-msgstr ""
+msgstr "při změnách v požadavcích na MVS."
 
 # Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -8266,7 +8271,7 @@ msgstr "On-line katalog"
 
 # OPAC > Advanced search options
 msgid "opac.pref Advanced search options"
-msgstr ""
+msgstr "Možnosti pokročilého vyhledávání"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -8544,12 +8549,13 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
 "option must be turned on."
-msgstr ". Poznámka: volba OPACXSLT musí být povolena."
+msgstr ""
+". Poznámka: volba <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACXSLT\">OPACXSLT</a> musí být povolena."
 
 # OPAC > Appearance
 msgid ""
@@ -8657,7 +8663,7 @@ msgstr "První sloupec tabulky"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# Holding library"
-msgstr "Aktuální knihovna"
+msgstr "Aktuální umístění"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# Home library"
@@ -8887,7 +8893,7 @@ msgstr "domovskou knihovnu"
 msgid ""
 "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in "
 "OPAC search results:"
-msgstr "Vložit následující HTML pod fasety ve výsledcích vyledání v OPACu."
+msgstr "Vložit následující HTML pod fasety ve výsledcích hledání v OPAC:"
 
 # OPAC > Appearance
 msgid ""
@@ -10102,13 +10108,12 @@ msgid ""
 msgstr ""
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
 msgstr ""
-"jako výchozí čtenářskou kategorii, pro čtenáře registrované pomocí on-line "
-"katalogu."
+"<br><strong>Varování: Pro samoobslužnou registraci nepoužívejte běžné "
+"čtenářské kategorie.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -10150,7 +10155,6 @@ msgid ""
 msgstr ""
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -10159,8 +10163,9 @@ msgid ""
 "make it empty."
 msgstr ""
 "<br><strong>Poznámka:</strong> Toto nastavení vyžaduje mít naplánovanou "
-"úlohu <code>misc/cronjobs/purge_suggestions.pl</code>. Požádejte správce "
-"systému o její nastavení."
+"úlohu <code>misc/cronjobs/cleanup_database.pl</code>. Požádejte správce "
+"systému o její nastavení. <br>Pokud zda nastavíte nulu, nebo necháte "
+"nastavení prázdné, nebudou čtenáři vůbec odstraňováni."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -10185,7 +10190,7 @@ msgstr ""
 msgid ""
 "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration "
 "for the following libraries:"
-msgstr "Povolit samoregistraci pro následující knihovny:"
+msgstr "Povolit samobslužnou registraci v následujících knihovnách:"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10379,14 +10384,14 @@ msgid "opac.pref#ShowReviewerPhoto# Show"
 msgstr "Zobrazit"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The "
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
 "profilový obrázek vedle komentáře v on-line katalogu. Profilový obrázek se "
-"bude hledat na www.libravatar.org podle e-mailové adresy uživatele."
+"bude hledat ve službě <a href=\"https://www.libravatar.org\" target=\"_blank"
+"\">Libravatar</a> podle e-mailové adresy uživatele."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
@@ -10847,7 +10852,7 @@ msgstr ""
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Library setup"
-msgstr ""
+msgstr "Informace o registraci"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Main address"
@@ -10923,8 +10928,10 @@ msgid ""
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
 "<br><strong>Poznámka:</strong> Uplatňuje se jen pro zdvořilostní zprávy. Pro "
-"povolení stejného přístupu i pro vlastní čtenáře, upravte "
-"EnhancedMessagingPreferencesOPAC."
+"povolení stejného přístupu i pro vlastní čtenáře, upravte <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a>."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -10953,15 +10960,15 @@ msgid ""
 msgstr ""
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EnhancedMessagingPreferences"
 "\">EnhancedMessagingPreferences</a> must be enabled."
 msgstr ""
-"<br><strong>Poznámka: </strong> EnhancedMessagingPreferences musí být "
-"zapnuto."
+"<br><strong>Poznámka: </strong> <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a> musí být zapnuto."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -11060,14 +11067,13 @@ msgid "patrons.pref#GDPR_Policy# permissive"
 msgstr ""
 
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "patrons.pref#LockExpiredDelay# <br><strong>NOTE:</strong> This system "
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
 "<br><strong>Poznámka:</strong> Toto nastavení vyžaduje mít naplánovanou "
-"úlohu <code>misc/cronjobs/purge_suggestions.pl</code>. Požádejte správce "
+"úlohu <code>misc/cronjobs/cleanup_database.pl</code>. Požádejte správce "
 "systému o její nastavení."
 
 # Patrons > General > LockExpiredDelay
@@ -11523,7 +11529,7 @@ msgstr "Používat SMS::Send::"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
-msgstr "driver pro posílání SMS zpráv."
+msgstr "ovladač pro posílání SMS zpráv."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# . Override from address with"
@@ -11784,13 +11790,14 @@ msgstr ""
 msgid ""
 "searching.pref#AdvancedSearchLanguages# ISO 639-2 language codes (separate "
 "values with | or ,)."
-msgstr "(vložte kódy jazyků podle ISO 639-2 oddělené znakem \"|\" nebo \",\")."
+msgstr "kódy jazyků podle ISO 639-2 (oddělené znakem | nebo ,)."
 
 # Searching > Search form
+#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchLanguages# Limit the languages listed in the "
 "advanced search drop-down to the"
-msgstr "Omezit seznam jazyků pro pokročilé vyhledávání na"
+msgstr "Výběrem jazyků z rolety omezíte výsledky pokročilého hledání na"
 
 # Searching > Search form
 msgid ""
@@ -11803,10 +11810,13 @@ msgstr ""
 "fondu (<strong>loc</strong>)."
 
 # Searching > Search form
+#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the OPAC and staff "
 "interface advanced search for limiting searches on the"
 msgstr ""
+"Zobrazit panely v OPACu a pokročilém vyhledávání v rozhraní pro zaměstnance "
+"k omezení vyhledávání na"
 
 # Searching > Search form
 msgid ""
@@ -12390,15 +12400,16 @@ msgid "searching.pref#displayFacetCount# Show"
 msgstr "Zobrazit"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#displayFacetCount# facet counts. The relevance of these "
 "numbers highly depends on the value of the <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=maxRecordsForFacets"
 "\">maxRecordsForFacets</a> preference. Applies to OPAC and staff interface."
 msgstr ""
-"počet fasetů. Význam těchto čísel je vysoce závislý na hodnotě parametru "
-"maxRecordsForFacets. Platí pro OPAC a intranet."
+"počet fasetů. Význam těchto čísel je vysoce závislý na hodnotě parametru <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=maxRecordsForFacets\">maxRecordsForFacets</a>. Platí "
+"pro OPAC i intranet."
 
 # Searching > Search form
 msgid ""
@@ -13065,7 +13076,7 @@ msgstr ""
 
 # Tools > Upload
 msgid "tools.pref Upload"
-msgstr ""
+msgstr "Nahrávání souborů"
 
 # Tools > News > AdditionalContentsEditor
 msgid "tools.pref#AdditionalContentsEditor# ."
@@ -13384,7 +13395,6 @@ msgid ""
 msgstr ""
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in "
 "normal mode, otherwise it operates in extended mode. In extended mode, it's "
@@ -13396,9 +13406,11 @@ msgid ""
 msgstr ""
 ". Pokud necháte toto pole prázdné, OAI server bude pracovat v normálním "
 "režimu, jinak se přepne do rozšířeného režimu. V tom je možné nastavit i "
-"jiné formáty než jen marcxml nebo Dublin Core. Případný konfigurační soubor "
-"by měl být v YAML formátu a měl by obsahovat seznam dostupných metadatových "
-"formátů názvy XSL souborů, které se použijí pro jejich vytvoření z marcxml."
+"jiné formáty než jen marcxml nebo Dublin Core. Případný <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:ConfFile"
+"\">konfigurační soubor</a> by měl být v YAML formátu a měl by obsahovat "
+"seznam dostupných metadatových formátů názvy XSL souborů, které se použijí "
+"pro jejich vytvoření z marcxml."
 
 # Web services > OAI-PMH
 msgid ""

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-03-17 07:59-0300\n"
+"POT-Creation-Date: 2022-05-09 19:33-0300\n"
 "PO-Revision-Date: 2019-02-28 22:46+0000\n"
 "Last-Translator: liliputech <arthur.suzuki@biblibre.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -291,7 +291,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:86
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s 見つかりませんでした。 %s "
@@ -535,6 +535,13 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; タイトル フレーズ "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:34
 #, c-format
 msgid "%s (Record no. %s)"
+msgstr "%s (レコード番号 %s)"
+
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:115
+#, fuzzy, c-format
+msgid "%s 0 records %s "
 msgstr "%s (レコード番号 %s)"
 
 #. %1$s:  USE raw -
@@ -1127,12 +1134,6 @@ msgid ""
 "will be charged a hold fee of %s for placing this hold %s "
 msgstr ""
 
-#. %1$s:  resul.used | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:113
-#, fuzzy, c-format
-msgid "%s biblios"
-msgstr "%s 冊の書籍"
-
 #. %1$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:57
 #, c-format
@@ -1498,13 +1499,6 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:113
-#, fuzzy, c-format
-msgid "%s0 biblios%s "
-msgstr "%s 冊の書籍"
-
 #. %1$s:  IF ( total ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -1512,7 +1506,7 @@ msgstr "%s 冊の書籍"
 #. %5$s:  LibraryNameTitle | html 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:40
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:41
 #, c-format
 msgid ""
 "%sAuthority search result%sNo results found%s &rsaquo; %s%s%sKoha online%s "
@@ -3632,7 +3626,7 @@ msgstr "作者"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:42
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #, fuzzy, c-format
 msgid "Authority search"
@@ -3647,8 +3641,8 @@ msgstr "典拠検索の結果は"
 msgid "Authority search &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sKoha オンライン%s カタログ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:96
 #, c-format
 msgid "Authority search results"
 msgstr "典拠検索の結果は"
@@ -3658,7 +3652,7 @@ msgstr "典拠検索の結果は"
 msgid "Authority type: "
 msgstr "典拠検索の結果は "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:99
 #, fuzzy, c-format
 msgid "Authorized headings"
 msgstr "権威は見出しを記録する"
@@ -3790,11 +3784,6 @@ msgstr ""
 msgid "BibTeX"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:101
-#, fuzzy, c-format
-msgid "Biblio records"
-msgstr "# 図書目録の記録"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:383
 #, c-format
 msgid "Bibliographies"
@@ -3832,7 +3821,7 @@ msgstr "館内にある"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:14
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:14
@@ -4893,7 +4882,7 @@ msgid "Current library"
 msgstr "いかなる分館"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:21
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:19
 msgid "Current page: Page %s"
 msgstr ""
@@ -5130,7 +5119,7 @@ msgstr ""
 msgid "Description"
 msgstr "陳述"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:110
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:137
 #, fuzzy, c-format
 msgid "Details"
@@ -6076,7 +6065,7 @@ msgid "Go to detail"
 msgstr "方法を連絡する"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:25
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
 msgstr ""
@@ -6094,14 +6083,14 @@ msgid "Go to the last page"
 msgstr "この館所蔵を選ぶ "
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #, fuzzy
 msgid "Go to the next page"
 msgstr "この館所蔵を選ぶ "
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:13
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
 #, fuzzy
 msgid "Go to the previous page"
@@ -6317,7 +6306,7 @@ msgstr "検索"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:17
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:17
@@ -7863,7 +7852,7 @@ msgstr "図書館の情報"
 msgid "Next"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:31
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
@@ -9237,7 +9226,7 @@ msgstr "&lt;&lt;&lt;上1筆"
 msgid "Previous"
 msgstr "&lt;&lt;&lt;上1筆"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:14
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:15
 #, fuzzy, c-format
 msgid "Previous "
 msgstr "&lt;&lt;&lt;上1筆"
@@ -9600,6 +9589,11 @@ msgstr ""
 msgid "RecordedBooks search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:102
+#, fuzzy, c-format
+msgid "Records"
+msgstr "図書目録は番号を記録する："
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
@@ -9956,7 +9950,7 @@ msgstr "(必須)"
 msgid "Resort list"
 msgstr "改正して本棚を仮想する <em>%s</em>"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:57
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:58
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:303
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:75
@@ -9971,7 +9965,7 @@ msgstr "結果："
 #. %1$s:  from | html 
 #. %2$s:  to | html 
 #. %3$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:86
 #, c-format
 msgid "Results %s to %s of %s"
 msgstr "%s から %s までの %s の結果"
@@ -10301,7 +10295,7 @@ msgid "Search results"
 msgstr "を管理する"
 
 #. NAV
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:9
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:47
@@ -10797,7 +10791,7 @@ msgstr "館所蔵のディレクトリを検索する "
 
 #. %1$s:  resultcount | html 
 #. %2$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:84
 #, c-format
 msgid "Showing %s of about %s results"
 msgstr ""
@@ -12270,7 +12264,7 @@ msgstr ""
 msgid "Type"
 msgstr "タイプ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:100
 #, fuzzy, c-format
 msgid "Type of heading"
 msgstr "見出しの型式"
@@ -13700,11 +13694,6 @@ msgstr "出版していない"
 msgid "[ New list ]"
 msgstr "新しく１つの新しい仮定の本棚に増加する："
 
-#. INPUT type=text name=limit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:97
-msgid "[% limit or"
-msgstr ""
-
 #. %1$s:  HTML5MediaParent | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:911
 #, c-format
@@ -14624,6 +14613,10 @@ msgstr ""
 #~ "%s待機中%s取り置き中%s for patron %sat%sexpected at%s %s since %s%s%s%s%s"
 #~ "%s%s. "
 
+#, fuzzy
+#~ msgid "%s biblios"
+#~ msgstr "%s 冊の書籍"
+
 # For the first occurrence,
 # %1$s: INCLUDE 'doc-head-open.inc'
 # %2$s: IF ( LibraryNameTitle )
@@ -14966,6 +14959,10 @@ msgstr ""
 #~ msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 #~ msgstr "%s %s%s%sKoha オンライン%s カタログ &rsaquo; あなたのカート %s "
 
+#, fuzzy
+#~ msgid "%s0 biblios%s "
+#~ msgstr "%s 冊の書籍"
+
 # For the first occurrence,
 # %1$s: ISSUE.renewsleft
 # %2$s: ISSUE.renewsallowed
@@ -14998,6 +14995,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Are you sure you want to remove this recall?"
 #~ msgstr "このリストを本当に削除しますか?"
+
+#, fuzzy
+#~ msgid "Biblio records"
+#~ msgstr "# 図書目録の記録"
 
 #, fuzzy
 #~ msgid "Call no."

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2021-12-15 10:44+0000\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2022-05-02 09:16+0000\n"
+"Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1639565043.932226\n"
+"X-POOTLE-MTIME: 1651483015.891262\n"
 "X-Pootle-Path: /sv/21.05/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -5689,9 +5689,11 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "spärra"
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
-"interface."
+"interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
+"cronjob."
 msgstr "omlån av exemplar från personalklienten."
 
 # Circulation > Checkout policy
@@ -10283,11 +10285,12 @@ msgid ""
 msgstr ""
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Do not "
 "use a regular patron category for self registration.</strong>"
-msgstr "som standardkategori för låntagare som registreras via OPAC."
+msgstr ""
+"opac.pref#PatronSelfRegistrationDefaultCategory# <br><strong>WARNING: Använd "
+"inte en vanlig låntagarkategori vid självregistrering.</strong>"
 
 # OPAC > Self registration and modification > PatronSelfRegistrationDefaultCategory
 msgid ""
@@ -10330,7 +10333,6 @@ msgstr ""
 "existerar i databasen."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
@@ -10338,9 +10340,11 @@ msgid ""
 "to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
 "make it empty."
 msgstr ""
+"opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# "
 "<br><strong>OBS!</strong> Denna systeminställning kräver att följande "
 "cronjobb körs: <code>misc/cronjobs/cleanup_database.pl</code>Be din "
-"systemadministratör att schemalägga det."
+"systemadministratör att schemalägga det. <br>Inga låntagare kommer tas bort "
+"om du sätter inställningen till 0 eller lämnar den tom."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
