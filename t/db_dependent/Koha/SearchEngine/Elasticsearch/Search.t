@@ -31,26 +31,24 @@ $se->mock( 'get_elasticsearch_mappings', sub {
     my %all_mappings;
 
     my $mappings = {
-        data => {
-            properties => {
-                title => {
-                    type => 'text'
-                },
-                title__sort => {
-                    type => 'text'
-                },
-                subject => {
-                    type => 'text'
-                },
-                itemnumber => {
-                    type => 'integer'
-                },
-                sortablenumber => {
-                    type => 'integer'
-                },
-                sortablenumber__sort => {
-                    type => 'integer'
-                }
+        properties => {
+            title => {
+                type => 'text'
+            },
+            title__sort => {
+                type => 'text'
+            },
+            subject => {
+                type => 'text'
+            },
+            itemnumber => {
+                type => 'integer'
+            },
+            sortablenumber => {
+                type => 'integer'
+            },
+            sortablenumber__sort => {
+                type => 'integer'
             }
         }
     };

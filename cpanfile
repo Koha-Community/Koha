@@ -91,7 +91,7 @@ requires 'Plack::Middleware::LogWarn', '0.001002';
 requires 'Plack::Middleware::ReverseProxy', '0.14';
 requires 'Readonly', '2.00';
 requires 'Schedule::At', '1.06';
-requires 'Search::Elasticsearch', '6.00';
+requires 'Search::Elasticsearch', '6.80';
 requires 'Sereal::Decoder', '3.0';
 requires 'Sereal::Encoder', '3.0';
 requires 'Storable', '2.20';

@@ -348,7 +348,6 @@ sub delete_index {
     my $result = $elasticsearch->bulk(
         index => $self->index_name,
         type => 'data',
-        include_type_name => JSON::true(),
         body => \@body,
     );
     if ($result->{errors}) {
