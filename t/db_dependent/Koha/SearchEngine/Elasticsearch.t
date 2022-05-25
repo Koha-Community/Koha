@@ -135,7 +135,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
     # test reading mappings
     my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
     $mappings = $es->get_elasticsearch_mappings();
-    is( $mappings->{data}{properties}{isbn__sort}{index}, 'false', 'Field mappings parsed correctly' );
+    is( $mappings->{properties}{isbn__sort}{index}, 'false', 'Field mappings parsed correctly' );
 };
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
