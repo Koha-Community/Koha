@@ -262,7 +262,6 @@ if ( $query->param('place_reserve') ) {
         $itemtype = undef if $itemNum;
 
         my $rank = $biblioData->{rank};
-        my $patron = Koha::Patrons->find( $borrowernumber );
         if ( $item ) {
             $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
         }
