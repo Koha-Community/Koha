@@ -231,6 +231,34 @@
                             {{ eholding.access_type }}
                         </span>
                     </li>
+
+                    <li v-if="eholding.eholding_packages.length">
+                        <label>{{ $t("Packages") }}</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(
+                                        p, counter
+                                    ) in eholding.eholding_packages"
+                                    v-bind:key="counter"
+                                >
+                                    <td>
+                                        <router-link
+                                            :to="`/cgi-bin/koha/erm/packages/${p.package_id}`"
+                                            :title="$t('Show package')"
+                                        >
+                                            {{ p.package.name }}
+                                        </router-link>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="action">
@@ -288,6 +316,7 @@ export default {
                 parent_publication_title_id: '',
                 preceeding_publication_title_id: '',
                 access_type: '',
+                eholding_packages: [],
             },
             initialized: false,
         }
