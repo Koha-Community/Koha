@@ -21,8 +21,7 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-use Koha::ERM::Packages;
-use Koha::Acquisition::Booksellers;
+use Koha::ERM::EHolding::Packages;
 
 =head1 NAME
 
@@ -31,6 +30,31 @@ Koha::ERM::EHolding - Koha ERM EHolding Object class
 =head1 API
 
 =head2 Class Methods
+
+=head3 eholding_packages
+
+Returns the eholding_packages link for this eHolding
+
+=cut
+
+sub eholding_packages {
+    my ( $self, $eholding_packages ) = @_;
+
+    if ( $eholding_packages ) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->eholding_packages->delete;
+
+                for my $eholding_package (@$eholding_packages) {
+                    $self->_result->add_to_erm_eholdings_packages($eholding_package);
+                }
+            }
+        );
+    }
+    my $eholding_packages_rs = $self->_result->erm_eholdings_packages;
+    return Koha::ERM::EHolding::Packages->_new_from_dbic($eholding_packages_rs);
+}
 
 =head2 Internal methods
 

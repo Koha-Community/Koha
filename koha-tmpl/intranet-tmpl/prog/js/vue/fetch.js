@@ -145,7 +145,11 @@ export const fetchEHolding = async function (eholding_id) {
     if (!eholding_id) return;
     const apiUrl = "/api/v1/erm/eholdings/" + eholding_id;
     let erm_eholding;
-    await fetch(apiUrl)
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "eholding_packages,eholding_packages.package",
+        },
+    })
         .then(checkError)
         .then(
             (result) => {

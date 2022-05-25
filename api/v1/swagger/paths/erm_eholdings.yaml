@@ -269,7 +269,8 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - agreements
+      - eholding_packages
+      - eholding_packages.package
   put:
     x-mojo-to: ERM::EHoldings#update
     operationId: updateErmEHoldings
@@ -324,7 +325,8 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - agreements
+      - eholding_packages
+      - eholding_packages.package
   delete:
     x-mojo-to: ERM::EHoldings#delete
     operationId: deleteErmEHoldings

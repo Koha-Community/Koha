@@ -91,7 +91,11 @@ sub add {
 
                 my $body = $c->validation->param('body');
 
+                my $eholding_packages = delete $body->{eholding_packages} // [];
+
                 my $eholding = Koha::ERM::EHolding->new_from_api($body)->store;
+
+                $eholding->eholding_packages($eholding_packages);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $eholding->eholding_id);
                 return $c->render(
@@ -163,7 +167,11 @@ sub update {
 
                 my $body = $c->validation->param('body');
 
+                my $eholding_packages = delete $body->{eholding_packages} // [];
+
                 $eholding->set_from_api($body)->store;
+
+                $eholding->eholding_packages($eholding_packages);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $eholding->eholding_id);
                 return $c->render(

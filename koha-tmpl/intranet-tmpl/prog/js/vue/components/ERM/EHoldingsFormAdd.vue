@@ -345,6 +345,10 @@
                                 :placeholder="$t('Access type')"
                             />
                         </li>
+
+                        <EHoldingPackages
+                            :eholding_packages="eholding.eholding_packages"
+                        />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -362,6 +366,7 @@
 </template>
 
 <script>
+import EHoldingPackages from "./EHoldingPackages.vue"
 import { setMessage, setError } from "../../messages"
 import { fetchEHolding } from '../../fetch'
 
@@ -397,6 +402,7 @@ export default {
                 parent_publication_title_id: '',
                 preceeding_publication_title_id: '',
                 access_type: '',
+                eholding_packages: [],
             },
             initialized: false,
         }
@@ -453,6 +459,7 @@ export default {
                 }).catch(e => { console.log(e) })
         },
     },
+    components: { EHoldingPackages },
     name: "EHoldingsFormAdd",
 }
 </script>

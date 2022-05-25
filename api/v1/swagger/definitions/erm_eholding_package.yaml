@@ -1,0 +1,27 @@
+---
+type: object
+properties:
+  eholding_id:
+    type: integer
+    description: Internal related eHolding identifier
+  package_id:
+    type: integer
+    description: Internal package identifier
+  started_on:
+    description: Start date
+    type:
+      - string
+      - "null"
+  ended_on:
+    description: End date
+    type:
+      - string
+      - "null"
+  proxy:
+    description: Proxy
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - package_id
