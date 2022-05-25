@@ -243,7 +243,6 @@ if ( $query->param('place_reserve') ) {
         }
 
         my $biblioData = $biblioDataHash{$biblioNum};
-        my $found;
 
         # Check for user supplied reserve date
         my $startdate;
@@ -299,7 +298,7 @@ if ( $query->param('place_reserve') ) {
                     notes            => $notes,
                     title            => $biblioData->{title},
                     itemnumber       => $itemNum,
-                    found            => $found,
+                    found            => undef,
                     itemtype         => $itemtype,
                 }
             );
