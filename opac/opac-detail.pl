@@ -86,6 +86,7 @@ use Koha::Reviews;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
+use JSON qw( decode_json );
 
 my $query = CGI->new();
 
@@ -247,7 +248,9 @@ if ($session->param('busc')) {
         $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
         my ($error, $results_hashref, $facets);
         eval {
-            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
+            my $searcher = Koha::SearchEngine::Search->new(
+                { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            ($error, $results_hashref, $facets) = $searcher->search_compat(decode_json($arrParamsBusc->{'query'}),$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
         };
         my $hits;
         my @newresults;
