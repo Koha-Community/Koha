@@ -468,6 +468,9 @@ export default {
             }
             delete eholding.eholding_id
 
+            // Cannot use the map/keepAttrs because of the reserved keywork 'package'
+            eholding.eholding_packages.forEach(function(e){ delete e.package });
+
             const options = {
                 method: method,
                 body: JSON.stringify(eholding),
