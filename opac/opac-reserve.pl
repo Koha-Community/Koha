@@ -72,18 +72,6 @@ unless ( $can_place_hold_if_available_at_pickup ) {
     }
 }
 
-# check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
-if ( $category->effective_BlockExpiredPatronOpacActions ) {
-
-    if ( $patron->is_expired ) {
-
-        # cannot reserve, their card has expired and the rules set mean this is not allowed
-        $template->param( message => 1, expired_patron => 1 );
-        output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
-        exit;
-    }
-}
-
 # Pass through any reserve charge
 my $reservefee = $category->reservefee;
 if ( $reservefee > 0){
@@ -119,6 +107,69 @@ my @biblionumbers = split /\//, $biblionumbers;
 if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
     # TODO: New message?
     $template->param(message=>1, no_biblionumber=>1);
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
+    exit;
+}
+
+#
+#
+# Here we check that the borrower can actually make reserves Stage 1.
+#
+#
+my $noreserves     = 0;
+if ( $category->effective_BlockExpiredPatronOpacActions ) {
+    if ( $patron->is_expired ) {
+        # cannot reserve, their card has expired and the rules set mean this is not allowed
+        $noreserves = 1;
+        $template->param( message => 1, expired_patron => 1 );
+    }
+}
+
+my $maxoutstanding = C4::Context->preference("maxoutstanding");
+my $amountoutstanding = $patron->account->balance;
+if ( $amountoutstanding && ($amountoutstanding > $maxoutstanding) ) {
+    my $amount = sprintf "%.02f", $amountoutstanding;
+    $template->param( message => 1 );
+    $noreserves = 1;
+    $template->param( too_much_oweing => $amount );
+}
+
+if ( $patron->gonenoaddress && ($patron->gonenoaddress == 1) ) {
+    $noreserves = 1;
+    $template->param(
+        message => 1,
+        GNA     => 1
+    );
+}
+
+if ( $patron->lost && ($patron->lost == 1) ) {
+    $noreserves = 1;
+    $template->param(
+        message => 1,
+        lost    => 1
+    );
+}
+
+if ( $patron->is_debarred ) {
+    $noreserves = 1;
+    $template->param(
+        message          => 1,
+        debarred         => 1,
+        debarred_comment => $patron->debarredcomment,
+        debarred_date    => $patron->debarred,
+    );
+}
+
+my $holds = $patron->holds;
+my $reserves_count = $holds->count;
+$template->param( RESERVES => $holds->unblessed );
+if ( $maxreserves && ( $reserves_count >= $maxreserves ) ) {
+    $template->param( message => 1 );
+    $noreserves = 1;
+    $template->param( too_many_reserves => $holds->count );
+}
+
+if( $noreserves ){
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
     exit;
 }
@@ -309,66 +360,13 @@ foreach my $biblioNumber (@biblionumbers) {
     $biblioData->{rank} = $reservecount + 1;
 }
 
-#
-#
-# Here we check that the borrower can actually make reserves Stage 1.
-#
-#
-my $noreserves     = 0;
-my $maxoutstanding = C4::Context->preference("maxoutstanding");
-my $amountoutstanding = $patron->account->balance;
-if ( $amountoutstanding && ($amountoutstanding > $maxoutstanding) ) {
-    my $amount = sprintf "%.02f", $amountoutstanding;
-    $template->param( message => 1 );
-    $noreserves = 1;
-    $template->param( too_much_oweing => $amount );
+
+my $requested_reserves_count = scalar( @biblionumbers );
+if ( $maxreserves && ( $reserves_count + $requested_reserves_count > $maxreserves ) ) {
+    $template->param( new_reserves_allowed => $maxreserves - $reserves_count );
 }
 
-if ( $patron->gonenoaddress && ($patron->gonenoaddress == 1) ) {
-    $noreserves = 1;
-    $template->param(
-        message => 1,
-        GNA     => 1
-    );
-}
-
-if ( $patron->lost && ($patron->lost == 1) ) {
-    $noreserves = 1;
-    $template->param(
-        message => 1,
-        lost    => 1
-    );
-}
-
-if ( $patron->is_debarred ) {
-    $noreserves = 1;
-    $template->param(
-        message          => 1,
-        debarred         => 1,
-        debarred_comment => $patron->debarredcomment,
-        debarred_date    => $patron->debarred,
-    );
-}
-
-my $holds = $patron->holds;
-my $reserves_count = $holds->count;
-$template->param( RESERVES => $holds->unblessed );
-if ( $maxreserves && ( $reserves_count >= $maxreserves ) ) {
-    $template->param( message => 1 );
-    $noreserves = 1;
-    $template->param( too_many_reserves => $holds->count );
-}
-
-unless ( $noreserves ) {
-    my $requested_reserves_count = scalar( @biblionumbers );
-    if ( $maxreserves && ( $reserves_count + $requested_reserves_count > $maxreserves ) ) {
-        $template->param( new_reserves_allowed => $maxreserves - $reserves_count );
-    }
-}
-
-unless ($noreserves) {
-    $template->param( select_item_types => 1 );
-}
+$template->param( select_item_types => 1 );
 
 
 #
