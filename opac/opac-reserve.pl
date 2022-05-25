@@ -237,12 +237,9 @@ if ( $query->param('place_reserve') ) {
             }
         }
 
-#item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
+        # if we have an item, we are placing the hold on the item's bib, in case of analytics
         if ( $item ) {
-            my $hostbiblioNum = $item->biblio->biblionumber;
-            if ( $hostbiblioNum ne $biblioNum ) {
-                $biblioNum = $hostbiblioNum;
-            }
+            $biblioNum = $item->biblionumber;
         }
 
         my $biblioData = $biblioDataHash{$biblioNum};
