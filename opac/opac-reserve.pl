@@ -329,7 +329,6 @@ if ( $query->param('place_reserve') ) {
 #
 my $noreserves     = 0;
 my $maxoutstanding = C4::Context->preference("maxoutstanding");
-$template->param( noreserve => 1 ) unless $maxoutstanding;
 my $amountoutstanding = $patron->account->balance;
 if ( $amountoutstanding && ($amountoutstanding > $maxoutstanding) ) {
     my $amount = sprintf "%.02f", $amountoutstanding;
