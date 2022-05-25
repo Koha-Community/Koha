@@ -24,7 +24,6 @@ use URI;
 use URI::Escape qw( uri_escape_utf8 );
 
 use C4::Koha qw( GetNormalizedISBN );
-use C4::XSLT qw( transformMARCXML4XSLT );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -42,6 +41,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Checkouts;
 use Koha::Recalls;
+use Koha::RecordProcessor;
 use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;
@@ -933,11 +933,22 @@ sub get_marc_notes {
     my ( $self, $params ) = @_;
 
     my $marcflavour = C4::Context->preference('marcflavour');
-    my $opac = $params->{opac};
+    my $opac = $params->{opac} // '0';
+    my $interface = $params->{opac} ? 'opac' : 'intranet';
+
+    my $record = $params->{record} // $self->metadata->record;
+    my $record_processor = Koha::RecordProcessor->new(
+        {
+            filters => [ 'ViewPolicy', 'ExpandCodedFields' ],
+            options => {
+                interface     => $interface,
+                frameworkcode => $self->frameworkcode
+            }
+        }
+    );
+    $record_processor->process($record);
 
     my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';
-    my @marcnotes;
-
     #MARC21 specs indicate some notes should be private if first indicator 0
     my %maybe_private = (
         541 => 1,
@@ -949,9 +960,8 @@ sub get_marc_notes {
 
     my %hiddenlist = map { $_ => 1 }
         split( /,/, C4::Context->preference('NotesToHide'));
-    my $record = $params->{record} // $self->metadata->record;
-    $record = transformMARCXML4XSLT( $self->biblionumber, $record, $opac );
 
+    my @marcnotes;
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
         next if $hiddenlist{ $tag };
