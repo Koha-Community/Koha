@@ -130,46 +130,7 @@ $template->param( branch => $branch );
 
 #
 #
-# Build hashes of the requested biblio(item)s and items.
-#
-#
-
-my %biblioDataHash; # Hash of biblionumber to biblio/biblioitems record.
-foreach my $biblioNumber (@biblionumbers) {
-
-    my $biblioData = GetBiblioData($biblioNumber);
-    $biblioDataHash{$biblioNumber} = $biblioData;
-
-    my $biblio = Koha::Biblios->find( $biblioNumber );
-    next unless $biblio;
-
-    my $marcrecord = $biblio->metadata->record;
-
-    my $items = Koha::Items->search_ordered(
-        [
-            biblionumber => $biblioNumber,
-            'me.itemnumber' => {
-                -in => [
-                    $biblio->host_items->get_column('itemnumber')
-                ]
-            }
-        ],
-        { prefetch => [ 'issue', 'homebranch', 'holdingbranch' ] }
-    )->filter_by_visible_in_opac({ patron => $patron });
-
-    $biblioData->{items} = [$items->as_list]; # FIXME Potentially a lot in memory here!
-
-    # Compute the priority rank.
-    $biblioData->{object} = $biblio;
-    my $reservecount = $biblio->holds->search({ found => [ {"!=" => "W"},undef] })->count;
-    $biblioData->{reservecount} = $reservecount;
-    $biblioData->{rank} = $reservecount + 1;
-}
-
-#
-#
-# If this is the second time through this script, it
-# means we are carrying out the hold request, possibly
+# Here we are carrying out the hold request, possibly
 # with a specific item for each biblionumber.
 #
 #
@@ -242,8 +203,6 @@ if ( $query->param('place_reserve') ) {
             $biblioNum = $item->biblionumber;
         }
 
-        my $biblioData = $biblioDataHash{$biblioNum};
-
         # Check for user supplied reserve date
         my $startdate;
         if (   C4::Context->preference('AllowHoldDateInFuture')
@@ -257,7 +216,8 @@ if ( $query->param('place_reserve') ) {
         my $itemtype = $query->param('itemtype') || undef;
         $itemtype = undef if $itemNum;
 
-        my $rank = $biblioData->{rank};
+        my $biblio = Koha::Biblios->find($biblioNum);
+        my $rank = $biblio->holds->search( { found => [ { "!=" => "W" }, undef ] } )->count + 1;
         if ( $item ) {
             $canreserve = 1 if CanItemBeReserved( $patron, $item, $branch )->{status} eq 'OK';
         }
@@ -296,7 +256,7 @@ if ( $query->param('place_reserve') ) {
                     reservation_date => $startdate,
                     expiration_date  => $patron_expiration_date,
                     notes            => $notes,
-                    title            => $biblioData->{title},
+                    title            => $biblio->title,
                     itemnumber       => $itemNum,
                     found            => undef,
                     itemtype         => $itemtype,
@@ -309,6 +269,44 @@ if ( $query->param('place_reserve') ) {
 
     print $query->redirect("/cgi-bin/koha/opac-user.pl?" . ( $failed_holds ? "failed_holds=$failed_holds" : q|| ) . "#opac-user-holds");
     exit;
+}
+
+#
+#
+# Build hashes of the requested biblio(item)s and items.
+#
+#
+
+my %biblioDataHash; # Hash of biblionumber to biblio/biblioitems record.
+foreach my $biblioNumber (@biblionumbers) {
+
+    my $biblioData = GetBiblioData($biblioNumber);
+    $biblioDataHash{$biblioNumber} = $biblioData;
+
+    my $biblio = Koha::Biblios->find( $biblioNumber );
+    next unless $biblio;
+
+    my $marcrecord = $biblio->metadata->record;
+
+    my $items = Koha::Items->search_ordered(
+        [
+            biblionumber => $biblioNumber,
+            'me.itemnumber' => {
+                -in => [
+                    $biblio->host_items->get_column('itemnumber')
+                ]
+            }
+        ],
+        { prefetch => [ 'issue', 'homebranch', 'holdingbranch' ] }
+    )->filter_by_visible_in_opac({ patron => $patron });
+
+    $biblioData->{items} = [$items->as_list]; # FIXME Potentially a lot in memory here!
+
+    # Compute the priority rank.
+    $biblioData->{object} = $biblio;
+    my $reservecount = $biblio->holds->search({ found => [ {"!=" => "W"},undef] })->count;
+    $biblioData->{reservecount} = $reservecount;
+    $biblioData->{rank} = $reservecount + 1;
 }
 
 #
