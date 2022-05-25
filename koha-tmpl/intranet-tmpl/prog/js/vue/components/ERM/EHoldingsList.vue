@@ -167,7 +167,7 @@ export default {
             },
             preDrawCallback: function (settings) {
                 var table_id = settings.nTable.id
-                $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'vendors')
+                $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
             }
         }, eholding_table_settings, 1)
     },
