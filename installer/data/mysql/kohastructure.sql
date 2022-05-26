@@ -798,6 +798,7 @@ CREATE TABLE `article_requests` (
   KEY `biblionumber` (`biblionumber`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
+  KEY `debit_id` (`debit_id`),
   CONSTRAINT `article_requests_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `article_requests_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `article_requests_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE CASCADE,
