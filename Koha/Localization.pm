@@ -21,6 +21,35 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+=head1 NAME
+
+Koha::Localization - Koha Localization type Object class
+
+=head1 API
+
+=head2 Class methods
+
+=cut
+
+=head3 store
+
+Localization specific store to ensure relevant caches are flushed on change
+
+=cut
+
+sub store {
+    my ($self) = @_;
+    $self = $self->SUPER::store;
+
+    if ($self->entity eq 'itemtypes') {
+        my $cache = Koha::Caches->get_instance();
+        my $key = $self->lang."ItemTypeDescriptions";
+        $cache->clear_from_cache($key);
+    }
+
+    return $self;
+}
+
 sub _type {
     return 'Localization';
 }

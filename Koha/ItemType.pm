@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use C4::Koha qw( getitemtypeimagelocation );
 use C4::Languages;
+use Koha::Caches;
 use Koha::Database;
 use Koha::CirculationRules;
 use Koha::Localizations;
@@ -35,6 +36,36 @@ Koha::ItemType - Koha Item type Object class
 =head2 Class methods
 
 =cut
+
+=head3 store
+
+ItemType specific store to ensure relevant caches are flushed on change
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $flush = 0;
+
+    if ( !$self->in_storage ) {
+        $flush = 1;
+    }
+    else {
+        my $self_from_storage = $self->get_from_storage;
+        $flush = 1 if ( $self_from_storage->description ne $self->description );
+    }
+
+    $self = $self->SUPER::store;
+
+    if ($flush) {
+        my $cache = Koha::Caches->get_instance();
+        my $key = "enItemTypeDescriptions";
+        $cache->clear_from_cache($key);
+    }
+
+    return $self;
+}
 
 =head3 image_location
 
