@@ -152,7 +152,8 @@ sub _shared_preferences {
         Persona
         AuthDisplayHierarchy
         AutoCreateAuthorities
-        BiblioAddsAuthorities
+        AutoLinkBiblios
+        AllowManualAuthorityEditing
         AuthorityMergeLimit
         AuthorityMergeMode
         UseAuthoritiesForTracings

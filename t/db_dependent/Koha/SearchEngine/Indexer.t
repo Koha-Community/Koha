@@ -70,7 +70,7 @@ subtest 'Test indexer calls' => sub {
             if scalar @engines == 1;
     }
 
-    t::lib::Mocks::mock_preference( 'BiblioAddsAuthorities', 0 );
+    t::lib::Mocks::mock_preference( 'AutoLinkBiblios', 0 );
 
     for my $engine ( @engines ){
         t::lib::Mocks::mock_preference( 'SearchEngine', $engine );

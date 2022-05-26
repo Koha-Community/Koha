@@ -68,7 +68,7 @@ subtest 'AddBiblio' => sub {
     is( Koha::Biblios->count, $nb_biblios,
         'No biblio should have been added if something went wrong' );
 
-    t::lib::Mocks::mock_preference( 'BiblioAddsAuthorities', $marcflavour );
+    t::lib::Mocks::mock_preference( 'AutoLinkBiblios', $marcflavour );
     t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', $marcflavour );
     t::lib::Mocks::mock_preference( 'autoControlNumber', "OFF" );
 
@@ -171,7 +171,7 @@ subtest "Authority creation with default linker" => sub {
     plan tests => 4;
     # Automatic authority creation
     t::lib::Mocks::mock_preference('LinkerModule', 'Default');
-    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
+    t::lib::Mocks::mock_preference('AutoLinkBiblios', 1);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $linker = C4::Linker::Default->new({});
@@ -449,7 +449,7 @@ sub run_tests {
         'GetMarcUrls prefixed a MARC21 URL with http://' );
 
     # Automatic authority creation
-    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
+    t::lib::Mocks::mock_preference('AutoLinkBiblios', 1);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
     my $authorities_mod = Test::MockModule->new( 'C4::Heading' );
     $authorities_mod->mock(
@@ -493,7 +493,7 @@ sub run_tests {
     is($field->subfield($author_relator_subfield), undef, 'Authority does not contain relator subfield');
 
     # Reset settings
-    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 0);
+    t::lib::Mocks::mock_preference('AutoLinkBiblios', 0);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 0);
 }
 
@@ -728,7 +728,7 @@ subtest 'MarcFieldForCreatorAndModifier' => sub {
 subtest 'ModBiblio called from linker test' => sub {
     plan tests => 2;
     my $called = 0;
-    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
+    t::lib::Mocks::mock_preference('AutoLinkBiblios', 1);
     my $biblio_mod = Test::MockModule->new( 'C4::Biblio' );
     $biblio_mod->mock( 'LinkBibHeadingsToAuthorities', sub {
         $called = 1;

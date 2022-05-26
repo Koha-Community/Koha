@@ -16,12 +16,12 @@ Authorities:
               type: textarea
         -
             - When editing records,
-            - pref: BiblioAddsAuthorities
+            - pref: AllowManualAuthorityEditing
               default: no
               choices:
                   1: allow
                   0: "don't allow"
-            - them to automatically create new authority records if needed, rather than having to reference existing authorities.
+            - catalogers to manually create new headings if needed, rather than having to reference existing authorities.
         -
             - When editing records,
             - pref: AutoCreateAuthorities
@@ -29,7 +29,7 @@ Authorities:
               choices:
                   1: generate
                   0: "don't generate"
-            - authority records that are missing (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities">BiblioAddsAuthorities</a> must be set to "allow" for this to have any effect).
+            - authority records that are missing (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing">AllowManualAuthorityEditing</a> must be set to "allow" for this to have any effect).
         -
             - When modifying an authority record, do not update attached bibliographic records if the number exceeds
             - pref: AuthorityMergeLimit
@@ -64,13 +64,13 @@ Authorities:
                   "strict": strict
             - mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default.
         -
-            - "Use the following text as default value for the 667$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+            - "Use the following text as default value for the 667$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing'>AllowManualAuthorityEditing</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField667
               default: "Machine generated authority record"
               type: textarea
               class: code
         -
-            - "Use the following text as default value for the 670$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+            - "Use the following text as default value for the 670$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing'>AllowManualAuthorityEditing</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField670
               default: "Work cat."
               type: textarea
@@ -111,4 +111,11 @@ Authorities:
               choices:
                   1: Do
                   0: "Don't"
-            - automatically relink headings that have previously been linked when saving records in the cataloging module.
+            - automatically relink headings that have previously been linked when saving records in the cataloging module (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>).
+        -
+            - pref: AutoLinkBiblios
+              default: no
+              choices:
+                  1: Do
+                  0: "Don't"
+            - attempt to automatically link headings when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for record edits.

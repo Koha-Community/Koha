@@ -172,8 +172,8 @@ if ($prefStatisticsFields) {
 }
 
 my $prefAutoCreateAuthorities = C4::Context->preference('AutoCreateAuthorities');
-my $prefBiblioAddsAuthorities = C4::Context->preference('BiblioAddsAuthorities');
-my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBiblioAddsAuthorities) );
+my $prefAllowManualAuthorityEditing = C4::Context->preference('AllowManualAuthorityEditing');
+my $warnPrefAllowManualAuthorityEditing = ( $prefAutoCreateAuthorities && ( !$prefAllowManualAuthorityEditing) );
 
 my $prefEasyAnalyticalRecords  = C4::Context->preference('EasyAnalyticalRecords');
 my $prefUseControlNumber  = C4::Context->preference('UseControlNumber');
@@ -632,9 +632,9 @@ $template->param(
     mysqlVersion  => $versions{'mysqlVersion'},
     apacheVersion => $versions{'apacheVersion'},
     zebraVersion  => $zebraVersion,
-    prefBiblioAddsAuthorities => $prefBiblioAddsAuthorities,
+    prefAllowManualAuthorityEditing => $prefAllowManualAuthorityEditing,
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
-    warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
+    warnPrefAllowManualAuthorityEditing => $warnPrefAllowManualAuthorityEditing,
     warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
     warnPrefAnonymousPatronOPACPrivacy        => $warnPrefAnonymousPatronOPACPrivacy,
     warnPrefAnonymousPatronAnonSuggestions    => $warnPrefAnonymousPatronAnonSuggestions,

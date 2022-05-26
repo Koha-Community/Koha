@@ -380,7 +380,7 @@ sub create_input {
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         # when authorities auto-creation is allowed, do not set readonly
-        my $is_readonly = !C4::Context->preference("BiblioAddsAuthorities");
+        my $is_readonly = !C4::Context->preference("AllowManualAuthorityEditing");
 
         $subfield_data{marc_value} = {
             type      => 'text',
