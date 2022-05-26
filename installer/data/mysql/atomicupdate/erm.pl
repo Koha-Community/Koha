@@ -184,9 +184,9 @@ return {
             });
         }
 
-        unless ( TableExists('erm_packages') ) {
+        unless ( TableExists('erm_eholdings_packages') ) {
             $dbh->do(q{
-                CREATE TABLE `erm_packages` (
+                CREATE TABLE `erm_eholdings_packages` (
                     `package_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                     `vendor_id` INT(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
                     `name` VARCHAR(255) NOT NULL COMMENT 'name of the package',
@@ -200,21 +200,21 @@ return {
             });
         }
 
-        unless ( TableExists('erm_packages_agreements') ) {
+        unless ( TableExists('erm_eholdings_packages_agreements') ) {
             $dbh->do(q{
-                CREATE TABLE `erm_packages_agreements` (
+                CREATE TABLE `erm_eholdings_packages_agreements` (
                     `package_id` INT(11) NOT NULL COMMENT 'link to the package',
                     `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
-                    CONSTRAINT `erm_packages_agreements_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `erm_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `erm_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                    CONSTRAINT `erm_eholdings_packages_agreements_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_eholdings_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
 
-        unless ( TableExists('erm_eholdings') ) {
+        unless ( TableExists('erm_eholdings_titles') ) {
             $dbh->do(q{
-                CREATE TABLE `erm_eholdings` (
-                    `eholding_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                CREATE TABLE `erm_eholdings_titles` (
+                    `title_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                     `vendor_id` INT(11) DEFAULT NULL,
                     `publication_title` VARCHAR(255) DEFAULT NULL,
                     `print_identifier` VARCHAR(255) DEFAULT NULL,
@@ -227,7 +227,6 @@ return {
                     `num_last_issue_online` VARCHAR(255) DEFAULT NULL,
                     `title_url` VARCHAR(255) DEFAULT NULL,
                     `first_author` VARCHAR(255) DEFAULT NULL,
-                    `title_id` VARCHAR(255) DEFAULT NULL,
                     `embargo_info` VARCHAR(255) DEFAULT NULL,
                     `coverage_depth` VARCHAR(255) DEFAULT NULL,
                     `notes` VARCHAR(255) DEFAULT NULL,
@@ -241,21 +240,23 @@ return {
                     `parent_publication_title_id` VARCHAR(255) DEFAULT NULL,
                     `preceeding_publication_title_id` VARCHAR(255) DEFAULT NULL,
                     `access_type` VARCHAR(255) DEFAULT NULL,
-                    CONSTRAINT `erm_eholdings_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-                    PRIMARY KEY(`eholding_id`)
+                    CONSTRAINT `erm_eholdings_titles_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+                    PRIMARY KEY(`title_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
-        unless ( TableExists('erm_eholdings_packages') ) {
+        unless ( TableExists('erm_eholdings_resources') ) {
             $dbh->do(q{
-                CREATE TABLE `erm_eholdings_packages` (
-                    `eholding_id` INT(11) NOT NULL,
+                CREATE TABLE `erm_eholdings_resources` (
+                    `resource_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `title_id` INT(11) NOT NULL,
                     `package_id` INT(11) NOT NULL,
                     `started_on` DATE,
                     `ended_on` DATE,
                     `proxy` VARCHAR(80) DEFAULT NULL,
-                    CONSTRAINT `erm_eholdings_packages_ibfk_1` FOREIGN KEY (`eholding_id`) REFERENCES `erm_eholdings` (`eholding_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `erm_eholdings_packages_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                    CONSTRAINT `erm_eholdings_resources_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_eholdings_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_eholdings_resources_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    PRIMARY KEY(`resource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }

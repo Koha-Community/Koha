@@ -1,4 +1,4 @@
-package Koha::ERM::Package::Agreements;
+package Koha::ERM::EHoldings::Resource;
 
 # This file is part of Koha.
 #
@@ -17,16 +17,16 @@ package Koha::ERM::Package::Agreements;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
-use Koha::ERM::Package::Agreement;
+use Koha::ERM::EHoldings::Title;
+use Koha::ERM::EHoldings::Package;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ERM::Package::Agreements - Koha Package Agreement Object set class
+Koha::ERM::EHoldings::Resource - Koha EHolding resource Object class
 
 =head1 API
 
@@ -34,16 +34,38 @@ Koha::ERM::Package::Agreements - Koha Package Agreement Object set class
 
 =cut
 
-=head3 type
+=head3 package
+
+Return the package for this resource
+
+=cut
+
+sub package {
+    my ( $self ) = @_;
+    my $package_rs = $self->_result->package;
+    return Koha::ERM::EHoldings::Package->_new_from_dbic($package_rs);
+}
+
+=head3 title
+
+Return the title for this resource
+
+=cut
+
+sub title {
+    my ( $self ) = @_;
+    my $title_rs = $self->_result->title;
+    return Koha::ERM::EHoldings::Title->_new_from_dbic($title_rs);
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
 sub _type {
-    return 'ErmPackageAgreement';
-}
-
-sub object_class {
-    return 'Koha::ERM::Package::Agreement';
+    return 'ErmEholdingsResource';
 }
 
 1;

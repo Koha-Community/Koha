@@ -1,4 +1,4 @@
-package Koha::ERM::Package;
+package Koha::ERM::EHoldings::Title;
 
 # This file is part of Koha.
 #
@@ -21,40 +21,39 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-use Koha::ERM::Package::Agreements;
+use Koha::ERM::EHoldings::Resources;
 
 =head1 NAME
 
-Koha::ERM::Package - Koha ERM Package Object class
+Koha::ERM::EHoldings::Title - Koha ERM Title Object class
 
 =head1 API
 
 =head2 Class Methods
 
-=head3 package_agreements
+=head3 resources
 
-Returns the package agreements link for this package
+Returns the resources linked to this title
 
 =cut
 
-sub package_agreements {
-    my ( $self, $package_agreements ) = @_;
+sub resources {
+    my ( $self, $resources ) = @_;
 
-    if ( $package_agreements ) {
+    if ( $resources ) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
-                $self->package_agreements->delete;
+                $self->resources->delete;
 
-                for my $package_agreement (@$package_agreements) {
-                    $self->_result->add_to_erm_packages_agreements($package_agreement);
+                for my $resources (@$resources) {
+                    $self->_result->add_to_erm_eholdings_resources($resources);
                 }
             }
         );
     }
-
-    my $agreements_rs = $self->_result->erm_packages_agreements;
-    return Koha::ERM::Package::Agreements->_new_from_dbic($agreements_rs);
+    my $resources_rs = $self->_result->erm_eholdings_resources;
+    return Koha::ERM::EHoldings::Resources->_new_from_dbic($resources_rs);
 }
 
 =head2 Internal methods
@@ -64,7 +63,7 @@ sub package_agreements {
 =cut
 
 sub _type {
-    return 'ErmPackage';
+    return 'ErmEholdingsTitle';
 }
 
 1;

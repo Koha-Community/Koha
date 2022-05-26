@@ -1,4 +1,4 @@
-package Koha::ERM::Package::Agreement;
+package Koha::ERM::EHoldings::Package::Agreement;
 
 # This file is part of Koha.
 #
@@ -25,7 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ERM::Package::Agreement - Koha Package Agreement Object class
+Koha::ERM::EHoldings::Package::Agreement - Koha Package-Agreement Object class
 
 =head1 API
 
@@ -52,7 +52,7 @@ sub agreement {
 =cut
 
 sub _type {
-    return 'ErmPackagesAgreement';
+    return 'ErmEholdingsPackagesAgreement';
 }
 
 1;

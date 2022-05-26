@@ -1,20 +1,20 @@
 <template>
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="this.eholdings" id="eholdings_list">
+    <div v-else-if="this.titles" id="titles_list">
         <Toolbar />
-        <table v-if="this.eholdings.length" id="eholding_list"></table>
+        <table v-if="this.titles.length" id="title_list"></table>
         <div v-else-if="this.initialized" class="dialog message">
-            {{ $t("There are no eHoldings defined") }}
+            {{ $t("There are no titles defined") }}
         </div>
     </div>
 </template>
 
 <script>
-import Toolbar from "./EHoldingsToolbar.vue"
+import Toolbar from "./EHoldingsTitlesToolbar.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
-import { fetchEHoldings } from "../../fetch"
+import { fetchTitles } from "../../fetch"
 
 export default {
     setup() {
@@ -27,36 +27,35 @@ export default {
     },
     data: function () {
         return {
-            eholdings: [],
+            titles: [],
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getEHoldings()
+            vm.getTitles()
         })
     },
     methods: {
-        async getEHoldings() {
-            const eholdings = await fetchEHoldings()
-            this.eholdings = eholdings
-            console.log(this.eholdings)
+        async getTitles() {
+            const titles = await fetchTitles()
+            this.titles = titles
             this.initialized = true
         },
-        show_eholding: function (eholding_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/" + eholding_id)
+        show_title: function (title_id) {
+            this.$router.push("/cgi-bin/koha/erm/eholdings/titles/" + title_id)
         },
-        edit_eholding: function (eholding_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/edit/" + eholding_id)
+        edit_title: function (title_id) {
+            this.$router.push("/cgi-bin/koha/erm/eholdings/titles/edit/" + title_id)
         },
-        delete_eholding: function (eholding_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/delete/" + eholding_id)
+        delete_title: function (title_id) {
+            this.$router.push("/cgi-bin/koha/erm/eholdings/titles/delete/" + title_id)
         },
     },
     updated() {
-        let show_eholding = this.show_eholding
-        let edit_eholding = this.edit_eholding
-        let delete_eholding = this.delete_eholding
+        let show_title= this.show_title
+        let edit_title= this.edit_title
+        let delete_title= this.delete_title
 
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
@@ -68,9 +67,9 @@ export default {
             return map
         }, {})
 
-        $('#eholding_list').kohaTable({
+        $('#title_list').kohaTable({
             "ajax": {
-                "url": eholdings_table_url,
+                "url": eholdings_titles_table_url,
             },
             "order": [[0, "asc"]],
             "columnDefs": [{
@@ -85,7 +84,7 @@ export default {
             "columns": [
                 {
                     "title": __("Title"),
-                    "data": ["me.eholding_id", "me.publication_title"],
+                    "data": ["me.title_id", "me.publication_title"],
                     "searchable": true,
                     "orderable": true,
                     // Rendering done in drawCallback
@@ -132,17 +131,17 @@ export default {
                 var api = new $.fn.dataTable.Api(settings)
 
                 $.each($(this).find("td .actions"), function (index, e) {
-                    let eholding_id = api.row(index).data().eholding_id
+                    let title_id = api.row(index).data().title_id
                     let editButton = createVNode("a", {
                         class: "btn btn-default btn-xs", role: "button", onClick: () => {
-                            edit_eholding(eholding_id)
+                            edit_title(title_id)
                         }
                     },
                         [createVNode("i", { class: "fa fa-pencil", 'aria-hidden': "true" }), __("Edit")])
 
                     let deleteButton = createVNode("a", {
                         class: "btn btn-default btn-xs", role: "button", onClick: () => {
-                            delete_eholding(eholding_id)
+                            delete_title(title_id)
                         }
                     },
                         [createVNode("i", { class: "fa fa-trash", 'aria-hidden': "true" }), __("Delete")])
@@ -157,10 +156,10 @@ export default {
                     let n = createVNode("a", {
                         role: "button",
                         onClick: () => {
-                            show_eholding(row.eholding_id)
+                            show_title(row.title_id)
                         }
                     },
-                        `${row.publication_title} (#${row.eholding_id})`
+                        `${row.publication_title} (#${row.title_id})`
                     )
                     render(n, e)
                 })
@@ -169,14 +168,14 @@ export default {
                 var table_id = settings.nTable.id
                 $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
             }
-        }, eholding_table_settings, 1)
+        }, eholdings_titles_table_settings, 1)
     },
     beforeUnmount() {
-        $('#eholding_list')
+        $('#title_list')
             .DataTable()
             .destroy(true)
     },
     components: { Toolbar },
-    name: "EHoldingsList",
+    name: "EHoldingsTitlesList",
 }
 </script>

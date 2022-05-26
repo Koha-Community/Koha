@@ -1,4 +1,4 @@
-package Koha::ERM::EHolding::Packages;
+package Koha::ERM::EHoldings::Resources;
 
 # This file is part of Koha.
 #
@@ -17,16 +17,15 @@ package Koha::ERM::EHolding::Packages;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
-use Koha::ERM::EHolding::Package;
+use Koha::ERM::EHoldings::Resource;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::ERM::EHolding::Packages- Koha EHolding EHolding Object set class
+Koha::ERM::EHoldings::Resources- Koha EHolding Resource Object set class
 
 =head1 API
 
@@ -39,11 +38,11 @@ Koha::ERM::EHolding::Packages- Koha EHolding EHolding Object set class
 =cut
 
 sub _type {
-    return 'ErmEholdingsPackage';
+    return 'ErmEholdingsResource';
 }
 
 sub object_class {
-    return 'Koha::ERM::EHolding::Package';
+    return 'Koha::ERM::EHoldings::Resource';
 }
 
 1;

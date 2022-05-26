@@ -66,28 +66,28 @@
         const package_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_TYPE')) | $raw %];
         const package_content_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_CONTENT_TYPE')) | $raw %];
 
-        var package_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'packages', 'packages', 'json' ) | $raw %];
+        var eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
 
-        var packages_table_url = '/api/v1/erm/packages?';
-        [% IF package_name_filter %]
-            var package_name_filter = {
+        var eholdings_packages_table_url = '/api/v1/erm/eholdings/packages?';
+        [% IF eholdings_package_name_filter %]
+            var eholdings_package_name_filter = {
                 'name': {
-                    "like": '%[%- package_name_filter | html -%]%'
+                    "like": '%[%- eholdings_package_name_filter | html -%]%'
                 }
             };
-            packages_table_url += 'q='+ encodeURIComponent(JSON.stringify(package_name_filter));
+            eholdings_packages_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholdings_package_name_filter));
         [% END %]
 
-        var eholding_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'eholdings', 'json' ) | $raw %];
+        var eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
 
-        var eholdings_table_url = '/api/v1/erm/eholdings?';
-        [% IF eholding_name_filter %]
-            var eholding_name_filter = {
+        var eholdings_titles_table_url = '/api/v1/erm/eholdings/titles?';
+        [% IF eholdings_title_name_filter %]
+            var eholdings_title_name_filter = {
                 'name': {
-                    "like": '%[%- eholding_name_filter | html -%]%'
+                    "like": '%[%- eholdings_title_name_filter | html -%]%'
                 }
             };
-            eholdings_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholding_name_filter));
+            eholdings_titles_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholding_title_name_filter));
         [% END %]
 
     </script>

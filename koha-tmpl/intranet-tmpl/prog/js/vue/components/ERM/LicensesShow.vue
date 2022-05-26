@@ -104,7 +104,6 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.license = vm.getLicense(to.params.license_id)
-            vm.initialized = true
         })
     },
     methods: {

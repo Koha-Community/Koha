@@ -1,9 +1,12 @@
 ---
 type: object
 properties:
-  eholding_id:
+  resource_id:
     type: integer
-    description: Internal related eHolding identifier
+    description: Internal resource identifier
+  title_id:
+    type: integer
+    description: Internal title identifier
   package_id:
     type: integer
     description: Internal package identifier
@@ -18,7 +21,7 @@ properties:
       - string
       - "null"
   proxy:
-    description: Proxy
+    description: Proxy to access this resource
     type:
       - string
       - "null"

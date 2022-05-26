@@ -1,145 +1,140 @@
 ---
-/erm/eholdings:
+/erm/eholdings/titles:
   get:
-    x-mojo-to: ERM::EHoldings#list
-    operationId: listErmEHoldings
+    x-mojo-to: ERM::EHoldings::Titles#list
+    operationId: listErmEHoldingsTitles
     tags:
-      - eholding
-    summary: List eholdings
+      - eholdings
+    summary: List eholdings titles
     produces:
       - application/json
     parameters:
-      - description: Case insensitive search on eholding eholding_id
+      - description: Case insensitive search on title title_id
         in: query
-        name: eholding_id
+        name: title_id
         required: false
         type: integer
-      - description: Case insensitive search on eholding vendor_id
+      - description: Case insensitive search on title vendor_id
         in: query
         name: vendor_id
         required: false
         type: integer
-      - description: Case insensitive search on eholding publication_title
+      - description: Case insensitive search on title publication_title
         in: query
         name: publication_title
         required: false
         type: string
-      - description: Case insensitive search on eholding print_identifier
+      - description: Case insensitive search on title print_identifier
         in: query
         name: print_identifier
         required: false
         type: string
-      - description: Case insensitive search on eholding online_identifier
+      - description: Case insensitive search on title online_identifier
         in: query
         name: online_identifier
         required: false
         type: string
-      - description: Case insensitive search on eholding date_first_issue_online
+      - description: Case insensitive search on title date_first_issue_online
         in: query
         name: date_first_issue_online
         required: false
         type: string
-      - description: Case insensitive search on eholding num_first_vol_online
+      - description: Case insensitive search on title num_first_vol_online
         in: query
         name: num_first_vol_online
         required: false
         type: string
-      - description: Case insensitive search on eholding num_first_issue_online
+      - description: Case insensitive search on title num_first_issue_online
         in: query
         name: num_first_issue_online
         required: false
         type: string
-      - description: Case insensitive search on eholding date_last_issue_online
+      - description: Case insensitive search on title date_last_issue_online
         in: query
         name: date_last_issue_online
         required: false
         type: string
-      - description: Case insensitive search on eholding num_last_vol_online
+      - description: Case insensitive search on title num_last_vol_online
         in: query
         name: num_last_vol_online
         required: false
         type: string
-      - description: Case insensitive search on eholding num_last_issue_online
+      - description: Case insensitive search on title num_last_issue_online
         in: query
         name: num_last_issue_online
         required: false
         type: string
-      - description: Case insensitive search on eholding title_url
+      - description: Case insensitive search on title title_url
         in: query
         name: title_url
         required: false
         type: string
-      - description: Case insensitive search on eholding first_author
+      - description: Case insensitive search on title first_author
         in: query
         name: first_author
         required: false
         type: string
-      - description: Case insensitive search on eholding title_id
-        in: query
-        name: title_id
-        required: false
-        type: string
-      - description: Case insensitive search on eholding embargo_info
+      - description: Case insensitive search on title embargo_info
         in: query
         name: embargo_info
         required: false
         type: string
-      - description: Case insensitive search on eholding coverage_depth
+      - description: Case insensitive search on title coverage_depth
         in: query
         name: coverage_depth
         required: false
         type: string
-      - description: Case insensitive search on eholding notes
+      - description: Case insensitive search on title notes
         in: query
         name: notes
         required: false
         type: string
-      - description: Case insensitive search on eholding publisher_name
+      - description: Case insensitive search on title publisher_name
         in: query
         name: publisher_name
         required: false
         type: string
-      - description: Case insensitive search on eholding publication_type
+      - description: Case insensitive search on title publication_type
         in: query
         name: publication_type
         required: false
         type: string
-      - description: Case insensitive search on eholding date_monograph_published_print
+      - description: Case insensitive search on title date_monograph_published_print
         in: query
         name: date_monograph_published_print
         required: false
         type: string
-      - description: Case insensitive search on eholding date_monograph_published_online
+      - description: Case insensitive search on title date_monograph_published_online
         in: query
         name: date_monograph_published_online
         required: false
         type: string
-      - description: Case insensitive search on eholding monograph_volume
+      - description: Case insensitive search on title monograph_volume
         in: query
         name: monograph_volume
         required: false
         type: string
-      - description: Case insensitive search on eholding monograph_edition
+      - description: Case insensitive search on title monograph_edition
         in: query
         name: monograph_edition
         required: false
         type: string
-      - description: Case insensitive search on eholding first_editor
+      - description: Case insensitive search on title first_editor
         in: query
         name: first_editor
         required: false
         type: string
-      - description: Case insensitive search on eholding parent_publication_title_id
+      - description: Case insensitive search on title parent_publication_title_id
         in: query
         name: parent_publication_title_id
         required: false
         type: string
-      - description: Case insensitive search on eholding preceeding_publication_title_id
+      - description: Case insensitive search on title preceeding_publication_title_id
         in: query
         name: preceeding_publication_title_id
         required: false
         type: string
-      - description: Case insensitive search on eholding access_type
+      - description: Case insensitive search on title access_type
         in: query
         name: access_type
         required: false
@@ -153,10 +148,10 @@
       - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       200:
-        description: A list of eholding
+        description: A list of eHoldings titles
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholding"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
           type: array
       403:
         description: Access forbidden
@@ -176,28 +171,28 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::EHoldings#add
-    operationId: addErmEHoldings
+    x-mojo-to: ERM::EHoldings::Titles#add
+    operationId: addErmEHoldingsTitles
     tags:
-      - eholding
+      - eholdings
     summary: Add eholding
     consumes:
       - application/json
     produces:
       - application/json
     parameters:
-      - description: A JSON object containing information about the new eholding
+      - description: A JSON object containing information about the new title
         in: body
         name: body
         required: true
         schema:
-            $ref: "../swagger.yaml#/definitions/erm_eholding"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
     responses:
       201:
-        description: A successfully created eholding
+        description: A successfully created title
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholding"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
       400:
         description: Bad parameter
         schema:
@@ -231,23 +226,23 @@
     x-koha-authorization:
       permissions:
         erm: 1
-"/erm/eholdings/{eholding_id}":
+"/erm/eholdings/titles/{title_id}":
   get:
-    x-mojo-to: ERM::EHoldings#get
-    operationId: getErmEHoldings
+    x-mojo-to: ERM::EHoldings::Titles#get
+    operationId: getErmEHoldingsTitles
     tags:
-      - eholding
-    summary: Get eholding
+      - eholdings
+    summary: Get titles
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
     responses:
       200:
-        description: Aneholding
+        description: An eHolding title
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholding"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
       401:
         description: Authentication required
         schema:
@@ -274,32 +269,32 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - eholding_packages
-      - eholding_packages.package
+      - resources
+      - resources.package
   put:
-    x-mojo-to: ERM::EHoldings#update
-    operationId: updateErmEHoldings
+    x-mojo-to: ERM::EHoldings::Titles#update
+    operationId: updateErmEHoldingsTitles
     tags:
-      - eholding
-    summary: Update eholding
+      - eholdings
+    summary: Update titles
     consumes:
       - application/json
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
       - name: body
         in: body
-        description: A JSON object containing new information about existing eholding
+        description: A JSON object containing new information about existing title
         required: true
         schema:
-          $ref: "../swagger.yaml#/definitions/erm_eholding"
+          $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
     responses:
       200:
-        description: A successfully updated eholding
+        description: A successfully updated title
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholding"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
       400:
         description: Bad parameter
         schema:
@@ -330,23 +325,23 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - eholding_packages
-      - eholding_packages.package
+      - resources
+      - resources.package
   delete:
-    x-mojo-to: ERM::EHoldings#delete
-    operationId: deleteErmEHoldings
+    x-mojo-to: ERM::EHoldings::Titles#delete
+    operationId: deleteErmEHoldingsTitles
     tags:
-      - eholding
-    summary: Delete eholding
+      - eholdings
+    summary: Delete eHolding title
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholding_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
     responses:
       204:
-        description: eholding deleted
+        description: title deleted
       400:
-        description: eholding deletion failed
+        description: title deletion failed
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:

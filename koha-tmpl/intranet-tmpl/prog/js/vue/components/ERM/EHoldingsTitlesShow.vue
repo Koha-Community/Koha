@@ -1,17 +1,17 @@
 <template>
     <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else id="eholdings_show">
+    <div v-else id="eholdings_title_show">
         <h2>
-            {{ $t("EHolding.id", { id: eholding.eholding_id }) }}
+            {{ $t("Title.id", { id: title.title_id }) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/edit/${eholding.eholding_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/titles/edit/${title.title_id}`"
                     :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/delete/${eholding.eholding_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/titles/delete/${title.title_id}`"
                     :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
@@ -20,17 +20,25 @@
         <div>
             <fieldset class="rows">
                 <ol>
+                    <li v-if="title.title_id">
+                        <label
+                            >{{ $t("Title identifier") }}:</label
+                        >
+                        <span>
+                            {{ title.title_id}}
+                        </span>
+                    </li>
                     <li>
                         <label>{{ $t("Publication title") }}:</label>
                         <span>
-                            {{ eholding.publication_title }}
+                            {{ title.publication_title }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="eholding.vendor_id">
+                        <span v-if="title.vendor_id">
                             {{
-                                vendors.find((e) => e.id == eholding.vendor_id)
+                                vendors.find((e) => e.id == title.vendor_id)
                                     .name
                             }}
                         </span>
@@ -38,13 +46,13 @@
                     <li>
                         <label>{{ $t("Print-format identifier") }}:</label>
                         <span>
-                            {{ eholding.print_identifier }}
+                            {{ title.print_identifier }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Online-format identifier") }}:</label>
                         <span>
-                            {{ eholding.online_identifier }}
+                            {{ title.online_identifier }}
                         </span>
                     </li>
                     <li>
@@ -56,7 +64,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.date_first_issue_online }}
+                            {{ title.date_first_issue_online }}
                         </span>
                     </li>
                     <li>
@@ -66,7 +74,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.num_first_vol_online }}
+                            {{ title.num_first_vol_online }}
                         </span>
                     </li>
                     <li>
@@ -76,7 +84,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.num_first_issue_online }}
+                            {{ title.num_first_issue_online }}
                         </span>
                     </li>
                     <li>
@@ -86,7 +94,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.date_last_issue_online }}
+                            {{ title.date_last_issue_online }}
                         </span>
                     </li>
                     <li>
@@ -96,7 +104,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.num_last_vol_online }}
+                            {{ title.num_last_vol_online }}
                         </span>
                     </li>
                     <li>
@@ -106,55 +114,49 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.num_last_issue_online }}
+                            {{ title.num_last_issue_online }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Title-level URL") }}:</label>
                         <span>
-                            {{ eholding.title_url }}
+                            {{ title.title_url }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("First author") }}:</label>
                         <span>
-                            {{ eholding.first_author }}
-                        </span>
-                    </li>
-                    <li>
-                        <label>{{ $t("Title identifier") }}:</label>
-                        <span>
-                            {{ eholding.title_id }}
+                            {{ title.first_author }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Embargo information") }}:</label>
                         <span>
-                            {{ eholding.embargo_info }}
+                            {{ title.embargo_info }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Coverage depth") }}:</label>
                         <span>
-                            {{ eholding.coverage_depth }}
+                            {{ title.coverage_depth }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Notes") }}:</label>
                         <span>
-                            {{ eholding.notes }}
+                            {{ title.notes }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Publisher name") }}:</label>
                         <span>
-                            {{ eholding.publisher_name }}
+                            {{ title.publisher_name }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Publication type") }}:</label>
                         <span>
-                            {{ eholding.publication_type }}
+                            {{ title.publication_type }}
                         </span>
                     </li>
                     <li>
@@ -166,7 +168,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.date_monograph_published_print }}
+                            {{ title.date_monograph_published_print }}
                         </span>
                     </li>
                     <li>
@@ -178,7 +180,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.date_monograph_published_online }}
+                            {{ title.date_monograph_published_online }}
                         </span>
                     </li>
                     <li>
@@ -186,19 +188,19 @@
                             >{{ $t("Number of volume for monograph") }}:</label
                         >
                         <span>
-                            {{ eholding.monograph_volume }}
+                            {{ title.monograph_volume }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Edition of the monograph") }}:</label>
                         <span>
-                            {{ eholding.monograph_edition }}
+                            {{ title.monograph_edition }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("First editor") }}:</label>
                         <span>
-                            {{ eholding.first_editor }}
+                            {{ title.first_editor }}
                         </span>
                     </li>
                     <li>
@@ -210,7 +212,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.parent_publication_title_id }}
+                            {{ title.parent_publication_title_id }}
                         </span>
                     </li>
                     <li>
@@ -222,17 +224,17 @@
                             }}:</label
                         >
                         <span>
-                            {{ eholding.preceeding_publication_title_id }}
+                            {{ title.preceeding_publication_title_id }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Acces type") }}:</label>
                         <span>
-                            {{ eholding.access_type }}
+                            {{ title.access_type }}
                         </span>
                     </li>
 
-                    <li v-if="eholding.eholding_packages.length">
+                    <li v-if="title.resources.length">
                         <label>{{ $t("Packages") }}</label>
                         <table>
                             <thead>
@@ -243,16 +245,16 @@
                             <tbody>
                                 <tr
                                     v-for="(
-                                        p, counter
-                                    ) in eholding.eholding_packages"
+                                        r, counter
+                                    ) in title.resources"
                                     v-bind:key="counter"
                                 >
                                     <td>
                                         <router-link
-                                            :to="`/cgi-bin/koha/erm/packages/${p.package_id}`"
+                                            :to="`/cgi-bin/koha/erm/eholdings/packages/${r.package_id}`"
                                             :title="$t('Show package')"
                                         >
-                                            {{ p.package.name }}
+                                            {{ r.package.name }}
                                         </router-link>
                                     </td>
                                 </tr>
@@ -263,7 +265,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings"
+                    to="/cgi-bin/koha/erm/eholdings/titles"
                     role="button"
                     class="cancel"
                     >{{ $t("Close") }}</router-link
@@ -274,7 +276,7 @@
 </template>
 
 <script>
-import { fetchEHolding } from "../../fetch"
+import { fetchTitle } from "../../fetch"
 import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
 export default {
@@ -288,8 +290,8 @@ export default {
     },
     data() {
         return {
-            eholding: {
-                eholding_id: null,
+            title: {
+                title_id: null,
                 vendor_id: null,
                 publication_title: '',
                 print_identifier: '',
@@ -302,7 +304,6 @@ export default {
                 num_last_issue_online: '',
                 title_url: '',
                 first_author: '',
-                title_id: '',
                 embargo_info: '',
                 coverage_depth: '',
                 notes: '',
@@ -316,7 +317,7 @@ export default {
                 parent_publication_title_id: '',
                 preceeding_publication_title_id: '',
                 access_type: '',
-                eholding_packages: [],
+                resources: [],
             },
             initialized: false,
         }
@@ -324,20 +325,20 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getEHolding(to.params.eholding_id)
-            vm.initialized = true
+            vm.getTitle(to.params.title_id)
         })
     },
     beforeRouteUpdate(to, from) {
-        this.eholding = this.getEHolding(to.params.eholding_id)
+        this.title = this.getTitle(to.params.title_id)
     },
     methods: {
-        async getEHolding(eholding_id) {
-            const eholding = await fetchEHolding(eholding_id)
-            this.eholding = eholding
+        async getTitle(title_id) {
+            const title= await fetchTitle(title_id)
+            this.title = title
+            this.initialized = true
         },
     },
-    name: "EHoldingsShow",
+    name: "EHoldingsTitlesShow",
 }
 </script>
 <style scoped>

@@ -91,7 +91,7 @@
                             </select>
                         </li>
 
-                        <PackageAgreements
+                        <EHoldingsPackageAgreements
                             :package_agreements="erm_package.package_agreements"
                         />
                     </ol>
@@ -99,7 +99,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/packages"
+                        to="/cgi-bin/koha/erm/eholdings/packages"
                         role="button"
                         class="cancel"
                         >{{ $t("Cancel") }}</router-link
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import PackageAgreements from "./PackageAgreements.vue"
+import EHoldingsPackageAgreements from "./EHoldingsPackageAgreements.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
@@ -166,7 +166,7 @@ export default {
             e.preventDefault()
 
             let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
-            let apiUrl = '/api/v1/erm/packages'
+            let apiUrl = '/api/v1/erm/eholdings/packages'
 
             let method = 'POST'
             if (erm_package.package_id) {
@@ -174,6 +174,8 @@ export default {
                 apiUrl += '/' + erm_package.package_id
             }
             delete erm_package.package_id
+            delete erm_package.resources
+            delete erm_package.vendor
 
             erm_package.package_agreements = erm_package.package_agreements.map(({ package_id, agreement, ...keepAttrs }) => keepAttrs)
 
@@ -188,10 +190,10 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/packages")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
                         setMessage(this.$t("Package updated"))
                     } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/packages")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
                         setMessage(this.$t("Package created"))
                     } else {
                         setError(response.message || response.statusText)
@@ -202,8 +204,8 @@ export default {
         },
     },
     components: {
-        PackageAgreements,
+        EHoldingsPackageAgreements,
     },
-    name: "PackagesFormAdd",
+    name: "EHoldingsPackagesFormAdd",
 }
 </script>

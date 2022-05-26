@@ -1,21 +1,32 @@
 <template>
     <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else id="eholdings_add">
-        <h2 v-if="eholding.eholding_id">
-            {{ $t("Edit eHolding.id", { id: eholding.eholding_id }) }}
+    <div v-else id="titles_add">
+        <h2 v-if="title.title_id">
+            {{ $t("Edit title.id", { id: title.title_id }) }}
         </h2>
-        <h2 v-else>{{ $t("New eHolding") }}</h2>
+        <h2 v-else>{{ $t("New title") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
+                        <li v-if="title.title_id">
+                            <label for="title_title_id"
+                                >{{ $t("Title identifier") }}:</label
+                            >
+                            <input
+                                id="title_title_id"
+                                v-model="title.title_id"
+                                :placeholder="$t('Title identifier')"
+                            />
+                        </li>
+
                         <li>
-                            <label class="required" for="eholding_name"
+                            <label class="required" for="title_name"
                                 >{{ $t("Publication title") }}:</label
                             >
                             <input
-                                id="eholding_publication_title"
-                                v-model="eholding.publication_title"
+                                id="title_publication_title"
+                                v-model="title.publication_title"
                                 :placeholder="$t('Publication title')"
                                 required
                             />
@@ -23,12 +34,12 @@
                         </li>
 
                         <li>
-                            <label for="eholding_vendor_id"
+                            <label for="title_vendor_id"
                                 >{{ $t("Vendor") }}:</label
                             >
                             <select
-                                id="eholding_vendor_id"
-                                v-model="eholding.vendor_id"
+                                id="title_vendor_id"
+                                v-model="title.vendor_id"
                             >
                                 <option value=""></option>
                                 <option
@@ -36,7 +47,7 @@
                                     :key="vendor.vendor_id"
                                     :value="vendor.id"
                                     :selected="
-                                        vendor.id == eholding.vendor_id
+                                        vendor.id == title.vendor_id
                                             ? true
                                             : false
                                     "
@@ -47,29 +58,29 @@
                         </li>
 
                         <li>
-                            <label for="eholding_print_identifier"
+                            <label for="title_print_identifier"
                                 >{{ $t("Print-format identifier") }}:</label
                             >
                             <input
-                                id="eholding_print_identifier"
-                                v-model="eholding.print_identifier"
+                                id="title_print_identifier"
+                                v-model="title.print_identifier"
                                 :placeholder="$t('Print-format identifier')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_online_identifier"
+                            <label for="title_online_identifier"
                                 >{{ $t("Online-format identifier") }}:</label
                             >
                             <input
-                                id="eholding_online_identifier"
-                                v-model="eholding.online_identifier"
+                                id="title_online_identifier"
+                                v-model="title.online_identifier"
                                 :placeholder="$t('Online-format identifier')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_date_first_issue_online"
+                            <label for="title_date_first_issue_online"
                                 >{{
                                     $t(
                                         "Date of first serial issue available online"
@@ -77,8 +88,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_date_first_issue_online"
-                                v-model="eholding.date_first_issue_online"
+                                id="title_date_first_issue_online"
+                                v-model="title.date_first_issue_online"
                                 :placeholder="
                                     $t(
                                         'Date of first serial issue available online'
@@ -88,7 +99,7 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_first_vol_online"
+                            <label for="title_num_first_vol_online"
                                 >{{
                                     $t(
                                         "Number of first volume available online"
@@ -96,8 +107,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_num_first_vol_online"
-                                v-model="eholding.num_first_vol_online"
+                                id="title_num_first_vol_online"
+                                v-model="title.num_first_vol_online"
                                 :placeholder="
                                     $t(
                                         'Number of first volume available online'
@@ -107,7 +118,7 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_first_issue_online"
+                            <label for="title_num_first_issue_online"
                                 >{{
                                     $t(
                                         "Number of first issue available online"
@@ -115,8 +126,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_num_first_issue_online"
-                                v-model="eholding.num_first_issue_online"
+                                id="title_num_first_issue_online"
+                                v-model="title.num_first_issue_online"
                                 :placeholder="
                                     $t('Number of first issue available online')
                                 "
@@ -124,14 +135,14 @@
                         </li>
 
                         <li>
-                            <label for="eholding_date_last_issue_online"
+                            <label for="title_date_last_issue_online"
                                 >{{
                                     $t("Date of last issue available online")
                                 }}:</label
                             >
                             <input
-                                id="eholding_date_last_issue_online"
-                                v-model="eholding.date_last_issue_online"
+                                id="title_date_last_issue_online"
+                                v-model="title.date_last_issue_online"
                                 :placeholder="
                                     $t('Date of last issue available online')
                                 "
@@ -139,7 +150,7 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_last_vol_online"
+                            <label for="title_num_last_vol_online"
                                 >{{
                                     $t(
                                         "Number of last volume available online"
@@ -147,8 +158,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_num_last_vol_online"
-                                v-model="eholding.num_last_vol_online"
+                                id="title_num_last_vol_online"
+                                v-model="title.num_last_vol_online"
                                 :placeholder="
                                     $t('Number of last volume available online')
                                 "
@@ -156,14 +167,14 @@
                         </li>
 
                         <li>
-                            <label for="eholding_num_last_issue_online"
+                            <label for="title_num_last_issue_online"
                                 >{{
                                     $t("Number of last issue available online")
                                 }}:</label
                             >
                             <input
-                                id="eholding_num_last_issue_online"
-                                v-model="eholding.num_last_issue_online"
+                                id="title_num_last_issue_online"
+                                v-model="title.num_last_issue_online"
                                 :placeholder="
                                     $t('Number of last issue available online')
                                 "
@@ -171,95 +182,82 @@
                         </li>
 
                         <li>
-                            <label for="eholding_title_url"
+                            <label for="title_title_url"
                                 >{{ $t("Title-level URL") }}:</label
                             >
                             <input
-                                id="eholding_title_url"
-                                v-model="eholding.title_url"
+                                id="title_title_url"
+                                v-model="title.title_url"
                                 :placeholder="$t('Title-level URL')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_first_author"
+                            <label for="title_first_author"
                                 >{{ $t("First author") }}:</label
                             >
                             <input
-                                id="eholding_first_author"
-                                v-model="eholding.first_author"
+                                id="title_first_author"
+                                v-model="title.first_author"
                                 :placeholder="$t('First author')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_title_id"
-                                >{{ $t("Title identifier") }}:</label
-                            >
-                            <input
-                                id="eholding_title_id"
-                                v-model="eholding.title_id"
-                                :placeholder="$t('Title identifier')"
-                            />
-                        </li>
-
-                        <li>
-                            <label for="eholding_embargo_info"
+                            <label for="title_embargo_info"
                                 >{{ $t("Embargo information") }}:</label
                             >
                             <input
-                                id="eholding_embargo_info"
-                                v-model="eholding.embargo_info"
+                                id="title_embargo_info"
+                                v-model="title.embargo_info"
                                 :placeholder="$t('Embargo information')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_coverage_depth"
+                            <label for="title_coverage_depth"
                                 >{{ $t("Coverage depth") }}:</label
                             >
                             <input
-                                id="eholding_coverage_depth"
-                                v-model="eholding.coverage_depth"
+                                id="title_coverage_depth"
+                                v-model="title.coverage_depth"
                                 :placeholder="$t('Coverage depth')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_notes"
-                                >{{ $t("Notes") }}:</label
-                            >
+                            <label for="title_notes">{{ $t("Notes") }}:</label>
                             <input
-                                id="eholding_notes"
-                                v-model="eholding.notes"
+                                id="title_notes"
+                                v-model="title.notes"
                                 :placeholder="$t('Notes')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_publisher_name"
+                            <label for="title_publisher_name"
                                 >{{ $t("Publisher name") }}:</label
                             >
                             <input
-                                id="eholding_publisher_name"
-                                v-model="eholding.publisher_name"
+                                id="title_publisher_name"
+                                v-model="title.publisher_name"
                                 :placeholder="$t('Publisher name')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_publication_type"
+                            <label for="title_publication_type"
                                 >{{ $t("Publication type") }}:</label
                             >
                             <input
-                                id="eholding_publication_type"
-                                v-model="eholding.publication_type"
+                                id="title_publication_type"
+                                v-model="title.publication_type"
                                 :placeholder="$t('Publication type')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_date_monograph_published_print"
+                            <label for="title_date_monograph_published_print"
                                 >{{
                                     $t(
                                         "Date the monograph is first published in print"
@@ -267,10 +265,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_date_monograph_published_print"
-                                v-model="
-                                    eholding.date_monograph_published_print
-                                "
+                                id="title_date_monograph_published_print"
+                                v-model="title.date_monograph_published_print"
                                 :placeholder="
                                     $t(
                                         'Date the monograph is first published in print'
@@ -280,8 +276,7 @@
                         </li>
 
                         <li>
-                            <label
-                                for="eholding_date_monograph_published_online"
+                            <label for="title_date_monograph_published_online"
                                 >{{
                                     $t(
                                         "Date the monograph is first published online"
@@ -289,10 +284,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_date_monograph_published_online"
-                                v-model="
-                                    eholding.date_monograph_published_online
-                                "
+                                id="title_date_monograph_published_online"
+                                v-model="title.date_monograph_published_online"
                                 :placeholder="
                                     $t(
                                         'Date the monograph is first published online'
@@ -302,14 +295,14 @@
                         </li>
 
                         <li>
-                            <label for="eholding_monograph_volume"
+                            <label for="title_monograph_volume"
                                 >{{
                                     $t("Number of volume for monograph")
                                 }}:</label
                             >
                             <input
-                                id="eholding_monograph_volume"
-                                v-model="eholding.monograph_volume"
+                                id="title_monograph_volume"
+                                v-model="title.monograph_volume"
                                 :placeholder="
                                     $t('Number of volume for monograph')
                                 "
@@ -317,29 +310,29 @@
                         </li>
 
                         <li>
-                            <label for="eholding_monograph_edition"
+                            <label for="title_monograph_edition"
                                 >{{ $t("Edition of the monograph") }}:</label
                             >
                             <input
-                                id="eholding_monograph_edition"
-                                v-model="eholding.monograph_edition"
+                                id="title_monograph_edition"
+                                v-model="title.monograph_edition"
                                 :placeholder="$t('Edition of the monograph')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_first_editor"
+                            <label for="title_first_editor"
                                 >{{ $t("First editor") }}:</label
                             >
                             <input
-                                id="eholding_first_editor"
-                                v-model="eholding.first_editor"
+                                id="title_first_editor"
+                                v-model="title.first_editor"
                                 :placeholder="$t('First editor')"
                             />
                         </li>
 
                         <li>
-                            <label for="eholding_parent_publication_title_id"
+                            <label for="title_parent_publication_title_id"
                                 >{{
                                     $t(
                                         "Title identifier of the parent publication"
@@ -347,8 +340,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_parent_publication_title_id"
-                                v-model="eholding.parent_publication_title_id"
+                                id="title_parent_publication_title_id"
+                                v-model="title.parent_publication_title_id"
                                 :placeholder="
                                     $t(
                                         'Title identifier of the parent publication'
@@ -358,8 +351,7 @@
                         </li>
 
                         <li>
-                            <label
-                                for="eholding_preceeding_publication_title_id"
+                            <label for="title_preceeding_publication_title_id"
                                 >{{
                                     $t(
                                         "Title identifier of any preceding publication title"
@@ -367,10 +359,8 @@
                                 }}:</label
                             >
                             <input
-                                id="eholding_preceeding_publication_title_id"
-                                v-model="
-                                    eholding.preceeding_publication_title_id
-                                "
+                                id="title_preceeding_publication_title_id"
+                                v-model="title.preceeding_publication_title_id"
                                 :placeholder="
                                     $t(
                                         'Title identifier of any preceding publication title'
@@ -380,28 +370,28 @@
                         </li>
 
                         <li>
-                            <label for="eholding_access_type"
+                            <label for="title_access_type"
                                 >{{
                                     // FIXME May be fee-based (P) or Open Access (F).
                                     $t("Access type")
                                 }}:</label
                             >
                             <input
-                                id="eholding_access_type"
-                                v-model="eholding.access_type"
+                                id="title_access_type"
+                                v-model="title.access_type"
                                 :placeholder="$t('Access type')"
                             />
                         </li>
 
-                        <EHoldingPackages
-                            :eholding_packages="eholding.eholding_packages"
+                        <EHoldingsResources
+                            :resources="title.resources"
                         />
                     </ol>
                 </fieldset>
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings"
+                        to="/cgi-bin/koha/erm/eholdings/titles"
                         role="button"
                         class="cancel"
                         >{{ $t("Cancel") }}</router-link
@@ -414,9 +404,9 @@
 
 <script>
 import { useVendorStore } from "../../stores/vendors"
-import EHoldingPackages from "./EHoldingPackages.vue"
+import EHoldingsResources from "./EHoldingsResources.vue"
 import { setMessage, setError } from "../../messages"
-import { fetchEHolding } from '../../fetch'
+import { fetchTitle } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -430,8 +420,8 @@ export default {
     },
     data() {
         return {
-            eholding: {
-                eholding_id: null,
+            title: {
+                title_id: null,
                 vendor_id: null,
                 publication_title: '',
                 print_identifier: '',
@@ -444,7 +434,6 @@ export default {
                 num_last_issue_online: '',
                 title_url: '',
                 first_author: '',
-                title_id: '',
                 embargo_info: '',
                 coverage_depth: '',
                 notes: '',
@@ -458,45 +447,50 @@ export default {
                 parent_publication_title_id: '',
                 preceeding_publication_title_id: '',
                 access_type: '',
-                eholding_packages: [],
+                resources: [],
             },
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (to.params.eholding_id) {
-                vm.eholding = vm.getEHolding(to.params.eholding_id)
+            if (to.params.title_id) {
+                vm.title = vm.getTitle(to.params.title_id)
             } else {
                 vm.initialized = true
             }
         })
     },
     methods: {
-        async getEHolding(eholding_id) {
-            const eholding = await fetchEHolding(eholding_id)
-            this.eholding = eholding
+        async getTitle(title_id) {
+            const title = await fetchTitle(title_id)
+            this.title = title
             this.initialized = true
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let eholding = JSON.parse(JSON.stringify(this.eholding)) // copy
-            let apiUrl = '/api/v1/erm/eholdings'
+            let title = JSON.parse(JSON.stringify(this.title)) // copy
+            let apiUrl = '/api/v1/erm/eholdings/titles'
 
             let method = 'POST'
-            if (eholding.eholding_id) {
+            if (title.title_id) {
                 method = 'PUT'
-                apiUrl += '/' + eholding.eholding_id
+                apiUrl += '/' + title.title_id
             }
-            delete eholding.eholding_id
+            delete title.title_id
+
+            title.resources.forEach(r => {
+                r.started_on = r.started_on ? $date_to_rfc3339(r.started_on) : null
+                r.ended_on = r.ended_on ? $date_to_rfc3339(r.ended_on) : null
+            })
 
             // Cannot use the map/keepAttrs because of the reserved keywork 'package'
-            eholding.eholding_packages.forEach(function (e) { delete e.package })
+            title.resources.forEach(function (e) { delete e.package; delete e.resource_id })
 
             const options = {
                 method: method,
-                body: JSON.stringify(eholding),
+                body: JSON.stringify(title),
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -505,11 +499,11 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings")
-                        setMessage(this.$t("EHolding updated"))
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/titles")
+                        setMessage(this.$t("Title updated"))
                     } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings")
-                        setMessage(this.$t("EHolding created"))
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/titles")
+                        setMessage(this.$t("Title created"))
                     } else {
                         setError(response.message || response.statusText)
                     }
@@ -518,8 +512,8 @@ export default {
                 }).catch(e => { console.log(e) })
         },
     },
-    components: { EHoldingPackages },
-    name: "EHoldingsFormAdd",
+    components: { EHoldingsResources },
+    name: "EHoldingsTitlesFormAdd",
 }
 </script>
 <style scoped>

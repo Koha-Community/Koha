@@ -1,14 +1,14 @@
 <template>
-    <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else id="eholdings_confirm_delete">
-        <h2>{{ $t("Delete eHolding") }}</h2>
+    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
+    <div v-else id="packages_confirm_delete">
+        <h2>{{ $t("Delete package") }}</h2>
         <div>
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            {{ $t("eHolding title") }}:
-                            {{ eholding.publication_title }}
+                            {{ $t("Package name") }}:
+                            {{ erm_package.name }}
                         </li>
                     </ol>
                 </fieldset>
@@ -19,7 +19,7 @@
                         :value="$t('Yes, delete')"
                     />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings"
+                        to="/cgi-bin/koha/erm/eholdings/packages"
                         role="button"
                         class="cancel"
                         >{{ $t("No, do not delete") }}</router-link
@@ -31,31 +31,31 @@
 </template>
 
 <script>
-import { fetchEHolding } from "../../fetch"
+import { fetchPackage } from "../../fetch"
 import { setMessage, setError } from "../../messages"
 
 export default {
     data() {
         return {
-            eholding: {},
+            erm_package: {},
             initialized: false,
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getEHolding(to.params.eholding_id)
+            vm.getPackage(to.params.package_id)
         })
     },
     methods: {
-        async getEHolding(eholding_id) {
-            const eholding = await fetchEHolding(eholding_id)
-            this.eholding = eholding
+        async getPackage(package_id) {
+            const erm_package = await fetchPackage(package_id)
+            this.erm_package = erm_package
             this.initialized = true
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/eholdings/' + this.eholding.eholding_id
+            let apiUrl = '/api/v1/erm/eholdings/packages/' + this.erm_package.package_id
 
             const options = {
                 method: 'DELETE',
@@ -68,8 +68,8 @@ export default {
                 .then(
                     (response) => {
                         if (response.status == 204) {
-                            setMessage(this.$t("eHolding deleted"))
-                            this.$router.push("/cgi-bin/koha/erm/eholdings")
+                            setMessage(this.$t("Package deleted"))
+                            this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
                         } else {
                             setError(response.message || response.statusText)
                         }
@@ -81,6 +81,6 @@ export default {
                 )
         }
     },
-    name: "EHoldingsFormConfirmDelete",
+    name: "EHoldingsPackagesFormConfirmDelete",
 }
 </script>

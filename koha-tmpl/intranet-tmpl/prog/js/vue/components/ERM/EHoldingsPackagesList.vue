@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Toolbar from "./PackagesToolbar.vue"
+import Toolbar from "./EHoldingsPackagesToolbar.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
@@ -49,13 +49,13 @@ export default {
             this.initialized = true
         },
         show_package: function (package_id) {
-            this.$router.push("/cgi-bin/koha/erm/packages/" + package_id)
+            this.$router.push("/cgi-bin/koha/erm/eholdings/packages/" + package_id)
         },
         edit_package: function (package_id) {
-            this.$router.push("/cgi-bin/koha/erm/packages/edit/" + package_id)
+            this.$router.push("/cgi-bin/koha/erm/eholdings/packages/edit/" + package_id)
         },
         delete_package: function (package_id) {
-            this.$router.push("/cgi-bin/koha/erm/packages/delete/" + package_id)
+            this.$router.push("/cgi-bin/koha/erm/eholdings/packages/delete/" + package_id)
         },
     },
     updated() {
@@ -92,7 +92,7 @@ export default {
 
         $('#package_list').kohaTable({
             "ajax": {
-                "url": packages_table_url,
+                "url": eholdings_packages_table_url,
             },
             "order": [[0, "asc"]],
             "columnDefs": [{
@@ -203,7 +203,7 @@ export default {
                 $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_package_content_types')
             }
 
-        }, package_table_settings, 1)
+        }, eholdings_packages_table_settings, 1)
     },
     beforeUnmount() {
         $('#package_list')
@@ -211,6 +211,6 @@ export default {
             .destroy(true)
     },
     components: { Toolbar },
-    name: "packagesList",
+    name: "EHoldingsPackagesList",
 }
 </script>

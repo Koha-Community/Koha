@@ -1,10 +1,10 @@
 ---
-/erm/packages:
+/erm/eholdings/packages:
   get:
-    x-mojo-to: ERM::Packages#list
-    operationId: listErmPackages
+    x-mojo-to: ERM::EHoldings::Packages#list
+    operationId: listErmEHoldingsPackages
     tags:
-      - package
+      - eHoldings package
     summary: List packages
     produces:
       - application/json
@@ -56,7 +56,7 @@
         description: A list of package
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
           type: array
       403:
         description: Access forbidden
@@ -76,10 +76,10 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::Packages#add
-    operationId: addErmPackages
+    x-mojo-to: ERM::EHoldings::Packages#add
+    operationId: addErmEHoldingsPackages
     tags:
-      - package
+      - eHoldings package
     summary: Add package
     consumes:
       - application/json
@@ -91,13 +91,13 @@
         name: body
         required: true
         schema:
-            $ref: "../swagger.yaml#/definitions/erm_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
     responses:
       201:
         description: A successfully created package
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
       400:
         description: Bad parameter
         schema:
@@ -131,23 +131,23 @@
     x-koha-authorization:
       permissions:
         erm: 1
-"/erm/packages/{package_id}":
+"/erm/eholdings/packages/{package_id}":
   get:
-    x-mojo-to: ERM::Packages#get
-    operationId: getErmPackages
+    x-mojo-to: ERM::EHoldings::Packages#get
+    operationId: getErmEHoldingsPackages
     tags:
       - package
-    summary: Get package
+    summary: Get eHoldings package
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
     responses:
       200:
-        description: Anpackage
+        description: A package
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
       401:
         description: Authentication required
         schema:
@@ -176,29 +176,29 @@
     x-koha-embed:
       - agreements
   put:
-    x-mojo-to: ERM::Packages#update
-    operationId: updateErmPackages
+    x-mojo-to: ERM::EHoldings::Packages#update
+    operationId: updateErmEHoldingsPackages
     tags:
       - package
-    summary: Update package
+    summary: Update eHoldings package
     consumes:
       - application/json
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
       - name: body
         in: body
         description: A JSON object containing new information about existing package
         required: true
         schema:
-          $ref: "../swagger.yaml#/definitions/erm_package"
+          $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
     responses:
       200:
         description: A successfully updated package
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
       400:
         description: Bad parameter
         schema:
@@ -231,15 +231,15 @@
     x-koha-embed:
       - agreements
   delete:
-    x-mojo-to: ERM::Packages#delete
-    operationId: deleteErmPackages
+    x-mojo-to: ERM::EHoldings::Packages#delete
+    operationId: deleteErmEHoldingsPackages
     tags:
       - package
-    summary: Delete package
+    summary: Delete eHoldings package
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
     responses:
       204:
         description: package deleted

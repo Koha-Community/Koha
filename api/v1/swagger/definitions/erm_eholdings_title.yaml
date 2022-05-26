@@ -1,7 +1,7 @@
 ---
 type: object
 properties:
-  eholding_id:
+  title_id:
     type: integer
     description: internally assigned identifier
     readOnly: true
@@ -11,133 +11,128 @@ properties:
       - integer
       - "null"
   publication_title:
-    description: publication_title of the eHolding
+    description: publication_title of the title
     type: string
   print_identifier:
-    description: print_identifier of the eHolding
+    description: print_identifier of the title
     type:
       - string
       - "null"
   online_identifier:
-    description: online_identifier of the eHolding
+    description: online_identifier of the title
     type:
       - string
       - "null"
   date_first_issue_online:
-    description: date_first_issue_online of the eHolding
+    description: date_first_issue_online of the title
     type:
       - string
       - "null"
   num_first_vol_online:
-    description: num_first_vol_online of the eHolding
+    description: num_first_vol_online of the title
     type:
       - string
       - "null"
   num_first_issue_online:
-    description: num_first_issue_online of the eHolding
+    description: num_first_issue_online of the title
     type:
       - string
       - "null"
   date_last_issue_online:
-    description: date_last_issue_online of the eHolding
+    description: date_last_issue_online of the title
     type:
       - string
       - "null"
   num_last_vol_online:
-    description: num_last_vol_online of the eHolding
+    description: num_last_vol_online of the title
     type:
       - string
       - "null"
   num_last_issue_online:
-    description: num_last_issue_online of the eHolding
+    description: num_last_issue_online of the title
     type:
       - string
       - "null"
   title_url:
-    description: title_url of the eHolding
+    description: title_url of the title
     type:
       - string
       - "null"
   first_author:
-    description: first_author of the eHolding
-    type:
-      - string
-      - "null"
-  title_id:
-    description: title_id of the eHolding
+    description: first_author of the title
     type:
       - string
       - "null"
   embargo_info:
-    description: embargo_info of the eHolding
+    description: embargo_info of the title
     type:
       - string
       - "null"
   coverage_depth:
-    description: coverage_depth of the eHolding
+    description: coverage_depth of the title
     type:
       - string
       - "null"
   notes:
-    description: notes of the eHolding
+    description: notes of the title
     type:
       - string
       - "null"
   publisher_name:
-    description: publisher_name of the eHolding
+    description: publisher_name of the title
     type:
       - string
       - "null"
   publication_type:
-    description: publication_type of the eHolding
+    description: publication_type of the title
     type:
       - string
       - "null"
   date_monograph_published_print:
-    description: date_monograph_published_print of the eHolding
+    description: date_monograph_published_print of the title
     type:
       - string
       - "null"
   date_monograph_published_online:
-    description: date_monograph_published_online of the eHolding
+    description: date_monograph_published_online of the title
     type:
       - string
       - "null"
   monograph_volume:
-    description: monograph_volume of the eHolding
+    description: monograph_volume of the title
     type:
       - string
       - "null"
   monograph_edition:
-    description: monograph_edition of the eHolding
+    description: monograph_edition of the title
     type:
       - string
       - "null"
   first_editor:
-    description: first_editor of the eHolding
+    description: first_editor of the title
     type:
       - string
       - "null"
   parent_publication_title_id:
-    description: parent_publication_title_id of the eHolding
+    description: parent_publication_title_id of the title
     type:
       - string
       - "null"
   preceeding_publication_title_id:
-    description: preceeding_publication_title_id of the eHolding
+    description: preceeding_publication_title_id of the title
     type:
       - string
       - "null"
   access_type:
-    description: access_type of the eHolding
+    description: access_type of the title
     type:
       - string
       - "null"
-  eholding_packages:
+  resources:
     type: array
-    description: packages containing this title
+    description: Resource containing this title
     items:
-      $ref: erm_eholding_package.yaml
+      $ref: erm_eholdings_resource.yaml
 
 additionalProperties: false
 required:

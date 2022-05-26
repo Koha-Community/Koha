@@ -1,4 +1,4 @@
-package Koha::ERM::EHolding;
+package Koha::ERM::EHoldings::Package;
 
 # This file is part of Koha.
 #
@@ -21,39 +21,40 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-use Koha::ERM::EHolding::Packages;
+use Koha::ERM::EHoldings::Package::Agreements;
 
 =head1 NAME
 
-Koha::ERM::EHolding - Koha ERM EHolding Object class
+Koha::ERM::EHoldings::Package - Koha ERM Package Object class
 
 =head1 API
 
 =head2 Class Methods
 
-=head3 eholding_packages
+=head3 package_agreements
 
-Returns the eholding_packages link for this eHolding
+Returns the package agreements link for this package
 
 =cut
 
-sub eholding_packages {
-    my ( $self, $eholding_packages ) = @_;
+sub package_agreements {
+    my ( $self, $package_agreements ) = @_;
 
-    if ( $eholding_packages ) {
+    if ( $package_agreements ) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
-                $self->eholding_packages->delete;
+                $self->package_agreements->delete;
 
-                for my $eholding_package (@$eholding_packages) {
-                    $self->_result->add_to_erm_eholdings_packages($eholding_package);
+                for my $package_agreement (@$package_agreements) {
+                    $self->_result->add_to_erm_eholdings_packages_agreements($package_agreement);
                 }
             }
         );
     }
-    my $eholding_packages_rs = $self->_result->erm_eholdings_packages;
-    return Koha::ERM::EHolding::Packages->_new_from_dbic($eholding_packages_rs);
+
+    my $agreements_rs = $self->_result->erm_eholdings_packages_agreements;
+    return Koha::ERM::EHoldings::Package::Agreements->_new_from_dbic($agreements_rs);
 }
 
 =head2 Internal methods
@@ -63,7 +64,7 @@ sub eholding_packages {
 =cut
 
 sub _type {
-    return 'ErmEholding';
+    return 'ErmEholdingsPackage';
 }
 
 1;

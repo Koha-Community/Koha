@@ -5,13 +5,13 @@
             {{ $t("Package.id", { id: erm_package.package_id }) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/packages/edit/${erm_package.package_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/packages/edit/${erm_package.package_id}`"
                     :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
-                    :to="`/cgi-bin/koha/erm/packages/delete/${erm_package.package_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/packages/delete/${erm_package.package_id}`"
                     :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
@@ -68,7 +68,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/packages"
+                    to="/cgi-bin/koha/erm/eholdings/packages"
                     role="button"
                     class="cancel"
                     >{{ $t("Close") }}</router-link
@@ -129,7 +129,7 @@ export default {
             this.initialized = true
         },
     },
-    name: "PackagesShow",
+    name: "EHoldingsPackagesShow",
 }
 </script>
 <style scoped>

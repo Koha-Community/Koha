@@ -1,4 +1,4 @@
-package Koha::REST::V1::ERM::Packages;
+package Koha::REST::V1::ERM::EHoldings::Titles;
 
 # This file is part of Koha.
 #
@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::ERM::Packages;
+use Koha::ERM::EHoldings::Titles;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
@@ -36,9 +36,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $packages_set = Koha::ERM::Packages->new;
-        my $packages = $c->objects->search( $packages_set );
-        return $c->render( status => 200, openapi => $packages );
+        my $titles_set = Koha::ERM::EHoldings::Titles->new;
+        my $titles = $c->objects->search( $titles_set );
+        return $c->render( status => 200, openapi => $titles );
     }
     catch {
         $c->unhandled_exception($_);
@@ -48,7 +48,7 @@ sub list {
 
 =head3 get
 
-Controller function that handles retrieving a single Koha::ERM::Package object
+Controller function that handles retrieving a single Koha::ERM::EHoldings::Title object
 
 =cut
 
@@ -56,19 +56,19 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $package_id = $c->validation->param('package_id');
-        my $package    = $c->objects->find( Koha::ERM::Packages->search, $package_id );
+        my $title_id = $c->validation->param('title_id');
+        my $title = $c->objects->find( Koha::ERM::EHoldings::Titles->search, $title_id );
 
-        unless ($package) {
+        unless ($title ) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "Package not found" }
+                openapi => { error => "eHolding title not found" }
             );
         }
 
         return $c->render(
             status  => 200,
-            openapi => $package
+            openapi => $title,
         );
     }
     catch {
@@ -78,7 +78,7 @@ sub get {
 
 =head3 add
 
-Controller function that handles adding a new Koha::ERM::Package object
+Controller function that handles adding a new Koha::ERM::EHoldings::Title object
 
 =cut
 
@@ -91,22 +91,23 @@ sub add {
 
                 my $body = $c->validation->param('body');
 
-                my $package_agreements = delete $body->{package_agreements} // [];
+                my $resources = delete $body->{resources} // [];
 
-                my $package = Koha::ERM::Package->new_from_api($body)->store;
-                $package->package_agreements($package_agreements);
+                my $title = Koha::ERM::EHoldings::Title->new_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
+                $title->resources($resources);
+
+                $c->res->headers->location($c->req->url->to_string . '/' . $title->title_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $package->to_api
+                    openapi => $title->to_api
                 );
             }
         );
     }
     catch {
 
-        my $to_api_mapping = Koha::ERM::Package->new->to_api_mapping;
+        my $to_api_mapping = Koha::ERM::EHoldings::Title->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -143,20 +144,20 @@ sub add {
 
 =head3 update
 
-Controller function that handles updating a Koha::ERM::Package object
+Controller function that handles updating a Koha::ERM::EHoldings::Title object
 
 =cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $package_id = $c->validation->param('package_id');
-    my $package = Koha::ERM::Packages->find( $package_id );
+    my $title_id = $c->validation->param('title_id');
+    my $title = Koha::ERM::EHoldings::Titles->find( $title_id );
 
-    unless ($package) {
+    unless ($title) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Package not found" }
+            openapi => { error => "eHolding title not found" }
         );
     }
 
@@ -166,21 +167,22 @@ sub update {
 
                 my $body = $c->validation->param('body');
 
-                my $package_agreements = delete $body->{package_agreements} // [];
+                my $resources = delete $body->{resources} // [];
 
-                $package->set_from_api($body)->store;
-                $package->package_agreements($package_agreements);
+                $title->set_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
+                $title->resources($resources);
+
+                $c->res->headers->location($c->req->url->to_string . '/' . $title->title_id);
                 return $c->render(
                     status  => 200,
-                    openapi => $package->to_api
+                    openapi => $title->to_api
                 );
             }
         );
     }
     catch {
-        my $to_api_mapping = Koha::ERM::Package->new->to_api_mapping;
+        my $to_api_mapping = Koha::ERM::EHoldings::Title->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
@@ -216,16 +218,16 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $package = Koha::ERM::Packages->find( $c->validation->param('package_id') );
-    unless ($package) {
+    my $title = Koha::ERM::EHoldings::Titles->find( $c->validation->param('title_id') );
+    unless ($title) {
         return $c->render(
             status  => 404,
-            openapi => { error => "Package not found" }
+            openapi => { error => "eHolding title not found" }
         );
     }
 
     return try {
-        $package->delete;
+        $title->delete;
         return $c->render(
             status  => 204,
             openapi => q{}

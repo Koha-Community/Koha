@@ -20,7 +20,7 @@ describe("Package CRUD operations", () => {
 
     it("List package", () => {
         // GET package returns 500
-        cy.intercept("GET", "/api/v1/erm/packages", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -31,15 +31,15 @@ describe("Package CRUD operations", () => {
         );
 
         // GET packages returns empty list
-        cy.intercept("GET", "/api/v1/erm/packages*", []);
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages*", []);
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
         cy.get("#packages_list").contains("There are no packages defined.");
 
         // GET packages returns something
         let erm_package = get_package();
         let packages = [erm_package];
 
-        cy.intercept("GET", "/api/v1/erm/packages*", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages*", {
             statusCode: 200,
             body: packages,
             headers: {
@@ -47,14 +47,14 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/packages/*", erm_package);
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages/*", erm_package);
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
         cy.get("#packages_list").contains("Showing 1 to 1 of 1 entries");
     });
 
     it("Add package", () => {
         // Click the button in the toolbar
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
         cy.contains("New package").click();
         cy.get("#packages_add h2").contains("New package");
 
@@ -71,7 +71,7 @@ describe("Package CRUD operations", () => {
         cy.get("#package_content_type").select(erm_package.content_type);
 
         // Submit the form, get 500
-        cy.intercept("POST", "/api/v1/erm/packages", {
+        cy.intercept("POST", "/api/v1/erm/eholdings/packages", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -81,7 +81,7 @@ describe("Package CRUD operations", () => {
         );
 
         // Submit the form, success!
-        cy.intercept("POST", "/api/v1/erm/packages", {
+        cy.intercept("POST", "/api/v1/erm/eholdings/packages", {
             statusCode: 201,
             body: erm_package,
         });
@@ -95,7 +95,7 @@ describe("Package CRUD operations", () => {
         let erm_package = get_package();
         let packages = [erm_package];
         // Click the 'Edit' button from the list
-        cy.intercept("GET", "/api/v1/erm/packages*", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages*", {
             statusCode: 200,
             body: packages,
             headers: {
@@ -103,10 +103,10 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/packages/*", erm_package).as(
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages/*", erm_package).as(
             "get-package"
         );
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
         cy.get("#packages_list table tbody tr:first")
             .contains("Edit")
             .click();
@@ -120,7 +120,7 @@ describe("Package CRUD operations", () => {
         cy.get("#package_content_type").should("have.value", erm_package.content_type);
 
         // Submit the form, get 500
-        cy.intercept("PUT", "/api/v1/erm/packages/*", {
+        cy.intercept("PUT", "/api/v1/erm/eholdings/packages/*", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -130,7 +130,7 @@ describe("Package CRUD operations", () => {
         );
 
         // Submit the form, success!
-        cy.intercept("PUT", "/api/v1/erm/packages/*", {
+        cy.intercept("PUT", "/api/v1/erm/eholdings/packages/*", {
             statusCode: 200,
             body: erm_package,
         });
@@ -144,7 +144,7 @@ describe("Package CRUD operations", () => {
         let erm_package = get_package();
         let packages = [erm_package];
         // Click the "name" link from the list
-        cy.intercept("GET", "/api/v1/erm/packages*", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages*", {
             statusCode: 200,
             body: packages,
             headers: {
@@ -152,10 +152,10 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/packages/*", erm_package).as(
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages/*", erm_package).as(
             "get-package"
         );
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
         let name_link = cy.get(
             "#packages_list table tbody tr:first td:first a"
         );
@@ -176,7 +176,7 @@ describe("Package CRUD operations", () => {
         let packages = [erm_package];
 
         // Click the 'Delete' button from the list
-        cy.intercept("GET", "/api/v1/erm/packages*", {
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages*", {
             statusCode: 200,
             body: packages,
             headers: {
@@ -184,8 +184,8 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/packages/*", erm_package);
-        cy.visit("/cgi-bin/koha/erm/packages");
+        cy.intercept("GET", "/api/v1/erm/eholdings/packages/*", erm_package);
+        cy.visit("/cgi-bin/koha/erm/eholdings/packages");
 
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
@@ -194,7 +194,7 @@ describe("Package CRUD operations", () => {
         cy.contains("Package name: " + erm_package.name);
 
         // Submit the form, get 500
-        cy.intercept("DELETE", "/api/v1/erm/packages/*", {
+        cy.intercept("DELETE", "/api/v1/erm/eholdings/packages/*", {
             statusCode: 500,
             error: "Something went wrong",
         });
@@ -204,7 +204,7 @@ describe("Package CRUD operations", () => {
         );
 
         // Submit the form, success!
-        cy.intercept("DELETE", "/api/v1/erm/packages/*", {
+        cy.intercept("DELETE", "/api/v1/erm/eholdings/packages/*", {
             statusCode: 204,
             body: null,
         });

@@ -1,9 +1,9 @@
 <template>
-    <fieldset class="rows" id="eholding_packages">
+    <fieldset class="rows" id="resources">
         <legend>{{ $t("Packages") }}</legend>
         <fieldset
             class="rows"
-            v-for="(eholding_package, counter) in eholding_packages"
+            v-for="(resource, counter) in resources"
             v-bind:key="counter"
         >
             <legend>
@@ -15,14 +15,12 @@
             </legend>
             <ol>
                 <li>
-                    <label
-                        :for="`eholding_package_id_${counter}`"
-                        class="required"
+                    <label :for="`resource_id_${counter}`" class="required"
                         >{{ $t("Package") }}:
                     </label>
                     <select
-                        v-model="eholding_package.package_id"
-                        :id="`eholding_package_id_${counter}`"
+                        v-model="resource.package_id"
+                        :id="`resource_id_${counter}`"
                         required
                     >
                         <option value=""></option>
@@ -31,7 +29,7 @@
                             :key="p.package_id"
                             :value="p.package_id"
                             :selected="
-                                p.package_id == eholding_package.package_id
+                                p.package_id == resource.package_id
                                     ? true
                                     : false
                             "
@@ -47,7 +45,7 @@
                     </label>
                     <flat-pickr
                         :id="`started_on_${counter}`"
-                        v-model="eholding_package.started_on"
+                        v-model="resource.started_on"
                         :config="fp_config"
                         :data-date_to="`ended_on_${counter}`"
                     />
@@ -58,7 +56,7 @@
                     >
                     <flat-pickr
                         :id="`ended_on_${counter}`"
-                        v-model="eholding_package.ended_on"
+                        v-model="resource.ended_on"
                         :config="fp_config"
                     />
                 </li>
@@ -66,7 +64,7 @@
                     <label :for="`${counter}`">{{ $t("Proxy") }}:</label>
                     <input
                         :id="`proxy_${counter}`"
-                        v-model="eholding_package.proxy"
+                        v-model="resource.proxy"
                         :placeholder="$t('Proxy')"
                     />
                 </li>
@@ -94,10 +92,17 @@ export default {
     },
     beforeCreate() {
         fetchPackages().then((packages) => this.packages = packages)
+        if (!this.dates_fixed) {
+            this.resources.forEach(r => {
+                r.started_on = $date(r.started_on)
+                r.ended_on = $date(r.ended_on)
+            })
+            this.dates_fixed = 1
+        }
     },
     methods: {
         addPackage() {
-            this.eholding_packages.push({
+            this.resources.push({
                 package_id: null,
                 started_on: null,
                 ended_on: null,
@@ -105,13 +110,13 @@ export default {
             })
         },
         deletePackage(counter) {
-            this.eholding_packages.splice(counter, 1)
+            this.resources.splice(counter, 1)
         },
     },
     props: {
-        eholding_packages: Array,
+        resources: Array,
     },
     components: { flatPickr },
-    name: 'EHoldingPackages',
+    name: 'EHoldingsResources',
 }
 </script>

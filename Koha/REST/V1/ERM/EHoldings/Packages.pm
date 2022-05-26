@@ -1,4 +1,4 @@
-package Koha::REST::V1::ERM::EHoldings;
+package Koha::REST::V1::ERM::EHoldings::Packages;
 
 # This file is part of Koha.
 #
@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::ERM::EHoldings;
+use Koha::ERM::EHoldings::Packages;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
@@ -36,9 +36,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $eholdings_set = Koha::ERM::EHoldings->new;
-        my $eholdings = $c->objects->search( $eholdings_set );
-        return $c->render( status => 200, openapi => $eholdings );
+        my $packages_set = Koha::ERM::EHoldings::Packages->new;
+        my $packages = $c->objects->search( $packages_set );
+        return $c->render( status => 200, openapi => $packages );
     }
     catch {
         $c->unhandled_exception($_);
@@ -48,7 +48,7 @@ sub list {
 
 =head3 get
 
-Controller function that handles retrieving a single Koha::ERM::EHolding object
+Controller function that handles retrieving a single Koha::ERM::EHoldings::Package object
 
 =cut
 
@@ -56,19 +56,19 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $eholding_id = $c->validation->param('eholding_id');
-        my $eholding    = $c->objects->find( Koha::ERM::EHoldings->search, $eholding_id );
+        my $package_id = $c->validation->param('package_id');
+        my $package    = $c->objects->find( Koha::ERM::EHoldings::Packages->search, $package_id );
 
-        unless ($eholding) {
+        unless ($package) {
             return $c->render(
                 status  => 404,
-                openapi => { error => "eHolding not found" }
+                openapi => { error => "Package not found" }
             );
         }
 
         return $c->render(
             status  => 200,
-            openapi => $eholding
+            openapi => $package
         );
     }
     catch {
@@ -78,7 +78,7 @@ sub get {
 
 =head3 add
 
-Controller function that handles adding a new Koha::ERM::EHolding object
+Controller function that handles adding a new Koha::ERM::EHoldings::Package object
 
 =cut
 
@@ -91,23 +91,22 @@ sub add {
 
                 my $body = $c->validation->param('body');
 
-                my $eholding_packages = delete $body->{eholding_packages} // [];
+                my $package_agreements = delete $body->{package_agreements} // [];
 
-                my $eholding = Koha::ERM::EHolding->new_from_api($body)->store;
+                my $package = Koha::ERM::EHoldings::Package->new_from_api($body)->store;
+                $package->package_agreements($package_agreements);
 
-                $eholding->eholding_packages($eholding_packages);
-
-                $c->res->headers->location($c->req->url->to_string . '/' . $eholding->eholding_id);
+                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $eholding->to_api
+                    openapi => $package->to_api
                 );
             }
         );
     }
     catch {
 
-        my $to_api_mapping = Koha::ERM::EHolding->new->to_api_mapping;
+        my $to_api_mapping = Koha::ERM::EHoldings::Package->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -144,20 +143,20 @@ sub add {
 
 =head3 update
 
-Controller function that handles updating a Koha::ERM::EHolding object
+Controller function that handles updating a Koha::ERM::EHoldings::Package object
 
 =cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $eholding_id = $c->validation->param('eholding_id');
-    my $eholding = Koha::ERM::EHoldings->find( $eholding_id );
+    my $package_id = $c->validation->param('package_id');
+    my $package = Koha::ERM::EHoldings::Packages->find( $package_id );
 
-    unless ($eholding) {
+    unless ($package) {
         return $c->render(
             status  => 404,
-            openapi => { error => "eHolding not found" }
+            openapi => { error => "Package not found" }
         );
     }
 
@@ -167,22 +166,21 @@ sub update {
 
                 my $body = $c->validation->param('body');
 
-                my $eholding_packages = delete $body->{eholding_packages} // [];
+                my $package_agreements = delete $body->{package_agreements} // [];
 
-                $eholding->set_from_api($body)->store;
+                $package->set_from_api($body)->store;
+                $package->package_agreements($package_agreements);
 
-                $eholding->eholding_packages($eholding_packages);
-
-                $c->res->headers->location($c->req->url->to_string . '/' . $eholding->eholding_id);
+                $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(
                     status  => 200,
-                    openapi => $eholding->to_api
+                    openapi => $package->to_api
                 );
             }
         );
     }
     catch {
-        my $to_api_mapping = Koha::ERM::EHolding->new->to_api_mapping;
+        my $to_api_mapping = Koha::ERM::EHoldings::Package->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
@@ -218,16 +216,16 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $eholding = Koha::ERM::EHoldings->find( $c->validation->param('eholding_id') );
-    unless ($eholding) {
+    my $package = Koha::ERM::EHoldings::Packages->find( $c->validation->param('package_id') );
+    unless ($package) {
         return $c->render(
             status  => 404,
-            openapi => { error => "eHolding not found" }
+            openapi => { error => "Package not found" }
         );
     }
 
     return try {
-        $eholding->delete;
+        $package->delete;
         return $c->render(
             status  => 204,
             openapi => q{}

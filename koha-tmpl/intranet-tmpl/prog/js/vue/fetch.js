@@ -106,7 +106,7 @@ export const fetchVendors = async function () {
 
 export const fetchPackage = async function (package_id) {
     if (!package_id) return;
-    const apiUrl = "/api/v1/erm/packages/" + package_id;
+    const apiUrl = "/api/v1/erm/eholdings/packages/" + package_id;
     let erm_package;
     await fetch(apiUrl, {
         headers: {
@@ -126,7 +126,7 @@ export const fetchPackage = async function (package_id) {
 };
 
 export const fetchPackages = async function () {
-    const apiUrl = "/api/v1/erm/packages";
+    const apiUrl = "/api/v1/erm/eholdings/packages";
     let packages;
     await fetch(apiUrl)
         .then(checkError)
@@ -141,41 +141,41 @@ export const fetchPackages = async function () {
     return packages;
 };
 
-export const fetchEHolding = async function (eholding_id) {
-    if (!eholding_id) return;
-    const apiUrl = "/api/v1/erm/eholdings/" + eholding_id;
-    let erm_eholding;
+export const fetchTitle = async function (title_id) {
+    if (!title_id) return;
+    const apiUrl = "/api/v1/erm/eholdings/titles/" + title_id;
+    let title;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "eholding_packages,eholding_packages.package",
+            "x-koha-embed": "resources,resources.package",
         },
     })
         .then(checkError)
         .then(
             (result) => {
-                erm_eholding = result;
+                title = result;
             },
             (error) => {
                 setError(error);
             }
         );
-    return erm_eholding;
+    return title;
 };
 
-export const fetchEHoldings = async function () {
-    const apiUrl = "/api/v1/erm/eholdings";
-    let eholdings;
+export const fetchTitles = async function () {
+    const apiUrl = "/api/v1/erm/eholdings/titles";
+    let titles;
     await fetch(apiUrl)
         .then(checkError)
         .then(
             (result) => {
-                eholdings = result;
+                titles = result;
             },
             (error) => {
                 setError(error);
             }
         );
-    return eholdings;
+    return titles;
 };
 
 function checkError(response) {

@@ -1,4 +1,4 @@
-package Koha::ERM::Packages;
+package Koha::ERM::EHoldings::Titles;
 
 # This file is part of Koha.
 #
@@ -20,13 +20,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::ERM::Package;
+use Koha::ERM::EHoldings::Title;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::ERM::Packages - Koha ERM Package Object set class
+Koha::ERM::EHoldings::Title - Koha ERM Title Object set class
 
 =head1 API
 
@@ -39,11 +39,11 @@ Koha::ERM::Packages - Koha ERM Package Object set class
 =cut
 
 sub _type {
-    return 'ErmPackage';
+    return 'ErmEholdingsTitle';
 }
 
 sub object_class {
-    return 'Koha::ERM::Package';
+    return 'Koha::ERM::EHoldings::Title';
 }
 
 1;
