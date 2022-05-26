@@ -3,6 +3,7 @@ import AgreementsList from "./components/ERM/AgreementsList.vue";
 import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "./components/ERM/AgreementsFormConfirmDelete.vue";
+import EHoldingsMain from "./components/ERM/EHoldingsMain.vue";
 import EHoldingsPackagesList from "./components/ERM/EHoldingsPackagesList.vue";
 import EHoldingsPackagesShow from "./components/ERM/EHoldingsPackagesShow.vue";
 import EHoldingsPackagesFormAdd from "./components/ERM/EHoldingsPackagesFormAdd.vue";
@@ -24,7 +25,8 @@ const breadcrumbs = {
     },
     agreements: { text: "Agreements", path: "/cgi-bin/koha/erm/agreements" },
     eholdings: {
-        titles: { text: "eHoldings", path: "/cgi-bin/koha/erm/eholdings" },
+        home: { text: "eHoldings", path: "/cgi-bin/koha/erm/eholdings" },
+        titles: { text: "Titles", path: "/cgi-bin/koha/erm/eholdings/titles" },
         packages: {
             text: "Packages",
             path: "/cgi-bin/koha/erm/eholdings/packages",
@@ -102,12 +104,25 @@ export const routes = [
         },
     },
     {
+        path: "/cgi-bin/koha/erm/eholdings",
+        component: EHoldingsMain,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
+            ],
+            view: "list",
+        },
+    },
+    {
         path: "/cgi-bin/koha/erm/eholdings/packages",
         component: EHoldingsPackagesList,
         meta: {
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.packages,
             ],
             view: "list",
@@ -120,6 +135,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.packages,
             ],
             view: "show",
@@ -132,6 +148,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.packages,
             ],
             view: "confirm-delete-form",
@@ -144,6 +161,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.packages,
             ],
             view: "add",
@@ -156,6 +174,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.packages,
             ],
             view: "edit",
@@ -168,6 +187,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.titles,
             ],
             view: "list",
@@ -180,6 +200,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.titles,
             ],
             view: "show",
@@ -192,6 +213,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.titles,
             ],
             view: "confirm-delete-form",
@@ -204,6 +226,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.titles,
             ],
             view: "add",
@@ -216,6 +239,7 @@ export const routes = [
             breadcrumb: [
                 breadcrumbs.home,
                 breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
                 breadcrumbs.eholdings.titles,
             ],
             view: "edit",

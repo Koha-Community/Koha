@@ -25,19 +25,35 @@
                                 </li>
                                 <li>
                                     <router-link
-                                        to="/cgi-bin/koha/erm/eholdings/packages"
+                                        to="/cgi-bin/koha/erm/eholdings"
                                     >
                                         <i class="fa fa-file-text-o"></i>
-                                        {{ $t("Packages") }}</router-link
-                                    >
-                                </li>
-                                <li>
-                                    <router-link
-                                        to="/cgi-bin/koha/erm/eholdings/titles"
-                                    >
-                                        <i class="fa fa-file-text-o"></i>
-                                        {{ $t("Titles") }}</router-link
-                                    >
+                                        eHoldings
+                                    </router-link>
+                                    <ul>
+                                        <li>
+                                            <router-link
+                                                to="/cgi-bin/koha/erm/eholdings/packages"
+                                            >
+                                                <i
+                                                    class="fa fa-file-text-o"
+                                                ></i>
+                                                {{
+                                                    $t("Packages")
+                                                }}</router-link
+                                            >
+                                        </li>
+                                        <li>
+                                            <router-link
+                                                to="/cgi-bin/koha/erm/eholdings/titles"
+                                            >
+                                                <i
+                                                    class="fa fa-file-text-o"
+                                                ></i>
+                                                {{ $t("Titles") }}</router-link
+                                            >
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li>
                                     <router-link
@@ -96,3 +112,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+a.router-link-active {
+    font-weight: 700;
+}
+</style>
