@@ -6,88 +6,7 @@
 <title>Basket grouping for [% booksellername | html %] &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("lib/yui/utilities/utilities.js") | $raw %]
-[% Asset.js("lib/yui/button/button-min.js") | $raw %]
-[% Asset.js("lib/yui/container/container_core-min.js") | $raw %]
-[% Asset.js("lib/yui/menu/menu-min.js") | $raw %]
-[% Asset.js("js/basketgroup.js") | $raw %]
-[% IF ( grouping ) %]
-[% Asset.js("lib/yui/yahoo-dom-event/yahoo-dom-event.js") | $raw %]
-[% Asset.js("lib/yui/animation/animation-min.js") | $raw %]
-[% Asset.js("lib/yui/dragdrop/dragdrop-min.js") | $raw %]
-[% Asset.js("lib/yui/element/element-min.js") | $raw %]
-<style>
-/*margin and padding on body element
-  can introduce errors in determining
-  element position and are not recommended;
-  we turn them off as a foundation for YUI
-  CSS treatments. */
-
-#ungrouped {
-	overflow: auto;
-	height: 400px;
-}
-
-.draglist{
-	width: 200px;
-	height: 300px;
-	overflow: auto;
-}
-
-div.workarea_alt { padding: 5px; float:left; width: 95%;}
-div.closed { background-color: pink; padding:10px; float:left; width: 45%;}
-
-ul.draglist {
-    position: relative;
-    background: #EEE;
-    padding-bottom:10;
-    border: 1px inset gray;
-    list-style: none;
-    margin:0;
-    padding: 5px;
-}
-
-ul.draglist li {
-    margin: 1px;
-    cursor: move;
-    list-style: none;
-}
-
-ul.draglist_alt {
-    position: relative;
-    border: 1px solid gray;
-    list-style: none;
-    margin: 0;
-    background: #f7f7f7;
-    padding: 5px;
-    cursor: move;
-}
-
-ul.draglist_alt li {
-    margin: 1px;
-    list-style: none;
-}
-
-li.grouped {
-    background-color: #D1E6EC;
-    border:1px solid #7EA6B2;
-    list-style: none;
-}
-
-li.ungrouped {
-    background-color: #D8D4E2;
-    border:1px solid #6B4C86;
-}
-
-fieldset.various li {
-    list-style: none;
-    clear: none;
-}
-
-</style>
- [% END %]
 <script>
-    YAHOO.util.Event.onDOMReady(DDApp.init, DDApp, true);
 
     var MSG_CONFIRM_CLOSE_BASKETGROUP = _("Are you sure you want to close this basketgroup?");
     var MSG_CLOSE_EMPTY_BASKET = _("Why close an empty basket?");
@@ -111,13 +30,57 @@ fieldset.various li {
         [% ELSE %]
             $("#basket_groups a[href='#opened']").tab("show");
         [% END %]
-        $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            "bAutoWidth": false,
-            "sPaginationType": "full"
-        } ));
+        [% UNLESS ( grouping ) %]
+            $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "bAutoWidth": false,
+                "sPaginationType": "full"
+            } ));
+        [% ELSE %]
+            grouped = $("#grouped").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "dom": 't',
+                "columnDefs": [
+                    { 'sortable': false, 'targets': [ 'NoSort' ] }
+                ],
+                'autoWidth': false,
+                "language": {
+                    "emptyTable": _("There are no baskets in this group")
+                }
+            } ));
+            ungrouped = $("#ungrouped").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "dom": 't',
+                "columnDefs": [
+                    { 'sortable': false, 'targets': [ 'NoSort' ] }
+                ],
+                'autoWidth': false,
+                "language": {
+                    "emptyTable": _("There are no ungrouped baskets")
+                }
+            } ));
+        [% END %]
+
+        $("#basketgroupcolumns").on("click", ".addtogroup", function(){
+            const row = $("#" + $(this).data("basketid") );
+            if( row ){
+                $(this).removeClass("addtogroup").addClass("removefromgroup").html("<i class=\"fa fa-trash\" aria-hidden=\"true\"></i> " + _("Remove") );
+                row.removeClass("ungrouped").addClass("grouped");
+                ungrouped.row( row ).remove().draw();
+                grouped.row.add( row ).draw();
+            }
+        });
+
+        $("#basketgroupcolumns").on("click", ".removefromgroup", function(){
+            const row = $("#" + $(this).data("basketid") );
+            if( row ){
+                $(this).removeClass("removefromgroup").addClass("addtogroup").html("<i class=\"fa fa-plus\" aria-hidden=\"true\"></i> " + _("Add to group") );
+                $(this).removeClass("").addClass("");
+                row.removeClass("grouped").addClass("ungrouped");
+                grouped.row( row ).remove().draw();
+                ungrouped.row.add( row ).draw();
+            }
+        });
     });
 </script>
 
@@ -190,32 +153,48 @@ fieldset.various li {
                     <div id="basketgroupcolumns" class="row">
                         [% UNLESS (closedbg) %]
                             <div class="col-xs-6 col-xs-push-6">
-                                <form action="[% scriptname | html %]" method="post" name="basketgroups" id="basketgroups">
+
                                     <div id="groups">
-                                        <fieldset class="brief">
-                                            <div class="workarea_alt" >
-                                                <h3>Ungrouped baskets</h3>
-                                                <ul id="ungrouped" class="draglist_alt">
-                                                    [% IF ( baskets ) %]
-                                                        [% FOREACH basket IN baskets %]
-                                                            <li class="ungrouped" id="b-[% basket.basketno | html %]" >
-                                                                <a href="basket.pl?basketno=[% basket.basketno | uri %]">
-                                                                    [% IF ( basket.basketname ) %]
-                                                                        [% basket.basketname | html %]
-                                                                    [% ELSE %]
-                                                                        <span>No name, basketnumber: [% basket.basketno | html %]</span>
-                                                                    [% END %]
-                                                                </a>, <br />
-                                                                Total: [% basket.total | $Price %]
-                                                                <input type="hidden" class="basket" name="basket" value="[% basket.basketno | html %]" />
-                                                            </li>
+                                        <div class="workarea_alt" >
+                                            <h3>Ungrouped baskets</h3>
+                                                <table id="ungrouped" class="basketgroup_baskets">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Basket</th>
+                                                            <th>Total</th>
+                                                            <th class="NoSort"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        [% IF ( baskets ) %]
+                                                            [% FOREACH basket IN baskets %]
+                                                                <tr class="ungrouped" id="b-[% basket.basketno | html %]">
+                                                                    <td>
+                                                                        <a href="basket.pl?basketno=[% basket.basketno | uri %]">
+                                                                            [% IF ( basket.basketname ) %]
+                                                                                [% basket.basketname | html %]
+                                                                            [% ELSE %]
+                                                                                <span>No name, basketnumber: [% basket.basketno | html %]</span>
+                                                                            [% END %]
+                                                                        </a>
+                                                                    </td>
+                                                                    <td data-sort="[% basket.total | html %]">
+                                                                        [% basket.total | $Price %]
+                                                                        <input type="hidden" class="basket" name="basket" value="[% basket.basketno | html %]" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <a class="addtogroup btn btn-default btn-xs" data-basketid="b-[% basket.basketno | html %]">
+                                                                            <i class="fa fa-plus" aria-hidden="true"></i> Add to group
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                </ul>
-                                            </div>
-                                        </fieldset>
+                                                    </tbody>
+                                                </table>
+                                        </div>
                                     </div>
-                                </form>
+
                             </div>
                         [% END %]
                         [% IF ( closedbg ) %]
@@ -223,7 +202,7 @@ fieldset.various li {
                         [% ELSE %]
                             <div class="col-xs-6 col-xs-pull-6">
                         [% END %]
-                            <form action="" method="post" id="groupingform" onsubmit="return submitForm(this)">
+                            <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post" id="groupingform" onsubmit="return submitForm(this)">
                                 <fieldset id="various" class="brief">
                                     <ol>
                                         [% UNLESS (closedbg) %]
@@ -281,34 +260,52 @@ fieldset.various li {
                                                 [% END %]
                                             </li>
                                             <li>
-                                                <span class="label">Baskets in this group:</span>
-                                                [% UNLESS (closedbg) %]
-                                                    <ul class="draglist" id="bg">
-                                                [% ELSE %]
-                                                    <ul>
-                                                [% END %]
-                                                [% FOREACH selectedbasket IN selectedbaskets %]
-                                                    <li class="grouped" id="b-[% selectedbasket.basketno | html %]" >
-                                                        <a href="basket.pl?basketno=[% selectedbasket.basketno | uri %]">
-                                                            [% IF ( selectedbasket.basketname ) %]
-                                                                [% selectedbasket.basketname | html %]
-                                                            [% ELSE %]
-                                                                No name, basketnumber: [% selectedbasket.basketno | html %]
-                                                            [% END %]
-                                                        </a>, <br />
-                                                        Total: [% selectedbasket.total | $Price %]
-                                                        <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno | html %]" />
-                                                    </li>
-                                                [% END %]
-                                            </ul>
-                                        </li>
+                                                <h3>Baskets in this group:</h3>
+                                                <table id="grouped" class="basketgroup_baskets">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Basket</th>
+                                                            <th>Total</th>
+                                                            <th class="NoSort"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        [% FOREACH selectedbasket IN selectedbaskets %]
+                                                            <tr id="b-[% selectedbasket.basketno | html %]">
+                                                                <td>
+                                                                    <a href="basket.pl?basketno=[% selectedbasket.basketno | uri %]">
+                                                                        [% IF ( selectedbasket.basketname ) %]
+                                                                            [% selectedbasket.basketname | html %]
+                                                                        [% ELSE %]
+                                                                            No name, basketnumber: [% selectedbasket.basketno | html %]
+                                                                        [% END %]
+                                                                    </a>
+                                                                </td>
+                                                                <td data-sort="[% selectedbasket.total | html %]">
+                                                                    [% selectedbasket.total | $Price %]
+                                                                    <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno | html %]" />
+                                                                </td>
+                                                                <td>
+                                                                    [% IF ( closedbg ) %]
+                                                                    [% ELSE %]
+                                                                        <a class="removefromgroup btn btn-default btn-xs" data-basketid="b-[% selectedbasket.basketno | html %]" id="addtogroup[% selectedbasket.basketno | html %]">
+                                                                            <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                                                                        </a>
+                                                                    [% END %]
+                                                                </td>
+                                                            </tr>
+                                                        [% END %]
+                                                    </tbody>
+                                                </table>
+                                            </li>
                                             [% UNLESS (closedbg) %]
-                                                <li><label><input type="checkbox" id="closedbg" name="closedbg" />Close basket group</label></li>
+                                                <li><label><input type="checkbox" id="closedbg" name="closedbg" /> Close basket group</label></li>
                                             [% ELSE %]
                                                 <input type="hidden" id="closedbg" name="closedbg" value ="1"/>
                                             [% END %]
                                     </ol>
                                 </fieldset>
+
                                 [% UNLESS (closedbg) %]
                                     <fieldset class="action"><input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                         [% IF ( basketgroupid ) %]
