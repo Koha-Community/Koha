@@ -67,7 +67,7 @@ subtest 'import record matches tests' => sub {
 
     # Unauthorized attempt to update
     my $tx = $t->ua->build_tx(
-      PUT => "/api/v1/import/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen"=>
+      PUT => "/api/v1/import_batches/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen"=>
       json => {
           candidate_match_id => $match_1->candidate_match_id
       }
@@ -79,7 +79,7 @@ subtest 'import record matches tests' => sub {
 
     # Invalid attempt to allow match on a non-existent record
     $tx = $t->ua->build_tx(
-      PUT => "/api/v1/import/".$del_import_batch_id."/records/".$del_match_id."/matches/chosen" =>
+      PUT => "/api/v1/import_batches/".$del_import_batch_id."/records/".$del_match_id."/matches/chosen" =>
       json => {
           candidate_match_id => $match_1->candidate_match_id
       }
@@ -94,7 +94,7 @@ subtest 'import record matches tests' => sub {
 
     # Valid, authorised update
     $tx = $t->ua->build_tx(
-      PUT => "/api/v1/import/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen" =>
+      PUT => "/api/v1/import_batches/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen" =>
       json => {
           candidate_match_id => $match_1->candidate_match_id
       }
@@ -111,7 +111,7 @@ subtest 'import record matches tests' => sub {
 
     # Valid unsetting
     $tx = $t->ua->build_tx(
-      DELETE => "/api/v1/import/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen" =>
+      DELETE => "/api/v1/import_batches/".$match_1->import_record->import_batch_id."/records/".$match_1->import_record_id."/matches/chosen" =>
       json => {
       }
     );
