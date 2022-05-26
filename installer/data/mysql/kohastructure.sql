@@ -1,8 +1,8 @@
--- MySQL dump 10.19  Distrib 10.3.31-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.15-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	10.6.5-MariaDB-1:10.6.5+maria~focal
+-- Server version	10.8.3-MariaDB-1:10.8.3+maria~jammy
 
 -- IMPORTANT NOTE:
 -- The lines with /*! are silently IGNORED when the web installer runs this
@@ -789,7 +789,7 @@ CREATE TABLE `article_requests` (
   `format` enum('PHOTOCOPY','SCAN') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PHOTOCOPY',
   `urls` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cancellation_reason` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'optional authorised value AR_CANCELLATION',
-  `debit_id` int(11) NULL DEFAULT NULL COMMENT 'Debit line with cost for article scan request',
+  `debit_id` int(11) DEFAULT NULL COMMENT 'Debit line with cost for article scan request',
   `created_on` timestamp NULL DEFAULT NULL COMMENT 'Be careful with two timestamps in one table not allowing NULL',
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `toc_request` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'borrower requested table of contents',
@@ -1435,8 +1435,8 @@ CREATE TABLE `borrowers` (
   `relationship` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'used for children to include the relationship to their guarantor',
   `sex` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s gender',
   `password` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s Bcrypt encrypted password',
-  `secret` MEDIUMTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA',
-  `auth_method` ENUM('password', 'two-factor') NOT NULL DEFAULT 'password' COMMENT 'Authentication method',
+  `secret` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA',
+  `auth_method` enum('password','two-factor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'password' COMMENT 'Authentication method',
   `flags` int(11) DEFAULT NULL COMMENT 'will include a number associated with the staff member''s permissions',
   `userid` varchar(75) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s opac and/or staff interface log in',
   `opacnote` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'a note on the patron/borrower''s account that is visible in the OPAC and staff interface',
@@ -2447,8 +2447,8 @@ CREATE TABLE `deletedborrowers` (
   `relationship` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'used for children to include the relationship to their guarantor',
   `sex` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s gender',
   `password` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s encrypted password',
-  `secret` MEDIUMTEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA',
-  `auth_method` ENUM('password', 'two-factor') NOT NULL DEFAULT 'password' COMMENT 'Authentication method',
+  `secret` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Secret for 2FA',
+  `auth_method` enum('password','two-factor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'password' COMMENT 'Authentication method',
   `flags` int(11) DEFAULT NULL COMMENT 'will include a number associated with the staff member''s permissions',
   `userid` varchar(75) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s opac and/or staff interface log in',
   `opacnote` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'a note on the patron/borrower''s account that is visible in the OPAC and staff interface',
@@ -2950,7 +2950,7 @@ CREATE TABLE `import_record_matches` (
   `import_record_id` int(11) NOT NULL COMMENT 'the id given to the imported bib record (import_records.import_record_id)',
   `candidate_match_id` int(11) NOT NULL COMMENT 'the biblio the imported record matches (biblio.biblionumber)',
   `score` int(11) NOT NULL DEFAULT 0 COMMENT 'the match score',
-  `chosen` tinyint(1) NULL DEFAULT NULL COMMENT 'whether this match has been allowed or denied',
+  `chosen` tinyint(1) DEFAULT NULL COMMENT 'whether this match has been allowed or denied',
   PRIMARY KEY (`import_record_id`,`candidate_match_id`),
   KEY `record_score` (`import_record_id`,`score`),
   CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`) REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3234,8 +3234,8 @@ CREATE TABLE `language_descriptions` (
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `lang` (`lang`),
-  UNIQUE KEY `uniq_desc` (`subtag`,`type`,`lang`)
+  UNIQUE KEY `uniq_desc` (`subtag`,`type`,`lang`),
+  KEY `lang` (`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3251,8 +3251,8 @@ CREATE TABLE `language_rfc4646_to_iso639` (
   `iso639_2_code` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `rfc4646_subtag` (`rfc4646_subtag`),
-  UNIQUE KEY `uniq_code` (`rfc4646_subtag`, `iso639_2_code`)
+  UNIQUE KEY `uniq_code` (`rfc4646_subtag`,`iso639_2_code`),
+  KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3280,7 +3280,7 @@ DROP TABLE IF EXISTS `language_script_mapping`;
 CREATE TABLE `language_script_mapping` (
   `language_subtag` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
   `script_subtag` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY `language_subtag` (`language_subtag`)
+  PRIMARY KEY (`language_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3298,8 +3298,8 @@ CREATE TABLE `language_subtag_registry` (
   `added` date DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `subtag` (`subtag`),
-  UNIQUE KEY `uniq_lang` (`subtag`, `type`)
+  UNIQUE KEY `uniq_lang` (`subtag`,`type`),
+  KEY `subtag` (`subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4298,33 +4298,36 @@ CREATE TABLE `ratings` (
 -- Table structure for table `recalls`
 --
 
-DROP TABLE IF EXISTS recalls;
-CREATE TABLE recalls (
-    recall_id int(11) NOT NULL AUTO_INCREMENT COMMENT "Unique identifier for this recall",
-    patron_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for patron who requested recall",
-    created_date datetime DEFAULT NULL COMMENT "Date the recall was requested",
-    biblio_id int(11) NOT NULL DEFAULT 0 COMMENT "Identifier for bibliographic record that has been recalled",
-    pickup_library_id varchar(10) DEFAULT NULL COMMENT "Identifier for recall pickup library",
-    completed_date datetime DEFAULT NULL COMMENT "Date the recall is completed (fulfilled, cancelled or expired)",
-    notes mediumtext COMMENT "Notes related to the recall",
-    priority smallint(6) DEFAULT NULL COMMENT "Where in the queue the patron sits",
-    status ENUM('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') DEFAULT 'requested' COMMENT "Status of recall",
-    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Date and time the recall was last updated",
-    item_id int(11) DEFAULT NULL COMMENT "Identifier for item record that was recalled, if an item-level recall",
-    waiting_date datetime DEFAULT NULL COMMENT "Date an item was marked as waiting for the patron at the library",
-    expiration_date datetime DEFAULT NULL COMMENT "Date recall is no longer required, or date recall will expire after waiting on shelf for pickup",
-    completed TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is old and no longer active, i.e. expired, cancelled or completed",
-    item_level TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Flag if recall is for a specific item",
-    PRIMARY KEY (recall_id),
-    KEY recalls_ibfk_1 (patron_id),
-    KEY recalls_ibfk_2 (biblio_id),
-    KEY recalls_ibfk_3 (item_id),
-    KEY recalls_ibfk_4 (pickup_library_id),
-    CONSTRAINT recalls_ibfk_1 FOREIGN KEY (patron_id) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT recalls_ibfk_2 FOREIGN KEY (biblio_id) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT recalls_ibfk_3 FOREIGN KEY (item_id) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT recalls_ibfk_4 FOREIGN KEY (pickup_library_id) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT="Information related to recalls in Koha";
+DROP TABLE IF EXISTS `recalls`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recalls` (
+  `recall_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this recall',
+  `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Identifier for patron who requested recall',
+  `created_date` datetime DEFAULT NULL COMMENT 'Date the recall was requested',
+  `biblio_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Identifier for bibliographic record that has been recalled',
+  `pickup_library_id` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Identifier for recall pickup library',
+  `completed_date` datetime DEFAULT NULL COMMENT 'Date the recall is completed (fulfilled, cancelled or expired)',
+  `notes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Notes related to the recall',
+  `priority` smallint(6) DEFAULT NULL COMMENT 'Where in the queue the patron sits',
+  `status` enum('requested','overdue','waiting','in_transit','cancelled','expired','fulfilled') COLLATE utf8mb4_unicode_ci DEFAULT 'requested' COMMENT 'Status of recall',
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Date and time the recall was last updated',
+  `item_id` int(11) DEFAULT NULL COMMENT 'Identifier for item record that was recalled, if an item-level recall',
+  `waiting_date` datetime DEFAULT NULL COMMENT 'Date an item was marked as waiting for the patron at the library',
+  `expiration_date` datetime DEFAULT NULL COMMENT 'Date recall is no longer required, or date recall will expire after waiting on shelf for pickup',
+  `completed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Flag if recall is old and no longer active, i.e. expired, cancelled or completed',
+  `item_level` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Flag if recall is for a specific item',
+  PRIMARY KEY (`recall_id`),
+  KEY `recalls_ibfk_1` (`patron_id`),
+  KEY `recalls_ibfk_2` (`biblio_id`),
+  KEY `recalls_ibfk_3` (`item_id`),
+  KEY `recalls_ibfk_4` (`pickup_library_id`),
+  CONSTRAINT `recalls_ibfk_1` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recalls_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recalls_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recalls_ibfk_4` FOREIGN KEY (`pickup_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Information related to recalls in Koha';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `repeatable_holidays`
@@ -4593,7 +4596,7 @@ CREATE TABLE `search_marc_to_field` (
   `search_field_id` int(11) NOT NULL,
   `facet` tinyint(1) DEFAULT 0 COMMENT 'true if a facet field should be generated for this',
   `suggestible` tinyint(1) DEFAULT 0 COMMENT 'true if this field can be used to generate suggestions for browse',
-  `sort` tinyint(1) DEFAULT 1 NOT NULL COMMENT 'Sort defaults to 1 (Yes) and creates sort fields in the index, 0 (no) will prevent this',
+  `sort` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Sort defaults to 1 (Yes) and creates sort fields in the index, 0 (no) will prevent this',
   PRIMARY KEY (`search_marc_map_id`,`search_field_id`),
   KEY `search_field_id` (`search_field_id`),
   CONSTRAINT `search_marc_to_field_ibfk_1` FOREIGN KEY (`search_marc_map_id`) REFERENCES `search_marc_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -4879,7 +4882,7 @@ CREATE TABLE `subscription` (
   `itemtype` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `previousitemtype` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `mana_id` int(11) DEFAULT NULL,
-  `ccode` varchar(80) DEFAULT NULL COMMENT 'collection code to assign to serial items',
+  `ccode` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'collection code to assign to serial items',
   PRIMARY KEY (`subscriptionid`),
   KEY `subscription_ibfk_1` (`periodicity`),
   KEY `subscription_ibfk_2` (`numberpattern`),
@@ -5425,4 +5428,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-24  9:48:17
+-- Dump completed on 2022-05-26  2:46:01
