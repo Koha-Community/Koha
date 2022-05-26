@@ -3,6 +3,7 @@
   put:
     x-mojo-to: ImportRecordMatches#set_chosen
     operationId: setChosen
+    summary: Set the chosen match for an import record ID
     tags:
       - import_batches
     parameters:
@@ -51,7 +52,10 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "503":
@@ -64,6 +68,7 @@
   delete:
     x-mojo-to: ImportRecordMatches#unset_chosen
     operationId: unsetChosen
+    summary: Unset the chosen match for an import record ID
     tags:
       - import_batches
     parameters:
@@ -95,7 +100,10 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
-        description: Internal server error
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "503":
