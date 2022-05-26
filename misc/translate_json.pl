@@ -9,10 +9,11 @@ my $translated = {};
 while (my ($k, $v) = each %$h ){
     if ( ref($v) ) {
         for my $kk ( keys %$v ) {
+            ( my $vv = $k ) =~ s|\s*$||;
             if ( $kk eq 'counter' ) {
-                $translated->{$k}->{counter} = "$k \%{counter}";
+                $translated->{$k}->{counter} = "$vv \%{counter}";
             } elsif ( $kk eq 'id' ) {
-                $translated->{$k}->{id} = "$k #\%{id}";
+                $translated->{$k}->{id} = "$vv #\%{id}";
             } else {
                 die "INVALID structure with key " . $kk;
             }

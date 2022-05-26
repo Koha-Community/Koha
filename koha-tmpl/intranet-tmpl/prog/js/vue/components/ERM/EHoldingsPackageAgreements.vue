@@ -7,7 +7,7 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement.counter", { counter: counter + 1 }) }}
+                {{ $t("Agreement .counter", { counter: counter + 1 }) }}
                 <a href="#" @click.prevent="deleteAgreement(counter)"
                     ><i class="fa fa-trash"></i>
                     {{ $t("Remove this agreement") }}</a

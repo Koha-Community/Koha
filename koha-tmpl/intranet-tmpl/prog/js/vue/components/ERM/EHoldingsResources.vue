@@ -7,7 +7,7 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Package.counter", { counter: counter + 1 }) }}
+                {{ $t("Package .counter", { counter: counter + 1 }) }}
                 <a href="#" @click.prevent="deletePackage(counter)"
                     ><i class="fa fa-trash"></i>
                     {{ $t("Remove from this package") }}</a

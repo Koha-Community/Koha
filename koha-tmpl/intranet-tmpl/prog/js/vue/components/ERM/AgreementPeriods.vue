@@ -8,7 +8,7 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Agreement period.counter", { counter: counter + 1 }) }}
+                {{ $t("Agreement period .counter", { counter: counter + 1 }) }}
                 <a href="#" @click.prevent="deletePeriod(counter)"
                     ><i class="fa fa-trash"></i>
                     {{ $t("Remove this period") }}</a

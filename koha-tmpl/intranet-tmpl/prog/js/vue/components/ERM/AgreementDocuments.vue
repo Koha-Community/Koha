@@ -8,7 +8,7 @@
             v-bind:key="counter"
         >
             <legend>
-                {{ $t("Document.counter", { counter: counter + 1 }) }}
+                {{ $t("Document .counter", { counter: counter + 1 }) }}
                 <a href="#" @click.prevent="deleteDocument(counter)"
                     ><i class="fa fa-trash"></i>
                     {{ $t("Remove this document") }}</a

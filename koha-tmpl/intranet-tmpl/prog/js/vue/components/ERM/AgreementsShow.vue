@@ -2,7 +2,7 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="agreements_show">
         <h2>
-            {{ $t("Agreement.id", { id: agreement.agreement_id }) }}
+            {{ $t("Agreement .id", { id: agreement.agreement_id }) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/agreements/edit/${agreement.agreement_id}`"

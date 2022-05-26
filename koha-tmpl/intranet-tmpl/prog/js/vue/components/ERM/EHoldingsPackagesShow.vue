@@ -2,7 +2,7 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="packages_show">
         <h2>
-            {{ $t("Package.id", { id: erm_package.package_id }) }}
+            {{ $t("Package .id", { id: erm_package.package_id }) }}
             <span class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/packages/edit/${erm_package.package_id}`"

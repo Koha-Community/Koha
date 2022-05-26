@@ -2,7 +2,7 @@
     <div v-if="!initialized">{{ $t("Loading") }}</div>
     <div v-else id="titles_add">
         <h2 v-if="title.title_id">
-            {{ $t("Edit title.id", { id: title.title_id }) }}
+            {{ $t("Edit title .id", { id: title.title_id }) }}
         </h2>
         <h2 v-else>{{ $t("New title") }}</h2>
         <div>
