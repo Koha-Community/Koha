@@ -64,6 +64,34 @@
                         <label>{{ $t("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
+
+                    <li v-if="erm_package.resources.length">
+                        <label>{{ $t("Titles") }}</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(
+                                        r, counter
+                                    ) in erm_package.resources"
+                                    v-bind:key="counter"
+                                >
+                                    <td>
+                                        <router-link
+                                            :to="`/cgi-bin/koha/erm/eholdings/resources/${r.resource_id}`"
+                                            :title="$t('Show resource')"
+                                        >
+                                            {{ r.title.publication_title }}
+                                        </router-link>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="action">

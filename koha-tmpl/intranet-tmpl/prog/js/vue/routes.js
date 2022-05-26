@@ -8,6 +8,7 @@ import EHoldingsPackagesList from "./components/ERM/EHoldingsPackagesList.vue";
 import EHoldingsPackagesShow from "./components/ERM/EHoldingsPackagesShow.vue";
 import EHoldingsPackagesFormAdd from "./components/ERM/EHoldingsPackagesFormAdd.vue";
 import EHoldingsPackagesFormConfirmDelete from "./components/ERM/EHoldingsPackagesFormConfirmDelete.vue";
+import EHoldingsResourcesShow from "./components/ERM/EHoldingsResourcesShow.vue";
 import EHoldingsTitlesList from "./components/ERM/EHoldingsTitlesList.vue";
 import EHoldingsTitlesShow from "./components/ERM/EHoldingsTitlesShow.vue";
 import EHoldingsTitlesFormAdd from "./components/ERM/EHoldingsTitlesFormAdd.vue";
@@ -243,6 +244,18 @@ export const routes = [
                 breadcrumbs.eholdings.titles,
             ],
             view: "edit",
+        },
+    },
+    {
+        path: "/cgi-bin/koha/erm/eholdings/resources/:resource_id",
+        component: EHoldingsResourcesShow,
+        meta: {
+            breadcrumb: [
+                breadcrumbs.home,
+                breadcrumbs.erm_home,
+                breadcrumbs.eholdings.home,
+            ],
+            view: "show",
         },
     },
     {

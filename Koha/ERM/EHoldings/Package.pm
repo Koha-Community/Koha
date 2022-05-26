@@ -22,6 +22,7 @@ use Koha::Database;
 use base qw(Koha::Object);
 
 use Koha::ERM::EHoldings::Package::Agreements;
+use Koha::ERM::EHoldings::Resources;
 
 =head1 NAME
 
@@ -55,6 +56,18 @@ sub package_agreements {
 
     my $agreements_rs = $self->_result->erm_eholdings_packages_agreements;
     return Koha::ERM::EHoldings::Package::Agreements->_new_from_dbic($agreements_rs);
+}
+
+=head3 resources
+
+Returns the resources from this package
+
+=cut
+
+sub resources {
+    my ( $self ) = @_;
+    my $rs = $self->_result->erm_eholdings_resources;
+    return Koha::ERM::EHoldings::Resources->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

@@ -3,13 +3,18 @@ type: object
 properties:
   resource_id:
     type: integer
-    description: Internal resource identifier
+    description: internally assigned identifier
+    readOnly: true
   title_id:
-    type: integer
-    description: Internal title identifier
+    description: foreign key to the title
+    type:
+      - integer
+      - "null"
   package_id:
-    type: integer
-    description: Internal package identifier
+    description: foreign key to the package
+    type:
+      - integer
+      - "null"
   started_on:
     description: Start date
     type:
@@ -25,6 +30,7 @@ properties:
     type:
       - string
       - "null"
+
 additionalProperties: false
 required:
   - package_id

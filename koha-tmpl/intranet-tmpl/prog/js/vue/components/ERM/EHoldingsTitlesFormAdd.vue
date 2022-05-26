@@ -383,7 +383,7 @@
                             />
                         </li>
 
-                        <EHoldingsResources
+                        <EHoldingsTitlesFormAddResources
                             :resources="title.resources"
                         />
                     </ol>
@@ -404,7 +404,7 @@
 
 <script>
 import { useVendorStore } from "../../stores/vendors"
-import EHoldingsResources from "./EHoldingsResources.vue"
+import EHoldingsTitlesFormAddResources from "./EHoldingsTitlesFormAddResources.vue"
 import { setMessage, setError } from "../../messages"
 import { fetchTitle } from '../../fetch'
 import { storeToRefs } from "pinia"
@@ -512,7 +512,7 @@ export default {
                 }).catch(e => { console.log(e) })
         },
     },
-    components: { EHoldingsResources },
+    components: { EHoldingsTitlesFormAddResources },
     name: "EHoldingsTitlesFormAdd",
 }
 </script>

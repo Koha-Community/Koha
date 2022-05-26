@@ -251,8 +251,8 @@
                                 >
                                     <td>
                                         <router-link
-                                            :to="`/cgi-bin/koha/erm/eholdings/packages/${r.package_id}`"
-                                            :title="$t('Show package')"
+                                            :to="`/cgi-bin/koha/erm/eholdings/resources/${r.resource_id}`"
+                                            :title="$t('Show resource')"
                                         >
                                             {{ r.package.name }}
                                         </router-link>

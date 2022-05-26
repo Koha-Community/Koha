@@ -26,10 +26,12 @@ definitions:
     $ref: ./definitions/erm_agreement.yaml
   erm_eholdings_title:
     $ref: ./definitions/erm_eholdings_title.yaml
-  erm_license:
-    $ref: ./definitions/erm_license.yaml
   erm_eholdings_package:
     $ref: ./definitions/erm_eholdings_package.yaml
+  erm_eholdings_resource:
+    $ref: ./definitions/erm_eholdings_resource.yaml
+  erm_license:
+    $ref: ./definitions/erm_license.yaml
   error:
     $ref: ./definitions/error.yaml
   fund:
@@ -175,6 +177,10 @@ paths:
     $ref: "./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1titles~1{title_id}"
   /erm/eholdings/packages:
     $ref: ./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages
+  /erm/eholdings/resources:
+    $ref: ./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1resources
+  "/erm/eholdings/resources/{resource_id}":
+    $ref: "./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1resources~1{resource_id}"
   "/erm/eholdings/packages/{package_id}":
     $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages~1{package_id}"
   /erm/licenses:
@@ -351,7 +357,7 @@ parameters:
     required: true
     type: integer
   eholdings_title_id_pp:
-    description: title internal identifier
+    description: Title internal identifier
     in: path
     name: title_id
     required: true
@@ -360,6 +366,12 @@ parameters:
     description: Package internal identifier
     in: path
     name: package_id
+    required: true
+    type: integer
+  eholdings_resource_id_pp:
+    description: Resource internal identifier
+    in: path
+    name: resource_id
     required: true
     type: integer
   fund_id_pp:

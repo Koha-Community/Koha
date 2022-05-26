@@ -110,7 +110,7 @@ export const fetchPackage = async function (package_id) {
     let erm_package;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "package_agreements,package_agreements.agreement",
+            "x-koha-embed": "package_agreements,package_agreements.agreement,resources,resources.title",
         },
     })
         .then(checkError)
@@ -176,6 +176,43 @@ export const fetchTitles = async function () {
             }
         );
     return titles;
+};
+
+export const fetchResource = async function (resource_id) {
+    if (!resource_id) return;
+    const apiUrl = "/api/v1/erm/eholdings/resources/" + resource_id;
+    let resource;
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "title,package",
+        },
+    })
+        .then(checkError)
+        .then(
+            (result) => {
+                resource = result;
+            },
+            (error) => {
+                setError(error);
+            }
+        );
+    return resource;
+};
+
+export const fetchresources = async function () {
+    const apiUrl = "/api/v1/erm/eholdings/resources";
+    let resources;
+    await fetch(apiUrl)
+        .then(checkError)
+        .then(
+            (result) => {
+                resources = result;
+            },
+            (error) => {
+                setError(error);
+            }
+        );
+    return resources;
 };
 
 function checkError(response) {

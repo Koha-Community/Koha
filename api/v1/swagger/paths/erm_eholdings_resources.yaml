@@ -1,47 +1,37 @@
 ---
-/erm/eholdings/packages:
+/erm/eholdings/resources:
   get:
-    x-mojo-to: ERM::EHoldings::Packages#list
-    operationId: listErmEHoldingsPackages
+    x-mojo-to: ERM::EHoldings::Resources#list
+    operationId: listErmEHoldingsResources
     tags:
-      - eHoldings package
-    summary: List packages
+      - eholdings
+    summary: List eholdings resources
     produces:
       - application/json
     parameters:
-      - description: Case insensitive search on package package_id
+      - description: Case insensitive search on resource_id
+        in: query
+        name: resource_id
+        required: false
+        type: integer
+      - description: Case insensitive search on package_id
         in: query
         name: package_id
         required: false
         type: integer
-      - description: Case insensitive search on package vendor_id
+      - description: Case insensitive search on started_on
         in: query
-        name: vendor_id
-        required: false
-        type: integer
-      - description: Case insensitive search on package name
-        in: query
-        name: name
+        name: started_on
         required: false
         type: string
-      - description: Case insensitive search on package external_package_id
+      - description: Case insensitive search on ended_on
         in: query
-        name: external_package_id
-        required: false
-        type: integer
-      - description: Case insensitive search on package type
-        in: query
-        name: package_type
+        name: ended_on
         required: false
         type: string
-      - description: Case insensitive search on package content_type
+      - description: Case insensitive search on proxy
         in: query
-        name: content_type
-        required: false
-        type: string
-      - description: Case insensitive search on package creation date
-        in: query
-        name: created_on
+        name: proxy
         required: false
         type: string
       - $ref: "../swagger.yaml#/parameters/match"
@@ -53,10 +43,10 @@
       - $ref: "../swagger.yaml#/parameters/q_header"
     responses:
       200:
-        description: A list of package
+        description: A list of eHoldings resources
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
           type: array
       403:
         description: Access forbidden
@@ -76,28 +66,28 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::EHoldings::Packages#add
-    operationId: addErmEHoldingsPackages
+    x-mojo-to: ERM::EHoldings::Resources#add
+    operationId: addErmEHoldingsResources
     tags:
-      - eHoldings package
-    summary: Add package
+      - eholdings
+    summary: Add eholding
     consumes:
       - application/json
     produces:
       - application/json
     parameters:
-      - description: A JSON object containing information about the new package
+      - description: A JSON object containing information about the new resource
         in: body
         name: body
         required: true
         schema:
-            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
     responses:
       201:
-        description: A successfully created package
+        description: A successfully created resource
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
       400:
         description: Bad parameter
         schema:
@@ -131,23 +121,23 @@
     x-koha-authorization:
       permissions:
         erm: 1
-"/erm/eholdings/packages/{package_id}":
+"/erm/eholdings/resources/{resource_id}":
   get:
-    x-mojo-to: ERM::EHoldings::Packages#get
-    operationId: getErmEHoldingsPackages
+    x-mojo-to: ERM::EHoldings::Resources#get
+    operationId: getErmEHoldingsResources
     tags:
-      - package
-    summary: Get eHoldings package
+      - eholdings
+    summary: Get resources
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_resource_id_pp"
     responses:
       200:
-        description: A package
+        description: An eHolding resource
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
       401:
         description: Authentication required
         schema:
@@ -174,32 +164,32 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - agreements
       - resources
+      - resources.package
   put:
-    x-mojo-to: ERM::EHoldings::Packages#update
-    operationId: updateErmEHoldingsPackages
+    x-mojo-to: ERM::EHoldings::Resources#update
+    operationId: updateErmEHoldingsResources
     tags:
-      - package
-    summary: Update eHoldings package
+      - eholdings
+    summary: Update resources
     consumes:
       - application/json
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_resource_id_pp"
       - name: body
         in: body
-        description: A JSON object containing new information about existing package
+        description: A JSON object containing new information about existing resource
         required: true
         schema:
-          $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+          $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
     responses:
       200:
-        description: A successfully updated package
+        description: A successfully updated resource
         schema:
           items:
-            $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+            $ref: "../swagger.yaml#/definitions/erm_eholdings_resource"
       400:
         description: Bad parameter
         schema:
@@ -230,23 +220,23 @@
       permissions:
         erm: 1
     x-koha-embed:
-      - agreements
       - resources
+      - resources.package
   delete:
-    x-mojo-to: ERM::EHoldings::Packages#delete
-    operationId: deleteErmEHoldingsPackages
+    x-mojo-to: ERM::EHoldings::Resources#delete
+    operationId: deleteErmEHoldingsResources
     tags:
-      - package
-    summary: Delete eHoldings package
+      - eholdings
+    summary: Delete eHolding resource
     produces:
       - application/json
     parameters:
-      - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
+      - $ref: "../swagger.yaml#/parameters/eholdings_resource_id_pp"
     responses:
       204:
-        description: package deleted
+        description: resource deleted
       400:
-        description: package deletion failed
+        description: resource deletion failed
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
