@@ -33,7 +33,7 @@ use Try::Tiny;
 
 Method that handles unselecting all chosen matches for an import record
 
-DELETE /api/v1/import/{import_batch_id}/records/{import_record_id}/matches/chosen
+DELETE /api/v1/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen
 
 =cut
 
@@ -63,7 +63,7 @@ sub unset_chosen {
 
 Method that handles modifying if a Koha::Import::Record::Match object has been chosen for overlay
 
-PUT /api/v1/import/{import_batch_id}/records/{import_record_id}/matches/chosen
+PUT /api/v1/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen
 
 Body should contain the condidate_match_id to chose
 

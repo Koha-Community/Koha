@@ -621,7 +621,7 @@
                     apidata = JSON.stringify({ candidate_match_id: $(this).val() });
                 }
                 $.ajax({
-                    url: '/api/v1/import/[% import_batch_id | html %]/records/'+$(this).data('import_record_id')+'/matches/chosen',
+                    url: '/api/v1/import_batches/[% import_batch_id | html %]/records/'+$(this).data('import_record_id')+'/matches/chosen',
                     method: apimethod,
                     data: apidata,
                     contentType: 'application/json'
