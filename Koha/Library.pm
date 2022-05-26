@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use C4::Context;
 
+use Koha::Caches;
 use Koha::Database;
 use Koha::StockRotationStages;
 use Koha::SMTP::Servers;
@@ -35,6 +36,35 @@ Koha::Library - Koha Library Object class
 =head1 API
 
 =head2 Class methods
+
+=head3 store
+
+Library specific store to ensure relevant caches are flushed on change
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $flush = 0;
+
+    if ( !$self->in_storage ) {
+        $flush = 1;
+    }
+    else {
+        my $self_from_storage = $self->get_from_storage;
+        $flush = 1 if ( $self_from_storage->branchname ne $self->branchname );
+    }
+
+    $self = $self->SUPER::store;
+
+    if ($flush) {
+        my $cache = Koha::Caches->get_instance();
+        $cache->clear_from_cache('LibraryNames');
+    }
+
+    return $self;
+}
 
 =head3 stockrotationstages
 

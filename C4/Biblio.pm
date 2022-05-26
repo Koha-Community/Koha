@@ -94,6 +94,7 @@ use C4::Charset qw(
     SetMarcUnicodeFlag
     SetUTF8Flag
 );
+use C4::Languages;
 use C4::Linker;
 use C4::OAI::Sets;
 use C4::Items qw( GetMarcItem );
@@ -1373,25 +1374,56 @@ descriptions rather than normal ones when they exist.
 sub GetAuthorisedValueDesc {
     my ( $tag, $subfield, $value, $framework, $tagslib, $category, $opac ) = @_;
 
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key;
     if ( !$category ) {
 
         return $value unless defined $tagslib->{$tag}->{$subfield}->{'authorised_value'};
 
         #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-            my $branch = Koha::Libraries->find($value);
-            return $branch? $branch->branchname: q{};
+            $cache_key = "LibraryNames";
+            my $libraries = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+            if ( !$libraries ) {
+                $libraries = {
+                    map { $_->branchcode => $_->branchname }
+                      Koha::Libraries->search( {},
+                        { columns => [ 'branchcode', 'branchname' ] } )
+                      ->as_list
+                };
+                $cache->set_in_cache($cache_key, $libraries);
+            }
+            return $libraries->{$value};
         }
 
         #---- itemtypes
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-            my $itemtype = Koha::ItemTypes->find( $value );
-            return $itemtype ? $itemtype->translated_description : q||;
+            my $lang = C4::Languages::getlanguage;
+            $lang //= 'en';
+            $cache_key = $lang . 'ItemTypeDescriptions';
+            my $itypes = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+            if ( !$itypes ) {
+                $itypes =
+                  { map { $_->itemtype => $_->translated_description }
+                      Koha::ItemTypes->search()->as_list };
+                $cache->set_in_cache( $cache_key, $itypes );
+            }
+            return $itypes->{$value};
         }
 
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "cn_source" ) {
-            my $source = GetClassSource($value);
-            return $source ? $source->{description} : q||;
+            $cache_key = "ClassSources";
+            my $cn_sources = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+            if ( !$cn_sources ) {
+                $cn_sources = {
+                    map { $_->cn_source => $_->description }
+                      Koha::ClassSources->search( {},
+                        { columns => [ 'cn_source', 'description' ] } )
+                      ->as_list
+                };
+                $cache->set_in_cache($cache_key, $cn_sources);
+            }
+            return $cn_sources->{$value};
         }
 
         #---- "true" authorized value
@@ -1400,10 +1432,25 @@ sub GetAuthorisedValueDesc {
 
     my $dbh = C4::Context->dbh;
     if ( $category ne "" ) {
-        my $sth = $dbh->prepare( "SELECT lib, lib_opac FROM authorised_values WHERE category = ? AND authorised_value = ?" );
-        $sth->execute( $category, $value );
-        my $data = $sth->fetchrow_hashref;
-        return ( $opac && $data->{'lib_opac'} ) ? $data->{'lib_opac'} : $data->{'lib'};
+        $cache_key = "AVDescriptions-" . $category;
+        my $av_descriptions = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+        if ( !$av_descriptions ) {
+            $av_descriptions = {
+                map {
+                    $_->authorised_value =>
+                      { lib => $_->lib, lib_opac => $_->lib_opac }
+                } Koha::AuthorisedValues->search(
+                    { category => $category },
+                    {
+                        columns => [ 'authorised_value', 'lib_opac', 'lib' ]
+                    }
+                )->as_list
+            };
+            $cache->set_in_cache($cache_key, $av_descriptions);
+        }
+        return ( $opac && $av_descriptions->{$value}->{'lib_opac'} )
+          ? $av_descriptions->{$value}->{'lib_opac'}
+          : $av_descriptions->{$value}->{'lib'};
     } else {
         return $value;    # if nothing is found return the original value
     }

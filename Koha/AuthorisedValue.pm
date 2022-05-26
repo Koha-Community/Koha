@@ -19,7 +19,7 @@ package Koha::AuthorisedValue;
 
 use Modern::Perl;
 
-
+use Koha::Caches;
 use Koha::Database;
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
@@ -33,6 +33,37 @@ Koha::AuthorisedValue - Koha Authorised value Object class
 =head2 Class methods
 
 =cut
+
+=head3 store
+
+AuthorisedValue specific store to ensure relevant caches are flushed on change
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $flush = 0;
+
+    if ( !$self->in_storage ) {
+        $flush = 1;
+    }
+    else {
+        my $self_from_storage = $self->get_from_storage;
+        $flush = 1 if ( $self_from_storage->lib ne $self->lib );
+        $flush = 1 if ( $self_from_storage->lib_opac ne $self->lib_opac );
+    }
+
+    $self = $self->SUPER::store;
+
+    if ($flush) {
+        my $cache = Koha::Caches->get_instance();
+        my $key = "AVDescriptions-".$self->category;
+        $cache->clear_from_cache($key);
+    }
+
+    return $self;
+}
 
 =head3 opac_description
 
