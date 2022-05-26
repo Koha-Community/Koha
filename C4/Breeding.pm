@@ -308,7 +308,10 @@ sub _handle_one_result {
     if( $breedingid ){
         my @kohafields = ('biblio.title','biblio.author','biblioitems.isbn','biblioitems.lccn','biblioitems.editionstatement');
         push @kohafields, C4::Context->preference('marcflavour') eq "MARC21" ? 'biblio.copyrightdate' : 'biblioitems.publicationyear';
-        $row = TransformMarcToKoha({ record => $marcrecord, kohafields => \@kohafields, limit_table => 'no_items' });
+        $row = C4::Biblio::TransformMarcToKoha({ record => $marcrecord, kohafields => \@kohafields, limit_table => 'no_items' });
+        $row->{biblionumber} = $bib;
+        $row->{server}       = $servhref->{servername};
+        $row->{breedingid}   = $breedingid;
         $row->{isbn}=_isbn_replace($row->{isbn});
         $row = _add_custom_field_rowdata($row, $marcrecord);
     }

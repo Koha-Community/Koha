@@ -1685,7 +1685,7 @@ sub _parse_biblio_fields {
     my ($marc_record) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $bibliofields = TransformMarcToKoha({ record => $marc_record });
+    my $bibliofields = TransformMarcToKoha({ record => $marc_record, kohafields => ['biblio.title','biblio.author','biblioitems.isbn','biblioitems.issn'] });
     return ($bibliofields->{'title'}, $bibliofields->{'author'}, $bibliofields->{'isbn'}, $bibliofields->{'issn'});
 
 }

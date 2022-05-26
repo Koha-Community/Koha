@@ -35,7 +35,6 @@ and authority) records in Koha.
 use Modern::Perl;
 
 use Carp qw( carp );
-use C4::Biblio;
 use Koha::Util::MARC;
 
 use base qw(Class::Accessor);
