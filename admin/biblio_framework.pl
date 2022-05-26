@@ -80,6 +80,7 @@ if ( $op eq 'add_form' ) {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
+    $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
     my $framework = Koha::BiblioFrameworks->find($frameworkcode);
@@ -111,6 +112,7 @@ if ( $op eq 'add_form' ) {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
+    $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
     $op = 'list';
 }
 
