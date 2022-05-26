@@ -603,7 +603,7 @@ sub BatchCommitRecords {
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
 
         if ($record_type eq 'biblio') {
-            # remove any item tags - rely on BatchCommitItems
+            # remove any item tags - rely on _batchCommitItems
             ($item_tag,$item_subfield) = &GetMarcFromKohaField( "items.itemnumber" );
             foreach my $item_field ($marc_record->field($item_tag)) {
                 $marc_record->delete_field($item_field);
@@ -624,7 +624,7 @@ sub BatchCommitRecords {
                 push @biblio_ids, $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
-                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result, $biblioitemnumber);
+                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = _batchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result, $biblioitemnumber);
                     $num_items_added += $bib_items_added;
                     $num_items_replaced += $bib_items_replaced;
                     $num_items_errored += $bib_items_errored;
@@ -673,7 +673,7 @@ sub BatchCommitRecords {
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
-                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
+                    my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = _batchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
                     $num_items_added += $bib_items_added;
                     $num_items_replaced += $bib_items_replaced;
                     $num_items_errored += $bib_items_errored;
@@ -696,7 +696,7 @@ sub BatchCommitRecords {
             $recordid = $record_match;
             $num_ignored++;
             if ($record_type eq 'biblio' and defined $recordid and ( $item_result eq 'create_new' || $item_result eq 'replace' ) ) {
-                my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
+                my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = _batchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
                 push @biblio_ids, $recordid if $bib_items_added || $bib_items_replaced;
                 $num_items_added += $bib_items_added;
          $num_items_replaced += $bib_items_replaced;
@@ -721,14 +721,16 @@ sub BatchCommitRecords {
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }
 
-=head2 BatchCommitItems
+=head2 _batchCommitItems
 
   ($num_items_added, $num_items_errored) = 
-         BatchCommitItems($import_record_id, $biblionumber, [$action, $biblioitemnumber]);
+         _batchCommitItems($import_record_id, $biblionumber, [$action, $biblioitemnumber]);
+
+Private function for batch committing item changes. We do not trigger a re-index here, that is left to the caller.
 
 =cut
 
-sub BatchCommitItems {
+sub _batchCommitItems {
     my ( $import_record_id, $biblionumber, $action, $biblioitemnumber ) = @_;
 
     my $dbh = C4::Context->dbh;

@@ -183,7 +183,7 @@ C4::ImportBatch::DeleteBatch( $id_import_batch3 );
 my $import_batch = C4::ImportBatch::GetImportBatch( $id_import_batch3 );
 is( $import_batch, undef, "Batch 3 has been deleted");
 
-subtest "BatchCommitItems" => sub {
+subtest "_batchCommitItems" => sub {
     plan tests => 3;
 
     my $exist_item = $builder->build_sample_item;
@@ -209,7 +209,7 @@ subtest "BatchCommitItems" => sub {
     }});
 
     my ( $num_items_added, $num_items_replaced, $num_items_errored ) =
-        C4::ImportBatch::BatchCommitItems( $import_item->import_record_id, 32, 'always_add',64 );
+        C4::ImportBatch::_batchCommitItems( $import_item->import_record_id, 32, 'always_add',64 );
     is( $num_items_errored, 1, "Item with duplicate barcode fails when action always_add" );
     $import_item->discard_changes();
     is( $import_item->status, 'error', "Import item marked as error when duplicate barcode and action always_add");
