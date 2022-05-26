@@ -157,6 +157,7 @@ if ($op eq 'add_form') {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
+    $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
     print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
     exit;
 													# END $OP eq ADD_VALIDATE
@@ -182,6 +183,7 @@ if ($op eq 'add_form') {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
+    $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
     $template->param( searchfield => $searchfield );
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
