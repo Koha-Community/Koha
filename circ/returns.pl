@@ -346,6 +346,15 @@ if ($barcode) {
     $template->param( 'confirm_items_bundle_returned' => 1 )
       if $query->param('confirm_items_bundle_return');
 
+    # is there a waiting hold for the item, for which cancellation
+    # has been requested?
+    my $waiting_holds_to_be_cancelled =
+      Koha::Holds->waiting->search( { itemnumber => $item->id } )
+      ->filter_by_has_cancellation_requests;
+    while ( my $hold = $waiting_holds_to_be_cancelled->next ) {
+        $hold->cancel;
+    }
+
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date )
