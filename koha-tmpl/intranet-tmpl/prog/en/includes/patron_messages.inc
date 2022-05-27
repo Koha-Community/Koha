@@ -310,7 +310,7 @@
                         <em>"[% patron_message.message | html %]"</em>
                     </span>
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
-                        <a class="btn btn-link" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember" onclick='return confirm(_("Are you sure you want to delete this message? This cannot be undone."));'><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash"></i> Delete</a>
                     [% END %]
                 </li>
             [% END %]
