@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-04-17 19:20-0300\n"
+"POT-Creation-Date: 2022-05-19 08:20-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -422,25 +422,26 @@ msgstr ""
 #. %9$s:  CASE "finished" 
 #. %10$s:  CASE "started" 
 #. %11$s:  CASE "running" 
-#. %12$s:  CASE # Default case 
-#. %13$s:  job.status | html 
-#. %14$s:  END -
-#. %15$s:  END 
-#. %16$s:  BLOCK show_job_type 
-#. %17$s:  SWITCH job.type 
-#. %18$s:  CASE "batch_biblio_record_modification" 
-#. %19$s:  CASE "batch_authority_record_modification" 
-#. %20$s:  CASE # Default case 
-#. %21$s:  job.type | html 
-#. %22$s:  END 
+#. %12$s:  CASE "failed" 
+#. %13$s:  CASE # Default case 
+#. %14$s:  job.status | html 
+#. %15$s:  END -
+#. %16$s:  END 
+#. %17$s:  BLOCK show_job_type 
+#. %18$s:  SWITCH job.type 
+#. %19$s:  CASE "batch_biblio_record_modification" 
+#. %20$s:  CASE "batch_authority_record_modification" 
+#. %21$s:  CASE # Default case 
+#. %22$s:  job.type | html 
 #. %23$s:  END 
-#. %24$s:  INCLUDE 'doc-head-open.inc' 
+#. %24$s:  END 
+#. %25$s:  INCLUDE 'doc-head-open.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s %s %s %s New %s Cancelled %s Finished %s Started %s Running %s "
-"%s %s %s %s %s %s Batch bibliographic record modification %s Batch authority "
-"record modification %s %s %s %s %s "
+"Failed %s %s %s %s %s %s %s Batch bibliographic record modification %s Batch "
+"authority record modification %s %s %s %s %s "
 msgstr ""
 
 #. %1$s:  END 
@@ -1068,7 +1069,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  SWITCH m.code 
 #. %3$s:  CASE 'authority_not_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:195
 #, c-format
 msgid "%s %s %s Authority record "
 msgstr ""
@@ -1088,7 +1089,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  SWITCH m.code 
 #. %3$s:  CASE 'biblio_not_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:177
 #, c-format
 msgid "%s %s %s Bibliographic record "
 msgstr ""
@@ -1519,7 +1520,7 @@ msgstr ""
 #. %3$s:  CASE 
 #. %4$s:  job.type | html 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:159
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:161
 #, c-format
 msgid "%s %s %sJob type \"%s\" not handled in the template %s "
 msgstr ""
@@ -3619,7 +3620,7 @@ msgstr ""
 #. %4$s:  CASE 
 #. %5$s:  job.type | html 
 #. %6$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:244
 #, c-format
 msgid ""
 "%s %sBatch bibliographic record modification %sBatch authority record "
@@ -3810,7 +3811,7 @@ msgstr ""
 #. %2$s:  CASE 
 #. %3$s:  job.type | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:203
 #, c-format
 msgid "%s %sJob type \"%s\" not handled in the template %s "
 msgstr ""
@@ -4446,8 +4447,8 @@ msgstr ""
 #. %2$s:  report.total_records | html 
 #. %3$s:  IF job.status == 'cancelled' 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:155
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, c-format
 msgid ""
 "%s / %s records have successfully been modified. Some errors occurred. %sThe "
@@ -5155,7 +5156,7 @@ msgstr ""
 #. %1$s:  IF op == 'view' 
 #. %2$s:  job.id | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:34
 #, c-format
 msgid ""
 "%s Details of job #%s &rsaquo; %s Background jobs &rsaquo; Administration "
@@ -11254,7 +11255,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:535
@@ -11880,7 +11881,7 @@ msgstr ""
 msgid "Add message"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:131
 #, c-format
 msgid "Add modified records to the following list: "
 msgstr ""
@@ -12512,8 +12513,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
@@ -13021,8 +13022,8 @@ msgstr ""
 msgid "All payments to the library"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:126
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:153
 #, c-format
 msgid "All records have successfully been modified! "
 msgstr ""
@@ -15424,9 +15425,9 @@ msgid "Background color"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:59
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:66
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #, c-format
@@ -16674,7 +16675,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
@@ -17626,7 +17627,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
@@ -25021,7 +25022,7 @@ msgstr ""
 msgid "Destination record"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:167
 #, c-format
 msgid "Detailed messages: "
 msgstr ""
@@ -25101,8 +25102,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  job.id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:96
 #, c-format
 msgid "Details of job #%s"
 msgstr ""
@@ -26920,12 +26921,12 @@ msgstr ""
 msgid "End of interval"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:232
 #, c-format
 msgid "Ended"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
 #, c-format
 msgid "Ended: "
 msgstr ""
@@ -30914,7 +30915,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
@@ -32869,7 +32870,7 @@ msgstr ""
 msgid "Instructors:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:88
 #, c-format
 msgid "Insufficient permission to see this job."
 msgstr ""
@@ -34262,12 +34263,12 @@ msgstr ""
 msgid "Jo Ransom"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:226
 #, c-format
 msgid "Job ID"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
 #, c-format
 msgid "Job ID: "
 msgstr ""
@@ -39200,10 +39201,10 @@ msgid "New batch record deletion"
 msgstr ""
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:145
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:258
 #, c-format
@@ -46617,12 +46618,12 @@ msgstr ""
 msgid "Programmed texts"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:228
 #, c-format
 msgid "Progress"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:105
 #, c-format
 msgid "Progress: "
 msgstr ""
@@ -47031,7 +47032,7 @@ msgstr ""
 msgid "Quantity: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:230
 #, c-format
 msgid "Queued"
 msgstr ""
@@ -47041,7 +47042,7 @@ msgstr ""
 msgid "Queued request"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:111
 #, c-format
 msgid "Queued: "
 msgstr ""
@@ -48530,7 +48531,7 @@ msgstr ""
 msgid "Report:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:122
 #, c-format
 msgid "Report: "
 msgstr ""
@@ -49401,7 +49402,7 @@ msgstr ""
 msgid "Return to the cataloging module"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:213
 #, c-format
 msgid "Return to the job list"
 msgstr ""
@@ -51340,7 +51341,7 @@ msgstr ""
 msgid "Select a library: "
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:102
 #, c-format
@@ -53717,12 +53718,12 @@ msgstr ""
 msgid "Start using Koha"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:229
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:231
 #, c-format
 msgid "Started"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:115
 #, c-format
 msgid "Started: "
 msgstr ""
@@ -53851,7 +53852,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:697
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:743
@@ -53912,7 +53913,7 @@ msgstr ""
 msgid "Status:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:102
 #, c-format
 msgid "Status: "
 msgstr ""
@@ -56818,7 +56819,7 @@ msgstr ""
 msgid "There are no authorized values defined for %s"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:265
 #, c-format
 msgid "There are no background jobs yet. "
 msgstr ""
@@ -59266,7 +59267,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:447
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:151
@@ -59299,7 +59300,7 @@ msgstr ""
 msgid "Type:"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:24
 #, c-format
@@ -61011,7 +61012,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:461
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -64447,7 +64448,7 @@ msgstr ""
 #. %2$s:  m.error | html 
 #. %3$s:  END 
 #. %4$s:  CASE 'authority_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:199
 #, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it%s (%s)%s. %s "
@@ -64458,7 +64459,7 @@ msgstr ""
 #. %2$s:  m.error | html 
 #. %3$s:  END 
 #. %4$s:  CASE 'biblio_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:181
 #, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it.%s (%s)%s. %s "
@@ -64467,8 +64468,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:181
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:201
 #, c-format
 msgid "has successfully been modified. %s "
 msgstr ""

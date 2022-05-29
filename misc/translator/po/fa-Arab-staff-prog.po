@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-04-17 19:24-0300\n"
-"PO-Revision-Date: 2022-04-04 03:18+0000\n"
+"POT-Creation-Date: 2022-05-19 08:23-0300\n"
+"PO-Revision-Date: 2022-05-29 08:18+0000\n"
 "Last-Translator: shahab.bohlooli@gmail.com <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
 "Language: fa\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/21.05/fa-Arab-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1649042338.345528\n"
+"X-POOTLE-MTIME: 1653812313.259026\n"
 
 #. %1$s:  data.borrowernumber | html 
 #. %2$s:  UNLESS loop.last 
@@ -434,25 +434,26 @@ msgstr "%s %s %s %s لا شيء %s "
 #. %9$s:  CASE "finished" 
 #. %10$s:  CASE "started" 
 #. %11$s:  CASE "running" 
-#. %12$s:  CASE # Default case 
-#. %13$s:  job.status | html 
-#. %14$s:  END -
-#. %15$s:  END 
-#. %16$s:  BLOCK show_job_type 
-#. %17$s:  SWITCH job.type 
-#. %18$s:  CASE "batch_biblio_record_modification" 
-#. %19$s:  CASE "batch_authority_record_modification" 
-#. %20$s:  CASE # Default case 
-#. %21$s:  job.type | html 
-#. %22$s:  END 
+#. %12$s:  CASE "failed" 
+#. %13$s:  CASE # Default case 
+#. %14$s:  job.status | html 
+#. %15$s:  END -
+#. %16$s:  END 
+#. %17$s:  BLOCK show_job_type 
+#. %18$s:  SWITCH job.type 
+#. %19$s:  CASE "batch_biblio_record_modification" 
+#. %20$s:  CASE "batch_authority_record_modification" 
+#. %21$s:  CASE # Default case 
+#. %22$s:  job.type | html 
 #. %23$s:  END 
-#. %24$s:  INCLUDE 'doc-head-open.inc' 
+#. %24$s:  END 
+#. %25$s:  INCLUDE 'doc-head-open.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s %s %s %s New %s Cancelled %s Finished %s Started %s Running %s "
-"%s %s %s %s %s %s Batch bibliographic record modification %s Batch authority "
-"record modification %s %s %s %s %s "
+"Failed %s %s %s %s %s %s %s Batch bibliographic record modification %s Batch "
+"authority record modification %s %s %s %s %s "
 msgstr ""
 
 #. %1$s:  END 
@@ -1093,7 +1094,7 @@ msgstr "%s %s %s ; %s %s "
 #. %1$s:  END 
 #. %2$s:  SWITCH m.code 
 #. %3$s:  CASE 'authority_not_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:195
 #, fuzzy, c-format
 msgid "%s %s %s Authority record "
 msgstr "التسجيلة الإستنادية"
@@ -1113,7 +1114,7 @@ msgstr "%s %s %s لا مجموعة سلة. %s %s "
 #. %1$s:  END 
 #. %2$s:  SWITCH m.code 
 #. %3$s:  CASE 'biblio_not_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:175
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:177
 #, fuzzy, c-format
 msgid "%s %s %s Bibliographic record "
 msgstr " تسجيلة بيبلوجرافية"
@@ -1571,7 +1572,7 @@ msgstr ""
 #. %3$s:  CASE 
 #. %4$s:  job.type | html 
 #. %5$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:159
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:161
 #, fuzzy, c-format
 msgid "%s %s %sJob type \"%s\" not handled in the template %s "
 msgstr "%s لم تعرّف بعد %s "
@@ -3720,7 +3721,7 @@ msgstr ""
 #. %4$s:  CASE 
 #. %5$s:  job.type | html 
 #. %6$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:242
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:244
 #, c-format
 msgid ""
 "%s %sBatch bibliographic record modification %sBatch authority record "
@@ -3916,7 +3917,7 @@ msgstr "%s %sالمواد%sالمادة%s متأخر اعتباراً من %s%s 
 #. %2$s:  CASE 
 #. %3$s:  job.type | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:201
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:203
 #, fuzzy, c-format
 msgid "%s %sJob type \"%s\" not handled in the template %s "
 msgstr "%s لم تعرّف بعد %s "
@@ -4561,8 +4562,8 @@ msgstr "أنقر لتوسيع هذا الرأس"
 #. %2$s:  report.total_records | html 
 #. %3$s:  IF job.status == 'cancelled' 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:155
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:142
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:157
 #, fuzzy, c-format
 msgid ""
 "%s / %s records have successfully been modified. Some errors occurred. %sThe "
@@ -5290,7 +5291,7 @@ msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
 #. %1$s:  IF op == 'view' 
 #. %2$s:  job.id | html 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:34
 #, fuzzy, c-format
 msgid ""
 "%s Details of job #%s &rsaquo; %s Background jobs &rsaquo; Administration "
@@ -6252,9 +6253,9 @@ msgstr "%s هاتف آخر: "
 #. %2$s:  END 
 #. %3$s:  IF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "%s Outstanding order %s %s "
-msgstr "%sلا يوجد أي طلبات معلّقة.%s "
+msgstr "%s سفارشات معوقه %s %s "
 
 #. %1$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:355
@@ -6287,9 +6288,9 @@ msgstr "%s صفحة %s / %s %s "
 
 #. %1$s:  IF ( f.filename ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "%s Parsing upload file "
-msgstr "%sتحليل رفع الملف "
+msgstr "%s پردازش فایل آپلود شده "
 
 #. %1$s:  IF ( newpassword ) 
 #. %2$s:  ELSE 
@@ -11519,7 +11520,7 @@ msgstr "إجراءات إذا لم يكن هناك تطابق :"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqplan.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:263
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:231
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:233
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cash_registers.tt:172
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:535
@@ -12155,7 +12156,7 @@ msgstr "أضف نقطة تطابق"
 msgid "Add message"
 msgstr "أضف رسالة جديدة"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:131
 #, fuzzy, c-format
 msgid "Add modified records to the following list: "
 msgstr "عدّل قاعدة تطابق التسجيلة"
@@ -12797,8 +12798,8 @@ msgstr "رفع صور غلاف محلية"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:35
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:71
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:30
@@ -13309,8 +13310,8 @@ msgstr ""
 msgid "All payments to the library"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:126
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:128
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:153
 #, fuzzy, c-format
 msgid "All records have successfully been modified! "
 msgstr "المادة مرتبطة بنجاح إلى"
@@ -15586,13 +15587,13 @@ msgid ""
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Autolocation is switched on and you are logging in with an IP address that "
 "doesn't match your library. "
 msgstr ""
-"القيم الإستنادية IndependentBranches و Autolocation قد تمَّ تشغيلهما وأنتَ مسجل "
-"دخولك من معرف IP لا يتطابق مع مكتبتك. "
+"موقعیت مکانی بطور خودکار روشن است و شما با آدرس IP که با کتابخانه شما منطبق "
+"نیست وارد سیستم می شوید. "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:19
@@ -15805,9 +15806,9 @@ msgid "Background color"
 msgstr "تجميع السلة ل"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:150
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:59
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:66
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:218
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:71
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #, fuzzy, c-format
@@ -17073,7 +17074,7 @@ msgstr "استعادة, تقليد"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:47
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:24
@@ -18020,8 +18021,6 @@ msgstr "لا يمكن حفظ هذه التسجيلة لان الحقل التا�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:262
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -18035,7 +18034,7 @@ msgstr "لا يمكن حفظ هذه التسجيلة لان الحقل التا�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:178
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:137
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:255
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:276
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:98
@@ -18080,6 +18079,8 @@ msgstr "لا يمكن حفظ هذه التسجيلة لان الحقل التا�
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:868
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:872
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:876
@@ -18729,9 +18730,9 @@ msgstr ".كلمة المرور يجب أن تكون على الأقل  %s الر
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be exactly %s characters. %s "
-msgstr ".كلمة المرور يجب أن تكون على الأقل  %s الرموز "
+msgstr "شماره کارت باید دقیقاً %s کاراکتر باشد. %s "
 
 #. For the first occurrence,
 #. %1$s:  maxlength_cardnumber | html 
@@ -20797,10 +20798,10 @@ msgstr "پاک کردن"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:302
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -22790,9 +22791,9 @@ msgid "Country: %s"
 msgstr "کشور:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "Courier New"
-msgstr "ایجاد کردن جدید"
+msgstr "پیام رسان جدید"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:49
 #, fuzzy, c-format
@@ -25559,15 +25560,15 @@ msgstr "وصف المكتبة:"
 msgid "Destination record"
 msgstr "وصف التسجيلة"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:165
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:167
 #, fuzzy, c-format
 msgid "Detailed messages: "
 msgstr "إعادة الرسائل"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:133
@@ -25639,8 +25640,8 @@ msgstr "Koha &rsaquo; أدوات &rsaquo; منشئ بطاقات المستفيد
 
 #. For the first occurrence,
 #. %1$s:  job.id | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:94
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:96
 #, fuzzy, c-format
 msgid "Details of job #%s"
 msgstr "جزئیات"
@@ -27482,12 +27483,12 @@ msgstr "نهاية مدى التاريخ"
 msgid "End of interval"
 msgstr "نهاية مدى التاريخ"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:232
 #, fuzzy, c-format
 msgid "Ended"
 msgstr "مدیریت شده توسط"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:119
 #, fuzzy, c-format
 msgid "Ended: "
 msgstr "مدیریت شده توسط"
@@ -31568,7 +31569,7 @@ msgstr "عطلة تتكرر سنويا لمجموعة معينة"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authorised_values.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:25
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:27
@@ -33587,7 +33588,7 @@ msgstr "تعليمات"
 msgid "Instructors:"
 msgstr "تعليمات"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:86
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:88
 #, fuzzy, c-format
 msgid "Insufficient permission to see this job."
 msgstr "صلاحيات غير كافية."
@@ -34582,11 +34583,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/itemtypes.tt:413
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:487
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:919
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:252
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:321
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:124
@@ -35003,12 +35004,12 @@ msgstr "پشتیبان های Jenkins:"
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:224
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:226
 #, c-format
 msgid "Job ID"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:98
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
 #, fuzzy, c-format
 msgid "Job ID: "
 msgstr "الملف:"
@@ -40014,10 +40015,10 @@ msgid "New batch record deletion"
 msgstr "الحذف الكمّي للمواد"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:129
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:145
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:160
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:258
 #, fuzzy, c-format
@@ -42151,8 +42152,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:241
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:330
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:378
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:379
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:86
@@ -47600,12 +47601,12 @@ msgstr "الملف:"
 msgid "Programmed texts"
 msgstr "متون برنامه ریزی شده"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:226
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:228
 #, fuzzy, c-format
 msgid "Progress"
 msgstr "معالجة المهمة"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:103
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:105
 #, fuzzy, c-format
 msgid "Progress: "
 msgstr "معالجة المهمة"
@@ -48015,7 +48016,7 @@ msgstr "الكمية استلمت:"
 msgid "Quantity: "
 msgstr "الكمية:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:228
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:230
 #, fuzzy, c-format
 msgid "Queued"
 msgstr "قراردادن در"
@@ -48026,7 +48027,7 @@ msgstr "قراردادن در"
 msgid "Queued request"
 msgstr "قراردادن در"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:109
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:111
 #, fuzzy, c-format
 msgid "Queued: "
 msgstr "متوقعة في"
@@ -48933,13 +48934,13 @@ msgstr "صورة بعيدة:"
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:317
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:494
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:272
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:173
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:502
@@ -49528,7 +49529,7 @@ msgstr "المجموعة الفرعية للتقرير: "
 msgid "Report:"
 msgstr "التقرير:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:120
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:122
 #, fuzzy, c-format
 msgid "Report: "
 msgstr "التقرير:"
@@ -50402,7 +50403,7 @@ msgstr "العودة إلى السلة من دون إنشاء طلب جديد"
 msgid "Return to the cataloging module"
 msgstr "شغّل التقرير"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:211
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:213
 #, fuzzy, c-format
 msgid "Return to the job list"
 msgstr "شغّل التقرير"
@@ -51020,7 +51021,6 @@ msgstr "أيام السبت"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -51054,6 +51054,7 @@ msgstr "أيام السبت"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:187
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:795
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
@@ -52360,7 +52361,7 @@ msgstr "إختر المكتبة :"
 msgid "Select a library: "
 msgstr "إختر المكتبة :"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:132
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:134
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:102
 #, fuzzy, c-format
@@ -52398,11 +52399,11 @@ msgstr "قالب جديد"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:47
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:225
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:301
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
@@ -54776,12 +54777,12 @@ msgstr "إبدأ البحث"
 msgid "Start using Koha"
 msgstr "ابدأ ب:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:229
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:231
 #, fuzzy, c-format
 msgid "Started"
 msgstr "ایجاد شده توسط:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:115
 #, fuzzy, c-format
 msgid "Started: "
 msgstr "ایجاد شده توسط:"
@@ -54910,7 +54911,7 @@ msgstr "معالجات الاحصائيات"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/histsearch.tt:65
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:64
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:225
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:227
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:329
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:697
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:743
@@ -54971,7 +54972,7 @@ msgstr "آخر مرة تم التحديث: "
 msgid "Status:"
 msgstr "حالة:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:100
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:102
 #, fuzzy, c-format
 msgid "Status: "
 msgstr "حالة:"
@@ -57940,7 +57941,7 @@ msgstr "لا توجد مكتبات معرَّفة. "
 msgid "There are no authorized values defined for %s"
 msgstr "لا يوجد قيمة إستناد معرفة ل %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:265
 #, fuzzy, c-format
 msgid "There are no background jobs yet. "
 msgstr "لا توجد إشعارات."
@@ -60427,7 +60428,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:447
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/accountline-details.tt:151
@@ -60460,7 +60461,7 @@ msgstr "نوع الدرجة:"
 msgid "Type:"
 msgstr "نوع:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:105
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:24
 #, c-format
@@ -62213,7 +62214,7 @@ msgstr "عمودي"
 
 #. INPUT type=submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:401
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:253
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:374
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:461
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -65780,7 +65781,7 @@ msgstr "لم يُعار من قبل."
 #. %2$s:  m.error | html 
 #. %3$s:  END 
 #. %4$s:  CASE 'authority_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:197
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:199
 #, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it%s (%s)%s. %s "
@@ -65791,7 +65792,7 @@ msgstr ""
 #. %2$s:  m.error | html 
 #. %3$s:  END 
 #. %4$s:  CASE 'biblio_modified' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:179
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:181
 #, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it.%s (%s)%s. %s "
@@ -65800,8 +65801,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:181
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:183
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/background_jobs.tt:201
 #, fuzzy, c-format
 msgid "has successfully been modified. %s "
 msgstr "المادة مرتبطة بنجاح إلى"
