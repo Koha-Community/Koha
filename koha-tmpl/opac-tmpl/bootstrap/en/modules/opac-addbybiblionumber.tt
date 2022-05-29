@@ -12,9 +12,9 @@
                         [% IF ( authorized ) %]
                             [% UNLESS ( newshelf ) %]
                                 [% IF ( multiple ) %]
-                                    <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]<span>a list</span>:[% END %]</h1>
+                                    <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]<span>a list:</span>[% END %]</h1>
                                 [% ELSE %]
-                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]<span>a list</span>:[% END %]</h1>
+                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]<span>a list:</span>[% END %]</h1>
                                 [% END %]
                                 <ul>
                                     [% FOREACH biblio IN biblios %]

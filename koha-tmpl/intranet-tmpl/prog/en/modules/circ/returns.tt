@@ -10,7 +10,7 @@
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
     [% IF ( bormessagepref ) %]
-        <li class="notification_method"><span>Patron notification</span>:
+        <li class="notification_method"><span>Patron notification:</span>
             [% FOREACH mtt IN bormessagepref.keys %]
                 [%~ IF ( mtt == 'email' ) %] <span>Email</span>[% END ~%]
                 [%~ IF ( mtt == 'phone' ) %] <span>Phone</span>[% END ~%]
@@ -249,7 +249,7 @@
                                         [% IF ( errmsgloo.ItemLocationUpdated ) %]
                                              <p class="problem ret_location_update">
                                                  Item shelving location updated.
-                                                <br /><span>Old value</span>:
+                                                <br /><span>Old value:</span>
                                                 [% IF errmsgloo.ItemLocationUpdated.from %]
                                                     [% SET av_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => errmsgloo.ItemLocationUpdated.from ) %]
                                                     [% IF errmsgloo.ItemLocationUpdated.from == '' %]

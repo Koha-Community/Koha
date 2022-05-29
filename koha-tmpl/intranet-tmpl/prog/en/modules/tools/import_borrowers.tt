@@ -112,7 +112,7 @@
                             [% IF ( missing_critical.badparse ) %]
                                 <span>could not be parsed!</span>
                             [% ELSIF ( missing_critical.bad_date ) %]
-                                <span>has &quot;[% missing_critical.key | html %]&quot; in unrecognized format</span>: &quot;[% missing_critical.value | html %]&quot;
+                                <span>has &quot;[% missing_critical.key | html %]&quot; in unrecognized format:</span> &quot;[% missing_critical.value | html %]&quot;
                             [% ELSE %]
                                 <span>Critical field &quot;[% missing_critical.key | html %]&quot;</span>
 

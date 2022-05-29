@@ -5,7 +5,7 @@
 [% SET panel_id = 0 %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 0 %]
-        <span>Jump to</span>:
+        <span>Jump to:</span>
         [% FOR pagename IN module.keys.sort %]
             <a href="#[% pagename | url %]">[% pagename | html %]</a>
             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
