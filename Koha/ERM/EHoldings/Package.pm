@@ -21,6 +21,7 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::Acquisition::Booksellers;
 use Koha::ERM::EHoldings::Package::Agreements;
 use Koha::ERM::EHoldings::Resources;
 
@@ -68,6 +69,19 @@ sub resources {
     my ( $self ) = @_;
     my $rs = $self->_result->erm_eholdings_resources;
     return Koha::ERM::EHoldings::Resources->_new_from_dbic($rs);
+}
+
+=head3 vendor
+
+Returns the vendor
+
+=cut
+
+sub vendor {
+    my ( $self ) = @_;
+    my $rs = $self->_result->vendor;
+    return unless $rs;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

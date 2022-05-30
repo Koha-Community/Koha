@@ -28,18 +28,19 @@
                     </li>
                     <li>
                         <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="erm_package.vendor_id">
-                            {{
-                                vendors.find(
-                                    (e) => e.id == erm_package.vendor_id
-                                ).name
-                            }}
+                        <span v-if="erm_package.vendor"
+                            ><a :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`">{{ erm_package.vendor.name }}</a>
                         </span>
                     </li>
                     <li v-if="erm_package.external_id">
                         <label>{{ $t("External ID") }}:</label>
                         <span>
-                            {{ erm_package.external_id }}
+                            <!-- FIXME Create a syspref to store the URL -->
+                            <a
+                                :href="`https://ptfs-europe-demo.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
+                            >
+                                {{ erm_package.external_id }}
+                            </a>
                         </span>
                     </li>
                     <li>
@@ -107,17 +108,12 @@
 </template>
 
 <script>
-import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchPackage } from "../../fetch"
-import { storeToRefs } from "pinia"
 
 export default {
     setup() {
         const format_date = $date
-
-        const vendorStore = useVendorStore()
-        const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
         const { get_lib_from_av } = AVStore
@@ -125,7 +121,6 @@ export default {
         return {
             format_date,
             get_lib_from_av,
-            vendors,
         }
     },
     data() {

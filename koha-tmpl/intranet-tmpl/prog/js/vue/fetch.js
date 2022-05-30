@@ -110,7 +110,7 @@ export const fetchPackage = async function (package_id) {
     let erm_package;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "package_agreements,package_agreements.agreement,resources,resources.title",
+            "x-koha-embed": "package_agreements,package_agreements.agreement,resources,resources.title,vendor",
         },
     })
         .then(checkError)
