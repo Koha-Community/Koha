@@ -34,6 +34,12 @@
                             {{ title.publication_title }}
                         </span>
                     </li>
+                    <li v-if="title.external_id">
+                        <label>{{ $t("External ID") }}:</label>
+                        <span>
+                            {{ title.external_id }}
+                        </span>
+                    </li>
                     <li>
                         <label>{{ $t("Vendor") }}:</label>
                         <span v-if="title.vendor_id">
@@ -294,6 +300,7 @@ export default {
                 title_id: null,
                 vendor_id: null,
                 publication_title: '',
+                external_id: '',
                 print_identifier: '',
                 online_identifier: '',
                 date_first_issue_online: '',

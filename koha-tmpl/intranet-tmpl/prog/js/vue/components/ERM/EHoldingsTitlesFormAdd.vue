@@ -424,6 +424,7 @@ export default {
                 title_id: null,
                 vendor_id: null,
                 publication_title: '',
+                external_id: '',
                 print_identifier: '',
                 online_identifier: '',
                 date_first_issue_online: '',

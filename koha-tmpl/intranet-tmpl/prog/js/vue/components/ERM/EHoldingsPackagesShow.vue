@@ -36,10 +36,10 @@
                             }}
                         </span>
                     </li>
-                    <li v-if="erm_package.external_package_id">
+                    <li v-if="erm_package.external_id">
                         <label>{{ $t("External ID") }}:</label>
                         <span>
-                            {{ erm_package.external_package_id }}
+                            {{ erm_package.external_id }}
                         </span>
                     </li>
                     <li>
@@ -134,7 +134,7 @@ export default {
                 package_id: null,
                 vendor_id: null,
                 name: '',
-                external_package_id: '',
+                external_id: '',
                 package_type: '',
                 content_type: '',
                 created_on: null,

@@ -139,7 +139,7 @@ export default {
             erm_package: {
                 package_id: null,
                 name: '',
-                external_package_id: null,
+                external_id: '',
                 package_type: '',
                 content_type: '',
                 package_agreements: [],
