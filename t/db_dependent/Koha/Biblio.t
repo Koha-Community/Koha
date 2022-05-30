@@ -572,7 +572,7 @@ subtest 'get_components_query' => sub {
     t::lib::Mocks::mock_preference( 'ComponentSortField', 'author' );
     t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'za' );
     my ( $comp_q, $comp_s ) = $biblio->get_components_query;
-    is($comp_q, "Host-item:(Some boring read)",, "UseControlNumber disabled");
+    is($comp_q, 'Host-item:("Some boring read")', "UseControlNumber disabled");
     is($comp_s, "author_za", "UseControlNumber disabled sort is correct");
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
