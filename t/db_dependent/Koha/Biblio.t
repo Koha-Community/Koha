@@ -572,7 +572,7 @@ subtest 'get_components_query' => sub {
     my $record = $biblio->metadata->record;
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
-    is($biblio->get_components_query, "Host-item:(Some boring read)", "UseControlNumber disabled");
+    is($biblio->get_components_query, 'Host-item:("Some boring read")', "UseControlNumber disabled");
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
     my $marc_001_field = MARC::Field->new('001', $biblionumber);

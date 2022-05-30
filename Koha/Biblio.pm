@@ -594,7 +594,7 @@ sub get_components_query {
         my $cleaned_title = $marc->subfield('245', "a");
         $cleaned_title =~ tr|/||;
         $cleaned_title = $builder->clean_search_term($cleaned_title);
-        $searchstr = "Host-item:($cleaned_title)";
+        $searchstr = qq#Host-item:("$cleaned_title")#;
     }
 
     return $searchstr;
