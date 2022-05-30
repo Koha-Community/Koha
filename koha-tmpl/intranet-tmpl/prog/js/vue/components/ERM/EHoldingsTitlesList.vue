@@ -84,10 +84,13 @@ export default {
             "columns": [
                 {
                     "title": __("Title"),
-                    "data": ["me.title_id", "me.publication_title"],
+                    "data": "me.title_id:me.publication_title",
                     "searchable": true,
                     "orderable": true,
-                    // Rendering done in drawCallback
+                    "render": function (data, type, row, meta) {
+                        // Rendering done in drawCallback
+                        return "";
+                    }
                 },
                 {
                     "title": __("Vendor"),
@@ -106,7 +109,7 @@ export default {
                 },
                 {
                     "title": __("Identifier"),
-                    "data": ["print_identifier", "online_identifier"],
+                    "data": "print_identifier:online_identifier",
                     "searchable": true,
                     "orderable": true,
                     "render": function (data, type, row, meta) {

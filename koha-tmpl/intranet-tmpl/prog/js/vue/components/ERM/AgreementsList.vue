@@ -118,10 +118,13 @@ export default {
             "columns": [
                 {
                     "title": __("Name"),
-                    "data": ["me.agreement_id", "me.name"],
+                    "data": "me.agreement_id:me.name",
                     "searchable": true,
                     "orderable": true,
-                    // Rendering done in drawCallback
+                    "render": function (data, type, row, meta) {
+                        // Rendering done in drawCallback
+                        return "";
+                    }
                 },
                 {
                     "title": __("Vendor"),
