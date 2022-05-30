@@ -2,7 +2,7 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else id="packages_add">
         <h2 v-if="erm_package.package_id">
-            {{ $t("Edit package.id", { id: erm_package.package_id }) }}
+            {{ $t("Edit package .id", { id: erm_package.package_id }) }}
         </h2>
         <h2 v-else>{{ $t("New package") }}</h2>
         <div>
