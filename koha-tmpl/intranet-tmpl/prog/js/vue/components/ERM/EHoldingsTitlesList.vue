@@ -56,6 +56,7 @@ export default {
         let show_title= this.show_title
         let edit_title= this.edit_title
         let delete_title= this.delete_title
+        let default_search = this.$route.query.q
 
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
@@ -69,9 +70,10 @@ export default {
 
         $('#title_list').kohaTable({
             "ajax": {
-                "url": eholdings_titles_table_url,
+                "url": "/api/v1/erm/eholdings/titles",
             },
             "order": [[0, "asc"]],
+            "search": { search: default_search },
             "columnDefs": [{
                 "targets": [1],
                 "render": function (data, type, row, meta) {

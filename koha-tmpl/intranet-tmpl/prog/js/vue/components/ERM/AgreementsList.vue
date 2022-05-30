@@ -63,6 +63,8 @@ export default {
         let show_agreement = this.show_agreement
         let edit_agreement = this.edit_agreement
         let delete_agreement = this.delete_agreement
+        let default_search = this.$route.query.q
+
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
             e['_str'] = e['name']
@@ -101,13 +103,14 @@ export default {
         }, {})
         window['av_agreement_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
-        $('#agreement_list').kohaTable({
+        const table = $('#agreement_list').kohaTable({
             "ajax": {
-                "url": agreements_table_url,
+                "url": "/api/v1/erm/agreements",
             },
             "order": [[0, "asc"]],
+            "search": { search: default_search },
             "columnDefs": [{
-                "targets": [0,2],
+                "targets": [0, 2],
                 "render": function (data, type, row, meta) {
                     if (type == 'display') {
                         return escape_str(data)
@@ -123,7 +126,7 @@ export default {
                     "orderable": true,
                     "render": function (data, type, row, meta) {
                         // Rendering done in drawCallback
-                        return "";
+                        return ""
                     }
                 },
                 {

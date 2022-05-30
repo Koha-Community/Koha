@@ -33,6 +33,8 @@ export default {
         let show_license = this.show_license
         let edit_license = this.edit_license
         let delete_license = this.delete_license
+        let default_search = this.$route.query.q
+
         window['av_license_types'] = this.av_license_types.map(e => {
             e['_id'] = e['authorised_value']
             e['_str'] = e['lib']
@@ -54,9 +56,10 @@ export default {
 
         $('#license_list').kohaTable({
             "ajax": {
-                "url": licenses_table_url,
+                "url": "/api/v1/erm/licenses",
             },
             "order": [[0, "asc"]],
+            "search": { search: default_search },
             "columnDefs": [{
                 "targets": [0, 1],
                 "render": function (data, type, row, meta) {

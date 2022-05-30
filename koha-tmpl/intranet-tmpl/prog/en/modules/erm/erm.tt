@@ -33,32 +33,8 @@
         const agreement_renewal_priorities = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_RENEWAL_PRIORITY')) | $raw %];
         const agreement_user_roles = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_USER_ROLES')) | $raw %];
 
-        var agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
-
-        var agreements_table_url = '/api/v1/erm/agreements?';
-        [% IF agreement_name_filter %]
-            var agreement_name_filter = {
-                'name': {
-                    "like": '%[%- agreement_name_filter | html -%]%'
-                }
-            };
-            agreements_table_url += 'q='+ encodeURIComponent(JSON.stringify(agreement_name_filter));
-        [% END %]
-
         const license_types = [% To.json(AuthorisedValues.Get('ERM_LICENSE_TYPE')) | $raw %];
         const license_statuses = [% To.json(AuthorisedValues.Get('ERM_LICENSE_STATUS')) | $raw %];
-
-        var license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
-
-        var licenses_table_url = '/api/v1/erm/licenses?';
-        [% IF license_name_filter %]
-            var license_name_filter = {
-                'name': {
-                    "like": '%[%- license_name_filter | html -%]%'
-                }
-            };
-            licenses_table_url += 'q='+ encodeURIComponent(JSON.stringify(license_name_filter));
-        [% END %]
 
         const agreement_license_statuses = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_STATUS')) | $raw %];
         const agreement_license_location = [% To.json(AuthorisedValues.Get('ERM_AGREEMENT_LICENSE_LOCATION')) | $raw %];
@@ -66,29 +42,10 @@
         const package_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_TYPE')) | $raw %];
         const package_content_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_CONTENT_TYPE')) | $raw %];
 
-        var eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
-
-        var eholdings_packages_table_url = '/api/v1/erm/eholdings/packages?';
-        [% IF eholdings_package_name_filter %]
-            var eholdings_package_name_filter = {
-                'name': {
-                    "like": '%[%- eholdings_package_name_filter | html -%]%'
-                }
-            };
-            eholdings_packages_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholdings_package_name_filter));
-        [% END %]
-
-        var eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
-
-        var eholdings_titles_table_url = '/api/v1/erm/eholdings/titles?';
-        [% IF eholdings_title_name_filter %]
-            var eholdings_title_name_filter = {
-                'name': {
-                    "like": '%[%- eholdings_title_name_filter | html -%]%'
-                }
-            };
-            eholdings_titles_table_url += 'q='+ encodeURIComponent(JSON.stringify(eholding_title_name_filter));
-        [% END %]
+        const agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
+        const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
+        const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
+        const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
 
     </script>
 

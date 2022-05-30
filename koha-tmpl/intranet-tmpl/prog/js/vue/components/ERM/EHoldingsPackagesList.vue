@@ -62,6 +62,8 @@ export default {
         let show_package = this.show_package
         let edit_package = this.edit_package
         let delete_package = this.delete_package
+        let default_search = this.$route.query.q
+
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
             e['_str'] = e['name']
@@ -92,9 +94,10 @@ export default {
 
         $('#package_list').kohaTable({
             "ajax": {
-                "url": eholdings_packages_table_url,
+                "url": "/api/v1/erm/eholdings/packages",
             },
             "order": [[0, "asc"]],
+            "search": { search: default_search },
             "columnDefs": [{
                 "targets": [0],
                 "render": function (data, type, row, meta) {
