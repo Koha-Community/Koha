@@ -51,7 +51,7 @@ legend:hover {
                 </li>
                 [% IF (borrower_data.firstname || borrower_data.surname ) %]
                     <li>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower_data.borrowernumber | uri %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">
                             [% INCLUDE 'patron-title.inc' %]
                         </a>
                     </li>
@@ -229,7 +229,7 @@ legend:hover {
                                 [% IF opadd %]
                                     <a class="btn btn-default" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
                                 [% ELSE %]
-                                    <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower_data.borrowernumber | html %]">
+                                    <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
                                 [% END %]
                                     <i class="fa fa-times"></i> Cancel
                                 </a>
@@ -246,7 +246,7 @@ legend:hover {
                             <input type="hidden" name="updtype" value="[% updtype | html %]" />
                             <input type="hidden" name="destination" value="[% destination | html %]" />
                             <input type="hidden" name="check_member" value="[% check_member | html %]" />
-                            <input type="hidden" name="borrowernumber" value="[% borrower_data.borrowernumber | html UNLESS opduplicate %]" />
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html UNLESS opduplicate %]" />
                             <input type="hidden" name="nodouble"  value="[% nodouble | html UNLESS opduplicate %]" />
                             <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             [% IF ( step ) %]
