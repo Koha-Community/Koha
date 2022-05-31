@@ -667,7 +667,7 @@ subtest 'Suggestion with ISBN' => sub {
     is($record->field( $title_tag), undef, "Record from suggestion title should be empty");
 
     my ($author_tag, $author_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.author', '');
-    is($record->field( $author_tag), undef, "Record from suggestion author should be emtpy");
+    is($record->field( $author_tag), undef, "Record from suggestion author should be empty");
 };
 
 $schema->storage->txn_rollback;

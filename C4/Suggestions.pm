@@ -617,19 +617,19 @@ sub MarcRecordFromNewSuggestion {
 
     if (my $isbn = $suggestion->{isbn}) {
         for my $field (qw(biblioitems.isbn biblioitems.issn)) {
-            my ($tag, $subfield) = GetMarcFromKohaField($field, '');
+            my ($tag, $subfield) = GetMarcFromKohaField($field);
             $record->append_fields(
                 MARC::Field->new($tag, ' ', ' ', $subfield => $isbn)
             );
         }
     }
     else {
-        my ($title_tag, $title_subfield) = GetMarcFromKohaField('biblio.title', '');
+        my ($title_tag, $title_subfield) = GetMarcFromKohaField('biblio.title');
         $record->append_fields(
             MARC::Field->new($title_tag, ' ', ' ', $title_subfield => $suggestion->{title})
         );
 
-        my ($author_tag, $author_subfield) = GetMarcFromKohaField('biblio.author', '');
+        my ($author_tag, $author_subfield) = GetMarcFromKohaField('biblio.author');
         if ($record->field( $author_tag )) {
             $record->field( $author_tag )->add_subfields( $author_subfield => $suggestion->{author} );
         }
@@ -640,7 +640,7 @@ sub MarcRecordFromNewSuggestion {
         }
     }
 
-    my ($it_tag, $it_subfield) = GetMarcFromKohaField('biblioitems.itemtype', '');
+    my ($it_tag, $it_subfield) = GetMarcFromKohaField('biblioitems.itemtype');
     if ($record->field( $it_tag )) {
         $record->field( $it_tag )->add_subfields( $it_subfield => $suggestion->{itemtype} );
     }
