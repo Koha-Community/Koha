@@ -739,20 +739,9 @@ $(document).ready(function() {
         });
     });
 
-    $("#serialsadditems-yes").on("change", function(){
-        if( $(this).prop("checked") ){
-            $(".use_items").show();
-        } else {
-            $(".use_items").hide().find("select").val("");
-        }
-    });
-
-    $("#serialsadditems-no").on("change", function(){
-        if( $(this).prop("checked") ){
-            $(".use_items").hide().find("select").val("");
-        } else {
-            $(".use_items").show();
-        }
+    $("input[name='serialsadditems']").on("change", function(){
+        const display = $(this).val() == "1" ? "block" : "none";
+        $(".use_items").css('display', display).find("select").val("")
     });
 
 });
