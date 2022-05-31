@@ -64,6 +64,11 @@ sub clear_from_cache {
     delete $L1_cache{$key};
 }
 
+sub all_keys {
+    my ( $self ) = @_;
+    return keys %L1_cache;
+}
+
 sub flush {
     my ( $self ) = @_;
     %L1_cache = ();

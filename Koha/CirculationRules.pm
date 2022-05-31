@@ -377,10 +377,9 @@ sub set_rule {
     }
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key = sprintf "CircRules:%s:%s:%s:%s", $rule_name // q{},
-      $categorycode // q{}, $branchcode // q{}, $itemtype // q{};
-
-    Koha::Cache::Memory::Lite->flush();
+    for my $k ( $memory_cache->all_keys ) {
+        $memory_cache->clear_from_cache($k) if $k =~ m{^CircRules:};
+    }
 
     return $rule;
 }
@@ -410,7 +409,6 @@ sub set_rules {
         push( @$rule_objects, $rule_object );
     }
 
-    Koha::Cache::Memory::Lite->flush();
     return $rule_objects;
 }
 
