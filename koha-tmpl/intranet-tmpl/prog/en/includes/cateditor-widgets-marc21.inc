@@ -8,7 +8,7 @@
             <option value="n">n - New</option>
             <option value="p">p - Increase in encoding level from prepublication</option>
         </select>
-        <select name="f6" title="Type of record">
+        <select name="f6" title="Type of record. Controls default type of 008 field.">
             <option value="a">a - Language material</option>
             <option value="c">c - Notated music</option>
             <option value="d">d - Manuscript notated music</option>

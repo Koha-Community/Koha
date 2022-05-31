@@ -111,7 +111,7 @@ define( [ 'resources' ], function( Resources ) {
 
                 return Resources[resourceId].done( function( xml ) {
                     $(widget.node).find('.widget-loading').remove();
-                    var $matSelect = $('<select class="material-select"></select>').appendTo(widget.node);
+                    var $matSelect = $('<select class="material-select" title="Type of material. Default controlled by Leader/06."></select>').appendTo(widget.node);
                     var $contents = $('<span class="material-contents"/>').appendTo(widget.node);
                     var materialInfo = {};
 
