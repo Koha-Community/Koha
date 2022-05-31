@@ -739,10 +739,6 @@ $(document).ready(function() {
         });
     });
 
-    if( $("#serialsadditems-yes").prop("checked") ){
-        $(".use_items").show();
-    }
-
     $("#serialsadditems-yes").on("change", function(){
         if( $(this).prop("checked") ){
             $(".use_items").show();
