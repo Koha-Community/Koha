@@ -5,6 +5,7 @@
 
 use Modern::Perl;
 use Test::More tests => 5;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 
@@ -26,7 +27,7 @@ my $dbh = C4::Context->dbh;
 our $itype_1 = $builder->build({ source => 'Itemtype' });
 
 subtest 'Authorized Values Tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $data = {
         category            => 'CATEGORY',
@@ -152,6 +153,8 @@ subtest 'Authorized Values Tests' => sub {
             'list of authorised values in OPAC mode sorted by OPAC label (bug 10656)'
         );
     }
+
+    warning_is { GetAuthorisedValues() } [], 'No warning when no parameter passed to GetAuthorisedValues';
 
 };
 
