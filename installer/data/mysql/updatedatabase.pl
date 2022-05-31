@@ -22062,7 +22062,7 @@ if( CheckVersion( $DBversion ) ) {
 
         for my $order ( @$orders ) {
             for my $claim (1..$order->{claims_count}) {
-                $insert_claim_sth->execute($order->{ordernumber}, $order->{claimed_on});
+                $insert_claim_sth->execute($order->{ordernumber}, $order->{claimed_date});
             }
         }
 
