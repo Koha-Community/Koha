@@ -2,8 +2,14 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
-[% Asset.js("lib/moment/moment.min.js") | $raw %]
-[% Asset.js("lib/moment/moment-timezone-with-data-10-year-range.min.js") | $raw %]
+[% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
+[% Asset.js("lib/dayjs/plugin/timezone.js") | $raw %]
+[% Asset.js("lib/dayjs/plugin/utc.js") | $raw %]
+<script>
+    dayjs.extend(window.dayjs_plugin_utc);
+    dayjs.extend(window.dayjs_plugin_timezone);
+</script>
+
 <!-- js-date-format.inc -->
 <script>
     (function() {
@@ -34,8 +40,10 @@
         window.$date = function(value, options) {
             if(!value) return '';
             var tz = (options&&options.tz)||def_tz;
-            var m = moment(value);
-            if((m.creationData().format !== 'YYYY-MM-DD')&&tz) m.tz(tz);
+            var m = dayjs(value);
+            if ( ! value.match(/^\d{4}-\d{2}-\d{2}$/ ) ) {
+                m = m.tz(tz);
+            }
 
             var dateformat = (options&&options.dateformat)||def_date_format;
             var withtime = (options&&options.withtime)||false;
@@ -58,8 +66,8 @@
         window.$time = function(value, options) {
             if(!value) return '';
             var tz = (options&&options.tz)||def_tz;
-            var m = moment(value);
-            if(tz) m.tz(tz);
+            var m = dayjs(value);
+            if(tz) m = m.tz(tz);
 
             var dateformat = (options&&options.dateformat);
             var timeformat = (dateformat=='rfc3339'&&'24hr')||(options&&options.timeformat)||def_time_format;
