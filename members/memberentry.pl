@@ -667,39 +667,21 @@ if(!defined($data{'sex'})){
 
 ##Now all the data to modify a member.
 
-my @typeloop;
-my $no_categories = 1;
-my $no_add;
-foreach my $category_type (qw(C A S P I X)) {
-    my $categories_limits = { category_type => $category_type };
-    $categories_limits->{can_be_guarantee} = 1 if ($guarantor_id);
-    my $patron_categories = Koha::Patron::Categories->search_with_library_limits( $categories_limits, {order_by => ['categorycode']} );
-    $no_categories = 0 if $patron_categories->count > 0;
-
-    my @categoryloop;
-    while ( my $patron_category = $patron_categories->next ) {
-        $categorycode = $patron_category->categorycode unless defined($categorycode); #If none passed in, select the first
-        push @categoryloop,
-          { 'categorycode' => $patron_category->categorycode,
-            'categoryname' => $patron_category->description,
-            'effective_min_password_length' => $patron_category->effective_min_password_length,
-            'effective_require_strong_password' => $patron_category->effective_require_strong_password,
-            'categorycodeselected' =>
-              ( $patron_category->categorycode eq $categorycode ),
-          };
-    }
-    my %typehash;
-    $typehash{'typename'} = $category_type;
-    my $typedescription = "typename_" . $typehash{'typename'};
-    $typehash{'categoryloop'} = \@categoryloop;
-    push @typeloop,
-      { 'typename'       => $category_type,
-        $typedescription => 1,
-        'categoryloop'   => \@categoryloop
-      };
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits(
+    {
+        category_type => [qw(C A S P I X)],
+        ( $guarantor_id ? ( can_be_guarantee => 1 ) : () )
+    },
+    { order_by => ['categorycode'] }
+);
+my $no_categories = ! $patron_categories->count;
+my $categories = {};
+foreach my $patron_category ($patron_categories->as_list ) {
+    push @{ $categories->{ $patron_category->category_type } }, $patron_category;
 }
+
 $template->param(
-    typeloop      => \@typeloop,
+    patron_categories => $categories,
     no_categories => $no_categories,
 );
 
@@ -761,6 +743,7 @@ if (defined ($data{'branchcode'}) and ( $op eq 'modify' || $op eq 'duplicate' ||
 }
 $template->param( userbranch => $userbranch );
 
+my $no_add;
 if ( Koha::Libraries->search->count < 1 ){
     $no_add = 1;
     $template->param(no_branches => 1);

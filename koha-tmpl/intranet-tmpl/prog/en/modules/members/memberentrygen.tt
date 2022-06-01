@@ -929,26 +929,32 @@ legend:hover {
                                         <li>
                                             <label for="categorycode_entry" class="required">Category: </label>
                                             <select id="categorycode_entry" name="categorycode">
-                                                [% FOREACH typeloo IN typeloop %]
-                                                    [% FOREACH categoryloo IN typeloo.categoryloop %]
-                                                        [% IF ( loop.first ) %]
-                                                            [% IF ( typeloo.typename_C ) %]<optgroup label="Child">[% END %]
-                                                            [% IF ( typeloo.typename_A ) %]<optgroup label="Adult">[% END %]
-                                                            [% IF ( typeloo.typename_S ) %]<optgroup label="Staff">[% END %]
-                                                            [% IF ( typeloo.typename_I ) %]<optgroup label="Organization">[% END %]
-                                                            [% IF ( typeloo.typename_P ) %]<optgroup label="Professional">[% END %]
-                                                            [% IF ( typeloo.typename_X ) %]<optgroup label="Statistical">[% END %]
-                                                        [% END %]
-                                                        [% IF ( categoryloo.categorycodeselected ) %]
-                                                            <option value="[% categoryloo.categorycode | html %]" selected="selected" data-pwd-length="[% categoryloo.effective_min_password_length | html %]" data-pwd-strong="[% categoryloo.effective_require_strong_password | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
+                                                [% FOREACH category_type IN patron_categories.keys %]
+                                                    [% SWITCH category_type %]
+                                                    [% CASE 'C' %]
+                                                        <optgroup label="Child">
+                                                    [% CASE 'A' %]
+                                                        <optgroup label="Adult">
+                                                    [% CASE 'S' %]
+                                                        <optgroup label="Staff">
+                                                    [% CASE 'I' %]
+                                                        <optgroup label="Organization">
+                                                    [% CASE 'P' %]
+                                                        <optgroup label="Professional">
+                                                    [% CASE 'X' %]
+                                                        <optgroup label="Statistical">
+                                                    [% CASE %]
+                                                        <optgroup label="Unknown">
+                                                    [% END %]
+                                                    [% FOREACH category IN patron_categories.$category_type %]
+                                                        [% IF category.categorycode == patron_category.categorycode %]
+                                                            <option value="[% category.categorycode | html %]" selected="selected" data-pwd-length="[% category.effective_min_password_length | html %]" data-pwd-strong="[% category.effective_require_strong_password | html %]" data-typename="[% category_type | html %]">[% category.description | html %]</option>
                                                         [% ELSE %]
-                                                            <option value="[% categoryloo.categorycode | html %]" data-pwd-length="[% categoryloo.effective_min_password_length | html %]" data-pwd-strong="[% categoryloo.effective_require_strong_password | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
+                                                            <option value="[% category.categorycode | html %]" data-pwd-length="[% category.effective_min_password_length | html %]" data-pwd-strong="[% category.effective_require_strong_password | html %]" data-typename="[% category_type | html %]">[% category.description | html %]</option>
                                                         [% END %]
-                                                        [% IF ( loop.last ) %]
-                                                            </optgroup>
-                                                        [% END %]
-                                                    [% END # /FOREACH categoryloo %]
-                                                [% END # /FOREACH typeloo %]
+                                                    [% END %]
+                                                        </optgroup>
+                                                [% END %]
                                             </select>
                                             <span class="required">Required</span>
                                         </li>
