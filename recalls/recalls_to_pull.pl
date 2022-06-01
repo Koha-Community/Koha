@@ -18,6 +18,8 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use List::MoreUtils qw( uniq );
+
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
@@ -63,7 +65,7 @@ if ( $op eq 'list' ) {
                 { order_by => { -asc => 'created_date' } }
             )->as_list;
             my $recalls_count = scalar @this_bib_recalls;
-            my @unique_patrons = do { my %seen; grep { !$seen{$_->patron_id}++ } @this_bib_recalls };
+            my @unique_patrons = uniq @this_bib_recalls ;
             my $patrons_count = scalar @unique_patrons;
             my $first_recall = $this_bib_recalls[0];
 
@@ -93,13 +95,6 @@ if ( $op eq 'list' ) {
             # don't push data if there are no items available for this recall
 
                 # get unique values
-                my @unique_callnumbers = do { my %seen; grep { !$seen{$_}++ } @callnumbers };
-                my @unique_copynumbers = do { my %seen; grep { !$seen{$_}++ } @copynumbers };
-                my @unique_enumchrons = do { my %seen; grep { !$seen{$_}++ } @enumchrons };
-                my @unique_itemtypes = do { my %seen; grep { !$seen{$_}++ } @itemtypes };
-                my @unique_locations = do { my %seen; grep { !$seen{$_}++ } @locations };
-                my @unique_libraries = do { my %seen; grep { !$seen{$_}++ } @libraries };
-
                 push( @pull_list, {
                     biblio => $biblio,
                     items_count => $items_count,
@@ -107,12 +102,12 @@ if ( $op eq 'list' ) {
                     patrons_count => $patrons_count,
                     pull_count => $items_count <= $recalls_count ? $items_count : $recalls_count,
                     first_recall => $first_recall,
-                    callnumbers => \@unique_callnumbers,
-                    copynumbers => \@unique_copynumbers,
-                    enumchrons => \@unique_enumchrons,
-                    itemtypes => \@unique_itemtypes,
-                    locations => \@unique_locations,
-                    libraries => \@unique_libraries,
+                    callnumbers   => [ uniq @callnumbers ],
+                      copynumbers => [ uniq @copynumbers ],
+                      enumchrons  => [ uniq @enumchrons ],
+                      itemtypes   => [ uniq @itemtypes ],
+                      locations   => [ uniq @locations ],
+                      libraries   => [ uniq @libraries ],
                 });
             }
         }
