@@ -242,7 +242,6 @@ legend:hover {
                             [% END %]
                             <!--    field always hidden in different form (1,2,3) -->
                             <input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField | html %]" />
-                            <input type="hidden" name="category_type" value="[% category_type | html %]" />
                             <input type="hidden" name="updtype" value="[% updtype | html %]" />
                             <input type="hidden" name="destination" value="[% destination | html %]" />
                             <input type="hidden" name="check_member" value="[% check_member | html %]" />
@@ -269,9 +268,9 @@ legend:hover {
                             [% IF ( step_1 ) %]
                                 [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex %]
                                     <fieldset class="rows" id="memberentry_identity">
-                                        <legend id="identity_lgd">[% IF ( I ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
+                                        <legend id="identity_lgd">[% IF ( patron_category.category_type == 'I' ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
                                         <ol>
-                                            [% UNLESS ( I ) %]
+                                            [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS notitle %]
                                                     [% IF Koha.Preference('BorrowersTitles') %]
                                                         <li>
@@ -301,7 +300,7 @@ legend:hover {
 
                                             [% UNLESS nosurname %]
                                                 <li>
-                                                    [% IF ( I ) %]
+                                                    [% IF ( patron_category.category_type == 'I' ) %]
                                                         <label for="surname" class="required">
                                                             Name:
                                                         </label>
@@ -325,7 +324,7 @@ legend:hover {
                                                 </li>
                                             [% END # /UNLESS nosurname %]
 
-                                            [% UNLESS ( I ) %]
+                                            [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS nofirstname %]
                                                     <li>
                                                         [% IF ( mandatoryfirstname ) %]
@@ -404,11 +403,11 @@ legend:hover {
                                                     [% IF ( mandatoryothernames ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
-                                                    [% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
+                                                    [% IF ( patron_category.category_type == 'I' ) %]<input type="hidden" name="sex" value="N" />[% END %]
                                                 </li>
                                             [% END #/UNLESS noothernames %]
 
-                                            [% UNLESS ( I ) %]
+                                            [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS nosex %]
                                                     <li class="radio">
                                                         [% UNLESS ( opduplicate ) %]
@@ -455,7 +454,7 @@ legend:hover {
                                                 [% FOREACH r IN relationships %]
                                                     <fieldset>
                                                         <ol>
-                                                            [% IF category_type == 'I' %]
+                                                            [% IF patron_category.category_type == 'I' %]
                                                                 <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
                                                                     <span class="label">Organization:</span>
                                                                     [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]

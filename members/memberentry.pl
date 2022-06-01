@@ -172,17 +172,10 @@ if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
     }
 
     $borrower_data = $patron->unblessed;
-    $borrower_data->{category_type} = $patron->category->category_type;
 }
 
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
-my $category_type = $input->param('category_type') || '';
-
 my $category = Koha::Patron::Categories->find($categorycode);
-$category_type ||= $category && $category->category_type;
-
-$category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
-
 $template->param( patron_category => $category );
 
 # if a add or modify is requested => check validity of data.
@@ -212,7 +205,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
     }
 
     # check permission to modify login info.
-    if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) )  {
+    if (ref($borrower_data) && ($category->category_type eq 'S') && ! (C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) )  {
         $NoUpdateLogin = 1;
     }
 }
@@ -222,7 +215,6 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
     my @keys_to_delete = (
         qr/^(borrowernumber|date_renewed|debarred|debarredcomment|flags|privacy|updated_on|lastseen|login_attempts|overdrive_auth_token|anonymized)$/, # Bug 28935
         qr/^BorrowerMandatoryField$/,
-        qr/^category_type$/,
         qr/^check_member$/,
         qr/^destination$/,
         qr/^nodouble$/,
@@ -297,14 +289,14 @@ $newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'))
 if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ && !defined $data{'userid'} ) {
     my $fake_patron = Koha::Patron->new;
     $fake_patron->userid($patron->userid) if $patron; # editing
-    if ( ( defined $newdata{'firstname'} || $category_type eq 'I' ) && ( defined $newdata{'surname'} ) ) {
+    if ( ( defined $newdata{'firstname'} || $category->category_type eq 'I' ) && ( defined $newdata{'surname'} ) ) {
         # Full page edit, firstname and surname input zones are present
         $fake_patron->firstname($newdata{firstname});
         $fake_patron->surname($newdata{surname});
         $fake_patron->generate_userid;
         $newdata{'userid'} = $fake_patron->userid;
     }
-    elsif ( ( defined $data{'firstname'} || $category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
+    elsif ( ( defined $data{'firstname'} || $category->category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
         # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
         # Still, if the userid field is erased, we can create a new userid with available firstname and surname
         # FIXME clean thiscode newdata vs data is very confusing
@@ -738,7 +730,7 @@ if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
     $userbranch = C4::Context->userenv->{'branch'};
 }
 
-if (defined ($data{'branchcode'}) and ( $op eq 'modify' || $op eq 'duplicate' || ( $op eq 'add' && $category_type eq 'C' ) )) {
+if (defined ($data{'branchcode'}) and ( $op eq 'modify' || $op eq 'duplicate' || ( $op eq 'add' && $category->category_type eq 'C' ) )) {
     $userbranch = $data{'branchcode'};
 }
 $template->param( userbranch => $userbranch );
@@ -809,8 +801,6 @@ $template->param(  step  => $step   ) if $step;	# associate with step to know wh
 
 $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
-  category_type => $category_type,#to know the category type of the borrower
-  "$category_type"  => 1,# associate with step to know where u are
   destination   => $destination,#to know where u come from and where u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
@@ -822,7 +812,6 @@ $template->param(
   relshiploop => \@relshipdata,
   btitle=> $default_borrowertitle,
   flagloop  => \@flagdata,
-  category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin,
