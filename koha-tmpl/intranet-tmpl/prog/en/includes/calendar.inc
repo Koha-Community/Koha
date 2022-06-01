@@ -148,7 +148,7 @@
                 disable_buttons.push(2); /* Tomorrow */
             }
             if( $(this).data("flatpickr-pastdate") === true ) {
-                options['maxDate'] = new Date().fp_incr(-1);
+                options['maxDate'] = new Date().fp_incr(-1).setHours(23, 59, 00, 00);
                 disable_buttons.push(1); /* Today */
                 disable_buttons.push(2); /* Tomorrow */
             }
