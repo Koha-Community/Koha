@@ -1390,6 +1390,24 @@
                                     </xsl:call-template>
                                 </xsl:for-each>
                             </xsl:when>
+                            <xsl:when test="$OPACResultsUnavailableGroupingBy='branchonly'">
+                                <!-- Only group by branch, do not list substatuses and individual call numbers -->
+                                <xsl:for-each select="items:items/items:item[not(items:resultbranch=preceding-sibling::*/items:resultbranch)]">
+                                    <xsl:sort select="items:resultbranch"/>
+                                    <xsl:variable name="currentbranch" select="items:resultbranch"/>
+                                    <xsl:if test="count($unavailable_items[items:resultbranch=$currentbranch])>0">
+                                        <span class="ItemSummary unavailable">
+                                            <xsl:value-of select="$currentbranch"/>
+                                            <span class="unavailable">
+                                                <xsl:text> (</xsl:text>
+                                                <xsl:value-of select="count($unavailable_items[items:resultbranch=$currentbranch])"/>
+                                                <xsl:text>)</xsl:text>
+                                            </span>
+                                        <xsl:text>. </xsl:text>
+                                        </span>
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </xsl:when>
                         </xsl:choose>
                     </span></xsl:if>
 
