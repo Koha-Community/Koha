@@ -177,13 +177,13 @@ if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
 
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type') || '';
-my $category;
-if ( !$category_type && $categorycode ) {
-    $category = Koha::Patron::Categories->find($categorycode);
-    $category_type    = $category->category_type;
-    $template->param( patron_category => $category );
-}
+
+my $category = Koha::Patron::Categories->find($categorycode);
+$category_type ||= $category && $category->category_type;
+
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
+
+$template->param( patron_category => $category );
 
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
@@ -354,8 +354,7 @@ if ($op eq 'save' || $op eq 'insert'){
     if ( $dateofbirth ) {
         my $patron = Koha::Patron->new({ dateofbirth => $dateofbirth });
         my $age = $patron->get_age;
-        my $borrowercategory = Koha::Patron::Categories->find($categorycode);
-        my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
+        my ($low,$high) = ($category->dateofbirthrequired, $category->upperagelimit);
         if (($high && ($age > $high)) or ($age < $low)) {
             push @errors, 'ERROR_age_limitations';
             $template->param( age_low => $low);
@@ -385,7 +384,7 @@ if ($op eq 'save' || $op eq 'insert'){
   push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
 
   if ( $password and $password ne '****' ) {
-      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, Koha::Patron::Categories->find($categorycode) );
+      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, $category );
       unless ( $is_valid ) {
           push @errors, 'ERROR_password_too_short' if $error eq 'too_short';
           push @errors, 'ERROR_password_too_weak' if $error eq 'too_weak';
@@ -823,7 +822,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 $template->param( borrower_data => \%data );
-$template->param( "show_guarantor" => $categorycode ? Koha::Patron::Categories->find($categorycode)->can_be_guarantee : 1); # associate with step to know where you are
+$template->param( "show_guarantor" => $category ? $category->can_be_guarantee : 1); # associate with step to know where you are
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
 $template->param(  step  => $step   ) if $step;	# associate with step to know where u are
 
