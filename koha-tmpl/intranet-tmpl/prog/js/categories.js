@@ -64,6 +64,9 @@ $(document).ready(function() {
                 },
                 enrollment_period: true
             },
+            password_expiry_days: {
+                digits: true
+            },
             dateofbirthrequired: {
                 digits: true
             },
