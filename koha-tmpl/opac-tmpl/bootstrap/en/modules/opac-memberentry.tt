@@ -1082,9 +1082,21 @@
                 }
             });
 
-            $("input.required,select.required,textarea.required").rules("add", {
-                required: true
-            });
+            if ( $("input.required").length ) {
+                $("input.required").rules("add", {
+                    required: true
+                });
+            }
+            if ( $("select.required").length ) {
+                $("select.required").rules("add", {
+                    required: true
+                });
+            }
+            if ( $("textarea.required").length ) {
+                $("textarea.required").rules("add", {
+                    required: true
+                });
+            }
 
             [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') %]
 
