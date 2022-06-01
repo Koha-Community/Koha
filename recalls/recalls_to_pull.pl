@@ -57,8 +57,11 @@ if ( $op eq 'list' ) {
             $seen_bib{$recall->biblio_id}++;
 
             # get recall data about this biblio
-            my $biblio = Koha::Biblios->find($recall->biblio_id);
-            my @this_bib_recalls = Koha::Recalls->search({ biblio_id => $recall->biblio_id, status => [ 'requested','overdue','in_transit' ] }, { order_by => { -asc => 'created_date' } })->as_list;
+            my $biblio = $recall->biblio;
+            my @this_bib_recalls = $biblio->recalls->search(
+                { status   => [ 'requested', 'overdue', 'in_transit' ] },
+                { order_by => { -asc => 'created_date' } }
+            )->as_list;
             my $recalls_count = scalar @this_bib_recalls;
             my @unique_patrons = do { my %seen; grep { !$seen{$_->patron_id}++ } @this_bib_recalls };
             my $patrons_count = scalar @unique_patrons;
@@ -98,7 +101,7 @@ if ( $op eq 'list' ) {
                 my @unique_libraries = do { my %seen; grep { !$seen{$_}++ } @libraries };
 
                 push( @pull_list, {
-                    biblio => $recall->biblio,
+                    biblio => $biblio,
                     items_count => $items_count,
                     recalls_count => $recalls_count,
                     patrons_count => $patrons_count,
