@@ -516,8 +516,8 @@ sub suggestions {
 
   my $components = $self->get_marc_components();
 
-Returns an array of MARCXML data, which are component parts of
-this object (MARC21 773$w points to this)
+Returns an array of search results data, which are component parts of
+this object (MARC21 773 points to this)
 
 =cut
 
@@ -526,19 +526,19 @@ sub get_marc_components {
 
     return [] if (C4::Context->preference('marcflavour') ne 'MARC21');
 
-    my $searchstr = $self->get_components_query;
+    my ( $searchstr, $sort ) = $self->get_components_query;
 
     my $components;
     if (defined($searchstr)) {
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my ( $error, $results, $total_hits );
+        my ( $error, $results, $facets );
         eval {
-            ( $error, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
+            ( $error, $results, $facets ) = $searcher->search_compat( $searchstr, undef, [$sort], ['biblioserver'], $max_results, 0, undef, undef, 'ccl', 0 );
         };
         if( $error || $@ ) {
             $error //= q{};
             $error .= $@ if $@;
-            warn "Warning from simple_search_compat: '$error'";
+            warn "Warning from search_compat: '$error'";
             $self->add_message(
                 {
                     type    => 'error',
@@ -547,7 +547,7 @@ sub get_marc_components {
                 }
             );
         }
-        $components = $results if defined($results) && @$results;
+        $components = $results->{biblioserver}->{RECORDS} if defined($results) && $results->{biblioserver}->{hits};
     }
 
     return $components // [];
@@ -565,6 +565,7 @@ sub get_components_query {
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $marc = $self->metadata->record;
+    my $sort = C4::Context->preference('ComponentSortField') . "_" . C4::Context->preference('ComponentSortOrder');
 
     my $searchstr;
     if ( C4::Context->preference('UseControlNumber') ) {
@@ -597,8 +598,13 @@ sub get_components_query {
         $cleaned_title = $builder->clean_search_term($cleaned_title);
         $searchstr = "Host-item:($cleaned_title)";
     }
+    my ($error, $query_str) = $builder->build_query_compat( undef, [$searchstr], undef, undef, [$sort], 0 );
+    if( $error ){
+        warn $error;
+        return;
+    }
 
-    return $searchstr;
+    return ($query_str, $sort);
 }
 
 =head3 subscriptions

@@ -518,7 +518,7 @@ subtest 'get_marc_components() tests' => sub {
     my $host_biblio = Koha::Biblios->find($host_bibnum);
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Zebra' );
     my $search_mod = Test::MockModule->new( 'Koha::SearchEngine::Zebra::Search' );
-    $search_mod->mock( 'simple_search_compat', \&search_component_record2 );
+    $search_mod->mock( 'search_compat', \&search_component_record2 );
 
     my $components = $host_biblio->get_marc_components;
     is( ref($components), 'ARRAY', 'Return type is correct' );
@@ -529,8 +529,8 @@ subtest 'get_marc_components() tests' => sub {
         '->get_marc_components returns an empty ARRAY'
     );
 
-    $search_mod->unmock( 'simple_search_compat');
-    $search_mod->mock( 'simple_search_compat', \&search_component_record1 );
+    $search_mod->unmock( 'search_compat');
+    $search_mod->mock( 'search_compat', \&search_component_record1 );
     my $component_record = component_record1()->as_xml();
 
     is_deeply(
@@ -538,13 +538,13 @@ subtest 'get_marc_components() tests' => sub {
         [$component_record],
         '->get_marc_components returns the related component part record'
     );
-    $search_mod->unmock( 'simple_search_compat');
+    $search_mod->unmock( 'search_compat');
 
-    $search_mod->mock( 'simple_search_compat',
+    $search_mod->mock( 'search_compat',
         sub { Koha::Exception->throw("error searching analytics") }
     );
     warning_like { $components = $host_biblio->get_marc_components }
-        qr{Warning from simple_search_compat: .* 'error searching analytics'};
+        qr{Warning from search_compat: .* 'error searching analytics'};
 
     is_deeply(
         $host_biblio->object_messages,
@@ -556,35 +556,46 @@ subtest 'get_marc_components() tests' => sub {
             }
         ]
     );
-    $search_mod->unmock( 'simple_search_compat');
+    $search_mod->unmock( 'search_compat');
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'get_components_query' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     my $biblio = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
     my $record = $biblio->metadata->record;
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
-    is($biblio->get_components_query, "Host-item:(Some boring read)", "UseControlNumber disabled");
+    t::lib::Mocks::mock_preference( 'ComponentSortField', 'author' );
+    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'za' );
+    my ( $comp_q, $comp_s ) = $biblio->get_components_query;
+    is($comp_q, "Host-item:(Some boring read)",, "UseControlNumber disabled");
+    is($comp_s, "author_za", "UseControlNumber disabled sort is correct");
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
+    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'az' );
     my $marc_001_field = MARC::Field->new('001', $biblionumber);
     $record->append_fields($marc_001_field);
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    is($biblio->get_components_query, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled without MarcOrgCode");
+    ( $comp_q, $comp_s ) = $biblio->get_components_query;
+    is($comp_q, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled without MarcOrgCode");
+    is($comp_s, "author_az", "UseControlNumber enabled without MarcOrgCode sort is correct");
 
     my $marc_003_field = MARC::Field->new('003', 'OSt');
     $record->append_fields($marc_003_field);
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
-    is($biblio->get_components_query, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled with MarcOrgCode");
+    t::lib::Mocks::mock_preference( 'ComponentSortField', 'title' );
+    t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'asc' );
+    ( $comp_q, $comp_s ) = $biblio->get_components_query;
+    is($comp_q, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "UseControlNumber enabled with MarcOrgCode");
+    is($comp_s, "title_asc", "UseControlNumber enabled with MarcOrgCode sort if correct");
 };
 
 subtest 'orders() and active_orders() tests' => sub {
@@ -1014,12 +1025,12 @@ sub component_record1 {
 }
 sub search_component_record1 {
     my @results = ( component_record1()->as_xml() );
-    return ( undef, \@results, 1 );
+    return ( undef, { biblioserver => { RECORDS => \@results, hits => 1 } }, 1 );
 }
 
 sub search_component_record2 {
     my @results;
-    return ( undef, \@results, 0 );
+    return ( undef, { biblioserver => { RECORDS => \@results, hits => 0 } }, 0 );
 }
 
 sub host_record {

@@ -144,6 +144,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CoceProviders', '', 'aws,gb,ol', 'Coce providers', 'multiple'),
 ('COinSinOPACResults','1','','If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','YesNo'),
 ('CollapseFieldsPatronAddForm','',NULL,'Collapse these fields by default when adding a new patron. These fields can still be expanded.','Multiple'),
+('ComponentsSortField','title','call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
+('ComponentsSortOrder','asc','asc|dsc|az|za','Specify the default sort order','Choice'),
 ('ConfirmFutureHolds','0','','Number of days for confirming future holds','Integer'),
 ('ConsiderOnSiteCheckoutsAsNormalCheckouts','1',NULL,'Consider on-site checkouts as normal checkouts','YesNo'),
 ('CreateAVFromCataloguing', '1', '', 'Ability to create authorized values from the cataloguing module', 'YesNo'),
