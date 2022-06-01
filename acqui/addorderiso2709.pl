@@ -163,7 +163,6 @@ if ($op eq ""){
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
         my $c_discount = shift ( @discount);
-        $c_discount = $c_discount / 100 if $c_discount > 1;
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
         my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
         my $c_replacement_price = shift( @orderreplacementprices );
@@ -276,9 +275,12 @@ if ($op eq ""){
                         $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                         $price = Koha::Number::Price->new($price)->unformat;
                         $orderinfo{tax_rate} = $bookseller->tax_rate;
-                        my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
+                        my $c = $c_discount ? $c_discount : $bookseller->discount;
                         $orderinfo{discount} = $c;
-                        if ( $c ) {
+                        if ( $c_discount ) {
+                            $orderinfo{ecost} = $price;
+                            $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c / 100 );
+                        } else {
                             $orderinfo{ecost} = $price * ( 1 - $c / 100 );
                             $orderinfo{rrp}   = $price;
                         }
@@ -334,9 +336,12 @@ if ($op eq ""){
                 $c_price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                 $c_price = Koha::Number::Price->new($c_price)->unformat;
                 $orderinfo{tax_rate} = $bookseller->tax_rate;
-                my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
+                my $c = $c_discount ? $c_discount : $bookseller->discount;
                 $orderinfo{discount} = $c;
-                if ( $c ) {
+                if ( $c_discount ) {
+                    $orderinfo{ecost} = $c_price;
+                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c / 100 );
+                } else {
                     $orderinfo{ecost} = $c_price * ( 1 - $c / 100 );
                     $orderinfo{rrp}   = $c_price;
                 }
