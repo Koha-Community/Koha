@@ -20,7 +20,7 @@
                 Modify patron
             [% END %]
             [% INCLUDE 'patron-title.inc' no_html = 1 %]
-            [% IF categoryname %]([% categoryname | html %])[% END %]
+            [% IF patron_category %]([% patron_category.description | html %])[% END %]
         [% END %] &rsaquo; Patrons &rsaquo; Koha
     </title>
 <style>
@@ -65,8 +65,8 @@ legend:hover {
                         [% ELSE %]
                             <span>Modify patron</span>
                         [% END %]
-                        [% IF categoryname %]
-                            ([% categoryname | html %])
+                        [% IF patron_category %]
+                            ([% patron_category.description | html %])
                         [% END %]
                     </a>
                 </li>
@@ -118,7 +118,7 @@ legend:hover {
                                 <span>Modify patron</span>
                             [% END %]
                             [% INCLUDE 'patron-title.inc' %]
-                            [% IF categoryname %]([% categoryname | html %])[% END %]
+                            [% IF patron_category %]([% patron_category.description | html %])[% END %]
                         </h1>
 
                         [% IF quickadd && opadd && !check_member %]

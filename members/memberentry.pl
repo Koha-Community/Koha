@@ -177,11 +177,11 @@ if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
 
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type') || '';
-unless ($category_type or !($categorycode)){
-    my $borrowercategory = Koha::Patron::Categories->find($categorycode);
-    $category_type    = $borrowercategory->category_type;
-    my $category_name = $borrowercategory->description;
-    $template->param("categoryname"=>$category_name);
+my $category;
+if ( !$category_type && $categorycode ) {
+    $category = Koha::Patron::Categories->find($categorycode);
+    $category_type    = $category->category_type;
+    $template->param( patron_category => $category );
 }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
