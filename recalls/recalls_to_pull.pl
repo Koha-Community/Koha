@@ -57,6 +57,7 @@ if ( $op eq 'list' ) {
             $seen_bib{$recall->biblio_id}++;
 
             # get recall data about this biblio
+            my $biblio = Koha::Biblios->find($recall->biblio_id);
             my @this_bib_recalls = Koha::Recalls->search({ biblio_id => $recall->biblio_id, status => [ 'requested','overdue','in_transit' ] }, { order_by => { -asc => 'created_date' } })->as_list;
             my $recalls_count = scalar @this_bib_recalls;
             my @unique_patrons = do { my %seen; grep { !$seen{$_->patron_id}++ } @this_bib_recalls };
@@ -71,7 +72,7 @@ if ( $op eq 'list' ) {
             my @locations;
             my @libraries;
 
-            my @items = Koha::Items->search({ biblio_id => $recall->biblio_id })->as_list;
+            my @items = $biblio->items->as_list;
             foreach my $item ( @items ) {
                 if ( $item->can_be_waiting_recall and !$item->checkout ) {
                     # if item can be pulled to fulfill recall, collect item data
