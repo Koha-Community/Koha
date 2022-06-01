@@ -71,7 +71,7 @@ if ( $op eq 'list' ) {
             my @locations;
             my @libraries;
 
-            my @items = Koha::Items->search({ biblio_id => $recall->biblio_id });
+            my @items = Koha::Items->search({ biblio_id => $recall->biblio_id })->as_list;
             foreach my $item ( @items ) {
                 if ( $item->can_be_waiting_recall and !$item->checkout ) {
                     # if item can be pulled to fulfill recall, collect item data
