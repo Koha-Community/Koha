@@ -261,6 +261,15 @@
               });
             });
 
+            var activeTab = localStorage.getItem("waitingreserves_activetab");
+            if( activeTab ){
+                $("div#resultlist li:eq(" + activeTab + ") a").tab("show");
+            }
+            $("div#resultlist a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                var thisTab = $(e.target).parent();
+                var activeTab = thisTab.index();
+                localStorage.setItem("waitingreserves_activetab", activeTab );
+            });
 
         });
     </script>
