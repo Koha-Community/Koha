@@ -280,6 +280,22 @@ Cataloging:
             - pref: MaxComponentRecords
             - "records will be displayed."
             - "<br/> UNIMARC is not supported."
+            - By default, sort component results in the staff interface by
+            - pref: ComponentSortField
+              default: title
+              choices:
+                  call_number: call number
+                  pubdate: date of publication
+                  acqdate: date added
+                  title: title
+                  author: author
+            - ','
+            - pref: ComponentSortOrder
+              choices:
+                  asc: ascending.
+                  dsc: descending.
+                  az: from A to Z.
+                  za: from Z to A.
     Importing:
         -
             - When matching on ISBN with the record import tool,
