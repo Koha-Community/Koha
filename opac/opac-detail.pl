@@ -731,18 +731,18 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     }
 
     my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
-    my $recall_status;
+    if ( $reserve_status eq "Waiting" )  { $itm->{'waiting'} = 1; }
+    if ( $reserve_status eq "Reserved" ) { $itm->{'onhold'}  = 1; }
+
     if ( C4::Context->preference('UseRecalls') ) {
-        my $recall_status = Koha::Recalls->search(
+        my $pending_recall_count = Koha::Recalls->search(
             {
                 item_id   => $itm->{itemnumber},
                 status    => 'waiting',
-                completed => undef,
             }
         )->count;
+        if ( $pending_recall_count ) { $itm->{has_pending_recall} = 1; }
     }
-    if ( $reserve_status eq "Waiting" or $recall_status ) { $itm->{'waiting'} = 1; }
-    if ( $reserve_status eq "Reserved" )                  { $itm->{'onhold'}  = 1; }
 
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {

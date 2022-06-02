@@ -96,6 +96,11 @@
     <span class="item-status pendinghold">Pending hold</span>
 [% END %]
 
+[% IF item.has_pending_recall %]
+    [% SET itemavailable = 0 %]
+    <span class="item-status pendingrecall">Pending recall</span>
+[% END %]
+
 [% IF ( itemavailable ) %]
     [% IF NOT item.isa('Koha::Item') %][% SET restrictedvalueopac = item.restrictedvalueopac %][% END %]
     <span class="item-status available">Available [% IF restrictedvalueopac %]<span class="restricted">([% restrictedvalueopac | html %])</span>[% END %]</span>
