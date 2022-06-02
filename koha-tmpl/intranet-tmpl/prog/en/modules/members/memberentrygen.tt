@@ -1511,7 +1511,7 @@ legend:hover {
                                                 <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
                                                 <span class="hint sms_number_help">Please enter numbers only. Prefix the number with + or 00 if including the country code.</span>
                                             </p>
-                                            [% UNLESS nosms_provider_id %]
+                                            [% IF SMSSendDriver == 'Email' && !nosms_provider_id %]
                                                 <p>
                                                     <label for="sms_provider_id">SMS provider:</label>
                                                     <select id="sms_provider_id" name="sms_provider_id">
