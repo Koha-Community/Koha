@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
-use C4::Items qw( GetItemsInfo );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Search qw( enabled_staff_search_views );
 
@@ -44,7 +43,6 @@ my $biblionumber = $query->param('biblionumber') || $query->param('bib') || Koha
 my $imagenumber = $query->param('imagenumber');
 my $biblio = Koha::Biblios->find( $biblionumber );
 my $itemcount = $biblio ? $biblio->items->count : 0;
-my @items = GetItemsInfo($biblionumber);
 
 if ( $query->cookie("holdfor") ) {
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
