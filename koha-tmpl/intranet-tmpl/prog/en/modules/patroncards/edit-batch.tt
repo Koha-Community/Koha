@@ -45,7 +45,10 @@
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
 
-                    <h1>[% IF description %]<span>Edit</span> [% ELSIF batch_id %]<span>Edit</span> [% ELSE %]<span>New</span> [% END %]<span>patron card batches</span></h1>
+                    <h1>[% IF description %]<span>Edit</span> [% description | html %]
+                        [% ELSIF batch_id %]<span>Edit patron card batch</span> [% batch_id | html %]
+                        [% ELSE %]<span>New patron card batch</span>[% END %]
+                    </h1>
 
                 [% IF ( duplicate_message ) %]
                     <div class="dialog message">
