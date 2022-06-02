@@ -24,7 +24,6 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Items qw( GetItemsInfo );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
@@ -72,26 +71,17 @@ foreach my $biblionumber ( @bibs ) {
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-    my @items            = GetItemsInfo( $biblionumber );
 
     my $hasauthors = 0;
     if($dat->{'author'} || @$marcauthorsarray) {
       $hasauthors = 1;
     }
-	
-    my $shelflocations =
-      { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 
-	for my $itm (@items) {
-	    if ($itm->{'location'}){
-	    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
-		}
-	}
-	# COinS format FIXME: for books Only
-        my $fmt = substr $record->leader(), 6,2;
-        my $fmts;
-        $fmts->{'am'} = 'book';
-        $dat->{ocoins_format} = $fmts->{$fmt};
+    # COinS format FIXME: for books Only
+    my $fmt = substr $record->leader(), 6,2;
+    my $fmts;
+    $fmts->{'am'} = 'book';
+    $dat->{ocoins_format} = $fmts->{$fmt};
 
     if ( $num % 2 == 1 ) {
         $dat->{'even'} = 1;
@@ -99,7 +89,7 @@ foreach my $biblionumber ( @bibs ) {
 
     $num++;
     $dat->{biblionumber} = $biblionumber;
-    $dat->{ITEM_RESULTS}   = \@items;
+    $dat->{ITEM_RESULTS}   = $biblio->items->search_ordered;
     $dat->{MARCNOTES}      = $marcnotesarray;
     $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
     $dat->{MARCAUTHORS}    = $marcauthorsarray;

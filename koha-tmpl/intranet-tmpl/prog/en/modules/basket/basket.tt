@@ -1,5 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% BLOCK controls %]
     <p class="cart-controls">
@@ -220,11 +222,13 @@
                                     <tr>
                                         <th scope="row">Location(s)</th>
                                         <td>
-                                            [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
+                                            [% IF BIBLIO_RESULT.ITEM_RESULTS %]
                                                 [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                     <p>
-                                                        [% ITEM_RESULT.branchname | html %]
-                                                        <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
+                                                        [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                        <span class="shelvingloc">
+                                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
+                                                        </span>
                                                         [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                             ([% ITEM_RESULT.itemcallnumber | html %])
                                                         [% END %]
@@ -293,8 +297,10 @@
                                                             <strong>
                                                                 <span class="callnumber">[% ITEM_RESULT.itemcallnumber | html %]</span>
                                                             </strong>
-                                                            [% ITEM_RESULT.branchname | html %]
-                                                            <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
+                                                            [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                            <span class="shelvingloc">
+                                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
+                                                            </span>
                                                         </span>
                                                     </div>
                                                 [% END %]
