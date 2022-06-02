@@ -25,7 +25,7 @@ use File::Temp qw( tempdir );
 use File::Path qw( mkpath rmtree );
 use C4::Biblio qw( GetXmlBiblio );
 use C4::AuthoritiesMarc qw( GetAuthority GetAuthorityXML );
-use C4::Items qw( GetItemsInfo Item2Marc );
+use C4::Items qw( Item2Marc );
 use Koha::RecordProcessor;
 use Koha::Caches;
 use XML::LibXML;
@@ -509,12 +509,14 @@ sub export_marc_records_from_sth {
                           ? GetXmlBiblio( $record_number )
                           : GetAuthorityXML( $record_number );
             if ($record_type eq 'biblio'){
-                my @items = GetItemsInfo($record_number);
-                if (@items){
+                my $biblio = Koha::Biblios->find($record_number);
+                next unless $biblio;
+                my $items = $biblio->items;
+                if ($items->count){
                     my $record = MARC::Record->new;
                     $record->encoding('UTF-8');
                     my @itemsrecord;
-                    foreach my $item (@items){
+                    for my $item ( @{$items->unblessed} ) {
                         my $record = Item2Marc($item, $record_number);
                         push @itemsrecord, $record->field($itemtag);
                     }
