@@ -209,6 +209,7 @@
                                 [% END %]
                             [% END %]
                         [% ELSE %]
+                            <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblio.biblionumber | html %]"/>
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
@@ -461,6 +462,7 @@
                                 [% END %]
                             [% END %]
                         [% ELSE %]
+                            <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblio.biblionumber | html %]"/>
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
