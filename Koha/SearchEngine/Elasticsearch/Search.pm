@@ -297,8 +297,8 @@ How many results to skip from the start of the results.
 
 =item C<$max_results>
 
-The max number of results to return. The default is 100 (because unlimited
-is a pretty terrible thing to do.)
+The max number of results to return.
+The default is the result of method max_result_window().
 
 =item C<%options>
 
@@ -336,7 +336,7 @@ sub simple_search_compat {
     my %options;
     $offset = 0 if not defined $offset or $offset < 0;
     $options{offset} = $offset;
-    $max_results //= 100;
+    $max_results //= $self->max_result_window;
 
     unless (ref $query) {
         # We'll push it through the query builder to sanitise everything.
