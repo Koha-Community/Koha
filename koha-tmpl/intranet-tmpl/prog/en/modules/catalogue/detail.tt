@@ -515,10 +515,10 @@ Note that permanent location is a code, and location may be an authval.
                         [% END %]
 
                         [% IF item.recalled %]
-                            [% IF item.recall.waitingdate %]
-                                Waiting at [% Branches.GetName( item.recall.branchcode ) | html %] since [% item.recall.waitingdate | $KohaDates %]
+                            [% IF item.recall.waiting_date %]
+                                Waiting at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %]
                             [% ELSE %]
-                                Item recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.borrowernumber | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a> on [% item.recall.recalldate | $KohaDates %]
+                                Item recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a> on [% item.recall.created_date | $KohaDates %]
                             [% END %]
                         [% END %]
 
