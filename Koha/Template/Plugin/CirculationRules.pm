@@ -24,6 +24,21 @@ use base qw( Template::Plugin );
 use Koha::CirculationRules;
 use C4::Circulation qw( GetRenewCount );
 
+=head1 NAME
+
+Koha::Template::Plugin::CirculationRules - A template plugin for dealing with things related to circulation
+
+
+=head2 Methods
+
+=head3 Get
+
+[% SET rule = CirculationRules.Get( branchcode, categorycode, itemtype, rule_name ) %]
+
+Returns the effective rule value for the given tuple.
+
+=cut
+
 sub Get {
     my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
 
@@ -42,6 +57,18 @@ sub Get {
 
     return $rule->rule_value if $rule;
 }
+
+=head3 Search
+
+[% SET rule = CirculationRules.Search( branchcode, categorycode, itemtype, rule_name, { want_rule = 1 } ) %]
+
+Returns the first rule that matches the given critea.
+It does not perform precedence sorting as CirculationRules.Get would.
+
+By default, it returns only the rule value. Set want_rule to true to return
+the rule object.
+
+=cut
 
 sub Search {
     my ( $self, $branchcode, $categorycode, $itemtype, $rule_name, $params) = @_;
@@ -62,6 +89,23 @@ sub Search {
     return $rule if $params->{want_rule};
     return $rule->rule_value if $rule;
 }
+
+=head3 Renewals
+
+[% SET renewals = CirculationRules.Renewals( borrowernumber, itemnumber ) %]
+[% renewals.remaining | html %]
+
+Returns a hash of data about renewals for a checkout, by the given borrowernumber and itemnumber.
+
+Hash keys include:
+count - The number of renewals already used
+allowed - The total number of renewals this checkout may have
+remaining - The total number of renewals that can still be made
+unseen_count - The number of unseen renewals already used
+unseen_allowed - The total number of unseen renewals this checkout may have
+unseen_remaining - The total number of unseen renewals that can still be made
+
+=cut
 
 sub Renewals {
     my ( $self, $borrowernumber, $itemnumber ) = @_;
