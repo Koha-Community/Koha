@@ -22,6 +22,7 @@ use Modern::Perl;
 use base qw( Template::Plugin );
 
 use Koha::CirculationRules;
+use C4::Circulation qw( GetRenewCount );
 
 sub Get {
     my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
@@ -60,6 +61,21 @@ sub Search {
 
     return $rule if $params->{want_rule};
     return $rule->rule_value if $rule;
+}
+
+sub Renewals {
+    my ( $self, $borrowernumber, $itemnumber ) = @_;
+
+    my ( $count, $allowed, $remaining, $unseen_count, $unseen_allowed, $unseen_remaining ) = GetRenewCount( $borrowernumber, $itemnumber );
+
+    return {
+        count            => $count,
+        allowed          => $allowed,
+        remaining        => $remaining,
+        unseen_count     => $unseen_count,
+        unseen_allowed   => $unseen_allowed,
+        unseen_remaining => $unseen_remaining,
+    };
 }
 
 1;
