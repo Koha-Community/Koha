@@ -26,7 +26,6 @@ use C4::Koha qw( getitemtypeimagelocation getitemtypeimagesrc );
 use C4::Circulation qw( GetBranchItemRule GetTransfers );
 use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
-use C4::Items qw( GetHostItemsInfo GetItemsInfo );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Members;
@@ -142,30 +141,32 @@ $template->param( branch => $branch );
 #
 
 my %biblioDataHash; # Hash of biblionumber to biblio/biblioitems record.
-my %itemInfoHash; # Hash of itemnumber to item info.
 foreach my $biblioNumber (@biblionumbers) {
 
     my $biblioData = GetBiblioData($biblioNumber);
     $biblioDataHash{$biblioNumber} = $biblioData;
-
-    my @itemInfos = GetItemsInfo($biblioNumber);
 
     my $biblio = Koha::Biblios->find( $biblioNumber );
     next unless $biblio;
 
     my $marcrecord = $biblio->metadata->record;
 
-    # flag indicating existence of at least one item linked via a host record
-    # adding items linked via host biblios
-    my @hostitemInfos = GetHostItemsInfo($marcrecord);
-    if (@hostitemInfos){
-        push (@itemInfos,@hostitemInfos);
-    }
+    my $items =
+      $biblio->items->filter_by_visible_in_opac( { patron => $patron } );
+    my $host_items =
+      $biblio->host_items->filter_by_visible_in_opac( { patron => $patron } );
+    $items = $biblio->items->search_ordered(
+        {
+            itemnumber => {
+                -in => [
+                    $items->get_column('itemnumber'),
+                    $host_items->get_column('itemnumber')
+                ]
+            }
+        }
+    );
 
-    $biblioData->{itemInfos} = \@itemInfos;
-    foreach my $itemInfo (@itemInfos) {
-        $itemInfoHash{$itemInfo->{itemnumber}} = $itemInfo;
-    }
+    $biblioData->{items} = [$items->as_list]; # FIXME Potentially a lot in memory here!
 
     # Compute the priority rank.
     $biblioData->{object} = $biblio;
@@ -237,6 +238,7 @@ if ( $query->param('place_reserve') ) {
             $branch = $patron->branchcode;
         }
 
+        # FIXME We shouldn't need to fetch the item here
         my $item = $itemNum ? Koha::Items->find( $itemNum ) : undef;
         # When choosing a specific item, the default pickup library should be dictated by the default hold policy
         if ( ! C4::Context->preference("OPACAllowUserToChooseBranch") && $item ) {
@@ -411,6 +413,7 @@ my $itemLevelTypes = C4::Context->preference('item-level_itypes');
 my $pickup_locations = Koha::Libraries->search({ pickup_location => 1 });
 $template->param('item_level_itypes' => $itemLevelTypes);
 
+my $patron_unblessed = $patron->unblessed;
 foreach my $biblioNum (@biblionumbers) {
 
     # Init the bib item with the choices for branch pickup
@@ -448,25 +451,7 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{imageurl} = getitemtypeimagesrc() . "/". $itemtypes->{$biblioData->{itemtype}}{imageurl};
     }
 
-    foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
-        if ($itemLevelTypes && $itemInfo->{itype}) {
-            $itemInfo->{translated_description} = $itemtypes->{$itemInfo->{itype}}{translated_description};
-            $itemInfo->{imageurl} = getitemtypeimagesrc() . "/". $itemtypes->{$itemInfo->{itype}}{imageurl};
-        }
 
-        if (!$itemInfo->{'notforloan'} && !($itemInfo->{'itemnotforloan'} > 0)) {
-            $biblioLoopIter{forloan} = 1;
-        }
-    }
-
-    my @notforloan_avs = Koha::AuthorisedValues->search_by_koha_field({ kohafield => 'items.notforloan', frameworkcode => $frameworkcode })->as_list;
-    my $notforloan_label_of = { map { $_->authorised_value => $_->opac_description } @notforloan_avs };
-
-    my $visible_items = { map { $_->itemnumber => $_ } $biblio->items->filter_by_visible_in_opac( { patron => $patron } )->as_list };
-
-    # Only keep the items that are visible in the opac (i.e. those in %visible_items)
-    # FIXME: We should get rid of itemInfos altogether and use $visible_items
-    $biblioData->{itemInfos} = [ grep { $visible_items->{ $_->{itemnumber} } } @{ $biblioData->{itemInfos} } ];
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
@@ -477,91 +462,44 @@ foreach my $biblioNum (@biblionumbers) {
     # (before this loop was inside that sub loop so it was O(n^2) )
     my $items_any_available;
     $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioNum, patron => $patron }) if $patron;
-    foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
-        my $itemNum = $itemInfo->{itemnumber};
-        my $item = $visible_items->{$itemNum};
-        my $itemLoopIter = {};
+    foreach my $item (@{$biblioData->{items}}) {
 
-        $itemLoopIter->{itemnumber} = $itemNum;
-        $itemLoopIter->{barcode} = $itemInfo->{barcode};
-        $itemLoopIter->{homeBranchName} = $itemInfo->{homebranch};
-        $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
-        $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
-        $itemLoopIter->{ccode} = $itemInfo->{ccode};
-        $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
-        $itemLoopIter->{itemnotes} = $itemInfo->{itemnotes};
+        my $item_info = $item->unblessed;
+        $item_info->{holding_branch} = $item->holding_branch;
+        $item_info->{home_branch}    = $item->home_branch;
         if ($itemLevelTypes) {
-            $itemLoopIter->{translated_description} = $itemInfo->{translated_description};
-            $itemLoopIter->{itype} = $itemInfo->{itype};
-            $itemLoopIter->{imageurl} = $itemInfo->{imageurl};
+            my $itemtype = $item->itemtype;
+            $item_info->{'imageurl'} = getitemtypeimagelocation( 'opac',
+                $itemtypes->{ $itemtype->itemtype }->{'imageurl'} );
+            $item_info->{'translated_description'} =
+              $itemtypes->{ $itemtype->itemtype }->{translated_description};
         }
 
-        # If the holdingbranch is different than the homebranch, we show the
-        # holdingbranch of the document too.
-        if ( $itemInfo->{homebranch} ne $itemInfo->{holdingbranch} ) {
-            $itemLoopIter->{holdingBranchName} = $itemInfo->{holdingbranch};
-        }
-
-        # If the item is currently on loan, we display its return date and
-        # change the background color.
-        my $issue = Koha::Checkouts->find( { itemnumber => $itemNum } );
-        if ( $issue ) {
-            $itemLoopIter->{dateDue} = $issue->date_due;
-            $itemLoopIter->{onloan} = 'onloan';
-        }
-
-        # checking reserve
+        # checking for holds
         my $holds = $item->current_holds;
-
         if ( my $first_hold = $holds->next ) {
-            $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = $first_hold->reservedate;
-            $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
-            $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
+            $item_info->{first_hold} = $first_hold;
         }
 
-        $itemLoopIter->{notforloan} = $itemInfo->{notforloan};
-        $itemLoopIter->{itemnotforloan} = $itemInfo->{itemnotforloan};
-
-        # Management of the notforloan document
-        if ( $itemLoopIter->{notforloan} || $itemLoopIter->{itemnotforloan}) {
-            $itemLoopIter->{backgroundcolor} = 'other';
-            $itemLoopIter->{notforloanvalue} =
-              $notforloan_label_of->{ $itemLoopIter->{notforloan} };
-        }
-
-        # Management of lost or long overdue items
-        if ( $itemInfo->{itemlost} ) {
-
-            # FIXME localized strings should never be in Perl code
-            $itemLoopIter->{message} =
-                $itemInfo->{itemlost} == 1 ? "(lost)"
-              : $itemInfo->{itemlost} == 2 ? "(long overdue)"
-              : "";
-            $itemInfo->{backgroundcolor} = 'other';
-        }
+        $item_info->{checkout} = $item->checkout;
 
         # Check of the transferred documents
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          GetTransfers($itemNum);
+          GetTransfers($item->itemnumber);
         if ( $transfertwhen && ($transfertwhen ne '') ) {
-            $itemLoopIter->{transfertwhen} = output_pref({ dt => dt_from_string($transfertwhen), dateonly => 1 });
-            $itemLoopIter->{transfertfrom} = $transfertfrom;
-            $itemLoopIter->{transfertto} = $transfertto;
-            $itemLoopIter->{nocancel} = 1;
+            $item_info->{transfertwhen} = $transfertwhen;
+            $item_info->{transfertfrom} = $transfertfrom;
+            $item_info->{transfertto} = $transfertto;
+            $item_info->{nocancel} = 1;
         }
 
         # if the items belongs to a host record, show link to host record
-        if ( $itemInfo->{biblionumber} ne $biblioNum ) {
-            $itemLoopIter->{hostbiblionumber} = $itemInfo->{biblionumber};
-            $itemLoopIter->{hosttitle}        = Koha::Biblios->find( $itemInfo->{biblionumber} )->title;
+        if ( $item_info->{biblionumber} ne $biblioNum ) {
+            $item_info->{hostbiblionumber} = $item->biblionumber;
+            $item_info->{hosttitle}        = Koha::Biblios->find( $item_info->{biblionumber} )->title;
         }
 
-        # If there is no loan, return and transfer, we show a checkbox.
-        $itemLoopIter->{notforloan} = $itemLoopIter->{notforloan} || 0;
-
-        my $patron_unblessed = $patron->unblessed;
-        my $branch = GetReservesControlBranch( $itemInfo, $patron_unblessed );
+        my $branch = GetReservesControlBranch( $item_info, $patron_unblessed );
 
         # items_any_available defined outside of the current loop,
         # so we avoiding loop inside IsAvailableForItemLevelRequest:
@@ -572,33 +510,31 @@ foreach my $biblioNum (@biblionumbers) {
         if ($policy_holdallowed) {
             my $opac_hold_policy = Koha::CirculationRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
             if ( $opac_hold_policy ne 'N' ) { # If Y or F
-                $itemLoopIter->{available} = 1;
+                $item_info->{available} = 1;
                 $numCopiesOPACAvailable++;
                 $biblioLoopIter{force_hold} = 1 if $opac_hold_policy eq 'F';
             }
             $numCopiesAvailable++;
 
             unless ( $can_place_hold_if_available_at_pickup ) {
-                my $items_in_this_library = Koha::Items->search({ biblionumber => $itemInfo->{biblionumber}, holdingbranch => $itemInfo->{holdingbranch} });
+                my $items_in_this_library = Koha::Items->search({ biblionumber => $item->biblionumber, holdingbranch => $item->holdingbranch });
                 my $nb_of_items_issued = $items_in_this_library->search({ 'issue.itemnumber' => { not => undef }}, { join => 'issue' })->count;
                 if ( $items_in_this_library->count > $nb_of_items_issued ) {
-                    push @not_available_at, $itemInfo->{holdingbranch};
+                    push @not_available_at, $item->holdingbranch;
                 }
             }
         }
 
-        $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $itemInfo->{itype} }{imageurl} );
-
-    # Show serial enumeration when needed
-        if ($itemLoopIter->{enumchron}) {
+        # Show serial enumeration when needed
+        if ($item_info->{enumchron}) {
             $itemdata_enumchron = 1;
         }
-    # Show collection when needed
-        if ($itemLoopIter->{ccode}) {
+        # Show collection when needed
+        if ($item_info->{ccode}) {
             $itemdata_ccode = 1;
         }
 
-        push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
+        push @{$biblioLoopIter{itemLoop}}, $item_info;
     }
     $template->param(
         itemdata_enumchron => $itemdata_enumchron,
@@ -635,7 +571,7 @@ foreach my $biblioNum (@biblionumbers) {
 
     if ( $biblioLoopIter{holdable} and C4::Context->preference('AllowHoldItemTypeSelection') ) {
         # build the allowed item types loop
-        my $rs = $biblio->items->search(
+        my $rs = $biblio->items->search_ordered(
             undef,
             {   select => [ { distinct => 'itype' } ],
                 as     => 'item_type'

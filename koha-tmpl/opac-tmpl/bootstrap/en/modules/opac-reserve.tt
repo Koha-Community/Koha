@@ -370,7 +370,7 @@
                                                     [% SET unholdable_items = 0 %]
                                                     [% FOREACH itemLoo IN bibitemloo.itemLoop %]
                                                         [% IF ( itemLoo.available ) %]
-                                                            [% IF ( itemLoo.onloan ) %]
+                                                            [% IF ( itemLoo.checkout ) %]
                                                                 <tr class="holdable onloan">
                                                             [% ELSE %]
                                                                 <tr class="holdable">
@@ -379,7 +379,7 @@
                                                                         <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
                                                         [% ELSE %]
                                                             [% SET unholdable_items = 1 %]
-                                                            [% IF ( itemLoo.onloan ) %]
+                                                            [% IF ( itemLoo.checkout ) %]
                                                                 <tr class="unholdable onloan" style="display:none;">
                                                             [% ELSE %]
                                                                 <tr class="unholdable" style="display:none;">
@@ -401,19 +401,19 @@
                                                                             <img src="[% itemLoo.imageurl | html %]" alt="" />
                                                                         [% END %]
                                                                     [% END %]
-                                                                    [% itemLoo.translated_description | html %]
+                                                                    [% itemLoo.itemtype.translated_description | html %]
                                                                 </td>
                                                             [% END %]
 
                                                             <td class="barcode">[% itemLoo.barcode | html %]</td>
                                                             [% UNLESS ( singleBranchMode ) %]
-                                                                <td class="homebranch">[% Branches.GetName( itemLoo.homeBranchName ) | html %]</td>
-                                                                <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingBranchName ) | html %]</td>
+                                                                <td class="homebranch">[% Branches.GetName( itemLoo.homebranch) | html %]</td>
+                                                                <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingbranch ) | html %]</td>
                                                             [% END %]
                                                             [% IF ( itemdata_ccode ) %]
                                                                 <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemLoo.ccode, opac => 1 ) | html %][% END %]</td>
                                                             [% END %]
-                                                            <td class="call_no">[% itemLoo.callNumber | html %]</td>
+                                                            <td class="call_no">[% itemLoo.itemcallnumber | html %]</td>
                                                             [% IF ( itemdata_enumchron ) %]
                                                                 <td class="vol_info">[% itemLoo.enumchron | html %]</td>
                                                             [% END %]
@@ -421,21 +421,21 @@
                                                                 [% itemLoo.itemnotes | html %]
                                                             </td>
                                                             <td class="information">
-                                                                [% IF ( itemLoo.dateDue ) %]
-                                                                    <span class="checkedout">Due [% itemLoo.dateDue | $KohaDates as_due_date => 1 %]</span>
+                                                                [% IF ( itemLoo.checkout.date_due) %]
+                                                                    <span class="checkedout">Due [% itemLoo.checkout.date_due| $KohaDates as_due_date => 1 %]</span>
                                                                 [% ELSIF ( itemLoo.transfertwhen ) %]
-                                                                    <span class="intransit">In transit from [% Branches.GetName( itemLoo.transfertfrom ) | html %] to [% Branches.GetName( itemLoo.transfertto ) | html %] since [% itemLoo.transfertwhen | html %]</span>
+                                                                    <span class="intransit">In transit from [% Branches.GetName( itemLoo.transfertfrom ) | html %] to [% Branches.GetName( itemLoo.transfertto ) | html %] since [% itemLoo.transfertwhen | $KohaDates %]</span>
                                                                 [% END %]
 
-                                                                [% IF ( itemLoo.message ) %]
+                                                                [% IF ( itemLoo.itemlost == 1 || itemLoo.itemlost == 2 ) %] [%# FIXME Why only for 1 or 2? Shouldn't we test for withdrawn as well? %]
                                                                     <span class="lost">Unavailable (lost or missing)</span>
                                                                 [% END %]
 
                                                                 [% IF ( itemLoo.notforloan ) %]
-                                                                    <span class="notforloan">Not for loan ([% itemLoo.notforloanvalue | html %])</span>
+                                                                    <span class="notforloan">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemLoo.notforloan ) %] %])</span>
                                                                 [% END %]
 
-                                                                [% IF ( itemLoo.reservedate ) %]
+                                                                [% IF ( itemLoo.first_hold ) %]
                                                                     <span class="waiting">
                                                                         [% IF ( itemLoo.waitingdate ) %]
                                                                             <span>Waiting for patron at [% Branches.GetName( itemLoo.ExpectedAtLibrary ) | html %] since [% itemLoo.waitingdate | $KohaDates %]</span>
@@ -447,7 +447,7 @@
                                                                     </span>
                                                                 [% ELSE %]
                                                                     <span class="notonhold">Not on hold</span>
-                                                                [% END # / IF ( itemLoo.reservedate )%]
+                                                                [% END # / IF ( itemLoo.first_hold )%]
                                                             </td>
                                                         </tr>
                                                     [% END # / FOREACH itemLoo IN bibitemloo.itemLoop%]
