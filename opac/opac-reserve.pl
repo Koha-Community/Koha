@@ -563,10 +563,9 @@ foreach my $biblioNum (@biblionumbers) {
         my $patron_unblessed = $patron->unblessed;
         my $branch = GetReservesControlBranch( $itemInfo, $patron_unblessed );
 
-        my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         # items_any_available defined outside of the current loop,
         # so we avoiding loop inside IsAvailableForItemLevelRequest:
-        $policy_holdallowed &&=
+        my $policy_holdallowed =
             CanItemBeReserved( $patron, $item )->{status} eq 'OK' &&
             IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
 
