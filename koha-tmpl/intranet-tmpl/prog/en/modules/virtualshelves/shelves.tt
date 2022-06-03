@@ -2,6 +2,8 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -315,7 +317,7 @@
                         [% IF ( itemsloo.notforloan ) %]
                             <span class="noholdstext">No holds allowed</span>
                         [% ELSE %]
-                            [% IF ( itemsloo.ITEM_RESULTS.size ) %]
+                            [% IF ( itemsloo.ITEM_RESULTS.count ) %]
                                 <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
                                 [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 %]</a></span>[% END %]
                             [% ELSE %]
@@ -334,12 +336,16 @@
             <td>[% itemsloo.dateadded | $KohaDates%]</td>
             <td>
                 <ul>
-                [% FOREACH result IN itemsloo.ITEM_RESULTS %]
+                [% FOREACH item IN itemsloo.ITEM_RESULTS %]
                     <li>
-                        [% result.holdingbranch | html %]
-                        [% IF ( result.location_intranet ) %]<span class="shelvingloc">[% result.location_intranet | html %]</span>[% END %]
-                        [% IF ( result.itemcallnumber ) %]
-                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% result.itemcallnumber |uri %]%22">[% result.itemcallnumber | html %]</a>]
+                        [% Branches.GetName(item.holdingbranch) | html %]
+                        [% IF ( item.location ) %]
+                            <span class="shelvingloc">
+                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
+                            </span>
+                        [% END %]
+                        [% IF ( item.itemcallnumber ) %]
+                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
                         [% END %]
                     </li>
                 [% END %]

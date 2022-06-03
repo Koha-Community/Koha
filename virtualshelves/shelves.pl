@@ -28,7 +28,6 @@ use C4::Koha qw(
     GetNormalizedOCLCNumber
     GetNormalizedUPC
 );
-use C4::Items qw( GetItemsLocationInfo );
 use C4::Members;
 use C4::Output qw( pagination_bar output_html_with_http_headers );
 use C4::XSLT qw( XSLTParse4Display );
@@ -323,8 +322,8 @@ if ( $op eq 'view' ) {
                 }
 
                 # Getting items infos for location display
-                my @items_infos = &GetItemsLocationInfo( $biblionumber );
-                $this_item->{'ITEM_RESULTS'} = \@items_infos;
+                my $items = $biblio->items;
+                $this_item->{'ITEM_RESULTS'} = $items;
                 $this_item->{biblionumber} = $biblionumber;
                 push @items, $this_item;
             }
