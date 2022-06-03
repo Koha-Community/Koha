@@ -30,7 +30,6 @@ use C4::Biblio qw(
     GetMarcISBN
     GetMarcSubjects
 );
-use C4::Items qw( GetItemsInfo );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Biblios;
 use Koha::Email;
@@ -55,8 +54,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 
 my $shelfid = $query->param('shelfid');
 my $email   = $query->param('email');
-
-my $dbh          = C4::Context->dbh;
 
 my $shelf = Koha::Virtualshelves->find( $shelfid );
 if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
@@ -97,13 +94,13 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         my $marcauthorsarray = $biblio->get_marc_contributors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
-        my @items = GetItemsInfo( $biblionumber );
+        my $items = $biblio->items->search_ordered->filter_by_visible_in_opac({ patron => $patron });
 
         $dat->{ISBN}           = GetMarcISBN($record, $marcflavour);
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{'biblionumber'} = $biblionumber;
-        $dat->{ITEM_RESULTS}   = \@items;
+        $dat->{ITEM_RESULTS}   = $items;
         $dat->{HASAUTHORS}     = $dat->{'author'} || @$marcauthorsarray;
 
         $iso2709 .= $record->as_usmarc();

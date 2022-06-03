@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE HtmlToText %]
 [% USE Koha %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
 
 <SUBJECT>
 Your cart
@@ -143,12 +145,12 @@ Your cart
                 In online catalog: [% OPACBaseURL | $raw %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber | html %]
             </p>
             [% END %]
-            [% IF ( BIBLIO_RESULT.ITEM_RESULTS.size ) %]
+            [% IF ( BIBLIO_RESULT.ITEM_RESULTS.count ) %]
             <p>Items:
             <ul>
                 [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]<li>
-                    [% ITEM_RESULT.branchname | $raw %]
-                    [% ITEM_RESULT.location | $raw %]
+                    [% Branches.GetName(ITEM_RESULT.holdingbranch) | $raw %]
+                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]%]
                     [% IF ITEM_RESULT.itemcallnumber %]([% ITEM_RESULT.itemcallnumber | $raw %])[% END %]
                     [% ITEM_RESULT.barcode | $raw %]
                 </li>[% END %]

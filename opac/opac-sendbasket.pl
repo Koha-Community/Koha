@@ -27,7 +27,6 @@ use Try::Tiny qw( catch try );
 use C4::Biblio qw(
     GetMarcSubjects
 );
-use C4::Items qw( GetItemsInfo );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
@@ -48,8 +47,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 
 my $bib_list     = $query->param('bib_list') || '';
 my $email_add    = $query->param('email_add');
-
-my $dbh          = C4::Context->dbh;
 
 if ( $email_add ) {
     die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
@@ -88,19 +85,18 @@ if ( $email_add ) {
         my $marcauthorsarray = $biblio->get_marc_contributors;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
-        my @items = GetItemsInfo( $biblionumber );
+        my $items = $biblio->items->search_ordered->filter_by_visible_in_opac({ patron => $patron });
 
         my $hasauthors = 0;
         if($dat->{'author'} || @$marcauthorsarray) {
           $hasauthors = 1;
         }
-	
 
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{HASAUTHORS}     = $hasauthors;
         $dat->{'biblionumber'} = $biblionumber;
-        $dat->{ITEM_RESULTS}   = \@items;
+        $dat->{ITEM_RESULTS}   = $items;
 
         $iso2709 .= $record->as_usmarc();
 
