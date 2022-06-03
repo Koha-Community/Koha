@@ -41,8 +41,6 @@ my $builder = sub {
         altInputClass: "input_marceditor flatpickr-input",
         dateFormat: "Y-m-d"
     });
-    /* Set current date on page load */
-    set_to_today($function_name.id);
 });
 
 function Focus$function_name(event) {
