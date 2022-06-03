@@ -88,8 +88,13 @@
     [% END %]
 
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
+        [% SET not_for_loan = 0 %]
+        [% IF ITEM_DAT.notforloan || ITEM_DAT.itemtype.notforloan %]
+            [% SET not_for_loan = 1 %]
+            [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+        [% END %]
         <div class="listgroup">
-        <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
+        <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF not_for_loan %][% not_for_loan_description | html %] [% END %]</h3>
 
         <h4>Item information [% UNLESS ( ITEM_DAT.nomod ) %]
          [% IF ( CAN_user_editcatalogue_edit_items ) %]
@@ -102,14 +107,20 @@
 	    [% IF ( item_level_itypes ) %]
             <li><span class="label">Item type:</span> [% ITEM_DAT.itype | html %]&nbsp;</li>
 	    [% END %]
-            [% IF ( ITEM_DAT.collection ) %]<li><span class="label">Collection:</span> [% ITEM_DAT.collection | html %]</li> [% END %]
+            [% IF ( ITEM_DAT.ccode) %]<li><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li> [% END %]
             <li><span class="label">Item callnumber:</span> [% ITEM_DAT.itemcallnumber | html %]&nbsp;</li>
             [% IF ( ITEM_DAT.displaycopy ) %]<li><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li> [% END %]
             [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li> [% END %]
 	    [% IF ITEM_DAT.materials %]<li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %] </li> [% END %]
             </ol></div></div>
            <div class="listgroup"><h4><span>Statuses</span> [% IF ( ITEM_DAT.status_advisory ) %](
-                [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]
+                [% IF ( not_for_loan ) %]
+                    [% IF not_for_loan_description %]
+                        [% not_for_loan_description | html %]
+                    [% ELSE %]
+                        <span>Not for loan</span>
+                    [% END %]
+                [% END %]
                 [% IF ( ITEM_DAT.itemlost ) %]<span>Lost</span>[% END %]
                 [% IF ( ITEM_DAT.damaged ) %]<span>Damaged</span>[% END %]
                 [% IF ( ITEM_DAT.withdrawn ) %]<span>Withdrawn</span>[% END %]
@@ -119,13 +130,14 @@
             <ol class="bibliodetails">
             <li><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
-            [% IF ( ITEM_DAT.issue ) %]<span>Checked out to
-                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]</span>
-                [% IF ( ITEM_DAT.lastreneweddate ) %]
-                    <span>Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %]</span>,
+            [% SET checkout = ITEM_DAT.object.checkout %]
+            [% IF ( checkout ) %]<span>Checked out to
+                [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]</span>
+                [% IF ( checkout.lastreneweddate ) %]
+                    <span>Last renewed [% checkout.lastreneweddate | $KohaDates %]</span>,
                 [% END %]
-                [% IF ( ITEM_DAT.datedue ) %]
-                    <span>Due back on [% ITEM_DAT.datedue | $KohaDates %]</span>
+                [% IF ( checkout.date_due ) %]
+                    <span>Due back on [% ITEM_DAT.date_due | $KohaDates %]</span>
                 [% ELSE %]
                     <span>Not checked out</span>
                 [% END %]

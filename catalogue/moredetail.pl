@@ -24,7 +24,6 @@ use C4::Koha qw( GetAuthorisedValues );
 use CGI qw ( -utf8 );
 use HTML::Entities;
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
-use C4::Items qw( GetHostItemsInfo GetItemsInfo );
 use C4::Acquisition qw( GetOrderFromItemnumber GetBasket GetInvoice );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
@@ -102,33 +101,33 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 # $dewey=~ s/\.$//;
 # $data->{'dewey'}=$dewey;
 
-my $fw = GetFrameworkCode($biblionumber);
-my @all_items= GetItemsInfo($biblionumber);
-my @items;
-my $patron = Koha::Patrons->find( $loggedinuser );
-for my $itm (@all_items) {
-    push @items, $itm unless ( $itm->{itemlost} && 
-                               $patron->category->hidelostitems &&
-                               !$showallitems && 
-                               ($itemnumber != $itm->{itemnumber}));
-}
-
 my $biblio = Koha::Biblios->find( $biblionumber );
 my $record = $biblio ? $biblio->metadata->record : undef;
 
 output_and_exit( $query, $cookie, $template, 'unknown_biblio')
     unless $biblio && $record;
 
-my $hostrecords;
-# adding items linked via host biblios
-my @hostitems = GetHostItemsInfo($record);
-if (@hostitems){
-        $hostrecords =1;
-        push (@items,@hostitems);
+my $fw = GetFrameworkCode($biblionumber);
+my $all_items = $biblio->items->search_ordered;
+
+my @items;
+my $patron = Koha::Patrons->find( $loggedinuser );
+while ( my $item = $all_items->next ) {
+    push @items, $item
+      unless $item->itemlost
+      && $patron->category->hidelostitems
+      && !$showallitems;
 }
 
-my $totalcount=@all_items;
-my $showncount=@items;
+my $hostrecords;
+my $hostitems = $biblio->host_items;
+if ( $hostitems->count ) {
+    $hostrecords = 1;
+    push @items, $hostitems->as_list;
+}
+
+my $totalcount = $all_items->count;
+my $showncount = scalar @items;
 my $hiddencount = $totalcount - $showncount;
 $data->{'count'}=$totalcount;
 $data->{'showncount'}=$showncount;
@@ -147,53 +146,59 @@ foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
 }
 
-($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
+my @item_data;
 foreach my $item (@items){
-    $item->{object} = Koha::Items->find( $item->{itemnumber} );
-    $item->{'collection'}              = $ccodes->{ $item->{ccode} } if $ccodes && $item->{ccode} && exists $ccodes->{ $item->{ccode} };
-    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'translated_description'} if exists $itemtypes->{ $item->{'itype'} };
-    $item->{'replacementprice'}        = $item->{'replacementprice'};
-    if ( defined $item->{'copynumber'} ) {
-        $item->{'displaycopy'} = 1;
-        if ( defined $copynumbers->{ $item->{'copynumber'} } ) {
-            $item->{'copyvol'} = $copynumbers->{ $item->{'copynumber'} }
+
+    my $item_info = $item->unblessed;
+    $item_info->{object} = $item;
+    $item_info->{itemtype} = $itemtypes->{$item->effective_itemtype};
+    $item_info->{'ccode'}              = $ccodes->{ $item->ccode } if $ccodes && $item->ccode && exists $ccodes->{ $item->ccode };
+    if ( defined $item->copynumber ) {
+        $item_info->{'displaycopy'} = 1;
+        if ( defined $copynumbers->{ $item_info->{'copynumber'} } ) {
+            $item_info->{'copyvol'} = $copynumbers->{ $item_info->{'copynumber'} }
         }
         else {
-            $item->{'copyvol'} = $item->{'copynumber'};
+            $item_info->{'copyvol'} = $item_info->{'copynumber'};
         }
     }
 
     # item has a host number if its biblio number does not match the current bib
-    if ($item->{biblionumber} ne $biblionumber){
-        $item->{hostbiblionumber} = $item->{biblionumber};
-        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+    if ($item->biblionumber ne $biblionumber){
+        $item_info->{hostbiblionumber} = $item->{biblionumber};
+        $item_info->{hosttitle} = $item->biblio->title;
     }
 
+    # FIXME The acquisition code below could be improved using methods from Koha:: objects
     my $order  = GetOrderFromItemnumber( $item->{'itemnumber'} );
-    $item->{'ordernumber'}             = $order->{'ordernumber'};
-    $item->{'basketno'}                = $order->{'basketno'};
-    $item->{'orderdate'}               = $order->{'entrydate'};
-    if ($item->{'basketno'}){
-	    my $basket = GetBasket($item->{'basketno'});
+    $item_info->{'basketno'}                = $order->{'basketno'};
+    $item_info->{'orderdate'}               = $order->{'entrydate'};
+    if ($item_info->{'basketno'}){
+        my $basket = GetBasket($item_info->{'basketno'});
         my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
-        $item->{'vendor'} = $bookseller->name;
+        $item_info->{'vendor'} = $bookseller->name;
     }
-    $item->{'invoiceid'}               = $order->{'invoiceid'};
-    if($item->{invoiceid}) {
-        my $invoice = GetInvoice($item->{invoiceid});
-        $item->{invoicenumber} = $invoice->{invoicenumber} if $invoice;
+    $item_info->{'invoiceid'}               = $order->{'invoiceid'};
+    if($item_info->{invoiceid}) {
+        my $invoice = GetInvoice($item_info->{invoiceid});
+        $item_info->{invoicenumber} = $invoice->{invoicenumber} if $invoice;
     }
-    $item->{'datereceived'}            = $order->{'datereceived'};
+    $item_info->{'datereceived'}            = $order->{'datereceived'};
 
-    if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{withdrawn}) {
-        $item->{status_advisory} = 1;
+    if (   $item->notforloan
+        || $item->itemtype->notforloan
+        || $item->itemlost
+        || $item->damaged
+        || $item->withdrawn )
+    {
+        $item_info->{status_advisory} = 1;
     }
 
     # Add paidfor info
-    if ( $item->{itemlost} ) {
+    if ( $item->itemlost ) {
         my $accountlines = Koha::Account::Lines->search(
             {
-                itemnumber        => $item->{itemnumber},
+                itemnumber        => $item->itemnumber,
                 debit_type_code   => 'LOST',
                 status            => [ undef, { '<>' => 'RETURNED' } ],
                 amountoutstanding => 0
@@ -217,7 +222,7 @@ foreach my $item (@items){
             if ($payment_offsets->count) {
                 my $patron = $accountline->patron;
                 my $payment_offset = $payment_offsets->next;
-                $item->{paidfor} = { patron => $patron, created_on => $payment_offset->created_on };
+                $item_info->{paidfor} = { patron => $patron, created_on => $payment_offset->created_on };
             }
         }
     }
@@ -225,20 +230,11 @@ foreach my $item (@items){
     if (C4::Context->preference("IndependentBranches")) {
         #verifying rights
         my $userenv = C4::Context->userenv();
-        unless (C4::Context->IsSuperLibrarian() or ($userenv->{'branch'} eq $item->{'homebranch'})) {
-                $item->{'nomod'}=1;
+        unless (C4::Context->IsSuperLibrarian() or ($userenv->{'branch'} eq $item->homebranch)) {
+                $item_info->{'nomod'}=1;
         }
     }
-    if ($item->{'datedue'}) {
-        $item->{'issue'}= 1;
-    } else {
-        $item->{'issue'}= 0;
-    }
-
-    if ( $item->{'borrowernumber'} ) {
-        my $curr_borrower = Koha::Patrons->find( $item->{borrowernumber} );
-        $item->{patron} = $curr_borrower;
-    }
+    push @item_data, $item_info;
 }
 
 my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
@@ -293,7 +289,7 @@ $template->param(
 );
 
 $template->param(
-    ITEM_DATA           => \@items,
+    ITEM_DATA           => \@item_data,
     moredetailview      => 1,
     loggedinuser        => $loggedinuser,
     biblionumber        => $biblionumber,
