@@ -19,7 +19,7 @@ use Modern::Perl;
 use Data::Dumper;
 
 use MARC::Record;
-use C4::Items qw( ModItemTransfer GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
+use C4::Items qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
 use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::Items;
@@ -34,7 +34,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 12;
+use Test::More tests => 11;
 
 use Test::Warn;
 
@@ -186,84 +186,6 @@ subtest 'ModItemTransfer tests' => sub {
 
     my $transfer3 = $transfers->next;
     is($transfer3->reason, 'Manual', "Reason set via ModItemTransfer");
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'GetItemsInfo tests' => sub {
-
-    plan tests => 9;
-
-    $schema->storage->txn_begin;
-
-    my $builder = t::lib::TestBuilder->new;
-    my $library1 = $builder->build({
-        source => 'Branch',
-    });
-    my $library2 = $builder->build({
-        source => 'Branch',
-    });
-    my $itemtype = $builder->build({
-        source => 'Itemtype',
-    });
-
-    Koha::AuthorisedValues->delete;
-    my $av1 = Koha::AuthorisedValue->new(
-        {
-            category         => 'RESTRICTED',
-            authorised_value => '1',
-            lib              => 'Restricted Access',
-            lib_opac         => 'Restricted Access OPAC',
-        }
-    )->store();
-
-    # Add a biblio
-    my $biblio = $builder->build_sample_biblio();
-    # Add an item
-    my $itemnumber = $builder->build_sample_item(
-        {
-            biblionumber  => $biblio->biblionumber,
-            homebranch    => $library1->{branchcode},
-            holdingbranch => $library2->{branchcode},
-            itype         => $itemtype->{itemtype},
-            restricted    => 1,
-        }
-    )->itemnumber;
-
-    my $library = Koha::Libraries->find( $library1->{branchcode} );
-    $library->opac_info("homebranch OPAC info");
-    $library->store;
-
-    $library = Koha::Libraries->find( $library2->{branchcode} );
-    $library->opac_info("holdingbranch OPAC info");
-    $library->store;
-
-    my @results = GetItemsInfo( $biblio->biblionumber );
-    ok( @results, 'GetItemsInfo returns results');
-
-    is( $results[0]->{ home_branch_opac_info }, "homebranch OPAC info",
-        'GetItemsInfo returns the correct home branch OPAC info notice' );
-    is( $results[0]->{ holding_branch_opac_info }, "holdingbranch OPAC info",
-        'GetItemsInfo returns the correct holding branch OPAC info notice' );
-    is( exists( $results[0]->{ onsite_checkout } ), 1,
-        'GetItemsInfo returns a onsite_checkout key' );
-    is( $results[0]->{ restricted }, 1,
-        'GetItemsInfo returns a restricted value code' );
-    is( $results[0]->{ restrictedvalue }, "Restricted Access",
-        'GetItemsInfo returns a restricted value description (staff)' );
-    is( $results[0]->{ restrictedvalueopac }, "Restricted Access OPAC",
-        'GetItemsInfo returns a restricted value description (OPAC)' );
-
-    #place item into holds queue
-    my $dbh = C4::Context->dbh;
-    @results = GetItemsInfo( $biblio->biblionumber );
-    is( $results[0]->{ has_pending_hold }, "0",
-        'Hold not marked as pending/unavailable if nothing in tmp_holdsqueue for item' );
-
-    $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $biblio->biblionumber, $itemnumber);
-    @results = GetItemsInfo( $biblio->biblionumber );
-    is( $results[0]->{ has_pending_hold }, "1",
-        'Hold marked as pending/unavailable if tmp_holdsqueue is not empty for item' );
 
     $schema->storage->txn_rollback;
 };
