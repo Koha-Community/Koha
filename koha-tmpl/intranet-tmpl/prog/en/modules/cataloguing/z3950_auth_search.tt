@@ -15,7 +15,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 <body id="cat_z3950_auth_search" class="cat">
-    <div class="container-fluid">
+    <div class="main container-fluid">
 
     [% IF ( opsearch ) %]
         <h1>Z39.50 authority search points</h1>
@@ -226,6 +226,7 @@
 [% END %]
 
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
+</div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

@@ -13,7 +13,7 @@
 </head>
 
 <body id="cat_z3950_search" class="cat">
-    <div class="container-fluid">
+    <div class="main container-fluid">
         [% IF ( opsearch ) %]
             <h1>Z39.50/SRU search</h1>
             <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
@@ -252,6 +252,7 @@
                     </form>
                 </div> <!-- /.col -->
             </div> <!-- /.row -->
+        </div> <!-- /.main.container-fluid -->
         [% END # /IF opsearch %]
 
         [% IF ( numberpending ) %]

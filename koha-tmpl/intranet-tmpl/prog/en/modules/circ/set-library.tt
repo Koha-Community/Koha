@@ -101,18 +101,19 @@
                             <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" %]" />
                         </div>
                     </form>
-                <!-- /updated -->
-                [% IF Koha.Preference('CircSidebar') %]
+                    <!-- /updated -->
                     </div> <!-- /.col-md-10... -->
+                    [% IF Koha.Preference('CircSidebar') %]
                         <div class="col-md-2 order-sm-2 order-md-1">
                             <aside>
                                 [% INCLUDE 'circ-nav.inc' %]
                             </aside>
                         </div> <!-- /.col-md-2 order-sm-2 order-md-1 -->
-                    </div> <!-- /.row -->
-                [% END %]
-        </main>
-    </div> <!-- /.col-sm-12 -->
-</div> <!-- /.row -->
+                    [% END %]
+                </div> <!-- /.row -->
+            </main>
+        </div> <!-- /.col-sm-12 -->
+    </div> <!-- /.row -->
+</div> <!-- /.main.container-fluid -->
 
 [% INCLUDE 'intranet-bottom.inc' %]
