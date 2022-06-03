@@ -3,10 +3,11 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( unknownauthid ) %]
-      Unknown authority record
+<title>
+    [% IF ( unknownauthid ) %]
+        Unknown authority record
     [% ELSE %]
-      Details for authority #[% authid | html %] ([% authtypetext | html %])
+        Details for authority #[% authid | html %] ([% authtypetext | html %])
     [% END %] &rsaquo; Authorities &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -45,83 +46,85 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
 
-    [% INCLUDE 'authorities-toolbar.inc' %]
-	
-[% IF ( displayhierarchy ) %]
-<div id="hierarchies">
-[% PROCESS showhierarchy trees = loophierarchies %]
-</div>
-[% END %]
+            [% INCLUDE 'authorities-toolbar.inc' %]
+
+            [% IF ( displayhierarchy ) %]
+                <div id="hierarchies">
+                    [% PROCESS showhierarchy trees = loophierarchies %]
+                </div>
+            [% END %]
 
 
-[% IF ( unknownauthid ) %]
-    <h1>Authority does not exist</h1>
-    <div class="dialog message">The authority record you requested does not exist ([% errauthid | html %]).</div>
-[% ELSE %]
-    <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
+            [% IF ( unknownauthid ) %]
+                <h1>Authority does not exist</h1>
+                <div class="dialog message">The authority record you requested does not exist ([% errauthid | html %]).</div>
+            [% ELSE %]
 
-<div id="action">
-    [% IF count %]
-        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an:[% authid | uri %]">[% count | html %] record(s)</a>
-    [% ELSE %]
-        This authority is not used in any records.
-    [% END %]
-</div>
+                <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
 
-<div id="authoritiestabs" class="toptabs numbered">
-    <ul class="nav nav-tabs" role="tablist">
-        [% FOREACH BIG_LOO IN BIG_LOOP %]
-            <li role="presentation">
-                <a href="#tab[% BIG_LOO.number | uri %]XX" aria-controls="tab[% BIG_LOO.number | uri %]XX" role="tab" data-toggle="tab">[% BIG_LOO.number | html %]</a>
-            </li>
-        [% END %]
-    </ul>
-    <div class="tab-content">
-[% FOREACH BIG_LOO IN BIG_LOOP %]
-    <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane">
-    [% FOREACH innerloo IN BIG_LOO.innerloop %]
-        [% IF ( innerloo.tag_number ) %]
-            <div class="tag">
-                <div class="tag_title">
-                    <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
-                    [% IF (innerloo.defined("ind1") ) %]
-                        <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
-                    [% END %]
-                    [% IF (innerloo.tag_desc) %]
-                        <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
+                <div id="action">
+                    [% IF count %]
+                        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an:[% authid | uri %]">[% count | html %] record(s)</a>
+                    [% ELSE %]
+                        This authority is not used in any records.
                     [% END %]
                 </div>
-        [% ELSE %]
-            <div class="tag">
-        [% END %]
-        [% FOREACH subfiel IN innerloo.subfield %]
-            <div class="auth_subfield">
-                <div class="subfield_info marc_field">
-                    [% UNLESS ( subfiel.hide_marc ) %]
-                        <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
-                    [% END %]
-                    <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
-                </div> <!-- /.subfield_info.marc_field -->
-                <div class="subfield_content marc_field">
-                    <span class="subfield_value">
-                        [% IF ( subfiel.is_url ) %]
-                            <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
-                        [% ELSE %]
-                            [% subfiel.marc_value | html %]
+
+                <div id="authoritiestabs" class="toptabs numbered">
+                    <ul class="nav nav-tabs" role="tablist">
+                        [% FOREACH BIG_LOO IN BIG_LOOP %]
+                            <li role="presentation">
+                                <a href="#tab[% BIG_LOO.number | uri %]XX" aria-controls="tab[% BIG_LOO.number | uri %]XX" role="tab" data-toggle="tab">[% BIG_LOO.number | html %]</a>
+                            </li>
                         [% END %]
-                    </span>
-                </div> <!-- /.subfield_content.marc_field -->
-            </div> <!-- /.auth_subfield -->
-        [% END %]
+                    </ul>
+                    <div class="tab-content">
+                        [% FOREACH BIG_LOO IN BIG_LOOP %]
+                            <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane">
+                                [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                                    [% IF ( innerloo.tag_number ) %]
+                                        <div class="tag">
+                                            <div class="tag_title">
+                                                <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
+                                                [% IF (innerloo.defined("ind1") ) %]
+                                                    <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
+                                                [% END %]
+                                                [% IF (innerloo.tag_desc) %]
+                                                    <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
+                                                [% END %]
+                                            </div>
+                                    [% ELSE %]
+                                        <div class="tag">
+                                    [% END %]
+
+                                        [% FOREACH subfiel IN innerloo.subfield %]
+                                            <div class="auth_subfield">
+                                                <div class="subfield_info marc_field">
+                                                    [% UNLESS ( subfiel.hide_marc ) %]
+                                                        <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
+                                                    [% END %]
+                                                    <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
+                                                </div> <!-- /.subfield_info.marc_field -->
+                                                <div class="subfield_content marc_field">
+                                                    <span class="subfield_value">
+                                                        [% IF ( subfiel.is_url ) %]
+                                                            <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                                                        [% ELSE %]
+                                                            [% subfiel.marc_value | html %]
+                                                        [% END %]
+                                                    </span>
+                                                </div> <!-- /.subfield_content.marc_field -->
+                                            </div> <!-- /.auth_subfield -->
+                                        [% END %]
+                                    </div>
+                                [% END %]
+                            </div>
+                        [% END %]
+                    </div> <!-- /.tab-content -->
+                </div>
+            [% END %]
         </div>
-    [% END %]
     </div>
-[% END %]
-</div> <!-- /.tab-content -->
-</div>
-</div>
-</div>
-[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
