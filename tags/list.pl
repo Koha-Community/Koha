@@ -23,9 +23,10 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetBiblioData );
 use C4::Context;
-use C4::Items qw( GetItemsInfo );
 use C4::Tags qw( get_tag_rows get_tags remove_tag );
 use C4::Output qw( output_html_with_http_headers );
+
+use Koha::Biblios;
 
 my $needed_flags = { tools => 'moderate_tags'
 };    # FIXME: replace when more specific permission is created.
@@ -57,11 +58,13 @@ else {
     if ($tag) {
         my $taglist = get_tag_rows( { term => $tag } );
         for ( @{$taglist} ) {
+            # FIXME We should use Koha::Biblio here
             my $dat    = &GetBiblioData( $_->{biblionumber} );
-            my @items = GetItemsInfo( $_->{biblionumber} );
+            my $biblio = Koha::Biblios->find($dat->{biblionumber});
+            my $items = $biblio->items->search_ordered;
             $dat->{biblionumber} = $_->{biblionumber};
             $dat->{tag_id}       = $_->{tag_id};
-            $dat->{items}        = \@items;
+            $dat->{items}        = $items;
             $dat->{TagLoop}      = get_tags(
                 {
                     biblionumber => $_->{biblionumber},

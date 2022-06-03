@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( do_it ) %]Review[% ELSE %]Review tags[% END %] &rsaquo; Tags &rsaquo; Tools &rsaquo; Koha</title>
@@ -64,9 +65,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             [% END %]</p>
             [% END %]
             </td>
-            <td>[% IF ( title.items ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
+            <td>[% IF ( title.items.count ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
                 <li>
-                    [% item.branchname | html %]
+                    [% Branches.GetName(item.holdingbranch) | html %]
                     <span class="shelvingloc">
                         [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
                     </span>
