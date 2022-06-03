@@ -162,6 +162,7 @@ BEGIN {
             itemnumber       => $itemnumber,
             found            => $found,
             itemtype         => $itemtype,
+            item_gorup_id    => $item_group_id
         }
     );
 

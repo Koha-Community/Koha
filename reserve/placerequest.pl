@@ -45,6 +45,7 @@ my $startdate      = $input->param('reserve_date') || '';
 my @rank           = $input->multi_param('rank-request');
 my $title          = $input->param('title');
 my $checkitem      = $input->param('checkitem');
+my $item_group_id  = $input->param('item_group_id');
 my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
 my $non_priority   = $input->param('non_priority');
@@ -140,6 +141,7 @@ if ( $patron ) {
                             found            => $found,
                             itemtype         => $itemtype,
                             non_priority     => $non_priority,
+                            item_group_id    => $item_group_id,
                         }
                     );
                 }

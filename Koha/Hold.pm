@@ -525,6 +525,20 @@ sub item {
     return $self->{_item};
 }
 
+=head3 item_group
+
+Returns the related Koha::Biblio::ItemGroup object for this Hold
+
+=cut
+
+sub item_group {
+    my ($self) = @_;
+
+    my $item_group_rs = $self->_result->item_group;
+    return unless $item_group_rs;
+    return Koha::Biblio::ItemGroup->_new_from_dbic($item_group_rs);
+}
+
 =head3 branch
 
 Returns the related Koha::Library object for this Hold

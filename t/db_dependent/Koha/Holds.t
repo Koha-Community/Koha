@@ -25,6 +25,7 @@ use Test::Warn;
 use C4::Circulation qw( AddIssue );
 use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll );
 use Koha::AuthorisedValueCategory;
+use Koha::Biblio::ItemGroups;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
@@ -639,6 +640,32 @@ subtest 'set_waiting+patron_expiration_date' => sub {
         is( $hold->expirationdate,         $patron_expiration_date );
         is( $hold->patron_expiration_date, $patron_expiration_date );
     };
+};
+
+subtest 'Test Koha::Hold::item_group' => sub {
+    plan tests => 1;
+    my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_sample_item;
+    my $item_group = $builder->build_object(
+        {
+            class => 'Koha::Biblio::ItemGroups',
+            value => { biblionumber => $item->biblionumber }
+        }
+    );
+    my $reserve_id = AddReserve(
+        {
+            branchcode       => $library->branchcode,
+            borrowernumber   => $patron->borrowernumber,
+            biblionumber     => $item->biblionumber,
+            itemnumber       => $item->itemnumber,
+            item_group_id    => $item_group->id,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+    is( $hold->item_group_id, $item_group->id,
+        'Koha::Hold::item_group returns the correct item_group' );
 };
 
 

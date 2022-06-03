@@ -179,6 +179,8 @@
                     [%- ELSE -%]
                         [%- IF hold.itemtype -%]
                             <em>Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</em>
+                        [%- ELSIF hold.object.item_group -%]
+                            <em>Next available item from group <strong>[% hold.object.item_group.description | html %]</strong></em>
                         [%- ELSE -%]
                             <em>Next available</em>
                         [%- END -%]

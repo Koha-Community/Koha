@@ -299,11 +299,14 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         my %biblioloopiter = ();
 
         my $biblio = Koha::Biblios->find( $biblionumber );
+
         unless ($biblio) {
             $biblioloopiter{noitems} = 1;
             $template->param('nobiblio' => 1);
             last;
         }
+
+        $biblioloopiter{object} = $biblio;
 
         if ( $patron ) {
             { # CanBookBeReserved
@@ -397,6 +400,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             for my $item_object ( @items ) {
                 my $do_check;
                 my $item = $item_object->unblessed;
+                $item->{object} = $item_object;
                 if ( $patron ) {
                     $do_check = $patron->do_check_for_previous_checkout($item) if $wants_check;
                     if ( $do_check && $wants_check ) {

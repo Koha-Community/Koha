@@ -599,7 +599,7 @@
                             [% UNLESS ( multi_hold ) %]
                                 <li>
                                     <label for="requestany">Hold next available item </label>
-                                    [% IF force_hold_level == 'item' %]
+                                    [% IF force_hold_level == 'item' || force_hold_level == 'item_group'  %]
                                         <input type="checkbox" id="requestany" name="request" disabled="true" />
                                     [% ELSIF force_hold_level == 'record' %]
                                         <input type="checkbox" id="requestany" checked="checked" value="Any" disabled="true"/>
@@ -658,6 +658,52 @@
                                 [% END %]
                             </ol>
 
+                            <!-- ItemGroup level holds -->
+                            [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                                <h2 style="padding: 0 1em;">
+                                    Hold next available item from an item group
+                                    [% IF force_hold_level == 'item_group' %]
+                                        <span class="error"><i>(Required)</i></span>
+                                    [% END %]
+                                </h2>
+
+                                [% IF force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
+                                    <span class="error">
+                                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                        Hold must be record level
+                                    </span>
+                                [% ELSIF force_hold_level == 'item' # Patron has placed an item level hold previously for this record %]
+                                    <span class="error">
+                                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                        Hold must be item level
+                                    </span>
+                                [% ELSE %]
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Hold</th>
+                                                <th>Item group</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            [% FOREACH g IN biblio.object.item_groups.search({}, { order_by => ['display_order'] }) %]
+                                                [% IF g.items %]
+                                                    <tr>
+                                                        <td>
+                                                            <input id="item_group_id_[% g.id | html %]" type="radio" name="item_group_id" value="[% g.id | html %]" />
+                                                        </td>
+                                                        <td>
+                                                            <label for="item_group_id_[% g.id | html %]">[% g.description | html %]</label>
+                                                        </td>
+                                                    </tr>
+                                                [% END %]
+                                            [% END %]
+                                        </tbody>
+                                    </table>
+                                [% END %]
+                            [% END %]
+                            <!-- /ItemGroup level holds -->
+
                             <h2 style="padding: 0 1em;">
                                 Place a hold on a specific item
                                 [% IF force_hold_level == 'item' %]
@@ -674,6 +720,9 @@
                                             <th>Item type</th>
                                         [% END %]
                                         <th>Barcode</th>
+                                        [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                                            <th>Item group</th>
+                                        [% END %]
                                         <th>Home library</th>
                                         <th>Last location</th>
                                         [% IF itemdata_ccode %]
@@ -697,6 +746,11 @@
                                                         <span class="error">
                                                             <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
                                                             Hold must be record level
+                                                        </span>
+                                                    [% ELSIF force_hold_level == 'item_group' %]
+                                                        <span class="error">
+                                                            <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                                            Hold must be item group level
                                                         </span>
                                                     [% ELSIF ( itemloo.available ) %]
                                                         <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
@@ -767,6 +821,11 @@
                                                 <td>
                                                     [% itemloo.barcode | html %]
                                                 </td>
+                                                [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                                                    <td>
+                                                        [% itemloo.object.item_group.description | html %]
+                                                    </td>
+                                                [% END %]
                                                 <td>
                                                     [% Branches.GetName( itemloo.homebranch ) | html %]
                                                 </td>
@@ -1346,6 +1405,8 @@
                 };
                 if($('input[name="checkitem"]:checked').length)
                     data.item_id = $('input[name="checkitem"]:checked').val();
+                if($('input[name="item_group_id"]:checked').length)
+                    data.item_group_id = $('input[name="item_group_id"]:checked').val();
                 if($('input[name="borrowernumber"]').length)
                     data.patron_id = $('input[name="borrowernumber"]').val();
                 if($('textarea[name="notes"]').length)
@@ -1391,8 +1452,8 @@
             });
 
             [% UNLESS ( multi_hold ) %]
-                $("#hold-request-form").on("submit", function(){
-                    return check($(this));
+                $("#hold-request-form").on("submit", function(e){
+                    return check(e, $(this));
                 });
             [% ELSE %]
                 $("#hold-request-form").on("submit", function(){
@@ -1436,7 +1497,7 @@
             });
         });
 
-        function check( table ) {
+        function check( e, table ) {
 
             var msg = "";
 
@@ -1467,6 +1528,7 @@
                 $('#hold-request-form').preventDoubleFormSubmit();
                 return(true);
             } else {
+                e.preventDefault();
                 alert(msg);
                 return(false);
             }
@@ -1619,6 +1681,16 @@
                 stickTo: "#existing_holds",
                 stickyClass: "floating"
             });
+
+            [% IF Koha.Preference('EnableItemGroupHolds') %]
+                $(':radio[name="item_group_id"]').change(function(){
+                    $(':radio[name="checkitem"]').prop('checked', false);
+                });
+
+                $(':radio[name="checkitem"]').change(function(){
+                    $(':radio[name="item_group_id"]').prop('checked', false);
+                });
+            [% END %]
 
             if(!localStorage.selectedHolds  || document.referrer.replace(/\?.*/, '') !== document.location.origin+document.location.pathname) {
                 localStorage.selectedHolds = [];
