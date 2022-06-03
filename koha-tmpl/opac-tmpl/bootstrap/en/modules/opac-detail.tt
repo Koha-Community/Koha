@@ -1246,16 +1246,16 @@
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
-                        [% IF ( ITEM_RESULT.holding_branch_opac_info ) %]
-                            <a href="[% ITEM_RESULT.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.branchcode | html %]">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.branchname | html %]
+                        [% IF ( ITEM_RESULT.holding_branch.opac_info ) %]
+                            <a href="[% ITEM_RESULT.holding_branch.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.holding_branch.branchcode | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.holding_branch.branchname | html %]
                             </a>
-                        [% ELSIF ( ITEM_RESULT.branchurl ) %]
+                        [% ELSIF ( ITEM_RESULT.holding_branch.branchurl ) %]
                             <a href="[% ITEM_RESULT.branchurl | url %]">
-                                [% ITEM_RESULT.branchname | html %]
+                                [% ITEM_RESULT.holding_branch.branchname | html %]
                             </a>
                         [% ELSE %]
-                            <span>[% ITEM_RESULT.branchname | html %]</span>
+                            <span>[% ITEM_RESULT.holding_branch.branchname | html %]</span>
                         [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'holding' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
@@ -1270,16 +1270,16 @@
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
-                        [% IF ( ITEM_RESULT.holding_branch_opac_info ) %]
-                            <a href="[% Branches.GetURL( ITEM_RESULT.homebranch ) | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.homebranch | html %]">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% Branches.GetName( ITEM_RESULT.homebranch ) | html %]
+                        [% IF ( ITEM_RESULT.holding_branch.opac_info ) %] [%# FIXME Shouldn't this be home_branch instead of holding_branch? %]
+                            <a href="[% ITEM_RESULT.home_branch.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.home_branch.branchchode | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.home_branch.branchname | html %]
                             </a>
-                        [% ELSIF ( Branches.GetURL( ITEM_RESULT.homebranch ) ) %]
-                            <a href="[% Branches.GetURL( ITEM_RESULT.homebranch ) | url %]">
-                                [% Branches.GetName( ITEM_RESULT.homebranch ) | html %]
+                        [% ELSIF ( ITEM_RESULT.home_branch.branchurl ) %]
+                            <a href="[% ITEM_RESULT.home_branch.branchurl | url %]">
+                                [% ITEM_RESULT.home_branch.branchname | html %]
                             </a>
                         [% ELSE %]
-                            <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
+                            <span>[% ITEM_RESULT.home_branch.branchname | html %]</span>
                         [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'home' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
@@ -1315,20 +1315,21 @@
                 [% END %]
 
                 [% IF ( itemdata_enumchron ) %]
+                    [% SET serial = ITEM_RESULT.serial %]
                     <td class="vol_info">
-                        [% IF ITEM_RESULT.enumchron && ITEM_RESULT.serialseq %]
+                        [% IF ITEM_RESULT.enumchron && serial.serialseq %]
                             <span class="enum">[% ITEM_RESULT.enumchron | html %]</span>
-                            [% IF ( ITEM_RESULT.serialseq && ITEM_RESULT.enumchron!=ITEM_RESULT.serialseq ) %]
+                            [% IF ( serial.serialseq && ITEM_RESULT.enumchron!=serial.serialseq ) %]
                                 <span class="sep"> -- </span>
-                                <span class="serialseq">[% ITEM_RESULT.serialseq | html %]</span>
+                                <span class="serialseq">[% serial.serialseq | html %]</span>
                             [% END %]
                         [% ELSIF ITEM_RESULT.enumchron %]
                             <span class="enum">[% ITEM_RESULT.enumchron | html %]</span>
-                        [% ELSIF ITEM_RESULT.serialseq %]
-                                <span class="serialseq">[% ITEM_RESULT.serialseq | html %]</span>
+                        [% ELSIF serial.serialseq %]
+                                <span class="serialseq">[% serial.serialseq | html %]</span>
                         [% END %]
-                        [% IF ( ITEM_RESULT.publisheddate ) %]
-                            <span class="pubdate">([% ITEM_RESULT.publisheddate | $KohaDates %])</span>
+                        [% IF ( serial.publisheddate ) %]
+                            <span class="pubdate">([% serial.publisheddate | $KohaDates %])</span>
                         [% END %]
                     </td>
                 [% END %]
@@ -1363,7 +1364,12 @@
                 [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>[% END %]
                 <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
                 [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>[% END %]
-                <td class="date_due" data-order="[% ITEM_RESULT.datedue | html %]">[% ITEM_RESULT.datedue | $KohaDates  as_due_date => 1 %]</td>
+                [% IF ITEM_RESULT.checkout %]
+                    <td class="date_due" data-order="[% ITEM_RESULT.checkout.date_due | html %]">[% ITEM_RESULT.checkout.date_due | $KohaDates as_due_date => 1 %]</td>
+                [% ELSE %]
+                    <td class="date_due"></td>
+                [% END %]
+
                     <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                 [% IF holds_count.defined || show_priority %]
                     <td class="holds_count">

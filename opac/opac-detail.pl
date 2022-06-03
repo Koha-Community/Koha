@@ -45,7 +45,6 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Items qw( GetItemsInfo );
 use C4::Circulation qw( GetTransfers );
 use C4::Tags qw( get_tags );
 use C4::XISBN qw( get_xisbns );
@@ -82,6 +81,7 @@ use Koha::Plugins;
 use Koha::Ratings;
 use Koha::Recalls;
 use Koha::Reviews;
+use Koha::Serial::Items;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Util::MARC;
@@ -105,12 +105,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my @all_items = GetItemsInfo($biblionumber);
-if( $specific_item ) {
-    @all_items = grep { $_->{itemnumber} == $query->param('itemnumber') } @all_items;
-    $template->param( specific_item => 1 );
-}
-my @items_to_show;
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $biblio = Koha::Biblios->find( $biblionumber );
@@ -120,6 +114,12 @@ unless ( $biblio && $record ) {
     exit;
 }
 
+my $items = $biblio->items->search_ordered;
+if ($specific_item) {
+    $items = $items->search( { itemnumber => scalar $query->param('itemnumber') } );
+    $template->param( specific_item => 1 );
+}
+
 unless ( $patron and $patron->category->override_hidden_items ) {
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
@@ -127,9 +127,8 @@ unless ( $patron and $patron->category->override_hidden_items ) {
         print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
         exit;
     }
-    if ( scalar @all_items >= 1 ) {
-        @items_to_show = Koha::Items->search( { itemnumber => [ map { $_->{itemnumber} } @all_items ] } )
-                                    ->filter_by_visible_in_opac( { patron => $patron } )->as_list;
+    if ( $items->count >= 1 ) {
+        $items = $items->filter_by_visible_in_opac( { patron => $patron } );
     }
 }
 
@@ -495,44 +494,18 @@ $template->param(
     OPACShowCheckoutName => C4::Context->preference("OPACShowCheckoutName"),
 );
 
-if ( C4::Context->preference('EasyAnalyticalRecords') ) {
-    # adding items linked via host biblios
-    my $analyticfield = '773';
-    if ($marcflavour eq 'MARC21'){
-        $analyticfield = '773';
-    } elsif ($marcflavour eq 'UNIMARC') {
-        $analyticfield = '461';
-    }
-    foreach my $hostfield ( $record->field($analyticfield)) {
-        my $hostbiblionumber = $hostfield->subfield("0");
-        my $linkeditemnumber = $hostfield->subfield("9");
-        my @hostitemInfos = GetItemsInfo($hostbiblionumber);
-        foreach my $hostitemInfo (@hostitemInfos){
-            if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
-                push(@all_items, $hostitemInfo);
-            }
-        }
-    }
-}
+my $host_items = $biblio->host_items->filter_by_visible_in_opac({ patron => $patron });
 
-my @items;
-
-# Are there items to hide?
-# Hide items
-if ( @items_to_show != @all_items ) {
-    for my $itm (@all_items) {
-        next unless any { $itm->{itemnumber} eq $_ } @items_to_show;
-        if ( C4::Context->preference('hidelostitems') ) {
-            push @items, $itm unless $itm->{itemlost};
-        }
-        else {
-            push @items, $itm;
+$items = $biblio->items->search_ordered(
+    {
+        'me.itemnumber' => {
+            -in => [
+                $items->get_column('itemnumber'),
+                $host_items->get_column('itemnumber')
+            ]
         }
     }
-} else {
-    # Or not
-    @items = @all_items;
-}
+);
 
 my $dat = &GetBiblioData($biblionumber);
 my $HideMARC = $record_processor->filters->[0]->should_hide_marc(
@@ -591,8 +564,7 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
-$dat->{'count'} = scalar(@items);
-
+$dat->{'count'} = $items->count;
 
 my (%item_reserves, %priority);
 my ($show_holds_count, $show_priority);
@@ -703,85 +675,123 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
 
 my $allow_onshelf_holds;
 my ( $itemloop_has_images, $otheritemloop_has_images );
-if ( not $viewallitems and @items > $max_items_to_display ) {
+if ( not $viewallitems and $items->count > $max_items_to_display ) {
     $template->param(
         too_many_items => 1,
-        items_count => scalar( @items ),
+        items_count    => $items->count,
     );
-} else {
-  for my $itm (@items) {
-    my $item = Koha::Items->find( $itm->{itemnumber} );
-    $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
-    $itm->{priority} = $priority{ $itm->{itemnumber} };
+}
+else {
+    while ( my $item = $items->next ) {
+        my $item_info = $item->unblessed;
+        $item->{holds_count} = $item_reserves{ $item->itemnumber };
+        $item->{priority}    = $priority{ $item->itemnumber };
 
-    $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
-      unless $allow_onshelf_holds;
+        $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy(
+            { item => $item, patron => $patron } )
+          unless $allow_onshelf_holds;
 
-    # get collection code description, too
-    my $ccode = $itm->{'ccode'};
-    $itm->{'ccode'} = $collections->{$ccode} if defined($ccode) && $collections && exists( $collections->{$ccode} );
-    my $copynumber = $itm->{'copynumber'};
-    $itm->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumbers) && defined($copynumber) && exists( $copynumbers->{$copynumber} ) );
-    if ( defined $itm->{'location'} ) {
-        $itm->{'location_description'} = $shelflocations->{ $itm->{'location'} };
-    }
-    if (exists $itm->{itype} && defined($itm->{itype}) && exists $itemtypes->{ $itm->{itype} }) {
-        $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
-        $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{translated_description};
-    }
-    foreach (qw(ccode materials enumchron copynumber itemnotes location_description uri)) {
-        $itemfields{$_} = 1 if ($itm->{$_});
-    }
+        # get collection code description, too
+        my $ccode = $item->ccode;
+        $item_info->{'ccode'} = $collections->{$ccode}
+          if defined($ccode)
+          && $collections
+          && exists( $collections->{$ccode} );
 
-    my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
-    if ( $reserve_status eq "Waiting" )  { $itm->{'waiting'} = 1; }
-    if ( $reserve_status eq "Reserved" ) { $itm->{'onhold'}  = 1; }
+        my $copynumber = $item->copynumber;
+        $item_info->{copynumber} = $copynumbers->{$copynumber}
+          if ( defined($copynumbers)
+            && defined($copynumber)
+            && exists( $copynumbers->{$copynumber} ) );
 
-    if ( C4::Context->preference('UseRecalls') ) {
-        my $pending_recall_count = Koha::Recalls->search(
-            {
-                item_id   => $itm->{itemnumber},
-                status    => 'waiting',
-            }
-        )->count;
-        if ( $pending_recall_count ) { $itm->{has_pending_recall} = 1; }
-    }
-
-     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
-     if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
-        $itm->{transfertwhen} = $transfertwhen;
-        $itm->{transfertfrom} = $transfertfrom;
-        $itm->{transfertto}   = $transfertto;
-     }
-
-    if ( C4::Context->preference('OPACAcquisitionDetails') ) {
-        $itm->{on_order} = 1
-          if grep { $_ eq $itm->{itemnumber} } @itemnumbers_on_order;
-    }
-
-    if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
-        $itm->{cover_images} = $item->cover_images;
-    }
-
-    if ( $item->in_bundle ) {
-        my $host = $item->bundle_host;
-        $itm->{bundle_host} = $host;
-    }
-
-    my $itembranch = $itm->{$separatebranch};
-    if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
-        if ($itembranch and $itembranch eq $currentbranch) {
-            push @itemloop, $itm;
-            $itemloop_has_images++ if $item->cover_images->count;
-        } else {
-            push @otheritemloop, $itm;
-            $otheritemloop_has_images++ if $item->cover_images->count;
+        if ( defined $item->location ) {
+            $item_info->{'location_description'} =
+              $shelflocations->{ $item->location };
         }
-    } else {
-        push @itemloop, $itm;
-        $itemloop_has_images++ if $item->cover_images->count;
+
+        my $itemtype = $item->itemtype;
+        $item_info->{'imageurl'} = getitemtypeimagelocation( 'opac',
+            $itemtypes->{ $itemtype->itemtype }->{'imageurl'} );
+        $item_info->{'description'} =
+          $itemtypes->{ $itemtype->itemtype }->{translated_description};
+
+        foreach my $field (
+            qw(ccode materials enumchron copynumber itemnotes location_description uri)
+          )
+        {
+            $itemfields{$field} = 1 if $item_info->{$field};
+        }
+
+        # FIXME The following must be Koha::Item->serial
+        my $serial_item = Koha::Serial::Items->find($item->itemnumber);
+        if ( $serial_item ) {
+            $item_info->{serial} = $serial_item;
+        }
+
+        $item_info->{checkout} = $item->checkout;
+
+        my $reserve_status =
+          C4::Reserves::GetReserveStatus( $item->itemnumber );
+        if ( $reserve_status eq "Waiting"  ) { $item_info->{'waiting'} = 1; }
+        if ( $reserve_status eq "Reserved" ) { $item_info->{'onhold'}  = 1; }
+
+        if ( C4::Context->preference('UseRecalls') ) {
+            my $pending_recall_count = Koha::Recalls->search(
+                {
+                    item_id   => $item->itemnumber,
+                    status    => 'waiting',
+                }
+            )->count;
+            if ( $pending_recall_count ) { $item_info->has_pending_recall = 1; }
+        }
+
+        my ( $transfertwhen, $transfertfrom, $transfertto ) =
+          GetTransfers( $item->itemnumber );
+        if ( defined($transfertwhen) && $transfertwhen ne '' ) {
+            $item_info->{transfertwhen} = $transfertwhen;
+            $item_info->{transfertfrom} = $transfertfrom;
+            $item_info->{transfertto}   = $transfertto;
+        }
+
+        if ( C4::Context->preference('OPACAcquisitionDetails') ) {
+            $item_info->{on_order} = 1
+              if grep { $_ eq $item->itemnumber } @itemnumbers_on_order;
+        }
+
+        if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
+            $item_info->{cover_images} = $item->cover_images;
+        }
+
+
+        if ( $item->in_bundle ) {
+            $item_info->{bundle_host} = $item->bundle_host;
+        }
+
+        if ( C4::Context->preference('UseCourseReserves') ) {
+            $item_info->{course_reserves} = GetItemCourseReservesInfo( itemnumber => $item->itemnumber );
+        }
+
+        $item_info->{holding_branch} = $item->holding_branch;
+        $item_info->{home_branch}    = $item->home_branch;
+
+        my $itembranch = $item->$separatebranch;
+        if ( $currentbranch
+            and C4::Context->preference('OpacSeparateHoldings') )
+        {
+            if ( $itembranch and $itembranch eq $currentbranch ) {
+                push @itemloop, $item_info;
+                $itemloop_has_images++ if $item->cover_images->count;
+            }
+            else {
+                push @otheritemloop, $item_info;
+                $otheritemloop_has_images++ if $item->cover_images->count;
+            }
+        }
+        else {
+            push @itemloop, $item_info;
+            $itemloop_has_images++ if $item->cover_images->count;
+        }
     }
-  }
 }
 
 if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
@@ -828,7 +838,7 @@ my $norequests = ! $biblio->items->filter_by_for_hold->count;
                      OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
     );
 
-if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+if (C4::Context->preference("AlternateHoldingsField") && $items->count == 0) {
     my $fieldspec = C4::Context->preference("AlternateHoldingsField");
     my $subfields = substr $fieldspec, 3;
     my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
@@ -1115,7 +1125,7 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         );
 
         # in which tab shelf browser should open ?
-        if (grep { $starting_itemnumber == $_->{itemnumber} } @itemloop) {
+        if (grep { $starting_itemnumber == $_->itemnumber } @itemloop) {
             $template->param(shelfbrowser_tab => 'holdings');
         } else {
             $template->param(shelfbrowser_tab => 'otherholdings');
@@ -1244,12 +1254,6 @@ if (C4::Context->preference('OpacHighlightedWords')) {
     $template->{VARS}->{query_desc} = $query->param('query_desc');
 }
 $template->{VARS}->{'trackclicks'} = C4::Context->preference('TrackClicks');
-
-if ( C4::Context->preference('UseCourseReserves') ) {
-    foreach my $i ( @items ) {
-        $i->{'course_reserves'} = GetItemCourseReservesInfo( itemnumber => $i->{'itemnumber'} );
-    }
-}
 
 $template->param(
     'OpacLocationBranchToDisplay' => C4::Context->preference('OpacLocationBranchToDisplay'),
