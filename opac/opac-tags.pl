@@ -40,7 +40,6 @@ use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_with_http_headers is_ajax output_html_with_http_headers );
 use C4::Scrubber;
-use C4::Items qw( GetItemsInfo );
 use C4::Tags qw(
     add_tag
     get_approval_rows
@@ -261,7 +260,7 @@ if ($loggedinuser) {
         next unless $record;
         my @hidden_items;
         if ($should_hide) {
-            my $items = $biblio->items;
+            my $items = $biblio->items->search_ordered;
             my @all_itemnumbers = $items->get_column('itemnumber');
             my @items_to_show = $items->filter_by_visible_in_opac({ opac => 1, patron => $patron })->as_list;
             @hidden_items = array_minus( @all_itemnumbers, @items_to_show );
