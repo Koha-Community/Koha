@@ -129,6 +129,63 @@
 
 [% END # /F ( has_modifications || warndeparture... %]
 
+[% IF waiting_recalls.count %]
+    <div id="recallswaiting" class="circmessage">
+        [% SET waiting_here = 0 %]
+        [% SET waiting_elsewhere = 0 %]
+        [% FOREACH w IN waiting_recalls %]
+            [% IF ( w.pickup_library_id == Branches.GetLoggedInBranchcode()  ) %]
+                [% waiting_here = waiting_here + 1 %]
+            [% ELSE %]
+                [% waiting_elsewhere = waiting_elsewhere + 1 %]
+            [% END %]
+        [% END %]
+
+        [% IF ( waiting_here > 0 ) %]
+            <h4>Recalls waiting here ([% waiting_here | html %])</h4>
+            <ul>
+                [% FOREACH w IN waiting_recalls %]
+                    [% IF ( w.pickup_library_id == Branches.GetLoggedInBranchcode()  ) %]
+                        <li>
+                            <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
+                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
+                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            <span>Recall placed on [% w.created_date | $KohaDates %].</span>
+                            <br />
+                            <strong class="waitinghere">
+                                [% SET expires_on = w.expiration_date %]
+                                Waiting here [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
+                            </strong>
+                        </li>
+                    [% END %]
+                [% END %]
+            </ul>
+        [% END %]
+
+        [% IF ( waiting_elsewhere > 0 ) %]
+            <h4>Recalls waiting at other libraries ([% waiting_elsewhere | html %])</h4>
+            <ul>
+                [% FOREACH w IN waiting_recalls %]
+                    [% IF ( w.pickup_library_id != Branches.GetLoggedInBranchcode()  ) %]
+                        <li>
+                            <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
+                            ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
+                            [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
+                            [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
+                            <span>Recall placed on [% w.created_date | $KohaDates %].</span>
+                            <br />
+                            <strong>
+                                [% SET expires_on = w.expiration_date %]
+                                Waiting at [% Branches.GetName( w.pickup_library_id ) | html %] [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
+                            </strong>
+                        </li>
+                    [% END %]
+                [% END %]
+            </ul>
+        [% END %]
+    </div>
+[% END # /IF waiting_recalls.count %]
 
 [% IF WaitingHolds.count %]
     <div id="holdswaiting" class="circmessage">
