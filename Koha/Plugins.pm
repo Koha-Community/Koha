@@ -34,6 +34,8 @@ use Koha::Cache::Memory::Lite;
 use Koha::Exceptions::Plugin;
 use Koha::Plugins::Methods;
 
+use constant ENABLED_PLUGINS_CACHE_KEY => 'enabled_plugins';
+
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
     my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
@@ -103,8 +105,7 @@ sub get_enabled_plugins {
 
     return unless C4::Context->config('enable_plugins');
 
-    my $cache_key = 'enabled_plugins';
-    my $enabled_plugins = Koha::Cache::Memory::Lite->get_from_cache($cache_key);
+    my $enabled_plugins = Koha::Cache::Memory::Lite->get_from_cache(ENABLED_PLUGINS_CACHE_KEY);
     unless ($enabled_plugins) {
         $enabled_plugins = [];
         my $rs = Koha::Database->schema->resultset('PluginData');
@@ -124,7 +125,7 @@ sub get_enabled_plugins {
 
             push @$enabled_plugins, $plugin;
         }
-        Koha::Cache::Memory::Lite->set_in_cache($cache_key, $enabled_plugins);
+        Koha::Cache::Memory::Lite->set_in_cache(ENABLED_PLUGINS_CACHE_KEY, $enabled_plugins);
     }
 
     return @$enabled_plugins;
@@ -258,6 +259,9 @@ sub InstallPlugins {
             warn $error unless $error =~ m|^Could not find or check module '$plugin_class'|;
         }
     }
+
+    Koha::Cache::Memory::Lite->clear_from_cache(ENABLED_PLUGINS_CACHE_KEY);
+
     return @plugins;
 }
 

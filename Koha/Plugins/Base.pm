@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output qw( output_with_http_headers );
 
 use Koha::Exceptions::Plugin;
+use Koha::Cache::Memory::Lite;
 
 =head1 NAME
 
@@ -103,6 +104,10 @@ sub store_data {
 
     foreach my $key ( keys %$data ) {
         $sth->execute( $self->{'class'}, $key, $data->{$key} );
+    }
+
+    if (exists $data->{__ENABLED__}) {
+        Koha::Cache::Memory::Lite->clear_from_cache(Koha::Plugins->ENABLED_PLUGINS_CACHE_KEY);
     }
 }
 
