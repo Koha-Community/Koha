@@ -199,6 +199,11 @@ $template->param(
     WaitingHolds => $waiting_holds,
 );
 
+if ( C4::Context->preference('UseRecalls') ) {
+    my $waiting_recalls = $patron->recalls->search({ status => 'waiting' });
+    $template->param( waiting_recalls => $waiting_recalls );
+}
+
 my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
 $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
 if ( defined $no_issues_charge_guarantees ) {

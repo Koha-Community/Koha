@@ -449,10 +449,13 @@ if ($patron) {
         holds_count  => $holds->count(),
         WaitingHolds => $waiting_holds,
     );
+
     if ( C4::Context->preference('UseRecalls') ) {
+        my $waiting_recalls = $patron->recalls->search({ status => 'waiting' });
         $template->param(
             recalls => $patron->recalls->filter_by_current->search({},{ order_by => { -asc => 'created_date' } }),
             specific_patron => 1,
+            waiting_recalls => $waiting_recalls,
         );
     }
 }
