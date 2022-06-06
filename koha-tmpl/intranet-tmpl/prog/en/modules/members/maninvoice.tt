@@ -108,7 +108,7 @@
     <script>
         var type_fees = {};
         [% FOREACH debit_type IN debit_types %]
-            type_fees['[% debit_type.code | html %]'] = "[% IF debit_type.default_amount %][% debit_type.default_amount | $Price %][% END %]";
+            type_fees['[% debit_type.code | html %]'] = "[% IF debit_type.default_amount %][% debit_type.default_amount | $Price on_editing => 1 %][% END %]";
         [% END %]
         $(document).ready(function(){
             $('#maninvoice').preventDoubleFormSubmit();
