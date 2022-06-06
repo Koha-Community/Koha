@@ -457,7 +457,7 @@ Set a recall as finished. This should only be called when the item allocated to 
 sub set_fulfilled {
     my ( $self ) = @_;
     $self->update({ status => 'fulfilled', completed => 1, completed_date => dt_from_string });
-    C4::Log::logaction( 'RECALLS', 'FULFILL', $self->id, "Recall fulfilled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
+    C4::Log::logaction( 'RECALLS', 'FILL', $self->id, "Recall fulfilled", 'INTRANET' ) if ( C4::Context->preference('RecallsLog') );
     return $self;
 }
 
