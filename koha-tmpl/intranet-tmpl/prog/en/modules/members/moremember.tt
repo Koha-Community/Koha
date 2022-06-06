@@ -342,10 +342,12 @@
                                                     <span class="label">SMS number:</span>
                                                     <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
                                                 </li>
+                                                [% IF Koha.Preference( 'SMSSendDriver') == 'Email' %]
                                                 <li>
                                                     <span class="label">SMS provider:</span>
                                                     [% patron.sms_provider.name | html %]
                                                 </li>
+                                                [% END %]
                                             </ol>
                                         </div>
                                     [% END %]
