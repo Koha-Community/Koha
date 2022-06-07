@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use MARC::Record;
-use Test::More tests => 4;
+use Test::More tests => 3;
 use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -28,24 +28,13 @@ use Koha::Libraries;
 use Koha::ItemTypes;
 
 BEGIN {
-    use_ok('C4::XSLT', qw( transformMARCXML4XSLT getAuthorisedValues4MARCSubfields buildKohaItemsNamespace ));
+    use_ok('C4::XSLT', qw( buildKohaItemsNamespace ));
 }
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 $schema->storage->txn_begin;
-
-subtest 'transformMARCXML4XSLT tests' => sub {
-    plan tests => 1;
-    my $mock_xslt =  Test::MockModule->new("C4::XSLT");
-    $mock_xslt->mock( getAuthorisedValues4MARCSubfields => sub { return { 942 => { 'n' => 1 } } } );
-    $mock_xslt->mock( GetAuthorisedValueDesc => sub { warn "called"; });
-    my $record = MARC::Record->new();
-    my $suppress_field = MARC::Field->new( 942, ' ', ' ', n => '1' );
-    $record->append_fields($suppress_field);
-    warning_is { C4::XSLT::transformMARCXML4XSLT( 3,$record ) } undef, "942n auth value not translated";
-};
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
     plan tests => 17;

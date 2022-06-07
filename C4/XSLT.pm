@@ -28,22 +28,18 @@ use C4::Koha qw( xml_escape );
 use C4::Biblio qw( GetAuthorisedValueDesc GetFrameworkCode GetMarcStructure );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
+use Koha::RecordProcessor;
 use Koha::XSLT::Base;
 use Koha::Libraries;
 use Koha::Recalls;
 
 my $engine; #XSLT Handler object
-my %authval_per_framework;
-    # Cache for tagfield-tagsubfield to decode per framework.
-    # Should be preferably be placed in Koha-core...
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-        transformMARCXML4XSLT
-        getAuthorisedValues4MARCSubfields
         buildKohaItemsNamespace
         XSLTParse4Display
     );
@@ -55,75 +51,6 @@ BEGIN {
 C4::XSLT - Functions for displaying XSLT-generated content
 
 =head1 FUNCTIONS
-
-=head2 transformMARCXML4XSLT
-
-Replaces codes with authorized values in a MARC::Record object
-
-=cut
-
-sub transformMARCXML4XSLT {
-    my ($biblionumber, $record, $opac) = @_;
-    my $frameworkcode = GetFrameworkCode($biblionumber) || '';
-    my $tagslib = &GetMarcStructure(1, $frameworkcode, { unsafe => 1 });
-    my @fields;
-    # FIXME: wish there was a better way to handle exceptions
-    eval {
-        @fields = $record->fields();
-    };
-    if ($@) { warn "PROBLEM WITH RECORD"; next; }
-    my $marcflavour = C4::Context->preference('marcflavour');
-    my $av = getAuthorisedValues4MARCSubfields($frameworkcode);
-    foreach my $tag ( keys %$av ) {
-        foreach my $field ( $record->field( $tag ) ) {
-            if ( $av->{ $tag } ) {
-                my @new_subfields = ();
-                for my $subfield ( $field->subfields() ) {
-                    my ( $letter, $value ) = @$subfield;
-                    # Replace the field value with the authorised value *except* for MARC21 field 942$n (suppression in opac)
-                    if ( !( $tag eq '942' && $subfield->[0] eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
-                        $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib, undef, $opac )
-                            if $av->{ $tag }->{ $letter };
-                    }
-                    push( @new_subfields, $letter, $value );
-                } 
-                $field ->replace_with( MARC::Field->new(
-                    $tag,
-                    $field->indicator(1),
-                    $field->indicator(2),
-                    @new_subfields
-                ) );
-            }
-        }
-    }
-    return $record;
-}
-
-=head2 getAuthorisedValues4MARCSubfields
-
-Returns a ref of hash of ref of hash for tag -> letter controlled by authorised values
-Is only used in this module currently.
-
-=cut
-
-sub getAuthorisedValues4MARCSubfields {
-    my ($frameworkcode) = @_;
-    unless ( $authval_per_framework{ $frameworkcode } ) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT DISTINCT tagfield, tagsubfield
-                                 FROM marc_subfield_structure
-                                 WHERE authorised_value IS NOT NULL
-                                   AND authorised_value!=''
-                                   AND frameworkcode=?");
-        $sth->execute( $frameworkcode );
-        my $av = { };
-        while ( my ( $tag, $letter ) = $sth->fetchrow() ) {
-            $av->{ $tag }->{ $letter } = 1;
-        }
-        $authval_per_framework{ $frameworkcode } = $av;
-    }
-    return $authval_per_framework{ $frameworkcode };
-}
 
 =head2 XSLTParse4Display
 
@@ -245,8 +172,9 @@ sub XSLTParse4Display {
     my ( $params ) = @_;
 
     my $biblionumber = $params->{biblionumber};
-    my $orig_record  = $params->{record};
+    my $record       = $params->{record};
     my $xslsyspref   = $params->{xsl_syspref};
+    my $interface    = ( $xslsyspref =~ /OPAC/ ) ? 'opac' : 'intranet' ;
     my $fixamps      = $params->{fix_amps};
     my $hidden_items = $params->{hidden_items} || [];
     my $variables    = $params->{xslt_variables};
@@ -257,8 +185,19 @@ sub XSLTParse4Display {
 
     my $xslfilename = get_xsl_filename( $xslsyspref);
 
+    my $frameworkcode = GetFrameworkCode($biblionumber) || '';
+    my $record_processor = Koha::RecordProcessor->new(
+        {
+            filters => [ 'ExpandCodedFields' ],
+            options => {
+                interface     => $interface,
+                frameworkcode => $frameworkcode
+            }
+        }
+    );
+    $record_processor->process($record);
+
     # grab the XML, run it through our stylesheet, push it out to the browser
-    my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     my $itemsxml;
     if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" || $xslsyspref eq "XSLTResultsDisplay" ) {
         $itemsxml = ""; #We don't use XSLT for items display on these pages

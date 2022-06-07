@@ -25,6 +25,7 @@ use HTTP::OAI::Repository qw( validate_request );
 
 use base ("HTTP::OAI::Repository");
 
+use Koha::RecordProcessor;
 use Koha::OAI::Server::Identify;
 use Koha::OAI::Server::ListSets;
 use Koha::OAI::Server::ListMetadataFormats;
@@ -35,7 +36,7 @@ use XML::SAX::Writer;
 use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
-use C4::XSLT qw( transformMARCXML4XSLT );
+use C4::Biblio qw( GetFrameworkCode );
 use Koha::XSLT::Base;
 use Koha::Biblios;
 
@@ -178,8 +179,19 @@ sub get_biblio_marcxml {
 
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record = $biblio->metadata->record({ embed_items => $with_items, opac => 1 });
-    $record = transformMARCXML4XSLT( $biblionumber, $record )
-        if $expanded_avs;
+    if ( $expanded_avs ) {
+        my $frameworkcode = GetFrameworkCode($biblionumber) || '';
+        my $record_processor = Koha::RecordProcessor->new(
+            {
+                filters => [ 'ExpandCodedFields' ],
+                options => {
+                    interface     => 'opac',
+                    frameworkcode => $frameworkcode
+                }
+            }
+        );
+        $record_processor->process($record) if $expanded_avs;
+    }
 
     return $record ? $record->as_xml_record() : undef;
 }
