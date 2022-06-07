@@ -78,15 +78,25 @@ if ( $op eq 'cancel' ) {
 
 
 if ( $op eq 'list' ) {
-    my $jobs =
+    my $queued_jobs =
       $can_manage_background_jobs
-      ? Koha::BackgroundJobs->search( {},
+      ? Koha::BackgroundJobs->search( { ended_on => undef },
         { order_by => { -desc => 'enqueued_on' } } )
       : Koha::BackgroundJobs->search(
-        { borrowernumber => $logged_in_user->borrowernumber },
+        { borrowernumber => $logged_in_user->borrowernumber, ended_on => undef },
         { order_by       => { -desc => 'enqueued_on' } }
       );
-    $template->param( jobs => $jobs );
+    $template->param( queued => $queued_jobs );
+
+    my $complete_jobs =
+      $can_manage_background_jobs
+      ? Koha::BackgroundJobs->search( { ended_on => { '!=' => undef } },
+        { order_by => { -desc => 'enqueued_on' } } )
+      : Koha::BackgroundJobs->search(
+        { borrowernumber => $logged_in_user->borrowernumber, ended_on => { '!=' => undef } },
+        { order_by       => { -desc => 'enqueued_on' } }
+      );
+    $template->param( complete => $complete_jobs );
 }
 
 $template->param(
