@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use base 'Class::Accessor';
 
-use C4::Biblio;
+use C4::Biblio qw(TransformMarcToKoha);
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use C4::Search qw( new_record_from_zebra );
 use DBIx::Class::ResultClass::HashRefInflator;

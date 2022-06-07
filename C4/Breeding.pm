@@ -21,7 +21,7 @@ package C4::Breeding;
 use strict;
 use warnings;
 
-use C4::Biblio;
+use C4::Biblio qw(TransformMarcToKoha);
 use C4::Koha qw( GetVariationsOfISBN );
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use MARC::File::USMARC;
