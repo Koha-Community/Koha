@@ -577,7 +577,7 @@ if ($pOldReserves) {
     print "Purging old reserves older than $pOldReserves days.\n" if $verbose;
     my $old_reserves = Koha::Old::Holds->filter_by_last_update( { days => $pOldReserves } );
     my $count = $old_reserves->count;
-    $old_reserves->delete if $verbose;
+    $old_reserves->delete if $confirm;
     if ($verbose) {
         say $confirm
           ? sprintf "Done with purging %d old reserves.", $count
@@ -594,7 +594,7 @@ if ($pTransfers) {
         }
     );
     my $count = $transfers->count;
-    $transfers->delete if $verbose;
+    $transfers->delete if $confirm;
     if ($verbose) {
         say $confirm
           ? sprintf "Done with purging %d transfers.", $count
