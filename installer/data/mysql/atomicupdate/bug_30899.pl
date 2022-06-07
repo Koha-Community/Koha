@@ -1,8 +1,8 @@
 use Modern::Perl;
 
 return {
-    bug_number => 30449,
-    description => "Check borrower_attribute_types FK constraint",
+    bug_number => 30899,
+    description => "Check borrower_attribute_types FK constraint (30449 follow-up)",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
