@@ -164,8 +164,8 @@ restart_plack()
     if is_plack_running ${instancename}; then
         stop_plack $instancename && start_plack $instancename
     else
-        log_daemon_msg "Error: Plack not running for ${instancename}"
-        log_end_msg 1
+        log_daemon_msg "Plack not running for ${instancename}."
+        start_plack $instancename
     fi
 }
 
