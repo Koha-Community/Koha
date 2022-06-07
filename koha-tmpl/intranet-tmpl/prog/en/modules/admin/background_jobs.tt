@@ -156,49 +156,106 @@
 
     <h1>Background jobs</h1>
 
-    [% IF jobs.count %]
-        <table id="table_background_jobs">
-            <thead>
-                <tr>
-                    <th>Job ID</th>
-                    <th>Status</th>
-                    <th>Progress</th>
-                    <th>Type</th>
-                    <th>Queued</th>
-                    <th>Started</th>
-                    <th>Ended</th>
-                    <th class="noExport">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH job IN jobs %]
-                <tr>
-                    <td>[% job.id | html %]</td>
-                    <td>
-                        [% PROCESS show_job_status %]
-                    </td>
-                    <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
-                    <td>
-                        [% PROCESS show_job_type job_type => job.type %]
-                    </td>
-                    <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
-                    <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
-                    <td>[% job.ended_on| $KohaDates with_hours = 1 %]</td>
-                    <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
-                        [% IF job.status == 'new' || job.status == 'started' %]
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
-                        [% END %]
-                    </td>
-                </tr>
+    <div id="taskstabs" class="toptabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#queued" aria-controls="queued" role="tab" data-toggle="tab">Queued jobs</a></li>
+            <li role="presentation"><a href="#complete" aria-controls="complete" role="tab" data-toggle="tab">Completed jobs</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="queued">
+                [% IF queued.count %]
+                    <table id="table_queued_jobs">
+                        <thead>
+                            <tr>
+                                <th>Job ID</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Type</th>
+                                <th>Queued</th>
+                                <th>Started</th>
+                                <th class="noExport">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH job IN queued %]
+                            <tr>
+                                <td>[% job.id | html %]</td>
+                                <td>
+                                    [% PROCESS show_job_status %]
+                                </td>
+                                <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
+                                <td>
+                                    [% PROCESS show_job_type job_type => job.type %]
+                                </td>
+                                <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
+                                <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
+                                <td class="actions">
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
+                                    [% IF job.status == 'new' || job.status == 'started' %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
+                                    [% END %]
+                                </td>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                [% ELSE %]
+                    <div class="dialog message">
+                        There are no queued background jobs yet.
+                    </div>
                 [% END %]
-            </tbody>
-        </table>
-    [% ELSE %]
-        <div class="dialog message">
-            There are no background jobs yet.
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="complete">
+                [% IF complete.count %]
+                    <p>Jobs completed in the last 60 minutes.</p>
+                    <table id="table_complete_jobs">
+                        <thead>
+                            <tr>
+                                <th>Job ID</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Type</th>
+                                <th>Queued</th>
+                                <th>Started</th>
+                                <th>Ended</th>
+                                <th class="noExport">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH job IN complete %]
+                            <tr>
+                                <td>[% job.id | html %]</td>
+                                <td>
+                                    [% PROCESS show_job_status %]
+                                </td>
+                                <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
+                                <td>
+                                    [% PROCESS show_job_type job_type => job.type %]
+                                </td>
+                                <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
+                                <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
+                                <td>[% job.ended_on| $KohaDates with_hours = 1 %]</td>
+                                <td class="actions">
+                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
+                                    [% IF job.status == 'new' || job.status == 'started' %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
+                                    [% END %]
+                                </td>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                [% ELSE %]
+                    <div class="dialog message">
+                        There were no completed background jobs completed in the last 60 minutes.
+                    </div>
+                [% END %]
+            </div>
         </div>
-    [% END %]
+    </div>
+
 [% END %]
 
             </main>
@@ -216,7 +273,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            $("#table_background_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#table_queued_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
                 ],
@@ -225,6 +282,14 @@
                 "sPaginationType": "full_numbers"
             }));
 
+            $("#table_complete_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 0, "desc" ]],
+                "iDisplayLength": 10,
+                "sPaginationType": "full_numbers"
+            }));
         });
     </script>
     [% IF op == 'view' %]
