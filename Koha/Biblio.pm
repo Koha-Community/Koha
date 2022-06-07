@@ -940,7 +940,7 @@ sub get_marc_notes {
 
     my %hiddenlist = map { $_ => 1 }
         split( /,/, C4::Context->preference('NotesToHide'));
-    my $record = $self->metadata->record;
+    my $record = $params->{record} // $self->metadata->record;
     $record = transformMARCXML4XSLT( $self->biblionumber, $record, $opac );
 
     foreach my $field ( $record->field($scope) ) {
