@@ -121,6 +121,20 @@ sub process_job {
 
     die "fork failed!" unless defined $pid;
 
-    $job->process( $args );
+    my $patron = Koha::Patrons->find($job->borrowernumber);
+    if ( $patron ) {
+        C4::Context->_new_userenv(-1);
+        C4::Context->set_userenv(
+            $patron->borrowernumber,      $patron->userid,
+            $patron->cardnumber,          $patron->firstname,
+            $patron->surname,            $patron->branchcode,
+            $patron->library->branchname, $patron->flags
+        );
+        $job->process( $args );
+        C4::Context->_unset_userenv(-1);
+    } ese {
+        $job->process( $args );
+    }
+
     exit;
 }
