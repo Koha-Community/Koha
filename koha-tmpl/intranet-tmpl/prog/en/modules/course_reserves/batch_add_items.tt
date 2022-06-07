@@ -5,7 +5,7 @@
 [% SET footerjs = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Add items &rsaquo; Course reserves &rsaquo; Koha</title>
+<title>Add reserves &rsaquo; [% course.course_name | html %] &rsaquo; Course reserves &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="courses_add_items_step1" class="course">
@@ -22,8 +22,11 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         </li>
         <li>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %]</a>
+        </li>
+        <li>
             <a href="#" aria-current="page">
-                Add reserves for <em>[% course.course_name | html %]</em>
+                Add reserves
             </a>
         </li>
     </ol>

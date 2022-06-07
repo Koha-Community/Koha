@@ -1,7 +1,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF is_edit || course_reserve %]Edit item[% ELSE %]Add items[% END %] &rsaquo; Course reserves &rsaquo; Koha</title>
+<title>[% IF is_edit || course_reserve %]Edit reserve[% ELSE %]Add reserves[% END %] &rsaquo; [% course.course_name | html %] &rsaquo; Course reserves &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -19,9 +19,12 @@
             <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
         </li>
         <li>
+            <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | uri %]">[% course.course_name | html %]</a>
+        </li>
+        <li>
             <a href="#" aria-current="page">
                 [% IF is_edit || course_reserve %] Edit [% ELSE %] Reserve [% END %]
-                <em>[% biblio.title | html %]</em> for <em>[% course.course_name | html %]</em>
+                <em>[% biblio.title | html %]</em>
             </a>
         </li>
     </ol>
