@@ -124,6 +124,7 @@ sub process_job {
     my $patron = Koha::Patrons->find($job->borrowernumber);
     if ( $patron ) {
         C4::Context->_new_userenv(-1);
+        C4::Context->interface('intranet');
         C4::Context->set_userenv(
             $patron->borrowernumber,      $patron->userid,
             $patron->cardnumber,          $patron->firstname,
