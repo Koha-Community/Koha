@@ -8,7 +8,7 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         if( foreign_key_exists('borrower_attribute_types', 'category_code_fk') ) {
-            $dbh->do( q|ALTER TABLE borrower_attribute_types DROP CONSTRAINT category_code_fk| );
+            $dbh->do( q|ALTER TABLE borrower_attribute_types DROP FOREIGN KEY category_code_fk| );
             if( index_exists('borrower_attribute_types', 'category_code_fk') ) {
                 $dbh->do( q|ALTER TABLE borrower_attribute_types DROP INDEX category_code_fk| );
             }
