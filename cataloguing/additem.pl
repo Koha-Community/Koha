@@ -177,8 +177,11 @@ if ($op eq "additem") {
             my @v = grep { $_ ne "" }
                 uniq $input->multi_param( "items." . $c );
 
-            next if !@v
-                && $c ne 'permanent_location'; # See 27837
+            next unless @v;
+
+            if ( $c eq 'permanent_location' ) { # See 27837
+                $item->make_column_dirty('permanent_location');
+            }
 
             $item->$c(join ' | ', @v);
         }
@@ -443,6 +446,10 @@ if ($op eq "additem") {
         } else {
             my @v = map { ( defined $_ && $_ eq '' ) ? undef : $_ } $input->multi_param( "items." . $c );
             next unless @v;
+
+            if ( $c eq 'permanent_location' ) { # See 27837
+                $item->make_column_dirty('permanent_location');
+            }
 
             if ( scalar(@v) == 1 && not defined $v[0] ) {
                 delete $new_values->{$c};
