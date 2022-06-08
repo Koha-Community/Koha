@@ -35,7 +35,7 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 =cut
 
-=head3 type
+=head3 get_private_shelves
 
 =cut
 
@@ -62,6 +62,9 @@ sub get_private_shelves {
     );
 }
 
+=head3 get_public_shelves
+
+=cut
 
 sub get_public_shelves {
     my ( $self, $params ) = @_;
@@ -79,6 +82,10 @@ sub get_public_shelves {
         }
     );
 }
+
+=head3 get_some_shelves
+
+=cut
 
 sub get_some_shelves {
     my ( $self, $params ) = @_;
@@ -142,6 +149,10 @@ sub get_some_shelves {
     );
 }
 
+=head3 get_shelves_containing_record
+
+=cut
+
 sub get_shelves_containing_record {
     my ( $self, $params ) = @_;
     my $borrowernumber = $params->{borrowernumber};
@@ -180,6 +191,10 @@ sub get_shelves_containing_record {
     );
 }
 
+=head3 get_shared_shelves
+
+=cut
+
 sub get_shared_shelves {
     my ( $self, $params ) = @_;
     my $borrowernumber = $params->{borrowernumber} || 0;
@@ -193,9 +208,17 @@ sub get_shared_shelves {
     );
 }
 
+=head3 _type
+
+=cut
+
 sub _type {
     return 'Virtualshelve';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Virtualshelf';
