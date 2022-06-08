@@ -41,6 +41,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $reserve_id = $query->param('reserve_id');
 my $cancellation_request = $query->param('cancellation_request');
+my $new_pickup_location  = $query->param('new_pickup_location');
 
 if ( $reserve_id && $borrowernumber ) {
 
@@ -60,6 +61,18 @@ if ( $reserve_id && $borrowernumber ) {
     else {
         $hold->cancel
           if $hold->is_cancelable_from_opac;
+    }
+
+    if ( $new_pickup_location ) {
+
+        if ( C4::Context->preference('OPACInTransitHoldPickupLocationChange') ) {
+            $hold->set_pickup_location({ library_id => $new_pickup_location });
+        }
+        else {
+            # whatcha tryin to do?
+            print $query->redirect('/cgi-bin/koha/errors/403.pl');
+            exit;
+        }
     }
 }
 

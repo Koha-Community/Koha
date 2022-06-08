@@ -82,7 +82,16 @@
                         [% UNLESS( singleBranchMode) %]
                             <td class="branch">
                                 <span class="tdlabel">Pick up location:</span>
-                                [% HOLD.branch.branchname | html %]
+                                [% IF Koha.Preference('OPACInTransitHoldPickupLocationChange') && HOLD.is_in_transit %]
+                                    <form class="form-inline" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                                        <select name="new_pickup_location" class="new_pickup_location" onchange="this.form.submit()">
+                                            [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { item => HOLD.itemnumber, patron => logged_in_user }, selected => HOLD.branchcode }) %]
+                                        </select>
+                                    </form>
+                                [% ELSE %]
+                                    [% HOLD.branch.branchname | html %]
+                                [% END %]
                             </td>
                         [% END %]
                         [% IF ( showpriority ) %]
