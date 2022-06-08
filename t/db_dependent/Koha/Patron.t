@@ -377,6 +377,8 @@ subtest 'extended_attributes' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
+    Koha::Patron::Attribute::Types->search->delete;
+
     my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
     my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
 
@@ -507,6 +509,7 @@ subtest 'extended_attributes' => sub {
         plan tests => 3;
 
         $schema->storage->txn_begin;
+        Koha::Patron::Attribute::Types->search->delete;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $attribute_type = $builder->build_object(
@@ -541,6 +544,7 @@ subtest 'extended_attributes' => sub {
         plan tests => 5;
 
         $schema->storage->txn_begin;
+        Koha::Patron::Attribute::Types->search->delete;
 
         my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
         my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
@@ -593,6 +597,7 @@ subtest 'extended_attributes' => sub {
         plan tests => 3;
 
         $schema->storage->txn_begin;
+        Koha::Patron::Attribute::Types->search->delete;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
@@ -637,6 +642,7 @@ subtest 'extended_attributes' => sub {
         plan tests => 5;
 
         $schema->storage->txn_begin;
+        Koha::Patron::Attribute::Types->search->delete;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
