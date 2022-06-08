@@ -366,6 +366,13 @@ Related object: L<Koha::Schema::Result::ReturnClaim>
 
 =cut
 
+__PACKAGE__->has_many(
+    "accountlines",
+    "Koha::Schema::Result::Accountline",
+    { "foreign.issue_id" => "self.issue_id" },
+    { cascade_copy       => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->might_have(
     "return_claim",
     "Koha::Schema::Result::ReturnClaim",

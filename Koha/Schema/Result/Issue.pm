@@ -403,6 +403,13 @@ __PACKAGE__->might_have(
     { cascade_copy       => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->has_many(
+    "accountlines",
+    "Koha::Schema::Result::Accountline",
+    { "foreign.issue_id" => "self.issue_id" },
+    { cascade_copy       => 0, cascade_delete => 0 },
+);
+
 sub koha_object_class {
     'Koha::Checkout';
 }
