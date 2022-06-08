@@ -463,10 +463,13 @@ subtest "delete" => sub {
     plan tests => 11;
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
-    Koha::Virtualshelves->search({})->delete;
-    my $userenv = C4::Context->userenv();
+    Koha::Virtualshelves->delete;
+
+    my $staff_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_userenv({ patron => $staff_patron });
+
     my $patron           = $builder->build( { source => 'Borrower' } );
-    my $patron_for_sharing = (ref($userenv) eq 'HASH' ) ? $userenv->{'number'} : 0;
+    my $patron_for_sharing = $staff_patron->borrowernumber;
     my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
     my $hold             = $builder->build(
         {   source => 'Reserve',
@@ -477,19 +480,19 @@ subtest "delete" => sub {
     my $private_list = Koha::Virtualshelf->new({
             shelfname => "private",
             owner => $patron->{borrowernumber},
-            category => 1
+            public => 0,
         }
     )->store;
     my $public_list = Koha::Virtualshelf->new({
             shelfname => "public",
             owner => $patron->{borrowernumber},
-            category => 2
+            public => 1,
         }
     )->store;
     my $list_to_share = Koha::Virtualshelf->new({
             shelfname => "shared",
             owner => $patron->{borrowernumber},
-            category => 1
+            public => 0,
         }
     )->store;
 
@@ -520,19 +523,19 @@ subtest "delete" => sub {
     my $private_list2 = Koha::Virtualshelf->new({
             shelfname => "private",
             owner => $patron2->{borrowernumber},
-            category => 1
+            public => 0,
         }
     )->store;
     my $public_list2 = Koha::Virtualshelf->new({
             shelfname => "public",
             owner => $patron2->{borrowernumber},
-            category => 2
+            public => 1,
         }
     )->store;
     my $list_to_share2 = Koha::Virtualshelf->new({
             shelfname => "shared",
             owner => $patron2->{borrowernumber},
-            category => 1
+            public => 0,
         }
     )->store;
 

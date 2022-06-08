@@ -480,7 +480,7 @@ subtest 'Get shelves' => sub {
     my $shelf_to_share = Koha::Virtualshelf->new({
             shelfname => "shared shelf",
             owner => $patron1->{borrowernumber},
-            category => 1,
+            public => 0,
         }
     )->store;
 
