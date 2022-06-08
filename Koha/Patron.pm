@@ -393,8 +393,8 @@ sub delete {
             if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
                 my $userenv = C4::Context->userenv();
                 my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
-                my @publiclists = Koha::Virtualshelves->get_public_shelves;
-                my @sharedlists = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $self->borrowernumber });
+                my @publiclists = Koha::Virtualshelves->get_public_shelves->as_list;
+                my @sharedlists = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $self->borrowernumber })->as_list;
                 foreach my $plist ( @publiclists ) {
                     if ( $plist->owner == $self->borrowernumber ) {
                         my $unique_name = $plist->shelfname . '_' . $self->borrowernumber;
@@ -411,7 +411,7 @@ sub delete {
 
             # Delete any remaining lists that this user is an owner of (always private lists,
             # only public and shared lists if ListOwnershipUponPatronDeletion = delete)
-            $_->delete for Koha::Virtualshelves->search({ owner => $self->borrowernumber });
+            $_->delete for Koha::Virtualshelves->search({ owner => $self->borrowernumber })->as_list;
 
             # We cannot have a FK on borrower_modifications.borrowernumber, the table is also used
             # for patron selfreg
