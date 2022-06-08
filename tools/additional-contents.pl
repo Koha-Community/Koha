@@ -82,6 +82,7 @@ elsif ( $op eq 'add_validate' ) {
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
+    my $idnew      = $cgi->param('idnew');
 
     my @lang       = $cgi->multi_param('lang');
 
@@ -92,6 +93,8 @@ elsif ( $op eq 'add_validate' ) {
     my $published_on = dt_from_string( scalar $cgi->param('published_on') );
     my $number = $cgi->param('number');
 
+    my $original_default = $idnew ? Koha::AdditionalContents->find($idnew) : undef;
+
     my $success = 1;
     for my $lang ( sort {$a ne 'default'} @lang ) { # Process 'default' first
         my $title   = $cgi->param( 'title_' . $lang );
@@ -100,7 +103,7 @@ elsif ( $op eq 'add_validate' ) {
             {
                 category   => $category,
                 code       => $code,
-                branchcode => $branchcode,
+                branchcode => $original_default ? $original_default->branchcode : $branchcode,
                 lang       => $lang,
             }
         );
