@@ -54,7 +54,7 @@
                         </div>
 
                         [% IF invalid_pin %]
-                            <div class="dialog error">Invalid pin code</div>
+                            <div class="dialog error">Invalid PIN code</div>
                         [% END %]
                         <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                             <fieldset class="rows">
@@ -67,7 +67,7 @@
                                         <img id="qr_code" src="[% qr_code | $raw %]" />
                                     </li>
                                     <li>
-                                        <label for="pin_code">Pin code: </label>
+                                        <label for="pin_code">PIN code: </label>
                                         <input type="text" id="pin_code" name="pin_code" value="" />
                                     </li>
                                 </ol>
