@@ -22,8 +22,10 @@ use Modern::Perl;
 use Test::More tests => 5;
 use Test::Warn;
 
+use MARC::Record;
+
 BEGIN {
-        use_ok('Koha::MetadataRecord');
+    use_ok('Koha::MetadataRecord');
 }
 
 my $marcrecord = MARC::Record->new;
