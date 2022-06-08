@@ -70,7 +70,7 @@ SKIP: {
 
         $s->fill_form({pin_code => 'wrong_code'});
         $s->submit_form;
-        ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid pin code")]'));
+        ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid PIN code")]'));
         is( $patron->get_from_storage->secret, undef, 'secret is not set in DB yet' );
 
         my $secret32 = $driver->find_element('//form[@id="two-factor-auth"]//input[@name="secret32"]')->get_value();
