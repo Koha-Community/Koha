@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Circulation qw( MarkIssueReturned AddReturn );
 use Koha::Checkouts;
@@ -108,6 +108,39 @@ subtest 'item' => sub {
         'Koha::Checkout->item should return a Koha::Item' );
     is( $item->itemnumber, $item_1->itemnumber,
         'Koha::Checkout->item should return the correct item' );
+};
+
+subtest 'accountlines' => sub {
+    plan tests => 3;
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            issue_id          => $retrieved_checkout_1->id,
+            borrowernumber    => $retrieved_checkout_1->borrowernumber,
+            itemnumber        => $retrieved_checkout_1->itemnumber,
+            branchcode        => $retrieved_checkout_1->branchcode,
+            date              => \'NOW()',
+            debit_type_code   => 'OVERDUE',
+            status            => 'UNRETURNED',
+            interface         => 'cli',
+            amount            => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    my $accountlines = $retrieved_checkout_1->accountlines;
+    is( ref($accountlines), 'Koha::Account::Lines',
+        'Koha::Checkout->accountlines should return a Koha::Item' );
+
+    my $line = $accountlines->next;
+    is( ref($line), 'Koha::Account::Line',
+        'next returns a Koha::Account::Line' );
+
+    is(
+        $accountline->id,
+        $line->id,
+        'Koha::Checkout->accountlines should return the correct accountlines'
+    );
 };
 
 subtest 'patron' => sub {

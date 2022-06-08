@@ -79,6 +79,20 @@ sub item {
     return Koha::Item->_new_from_dbic( $item_rs );
 }
 
+=head3 accountlines
+
+my $accountlines = $checkout->accountlines;
+
+Return the checked out accountlines
+
+=cut
+
+sub accountlines {
+    my ( $self ) = @_;
+    my $accountlines_rs = $self->_result->accountlines;
+    return Koha::Account::Lines->_new_from_dbic( $accountlines_rs );
+}
+
 =head3 library
 
 my $library = $checkout->library;

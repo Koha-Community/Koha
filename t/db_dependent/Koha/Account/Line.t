@@ -203,7 +203,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
 
 subtest 'apply() tests' => sub {
 
-    plan tests => 31;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -345,6 +345,9 @@ subtest 'apply() tests' => sub {
             amountoutstanding => '1',
         }
     )->store();
+
+    my $a = $checkout->accountlines->next;
+    is( $a->id, $accountline->id, "Koha::Checkout::accountlines returns the related acountline" );
 
     # Enable renewing upon fine payment
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
