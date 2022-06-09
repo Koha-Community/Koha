@@ -267,7 +267,7 @@ legend:hover {
                             [% END %]
 
                             [% IF ( step_1 ) %]
-                                [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex %]
+                                [% UNLESS notitle && nosurname && nofirstname && nomiddle_name && nodateofbirth && noinitials && noothernames &&nosex && nopronouns %]
                                     <fieldset class="rows" id="memberentry_identity">
                                         <legend id="identity_lgd">[% IF ( patron_category.category_type == 'I' ) %]<span>Organization</span> [% ELSE %]<span>Patron</span> [% END %]<span>identity</span></legend>
                                         <ol>
@@ -390,6 +390,21 @@ legend:hover {
                                                         [% END %]
                                                     </li>
                                                 [% END # /UNLESS noinitials %]
+                                                [% UNLESS nopronouns %]
+                                                    <li>
+                                                        [% IF ( mandatorypronouns ) %]
+                                                            <label for="pronouns" class="required">
+                                                        [% ELSE %]
+                                                            <label for="pronouns">
+                                                        [% END %]
+                                                            Pronouns:
+                                                        </label>
+                                                        <input type="text" id="pronouns" name="pronouns" size="20"  value="[% borrower_data.pronouns | html UNLESS opduplicate %]" />
+                                                        [% IF ( mandatorypronouns ) %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                    </li>
+                                                [% END # /UNLESS nopronouns %]
                                             [% END #/UNLESS ( I ) %]
                                             [% UNLESS noothernames %]
                                                 <li>

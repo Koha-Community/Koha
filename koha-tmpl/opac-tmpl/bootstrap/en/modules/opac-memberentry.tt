@@ -193,7 +193,7 @@
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
 
-                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
+                [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' ] %]
                     [% IF mandatory.defined( field ) %]
                         [% SET required.$field = 'required' %]
                     [% END %]
@@ -300,7 +300,7 @@
                     [% END # / defined 'branchcode' %]
 
                     [%# Following on one line for translatability %]
-                    [% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') && hidden.defined('middle_name') && hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('othernames') && hidden.defined('sex') %]
+                    [% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') && hidden.defined('middle_name') && hidden.defined('dateofbirth') && hidden.defined('initials')  && hidden.definded('pronouns') && hidden.defined('othernames') && hidden.defined('sex') %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_identity">
@@ -368,6 +368,15 @@
 
                                                 <input type="text" id="borrower_initials" name="borrower_initials" value="[% borrower.initials | html %]" class="[% required.initials | html %]" />
                                                 <div class="required_label [% required.initials | html %]">Required</div>
+                                            </li>
+                                        [% END %]
+
+                                        [% UNLESS hidden.defined('pronouns') %]
+                                            <li>
+                                                <label for="borrower_pronouns" class="[% required.pronouns | html %]">Pronouns:</label>
+
+                                                <input type="text" id="borrower_pronouns" name="borrower_pronouns" value="[% borrower.pronouns | html %]" class="[% required.prnouns | html %]" />
+                                                <div class="required_label [% required.pronouns | html %]">Required</div>
                                             </li>
                                         [% END %]
 

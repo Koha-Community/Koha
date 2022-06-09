@@ -66,6 +66,7 @@ sub columns {
             "middle_name"         => __("Middle name"),
             "dateofbirth"         => __("Date of birth"),
             "initials"            => __("Initials"),
+            "pronouns"            => __("Pronouns"),
             "othernames"          => __("Other name"),
             "sex"                 => __("Gender"),
             "relationship"        => __("Relationship"),

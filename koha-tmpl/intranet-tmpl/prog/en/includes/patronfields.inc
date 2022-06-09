@@ -9,6 +9,7 @@
      [%- CASE 'title' -%]<span>Salutation</span>
      [%- CASE 'othernames' -%]<span>Other name</span>
      [%- CASE 'initials' -%]<span>Initials</span>
+     [%- CASE 'pronouns' -%]<span>Pronouns</span>
      [%- CASE 'streetnumber' -%]<span>Street number</span>
      [%- CASE 'streettype' -%]<span>Street type</span>
      [%- CASE 'address' -%]<span>Address</span>
