@@ -83,7 +83,7 @@
                                 </a>
                             [% END %]
                         [% ELSIF ( reser.recall ) %]
-                            Recall requested by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.borrowernumber | uri %]">[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a>
+                            Recall requested by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.recall.patron_id | uri %]">[% reser.recall.patron.surname | html %][% IF reser.recall.patron.firstname %], [% reser.recall.patron.firstname | html %][% END %] ([% reser.recall.patron.cardnumber | html %])</a>
                         [% ELSE %]
                         <p>None</p>
                     [% END %]
