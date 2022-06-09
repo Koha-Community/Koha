@@ -92,10 +92,10 @@
                                                 [% IF (innerloo.tag_desc) %]
                                                     <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
                                                 [% END %]
-                                            </div>
+                                            </div> <!-- /.tag_title -->
                                     [% ELSE %]
                                         <div class="tag">
-                                    [% END %]
+                                    [% END # /IF ( innerloo.tag_number ) %]
 
                                         [% FOREACH subfiel IN innerloo.subfield %]
                                             <div class="auth_subfield">
@@ -115,16 +115,16 @@
                                                     </span>
                                                 </div> <!-- /.subfield_content.marc_field -->
                                             </div> <!-- /.auth_subfield -->
-                                        [% END %]
-                                    </div>
-                                [% END %]
-                            </div>
-                        [% END %]
+                                        [% END #/FOREACH subfiel %]
+                                    </div> <!-- /.tag -->
+                                [% END # /FOREACH innerloo %]
+                            </div> <!-- /.tab-pane -->
+                        [% END # /FOREACH BIG_LOO %]
                     </div> <!-- /.tab-content -->
-                </div>
-            [% END %]
-        </div>
-    </div>
+                </div> <!-- /#authoritiestabs -->
+            [% END # /IF ( unknownauthid ) %]
+        </div> <!-- /.col-md-8 col-md-offset-2 -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
@@ -163,7 +163,7 @@
                     e.preventDefault();
                     document.location.href = data.node.a_attr.href;
                 });
-            [% END %]
+            [% END # /IF ( displayhierarchy ) %]
          });
     </script>
 [% END %]
