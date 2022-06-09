@@ -387,31 +387,21 @@ sub delete {
                 $hold->cancel;
             }
 
-            # FIXME Could be $patron->get_lists
-            # If ListOwnershipUponPatronDeletion = transfer, change ownership of all
-            # public and shared lists to the user who deleted them.
-            if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
-                my $userenv = C4::Context->userenv();
-                my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
-                my @publiclists = Koha::Virtualshelves->get_public_shelves->as_list;
-                my @sharedlists = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $self->borrowernumber })->as_list;
-                foreach my $plist ( @publiclists ) {
-                    if ( $plist->owner == $self->borrowernumber ) {
-                        my $unique_name = $plist->shelfname . '_' . $self->borrowernumber;
-                        $plist->set({ owner => $usernumber, shelfname => $unique_name })->store;
-                    }
-                }
-                foreach my $slist ( @sharedlists ) {
-                    my $unique_name = $slist->shelfname . '_' . $self->borrowernumber;
-                    $slist->set({ owner => $usernumber, shelfname => $unique_name })->store;
-                    # if staff member had a share, remove it
-                    $slist->remove_share( $usernumber );
+            # Handle lists (virtualshelves)
+            my $userenv = C4::Context->userenv;
+            my $usernumber = ref($userenv) eq 'HASH' ? $userenv->{'number'} : 0;
+            my $lists = $self->virtualshelves;
+            while( my $list = $lists->next ) {
+                # if staff member had a share, remove it
+                $list->remove_share( $usernumber ) if $usernumber && $list->is_private;
+                if( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' &&
+                    $usernumber && ( $list->is_public || $list->is_shared ))
+                {
+                    $list->set({ owner => $usernumber })->store; # transfer ownership of public/shared list
+                } else { # delete
+                    $list->delete;
                 }
             }
-
-            # Delete any remaining lists that this user is an owner of (always private lists,
-            # only public and shared lists if ListOwnershipUponPatronDeletion = delete)
-            $_->delete for Koha::Virtualshelves->search({ owner => $self->borrowernumber })->as_list;
 
             # We cannot have a FK on borrower_modifications.borrowernumber, the table is also used
             # for patron selfreg
@@ -2192,6 +2182,17 @@ sub decoded_secret {
         return Koha::Encryption->new->decrypt_hex( $self->secret );
     }
     return $self->secret;
+}
+
+=head3 virtualshelves
+
+    my $shelves = $patron->virtualshelves;
+
+=cut
+
+sub virtualshelves {
+    my $self = shift;
+    return Koha::Virtualshelves->_new_from_dbic( scalar $self->_result->virtualshelves );
 }
 
 =head2 Internal methods

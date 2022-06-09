@@ -460,91 +460,81 @@ subtest "move_to_deleted" => sub {
 };
 
 subtest "delete" => sub {
-    plan tests => 11;
+    plan tests => 13;
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
     Koha::Virtualshelves->delete;
 
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_for_sharing = $builder->build_object({ class => 'Koha::Patrons' });
     my $staff_patron = $builder->build_object({ class => 'Koha::Patrons' });
     t::lib::Mocks::mock_userenv({ patron => $staff_patron });
 
-    my $patron           = $builder->build( { source => 'Borrower' } );
-    my $patron_for_sharing = $staff_patron->borrowernumber;
-    my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    my $hold             = $builder->build(
-        {   source => 'Reserve',
-            value => { borrowernumber => $patron->{borrowernumber} }
-        }
-    );
-    my $modification = $builder->build_object({ class => 'Koha::Patron::Modifications', value => { borrowernumber => $patron->{borrowernumber} } });
+    my $hold = $builder->build_object({ class => 'Koha::Holds', value => { borrowernumber => $patron->borrowernumber } });
+    my $modification = $builder->build_object({ class => 'Koha::Patron::Modifications', value => { borrowernumber => $patron->borrowernumber } });
     my $private_list = Koha::Virtualshelf->new({
-            shelfname => "private",
-            owner => $patron->{borrowernumber},
-            public => 0,
-        }
-    )->store;
+        shelfname => "private",
+        owner => $patron->borrowernumber,
+        public => 0,
+    })->store;
     my $public_list = Koha::Virtualshelf->new({
-            shelfname => "public",
-            owner => $patron->{borrowernumber},
-            public => 1,
-        }
-    )->store;
+        shelfname => "public",
+        owner => $patron->borrowernumber,
+        public => 1,
+    })->store;
     my $list_to_share = Koha::Virtualshelf->new({
-            shelfname => "shared",
-            owner => $patron->{borrowernumber},
-            public => 0,
-        }
-    )->store;
+        shelfname => "shared",
+        owner => $patron->borrowernumber,
+        public => 0,
+    })->store;
 
-    my $shared_shelf = eval { $list_to_share->share("valid key")->accept("valid key", $patron_for_sharing) };
-    my $deleted = $retrieved_patron->delete;
+    $list_to_share->share("valid key")->accept( "valid key", $patron_for_sharing->borrowernumber );
+    $list_to_share->share("valid key")->accept( "valid key", $staff_patron->borrowernumber ); # this share should be removed at deletion too
+    my $deleted = $patron->delete;
     is( ref($deleted), 'Koha::Patron', 'Koha::Patron->delete should return the deleted patron object if the patron has been correctly deleted' );
+    ok( $patron->borrowernumber, 'Still have the deleted borrowernumber' );
 
-    is( Koha::Patrons->find( $patron->{borrowernumber} ), undef, 'Koha::Patron->delete should have deleted the patron' );
+    is( Koha::Patrons->find( $patron->borrowernumber ), undef, 'Koha::Patron->delete should have deleted the patron' );
 
-    is (Koha::Old::Holds->search( { reserve_id => $hold->{ reserve_id } } )->count, 1, q|Koha::Patron->delete should have cancelled patron's holds| );
+    is (Koha::Old::Holds->search({ reserve_id => $hold->reserve_id })->count, 1, q|Koha::Patron->delete should have cancelled patron's holds| );
 
-    is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have cancelled patron's holds 2| );
+    is( Koha::Holds->search( { borrowernumber => $patron->borrowernumber } )->count, 0, q|Koha::Patron->delete should have cancelled patron's holds 2| );
 
-    my $transferred_lists = Koha::Virtualshelves->search({ owner => $patron_for_sharing })->count;
+    my $transferred_lists = Koha::Virtualshelves->search({ owner => $staff_patron->borrowernumber })->count;
     is( $transferred_lists, 2, 'Public and shared lists should stay in database under a different owner with a unique name, while private lists delete, with ListOwnershipPatronDeletion set to Transfer');
-    is( Koha::Virtualshelfshares->search({ borrowernumber => $patron_for_sharing })->count, 0, "New owner of list should have shares removed" );
-    is( Koha::Virtualshelves->search({ owner => $patron->{borrowernumber} })->count, 0, q|Koha::Patron->delete should have deleted patron's lists/removed their ownership| );
+    is( Koha::Virtualshelfshares->search({ borrowernumber => $staff_patron->borrowernumber })->count, 0, "New owner of list should have shares removed" );
+    is( Koha::Virtualshelfshares->search({ borrowernumber => $patron_for_sharing->borrowernumber })->count, 1, "But the other share is still there" );
+    is( Koha::Virtualshelves->search({ owner => $patron->borrowernumber })->count, 0, q|Koha::Patron->delete should have deleted patron's lists/removed their ownership| );
 
-    is( Koha::Patron::Modifications->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's modifications| );
+    is( Koha::Patron::Modifications->search( { borrowernumber => $patron->borrowernumber } )->count, 0, q|Koha::Patron->delete should have deleted patron's modifications| );
 
-    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $retrieved_patron->borrowernumber } )->count;
+    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
 
     t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'delete' );
-    Koha::Virtualshelves->search({})->delete;
-    my $patron2           = $builder->build( { source => 'Borrower' } );
-    my $retrieved_patron2 = Koha::Patrons->find( $patron2->{borrowernumber} );
+    Koha::Virtualshelves->delete;
+    my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
     my $private_list2 = Koha::Virtualshelf->new({
-            shelfname => "private",
-            owner => $patron2->{borrowernumber},
-            public => 0,
-        }
-    )->store;
+         shelfname => "private",
+         owner => $patron2->borrowernumber,
+         public => 0,
+    })->store;
     my $public_list2 = Koha::Virtualshelf->new({
-            shelfname => "public",
-            owner => $patron2->{borrowernumber},
-            public => 1,
-        }
-    )->store;
+        shelfname => "public",
+        owner => $patron2->borrowernumber,
+        public => 1,
+    })->store;
     my $list_to_share2 = Koha::Virtualshelf->new({
-            shelfname => "shared",
-            owner => $patron2->{borrowernumber},
-            public => 0,
-        }
-    )->store;
+        shelfname => "shared",
+        owner => $patron2->borrowernumber,
+        public => 0,
+    })->store;
+    $list_to_share2->share("valid key")->accept( "valid key", $patron_for_sharing->borrowernumber );
 
-    my $shared_shelf2 = eval { $list_to_share2->share("valid key") };
-    my $deleted2 = $retrieved_patron2->delete;
-
-    is( Koha::Virtualshelves->search( { owner => $patron2->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's lists| );
-    $transferred_lists = Koha::Virtualshelves->search({})->count;
-    is( $transferred_lists, 0, 'All lists should be deleted with ListOwnershipUponPatronDeletion set to Delete');
+    # Delete patron2, check if shelves and shares are now empty
+    $patron2->delete;
+    is( Koha::Virtualshelves->count, 0, 'All lists should be gone now' );
+    is( Koha::Virtualshelfshares->count, 0, 'All shares should be gone too' );
 };
 
 subtest 'Koha::Patrons->delete' => sub {
