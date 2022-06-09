@@ -250,7 +250,8 @@ if ($session->param('busc')) {
         eval {
             my $searcher = Koha::SearchEngine::Search->new(
                 { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-            ($error, $results_hashref, $facets) = $searcher->search_compat(decode_json($arrParamsBusc->{'query'}),$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
+            my $json = JSON->new->utf8->allow_nonref(1);
+            ($error, $results_hashref, $facets) = $searcher->search_compat($json->decode($arrParamsBusc->{'query'}),$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
         };
         my $hits;
         my @newresults;
