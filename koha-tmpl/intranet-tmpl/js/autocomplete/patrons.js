@@ -5,7 +5,7 @@ function patron_autocomplete(params) {
     var field_to_retrieve = params.field_to_retrieve || 'cardnumber';
 
     $( input_autocomplete ).autocomplete({
-        source: "/cgi-bin/koha/circ/ysearch.pl",
+        source: "/api/v1/patrons",
         minLength: 3,
         select: function( event, ui ) {
             var field = ui.item.cardnumber;

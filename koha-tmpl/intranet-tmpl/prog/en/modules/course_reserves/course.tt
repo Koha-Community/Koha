@@ -174,36 +174,11 @@
     [% MACRO jsinclude BLOCK %]
         <script>
             $(document).ready(function(){
-                $( "#find_instructor" ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.borrowernumber );
+                patron_autocomplete($("#find_instructor"), { 'on-select-callback': function( event, ui ) {
+                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.patron_id );
                         return false;
                     }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append(
-                        "<a>"
-                            + ( item.surname ? item.surname.escapeHtml() : "" )
-                            + ", "
-                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
-                            + " "
-                            + "<small>"
-                                + ( item.address ? item.address.escapeHtml() : "" )
-                                + " "
-                                + ( item.city ? item.city.escapeHtml() : "" )
-                                + " "
-                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
-                                + " "
-                                + ( item.country ? item.country.escapeHtml() : "" )
-                            + "</small>"
-                        + "</a>" )
-                    .appendTo( ul );
-                };
+                });
 
                 if ( ! $('#instructors').html() ) {
                     $('#course_instructors').hide();

@@ -1589,36 +1589,7 @@
 
             [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
                 [% IF ( PatronAutoComplete ) %]
-                $( "#search_patron_filter" ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        document.location.href = '/cgi-bin/koha/reserve/request.pl?[% url_biblio_params | url %]&borrowernumber=' + ui.item.borrowernumber;
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append(
-                        "<a>"
-                            + ( item.surname ? item.surname.escapeHtml() : "" )
-                            + ", "
-                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                            + ( item.middle_name ? " " + item.middle_name.escapeHtml() : "" )
-                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
-                            + " "
-                            + "<small>"
-                                + ( item.address ? item.address.escapeHtml() : "" )
-                                + " "
-                                + ( item.city ? item.city.escapeHtml() : "" )
-                                + " "
-                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
-                                + " "
-                                + ( item.country ? item.country.escapeHtml() : "" )
-                            + "</small>"
-                        + "</a>" )
-                    .appendTo( ul );
-                };
+                    patron_autocomplete($("#search_patron_filter"), { 'link-to': 'reserve', 'url-params': '[% url_biblio_params | url %]' });
                 [% END %]
             [% END %]
 

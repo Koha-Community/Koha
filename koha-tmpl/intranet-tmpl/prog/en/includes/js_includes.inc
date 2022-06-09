@@ -26,6 +26,9 @@
 [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
 <!-- koha core js -->
 [% Asset.js("js/staff-global.js") | $raw %]
+[% INCLUDE 'js-date-format.inc' %]
+[% INCLUDE 'js-patron-get-age.inc' %]
+[% Asset.js("js/patron-autocomplete.js") | $raw %]
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
@@ -65,112 +68,20 @@
     </script>
 [% END %]
 
-[% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-    [% IF ( PatronAutoComplete ) %]
-        <script>
-            // PatronAutoComplete && CAN_user_circulate_circulate_remaining_permissions
-            var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
-            var loggedInClass = "";
-            $(document).ready(function(){
-                var obj = $( "#findborrower" ).autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        window.location.href = ui.item.link;
-                    }
-                }).data( "ui-autocomplete" );
-                if( obj ) {
-                    obj._renderItem = function( ul, item ) {
-                        item.link = "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + item.borrowernumber;
-                        var cardnumber = "";
-                        if( item.cardnumber != "" ){
-                            // Display card number in parentheses if it exists
-                            cardnumber = " (" + item.cardnumber + ") ";
-                        }
-                        var itemString = "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", "
-                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                            + ( item.middle_name ? " " + item.middle_name.escapeHtml() : "" )
-                            + cardnumber.escapeHtml()
-                            + " <small>";
-
-                        if( item.branchcode == loggedInLibrary ){
-                            loggedInClass = "ac-currentlibrary";
-                        } else {
-                            loggedInClass = "";
-                        }
-
-                        if( item.dateofbirth ) {
-                            itemString += ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" )
-                                        + "<span class=\"age_years\"> (" + ( item.age ? item.age.escapeHtml() : "" ) + " " +  _("years") + ")</span>, ";
-                        }
-                        itemString += ( item.address ? item.address.escapeHtml() : "" ) + " "
-                                    + ( item.city    ? item.city.escapeHtml()    : "" ) + " "
-                                    + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " "
-                                    + ( item.country ? item.country.escapeHtml() : "" )
-                                    + "</small></a>";
-                        [% UNLESS ( singleBranchMode ) %]
-                            itemString += " <span class=\"ac-library\">" + item.branchname + "</span> " + "</a>";
-                        [% END %]
-                        return $( "<li></li>" )
-                        .addClass( loggedInClass )
-                        .data( "ui-autocomplete-item", item )
-                        .append( itemString )
-                        .appendTo( ul );
-                    };
-                }
-            });
-        </script>
-    [% END %]
-[% END %]
 [% IF ( PatronAutoComplete ) %]
     <script>
     // PatronAutoComplete
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
+    var singleBranchMode = '[% singleBranchMode | html %]';
     var loggedInClass = "";
     $(document).ready(function(){
-        var obj = $( "#searchmember" ).autocomplete({
-            source: "/cgi-bin/koha/circ/ysearch.pl",
-            minLength: 3,
-            select: function( event, ui ) {
-                window.location.href = ui.item.link;
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            if ( $("#findborrower").length ) {
+                patron_autocomplete($("#findborrower"), { 'on-select': 'link-to-circ' });
             }
-        }).data( "ui-autocomplete" );
-        if( obj ) {
-            obj._renderItem = function( ul, item ) {
-                item.link = "/cgi-bin/koha/members/moremember.pl?borrowernumber=" + item.borrowernumber;
-                var cardnumber = "";
-                if( item.cardnumber != "" ){
-                    // Display card number in parentheses if it exists
-                    cardnumber = " (" + item.cardnumber + ") ";
-                }
-                if( item.branchcode == loggedInLibrary ){
-                    loggedInClass = "ac-currentlibrary";
-                } else {
-                    loggedInClass = "";
-                }
-                return $( "<li></li>" )
-                .addClass( loggedInClass )
-                .data( "ui-autocomplete-item", item )
-                .append(
-                    "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", "
-                        + ( item.firstname ? item.firstname.escapeHtml() : "" )
-                        + ( item.middle_name ? " " + item.middle_name.escapeHtml() : "" )
-                        + cardnumber.escapeHtml()
-                        + " <small>"
-                            + ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" ) + " "
-                            + ( item.address     ? item.address.escapeHtml() : "" )     + " "
-                            + ( item.city        ? item.city.escapeHtml() : "" )        + " "
-                            + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
-                            + ( item.country     ? item.country.escapeHtml() : "" ) + " "
-                            [% UNLESS ( singleBranchMode ) %]
-                                + "<span class=\"ac-library\">"
-                                + ( item.branchname  ? item.branchname.escapeHtml() : "" )
-                                + "</span>"
-                            [% END %]
-                        + "</small>"
-                    + "</a>" )
-                .appendTo( ul );
-            };
+        [% END %]
+        if ( $("#searchmember").length ) {
+            patron_autocomplete($("#searchmember"), { 'on-select': 'link-to-patron' });
         }
     });
     </script>

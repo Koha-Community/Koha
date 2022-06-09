@@ -144,32 +144,9 @@ $(document).ready(function(){
         e.preventDefault();
         $(".compare:checked").prop("checked", false).change();
     });
-    var obj = $("#user").autocomplete({
-        source: "/cgi-bin/koha/circ/ysearch.pl",
-        minLength: 3,
-        select: function ( event, ui ) {
-            $("#user").val( ui.item.borrowernumber );
+    patron_autocomplete($("#user"), { 'on-select-callback': function ( event, ui ) {
+            $("#user").val( ui.item.patron_id );
             return false;
         }
-    }).data("ui-autocomplete");
-    if (obj) {
-        obj._renderItem = function (ul, item) {
-            var cardnumber = "";
-            if (item.cardnumber != "") {
-                // Display card number in parentheses if it exists
-                cardnumber = " (" + item.cardnumber + ") ";
-            }
-            var itemString = "<a href=\"#\">" + (item.surname ? item.surname.escapeHtml() : "") + ", " + (item.firstname ? item.firstname.escapeHtml() : "") + cardnumber.escapeHtml() + " <small>";
-            itemString += (item.address ? item.address.escapeHtml() : "") + " "
-                + (item.city ? item.city.escapeHtml() : "") + " "
-                + (item.zipcode ? item.zipcode.escapeHtml() : "") + " "
-                + (item.country ? item.country.escapeHtml() : "")
-                + "</small></a>";
-            return $("<li></li>")
-                .data("ui-autocomplete-item", item)
-                .append(itemString)
-                .appendTo(ul);
-        };
-    }
-
+    });
 });
