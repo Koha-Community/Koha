@@ -368,7 +368,7 @@ $patron->delete
 
 Delete patron's holds, lists and finally the patron.
 
-Lists owned by the borrower are deleted or ownership is transfered depending on the
+Lists owned by the borrower are deleted or ownership is transferred depending on the
 ListOwnershipUponPatronDeletion pref, but entries from the borrower to other lists are kept.
 
 =cut
