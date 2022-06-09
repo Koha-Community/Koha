@@ -191,23 +191,6 @@ sub get_shelves_containing_record {
     );
 }
 
-=head3 get_shared_shelves
-
-=cut
-
-sub get_shared_shelves {
-    my ( $self, $params ) = @_;
-    my $borrowernumber = $params->{borrowernumber} || 0;
-
-    $self->search(
-        {
-            'me.owner' => $borrowernumber,
-            'me.shelfnumber' => { -ident => 'virtualshelfshares.shelfnumber' }
-        },
-        { prefetch => 'virtualshelfshares' }
-    );
-}
-
 =head3 _type
 
 =cut

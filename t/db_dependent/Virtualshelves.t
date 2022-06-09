@@ -497,8 +497,8 @@ subtest 'Get shelves' => sub {
     is( $public_shelves->count, 2, 'get_public_shelves should return all public shelves, no matter who is the owner' );
 
     my $shared_shelf = eval { $shelf_to_share->share("valid key") };
-    my $shared_shelves = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $patron1->{borrowernumber} });
-    is( $shared_shelves->count, 1, 'get_shared_shelves should return shared shelves' );
+    my $shared_shelves = Koha::Virtualshelfshares->search({ borrowernumber => $patron1->{borrowernumber} });
+    is( $shared_shelves->count, 1, 'Found the share for patron1' );
 
     teardown();
 };
