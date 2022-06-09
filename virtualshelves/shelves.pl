@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( get_template_and_user haspermission );
 use C4::Biblio qw( GetMarcBiblio );
 use C4::Circulation qw( barcodedecode );
+use C4::Context;
 use C4::Koha qw(
     GetNormalizedEAN
     GetNormalizedISBN
@@ -57,7 +58,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op       = $query->param('op')      || 'list';
 my $referer  = $query->param('referer') || $op;
 my $public   = $query->param('public') ? 1 : 0;
-my ( $shelf, $shelfnumber, @messages );
+my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 
 if ( $op eq 'add_form' ) {
     # Only pass default
@@ -353,6 +354,8 @@ if ( $op eq 'view' ) {
     } else {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
+} elsif( $op eq 'list' ) {
+    $allow_transfer = haspermission( C4::Context->userenv->{id}, { lists => 'edit_public_lists' } ) ? 1 : 0;
 }
 
 $template->param(
@@ -363,6 +366,7 @@ $template->param(
     public   => $public,
     print    => scalar $query->param('print') || 0,
     csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ],
+    allow_transfer => $allow_transfer,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
