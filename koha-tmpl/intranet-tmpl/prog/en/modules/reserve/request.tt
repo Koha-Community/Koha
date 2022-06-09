@@ -206,14 +206,17 @@
 
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
-                            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
-                                <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
-                                <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% UNLESS biblioloo.none_avail %]
+                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
+                                    <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+                                    <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblio.biblionumber | html %]"/>
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
@@ -403,6 +406,8 @@
                                         <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]"> [% biblioloo.title | html %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% max_holds_for_record | html %] hold(s) on this record.</li>
                                     [% END %]
                                 [% END %]
+                            [% ELSIF ( none_available ) %]
+                                <li><strong>No items available: </strong>One or more records have no items that can be held</li>
                             [% END # /IF exceeded_maxreserves %]
                         [% END # /UNLESS multi_hold %]
                     </div>
@@ -450,14 +455,17 @@
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
-                            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
                             [% FOREACH biblioloo IN biblioloop %]
-                                <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
-                                <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% UNLESS biblioloo.none_avail %]
+                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
+                                    <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+                                    <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblio.biblionumber | html %]"/>
                             <input type="hidden" name="title" value="[% biblio.title | html %]" />
                             <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
                         [% END # /IF multi_hold %]
@@ -666,6 +674,8 @@
                                                                         Library is not a pickup location
                                                                     [% ELSIF itemloo.not_holdable == 'no_valid_pickup_location' %]
                                                                         No valid pickup location
+                                                                    [% ELSIF itemloo.not_holdable == 'notforloan' %]
+                                                                        Not for loan
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]
@@ -760,6 +770,8 @@
 
                                                         [% IF ( itemloo.notforloan ) %]
                                                            <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
+                                                        [% ELSIF ( itemloo.notforloanitype ) %]
+                                                           <span class="nfl">Not for loan (Itemtype not for loan)</span>
                                                         [% END %]
                                                     </td>
                                                     <td>
@@ -886,13 +898,21 @@
 
                         <fieldset class="action">
                             [% IF ( patron AND patron.borrowernumber ) %]
-                                [% IF ( override_required ) %]
-                                    <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place holds</button>
-                                [% ELSIF ( none_available ) %]
-                                    <button class="btn btn-default" type="submit">Place holds</button>
-                                [% ELSE %]
-                                    [% IF ( multi_hold ) %]
+                                [% IF ( multi_hold ) %]
+                                    [% IF ( override_required ) %]
+                                        <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place holds</button>
+                                    [% ELSIF ( no_bibs_available ) %]
+                                        <button type="submit" class="btn btn-default btn-disabled" disabled="disabled">Place holds</button>
+                                    [% ELSIF ( none_available ) %]
+                                        <button type="submit" class="btn btn-default">Place holds</button>
+                                    [% ELSE %]
                                         <button type="submit" class="btn btn-default" id="multi_hold_submit">Place holds</button>
+                                    [% END %]
+                                [% ELSE %]
+                                    [% IF ( override_required ) %]
+                                        <button type="submit" class="btn btn-default warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                    [% ELSIF ( none_available ) %]
+                                        <button type="submit" class="btn btn-default btn-disabled" disabled="disabled">Place hold</button>
                                     [% ELSE %]
                                         <button type="submit" class="btn btn-default">Place hold</button>
                                     [% END %]
@@ -1383,15 +1403,7 @@
                 return false;
             }
 
-            var badSpans = $(".not_holdable");
-            var badBibs = "";
-            $(badSpans).each(function() {
-                var bibnum = $(this).attr("title");
-                badBibs += bibnum + "/";
-            });
-
             $("#multi_hold_bibs").val(biblionumbers);
-            $("#bad_bibs").val(badBibs);
 
             $('#hold-request-form').preventDoubleFormSubmit();
 

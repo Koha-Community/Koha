@@ -320,6 +320,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
     my $itemdata_ccode = 0;
     my @biblioloop = ();
     my $no_reserves_allowed = 0;
+    my $num_bibs_available = 0;
     foreach my $biblionumber (@biblionumbers) {
         next unless $biblionumber =~ m|^\d+$|;
 
@@ -443,7 +444,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             my @available_itemtypes;
             foreach my $biblioitemnumber (@biblioitemnumbers) {
                 my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
-                my $num_available = 0;
+                my $num_items_available = 0;
                 my $num_override  = 0;
                 my $hiddencount   = 0;
                 my $num_alreadyheld = 0;
@@ -556,6 +557,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     }
 
                     # If there is no loan, return and transfer, we show a checkbox.
+                    $item->{notforloanitype} = $itemtypes->{$item->{itype}}{notforloan};
                     $item->{notforloan} ||= 0;
 
                     # if independent branches is on we need to check if the person can reserve
@@ -580,6 +582,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
                         my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber )->{status};
                         $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
+                        $item->{not_holdable} ||= 'notforloan' if ( $item->{notforloanitype} || $item->{notforloan} > 0 );
 
                         $item->{item_level_holds} = Koha::CirculationRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
@@ -597,7 +600,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             $item->{pickup_locations_count} = scalar @pickup_locations;
 
                             if ( @pickup_locations ) {
-                                $num_available++;
+                                $num_items_available++;
                                 $item->{available} = 1;
 
                                 my $default_pickup_location;
@@ -659,7 +662,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 if ( $num_override > 0 && ($num_override + $num_alreadyheld) == scalar( @{ $biblioitem->{itemloop} } ) ) {
                 # That is, if all items require an override
                     $template->param( override_required => 1 );
-                } elsif ( $num_available == 0 ) {
+                } elsif ( $num_items_available == 0 ) {
                     $template->param( none_available => 1 );
                     $biblioloopiter{warn} = 1;
                     $biblioloopiter{none_avail} = 1;
@@ -767,9 +770,11 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             $biblioloopiter{pickup_locations_codes} = [ map { $_->branchcode } @pickup_locations ];
         }
 
+        $num_bibs_available++ unless $biblioloopiter{none_avail};
         push @biblioloop, \%biblioloopiter;
     }
 
+    $template->param( no_bibs_available => 1 ) unless $num_bibs_available > 0;
     $template->param( biblioloop => \@biblioloop );
     $template->param( no_reserves_allowed => $no_reserves_allowed );
     $template->param( exceeded_maxreserves => $exceeded_maxreserves );

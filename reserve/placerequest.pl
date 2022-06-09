@@ -36,6 +36,7 @@ checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
 my @bibitems       = $input->multi_param('biblioitem');
 my @reqbib         = $input->multi_param('reqbib');
+my @holdable_bibs  = $input->multi_param('holdable_bibs');
 my $biblionumber   = $input->param('biblionumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $notes          = $input->param('notes');
@@ -55,7 +56,6 @@ $borrower = $borrower->unblessed if $borrower;
 my $biblionumbers = $input->param('biblionumbers');
 $biblionumbers ||= $biblionumber . '/';
 
-my $bad_bibs = $input->param('bad_bibs');
 my $holds_to_place_count = $input->param('holds_to_place_count') || 1;
 
 my %bibinfos = ();
@@ -164,9 +164,6 @@ if ( $type eq 'str8' && $borrower ) {
         }
     }
 
-    if ($bad_bibs) {
-        $biblionumbers .= $bad_bibs;
-    }
     print $input->redirect("request.pl?biblionumbers=$biblionumbers");
 }
 elsif ( $borrowernumber eq '' ) {
