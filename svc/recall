@@ -78,7 +78,10 @@ if ( $op eq 'cancel' ) {
 } elsif ( $op eq 'transit' ) {
     # cancel recall and return item to home library
     if ( $recall->in_transit ) {
-        C4::Items::ModItemTransfer( $recall->item->itemnumber, $recall->item->holdingbranch, $recall->item->homebranch, 'CancelRecall' );
+        C4::Items::ModItemTransfer(
+            $recall->item->itemnumber, $recall->item->holdingbranch,
+            $recall->item->homebranch, 'RecallCancellation'
+        );
     }
     $recall->set_cancelled;
     if ( $recall->cancelled ){

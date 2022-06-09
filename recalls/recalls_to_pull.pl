@@ -40,7 +40,10 @@ my $recall_id = $query->param('recall_id');
 if ( $op eq 'cancel' ) {
     my $recall = Koha::Recalls->find( $recall_id );
     if ( $recall->in_transit ) {
-        C4::Items::ModItemTransfer( $recall->item->itemnumber, $recall->item->holdingbranch, $recall->item->homebranch, 'CancelRecall' );
+        C4::Items::ModItemTransfer(
+            $recall->item->itemnumber, $recall->item->holdingbranch,
+            $recall->item->homebranch, 'RecallCancellation'
+        );
     }
     $recall->set_cancelled;
     $op = 'list';
