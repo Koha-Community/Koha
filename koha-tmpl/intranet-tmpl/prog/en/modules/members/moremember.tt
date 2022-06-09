@@ -109,7 +109,8 @@
                                     [% END %]
                                 </div>
 
-                                [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames | html %]&rdquo;[% END %]
+                                [% IF ( patron.othernames ) %]<div>&ldquo;[% patron.othernames | html %]&rdquo;</div>[% END %]
+                                [% IF ( patron.pronouns ) %]<div>&ldquo;[% patron.pronouns | html %]&rdquo;</div>[% END %]
 
                                 <div class="address">
                                     <ul>
