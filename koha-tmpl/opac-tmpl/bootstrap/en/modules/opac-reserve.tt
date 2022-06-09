@@ -314,6 +314,20 @@
                                                     </li>
                                                 [% END %]
 
+                                                [% UNLESS bibitemloo.forced_hold_level && ( bibitemloo.forced_hold_level == 'item' || bibitemloo.forced_hold_level == 'record' ) %]
+                                                    [% IF bibitemloo.object.item_groups %]
+                                                        <li>
+                                                            <label for="itemtype">Request specific item group:</label>
+                                                            <select name="item_group_id_[% bibitemloo.biblionumber | html %]" id="item_group_id_[% bibitemloo.biblionumber | html %]">
+                                                                <option value="">Any item group</option>
+                                                                [% FOREACH g IN bibitemloo.object.item_groups.search({}, { order_by => ['display_order'] }) %]
+                                                                    <option value="[% g.id | html %]">[% g.description | html %]</option>
+                                                                [% END %]
+                                                            </select>
+                                                        </li>
+                                                    [% END %]
+                                                [% END %]
+
                                                 [% IF ( OpacHoldNotes ) %]
                                                     <li>
                                                         <div class="notesrow" id="notesrow_[% bibitemloo.biblionumber | html %]">
@@ -326,7 +340,7 @@
                                                 [% IF bibitemloo.itemholdable %]
                                                     <!-- ITEM HOLDS -->
                                                     <li class="lradio place_on_type" style="display:none;">
-                                                        [% IF NOT bibitemloo.force_hold %]
+                                                        [% UNLESS bibitemloo.forced_hold_level == 'item' || bibitemloo.forced_hold_level == 'item_group' %]
                                                             <label class="radio inline" for="reqany_[% bibitemloo.biblionumber | html %]">Next available item</label>
                                                             <input type="radio" name="reqtype_[% bibitemloo.biblionumber | html %]"
                                                                     id="reqany_[% bibitemloo.biblionumber | html %]"
@@ -581,10 +595,16 @@
             var select_specific = $("#reqspecific_"+biblioNum).is(":checked");
             // If the checkbox is checked AND we want a specific item, we display the items block
             if ( $(checkbox).is(":checked") && select_specific ) {
+                if ( $(`#item_group_id_${biblioNum}`).length ) {
+                    $(`#item_group_id_${biblioNum}`).val("").attr('disabled', 'disabled');
+                }
                 $(newCopiesRowId).show();
             } else {
+                if ( $(`#item_group_id_${biblioNum}`).length ) {
+                    $(`#item_group_id_${biblioNum}`).removeAttr('disabled');
+                }
                 $(newCopiesRowId).hide();
-             }
+            }
         };
 
         $("#place_on_hdr").show();

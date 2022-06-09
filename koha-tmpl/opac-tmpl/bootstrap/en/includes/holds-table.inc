@@ -56,6 +56,9 @@
                                 </strong>
                             [% END %]
                             [% HOLD.biblio.author | html %]
+                            [% IF HOLD.item_group_id %]
+                               <p>Next available item from item group: <strong>[% HOLD.item_group.description | html %]</strong></p>
+                            [% END %]
                             [% IF HOLD.item_level_hold %]
                                 <p class="hint">Item on hold: [% HOLD.item.barcode | html %]</p>
                             [% END %]
