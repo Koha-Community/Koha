@@ -96,12 +96,15 @@ Return the job_id of the newly created job.
 sub enqueue {
     my ( $self, $params ) = @_;
 
-    my $job_type = $self->job_type;
-    my $job_size = $params->{job_size};
-    my $job_args = $params->{job_args};
-    my $job_queue = $params->{job_queue} // 'default';
+    my $job_type    = $self->job_type;
+    my $job_size    = $params->{job_size};
+    my $job_args    = $params->{job_args};
+    my $job_context = $params->{job_context} // C4::Context->userenv;
+    my $job_queue   = $params->{job_queue}  // 'default';
 
     my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
+    $job_context->{interface} = C4::Context->interface;
+    my $json_context = encode_json $job_context;
     my $json_args = encode_json $job_args;
 
     $self->set(
@@ -111,6 +114,7 @@ sub enqueue {
             queue          => $job_queue,
             size           => $job_size,
             data           => $json_args,
+            context        => $json_context,
             enqueued_on    => dt_from_string,
             borrowernumber => $borrowernumber,
         }
@@ -161,6 +165,19 @@ sub process {
     my $derived_class = $self->_derived_class;
 
     $args ||= {};
+
+    my $context = decode_json($self->context);
+    C4::Context->_new_userenv(-1);
+    C4::Context->interface( $context->{interface} );
+    C4::Context->set_userenv(
+        $context->{number},       $context->{id},
+        $context->{cardnumber},   $context->{firstname},
+        $context->{surname},      $context->{branch},
+        $context->{branchname},   $context->{flags},
+        $context->{emailaddress}, undef,
+        $context->{desk_id},      $context->{desk_name},
+        $context->{register_id},  $context->{register_name}
+    );
 
     return $derived_class->process( $args );
 }
