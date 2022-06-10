@@ -217,7 +217,7 @@
         dt_overwrite_html_sorting_localeCompare();
 
         $(document).ready(function() {
-            var column_settings = [% TablesSettings.GetColumns( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
             var oTable = KohaTable("accounts", {
                 "fnDrawCallback": function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
@@ -257,7 +257,7 @@
                 'aaSortingFixed': [[ 1, 'asc' ]],
                 'bPaginate': false,
                 "bAutoWidth": false
-            }, column_settings );
+            }, table_settings );
 
             $(oTable).treetable({
                 expandable: true
