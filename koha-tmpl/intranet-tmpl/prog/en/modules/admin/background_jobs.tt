@@ -164,8 +164,6 @@
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="queued">
-                <h2>Queued jobs</h2>
-
                 [% IF queued.count %]
                     <table id="table_queued_jobs">
                         <thead>
@@ -211,10 +209,9 @@
                 [% END %]
             </div>
 
-            <div role="tabpanel" class="tab-pane active" id="complete">
-                <h2>Complete jobs</h2>
-
+            <div role="tabpanel" class="tab-pane" id="complete">
                 [% IF complete.count %]
+                    <p>Jobs completed in the last 60 minutes.</p>
                     <table id="table_complete_jobs">
                         <thead>
                             <tr>
@@ -254,7 +251,7 @@
                     </table>
                 [% ELSE %]
                     <div class="dialog message">
-                        There are no completed background jobs yet.
+                        There were no completed background jobs completed in the last 60 minutes.
                     </div>
                 [% END %]
             </div>

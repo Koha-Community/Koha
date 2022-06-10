@@ -19,6 +19,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Context;
+use Koha::DateUtils qw( dt_from_string );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
@@ -88,13 +89,23 @@ if ( $op eq 'list' ) {
       );
     $template->param( queued => $queued_jobs );
 
+    my $ended_since = dt_from_string->subtract( minutes => '60' );
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
     my $complete_jobs =
       $can_manage_background_jobs
-      ? Koha::BackgroundJobs->search( { ended_on => { '!=' => undef } },
-        { order_by => { -desc => 'enqueued_on' } } )
+      ? Koha::BackgroundJobs->search(
+        {
+            ended_on => { '>=' => $dtf->format_date($ended_since) }
+        },
+        { order_by => { -desc => 'enqueued_on' } }
+      )
       : Koha::BackgroundJobs->search(
-        { borrowernumber => $logged_in_user->borrowernumber, ended_on => { '!=' => undef } },
-        { order_by       => { -desc => 'enqueued_on' } }
+        {
+            borrowernumber => $logged_in_user->borrowernumber,
+            ended_on       => { '>=' => $dtf->format_date($ended_since) }
+        },
+        { order_by => { -desc => 'enqueued_on' } }
       );
     $template->param( complete => $complete_jobs );
 }
