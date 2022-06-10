@@ -119,8 +119,8 @@
             <ol class="bibliodetails">
             <li><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
-            [% IF ( ITEM_DAT.issue ) %]<span>Checked out to</span>
-                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]
+            [% IF ( ITEM_DAT.issue ) %]<span>Checked out to
+                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]</span>
                 [% IF ( ITEM_DAT.lastreneweddate ) %]
                     <span>Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %]</span>,
                 [% END %]

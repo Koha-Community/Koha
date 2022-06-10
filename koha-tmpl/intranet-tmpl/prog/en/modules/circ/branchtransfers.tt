@@ -42,13 +42,13 @@
     <table>
         <caption>
             [% IF ( reserved ) %]
-                Hold found for [% INCLUDE 'patron-title.inc' patron => hold.patron | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
+                <span>Hold found for [% INCLUDE 'patron-title.inc' patron => hold.patron | html %]</span> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
             [% IF ( waiting ) %]
-                Item is marked waiting at [% branchname | html %] for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
+                <span>Item is marked waiting at [% branchname | html %] for [% name | html %]</span> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
             [% IF ( transferred ) %]
-                Item has been trapped to fill a hold and is in transit for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
+                <span>Item has been trapped to fill a hold and is in transit for [% name | html %]</span> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
         </caption>
         <tr>

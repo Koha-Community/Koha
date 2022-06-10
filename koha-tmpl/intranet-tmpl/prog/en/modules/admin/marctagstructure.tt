@@ -277,7 +277,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                 [% FOREACH subfield IN loo.subfields %]
                     <p>
                         <span>Tab:[% subfield.tab | html %]</span> | $[% subfield.tagsubfield | html %]
-                        [% subfield.liblibrarian | html %] [% IF ( subfield.kohafield ) %][% subfield.kohafield | html %][% END %][% IF ( subfield.repeatable ) %], <span>repeatable</span>[% END %][% IF ( subfield.mandatory ) %], <span>Mandatory</span>[% END %][% IF ( subfield.seealso ) %], <span>See</span> [% subfield.seealso | html %][% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value | html %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode | html %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder | html %][% END %]
+                        [% subfield.liblibrarian | html %] [% IF ( subfield.kohafield ) %][% subfield.kohafield | html %][% END %][% IF ( subfield.repeatable ) %], <span>repeatable</span>[% END %][% IF ( subfield.mandatory ) %], <span>Mandatory</span>[% END %][% IF ( subfield.seealso ) %], <span>See [% subfield.seealso | html %]</span>[% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value | html %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode | html %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder | html %][% END %]
                     </p>
                 [% END %]
             [% END %]

@@ -398,18 +398,18 @@
                                             [% IF loo.tab == -1 %]
                                                 <em>subfield ignored</em>
                                             [% ELSE %]
-                                                <span>Tab:[% loo.tab | html %]</span>,
-                                                [% IF ( loo.kohafield ) %] | <span>Koha field: [% loo.kohafield | html %]</span>, [% END %]
+                                                <span>Tab:</span>[% loo.tab | html %],
+                                                [% IF ( loo.kohafield ) %] | <span>Koha field:</span> [% loo.kohafield | html %], [% END %]
                                                 [% IF ( loo.repeatable ) %]<span>Repeatable</span>, [% ELSE %]<span>Not repeatable</span>,[% END %]
                                                 [% IF ( loo.mandatory ) %]<span>Mandatory</span>, [% ELSE %]<span>Not mandatory</span>,[% END %]
                                                 [% IF ( loo.important ) %]<span>Important</span>, [% ELSE %]<span>Not important</span>,[% END %]
-                                                [% IF ( loo.seealso ) %] | <span>See also: [% loo.seealso | html %]</span>,[% END %]
+                                                [% IF ( loo.seealso ) %] | <span>See also:</span> [% loo.seealso | html %],[% END %]
                                                 [% IF ( loo.hidden ) %]<span>hidden</span>,[% END %]
                                                 [% IF ( loo.isurl ) %]<span>is a URL</span>,[% END %]
-                                                [% IF ( loo.authorised_value ) %] | <span>Auth value:[% loo.authorised_value | html %]</span>,[% END %]
-                                                [% IF ( loo.authtypecode ) %] | <span>Authority:[% loo.authtypecode | html %]</span>,[% END %]
-                                                [% IF ( loo.value_builder ) %] | <span>Plugin:[% loo.value_builder | html %]</span>,[% END %]
-                                                [% IF ( loo.link ) %] | <span>Link:[% loo.link | html %]</span>,[% END %]
+                                                [% IF ( loo.authorised_value ) %] | <span>Auth value:</span>[% loo.authorised_value | html %],[% END %]
+                                                [% IF ( loo.authtypecode ) %] | <span>Authority:</span>[% loo.authtypecode | html %],[% END %]
+                                                [% IF ( loo.value_builder ) %] | <span>Plugin:</span>[% loo.value_builder | html %],[% END %]
+                                                [% IF ( loo.link ) %] | <span>Link:</span>[% loo.link | html %],[% END %]
                                             [% END %]
                                         </td>
                                         <td class="actions">

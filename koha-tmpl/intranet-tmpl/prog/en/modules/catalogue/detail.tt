@@ -518,12 +518,13 @@ Note that permanent location is a code, and location may be an authval.
                             [% IF item.recall.waiting_date %]
                                 <span>Waiting at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %]</span>
                             [% ELSE %]
-                                <span>Item recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a> on [% item.recall.created_date | $KohaDates %]</span>
+                                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.patron_id | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a>[% END %]
+                                <span>Item recalled by [% patron_link| $raw %] on [% item.recall.created_date | $KohaDates %]</span>
                             [% END %]
                         [% END %]
 
                         [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || item.recalled ) %]
-                            Available
+                            <span>Available</span>
                         [% END %]
 
                         [% IF ( item.restricted ) %]
