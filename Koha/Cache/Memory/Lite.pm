@@ -41,33 +41,83 @@ use Modern::Perl;
 use base qw(Class::Accessor);
 
 our %L1_cache;
-
 our $singleton_cache;
+
+=head2 get_instance
+
+This gets a shared instance of the lite cache, set up in a very default
+way. The lite cache is an in memory only cache that's automatically flushed
+for every request.
+
+=cut
+
 sub get_instance {
     my ($class) = @_;
     $singleton_cache = $class->new() unless $singleton_cache;
     return $singleton_cache;
 }
 
+=head2 get_from_cache
+
+    my $value = $cache->get_from_cache($key);
+
+Retrieve the value stored under the specified key in the cache.
+
+The retrieved value is a direct reference so should not be modified.
+
+=cut
+
 sub get_from_cache {
     my ( $self, $key ) = @_;
     return $L1_cache{$key};
 }
+
+=head2 set_in_cache
+
+    $cache->set_in_cache($key, $value);
+
+Save a value to the specified key in the cache.
+
+=cut
 
 sub set_in_cache {
     my ( $self, $key, $value ) = @_;
     $L1_cache{$key} = $value;
 }
 
+=head2 clear_from_cache
+
+    $cache->clear_from_cache($key);
+
+Remove the value identified by the specified key from the lite cache.
+
+=cut
+
 sub clear_from_cache {
     my ( $self, $key ) = @_;
     delete $L1_cache{$key};
 }
 
+=head2 all_keys
+
+    my @keys = $cache->all_keys();
+
+Returns an array of all keys currently in the lite cache.
+
+=cut
+
 sub all_keys {
     my ( $self ) = @_;
     return keys %L1_cache;
 }
+
+=head2 flush
+
+    $cache->flush();
+
+Clear the entire lite cache.
+
+=cut
 
 sub flush {
     my ( $self ) = @_;
