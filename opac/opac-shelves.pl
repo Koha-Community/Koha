@@ -89,6 +89,7 @@ $public = 1 if $query->param('public') && $query->param('public') == 1;
 
 my ( $shelf, $shelfnumber, @messages );
 
+# PART 1: Perform a few actions
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
@@ -255,8 +256,11 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
     $op = 'view';
+} elsif( $op eq 'transfer' ) {
+    $op = 'list'; # TODO
 }
 
+# PART 2: After a possible action, view one list or show a number of lists
 if ( $op eq 'view' ) {
     $shelfnumber ||= $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
@@ -424,9 +428,7 @@ if ( $op eq 'view' ) {
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
-}
-
-if ( $op eq 'list' ) {
+} elsif ( $op eq 'list' ) {
     my $shelves;
     my ( $page, $rows ) = ( $query->param('page') || 1, 20 );
     if ( !$public ) {
@@ -444,6 +446,7 @@ if ( $op eq 'list' ) {
         ),
     );
 }
+
 my $staffuser;
 $staffuser = Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists if $loggedinuser;
 $template->param(
