@@ -114,6 +114,10 @@
                 </a>
             </li>
         [% END %]
+
+        [% IF op == 'transfer' %]
+            <li><a href="#" aria-current="page">Transfer list <em>[% shelf.shelfname | html %]</em></a></li>
+        [% END %]
     </ol>
 </nav>
 
@@ -122,7 +126,7 @@
             <div class="col-sm-10 col-sm-push-1">
                 <main>
 
-                [% INCLUDE 'virtualshelves-toolbar.inc' %]
+                [% IF op != 'transfer' %][% INCLUDE 'virtualshelves-toolbar.inc' %][% END %]
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -169,18 +173,55 @@
            <span>You do not have permission to delete this list.</span>
         [% CASE 'unauthorized_on_add_biblio' %]
             <span>You do not have permission to add a record to this list.</span>
+        [% CASE 'unauthorized_transfer' %]
+            <span>You do not have permission to transfer ownership of this list.</span>
+        [% CASE 'new_owner_not_found' %]
+            <span>The new owner could not be found anymore.</span>
         [% CASE 'no_biblio_removed' %]
             <span>No record was removed.</span>
+
         [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
             <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
         [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
             <span>List could not be created. (Do not use the database administrator account.)</span>
         [% CASE 'DBIx::Class::Exception' %]
             [% m.msg | html %]
+
         [% CASE %]
             [% m.code | html %] [% m.msg | html %]
         [% END %]
     </div>
+[% END %]
+
+[% IF op == 'transfer' %]
+    <h1>Transfer ownership of public list [% shelf.shelfname | html %]</h1>
+
+    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
+    <fieldset>
+        <input type="hidden" name="op" value="transfer" />
+        <input type="hidden" name="public" value="1" />
+        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+
+        <div>
+            <label for="find_patron">Search for new owner: </label>
+            <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
+        </div>
+
+        <br/>
+        <div>
+            <label for="find_patron">New owner: </label>
+            <span id="new_owner_name"></span>
+            <input type="hidden" id="new_owner" name="new_owner" value="" />
+        </div>
+
+        <br/>
+        <fieldset class="action">
+            <input type="submit" value="Transfer" class="submit" />
+            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
+        </fieldset>
+
+    </fieldset>
+    </form>
 [% END %]
 
 [% IF op == 'view' %]
@@ -848,6 +889,35 @@
              });
 
         [% END %]
+
+        [% IF op == 'transfer' %]
+            $(document).ready(function() {
+                $('#find_patron').autocomplete({
+                    source: "/cgi-bin/koha/circ/ysearch.pl",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        $('#new_owner_name').html( ui.item.firstname + " " + ui.item.surname );
+                        $('#new_owner').val( ui.item.borrowernumber );
+                        $('#find_patron').val('').focus();
+                        return false;
+                    },
+                }).data('ui-autocomplete')._renderItem = function( ul, item ) {
+                    return $('<li></li>')
+                        .data( 'ui-autocomplete-item', item )
+                        .append( '<a>' + item.surname + ', ' + item.firstname + '</a>' )
+                        .appendTo(ul);
+                };
+
+                $('#transferform').submit(function() {
+                    if( $('#new_owner').val() == '' ) {
+                        alert( _("Please select a new owner first") );
+                        return false;
+                    }
+                    return true;
+                });
+             });
+        [% END %]
+
     </script>
 [% END %]
 

@@ -235,6 +235,25 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
+} elsif ( $op eq 'transfer' ) {
+    $shelfnumber = $query->param('shelfnumber');
+    $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
+    my $new_owner = $query->param('new_owner'); # is a borrowernumber
+
+    if( $new_owner ) {
+        $op = 'list';
+        # First check: shelf found, permission, patron found?
+        if( !$shelf ) {
+            push @messages, { type => 'alert', code => 'does_not_exist' };
+        } elsif( !haspermission(C4::Context->userenv->{id}, { lists => 'edit_public_lists' }) ) {
+            push @messages, { type => 'alert', code => 'unauthorized_transfer' };
+        } elsif( !Koha::Patrons->find($new_owner) ) {
+            push @messages, { type => 'alert', code => 'new_owner_not_found' };
+            $op = 'transfer'; # find again..
+        } else { # success
+            $shelf->owner($new_owner)->store;
+        }
+    }
 }
 
 if ( $op eq 'view' ) {
