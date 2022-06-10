@@ -225,7 +225,7 @@ sub AddReserve {
         }
     }
     if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
-	# Make room in reserves for this before those of a later reserve date
+    # Make room in reserves for this if passed a priority
     $priority = _ShiftPriority( $biblionumber, $priority );
     }
 

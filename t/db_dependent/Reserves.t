@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 75;
+use Test::More tests => 73;
 use Test::MockModule;
 use Test::Warn;
 
@@ -387,7 +387,28 @@ t::lib::Mocks::mock_preference('ConfirmFutureHolds', 7);
 ($doreturn, $messages)= AddReturn('97531',$branch_1);
 is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve within ConfirmFutureHolds days');
 
+my $now_holder = $builder->build_object({ class => 'Koha::Patrons', value => {
+    branchcode       => $branch_1,
+}});
+my $now_reserve_id = AddReserve(
+    {
+        branchcode       => $branch_1,
+        borrowernumber   => $requesters{$branch_1},
+        biblionumber     => $bibnum,
+        priority         => 2,
+        reservation_date => output_pref(dt_from_string()),
+    }
+);
+my $which_highest;
+($status,$which_highest)=CheckReserves($item->itemnumber,undef,3);
+is( $which_highest->{reserve_id}, $now_reserve_id, 'CheckReserves returns lower priority current reserve with insufficient lookahead');
+($status, $which_highest)=CheckReserves($item->itemnumber,undef,4);
+is( $which_highest->{reserve_id}, $reserve_id, 'CheckReserves returns higher priority future reserve with sufficient lookahead');
+ModReserve({ reserve_id => $now_reserve_id, rank => 'del', cancellation_reason => 'test reserve' });
+
+
 # End of tests for bug 9761 (ConfirmFutureHolds)
+
 
 # test marking a hold as captured
 my $hold_notice_count = count_hold_print_messages();
@@ -521,26 +542,40 @@ is($p, 3, 'CalculatePriority should now return priority 3');
 # regression test for bug 12630
 # Now there are 2 reserves on $bibnum
 t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
-my $borrowernumber_tmp_1 = AddMember(
+my $bor_tmp_1 = $builder->build_object({ class => 'Koha::Patrons',value =>{
     firstname =>  'my firstname tmp 1',
     surname => 'my surname tmp 1',
     categorycode => 'S',
     branchcode => 'CPL',
-);
-my $borrowernumber_tmp_2 = AddMember(
+}});
+my $bor_tmp_2 = $builder->build_object({ class => 'Koha::Patrons',value =>{
     firstname =>  'my firstname tmp 2',
     surname => 'my surname tmp 2',
     categorycode => 'S',
     branchcode => 'CPL',
-);
+}});
+my $borrowernumber_tmp_1 = $bor_tmp_1->borrowernumber;
+my $borrowernumber_tmp_2 = $bor_tmp_2->borrowernumber;
 my $date_in_future = dt_from_string();
 $date_in_future = $date_in_future->add_duration(DateTime::Duration->new(days => 1));
-AddReserve('CPL', $borrowernumber_tmp_1, $bibnum, undef, undef, 3, output_pref($date_in_future));
-AddReserve('CPL', $borrowernumber_tmp_2, $bibnum, undef, undef, 4);
-my @r1 = GetReservesFromBorrowernumber( $borrowernumber_tmp_1 );
-my @r2 = GetReservesFromBorrowernumber( $borrowernumber_tmp_2 );
-is( $r1[0]->{priority}, 3, 'priority for hold in future should be correct');
-is( $r2[0]->{priority}, 4, 'priority for hold not in future should be correct');
+AddReserve({
+    branch => 'CPL',
+    borrowernumber => $borrowernumber_tmp_1,
+    biblionumber => $bibnum,
+    priority => 3,
+    reservation_date => output_pref($date_in_future)
+});
+AddReserve({
+    branch => 'CPL',
+    borrowernumber => $borrowernumber_tmp_2,
+    biblionumber => $bibnum,
+    priority => 4,
+    reservation_date => output_pref($date_in_future)
+});
+my @r1 = Koha::Holds->search({ borrowernumber => $borrowernumber_tmp_1 })->as_list;
+my @r2 = Koha::Holds->search({ borrowernumber => $borrowernumber_tmp_2 })->as_list;
+is( $r1[0]->priority, 3, 'priority for hold in future should be correct');
+is( $r2[0]->priority, 4, 'priority for hold not in future should be correct');
 # end of tests for bug 12630
 
 # Tests for cancel reserves by users from OPAC.
