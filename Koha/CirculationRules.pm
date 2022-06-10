@@ -209,6 +209,18 @@ sub rule_kinds {
 
 =head3 get_effective_rule
 
+  my $effective_rule = Koha::CirculationRules->get_effective_rule(
+    {
+        rule_name    => $name,
+        categorycode => $categorycode,
+        itemtype     => $itemtype,
+        branchcode   => $branchcode
+    }
+  );
+
+Return the effective rule object for the rule associated with the criteria passed.
+
+
 =cut
 
 sub get_effective_rule {
@@ -251,6 +263,24 @@ sub get_effective_rule {
 
     return $rule;
 }
+
+=head3 get_effective_rule_value
+
+  my $effective_rule_value = Koha::CirculationRules->get_effective_rule_value(
+    {
+        rule_name    => $name,
+        categorycode => $categorycode,
+        itemtype     => $itemtype,
+        branchcode   => $branchcode
+    }
+  );
+
+Return the effective value for the rule associated with the criteria passed.
+
+This is a cached method so should be used in preference to get_effective_rule where possible
+to aid performance.
+
+=cut
 
 sub get_effective_rule_value {
     my ( $self, $params ) = @_;
@@ -600,7 +630,7 @@ sub guess_article_requestable_itemtypes {
     return $res;
 }
 
-=head3 get_daysmode_effective_value
+=head3 get_effective_daysmode
 
 Return the value for daysmode defined in the circulation rules.
 If not defined (or empty string), the value of the system preference useDaysMode is returned
