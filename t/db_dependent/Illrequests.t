@@ -41,7 +41,7 @@ use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -1174,6 +1174,43 @@ subtest 'Checking out' => sub {
     isa_ok($patron->checkouts, 'Koha::Checkouts');
     is($patron->checkouts->count, 1);
     is($request->status, 'CHK');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Checking out with custom due date' => sub {
+    plan tests => 1;
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { category_type => 'x' }
+    });
+    my $biblio = $builder->build_sample_biblio();
+    my $itemtype_loanable = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            notforloan => 0
+        }
+    });
+    my $request = $builder->build_object({
+        class => 'Koha::Illrequests',
+        value => {
+            borrowernumber => $patron->borrowernumber,
+            biblio_id      => $biblio->biblionumber
+        }
+    });
+
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    my $duedate = '2099-05-21 00:00:00';
+    my $form_stage_loanable = $request->check_out({
+        stage      => 'form',
+        item_type  => $itemtype_loanable->itemtype,
+        branchcode => $library->branchcode,
+        duedate    => $duedate
+    });
+    is($patron->checkouts->next->date_due, $duedate, "Custom due date was used");
 
     $schema->storage->txn_rollback;
 };
