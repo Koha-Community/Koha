@@ -46,12 +46,12 @@
             [% ELSE %]
             <h3>
                     [% IF ( label_ids ) %]
-                        [% IF ( card_count == 1 ) %]<span>Exporting [% card_count | html %] patron card</span>[% ELSE %]<span>Exporting [% card_count | html %] patron cards</span>[% END %]
+                        [% IF ( card_count == 1 ) %]<span>Exporting 1 patron card</span>[% ELSE %]<span>Exporting [% card_count | html %] patron cards</span>[% END %]
                     [% ELSIF ( borrower_numbers ) %]
-                        [% IF ( borrower_count == 1 ) %]<span>Exporting [% borrower_count | html %] patron card</span>[% ELSE %]<span>Exporting [% borrower_count | html %] patron cards</span>[% END %]
+                        [% IF ( borrower_count == 1 ) %]<span>Exporting 1 patron card</span>[% ELSE %]<span>Exporting [% borrower_count | html %] patron cards</span>[% END %]
                     [% ELSIF ( patronlist_id ) %] <span>Exporting from patron list</span>
                     [% ELSE %]
-                        [% IF ( multi_batch_count == 1 ) %]<span>[% multi_batch_count | html %] batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
+                        [% IF ( multi_batch_count == 1 ) %]<span>1 batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
                     [% END %]
             </h3>
             <form id="exportingf" name="exporting" method="post" action="/cgi-bin/koha/patroncards/print.pl">
