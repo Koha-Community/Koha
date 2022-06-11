@@ -1222,7 +1222,7 @@ sub check_out {
             scalar $target_item->barcode
         );
         if ($params->{duedate} && length $params->{duedate} > 0) {
-            push @issue_args, $params->{duedate};
+            push @issue_args, dt_from_string($params->{duedate});
         }
         # Check if we can check out
         my ( $error, $confirm, $alerts, $messages ) =

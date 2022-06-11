@@ -3837,9 +3837,9 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
         }
     );
 
-    my $now   = dt_from_string;
-    my $five_days_go = output_pref({ dt => $now->clone->add( days => 5 ), dateonly => 1});
-    my $ten_days_go  = output_pref({ dt => $now->clone->add( days => 10), dateonly => 1 });
+    my $now   = dt_from_string()->truncate( to => 'day' );
+    my $five_days_go = $now->clone->add( days => 5 );
+    my $ten_days_go  = $now->clone->add( days => 10);
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
@@ -3851,7 +3851,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
 
     my $issue = AddIssue( $patron->unblessed, $item->barcode, $five_days_go ); # date due was 10d ago
     my $actualissue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
-    is( output_pref({ str => $actualissue->date_due, dateonly => 1}), $five_days_go, "First issue works");
+    is( output_pref({ str => $actualissue->date_due, dateonly => 1}), output_pref({ str => $five_days_go, dateonly => 1}), "First issue works");
     my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron,$item->barcode,$ten_days_go, undef, undef, undef);
     is( $needsconfirmation->{RENEW_ISSUE}, 1, "This is a renewal");
     is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");

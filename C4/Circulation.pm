@@ -794,20 +794,11 @@ sub CanBookBeIssued {
     my $patron_unblessed = $patron->unblessed;
 
     my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
-    #
-    # DUE DATE is OK ? -- should already have checked.
-    #
-    if ($duedate && ref $duedate ne 'DateTime') {
-        $duedate = dt_from_string($duedate);
-    }
+
     my $now = dt_from_string();
-    unless ( $duedate ) {
-        my $issuedate = $now->clone();
-
-        $duedate = CalcDateDue( $issuedate, $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
-
-        # Offline circ calls AddIssue directly, doesn't run through here
-        #  So issuingimpossible should be ok.
+    $duedate ||= CalcDateDue( $now->clone(), $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
+    if (DateTime->compare($duedate,$now) == -1 ) { # duedate cannot be before now
+         $needsconfirmation{INVALID_DATE} = output_pref($duedate);
     }
 
     my $fees = Koha::Charges::Fees->new(
@@ -818,16 +809,6 @@ sub CanBookBeIssued {
             to_date   => $duedate,
         }
     );
-
-    if ($duedate) {
-        my $today = $now->clone();
-        $today->truncate( to => 'minute');
-        if (DateTime->compare($duedate,$today) == -1 ) { # duedate cannot be before now
-            $needsconfirmation{INVALID_DATE} = output_pref($duedate);
-        }
-    } else {
-            $issuingimpossible{INVALID_DATE} = output_pref($duedate);
-    }
 
     #
     # BORROWER STATUS
