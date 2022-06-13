@@ -174,7 +174,6 @@
                                 <th>Type</th>
                                 <th>Queued</th>
                                 <th>Started</th>
-                                <th>Ended</th>
                                 <th class="noExport">Actions</th>
                             </tr>
                         </thead>
@@ -191,7 +190,6 @@
                                 </td>
                                 <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
                                 <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
-                                <td>[% job.ended_on| $KohaDates with_hours = 1 %]</td>
                                 <td class="actions">
                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
                                     [% IF job.status == 'new' || job.status == 'started' %]
