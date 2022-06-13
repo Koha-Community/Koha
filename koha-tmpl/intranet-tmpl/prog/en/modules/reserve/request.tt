@@ -1362,7 +1362,7 @@
 
             var msg = "";
 
-            if ( $("#requestany").attr("checked") !== "checked" ) {
+            if ( ! $("#requestany").is(":checked") ) {
                 // requestany not selected, go through the item-specific cases
                 if ( $('input[type="radio"]:checked').length > 0 ) {
                     // got item-specific hold requests in the form!
