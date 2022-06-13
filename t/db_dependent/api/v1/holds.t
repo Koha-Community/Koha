@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -461,7 +461,18 @@ subtest 'suspend and resume tests' => sub {
     my $password = 'AbcdEFG123';
 
     my $patron = $builder->build_object(
-        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 1 } } );
+        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 0 } } );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
     $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
 
@@ -1360,6 +1371,61 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
     is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used, even if x-koha-override is passed' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+    my $patron   = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 } });
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
+    # Only have 'place_holds' subpermission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $patron->branchcode
+        }
+    );
+
+    # Add a hold
+    my $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id )
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $schema->storage->txn_rollback;
 };
