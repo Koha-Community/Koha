@@ -3362,7 +3362,7 @@ subtest 'AddReturn | is_overdue' => sub {
                 payment_type => 'CASH',
                 user_id => $patron->borrowernumber,
                 amount => 39.00,
-                lines => [$lost_fee_line]
+                debits => [$lost_fee_line]
             });
 
             $lost_fee_line->discard_changes;
@@ -3422,7 +3422,7 @@ subtest 'AddReturn | is_overdue' => sub {
                 payment_type => 'CASH',
                 user_id => $patron->borrowernumber,
                 amount => $replacement_amount,
-                lines => [$lost_fee_line]
+                debits => [$lost_fee_line]
             });
 
             $lost_fee_line->discard_changes;
