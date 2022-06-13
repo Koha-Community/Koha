@@ -1,8 +1,6 @@
 /* global __ */
 
 $(document).ready(function() {
-    $.ajaxSetup ({ cache: false });
-
     var barcodefield = $("#barcode");
 
     var onHoldDueDateSet = false;
