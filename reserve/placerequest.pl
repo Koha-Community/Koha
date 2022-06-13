@@ -71,34 +71,35 @@ if ( $patron ) {
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
         if ( defined $checkitem && $checkitem ne '' ) {
 
-            my $item_pickup_location = $input->param("item_pickup_$checkitem");
+            if ( my $item_pickup_location = $input->param("item_pickup_$checkitem") ) {
 
-            my $item = Koha::Items->find($checkitem);
+                my $item = Koha::Items->find($checkitem);
 
-            if ( $item->biblionumber ne $biblionumber ) {
-                $biblionumber = $item->biblionumber;
-            }
+                if ( $item->biblionumber ne $biblionumber ) {
+                    $biblionumber = $item->biblionumber;
+                }
 
-            my $can_item_be_reserved = CanItemBeReserved($patron, $item, $item_pickup_location)->{status};
+                my $can_item_be_reserved = CanItemBeReserved($patron, $item, $item_pickup_location)->{status};
 
-            if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
-                AddReserve(
-                    {
-                        branchcode       => $item_pickup_location,
-                        borrowernumber   => $patron->borrowernumber,
-                        biblionumber     => $biblionumber,
-                        priority         => $rank[0],
-                        reservation_date => $startdate,
-                        expiration_date  => $expirationdate,
-                        notes            => $notes,
-                        title            => $title,
-                        itemnumber       => $checkitem,
-                        found            => $found,
-                        itemtype         => $itemtype,
-                        non_priority     => $non_priority,
-                    }
-                );
+                if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
+                    AddReserve(
+                        {
+                            branchcode       => $item_pickup_location,
+                            borrowernumber   => $patron->borrowernumber,
+                            biblionumber     => $biblionumber,
+                            priority         => $rank[0],
+                            reservation_date => $startdate,
+                            expiration_date  => $expirationdate,
+                            notes            => $notes,
+                            title            => $title,
+                            itemnumber       => $checkitem,
+                            found            => $found,
+                            itemtype         => $itemtype,
+                            non_priority     => $non_priority,
+                        }
+                    );
 
+                }
             }
 
         } elsif (@biblionumbers > 1) {
