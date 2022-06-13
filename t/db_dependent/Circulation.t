@@ -3444,7 +3444,7 @@ subtest 'AddReturn | is_overdue' => sub {
             $lost_fee_line->discard_changes;
 
             is( int($lost_fee_line->amountoutstanding) , 0, 'The LOST amountoutstanding is zero after returning lost item with full payment' );
-            is( $lost_fee_line->status, 'FOUND', 'The FOUND status was set for lost item iwth partial payment' );
+            is( $lost_fee_line->status, 'FOUND', 'The FOUND status was set for lost item with partial payment' );
             is(
                 int($patron->account->balance),
                 0,

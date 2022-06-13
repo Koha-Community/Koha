@@ -1207,7 +1207,7 @@ sub _set_found_trigger {
                     # "refund_unpaid"
                     #
                     # In that case only unpaid/outstanding amount
-                    # will be credited wich settles the debt without
+                    # will be credited which settles the debt without
                     # creating extra credits
 
                     my $credit_offsets = $lost_charge->debit_offsets(
