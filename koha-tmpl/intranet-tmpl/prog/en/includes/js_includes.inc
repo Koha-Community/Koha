@@ -77,11 +77,11 @@
     $(document).ready(function(){
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             if ( $("#findborrower").length ) {
-                patron_autocomplete($("#findborrower"), { 'on-select': 'link-to-circ' });
+                patron_autocomplete($("#findborrower"), { 'link-to': 'circ' });
             }
         [% END %]
         if ( $("#searchmember").length ) {
-            patron_autocomplete($("#searchmember"), { 'on-select': 'link-to-patron' });
+            patron_autocomplete($("#searchmember"), { 'link-to': 'patron' });
         }
     });
     </script>
