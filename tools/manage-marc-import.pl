@@ -23,6 +23,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use CGI::Cookie;
 use MARC::File::USMARC;
+use Try::Tiny;
 
 # Koha modules used
 use C4::Context;
@@ -31,19 +32,18 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::ImportBatch qw( CleanBatch DeleteBatch GetImportBatch GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction SetImportBatchOverlayAction SetImportBatchNoMatchAction SetImportBatchItemAction BatchFindDuplicates SetImportBatchMatcher GetItemNumbersFromImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches BatchCommitRecords BatchRevertRecords );
 use C4::Matcher;
-use C4::BackgroundJob;
 use C4::Labels::Batch;
 use Koha::BiblioFrameworks;
+use Koha::BackgroundJob::MARCImportCommitBatch;
+use Koha::BackgroundJob::MARCImportRevertBatch;
 
 use Koha::Logger;
 
-my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
 my $input = CGI->new;
 my $op = $input->param('op') || '';
-my $completedJobID = $input->param('completedJobID');
-our $runinbackground = $input->param('runinbackground');
 my $import_batch_id = $input->param('import_batch_id') || '';
+my @messages;
 
 # record list displays
 my $offset = $input->param('offset') || 0;
@@ -55,10 +55,6 @@ my ($template, $loggedinuser, $cookie)
                  type => "intranet",
                  flagsrequired => {tools => 'manage_staged_marc'},
                  });
-
-my %cookies = CGI::Cookie->fetch();
-our $sessionID = $cookies{'CGISESSID'}->value;
-our $dbh = C4::Context->dbh;
 
 my $frameworks = Koha::BiblioFrameworks->search({ tagfield => { 'not' => undef } }, { join => 'marc_tag_structure', distinct => 'frameworkcode', order_by => ['frameworktext'] });
 $template->param( frameworks => $frameworks );
@@ -79,10 +75,9 @@ if ($op eq "create_labels") {
 	$op='';
 	$import_batch_id='';
 }
+
 if ($op) {
-    $template->param(script_name => $script_name, $op => 1);
-} else {
-    $template->param(script_name => $script_name);
+    $template->param($op => 1);
 }
 
 if ($op eq "") {
@@ -93,20 +88,50 @@ if ($op eq "") {
         import_records_list($template, $import_batch_id, $offset, $results_per_page);
     }
 } elsif ($op eq "commit-batch") {
-    if ($completedJobID) {
-        add_saved_job_results_to_template($template, $completedJobID);
-    } else {
-        my $framework = $input->param('framework');
-        commit_batch($template, $import_batch_id, $framework);
+    my $frameworkcode = $input->param('framework');
+    try {
+        my $job_id = Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue(
+            {
+                import_batch_id => $import_batch_id,
+                frameworkcode   => $frameworkcode
+            }
+        );
+        if ($job_id) {
+            $template->param(
+                job_enqueued => 1,
+                job_id => $job_id,
+            );
+        }
     }
-    import_records_list($template, $import_batch_id, $offset, $results_per_page);
+    catch {
+        warn $_;
+        push @messages,
+          {
+            type  => 'error',
+            code  => 'cannot_enqueue_job',
+            error => $_,
+          };
+    };
 } elsif ($op eq "revert-batch") {
-    if ($completedJobID) {
-        add_saved_job_results_to_template($template, $completedJobID);
-    } else {
-        revert_batch($template, $import_batch_id);
+    try {
+        my $job_id = Koha::BackgroundJob::MARCImportRevertBatch->new->enqueue(
+            { import_batch_id => $import_batch_id } );
+        if ($job_id) {
+            $template->param(
+                job_enqueued => 1,
+                job_id => $job_id,
+            );
+        }
     }
-    import_records_list($template, $import_batch_id, $offset, $results_per_page);
+    catch {
+        warn $_;
+        push @messages,
+          {
+            type  => 'error',
+            code  => 'cannot_enqueue_job',
+            error => $_,
+          };
+    };
 } elsif ($op eq "clean-batch") {
     CleanBatch($import_batch_id);
     import_batches_list($template, $offset, $results_per_page);
@@ -226,138 +251,6 @@ sub import_batches_list {
     $template->param(num_results => $num_batches);
     $template->param(results_per_page => $results_per_page);
 
-}
-
-sub commit_batch {
-    my ($template, $import_batch_id, $framework) = @_;
-
-    my $job = undef;
-    my ( $num_added, $num_updated, $num_items_added,
-        $num_items_replaced, $num_items_errored, $num_ignored );
-    my $callback = sub { };
-    if ($runinbackground) {
-        $job = put_in_background($import_batch_id);
-        $callback = progress_callback( $job );
-    }
-    (
-        $num_added, $num_updated, $num_items_added,
-        $num_items_replaced, $num_items_errored, $num_ignored
-      )
-      = BatchCommitRecords( $import_batch_id, $framework, 50,
-        $callback );
-
-    my $results = {
-        did_commit => 1,
-        num_added => $num_added,
-        num_updated => $num_updated,
-        num_items_added => $num_items_added,
-        num_items_replaced => $num_items_replaced,
-        num_items_errored => $num_items_errored,
-        num_ignored => $num_ignored
-    };
-    if ($runinbackground) {
-        $job->finish($results);
-    } else {
-        add_results_to_template($template, $results);
-    }
-}
-
-sub revert_batch {
-    my ($template, $import_batch_id) = @_;
-
-    my $job = undef;
-            my (
-                $num_deleted,       $num_errors, $num_reverted,
-                $num_items_deleted, $num_ignored
-            );
-    my $schema = Koha::Database->new->schema;
-    $schema->txn_do(
-        sub {
-            if ($runinbackground) {
-                $job = put_in_background($import_batch_id);
-            }
-            (
-                $num_deleted,       $num_errors, $num_reverted,
-                $num_items_deleted, $num_ignored
-            ) = BatchRevertRecords( $import_batch_id );
-        }
-    );
-
-    my $results = {
-        did_revert => 1,
-        num_deleted => $num_deleted,
-        num_items_deleted => $num_items_deleted,
-        num_errors => $num_errors,
-        num_reverted => $num_reverted,
-        num_ignored => $num_ignored,
-    };
-    if ($runinbackground) {
-        $job->finish($results);
-    } else {
-        add_results_to_template($template, $results);
-    }
-}
-
-sub put_in_background {
-    my $import_batch_id = shift;
-
-    my $batch = GetImportBatch($import_batch_id);
-    my $job = C4::BackgroundJob->new($sessionID, $batch->{'file_name'}, '/cgi-bin/koha/tools/manage-marc-import.pl', $batch->{'num_records'});
-    my $jobID = $job->id();
-
-    # fork off
-    if (my $pid = fork) {
-        # parent
-        # return job ID as JSON
-
-        # prevent parent exiting from
-        # destroying the kid's database handle
-        # FIXME: according to DBI doc, this may not work for Oracle
-        $dbh->{InactiveDestroy}  = 1;
-
-        my $reply = CGI->new("");
-        print $reply->header(-type => 'text/html');
-        print '{"jobID":"' . $jobID . '"}';
-        exit 0;
-    } elsif (defined $pid) {
-        # child
-        # close STDOUT to signal to Apache that
-        # we're now running in the background
-        close STDOUT;
-        close STDERR;
-        $SIG{__WARN__} = sub {
-            my ($msg) = @_;
-            my $logger = Koha::Logger->get;
-            $logger->warn($msg);
-        }
-    } else {
-        # fork failed, so exit immediately
-        warn "fork failed while attempting to run tools/manage-marc-import.pl as a background job";
-        exit 0;
-    }
-    return $job;
-}
-
-sub progress_callback {
-    my $job = shift;
-    return sub {
-        my $progress = shift;
-        $job->progress($progress);
-    }
-}
-
-sub add_results_to_template {
-    my $template = shift;
-    my $results = shift;
-    $template->param(map { $_ => $results->{$_} } keys %{ $results });
-}
-
-sub add_saved_job_results_to_template {
-    my $template = shift;
-    my $completedJobID = shift;
-    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
-    my $results = $job->results();
-    add_results_to_template($template, $results);
 }
 
 sub import_records_list {

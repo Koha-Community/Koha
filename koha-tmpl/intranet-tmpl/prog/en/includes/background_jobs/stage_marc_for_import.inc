@@ -31,6 +31,9 @@
                 <li>New label batch created: # [% report.label_batch | html %] </li>
             [% END %]
         </ul>
+        <p>
+            <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% report.import_batch_id | uri %]">View batch</a>
+        </p>
         [% IF report.basketno && report.booksellerid %]
         <p>
             <a id="addtobasket" class="btn btn-default" href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% report.import_batch_id | html %]&basketno=[% report.basketno | html %]&booksellerid=[% report.booksellerid | html %]">Add staged files to basket</a>

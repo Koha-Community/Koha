@@ -43,6 +43,10 @@
         <span>Holds queue update</span>
     [% CASE 'stage_marc_for_import' %]
         <span>Staged MARC records for import</span>
+    [% CASE 'marc_import_commit_batch' %]
+        <span>Import MARC records</span>
+    [% CASE 'marc_import_revert_batch' %]
+        <span>Revert import MARC records</span>
     [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
     [% END %]
 

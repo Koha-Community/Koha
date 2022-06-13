@@ -31,7 +31,7 @@
             </li>
             [% IF ( import_batch_id ) %]
                 <li>
-                    <a href="[% script_name | url %]">Manage staged MARC records</a>
+                    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>
                 </li>
                 <li>
                     <a href="#" aria-current="page">
@@ -57,8 +57,30 @@
                             &rsaquo; Batch [% import_batch_id | html %]
                         [% END %]
                     </h1>
+                    [% FOREACH message IN messages %]
+                      [% IF message.type == 'success' %]
+                        <div class="dialog message">
+                      [% ELSIF message.type == 'warning' %]
+                        <div class="dialog alert">
+                      [% ELSIF message.type == 'error' %]
+                        <div class="dialog alert" style="margin:auto;">
+                      [% END %]
+                      [% IF message.code == 'cannot_enqueue_job' %]
+                          <span>Cannot enqueue this job.</span>
+                      [% END %]
+                      [% IF message.error %]
+                        <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
+                      [% END %]
+                      </div>
+                    [% END %]
 
-                    [% IF ( label_batch_msg ) %]
+                    [% IF job_enqueued %]
+                        <div class="dialog message">
+                          <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                          <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
+                        </div>
+
+                    [% ELSIF ( label_batch_msg ) %]
                         [% IF ( alert ) %]
                             <div class="alert">
                         [% ELSE %]
@@ -82,18 +104,16 @@
                         <div class="dialog message">Import batch deleted successfully</div>
                     [% END %]
 
-                    [% UNLESS ( batch_list ) %]
-                        [% UNLESS ( batch_info ) %]
-                            <div class="dialog message">
-                                <p>No records have been staged.</p>
-                                <p><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>.</p>
-                            </div>
-                        [% END %]
+                    [% UNLESS batch_list || batch_info || job_enqueued %]
+                        <div class="dialog message">
+                            <p>No records have been staged.</p>
+                            <p><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>.</p>
+                        </div>
                     [% END %]
 
                     [% IF ( batch_info ) %]
                         [% IF ( can_commit ) %]
-                            <form action="[% script_name | html %]" method="post">
+                            <form method="post">
                                 <input type="hidden" name="op" value="redo-matching" />
                                 <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                 <input type="hidden" name="current_matcher_id" value="[% current_matcher_id | html %]" />
@@ -121,6 +141,7 @@
                             <div class="dialog message">Changed item processing option</div>
                         [% END %]
 
+                        [% UNLESS job_enqueued %]
                         <fieldset class="rows" id="staged-record-matching-rules">
                             <ol>
                                 <li><span class="label">File name:</span> [% file_name | html %]</li>
@@ -236,7 +257,7 @@
 
                         <div>
                             [% IF ( can_commit ) %]
-                                <form action="[% script_name | html %]" method="post" id="import_batch_form">
+                                <form method="post" id="import_batch_form">
                                     <input type="hidden" name="op" value="commit-batch" />
                                     <input type="hidden" name="runinbackground" value="" />
                                     <input type="hidden" name="completedJobID" value="" />
@@ -261,7 +282,7 @@
                                 </div>
                             [% END # /IF can_commit %]
                             [% IF ( can_revert ) %]
-                                <form action="[% script_name | html %]" method="post" id="revert_batch_form">
+                                <form method="post" id="revert_batch_form">
                                     <input type="hidden" name="op" value="revert-batch" />
                                     <input type="hidden" name="runinbackground" value="" />
                                     <input type="hidden" name="completedJobID" value="" />
@@ -274,66 +295,7 @@
                                 </div>
                             [% END # /IF can_revert %]
                         </div>
-
-                        [% IF ( did_commit ) %]
-                            <div class="dialog message">Completed import of records</div>
-                            <table>
-                                <tr>
-                                    <td>Number of records added</td>
-                                    <td>[% num_added | html %]</td>
-                                </tr>
-                                <tr>
-                                    <td>Number of records updated</td>
-                                    <td>[% num_updated | html %]</td>
-                                </tr>
-                                <tr>
-                                    <td>Number of records ignored</td>
-                                    <td>[% num_ignored | html %]</td>
-                                </tr>
-                                [% IF ( record_type == 'biblio' ) %]
-                                    <tr>
-                                        <td>Number of items added</td>
-                                        <td>[% num_items_added | html %]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Number of items replaced</td>
-                                        <td>[% num_items_replaced | html %]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Number of items ignored because of duplicate barcode</td>
-                                        <td>[% num_items_errored | html %]</td>
-                                    </tr>
-                                [% END %]
-                            </table>
-                        [% END #/ IF did_commit %]
-
-                        [% IF ( did_revert ) %]
-                            <div class="dialog message">Success: Import reversed</div>
-                            <table>
-                                <tr>
-                                    <td>Number of records deleted</td>
-                                    <td>[% num_deleted | html %]</td>
-                                </tr>
-                                [% IF ( record_type == 'biblio' ) %]
-                                    <tr>
-                                        <td>Number of items deleted</td>
-                                        <td>[% num_items_deleted | html %]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Number of records not deleted due to items on loan</td>
-                                        <td>[% num_errors | html %]</td>
-                                    </tr>
-                                [% END %]
-                                <tr>
-                                    <td>Number of records changed back</td>
-                                    <td>[% num_reverted | html %]</td>
-                                </tr>
-                                <tr>
-                                    <td>Number of records ignored</td>
-                                    <td>[% num_ignored | html %]</td>
-                                </tr>
-                            </table>
-                        [% END  # /IF did_revert%]
+                        [% END %]
 
                     [% END # /IF batch_info %]
 
@@ -360,7 +322,7 @@
                             [% FOREACH batch_lis IN batch_list %]
                                 <tr>
                                     <td>[% batch_lis.import_batch_id | html %]</td>
-                                    <td><a href="[% batch_lis.script_name | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
+                                    <td><a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
                                     <td>[% batch_lis.profile | html %]</td>
                                     <td>[% batch_lis.comments | html %]</td>
                                     <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
@@ -385,12 +347,12 @@
                                     <td>[% batch_lis.num_records | html %]</td>
                                     <td>[% batch_lis.num_items | html %]
                                         [% IF ( batch_lis.num_items && batch_lis.import_status == 'imported' ) %]
-                                            (<a href="[% batch_lis.script_name | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">Create label batch</a>)
+                                            (<a href="?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">Create label batch</a>)
                                         [% END %]
                                     </td>
                                     <td class="actions">
                                         [% IF ( batch_lis.can_clean ) %]
-                                            <form method="post" action="[% batch_lis.script_name | html %]" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">
+                                            <form method="post" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">
                                                 <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
                                                 <input type="hidden" name="op" value="clean-batch" />
                                                 <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
@@ -457,7 +419,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
-    [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
@@ -657,8 +618,8 @@
         <ul class="pagination">
             [% FOREACH page IN pages %]
                 [% IF ( page.current_page && page.page_number > 1 ) %]
-                    <li><a href="[% page.script_name | url %]?offset=0" class="nav"><i class="fa fa-fw fa-angle-double-left"></i> First</a></li>
-                    <li><a href="[% page.script_name | url %]?offset=[% offset - results_per_page | uri %]"><i class="fa fa-fw fa-angle-left"></i> Previous</a></li>
+                    <li><a href="?offset=0" class="nav"><i class="fa fa-fw fa-angle-double-left"></i> First</a></li>
+                    <li><a href="?offset=[% offset - results_per_page | uri %]"><i class="fa fa-fw fa-angle-left"></i> Previous</a></li>
                 [% END %]
             [% END %]
             [% FOREACH page IN pages %]
@@ -666,15 +627,15 @@
                     [% SET current_page = page.page_number %]
                     <li class="active"><span class="current">[% page.page_number | html %]</span></li>
                 [% ELSE %]
-                    <li><a class="nav" href="[% page.script_name | url %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a></li>
+                    <li><a class="nav" href="?offset=[% page.offset | uri %]">[% page.page_number | html %]</a></li>
                 [% END %]
             [% END %]
             [% IF ( current_page < pages.size() ) %]
                 <li>
-                    <a href="[% page.script_name | url %]?offset=[% offset + results_per_page | uri %]" class="nav">Next <i class="fa fa-fw fa-angle-right"></i></a>
+                    <a href="?offset=[% offset + results_per_page | uri %]" class="nav">Next <i class="fa fa-fw fa-angle-right"></i></a>
                 </li>
                 <li>
-                    <a href="[% page.script_name | url %]?offset=[% ( results_per_page * ( pages.size - 1 ) ) | uri %]" class="nav">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
+                    <a href="?offset=[% ( results_per_page * ( pages.size - 1 ) ) | uri %]" class="nav">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
                 </li>
             [% END %]
         </ul>
