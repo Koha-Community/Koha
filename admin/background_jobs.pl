@@ -96,14 +96,14 @@ if ( $op eq 'list' ) {
       $can_manage_background_jobs
       ? Koha::BackgroundJobs->search(
         {
-            ended_on => { '>=' => $dtf->format_date($ended_since) }
+            ended_on => { '>=' => $dtf->format_datetime($ended_since) }
         },
         { order_by => { -desc => 'enqueued_on' } }
       )
       : Koha::BackgroundJobs->search(
         {
             borrowernumber => $logged_in_user->borrowernumber,
-            ended_on       => { '>=' => $dtf->format_date($ended_since) }
+            ended_on       => { '>=' => $dtf->format_datetime($ended_since) }
         },
         { order_by => { -desc => 'enqueued_on' } }
       );
