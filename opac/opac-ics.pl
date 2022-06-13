@@ -47,10 +47,11 @@ my $calendar = Data::ICal->new();
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $pending_checkouts = $patron->pending_checkouts;
 
+my $timestamp = dt_from_string(undef,undef,"UTC"); #Get current time in UTC
+
 while ( my $c = $pending_checkouts->next ) {
     my $issue = $c->unblessed_all_relateds;
     my $vevent = Data::ICal::Entry::Event->new();
-    my $timestamp = dt_from_string(undef,undef,"UTC"); #Get current time in UTC
     # Send some values to the template to generate summary and description
     $issue->{overdue} = $c->is_overdue;
     $template->param(
@@ -60,13 +61,15 @@ while ( my $c = $pending_checkouts->next ) {
     );
     # Catch the result of the template and split on newline
     my ($summary,$description) = split /\n/, $template->output;
-    my $datestart;
+    my ( $datestart, $datestart_local );
     if ($issue->{'overdue'} && $issue->{'overdue'} == 1) {
         # Not much use adding an event in the past for a book that is overdue
         # so we set datestart = now
-        $datestart = $timestamp;
+        $datestart = $timestamp->clone();
+        $datestart_local = $datestart->clone();
     } else {
         $datestart = dt_from_string($issue->{'date_due'});
+        $datestart_local = $datestart->clone();
         $datestart->set_time_zone('UTC');
     }
     # Create a UID that includes the issue number and the domain
@@ -80,11 +83,24 @@ while ( my $c = $pending_checkouts->next ) {
     }
     my $uid = 'issue-' . $issue->{'issue_id'} . '@' . $domain;
     # Create the event
+
+    my $dtstart;
+    if ($issue->{'overdue'} && $issue->{'overdue'} == 1) {
+        # It's already overdue so make it due as an all day event today
+        $dtstart = [ $datestart->ymd(q{}), { VALUE => 'DATE' } ];
+    } elsif ( $datestart_local->hour eq '23' && $datestart_local->minute eq '59' ) {
+        # Checkouts due at 23:59 are "all day events"
+        $dtstart = [ $datestart->ymd(q{}), { VALUE => 'DATE' } ];
+    }
+    else { # Checkouts due any other time are instantaneous events at the date and time due
+        $dtstart = DateTime::Format::ICal->format_datetime($datestart);
+    }
+
     $vevent->add_properties(
         summary     => $summary,
         description => $description,
         dtstamp     => DateTime::Format::ICal->format_datetime($timestamp),
-        dtstart     => DateTime::Format::ICal->format_datetime($datestart),
+        dtstart     => $dtstart,
         uid         => $uid,
     );
     # Add it to the calendar
