@@ -1401,7 +1401,7 @@ CREATE TABLE `borrowers` (
   `title` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower''s title, for example: Mr. or Mrs.',
   `othernames` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'any other names associated with the patron/borrower',
   `initials` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'initials for your patron/borrower',
-  `pronouns` longtext COLLATE utfmb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower pronouns',
+  `pronouns` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'patron/borrower pronouns',
   `streetnumber` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the house number for your patron/borrower''s primary address',
   `streettype` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the street type (Rd., Blvd, etc) for your patron/borrower''s primary address',
   `address` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the first address line for your patron/borrower''s primary address',
