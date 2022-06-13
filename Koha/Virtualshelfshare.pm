@@ -23,6 +23,7 @@ use DateTime::Duration;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
+use Koha::Patron;
 
 use base qw(Koha::Object);
 
@@ -38,7 +39,7 @@ Koha::Virtualshelfshare - Koha Virtualshelfshare Object class
 
 =cut
 
-=head3 type
+=head3 accept
 
 =cut
 
@@ -66,6 +67,10 @@ sub accept {
     }
 }
 
+=head3 has_expired
+
+=cut
+
 sub has_expired {
     my ($self) = @_;
     my $dt_sharedate     = dt_from_string( $self->sharedate, 'sql' );
@@ -75,6 +80,21 @@ sub has_expired {
     # Note: has_expired = 0 if the share expires today
     return $has_expired == 1 ? 1 : 0
 }
+
+=head3 patron
+
+    Returns related Koha::Patron object for this share.
+
+=cut
+
+sub patron {
+    my $self = shift;
+    return Koha::Patron->_new_from_dbic( $self->{_result}->borrowernumber );
+}
+
+=head3 _type
+
+=cut
 
 sub _type {
     return 'Virtualshelfshare';

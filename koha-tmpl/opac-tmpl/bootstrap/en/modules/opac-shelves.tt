@@ -182,8 +182,15 @@
                             <span>You do not have permission to delete this list.</span>
                         [% CASE 'unauthorized_on_add_biblio' %]
                             <span>You do not have permission to add a record to this list.</span>
+                        [% CASE 'unauthorized_transfer' %]
+                            <span>You do not have permission to transfer ownership of this list.</span>
                         [% CASE 'no_biblio_removed' %]
                             <span>No record was removed.</span>
+                        [% CASE 'new_owner_not_found' %]
+                            <span>The new owner could not be found anymore.</span>
+                        [% CASE 'new_owner_has_no_share' %]
+                            <span>The new owner has no share for this list.</span>
+
                         [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
                             <span>An error occurred when creating the list. The name [% shelfname | html %] already exists.</span>
                         [% CASE 'DBIx::Class::Exception' %]
@@ -633,6 +640,30 @@
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list" class="cancel">Cancel</a>
                                 [% END %]
                             </fieldset>
+                        </form>
+
+                    [% ELSIF op == 'transfer' %]
+                        <h1>Transfer ownership of shared list '[% shelf.shelfname | html %]'</h1>
+                        <br/>
+                        <form action="/cgi-bin/koha/opac-shelves.pl" id="transferform" method="post">
+                        <fieldset>
+                            <input type="hidden" name="op" value="transfer" />
+                            <input type="hidden" name="public" value="0" />
+                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                            <div>
+                                <label for="find_patron">New owner: </label>
+                                <select name="new_owner" id="new_owner">
+                                [% FOREACH sharee IN shared_users %]
+                                    <option value="[% sharee.borrowernumber | html %]" selected="">[% sharee.email | html %]</option>
+                                [% END %]
+                                </select>
+                            </div>
+                            <br/>
+                            <fieldset class="action">
+                                <input type="submit" value="Transfer" class="submit" />
+                                <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" class="cancel">Cancel</a>
+                            </fieldset>
+                        </fieldset>
                         </form>
 
                     [% ELSIF op == 'list' %]

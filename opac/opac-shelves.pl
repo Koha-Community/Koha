@@ -38,9 +38,11 @@ use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::CirculationRules;
 use Koha::CsvProfiles;
+use Koha::DateUtils qw/dt_from_string/;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
+use Koha::Virtualshelfshares;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
 
@@ -257,7 +259,35 @@ if ( $op eq 'add_form' ) {
     }
     $op = 'view';
 } elsif( $op eq 'transfer' ) {
-    $op = 'list'; # TODO
+    $shelfnumber = $query->param('shelfnumber');
+    $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
+    my $new_owner = $query->param('new_owner'); # borrowernumber or undef
+
+    $op = 'list';
+    if( !$shelf ) {
+        push @messages, { type => 'error', code => 'does_not_exist' };
+    } elsif( $shelf->public or !$shelf->is_shared or !$shelf->can_be_managed($loggedinuser) ) {
+        push @messages, { type => 'error', code => 'unauthorized_transfer' };
+    } elsif( !$new_owner ) {
+        my $patrons = [];
+        my $shares = $shelf->get_shares->search({ borrowernumber => { '!=' => undef } });
+        while( my $share = $shares->next ) {
+            push @$patrons, { email => $share->patron->notice_email_address, borrowernumber => $share->get_column('borrowernumber') };
+        }
+        $template->param( shared_users => $patrons );
+        $op = 'transfer';
+    } elsif( !Koha::Patrons->find($new_owner) ) {
+        push @messages, { type => 'error', code => 'new_owner_not_found' };
+    } elsif( !$shelf->get_shares->search({ borrowernumber => $new_owner })->count ) {
+        push @messages, { type => 'error', code => 'new_owner_has_no_share' };
+    } else {
+        # Remove from virtualshelfshares new_owner, add loggedinuser
+        $shelf->_result->result_source->schema->txn_do( sub {
+            $shelf->get_shares->search({ borrowernumber => $new_owner })->delete;
+            Koha::Virtualshelfshare->new({ shelfnumber => $shelfnumber, borrowernumber => $loggedinuser, sharedate => dt_from_string })->store;
+            $shelf->owner($new_owner)->store;
+        });
+    }
 }
 
 # PART 2: After a possible action, view one list or show a number of lists
