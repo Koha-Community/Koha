@@ -2306,10 +2306,23 @@ sub AddReturn {
         if ( $issue and $issue->is_overdue($return_date) ) {
         # fix fine days
             my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item->unblessed, dt_from_string($issue->date_due), $return_date );
-            if ($reminder){
-                $messages->{'PrevDebarred'} = $debardate;
-            } else {
-                $messages->{'Debarred'} = $debardate if $debardate;
+            if ($debardate and $debardate ne "9999-12-31") {
+                if ($reminder){
+                    $messages->{'PrevDebarred'} = $debardate;
+                } else {
+                    $messages->{'Debarred'} = $debardate;
+                }
+            } elsif ($patron->debarred) {
+                if ( $patron->debarred eq "9999-12-31") {
+                    $messages->{'ForeverDebarred'} = $patron->debarred;
+                } else {
+                    my $borrower_debar_dt = dt_from_string( $patron->debarred );
+                    $borrower_debar_dt->truncate(to => 'day');
+                    my $today_dt = $return_date->clone()->truncate(to => 'day');
+                    if ( DateTime->compare( $borrower_debar_dt, $today_dt ) != -1 ) {
+                        $messages->{'PrevDebarred'} = $patron->debarred;
+                    }
+                }
             }
         # there's no overdue on the item but borrower had been previously debarred
         } elsif ( $issue->date_due and $patron->debarred ) {
