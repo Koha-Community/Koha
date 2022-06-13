@@ -13,33 +13,43 @@ function patron_autocomplete(node, options) {
             on_select_callback = options['on-select-callback'];
         }
     }
+    const search_fields = ['me.surname', 'me.firstname', 'me.cardnumber'];
     return node.autocomplete({
         source: function( request, response ) {
-                let params = {
-                    '_page': 1,
-                    '_per_page': 10,
-                    'q': JSON.stringify([
-                        {"me.firstname": {"like": "%"+request.term+"%"}},
-                        {"me.surname": {"like": "%"+request.term+"%"}},
-                        {"me.cardnumber": {"like": request.term+"%"}}
-                    ]),
-                    '_order_by': '+me.surname,+me.firstname',
-                };
-                $.ajax({
-                    data: params,
-                    type: 'GET',
-                    url: '/api/v1/patrons',
-                    headers: {
-                        "x-koha-embed": "library"
-                    },
-                    success: function(data) {
-                        return response(data);
-                    },
-                    error: function() {
-                        alert( _("An error occurred. Check the logs") );
-                        return response();
-                    }
+            let subquery_and = [];
+            request.term.split(' ')
+                .filter(function(s){ return s.length })
+                .forEach(function(pattern,i){
+                    subquery_and.push(
+                        [
+                            {'me.surname':    {'like': '%' + pattern + '%'}},
+                            {'me.firstname':  {'like': '%' + pattern + '%'}},
+                            {'me.cardnumber': {'like': pattern + '%'}},
+                        ]
+                    );
                 });
+            let q = {"-and": subquery_and};
+            let params = {
+                '_page': 1,
+                '_per_page': 10,
+                'q': JSON.stringify(q),
+                '_order_by': '+me.surname,+me.firstname',
+            };
+            $.ajax({
+                data: params,
+                type: 'GET',
+                url: '/api/v1/patrons',
+                headers: {
+                    "x-koha-embed": "library"
+                },
+                success: function(data) {
+                    return response(data);
+                },
+                error: function() {
+                    alert( _("An error occurred. Check the logs") );
+                    return response();
+                }
+            });
         },
         minLength: 3,
         select: function( event, ui ) {
