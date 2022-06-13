@@ -68,7 +68,7 @@ function patron_autocomplete(node, options) {
             // Display card number in parentheses if it exists
             cardnumber = " (" + item.cardnumber + ") ";
         }
-        if( item.branchcode == loggedInLibrary ){
+        if( item.library_id == loggedInLibrary ){
             loggedInClass = "ac-currentlibrary";
         } else {
             loggedInClass = "";
