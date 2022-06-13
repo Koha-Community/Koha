@@ -124,10 +124,10 @@
                         [% END # / TAGLOOP%]
                         [% IF ( add_op ) %]
                             [% IF ( added_count ) %]
-                                <div class="dialog message">[% added_count | html %] [% IF ( added_count == 1 ) %]<span>tag</span>[% ELSE %]<span>tags</span>[% END %] <span>successfully added.</span></div>
+                                <div class="dialog message">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
                             [% END %]
                             [% IF ( deleted_count ) %]
-                            <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]<span>tag</span>[% ELSE %]<span>tags</span>[% END %] <span>successfully deleted.</span></div>
+                                <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
                             [% END %]
                         [% END # /add_op %]
 
