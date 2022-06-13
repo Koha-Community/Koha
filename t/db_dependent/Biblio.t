@@ -70,6 +70,7 @@ subtest 'AddBiblio' => sub {
 
     t::lib::Mocks::mock_preference( 'BiblioAddsAuthorities', $marcflavour );
     t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', $marcflavour );
+    t::lib::Mocks::mock_preference( 'autoControlNumber', "OFF" );
 
     my $mock_biblio = Test::MockModule->new("C4::Biblio");
     $mock_biblio->mock( BiblioAutoLink => sub {
@@ -835,12 +836,12 @@ subtest 'autoControlNumber tests' => sub {
     is($record->field('001'), undef, '001 not set when pref is off');
 
     t::lib::Mocks::mock_preference('autoControlNumber', 'biblionumber');
-    C4::Biblio::ModBiblio($record, $biblionumber, "", 1);
+    C4::Biblio::ModBiblio($record, $biblionumber, "", { skip_record_index => 1, disable_autolink => 1 });
     $record = GetMarcBiblio({biblionumber => $biblionumber});
     is($record->field('001')->as_string(), $biblionumber, '001 set to biblionumber when pref set and field is blank');
 
     $record->field('001')->update('Not biblionumber');
-    C4::Biblio::ModBiblio($record, $biblionumber, "", 1);
+    C4::Biblio::ModBiblio($record, $biblionumber, "", { skip_record_index => 1, disable_autolink => 1 });
     $record = GetMarcBiblio({biblionumber => $biblionumber});
     is($record->field('001')->as_string(), 'Not biblionumber', '001 not set to biblionumber when pref set and field exists');
 
