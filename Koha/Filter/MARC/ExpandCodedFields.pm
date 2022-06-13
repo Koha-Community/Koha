@@ -114,14 +114,8 @@ sub _getCodedFields {
     my $cached    = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
     return $cached if $cached;
 
-    my $coded_fields = {
-        map {
-            $_->tagfield => {
-                $_->tagsubfield => {
-                    'authorised_value' => $_->authorised_value
-                }
-            }
-        } Koha::MarcSubfieldStructures->search(
+    my $coded_fields = {};
+    my @fields = Koha::MarcSubfieldStructures->search(
             {
                 frameworkcode    => $frameworkcode,
                 authorised_value => { '>' => '' }
@@ -130,8 +124,10 @@ sub _getCodedFields {
                 columns  => [ 'tagfield', 'tagsubfield', 'authorised_value' ],
                 order_by => [ 'tagfield', 'tagsubfield' ]
             }
-        )->as_list
-    };
+        )->as_list;
+    for my $field (@fields) {
+        $coded_fields->{ $field->tagfield }->{ $field->tagsubfield }->{'authorised_value'} = $field->authorised_value;
+    }
 
     $cache->set_in_cache( $cache_key, $coded_fields );
     return $coded_fields;
