@@ -35,14 +35,26 @@ my $builder = t::lib::TestBuilder->new();
 
 subtest 'ExpandCodedFields tests' => sub {
 
-    plan tests => 10;
+    plan tests => 16;
 
     $schema->storage->txn_begin();
+
+    # Add libraries
+    my $homebranch    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $holdingbranch = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    diag("Homebranch: " . $homebranch->branchcode . " : " . $homebranch->branchname);
+    # Add itemtypes
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
 
     # Add a biblio
     my $biblio = $builder->build_sample_biblio;
     my $record = $biblio->metadata->record;
+
+    # Suppress the record to test that suppression is never expanded
     $record->field('942')->update( n => 1 );
+
+    # Add an AV ended field to test for AV expansion
     $record->append_fields(
         MARC::Field->new( '590', '', '', a => 'CODE' ),
     );
@@ -66,8 +78,22 @@ subtest 'ExpandCodedFields tests' => sub {
     $biblio = Koha::Biblios->find( $biblio->biblionumber);
     $record = $biblio->metadata->record;
 
+    # Embed an item to test for branchcode and itemtype expansions
+    $record->append_fields(
+        MARC::Field->new(
+            '952', '', '',
+            a => $homebranch->branchcode,
+            b => $holdingbranch->branchcode,
+            y => $itemtype->itemtype
+        ),
+    );
+
+
     is( $record->field('590')->subfield('a'), 'CODE', 'Record prior to filtering contains AV Code' );
     is( $record->field('942')->subfield('n'), 1, 'Record suppression is numeric prior to filtering' );
+    is( $record->field('952')->subfield('a'), $homebranch->branchcode, 'Record prior to filtering contains homebranch branchcode' );
+    is( $record->field('952')->subfield('b'), $holdingbranch->branchcode, 'Record prior to filtering contains holdingbranch branchcode' );
+    is( $record->field('952')->subfield('y'), $itemtype->itemtype, 'Record prior to filtering contains itemtype code' );
 
     my $processor = Koha::RecordProcessor->new(
         {
@@ -82,6 +108,9 @@ subtest 'ExpandCodedFields tests' => sub {
     is( $result->field('590')->subfield('a'), 'Description should show OPAC', 'Returned record contains AV OPAC description (interface defaults to opac)' );
     is( $record->field('590')->subfield('a'), 'Description should show OPAC', 'Original record now contains AV OPAC description (interface defaults to opac)' );
     is( $record->field('942')->subfield('n'), 1, 'Record suppression is still numeric after filtering' );
+    is( $record->field('952')->subfield('a'), $homebranch->branchname, 'Record now contains homebranch branchname' );
+    is( $record->field('952')->subfield('b'), $holdingbranch->branchname, 'Record now contains holdingbranch branchname' );
+    is( $record->field('952')->subfield('y'), $itemtype->description, 'Record now contains itemtype description' );
 
     # reset record for next test
     $record = $biblio->metadata->record;
