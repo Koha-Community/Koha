@@ -421,6 +421,7 @@ sub core_types_to_classes {
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
         update_elastic_index                => 'Koha::BackgroundJob::UpdateElasticIndex',
         update_holds_queue_for_biblios      => 'Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue',
+        stage_marc_for_import               => 'Koha::BackgroundJob::StageMARCForImport',
     };
 }
 

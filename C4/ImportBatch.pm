@@ -390,6 +390,10 @@ sub BatchStageMarcRecords {
     }
     # FIXME branch_code, number of bibs, number of items
     _update_batch_record_counts($batch_id);
+    if ($progress_interval){
+        &$progress_callback($rec_num);
+    }
+
     return ($batch_id, $num_valid, $num_items, @invalid_records);
 }
 
@@ -494,6 +498,11 @@ sub BatchFindDuplicates {
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'no_match');
         }
     }
+
+    if ($progress_interval){
+        &$progress_callback($rec_num);
+    }
+
     $sth->finish();
     return $num_with_matches;
 }
@@ -690,7 +699,13 @@ sub BatchCommitRecords {
             SetImportRecordStatus($rowref->{'import_record_id'}, 'ignored');
         }
     }
+
+    if ($progress_interval){
+        &$progress_callback($rec_num);
+    }
+
     $schema->txn_commit; # Commit final records that may not have hit callback threshold
+
     $sth->finish();
 
     if ( @biblio_ids ) {

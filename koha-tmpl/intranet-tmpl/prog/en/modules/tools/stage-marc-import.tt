@@ -48,54 +48,41 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% IF ( uploadmarc ) %]
-<div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" href="/cgi-bin/koha/tools/stage-marc-import.pl"><i class="fa fa-plus"></i> Stage MARC records</a>
-        <a class="btn btn-default" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% import_batch_id | html %]"><i class="fa fa-list-ul"></i> Manage staged records</a>
-</div>
-[% END %]
-
-[% IF ( uploadmarc ) %]
-<h1>MARC staging results</h1>
-<ul>
-    [% SWITCH (record_type) %]
-    [% CASE 'biblio' %]
-        <li>Processing bibliographic records</li>
-    [% CASE 'auth' %]
-        <li>Processing authority records</li>
-    [% END %]
-	<li>[% total | html %]  records in file</li>
-	<li>[% import_errors | html %] records not staged because of MARC error</li>
-	<li>[% staged | html %] records staged</li>
-    [% IF ( checked_matches ) %]
-	<li>[% matched | html %] records with at least one match in catalog per matching rule 
-        &quot;[% matcher_code | html %]&quot;</li>
-    [% ELSE %]
-        [% IF ( matcher_failed ) %]
-          <li>Record matching failed -- unable to retrieve selected matching rule.</li>
-        [% ELSE %]
-          <li>Did not check for matches with existing records in catalog</li>
+        [% FOREACH message IN messages %]
+          [% IF message.type == 'success' %]
+            <div class="dialog message">
+          [% ELSIF message.type == 'warning' %]
+            <div class="dialog alert">
+          [% ELSIF message.type == 'error' %]
+            <div class="dialog alert" style="margin:auto;">
+          [% END %]
+          [% IF message.code == 'cannot_enqueue_job' %]
+              <span>Cannot enqueue this job.</span>
+          [% END %]
+          [% IF message.error %]
+            <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
+          [% END %]
+          </div>
         [% END %]
-    [% END %]
-    [% IF record_type == 'biblio' %]
-        <li>[% num_items | html %] item records found and staged</li>
-    [% END %]
-	[% IF ( label_batch ) %]
-	  <li>New label batch created: # [% label_batch | html %] </li>
-    [% END %]
-</ul>
-[% IF basketno && booksellerid %]
-<p>
-    <a id="addtobasket" class="btn btn-default" href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% import_batch_id | html %]&basketno=[% basketno | html %]&booksellerid=[% booksellerid | html %]">Add staged files to basket</a>
-</p>
-[% END %]
-[% ELSE %]
+
+        [% IF job_enqueued %]
+            <div id="toolbar" class="btn-toolbar">
+                    <a class="btn btn-default" href="/cgi-bin/koha/tools/stage-marc-import.pl"><i class="fa fa-plus"></i> Stage MARC records</a>
+                    <a class="btn btn-default" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% import_batch_id | html %]"><i class="fa fa-list-ul"></i> Manage staged records</a>
+            </div>
+
+            <h1>MARC staging</h1>
+            <div class="dialog message">
+              <p>The job has been enqueued! It will be processed as soon as possible.</p>
+              <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
+            </div>
+        [% ELSE %]
 <h1>Stage MARC records for import</h1>
 <ul>
     <li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
     <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
 </ul>
-<form method="post" action="[% SCRIPT_NAME | html %]" id="uploadfile" enctype="multipart/form-data">
+<form method="post" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
 <legend>Upload a file to stage</legend>
 <ol>
@@ -136,7 +123,7 @@
     </ol>
 </fieldset>
 
-    <form method="post" id="processfile" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
+    <form method="post" id="processfile" enctype="multipart/form-data">
 [% IF basketno && booksellerid %]
     <input type="hidden" name="basketno" id="basketno" value="[% basketno | html %]" />
     <input type="hidden" name="booksellerid" id="booksellerid" value="[% booksellerid | html %]" />
@@ -253,10 +240,7 @@
   <fieldset class="action">
     <input type="button" id="mainformsubmit" value="Stage for import" />
   </fieldset>
- 
-       <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-     <div id="jobfailed"></div></div>
-  
+
 </form>
 [% END %]
 
@@ -273,7 +257,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
-    [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% Asset.js("js/file-upload.js") | $raw %]
     <script>
         var xhr;
@@ -297,9 +280,17 @@
                 e.preventDefault();
                 CancelUpload();
             });
-            $("#mainformsubmit").on("click",function(){
-                return CheckForm( document.getElementById("processfile"));
+            $("#mainformsubmit").on("click",function(e){
+                e.preventDefault();
+                if ($("#fileToUpload").value == '') {
+                    alert(_("Please upload a file first."));
+                    return false;
+                } else {
+                    $("#processfile").submit();
+                    return true;
+                }
             });
+
             getProfiles();
             $('#profile').change(function(){
                 if(this.value=='') {
@@ -432,14 +423,6 @@
             });
         });
 
-        function CheckForm(f) {
-            if ($("#fileToUpload").value == '') {
-                alert(_("Please upload a file first."));
-            } else {
-                return submitBackgroundJob(f);
-            }
-            return false;
-        }
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;
             $('#fileuploadbutton').hide();
