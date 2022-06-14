@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
+use Test::Warn;
 
 use C4::Context;
 use t::lib::Mocks;
@@ -54,6 +55,11 @@ foreach my $filter (@filters) {
         ($output eq $expect) or diag  "Bad output: '$output'";
     }
 }
+
+warnings_are
+    { C4::Circulation::barcodedecode(undef); }
+    [],
+    'No warnings with undef barcode';
 
 # T-prefix style is derived from zero-padded "Follett Classic Code 3 of 9".  From:
 #     www.fsc.follett.com/_file/File/pdf/Barcode%20Symbology%20Q%20%20A%203_05.pdf

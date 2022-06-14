@@ -167,6 +167,9 @@ System Pref options.
 #
 sub barcodedecode {
     my ($barcode, $filter) = @_;
+
+    return unless defined $barcode;
+
     my $branch = C4::Context::mybranch();
     $barcode =~ s/^\s+|\s+$//g;
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
