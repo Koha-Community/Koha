@@ -89,14 +89,31 @@
 
                     <div id="opac-pickups-views" class="toptabs">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation" id="tab-user-pickups"><a href="#user-pickups" class="nav-link" aria-controls="user-pickups" aria-selected="true" role="tab" data-toggle="tab">Your pickups</a></li>
+                            <li class="nav-item" role="presentation" id="tab-user-pickups">
+                            [% IF patron_curbside_pickups.count %]
+                                <a href="#user-pickups" class="nav-link active" aria-controls="user-pickups" aria-selected="true" role="tab" data-toggle="tab">Your pickups</a>
+                            [% ELSE %]
+                                <a href="#user-pickups" class="nav-link" aria-controls="user-pickups" role="tab" data-toggle="tab">Your pickups</a>
+                            [% END %]
+                            </li>
+
                             [% IF policies.count %]
-                                <li class="nav-item" role="presentation" id="tab-user-schedule-pickup"><a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" aria-selected="false" role="tab" data-toggle="tab">Schedule a pickup</a></li>
+                                <li class="nav-item" role="presentation" id="tab-user-schedule-pickup">
+                                [% IF patron_curbside_pickups.count %]
+                                    <a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" role="tab" data-toggle="tab">Schedule a pickup</a>
+                                [% ELSE %]
+                                    <a href="#user-schedule-pickup" class="nav-link active" aria-controls="user-schedule-pickup" aria-selected="true" role="tab" data-toggle="tab">Schedule a pickup</a>
+                                [% END %]
+                                </li>
                             [% END %]
                         </ul>
 
                         <div class="tab-content">
+                            [% IF patron_curbside_pickups.count %]
+                            <div role="tabpanel" class="tab-pane active" id="user-pickups" aria-labelledby="tab-user-pickups">
+                            [% ELSE %]
                             <div role="tabpanel" class="tab-pane" id="user-pickups" aria-labelledby="tab-user-pickups">
+                            [% END %]
                                 [% IF patron_curbside_pickups.count %]
                                     <table id="pickups-table" class="table table-striped">
                                         <thead>
@@ -147,7 +164,11 @@
                             </div>
 
                             [% IF policies.count %]
+                                [% IF patron_curbside_pickups.count %]
                                 <div role="tabpanel" class="tab-pane" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
+                                [% ELSE %]
+                                <div role="tabpanel" class="tab-pane active" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
+                                [% END %]
                                     <form id="create-pickup" method="post">
                                         <fieldset class="rows">
                                             <ol>
@@ -160,7 +181,7 @@
 
                                                         [% END %]
                                                     </select>
-                                                    <span id="existing-pickup-warning" class="required">You already have a pickup scheduled for this library.</span>
+                                                    <span id="existing-pickup-warning" class="required" style="display: none;">You already have a pickup scheduled for this library.</span>
                                                 </li>
                                                 <li>
                                                     <label for="pickup_date">Pickup date:</label>
@@ -365,11 +386,7 @@
 
 
         $(document).ready(function() {
-            $("#existing-pickup-warning").hide();
             $("#pickup-times").hide();
-            if( $("#opac-pickups-views .tab-pane.active").length < 1 ){
-                $("#opac-pickups-views a:first").tab("show");
-            }
 
             $("#create-pickup").on('submit', function(){
                 if ( ! $("input[type='radio']:checked").length ) {
