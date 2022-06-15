@@ -171,7 +171,12 @@ return {
         $dbh->do(qq{
             INSERT IGNORE permissions (module_bit, code, description)
             VALUES
-            (3, 'manage_curbside_pickups', 'Manage curbside pickups')
+            (1, 'manage_curbside_pickups', 'Manage curbside pickups (circulation)')
+        });
+        $dbh->do(qq{
+            INSERT IGNORE permissions (module_bit, code, description)
+            VALUES
+            (3, 'manage_curbside_pickups', 'Manage curbside pickups (admin)')
         });
 
         unless ( column_exists('curbside_pickup_policy', 'enable_waiting_holds_only') ) {

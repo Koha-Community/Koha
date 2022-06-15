@@ -83,7 +83,7 @@
                     <li>
                         <a class="circ-button" href="/cgi-bin/koha/circ/waitingreserves.pl"><i class="fa fa-calendar"></i> Holds awaiting pickup</a>
                     </li>
-                    [% IF ( Koha.Preference('CurbsidePickup') && CAN_user_parameters_manage_curbside_pickups ) %]
+                    [% IF ( Koha.Preference('CurbsidePickup') && CAN_user_circulate_manage_curbside_pickups ) %]
                     <li>
                         <a class="circ-button" href="/cgi-bin/koha/circ/curbside_pickups.pl"><i class="fa fa-refresh"></i> Curbside Pickups</a>
                     </li>

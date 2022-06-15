@@ -38,7 +38,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "circ/curbside_pickups.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired => { parameters => 'manage_curbside_pickups' },
+        flagsrequired => { circulate => 'manage_curbside_pickups' },
     }
 );
 

@@ -5,6 +5,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'force_checkout', 'Force checkout if a limitation exists'),
    ( 1, 'manage_restrictions', 'Manage restrictions for accounts'),
    ( 1, 'manage_checkout_notes', 'Mark checkout notes as seen/not seen'),
+   ( 1, 'manage_curbside_pickups', 'Manage curbside pickups'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 3, 'manage_accounts', 'Manage Account Debit and Credit Types' ),
    ( 3, 'manage_circ_rules', 'Manage circulation rules'),
