@@ -27,8 +27,9 @@ package C4::Output;
 
 use Modern::Perl;
 
-use URI::Escape;
+use HTML::Entities;
 use Scalar::Util qw( looks_like_number );
+use URI::Escape;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
@@ -82,6 +83,8 @@ sub pagination_bar {
     my $current_page   = (@_) ? shift : undef;	# delay default until later
     my $startfrom_name = (@_) ? shift : 'page';
     my $additional_parameters = shift || {};
+
+    $base_url = HTML::Entities::encode($base_url);
 
     $current_page = looks_like_number($current_page) ? $current_page : undef;
     $nb_pages     = looks_like_number($nb_pages)     ? $nb_pages     : undef;
