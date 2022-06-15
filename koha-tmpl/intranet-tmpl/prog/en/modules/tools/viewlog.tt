@@ -373,9 +373,9 @@
                                             [% END %]
                                         [% ELSIF ( loopro.module == 'RECALLS' ) %]
                                             [% IF loopro.recall.item_level %]
-                                                Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.itemnumber | uri %]&amp;biblionumber=[% loopro.recall.biblionumber | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
+                                                Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
                                             [% ELSE %]
-                                                Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblionumber | uri %]">biblio</a>
+                                                Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
                                             [% END %]
                                         [% ELSE %]
                                             [% loopro.object | html %]
