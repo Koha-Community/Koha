@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 use Test::Exception;
 
 use MARC::Record;
@@ -22,13 +22,15 @@ use Koha::Biblios;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Holds;
+use Koha::Holds qw( search );
 use Koha::Checkout;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Library::Groups;
 use Koha::Patrons;
+use Koha::Hold qw( get_items_that_can_fill );
+use Koha::Item::Transfers;
 
 BEGIN {
     use FindBin;
@@ -1702,3 +1704,93 @@ subtest 'ModReserve can only update expirationdate for found holds' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+subtest 'Koha::Holds->get_items_that_can_fill returns items with datecancelled or (inclusive) datearrived' => sub {
+    plan tests => 8;
+    # biblio item with date arrived and date cancelled
+    my $biblio1 = $builder->build_sample_biblio();
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+
+    my $transfer1 = $builder->build_object({ class => "Koha::Item::Transfers", value => {
+        datecancelled => '2022-06-12',
+        itemnumber => $item1->itemnumber
+    }});
+
+    my $hold1 = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber => $biblio1->biblionumber,
+        itemnumber => undef,
+        itemtype => undef,
+        found => undef
+    }});
+
+    # biblio item with date arrived and NO date cancelled
+    my $biblio2 = $builder->build_sample_biblio();
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio2->biblionumber });
+
+    my $transfer2 = $builder->build_object({ class => "Koha::Item::Transfers", value => {
+        datecancelled => undef,
+        itemnumber => $item2->itemnumber
+    }});
+
+    my $hold2 = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber => $biblio2->biblionumber,
+        itemnumber => undef,
+        itemtype => undef,
+        found => undef
+    }});
+
+    # biblio item with NO date arrived and date cancelled
+    my $biblio3 = $builder->build_sample_biblio();
+    my $item3 = $builder->build_sample_item({ biblionumber => $biblio3->biblionumber });
+
+    my $transfer3 = $builder->build_object({ class => "Koha::Item::Transfers", value => {
+        datecancelled => '2022-06-12',
+        itemnumber => $item3->itemnumber,
+        datearrived => undef
+    }});
+
+    my $hold3 = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber => $biblio3->biblionumber,
+        itemnumber => undef,
+        itemtype => undef,
+        found => undef
+    }});
+
+
+    # biblio item with NO date arrived and NO date cancelled
+    my $biblio4 = $builder->build_sample_biblio();
+    my $item4 = $builder->build_sample_item({ biblionumber => $biblio4->biblionumber });
+
+    my $transfer4 = $builder->build_object({ class => "Koha::Item::Transfers", value => {
+        datecancelled => undef,
+        itemnumber => $item4->itemnumber,
+        datearrived => undef
+    }});
+
+    my $hold4 = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber => $biblio4->biblionumber,
+        itemnumber => undef,
+        itemtype => undef,
+        found => undef
+    }});
+
+    # create the holds which get_items_that_can_fill will be ran on
+    my $holds1 = Koha::Holds->search({reserve_id => $hold1->id});
+    my $holds2 = Koha::Holds->search({reserve_id => $hold2->id});
+    my $holds3 = Koha::Holds->search({reserve_id => $hold3->id});
+    my $holds4 = Koha::Holds->search({reserve_id => $hold4->id});
+
+    my $items_that_can_fill1 = $holds1->get_items_that_can_fill;
+    my $items_that_can_fill2 = $holds2->get_items_that_can_fill;
+    my $items_that_can_fill3 = $holds3->get_items_that_can_fill;
+    my $items_that_can_fill4 = $holds4->get_items_that_can_fill;
+
+    is($items_that_can_fill1->next->id, $item1->id, "Koha::Holds->get_items_that_can_fill returns item with defined datearrived and datecancelled");
+    is($items_that_can_fill1->count, 1, "Koha::Holds->get_items_that_can_fill returns 1 item with correct parameters");
+    is($items_that_can_fill2->next->id, $item2->id, "Koha::Holds->get_items_that_can_fill returns item with defined datearrived and undefined datecancelled");
+    is($items_that_can_fill2->count, 1, "Koha::Holds->get_items_that_can_fill returns 1 item with correct parameters");
+    is($items_that_can_fill3->next->id, $item3->id, "Koha::Holds->get_items_that_can_fill returns item with undefined datearrived and defined datecancelled");
+    is($items_that_can_fill3->count, 1, "Koha::Holds->get_items_that_can_fill returns 1 item with correct parameters");
+    is($items_that_can_fill4->next, undef, "Koha::Holds->get_items_that_can_fill doesn't return item with undefined datearrived and undefined datecancelled");
+    is($items_that_can_fill4->count, 0, "Koha::Holds->get_items_that_can_fill returns 0 item");
+}
