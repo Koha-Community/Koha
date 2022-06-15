@@ -141,10 +141,10 @@
                                                         [% hold = item.current_holds.next %]
                                                         [% IF ( item.recall ) %]
                                                             <span class="waiting">
-                                                            [% IF ( item.recall.waitingdate ) %]
-                                                                Waiting for patron at [% Branches.GetName( item.recall.branchcode ) | html %] since [% item.recall.waitingdate | $KohaDates %].
+                                                            [% IF ( item.recall.waiting_date ) %]
+                                                                Waiting for patron at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.waiting_date | $KohaDates %].
                                                             [% ELSE %]
-                                                                Recalled by patron expected at [% Branches.GetName( item.recall.branchcode ) | html %] since [% item.recall.recalldate | $KohaDates %].
+                                                                Recalled by patron expected at [% Branches.GetName( item.recall.pickup_library_id ) | html %] since [% item.recall.created_date | $KohaDates %].
                                                             [% END %]
                                                             </span>
                                                         [% ELSIF ( hold.waitingdate ) %]
