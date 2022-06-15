@@ -221,7 +221,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         $recall = $item->check_recalls if $item->can_be_waiting_recall;
         if ( defined $recall ) {
             if ( $recall->item_level ) {
-                if ( $recall->itemnumber == $c->{itemnumber} ) {
+                if ( $recall->item_id == $c->{itemnumber} ) {
                     # item-level recall on this item
                     $recalled = 1;
                 } else {
