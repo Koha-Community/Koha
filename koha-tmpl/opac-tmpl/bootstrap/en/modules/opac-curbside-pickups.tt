@@ -310,6 +310,10 @@
 
             policy.slots_per_day[dow].forEach(function(slot){
                 let pickup_interval = policy.pickup_interval;
+                if (!pickup_interval) {
+                    $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                    return;
+                }
 
                 let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
                 let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
