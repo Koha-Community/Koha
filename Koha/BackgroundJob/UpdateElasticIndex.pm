@@ -107,7 +107,7 @@ sub enqueue {
     my @record_ids = @{ $args->{record_ids} };
 
     $self->SUPER::enqueue({
-        job_size => scalar @record_ids,
+        job_size => 1,
         job_args => {record_server => $record_server, record_ids => \@record_ids},
     });
 }
