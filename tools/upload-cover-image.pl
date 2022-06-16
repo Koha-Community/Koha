@@ -107,10 +107,10 @@ if ($fileID) {
         if ( defined $srcimage ) {
             eval {
                 if ( $replace ) {
-                    if ( $biblionumber ) {
-                        Koha::Biblios->find($biblionumber)->cover_images->delete;
-                    } elsif ( $itemnumber ) {
+                    if ( $itemnumber ) {
                         Koha::Items->find($itemnumber)->cover_images->delete;
+                    } elsif ( $biblionumber ) {
+                        Koha::Biblios->find($biblionumber)->cover_images->search({ itemnumber => undef })->delete;
                     }
                 }
 
