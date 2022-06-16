@@ -130,7 +130,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
 [% IF op == 'list' || op == 'view' %]
     <div id="toolbar" class="btn-toolbar">
         <a class="btn btn-default" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
-        [% IF op == 'view' %]
+        [% IF op == 'view' && library %]
             <a class="btn btn-default" id="editbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form&branchcode=[% library.branchcode | uri %]"><i class="fa fa-pencil"></i> Edit library</a>
         [% END %]
     </div>
@@ -337,7 +337,7 @@ Libraries &rsaquo; Administration &rsaquo; Koha
     [% END %]
 [% END %]
 
-[% IF op == 'view' %]
+[% IF op == 'view' && library %]
     <h1>[% library.branchname | html %]</h1>
     <div class="row">
         <div class="col-sm-6">
@@ -470,6 +470,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
             </div>
         </div>
     [% END %]
+[% ELSIF op == 'view' %]
+    <div>This library does not exist.</div>
 [% END %]
 
             </main>
