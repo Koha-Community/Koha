@@ -534,8 +534,8 @@ Note that permanent location is a code, and location may be an authval.
                         [% END %]
                     </td>
                     <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
-                    <td class="issues_field" data-order="[% item.issues || 0 | html %]">[% item.issues || 0 | html %]</td>
-                    <td class="renewals_field" data-order="[% item.renewals || 0 | html %]">[% item.renewals || 0 | html %]</td>
+                    <td class="issues" data-order="[% item.issues || 0 | html %]">[% item.issues || 0 | html %]</td>
+                    <td class="renewals" data-order="[% item.renewals || 0 | html %]">[% item.renewals || 0 | html %]</td>
                     <td class="dateaccessioned" data-order="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</td>
                     <td class="datelastborrowed" data-order="[% item.datelastborrowed | html %]">[% item.datelastborrowed | $KohaDates %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
