@@ -23,7 +23,7 @@ use Carp qw( croak );
 use C4::Context;
 use C4::Members::Messaging;
 use C4::Auth qw( checkpw_internal );
-use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use Koha::Patrons;
 use Koha::AuthUtils qw( hash_password );
 use Net::LDAP;
@@ -260,6 +260,8 @@ sub checkpw_ldap {
                         message_transport_type => 'email'
                     }
                 );
+
+                C4::Letters::SendQueuedMessages( { message_id => $message_id } );
             }
         }
    } else {

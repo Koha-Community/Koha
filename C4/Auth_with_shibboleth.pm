@@ -23,7 +23,7 @@ use C4::Context;
 use Koha::AuthUtils qw( get_script_name );
 use Koha::Database;
 use Koha::Patrons;
-use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members::Messaging;
 use Carp qw( carp );
 use List::MoreUtils qw( any );
@@ -169,6 +169,7 @@ sub _autocreate {
                     message_transport_type => 'email'
                 }
             );
+            C4::Letters::SendQueuedMessages( { message_id => $message_id } );
         }
     }
     return ( 1, $patron->cardnumber, $patron->userid );
