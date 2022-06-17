@@ -384,8 +384,8 @@
 
                             [% IF bundle_items && !missing_items %]
                                 <div class="dialog message">
-                                    <h3>Bundle varified</h3>
-                                    <p>The bundle content was varified</p>
+                                    <h3>Bundle verified</h3>
+                                    <p>The bundle content was verified</p>
                                     <p><a class="btn btn-default btn-xs" role="button" data-toggle="modal" href="#bundleContentsModal"><i class="fa fa-eye" aria-hidden="true"></i> View contents list</a></p>
                                 </div>
                             [% END %]
@@ -1558,7 +1558,7 @@
                         });
                     } else {
                         feedback.fadeOut(100, function(){
-                            string = _("Varified: ")+last;
+                            string = _("Verified: ")+last;
                             feedback.addClass('alert-success').removeClass('alert-danger').html(string).fadeIn(100);
                         });
                     }

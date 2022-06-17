@@ -1607,7 +1607,7 @@ Note that permanent location is a code, and location may be an authval.
 
         [% IF bundlesEnabled %]
         var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
-        var bundle_lost_value = [% Koha.Preference('BundleLostValue') %];
+        var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
         [% END %]
         $(document).ready(function() {
 
