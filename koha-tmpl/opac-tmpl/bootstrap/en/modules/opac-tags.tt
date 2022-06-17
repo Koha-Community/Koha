@@ -116,7 +116,7 @@
                             <div id="tagcloud">
                                 [% FOREACH TAGLOO IN TAGLOOP %]
                                     <span class="tag tagweight[% TAGLOO.stratum | html %]" id="tag[% loop.count | html %]" style="display:inline;">
-                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term | html %]</a>
+                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |uri %]&amp;q=[% TAGLOO.term |uri %]">[% TAGLOO.term | html %]</a>
                                     <span class="tagweight">[% TAGLOO.weight_total | html %]</span>
                                     </span>
                                 [% END %]
@@ -153,7 +153,7 @@
                                             <td class="tagterm">
                                                 <span class="tdlabel">Tag:</span>
                                                 [% IF MY_TAG.approved == 1 %]
-                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term | html %]</a>
+                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
                                                 [% ELSE %]
                                                     [% MY_TAG.term | html %] (not approved)
                                                 [% END %]
