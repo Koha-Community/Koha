@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 17;
+use Test::More tests => 25;
 use Test::Exception;
 use Test::MockModule;
 
@@ -41,6 +41,66 @@ use t::lib::Mocks;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
+subtest 'return_claims relationship' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+    });
+    my $return_claims = $item->return_claims;
+    is( ref($return_claims), 'Koha::Checkouts::ReturnClaims', 'return_claims returns a Koha::Checkouts::ReturnClaims object set' );
+    is($item->return_claims->count, 0, "Empty Koha::Checkouts::ReturnClaims set returned if no return_claims");
+    my $claim1 = $builder->build({ source => 'ReturnClaim', value => { itemnumber => $item->itemnumber }});
+    my $claim2 = $builder->build({ source => 'ReturnClaim', value => { itemnumber => $item->itemnumber }});
+
+    is($item->return_claims()->count,2,"Two ReturnClaims found for item");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'return_claim accessor' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+    });
+    my $return_claim = $item->return_claim;
+    is( $return_claim, undef, 'return_claim returned undefined if there are no claims for this item' );
+
+    my $claim1 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::ReturnClaims',
+            value => { itemnumber => $item->itemnumber, resolution => undef, created_on => dt_from_string()->subtract( minutes => 10 ) }
+        }
+    );
+    my $claim2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::ReturnClaims',
+            value  => { itemnumber => $item->itemnumber, resolution => undef, created_on => dt_from_string()->subtract( minutes => 5 ) }
+        }
+    );
+
+    $return_claim = $item->return_claim;
+    is( ref($return_claim), 'Koha::Checkouts::ReturnClaim', 'return_claim returned a Koha::Checkouts::ReturnClaim object' );
+    is( $return_claim->id, $claim2->id, 'return_claim returns the most recent unresolved claim');
+
+    $claim2->resolution('test')->store();
+    $return_claim = $item->return_claim;
+    is( $return_claim->id, $claim1->id, 'return_claim returns the only unresolved claim');
+
+    $claim1->resolution('test')->store();
+    $return_claim = $item->return_claim;
+    is( $return_claim, undef, 'return_claim returned undefined if there are no active claims for this item' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'tracked_links relationship' => sub {
     plan tests => 3;
 
@@ -55,6 +115,139 @@ subtest 'tracked_links relationship' => sub {
     my $link2 = $builder->build({ source => 'Linktracker', value => { itemnumber => $item->itemnumber }});
 
     is($item->tracked_links()->count,2,"Two tracked links found");
+};
+
+subtest 'is_bundle tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item   = $builder->build_sample_item();
+
+    my $is_bundle = $item->is_bundle;
+    is($is_bundle, 0, 'is_bundle returns 0 when there are no items attached');
+
+    my $item2 = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')
+      ->create( { host => $item->itemnumber, item => $item2->itemnumber } );
+
+    $is_bundle = $item->is_bundle;
+    is($is_bundle, 1, 'is_bundle returns 1 when there is at least one item attached');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'in_bundle tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item   = $builder->build_sample_item();
+
+    my $in_bundle = $item->in_bundle;
+    is($in_bundle, 0, 'in_bundle returns 0 when the item is not in a bundle');
+
+    my $host_item = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')
+      ->create( { host => $host_item->itemnumber, item => $item->itemnumber } );
+
+    $in_bundle = $item->in_bundle;
+    is($in_bundle, 1, 'in_bundle returns 1 when the item is in a bundle');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'bundle_items tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $host_item = $builder->build_sample_item();
+    my $bundle_items = $host_item->bundle_items;
+    is( ref($bundle_items), 'Koha::Items',
+        'bundle_items returns a Koha::Items object set' );
+    is( $bundle_items->count, 0,
+        'bundle_items set is empty when no items are bundled' );
+
+    my $bundle_item1 = $builder->build_sample_item();
+    my $bundle_item2 = $builder->build_sample_item();
+    my $bundle_item3 = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item->itemnumber, item => $bundle_item1->itemnumber } );
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item->itemnumber, item => $bundle_item2->itemnumber } );
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item->itemnumber, item => $bundle_item3->itemnumber } );
+
+    $bundle_items = $host_item->bundle_items;
+    is( $bundle_items->count, 3,
+        'bundle_items returns all the bundled items in the set' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'bundle_host tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $host_item = $builder->build_sample_item();
+    my $bundle_item1 = $builder->build_sample_item();
+    my $bundle_item2 = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item->itemnumber, item => $bundle_item2->itemnumber } );
+
+    my $bundle_host = $bundle_item1->bundle_host;
+    is( $bundle_host, undef, 'bundle_host returns undefined when the item it not part of a bundle');
+    $bundle_host = $bundle_item2->bundle_host;
+    is( ref($bundle_host), 'Koha::Item', 'bundle_host returns a Koha::Item object when the item is in a bundle');
+    is( $bundle_host->id, $host_item->id, 'bundle_host returns the host item when called against an item in a bundle');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_to_bundle tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'BundleNotLoanValue', 1 );
+
+    my $host_item = $builder->build_sample_item();
+    my $bundle_item1 = $builder->build_sample_item();
+    my $bundle_item2 = $builder->build_sample_item();
+
+    ok($host_item->add_to_bundle($bundle_item1), 'bundle_item1 added to bundle');
+    is($bundle_item1->notforloan, 1, 'add_to_bundle sets notforloan to BundleNotLoanValue');
+
+    throws_ok { $host_item->add_to_bundle($bundle_item1) }
+    'Koha::Exceptions::Object::DuplicateID',
+      'Exception thrown if you try to add the same item twice';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'remove_from_bundle tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $host_item = $builder->build_sample_item();
+    my $bundle_item1 = $builder->build_sample_item({ notforloan => 1 });
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item->itemnumber, item => $bundle_item1->itemnumber } );
+
+    is($bundle_item1->remove_from_bundle(), 1, 'remove_from_bundle returns 1 when item is removed from a bundle');
+    is($bundle_item1->notforloan, 0, 'remove_from_bundle resets notforloan to 0');
+    $bundle_item1 = $bundle_item1->get_from_storage;
+    is($bundle_item1->remove_from_bundle(), 0, 'remove_from_bundle returns 0 when item is not in a bundle');
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'hidden_in_opac() tests' => sub {
