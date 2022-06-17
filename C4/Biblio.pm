@@ -101,6 +101,7 @@ use C4::Items qw( GetMarcItem );
 
 use Koha::Logger;
 use Koha::Caches;
+use Koha::ClassSources;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
