@@ -272,7 +272,7 @@ if ( $op eq 'add_form' ) {
         my $patrons = [];
         my $shares = $shelf->get_shares->search({ borrowernumber => { '!=' => undef } });
         while( my $share = $shares->next ) {
-            push @$patrons, { email => $share->patron->notice_email_address, borrowernumber => $share->get_column('borrowernumber') };
+            push @$patrons, { email => $share->sharee->notice_email_address, borrowernumber => $share->get_column('borrowernumber') };
         }
         $template->param( shared_users => $patrons );
         $op = 'transfer';

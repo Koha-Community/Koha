@@ -81,13 +81,13 @@ sub has_expired {
     return $has_expired == 1 ? 1 : 0
 }
 
-=head3 patron
+=head3 sharee
 
-    Returns related Koha::Patron object for this share.
+    Returns related Koha::Patron object for the sharee (patron who got this share).
 
 =cut
 
-sub patron {
+sub sharee {
     my $self = shift;
     return Koha::Patron->_new_from_dbic( $self->{_result}->borrowernumber );
 }
