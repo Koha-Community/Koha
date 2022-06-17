@@ -3,54 +3,12 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
-[% BLOCK show_job_status %]
-    [% SWITCH job.status %]
-        [% CASE "new" %]
-            <span>New</span>
-        [% CASE "cancelled" %]
-            <span>Cancelled</span>
-        [% CASE "finished" %]
-            <span>Finished</span>
-        [% CASE "started" %]
-            <span>Started</span>
-        [% CASE "running" %]
-            <span>Running</span>
-        [% CASE "failed" %]
-            <span>Failed</span>
-        [% CASE # Default case %]
-            [% job.status | html %]
-    [% END -%]
-[% END %]
-[% BLOCK show_job_type %]
-    [% SWITCH job_type %]
-    [% CASE 'batch_biblio_record_modification' %]
-        <span>Batch bibliographic record modification</span>
-    [% CASE 'batch_biblio_record_deletion' %]
-        <span>Batch bibliographic record record deletion</span>
-    [% CASE 'batch_authority_record_modification' %]
-        <span>Batch authority record modification</span>
-    [% CASE 'batch_authority_record_deletion' %]
-        <span>Batch authority record deletion</span>
-    [% CASE 'batch_item_record_modification' %]
-        <span>Batch item record modification</span>
-    [% CASE 'batch_item_record_deletion' %]
-        <span>Batch item record deletion</span>
-    [% CASE "batch_hold_cancel" %]
-        <span>Batch hold cancellation</span>
-    [% CASE 'update_elastic_index' %]
-        <span>Update Elasticsearch index</span>
-    [% CASE 'update_holds_queue_for_biblios' %]
-        <span>Holds queue update</span>
-    [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
-    [% END %]
-
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op == 'view' %]
         Details of job #[% job.id | html %] &rsaquo;
     [% END %]
-    Background jobs &rsaquo;
+    Jobs &rsaquo;
     Administration &rsaquo; Koha
 </title>
 
@@ -73,14 +31,14 @@
         </li>
         [% IF op == 'view' %]
             <li>
-                <a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a>
+                <a href="/cgi-bin/koha/admin/background_jobs.pl">Jobs</a>
             </li>
             <li>
                 <a href="#" aria-current="page">Details of job #[% job.id | html %]</a>
             </li>
         [% ELSE %]
             <li>
-                <a href="#" aria-current="page">Background jobs</a>
+                <a href="#" aria-current="page">Jobs</a>
             </li>
         [% END %]
     [% ELSE %]
@@ -112,17 +70,17 @@
 
     [% PROCESS "background_jobs/${job.type}.inc" %]
 
-    <fieldset class="rows">
+    <fieldset class="rows" style="display:none;">
         <ol>
             <li><span class="label">Job ID: </span>[% job.id | html %]</li>
             <li>
                 <label for="job_status">Status: </label>
-                [% PROCESS show_job_status %]
+                <span id="job_status_description"></span>
             </li>
             <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
             <li>
                 <label for="job_type">Type: </label>
-                [% PROCESS show_job_type job_type => job.type %]
+                <span id="job_type_description"></span>
             </li>
             <li>
                 <label for="job_enqueued_on">Queued: </label>
@@ -154,108 +112,32 @@
 
 [% IF op == 'list' %]
 
-    <h1>Background jobs</h1>
+    <h1>Jobs</h1>
 
-    <div id="taskstabs" class="toptabs">
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#queued" aria-controls="queued" role="tab" data-toggle="tab">Queued jobs</a></li>
-            <li role="presentation"><a href="#complete" aria-controls="complete" role="tab" data-toggle="tab">Completed jobs</a></li>
-        </ul>
-
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="queued">
-                [% IF queued.count %]
-                    <table id="table_queued_jobs">
-                        <thead>
-                            <tr>
-                                <th>Job ID</th>
-                                <th>Status</th>
-                                <th>Progress</th>
-                                <th>Type</th>
-                                <th>Queued</th>
-                                <th>Started</th>
-                                <th class="noExport">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH job IN queued %]
-                            <tr>
-                                <td>[% job.id | html %]</td>
-                                <td>
-                                    [% PROCESS show_job_status %]
-                                </td>
-                                <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
-                                <td>
-                                    [% PROCESS show_job_type job_type => job.type %]
-                                </td>
-                                <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
-                                <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
-                                <td class="actions">
-                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
-                                    [% IF job.status == 'new' || job.status == 'started' %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
-                                    [% END %]
-                                </td>
-                            </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-                [% ELSE %]
-                    <div class="dialog message">
-                        There are no queued background jobs yet.
-                    </div>
-                [% END %]
-            </div>
-
-            <div role="tabpanel" class="tab-pane" id="complete">
-                [% IF complete.count %]
-                    <p>Jobs completed in the last 60 minutes.</p>
-                    <table id="table_complete_jobs">
-                        <thead>
-                            <tr>
-                                <th>Job ID</th>
-                                <th>Status</th>
-                                <th>Progress</th>
-                                <th>Type</th>
-                                <th>Queued</th>
-                                <th>Started</th>
-                                <th>Ended</th>
-                                <th class="noExport">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            [% FOREACH job IN complete %]
-                            <tr>
-                                <td>[% job.id | html %]</td>
-                                <td>
-                                    [% PROCESS show_job_status %]
-                                </td>
-                                <td>[% job.progress || 0 | html %] / [% job.size | html %]</td>
-                                <td>
-                                    [% PROCESS show_job_type job_type => job.type %]
-                                </td>
-                                <td>[% job.enqueued_on | $KohaDates with_hours = 1 %]</td>
-                                <td>[% job.started_on| $KohaDates with_hours = 1 %]</td>
-                                <td>[% job.ended_on| $KohaDates with_hours = 1 %]</td>
-                                <td class="actions">
-                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
-                                    [% IF job.status == 'new' || job.status == 'started' %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
-                                    [% END %]
-                                </td>
-                            </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
-                [% ELSE %]
-                    <div class="dialog message">
-                        There were no completed background jobs completed in the last 60 minutes.
-                    </div>
-                [% END %]
-            </div>
-        </div>
+    <div>
+        <input type="checkbox" id="only_current" checked />
+        <label for="only_current">Current jobs only</label>
     </div>
 
+    <div>
+        <input type="checkbox" id="include_last_hour" checked />
+        <label for="include_last_hour">Only include jobs started in the last hour</label>
+    </div>
+
+    <table id="table_jobs">
+        <thead>
+            <tr>
+                <th>Job ID</th>
+                <th data-filter="job_statuses">Status</th>
+                <th>Progress</th>
+                <th data-filter="job_types">Type</th>
+                <th>Queued</th>
+                <th>Started</th>
+                <th>Ended</th>
+                <th class="noExport">Actions</th>
+            </tr>
+        </thead>
+    </table>
 [% END %]
 
             </main>
@@ -270,26 +152,193 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function() {
-            $("#table_queued_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-                ],
-                "aaSorting": [[ 0, "desc" ]],
-                "iDisplayLength": 10,
-                "sPaginationType": "full_numbers"
-            }));
+        const job_statuses = [
+            {'_id': 'new',       '_str': _("New")},
+            {'_id': 'cancelled', '_str': _("Cancelled")},
+            {'_id': 'finished',  '_str': _("Finished")},
+            {'_id': 'started',   '_str': _("Started")},
+            {'_id': 'running',   '_str': _("Running")},
+            {'_id': 'failed',    '_str': _("Failed")},
+        ];
+        function get_job_status (status) {
+            let status_lib = job_statuses.find( s => s._id == status );
+            if (status_lib) {
+                return status_lib._str;
+            }
+            return status;
+        }
 
-            $("#table_complete_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-                ],
-                "aaSorting": [[ 0, "desc" ]],
-                "iDisplayLength": 10,
-                "sPaginationType": "full_numbers"
-            }));
+        const job_types = [
+            {
+                '_id': 'batch_biblio_record_modification',
+                '_str': _("Batch bibliographic record modification")
+            },
+            {
+                '_id': 'batch_biblio_record_deletion',
+                '_str': _("Batch bibliographic record record deletion")
+            },
+            {
+                '_id': 'batch_authority_record_modification',
+                '_str': _("Batch authority record modification")
+            },
+            {
+                '_id': 'batch_authority_record_deletion',
+                '_str': _("Batch authority record deletion")
+            },
+            {
+                '_id': 'batch_item_record_modification',
+                '_str': _("Batch item record modification")
+            },
+            {
+                '_id': 'batch_item_record_deletion',
+                '_str': _("Batch item record deletion")
+            },
+            {
+                '_id': 'batch_hold_cancel',
+                '_str': _("Batch hold cancellation")
+            },
+            {
+                '_id': 'update_elastic_index',
+                '_str': _("Update Elasticsearch index")
+            },
+            {
+                '_id': 'update_holds_queue_for_biblios',
+                '_str': _("Holds queue update")
+            },
+            {
+                '_id': 'stage_marc_for_import',
+                '_str': _("Staged MARC records for import")
+            },
+            {
+                '_id': 'marc_import_commit_batch',
+                '_str': _("Import MARC records")
+            },
+            {
+                '_id': 'marc_import_revert_batch',
+                '_str': _("Revert import MARC records")
+            },
+        ];
+
+        function get_job_type (job_type) {
+            let job_type_lib = job_types.find( t => t._id == job_type );
+            if ( job_type_lib ) {
+                return job_type_lib._str;
+            }
+            return _("Unknown job type '%s'").format(job_type);
+        }
+
+        $(document).ready(function() {
+            [% IF op == 'view' %]
+                $("#job_status_description").html( get_job_status("[% job.status | html %]") );
+                $("#job_type_description").html( get_job_type("[% job.type | html %]") );
+                $("fieldset.rows").show();
+            [% END %]
+
+            let additional_filters = {
+                started_on: function(){
+                    let now = new Date();
+                    if ( $("#include_last_hour").is(":checked") ) {
+                        now.setHours(now.getHours() - 1);
+                        return { ">": now.toISOString() };
+                    } else {
+                        return { "<": now.toISOString() };
+                    }
+                }
+            };
+
+            let only_current_filter = function(){
+                if ( $("#only_current").is(":checked") ) {
+                    return 'only_current=1';
+                } else {
+                    return 'only_current=0';
+                }
+            }
+
+            let jobs_table = $("#table_jobs").kohaTable({
+                "ajax": {
+                    "url": "/api/v1/jobs?" + only_current_filter()
+                },
+                "order": [[ 1, "desc" ]],
+                "columns": [
+                    {
+                        "data": "job_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "status",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return get_job_status(row.status).escapeHtml();
+                        }
+                    },
+                    {
+                        "data": "progress,size",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return "%s/%s".format(row.progress, row.size).escapeHtml();
+                        }
+                    },
+                    {
+                        "data": "type",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return get_job_type(row.type).escapeHtml();
+                        }
+                    },
+                    {
+                        "data": "enqueued_date",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.enqueued_date);
+                        }
+                    },
+                    {
+                        "data": "started_date",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.started_date);
+                        }
+                    },
+                    {
+                        "data": "ended_date",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.ended_date);
+                        }
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id='+ encodeURIComponent(row.job_id) +'"><i class="fa fa-eye" aria-hidden="true"></i> '+_("View")+'</a>'+"\n";
+                            if ( row.status == 'new' || row.status == 'started' ) {
+                                result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/bakcground_jobs.pl?op=cancel&amp;id='+ encodeURIComponent(row.job_id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</a>';
+                            }
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            }, null, 1, additional_filters);
+
+            $("#include_last_hour").on("change", function(){
+                jobs_table.DataTable().draw();
+                return false;
+            });
+
+            $("#only_current").on("change", function(){
+                jobs_table.DataTable().ajax.url("/api/v1/jobs?" + only_current_filter()).load();
+                return false;
+            });
         });
     </script>
     [% IF op == 'view' %]

@@ -42,6 +42,8 @@ definitions:
     $ref: ./definitions/invoice.yaml
   item:
     $ref: ./definitions/item.yaml
+  job:
+    $ref: ./definitions/job.yaml
   library:
     $ref: ./definitions/library.yaml
   order:
@@ -155,6 +157,10 @@ paths:
     $ref: "./paths/items.yaml#/~1items~1{item_id}"
   "/items/{item_id}/pickup_locations":
     $ref: "./paths/items.yaml#/~1items~1{item_id}~1pickup_locations"
+  /jobs:
+    $ref: ./paths/jobs.yaml#/~1jobs
+  "/jobs/{job_id}":
+    $ref: "./paths/jobs.yaml#/~1jobs~1{job_id}"
   /libraries:
     $ref: ./paths/libraries.yaml#/~1libraries
   "/libraries/{library_id}":
@@ -298,6 +304,12 @@ parameters:
     description: Internal item identifier
     in: path
     name: item_id
+    required: true
+    type: integer
+  job_id_pp:
+    description: Job internal identifier
+    in: path
+    name: job_id
     required: true
     type: integer
   library_id_pp:
@@ -560,6 +572,9 @@ tags:
   - description: "Manage items\n"
     name: items
     x-displayName: Items
+  - description: "Manage jobs\n"
+    name: jobs
+    x-displayName: Jobs
   - description: "Manage libraries\n"
     name: libraries
     x-displayName: Libraries

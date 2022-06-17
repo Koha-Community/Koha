@@ -1,0 +1,87 @@
+---
+/jobs:
+  get:
+    x-mojo-to: BackgroundJobs#list
+    operationId: listJobs
+    tags:
+      - jobs
+    summary: List jobs
+    produces:
+      - application/json
+    parameters:
+      - name: only_current
+        in: query
+        required: false
+        type: boolean
+        description: Only include current jobs
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of jobs
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/job"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+"/jobs/{job_id}":
+  get:
+    x-mojo-to: BackgroundJobs#get
+    operationId: getJob
+    tags:
+      - jobs
+    summary: Get a job
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/job_id_pp"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A job
+        schema:
+          $ref: "../swagger.yaml#/definitions/job"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Job not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"

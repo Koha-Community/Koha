@@ -47,7 +47,7 @@ my $job_id = Koha::BackgroundJob->enqueue(
 );
 
 Consumer:
-Koha::BackgrounJobs->find($job_id)->process;
+Koha::BackgroundJobs->find($job_id)->process;
 See also C<misc/background_jobs_worker.pl> for a full example
 
 =head1 API
@@ -386,7 +386,7 @@ sub _derived_class {
 
 =head3 type_to_class_mapping
 
-    my $mapping = Koha::BackgrounJob->new->type_to_class_mapping;
+    my $mapping = Koha::BackgroundJob->new->type_to_class_mapping;
 
 Returns the available types to class mappings.
 
@@ -404,7 +404,7 @@ sub type_to_class_mapping {
 
 =head3 core_types_to_classes
 
-    my $mappings = Koha::BackgrounJob->new->core_types_to_classes
+    my $mappings = Koha::BackgroundJob->new->core_types_to_classes
 
 Returns the core background jobs types to class mappings.
 
@@ -467,6 +467,44 @@ sub plugin_types_to_classes {
     }
 
     return $self->{_plugin_mapping};
+}
+
+=head3 to_api
+
+    my $json = $job->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::BackgroundJob object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $json = $self->SUPER::to_api( $params );
+
+    $json->{context} = $self->json->decode($self->context)
+      if defined $self->context;
+    $json->{data} = $self->decoded_data;
+
+    return $json;
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::BackgroundJob object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id             => 'job_id',
+        borrowernumber => 'patron_id',
+        ended_on       => 'ended_date',
+        enqueued_on    => 'enqueued_date',
+        started_on     => 'started_date',
+    };
 }
 
 =head3 _type
