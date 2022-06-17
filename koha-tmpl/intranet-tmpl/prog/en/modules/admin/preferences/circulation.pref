@@ -938,13 +938,14 @@ Circulation:
                   years: years
             - from reserve date.
         -
-            - When placing a hold via the staff client default the pickup location to the
+            - When placing a hold via the staff interface default the pickup location to the
             - pref: DefaultHoldPickupLocation
               default: loggedinlibrary
               choices:
                   loggedinlibrary: "logged in library"
-                  homebranch: "item's home branch"
-                  holdingbranch: "item's holding branch"
+                  homebranch: "item's home library"
+                  holdingbranch: "item's holding library"
+            - "."
     Interlibrary loans:
         -
             - pref: ILLModule
