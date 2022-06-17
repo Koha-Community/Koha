@@ -71,7 +71,7 @@ sub chargelostitem {
     my $dbh = C4::Context->dbh();
     my ($borrowernumber, $itemnumber, $amount, $description) = @_;
     my $item  = Koha::Items->find($itemnumber);
-    my $itype = Koha::ItemTypes->find({ itemtype => $item->effective_itemtype() });
+    my $itype = $item->itemtype;
     my $replacementprice = $amount;
     my $defaultreplacecost = $itype->defaultreplacecost;
     my $processfee = $itype->processfee;
