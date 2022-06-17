@@ -130,7 +130,7 @@
                 <span class="results_summary"><span class="label">Tags:</span>
                     [% FOREACH TagLoo IN TagLoop %]
                         [% IF ( CAN_user_tools_moderate_tags ) %]
-                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term | html %]</a>
+                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |uri %]">[% TagLoo.term | html %]</a>
                         [% ELSE %]
                         [% TagLoo.term | html %]
                         [% END %]
