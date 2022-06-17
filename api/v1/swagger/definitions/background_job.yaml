@@ -1,0 +1,58 @@
+---
+type: object
+properties:
+  background_job_id:
+    type: integer
+    description: internally assigned background_job identifier
+    readOnly: true
+  status:
+    description: background_job status
+    type:
+      - string
+      - "null"
+  progress:
+    description: background_job progress
+    type:
+      - string
+      - "null"
+  size:
+    description: background_job size
+    type:
+      - string
+      - "null"
+  patron_id:
+    description: background_job enqueuer
+    type:
+      - string
+      - "null"
+  type:
+    description: background_job type
+    type:
+      - string
+      - "null"
+  queue:
+    description: background_job queue
+    type:
+      - string
+      - "null"
+  data:
+    description: background_job data
+    type:
+      - string
+      - "null"
+  enqueued_on:
+    description: background_job enqueue date
+    type:
+      - string
+      - "null"
+  started_on:
+    description: background_job start date
+    type:
+      - string
+      - "null"
+  ended_on:
+    description: background_job end date
+    type:
+      - string
+      - "null"
+additionalProperties: false

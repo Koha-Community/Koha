@@ -8,6 +8,8 @@ definitions:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
     $ref: ./definitions/allows_renewal.yaml
+  background_job:
+    $ref: ./definitions/background_job.yaml
   basket:
     $ref: ./definitions/basket.yaml
   bundle_link:
@@ -103,6 +105,10 @@ paths:
     $ref: "./paths/article_requests.yaml#/~1article_requests~1{article_request_id}"
   /auth/otp/token_delivery:
     $ref: paths/auth.yaml#/~1auth~1otp~1token_delivery
+  /background_jobs:
+    $ref: ./paths/background_jobs.yaml#/~1background_jobs
+  "/background_jobs/{background_job_id}":
+    $ref: "./paths/background_jobs.yaml#/~1background_jobs~1{background_job_id}"
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
   "/biblios/{biblio_id}/checkouts":
@@ -252,6 +258,12 @@ parameters:
     description: Advanced editor macro internal identifier
     in: path
     name: advancededitormacro_id
+    required: true
+    type: integer
+  background_job_id_pp:
+    description: Job internal identifier
+    in: path
+    name: background_job_id
     required: true
     type: integer
   biblio_id_pp:

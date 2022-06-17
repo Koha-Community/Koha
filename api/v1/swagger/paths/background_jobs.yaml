@@ -1,0 +1,123 @@
+---
+/background_jobs:
+  get:
+    x-mojo-to: BackgroundJobs#list
+    operationId: listBackgroundJobs
+    tags:
+      - background_jobs
+    summary: List background jobs
+    produces:
+      - application/json
+    parameters:
+      - name: status
+        in: query
+        description: Case insensative search on job status
+        required: false
+        type: string
+      - name: progress
+        in: query
+        description: Case insensative search on job progress
+        required: false
+        type: string
+      - name: size
+        in: query
+        description: Case insensative search on job size
+        required: false
+        type: string
+      - name: patron_id
+        in: query
+        description: Case insensative search on job enqueuer id
+        required: false
+        type: string
+      - name: tye
+        in: query
+        description: Case insensative search on job type
+        required: false
+        type: string
+      - name: queue
+        in: query
+        description: Case insensative search on job queue
+        required: false
+        type: string
+      - name: enqueued_on
+        in: query
+        description: Case insensative search on job enqueue date
+        required: false
+        type: string
+      - name: started_on
+        in: query
+        description: Case insensative search on job start date
+        required: false
+        type: string
+      - name: ended_on
+        in: query
+        description: Case insensative search on job end date
+        required: false
+        type: string
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of jobs
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/background_job"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+"/background_jobs/{background_job_id}":
+  get:
+    x-mojo-to: BackgroundJobs#get
+    operationId: getBackgroundJob
+    tags:
+      - background_job
+    summary: Get background job
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/background_job_id_pp"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A background job
+        schema:
+          $ref: "../swagger.yaml#/definitions/background_job"
+      "404":
+        description: Background job not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
