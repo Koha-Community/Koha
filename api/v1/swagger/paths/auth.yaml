@@ -1056,3 +1056,58 @@
     x-koha-authorization:
       permissions:
         parameters: manage_identity_providers
+"/auth/password/validation":
+  post:
+    x-mojo-to: Auth::Password#validate
+    operationId: validateUserAndPassword
+    tags:
+      - patrons
+    summary: Check validity of username and password
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing username and password information
+        schema:
+          type: object
+          properties:
+            username:
+              description: Username
+              type: string
+            password:
+              description: Password (plain text)
+              type: string
+          required:
+            - username
+            - password
+          additionalProperties: false
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Validation successful
+      "400":
+        description: Bad request
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "401":
+        description: Authentication required
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+    x-koha-authorization:
+      permissions:
+        borrowers: "1"
