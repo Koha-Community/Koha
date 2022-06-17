@@ -1217,7 +1217,7 @@ sub buildQuery {
     my $query_cgi;
     my $query_type;
 
-    my $limit;
+    my $limit = q{};
     my $limit_cgi;
     my $limit_desc;
 
@@ -1328,7 +1328,7 @@ sub buildQuery {
         # This is needed otherwise ccl= and &limit won't work together, and
         # this happens when selecting a subject on the opac-detail page
         my $original_q = $q; # without available part
-        $q .= $limit;
+        $q .= $limit if $limit;
         return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $original_q, '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
