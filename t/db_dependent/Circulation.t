@@ -4298,6 +4298,25 @@ subtest 'AddReturn | recalls' => sub {
     $recall1->set_cancelled;
 };
 
+subtest 'AddReturn | bundles' => sub {
+    plan tests => 1;
+
+    my $schema = Koha::Database->schema;
+    $schema->storage->txn_begin;
+
+    my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $host_item1 = $builder->build_sample_item;
+    my $bundle_item1 = $builder->build_sample_item;
+    $schema->resultset('ItemBundle')
+      ->create(
+        { host => $host_item1->itemnumber, item => $bundle_item1->itemnumber } );
+
+    my ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $bundle_item1->barcode, $bundle_item1->homebranch );
+    is($messages->{InBundle}->id, $host_item1->id, 'AddReturn returns InBundle host item when item is part of a bundle');
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     plan tests => 13;
