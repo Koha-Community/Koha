@@ -27,6 +27,7 @@ use warnings;
 use Data::Dumper qw( Dumper );
 use JSON qw( to_json );
 use Scalar::Util qw( blessed );
+use File::Basename qw( basename );
 
 use C4::Context;
 use Koha::Logger;
@@ -89,9 +90,14 @@ sub logaction {
         }
     }
 
+    my $script =
+        $interface eq 'cron'        ? basename($0)
+      : $interface eq 'commandline' ? basename($0)
+      :                               undef;
+
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface) values (now(),?,?,?,?,?,?)");
-    $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface);
+    my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface,script) values (now(),?,?,?,?,?,?,?)");
+    $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface,$script);
     $sth->finish;
 
     my $logger = Koha::Logger->get(
