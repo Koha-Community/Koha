@@ -77,39 +77,6 @@ if ( $op eq 'cancel' ) {
     $op = 'list';
 }
 
-
-if ( $op eq 'list' ) {
-    my $queued_jobs =
-      $can_manage_background_jobs
-      ? Koha::BackgroundJobs->search( { ended_on => undef },
-        { order_by => { -desc => 'enqueued_on' } } )
-      : Koha::BackgroundJobs->search(
-        { borrowernumber => $logged_in_user->borrowernumber, ended_on => undef },
-        { order_by       => { -desc => 'enqueued_on' } }
-      );
-    $template->param( queued => $queued_jobs );
-
-    my $ended_since = dt_from_string->subtract( minutes => '60' );
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-
-    my $complete_jobs =
-      $can_manage_background_jobs
-      ? Koha::BackgroundJobs->search(
-        {
-            ended_on => { '>=' => $dtf->format_datetime($ended_since) }
-        },
-        { order_by => { -desc => 'enqueued_on' } }
-      )
-      : Koha::BackgroundJobs->search(
-        {
-            borrowernumber => $logged_in_user->borrowernumber,
-            ended_on       => { '>=' => $dtf->format_datetime($ended_since) }
-        },
-        { order_by => { -desc => 'enqueued_on' } }
-      );
-    $template->param( complete => $complete_jobs );
-}
-
 $template->param(
     messages => \@messages,
     op       => $op,

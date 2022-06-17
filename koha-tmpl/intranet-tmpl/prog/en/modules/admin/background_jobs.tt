@@ -262,6 +262,23 @@
         </div>
     </div>
 
+    <label for="include_last_hour">Only include jobs started in the last hour</label>
+    <input type="checkbox" id="include_last_hour" checked />
+
+    <table id="table_jobs">
+        <thead>
+            <tr>
+                <th>Job ID</th>
+                <th data-filter="job_statuses">Status</th>
+                <th>Progress</th>
+                <th data-filter="job_types">Type</th>
+                <th>Queued</th>
+                <th>Started</th>
+                <th>Ended</th>
+                <th class="noExport">Actions</th>
+            </tr>
+        </thead>
+    </table>
 [% END %]
 
             </main>
@@ -276,6 +293,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
@@ -297,6 +315,162 @@
                 "sPaginationType": "full_numbers"
             }));
         });
+
+        const job_statuses = [
+            {'_id': 'new',       '_str': _('New')},
+            {'_id': 'cancelled', '_str': _('Cancelled')},
+            {'_id': 'finished',  '_str': _('Finished')},
+            {'_id': 'started',   '_str': _('Started')},
+            {'_id': 'running',   '_str': _('Running')},
+            {'_id': 'failed',    '_str': _('Failed')},
+        ];
+        function get_job_status (status) {
+            let status_lib = job_statuses.find( s => s._id == status );
+            if (status_lib) {
+                return status_lib._str;
+            }
+            return status;
+        }
+
+        const job_types = [
+            {
+                '_id': 'batch_biblio_record_modification',
+                '_str': _('Batch bibliographic record modification')
+            },
+            {
+                '_id': 'batch_biblio_record_deletion',
+                '_str': _('Batch bibliographic record record deletion')
+            },
+            {
+                '_id': 'batch_authority_record_modification',
+                '_str': _('Batch authority record modification')
+            },
+            {
+                '_id': 'batch_authority_record_deletion',
+                '_str': _('Batch authority record deletion')
+            },
+            {
+                '_id': 'batch_item_record_modification',
+                '_str': _('Batch item record modification')
+            },
+            {
+                '_id': 'batch_item_record_deletion',
+                '_str': _('Batch item record deletion')
+            },
+            {
+                '_id': 'batch_hold_cancel',
+                '_str': _('Batch hold cancellation')
+            },
+            {
+                '_id': 'update_elastic_index'
+                , '_str': _('Update Elasticsearch index')
+            },
+            {
+                '_id': 'update_holds_queue_for_biblios',
+                '_str': _('Holds queue update')
+            }
+        ];
+
+        function get_job_type (job_type) {
+            let job_type_lib = job_types.find( t => t._id == job_type );
+            if ( job_type_lib ) {
+                return job_type_lib._str;
+            }
+            return _("Unknown job type '%s'").format(job_type);
+        }
+
+        $(document).ready(function() {
+            let additional_filters = {
+                started_on: function(){
+                    let now = new Date();
+                    if ( $("#include_last_hour").is(":checked") ) {
+                        now.setHours(now.getHours() - 1);
+                        return { ">": now.toISOString() };
+                    } else {
+                    console.log("not checked");
+                        return { "<": now.toISOString() };
+                    }
+                },
+            };
+            let jobs_table = $("#table_jobs").kohaTable({
+                "ajax": {
+                    "url": "/api/v1/background_jobs"
+                },
+                "order": [[ 1, "desc" ]],
+                "columns": [
+                    {
+                        "data": "background_job_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "status",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return get_job_status(row.status).escapeHtml();
+                        },
+                    },
+                    {
+                        "data": "progress,size",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return "%s/%s".format(row.progress, row.size).escapeHtml();
+                        },
+                    },
+                    {
+                        "data": "type",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return get_job_type(row.type).escapeHtml();
+                        },
+                    },
+                    {
+                        "data": "enqueued_on",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.enqueued_on);
+                        },
+                    },
+                    {
+                        "data": "started_on",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.started_on);
+                        },
+                    },
+
+                    {
+                        "data": "ended_on",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $datetime(row.ended_on);
+                        },
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id='+ encodeURIComponent(row.background_job_id) +'"><i class="fa fa-eye" aria-hidden="true"></i> '+_("View")+'</a>'+"\n";
+                            if ( row.status == 'new' || row.status == 'started' ) {
+                                result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/bakcground_jobs.pl?op=cancel&amp;id='+ encodeURIComponent(row.background_job_id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</a>';
+                            }
+                            return result;
+
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            }, null, 1, additional_filters);
+
+            $("#include_last_hour").on("change", function(){
+                jobs_table.DataTable().draw();
+                return false;
+            });
     </script>
     [% IF op == 'view' %]
         [% PROCESS 'js' %]

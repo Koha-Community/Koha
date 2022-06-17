@@ -472,6 +472,20 @@ sub plugin_types_to_classes {
     return $self->{_plugin_mapping};
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::BackgroundJob object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id             => 'background_job_id',
+        borrowernumber => 'patron_id',
+    };
+}
+
 =head3 _type
 
 =cut
