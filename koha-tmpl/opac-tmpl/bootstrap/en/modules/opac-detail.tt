@@ -207,7 +207,7 @@
                                 <span class="label">Tags from this library:</span>
                                 <ul id="tagslist">
                                     [% FOREACH TagLoo IN TagLoop %]
-                                        <li><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>
+                                        <li><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term | uri %]&amp;q=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>
                                         [% IF ( loop.last ) %][% ELSE %], [% END %]
                                         </li>
                                     [% END %]
