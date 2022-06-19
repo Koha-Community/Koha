@@ -796,7 +796,7 @@ sub CanBookBeIssued {
     my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
 
     my $now = dt_from_string();
-    $duedate ||= CalcDateDue( $now->clone(), $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
+    $duedate ||= CalcDateDue( $now, $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
     if (DateTime->compare($duedate,$now) == -1 ) { # duedate cannot be before now
          $needsconfirmation{INVALID_DATE} = output_pref($duedate);
     }
