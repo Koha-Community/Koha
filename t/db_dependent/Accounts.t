@@ -555,18 +555,22 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
     my $cli_itemnumber2 = $builder->build_sample_item({ itype => $itype_replace_no_fee->{itemtype} })->itemnumber;
     my $cli_itemnumber3 = $builder->build_sample_item({ itype => $itype_no_replace_fee->{itemtype} })->itemnumber;
     my $cli_itemnumber4 = $builder->build_sample_item({ itype => $itype_replace_fee->{itemtype} })->itemnumber;
+    my $cli_itemnumber5 = $builder->build_sample_item({ itype => $itype_replace_fee->{itemtype} })->itemnumber;
+    my $cli_bundle1     = $builder->build_sample_item({ itype => $itype_no_replace_no_fee->{itemtype} })->itemnumber;
+    $schema->resultset('ItemBundle')->create( { host => $cli_bundle1, item => $cli_itemnumber5 } );
 
     my $cli_issue_id_1 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1 } })->{issue_id};
     my $cli_issue_id_2 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2 } })->{issue_id};
     my $cli_issue_id_3 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3 } })->{issue_id};
     my $cli_issue_id_4 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4 } })->{issue_id};
     my $cli_issue_id_4X = undef;
+    my $cli_bundle_issue = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_bundle1 } })->{issue_id};
 
     my $lostfine;
     my $procfee;
 
     subtest "fee application tests" => sub {
-        plan tests => 44;
+        plan tests => 48;
 
         t::lib::Mocks::mock_preference('item-level_itypes', '1');
         t::lib::Mocks::mock_preference('useDefaultReplacementCost', '0');
@@ -694,6 +698,16 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
         ok( $procfees->count == 2,  "Processing fee can be charged twice for the same item if they are distinct issue_id's");
         $lostfines->delete();
         $procfees->delete();
+
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber5, 6.12, "Bundle");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber5, debit_type_code => 'LOST' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber5, debit_type_code => 'PROCESSING' });
+        is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and default set (Bundle)");
+        is( $procfee->amount, "2.040000",  "Processing fee if processing fee (Bundle)");
+        is( $lostfine->issue_id, $cli_bundle_issue, "Lost fine issue id matched to bundle issue");
+        is( $procfee->issue_id, $cli_bundle_issue, "Processing fee issue id matched to bundle issue");
+        $lostfine->delete();
+        $procfee->delete();
     };
 
     subtest "basic fields tests" => sub {
