@@ -65,7 +65,7 @@ subtest '_derived_class() tests' => sub {
 
 subtest 'enqueue() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -77,15 +77,34 @@ subtest 'enqueue() tests' => sub {
     is( $job->status,         'new', 'Initial status set correctly' );
     is( $job->borrowernumber, undef, 'No userenv, borrowernumber undef' );
 
+    my $interface = C4::Context->interface;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_userenv( { patron => $patron } );
+    my $job_context = {
+        number        => $patron->borrowernumber,
+        id            => $patron->userid,
+        cardnumber    => $patron->cardnumber,
+        firstname     => $patron->firstname,
+        surname       => $patron->surname,
+        branch        => $patron->library->branchcode,
+        branchname    => $patron->library->branchname,
+        flags         => $patron->flags,
+        emailaddress  => $patron->email,
+        register_id   => undef,
+        register_name => undef,
+        shibboleth    => undef,
+        desk_id       => undef,
+        desk_name     => undef,
+        interface     => $interface
+    };
 
     $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2, 3 ] } );
     $job    = Koha::BackgroundJobs->find($job_id)->_derived_class;
 
     is( $job->size,           3,           'Three steps' );
     is( $job->status,         'new',       'Initial status set correctly' );
-    is( $job->borrowernumber, $patron->id, 'No userenv, borrowernumber undef' );
+    is( $job->borrowernumber, $patron->id, 'Borrowernumber set from userenv' );
+    is_deeply( decode_json( $job->context ), $job_context, 'Context set from userenv + interface' );
 
     $schema->storage->txn_rollback;
 };
