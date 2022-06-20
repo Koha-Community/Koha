@@ -388,16 +388,13 @@ sub delete {
             }
 
             # Handle lists (virtualshelves)
-            my $userenv = C4::Context->userenv;
-            my $usernumber = ref($userenv) eq 'HASH' ? $userenv->{'number'} : 0;
+            my $new_owner = _new_owner();
             my $lists = $self->virtualshelves;
             while( my $list = $lists->next ) {
-                # if staff member had a share, remove it
-                $list->remove_share( $usernumber ) if $usernumber && $list->is_private;
-                if( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' &&
-                    $usernumber && ( $list->is_public || $list->is_shared ))
-                {
-                    $list->set({ owner => $usernumber })->store; # transfer ownership of public/shared list
+                if( $new_owner && ( $list->is_public || $list->is_shared )) {
+                    # if new_owner had a share, remove it
+                    $list->remove_share( $new_owner ) if $list->is_private;
+                    $list->set({ owner => $new_owner })->store; # transfer ownership of public/shared list
                 } else { # delete
                     $list->delete;
                 }
@@ -415,6 +412,15 @@ sub delete {
     return $self;
 }
 
+sub _new_owner {
+    if( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
+        # designated owner overrides userenv
+        my $designated_owner = C4::Context->preference('ListOwnerDesignated');
+        return $designated_owner if Koha::Patrons->find($designated_owner);
+        my $userenv = C4::Context->userenv;
+        return $userenv->{'number'} if $userenv;
+    }
+}
 
 =head3 category
 

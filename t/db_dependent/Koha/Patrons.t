@@ -460,9 +460,10 @@ subtest "move_to_deleted" => sub {
 };
 
 subtest "delete" => sub {
-    plan tests => 13;
+    plan tests => 16;
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
+    t::lib::Mocks::mock_preference( 'ListOwnerDesignated', undef );
     Koha::Virtualshelves->delete;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -511,6 +512,20 @@ subtest "delete" => sub {
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
 
+    # Test deletion with designated fallback owner
+    my $designated_owner = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_preference( 'ListOwnerDesignated', $designated_owner->id );
+    $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $private_list = Koha::Virtualshelf->new({ shelfname => "PR1", owner => $patron->id })->store;
+    $public_list = Koha::Virtualshelf->new({ shelfname => "PU1", public => 1, owner => $patron->id })->store;
+    $list_to_share = Koha::Virtualshelf->new({ shelfname => "SH1", owner => $patron->id })->store;
+    $list_to_share->share("valid key")->accept( "valid key", $patron_for_sharing->id );
+    $patron->delete;
+    is( Koha::Virtualshelves->find( $private_list->id ), undef, 'Private list gone' );
+    is( $public_list->discard_changes->get_column('owner'), $designated_owner->id, 'Public list transferred' );
+    is( $list_to_share->discard_changes->get_column('owner'), $designated_owner->id, 'Shared list transferred' );
+
+    # Finally test deleting lists
     t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'delete' );
     Koha::Virtualshelves->delete;
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
