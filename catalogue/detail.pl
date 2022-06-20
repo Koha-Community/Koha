@@ -605,7 +605,7 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     $template->param( course_reserves => $course_reserves );
 }
 
-$template->param(found1 => $query->param('found1') );
+$template->param(found1 => scalar $query->param('found1') );
 
 $template->param(biblio => $biblio);
 
