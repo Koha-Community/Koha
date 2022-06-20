@@ -115,6 +115,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BorrowerUnwantedField','',NULL,'Name the fields you don\'t need to store for a patron\'s account','free'),
 ('BranchTransferLimitsType','ccode','itemtype|ccode','When using branch transfer limits, choose whether to limit by itemtype or collection code.','Choice'),
 ('BrowseResultSelection','0',NULL,'Enable/Disable browsing search results fromt the bibliographic record detail page in staff interface','YesNo'),
+('BundleLostValue','5',NULL,'Sets the LOST AV value that represents "Missing from bundle" as a lost value','Free'),
+('BundleNotLoanValue','3',NULL,'Sets the NOT_LOAN AV value that represents "Added to bundle" as a not for loan value','Free'),
 ('CalculateFinesOnReturn','1','','Switch to control if overdue fines are calculated on return or not','YesNo'),
 ('CalculateFinesOnBackdate','1','','Switch to control if overdue fines are calculated on return when backdating','YesNo'),
 ('CalendarFirstDayOfWeek','0','0|1|2|3|4|5|6','Select the first day of week to use in the calendar.','Choice'),
