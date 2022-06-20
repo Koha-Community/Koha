@@ -294,5 +294,18 @@ return {
                 ('ERM_PACKAGE_CONTENT_TYPE', 'streaming_media', 'Streaming media'),
                 ('ERM_PACKAGE_CONTENT_TYPE', 'unknown', 'Unknown')
         });
+
+        $dbh->do(q{
+            INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+            VALUES ('ERMProvider', 'manual', 'manual|ebsco', 'Set the provider for the ERM module', 'Choice');
+        });
+        $dbh->do(q{
+            INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+            VALUES
+            ('ERMProviderEbscoCustomerID', '', '', 'Customer ID for EBSCO', 'free'),
+            ('ERMProviderEbscoApiKey', '', '', 'API key for EBSCO', 'free');
+        });
+
+
     }
 };
