@@ -13,10 +13,6 @@ Circulation:
                   0: "Don't require"
             - staff to confirm that all parts of an item are present at checkin/checkout.
         -
-            - Use the LOST authorised value
-            - pref: BundleLostValue
-            - to represent 'missing from bundle' at return.
-        -
             - pref: AutoSwitchPatron
               choices:
                   1: "Enable"
@@ -1287,6 +1283,17 @@ Circulation:
             - "The following article request formats are supported:"
             - pref: ArticleRequestsSupportedFormats
             - "(Valid choices are currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical bar. The first listed format is selected by default when you request via the OPAC.)"
+
+
+    Item bundles:
+        -
+            - Use the LOST authorised value
+            - pref: BundleLostValue
+            - to represent 'missing from bundle' at return.
+        -
+            - Use the NOT_LOAN authorised value
+            - pref: BundleNotLoanValue
+            - to represent 'added to bundle' when an item is attached to bundle.
 
     Return claims:
         -
