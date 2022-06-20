@@ -131,7 +131,7 @@ sub mock_userenv {
     my $branchcode = $params->{branchcode}     || $userenv->{branchcode}     || 'Branch4T';
     my $branchname   = $params->{branchname}   || $userenv->{branchname};
     my $flags        = $params->{flags}        || $userenv->{flags}          || 0;
-    my $emailaddress = $params->{emailaddress} || $userenv->{emailaddress};
+    my $emailaddress = $params->{emailaddress} || $userenv->{email};
     my $desk_id       = $params->{desk_id}       || $userenv->{desk_id};
     my $desk_name     = $params->{desk_name}     || $userenv->{desk_name};
     my $register_id   = $params->{register_id}   || $userenv->{register_id};
