@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::MockModule;
 use Test::Exception;
 
 use Koha::Database;
@@ -28,6 +29,7 @@ use JSON qw( decode_json encode_json );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+use t::lib::Koha::BackgroundJob::BatchTest;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -168,6 +170,56 @@ subtest 'start(), step() and finish() tests' => sub {
         'Exception thrown trying to start a finished job';
 
     is( $@->expected_status, 'started' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'process tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    C4::Context->interface('intranet');
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+    my $job_context = {
+        number        => $patron->borrowernumber,
+        id            => $patron->userid,
+        cardnumber    => $patron->cardnumber,
+        firstname     => $patron->firstname,
+        surname       => $patron->surname,
+        branch        => $patron->library->branchcode,
+        branchname    => $patron->library->branchname,
+        flags         => $patron->flags,
+        emailaddress  => $patron->email,
+        register_id   => undef,
+        register_name => undef,
+        shibboleth    => undef,
+        desk_id       => undef,
+        desk_name     => undef,
+    };
+
+    my $background_job_module = Test::MockModule->new('Koha::BackgroundJob');
+    $background_job_module->mock(
+        'type_to_class_mapping',
+        sub {
+            return { batch_test => 't::lib::Koha::BackgroundJob::BatchTest' };
+        }
+    );
+
+    my $job_id = t::lib::Koha::BackgroundJob::BatchTest->new->enqueue(
+        { size => 10, a => 'aaa', b => 'bbb' } );
+    my $job    = Koha::BackgroundJobs->find($job_id);
+
+    C4::Context->_new_userenv(-1);
+    C4::Context->interface('opac');
+    is( C4::Context->userenv, undef, "Userenv unset prior to calling process");
+    is( C4::Context->interface, 'opac', "Interface set to opac prior to calling process");
+
+    $job->process();
+    is_deeply( C4::Context->userenv, $job_context, "Userenv set from job context on process" );
+    is_deeply( C4::Context->interface, 'intranet', "Interface set from job context on process" );
 
     $schema->storage->txn_rollback;
 };
