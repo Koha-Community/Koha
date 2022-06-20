@@ -14,11 +14,6 @@
         name: title_id
         required: false
         type: integer
-      - description: Case insensitive search on title vendor_id
-        in: query
-        name: vendor_id
-        required: false
-        type: integer
       - description: Case insensitive search on title publication_title
         in: query
         name: publication_title
@@ -158,6 +153,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_title"
           type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:

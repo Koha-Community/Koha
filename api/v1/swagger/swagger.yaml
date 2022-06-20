@@ -175,6 +175,8 @@ paths:
     $ref: ./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1titles
   "/erm/eholdings/titles/{title_id}":
     $ref: "./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1titles~1{title_id}"
+  "/erm/eholdings/titles/{title_id}/resources":
+    $ref: "./paths/erm_eholdings_titles_resources.yaml#/~1erm~1eholdings~1titles~1{title_id}~1resources"
   /erm/eholdings/packages:
     $ref: ./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages
   /erm/eholdings/resources:
@@ -183,6 +185,8 @@ paths:
     $ref: "./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1resources~1{resource_id}"
   "/erm/eholdings/packages/{package_id}":
     $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages~1{package_id}"
+  "/erm/eholdings/packages/{package_id}/resources":
+    $ref: "./paths/erm_eholdings_packages_resources.yaml#/~1erm~1eholdings~1packages~1{package_id}~1resources"
   /erm/licenses:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":
@@ -367,13 +371,13 @@ parameters:
     in: path
     name: package_id
     required: true
-    type: integer
+    type: string
   eholdings_resource_id_pp:
     description: Resource internal identifier
     in: path
     name: resource_id
     required: true
-    type: integer
+    type: string
   fund_id_pp:
     description: Fund id
     in: path

@@ -42,10 +42,14 @@
         const package_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_TYPE')) | $raw %];
         const package_content_types = [% To.json(AuthorisedValues.Get('ERM_PACKAGE_CONTENT_TYPE')) | $raw %];
 
+        const title_publication_types = [% To.json(AuthorisedValues.Get('ERM_TITLE_PUBLICATION_TYPE')) | $raw %];
+
         const agreement_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'agreements', 'agreements', 'json' ) | $raw %];
         const license_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'licenses', 'licenses', 'json' ) | $raw %];
         const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
         const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
+
+        const erm_provider = "[% Koha.Preference('ERMProvider') | html %]";
 
     </script>
 

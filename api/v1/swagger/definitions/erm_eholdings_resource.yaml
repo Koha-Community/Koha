@@ -2,7 +2,7 @@
 type: object
 properties:
   resource_id:
-    type: integer
+    type: string
     description: internally assigned identifier
     readOnly: true
   title_id:
@@ -12,6 +12,11 @@ properties:
       - "null"
   package_id:
     description: foreign key to the package
+    type:
+      - string
+      - "null"
+  vendor_id:
+    description: foreign key to aqbooksellers
     type:
       - integer
       - "null"
@@ -29,6 +34,25 @@ properties:
     description: Proxy to access this resource
     type:
       - string
+      - "null"
+  is_selected:
+    type:
+      - boolean
+      - "null"
+  title:
+    description: Information about the title
+    type:
+      - object
+      - "null"
+  package:
+    description: Information about the package
+    type:
+      - object
+      - "null"
+  vendor:
+    description: Information about the vendor
+    type:
+      - object
       - "null"
 
 additionalProperties: false

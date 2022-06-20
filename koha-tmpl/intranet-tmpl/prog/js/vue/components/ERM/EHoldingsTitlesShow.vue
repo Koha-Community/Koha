@@ -1,9 +1,9 @@
 <template>
     <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else id="eholdings_title_show">
+    <div v-else-if="title" id="eholdings_title_show">
         <h2>
             {{ $t("Title .id", { id: title.title_id }) }}
-            <span class="action_links">
+            <span v-if="erm_provider == 'manual'" class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/titles/edit/${title.title_id}`"
                     :title="$t('Edit')"
@@ -38,34 +38,19 @@
                             </a>
                         </span>
                     </li>
-                    <li v-if="title.external_id">
-                        <label>{{ $t("External ID") }}:</label>
-                        <span>
-                            {{ title.external_id }}
-                        </span>
-                    </li>
-                    <li>
-                        <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="title.vendor_id">
-                            {{
-                                vendors.find((e) => e.id == title.vendor_id)
-                                    .name
-                            }}
-                        </span>
-                    </li>
-                    <li>
+                    <li v-if="title.print_identifier">
                         <label>{{ $t("Print-format identifier") }}:</label>
                         <span>
                             {{ title.print_identifier }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.online_identifier">
                         <label>{{ $t("Online-format identifier") }}:</label>
                         <span>
                             {{ title.online_identifier }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.date_first_issue_online">
                         <label
                             >{{
                                 $t(
@@ -77,7 +62,7 @@
                             {{ title.date_first_issue_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.num_first_vol_online">
                         <label
                             >{{
                                 $t("Number of first volume available online")
@@ -87,7 +72,7 @@
                             {{ title.num_first_vol_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.num_first_issue_online">
                         <label
                             >{{
                                 $t("Number of first issue available online")
@@ -97,7 +82,7 @@
                             {{ title.num_first_issue_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.date_last_issue_online">
                         <label
                             >{{
                                 $t("Date of last issue available online")
@@ -107,7 +92,7 @@
                             {{ title.date_last_issue_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.num_last_vol_online">
                         <label
                             >{{
                                 $t("Number of last volume available online")
@@ -117,7 +102,7 @@
                             {{ title.num_last_vol_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.num_last_issue_online">
                         <label
                             >{{
                                 $t("Number of last issue available online")
@@ -127,49 +112,54 @@
                             {{ title.num_last_issue_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.title_url">
                         <label>{{ $t("Title-level URL") }}:</label>
                         <span>
                             {{ title.title_url }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.first_author">
                         <label>{{ $t("First author") }}:</label>
                         <span>
                             {{ title.first_author }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.embargo_info">
                         <label>{{ $t("Embargo information") }}:</label>
                         <span>
                             {{ title.embargo_info }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.coverage_depth">
                         <label>{{ $t("Coverage depth") }}:</label>
                         <span>
                             {{ title.coverage_depth }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.notes">
                         <label>{{ $t("Notes") }}:</label>
                         <span>
                             {{ title.notes }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.publisher_name">
                         <label>{{ $t("Publisher name") }}:</label>
                         <span>
                             {{ title.publisher_name }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.publication_type">
                         <label>{{ $t("Publication type") }}:</label>
-                        <span>
-                            {{ title.publication_type }}
+                        <span
+                            >{{
+                                get_lib_from_av(
+                                    "av_title_publication_types",
+                                    title.publication_type
+                                )
+                            }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.date_monograph_published_print">
                         <label
                             >{{
                                 $t(
@@ -181,7 +171,7 @@
                             {{ title.date_monograph_published_print }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.date_monograph_published_online">
                         <label
                             >{{
                                 $t(
@@ -193,7 +183,7 @@
                             {{ title.date_monograph_published_online }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.monograph_volume">
                         <label
                             >{{ $t("Number of volume for monograph") }}:</label
                         >
@@ -201,19 +191,19 @@
                             {{ title.monograph_volume }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.monograph_edition">
                         <label>{{ $t("Edition of the monograph") }}:</label>
                         <span>
                             {{ title.monograph_edition }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.first_editor">
                         <label>{{ $t("First editor") }}:</label>
                         <span>
                             {{ title.first_editor }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.parent_publication_title_id">
                         <label
                             >{{
                                 $t(
@@ -225,7 +215,7 @@
                             {{ title.parent_publication_title_id }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.preceeding_publication_title_id">
                         <label
                             >{{
                                 $t(
@@ -237,37 +227,19 @@
                             {{ title.preceeding_publication_title_id }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="title.access_type">
                         <label>{{ $t("Acces type") }}:</label>
                         <span>
                             {{ title.access_type }}
                         </span>
                     </li>
-
-                    <li v-if="title.resources.length">
-                        <label>{{ $t("Packages") }}</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(r, counter) in title.resources"
-                                    v-bind:key="counter"
-                                >
-                                    <td>
-                                        <router-link
-                                            :to="`/cgi-bin/koha/erm/eholdings/resources/${r.resource_id}`"
-                                            :title="$t('Show resource')"
-                                        >
-                                            {{ r.package.name }}
-                                        </router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <li>
+                        <label>Packages ({{ title.resources.length }})</label>
+                        <div v-if="title.resources.length">
+                            <EHoldingsTitlePackagesList
+                                :resources="title.resources"
+                            />
+                        </div>
                     </li>
                 </ol>
             </fieldset>
@@ -284,23 +256,22 @@
 </template>
 
 <script>
+import EHoldingsTitlePackagesList from "./EHoldingsTitlePackagesList.vue"
 import { fetchTitle } from "../../fetch"
-import { useVendorStore } from "../../stores/vendors"
-import { storeToRefs } from "pinia"
+import { useAVStore } from "../../stores/authorised_values"
 export default {
     setup() {
-        const vendorStore = useVendorStore()
-        const { vendors } = storeToRefs(vendorStore)
+        const AVStore = useAVStore()
+        const { get_lib_from_av } = AVStore
 
         return {
-            vendors,
+            get_lib_from_av,
         }
     },
     data() {
         return {
             title: {
                 title_id: null,
-                vendor_id: null,
                 publication_title: '',
                 external_id: '',
                 print_identifier: '',
@@ -331,7 +302,7 @@ export default {
             initialized: false,
         }
     },
-
+    inject: ['erm_provider'],
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.getTitle(to.params.title_id)
@@ -346,6 +317,9 @@ export default {
             this.title = title
             this.initialized = true
         },
+    },
+    components: {
+        EHoldingsTitlePackagesList,
     },
     name: "EHoldingsTitlesShow",
 }

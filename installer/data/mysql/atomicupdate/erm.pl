@@ -216,7 +216,6 @@ return {
                 CREATE TABLE `erm_eholdings_titles` (
                     `title_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                     `biblio_id` INT(11) DEFAULT NULL,
-                    `vendor_id` INT(11) DEFAULT NULL,
                     `publication_title` VARCHAR(255) DEFAULT NULL,
                     `external_id` VARCHAR(255) DEFAULT NULL,
                     `print_identifier` VARCHAR(255) DEFAULT NULL,
@@ -233,7 +232,7 @@ return {
                     `coverage_depth` VARCHAR(255) DEFAULT NULL,
                     `notes` VARCHAR(255) DEFAULT NULL,
                     `publisher_name` VARCHAR(255) DEFAULT NULL,
-                    `publication_type` VARCHAR(255) DEFAULT NULL,
+                    `publication_type` VARCHAR(80) DEFAULT NULL,
                     `date_monograph_published_print` VARCHAR(255) DEFAULT NULL,
                     `date_monograph_published_online` VARCHAR(255) DEFAULT NULL,
                     `monograph_volume` VARCHAR(255) DEFAULT NULL,
@@ -242,7 +241,6 @@ return {
                     `parent_publication_title_id` VARCHAR(255) DEFAULT NULL,
                     `preceeding_publication_title_id` VARCHAR(255) DEFAULT NULL,
                     `access_type` VARCHAR(255) DEFAULT NULL,
-                    CONSTRAINT `erm_eholdings_titles_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
                     CONSTRAINT `erm_eholdings_titles_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
                     PRIMARY KEY(`title_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -254,11 +252,13 @@ return {
                     `resource_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                     `title_id` INT(11) NOT NULL,
                     `package_id` INT(11) NOT NULL,
+                    `vendor_id` INT(11) DEFAULT NULL,
                     `started_on` DATE,
                     `ended_on` DATE,
                     `proxy` VARCHAR(80) DEFAULT NULL,
                     CONSTRAINT `erm_eholdings_resources_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_eholdings_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT `erm_eholdings_resources_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_eholdings_resources_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
                     PRIMARY KEY(`resource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
@@ -276,7 +276,8 @@ return {
             INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
             VALUES
                 ('ERM_PACKAGE_TYPE', 1),
-                ('ERM_PACKAGE_CONTENT_TYPE', 1)
+                ('ERM_PACKAGE_CONTENT_TYPE', 1),
+                ('ERM_TITLE_PUBLICATION_TYPE', 1)
         });
 
         $dbh->do(q{
@@ -284,15 +285,30 @@ return {
             VALUES
                 ('ERM_PACKAGE_TYPE', 'local', 'Local'),
                 ('ERM_PACKAGE_TYPE', 'complete', 'Complete'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Aggregated full'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Abstract and index'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'e_book', 'E-book'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Mixed content'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'e_journal', 'E-journal'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'online_reference', 'Online reference'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'print', 'Print'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'streaming_media', 'Streaming media'),
-                ('ERM_PACKAGE_CONTENT_TYPE', 'unknown', 'Unknown')
+                ('ERM_PACKAGE_CONTENT_TYPE', 'AggregatedFullText', 'Aggregated full'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'AbstractAndIndex', 'Abstract and index'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'EBook', 'E-book'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'MixedContent', 'Mixed content'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'EJournal', 'E-journal'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'OnlineReference', 'Online reference'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'Print', 'Print'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'StreamingMedia', 'Streaming media'),
+                ('ERM_PACKAGE_CONTENT_TYPE', 'Unknown', 'Unknown'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'journal', 'Journal'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'newsletter', 'Newsletter'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'report', 'Report'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'proceedings', 'Proceedings'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'website', 'Website'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'newspaper', 'Newspaper'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'unspecified', 'Unspecified'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'book', 'Book'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'ebook', 'E-book'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'bookseries', 'Bookseries'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'database', 'Database'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'thesisdissertation', 'Thesis/Dissertation'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'streamingaudio', 'Streaming audio'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'streamingvideo', 'Streaming video'),
+                ('ERM_TITLE_PUBLICATION_TYPE', 'audiobook', 'AudioBook');
         });
 
         $dbh->do(q{

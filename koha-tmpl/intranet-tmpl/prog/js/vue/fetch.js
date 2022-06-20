@@ -110,7 +110,8 @@ export const fetchPackage = async function (package_id) {
     let erm_package;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "package_agreements,package_agreements.agreement,resources,resources.title,vendor",
+            "x-koha-embed":
+                "package_agreements,package_agreements.agreement,resources+count,vendor",
         },
     })
         .then(checkError)
@@ -128,7 +129,11 @@ export const fetchPackage = async function (package_id) {
 export const fetchPackages = async function () {
     const apiUrl = "/api/v1/erm/eholdings/packages";
     let packages;
-    await fetch(apiUrl)
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "resources+count,vendor.name",
+        },
+    })
         .then(checkError)
         .then(
             (result) => {
@@ -184,7 +189,7 @@ export const fetchResource = async function (resource_id) {
     let resource;
     await fetch(apiUrl, {
         headers: {
-            "x-koha-embed": "title,package",
+            "x-koha-embed": "title,package,vendor",
         },
     })
         .then(checkError)
@@ -199,10 +204,31 @@ export const fetchResource = async function (resource_id) {
     return resource;
 };
 
-export const fetchresources = async function () {
+export const fetchResources = async function () {
     const apiUrl = "/api/v1/erm/eholdings/resources";
     let resources;
     await fetch(apiUrl)
+        .then(checkError)
+        .then(
+            (result) => {
+                resources = result;
+            },
+            (error) => {
+                setError(error);
+            }
+        );
+    return resources;
+};
+
+export const fetchPackageResources = async function (package_id) {
+    const apiUrl =
+        "/api/v1/erm/eholdings/packages/" + package_id + "/resources";
+    let resources;
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "title.publication_title",
+        },
+    })
         .then(checkError)
         .then(
             (result) => {

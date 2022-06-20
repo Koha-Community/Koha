@@ -1,10 +1,58 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="this.titles" id="titles_list">
-        <Toolbar />
-        <table v-if="this.titles.length" id="title_list"></table>
-        <div v-else-if="this.initialized" class="dialog message">
-            {{ $t("There are no titles defined") }}
+    <div v-if="erm_provider == 'manual'">
+        <div v-if="!this.initialized">{{ $t("Loading") }}</div>
+        <div v-else-if="this.titles" id="titles_list">
+            <Toolbar />
+            <table v-if="this.titles.length" id="title_list"></table>
+            <div v-else-if="this.initialized" class="dialog message">
+                {{ $t("There are no titles defined") }}
+            </div>
+        </div>
+        <div id="title_list_result">
+            <table id="title_list"></table>
+        </div>
+    </div>
+    <div v-else>
+        <fieldset>
+            {{ $t("Publication title") }}:
+            <input
+                type="text"
+                id="publication_title_filter"
+                v-model="filters.publication_title"
+                @keyup.enter="filter_table"
+            />
+            {{ $t("Publication type") }}:
+            <select
+                id="publication_type_filter"
+                v-model="filters.publication_type"
+            >
+                <option value="">{{ $t("All") }}</option>
+                <option
+                    v-for="type in av_title_publication_types"
+                    :key="type.authorised_values"
+                    :value="type.authorised_value"
+                >
+                    {{ type.lib }}
+                </option>
+            </select>
+            {{ $t("Selection status") }}:
+            <select id="selection_type_filter" v-model="filters.selection_type">
+                <option value="0">{{ $t("All") }}</option>
+                <option value="1">{{ $t("Selected") }}</option>
+                <option value="2">{{ $t("Not selected") }}</option>
+            </select>
+            <input
+                @click="filter_table"
+                id="filter_table"
+                type="button"
+                :value="$t('Submit')"
+            />
+            <span v-if="cannot_search">{{
+                $t("Please enter a search term")
+            }}</span>
+        </fieldset>
+        <div id="title_list_result" style="display: none">
+            <table id="title_list"></table>
         </div>
     </div>
 </template>
@@ -13,6 +61,7 @@
 import Toolbar from "./EHoldingsTitlesToolbar.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
+import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchTitles } from "../../fetch"
 
@@ -21,14 +70,26 @@ export default {
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
 
+        const AVStore = useAVStore()
+        const { av_title_publication_types } = storeToRefs(AVStore)
+        const { get_lib_from_av } = AVStore
+
         return {
             vendors,
+            av_title_publication_types,
+            get_lib_from_av,
         }
     },
     data: function () {
         return {
             titles: [],
             initialized: false,
+            filters: {
+                publication_title: this.$route.query.q || "",
+                publication_type: "",
+                selection_type: "",
+            },
+            cannot_search: false,
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -36,10 +97,13 @@ export default {
             vm.getTitles()
         })
     },
+    inject: ['erm_provider'],
     methods: {
         async getTitles() {
-            const titles = await fetchTitles()
-            this.titles = titles
+            if (erm_provider == 'manual') {
+                const titles = await fetchTitles()
+                this.titles = titles
+            }
             this.initialized = true
         },
         show_title: function (title_id) {
@@ -51,12 +115,22 @@ export default {
         delete_title: function (title_id) {
             this.$router.push("/cgi-bin/koha/erm/eholdings/titles/delete/" + title_id)
         },
+        filter_table: function () {
+            if (this.filters.publication_title.length) {
+                this.cannot_search = false
+                $("#title_list_result").show()
+                $("#title_list").DataTable().draw()
+            } else {
+                this.cannot_search = true
+            }
+        }
     },
     updated() {
-        let show_title= this.show_title
-        let edit_title= this.edit_title
-        let delete_title= this.delete_title
-        let default_search = this.$route.query.q
+        let show_title = this.show_title
+        let edit_title = this.edit_title
+        let delete_title = this.delete_title
+        let get_lib_from_av = this.get_lib_from_av
+        let filters = this.filters
 
         window['vendors'] = this.vendors.map(e => {
             e['_id'] = e['id']
@@ -67,38 +141,54 @@ export default {
             map[e.id] = e
             return map
         }, {})
+        window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
+            e['_id'] = e['authorised_value']
+            e['_str'] = e['lib']
+            return e
+        })
 
+        let additional_filters = {}
+        if (erm_provider != 'manual') {
+            additional_filters = {
+                publication_title: function () {
+                    return filters.publication_title || ""
+                },
+                publication_type: function () {
+                    return filters.content_type_search || ""
+                },
+                selection_type: function () {
+                    return filters.selection_type || ""
+                },
+            }
+        }
         $('#title_list').kohaTable({
             "ajax": {
                 "url": "/api/v1/erm/eholdings/titles",
             },
-            "order": [[0, "asc"]],
-            "search": { search: default_search },
-            "columnDefs": [{
-                "targets": [1],
-                "render": function (data, type, row, meta) {
-                    if (type == 'display') {
-                        return escape_str(data)
-                    }
-                    return data
-                }
-            }],
+            embed: ["resources.package"],
+            ...(erm_provider == 'manual' ? { order: [[0, "asc"]] } : {}),
+            ...(erm_provider != 'manual' ? { ordering: false } : {}),
+            ...(erm_provider == 'manual' ? { search: { search: filters.publication_title } } : {}),
+            ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
+            ...(erm_provider != 'manual' ? { lengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
+            ...(erm_provider != 'manual' ? { deferLoading: true } : {}),
+            autoWidth: false,
             "columns": [
                 {
                     "title": __("Title"),
-                    "data": "me.title_id:me.publication_title",
-                    "searchable": true,
-                    "orderable": true,
+                    "data": "me.publication_title",
+                    "searchable": (erm_provider == 'manual'),
+                    "orderable": (erm_provider == 'manul'),
                     "render": function (data, type, row, meta) {
                         // Rendering done in drawCallback
-                        return "";
+                        return ""
                     }
                 },
                 {
                     "title": __("Vendor"),
                     "data": "vendor_id",
-                    "searchable": true,
-                    "orderable": true,
+                    "searchable": (erm_provider == 'manual'),
+                    "orderable": (erm_provider == 'manul'),
                     "render": function (data, type, row, meta) {
                         return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
                     }
@@ -106,14 +196,17 @@ export default {
                 {
                     "title": __("Publication type"),
                     "data": "publication_type",
-                    "searchable": true,
-                    "orderable": true,
+                    "searchable": (erm_provider == 'manual'),
+                    "orderable": (erm_provider == 'manul'),
+                    "render": function (data, type, row, meta) {
+                        return escape_str(get_lib_from_av("av_title_publication_types", row.publication_type))
+                    }
                 },
                 {
                     "title": __("Identifier"),
                     "data": "print_identifier:online_identifier",
-                    "searchable": true,
-                    "orderable": true,
+                    "searchable": (erm_provider == 'manual'),
+                    "orderable": (erm_provider == 'manul'),
                     "render": function (data, type, row, meta) {
                         let print_identifier = row.print_identifier
                         let online_identifier = row.online_identifier
@@ -121,7 +214,7 @@ export default {
                             (online_identifier ? escape_str(_("ISBN (Online): %s").format(online_identifier)) : "")
                     }
                 },
-                {
+                erm_provider == 'manual' ? {
                     "title": __("Actions"),
                     "data": function (row, type, val, meta) {
                         return '<div class="actions"></div>'
@@ -129,8 +222,8 @@ export default {
                     "className": "actions noExport",
                     "searchable": false,
                     "orderable": false
-                }
-            ],
+                } : null,
+            ].filter(Boolean),
             drawCallback: function (settings) {
 
                 var api = new $.fn.dataTable.Api(settings)
@@ -160,20 +253,33 @@ export default {
                     if (!row) return // Happen if the table is empty
                     let n = createVNode("a", {
                         role: "button",
-                        onClick: () => {
+                        onClick: (e) => {
+                            e.preventDefault()
                             show_title(row.title_id)
                         }
                     },
                         `${row.publication_title} (#${row.title_id})`
                     )
+                    // TODO? We don't have is_selected at title level
+                    //if (row.is_selected) {
+                    //    n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                    //}
                     render(n, e)
                 })
             },
-            preDrawCallback: function (settings) {
-                var table_id = settings.nTable.id
-                $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
+            ...(erm_provider == 'manual' ? {
+                preDrawCallback: function (settings) {
+                    var table_id = settings.nTable.id
+                    $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
+                }
+            } : {}),
+        }, eholdings_titles_table_settings, erm_provider == 'manual' ? 1 : 0, additional_filters)
+
+        if (erm_provider != 'manual') {
+            if (filters.publication_title.length) {
+                this.filter_table()
             }
-        }, eholdings_titles_table_settings, 1)
+        }
     },
     beforeUnmount() {
         $('#title_list')

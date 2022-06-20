@@ -13,7 +13,7 @@
         in: query
         name: package_id
         required: false
-        type: integer
+        type: string
       - description: Case insensitive search on package vendor_id
         in: query
         name: vendor_id
@@ -58,6 +58,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
           type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:
@@ -75,6 +79,9 @@
     x-koha-authorization:
       permissions:
         erm: 1
+    x-koha-embed:
+      - vendors
+      - resources+count
   post:
     x-mojo-to: ERM::EHoldings::Packages#add
     operationId: addErmEHoldingsPackages

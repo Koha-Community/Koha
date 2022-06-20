@@ -34,30 +34,6 @@
                         </li>
 
                         <li>
-                            <label for="title_vendor_id"
-                                >{{ $t("Vendor") }}:</label
-                            >
-                            <select
-                                id="title_vendor_id"
-                                v-model="title.vendor_id"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="vendor in vendors"
-                                    :key="vendor.vendor_id"
-                                    :value="vendor.id"
-                                    :selected="
-                                        vendor.id == title.vendor_id
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ vendor.name }}
-                                </option>
-                            </select>
-                        </li>
-
-                        <li>
                             <label for="title_print_identifier"
                                 >{{ $t("Print-format identifier") }}:</label
                             >
@@ -249,11 +225,25 @@
                             <label for="title_publication_type"
                                 >{{ $t("Publication type") }}:</label
                             >
-                            <input
+                            <select
                                 id="title_publication_type"
                                 v-model="title.publication_type"
-                                :placeholder="$t('Publication type')"
-                            />
+                            >
+                                <option value=""></option>
+                                <option
+                                    v-for="type in av_title_publication_types"
+                                    :key="type.authorised_values"
+                                    :value="type.authorised_value"
+                                    :selected="
+                                        type.authorised_value ==
+                                        title.publication_type
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ type.lib }}
+                                </option>
+                            </select>
                         </li>
 
                         <li>
@@ -404,6 +394,7 @@
 
 <script>
 import { useVendorStore } from "../../stores/vendors"
+import { useAVStore } from "../../stores/authorised_values"
 import EHoldingsTitlesFormAddResources from "./EHoldingsTitlesFormAddResources.vue"
 import { setMessage, setError } from "../../messages"
 import { fetchTitle } from '../../fetch'
@@ -414,15 +405,20 @@ export default {
         const vendorStore = useVendorStore()
         const { vendors } = storeToRefs(vendorStore)
 
+        const AVStore = useAVStore()
+        const { av_title_publication_types } = storeToRefs(AVStore)
+        const { get_lib_from_av } = AVStore
+
         return {
             vendors,
+            av_title_publication_types,
+            get_lib_from_av,
         }
     },
     data() {
         return {
             title: {
                 title_id: null,
-                vendor_id: null,
                 publication_title: '',
                 external_id: '',
                 print_identifier: '',

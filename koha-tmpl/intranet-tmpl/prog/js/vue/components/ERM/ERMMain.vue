@@ -93,10 +93,14 @@ export default {
         AVStore.av_agreement_license_location = agreement_license_location
         AVStore.av_package_types = package_types
         AVStore.av_package_content_types = package_content_types
+        AVStore.av_title_publication_types = title_publication_types
 
         return {
             vendorStore,
         }
+    },
+    provide: {
+        erm_provider
     },
     data() {
         return {

@@ -68,6 +68,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_agreement"
           type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       403:
         description: Access forbidden
         schema:

@@ -2,7 +2,7 @@
 type: object
 properties:
   package_id:
-    type: integer
+    type: string
     description: internally assigned package identifier
     readOnly: true
   vendor_id:
@@ -46,6 +46,14 @@ properties:
   vendor:
     type:
       - object
+      - "null"
+  is_selected:
+    type:
+      - boolean
+      - "null"
+  resources_count:
+    type:
+      - integer
       - "null"
 
 additionalProperties: false

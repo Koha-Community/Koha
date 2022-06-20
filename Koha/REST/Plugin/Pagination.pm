@@ -117,7 +117,7 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
 
             # Add X-Total-Count header
             $c->res->headers->add( 'X-Total-Count' => $total );
-            $c->res->headers->add( 'X-Base-Total-Count' => $base_total );
+            $c->res->headers->add( 'X-Base-Total-Count' => $base_total ) if defined $base_total;
             return $c;
         }
     );

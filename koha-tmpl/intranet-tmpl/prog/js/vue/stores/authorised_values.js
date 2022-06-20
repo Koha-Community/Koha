@@ -35,6 +35,7 @@ export const useAVStore = defineStore("authorised_values", {
         ],
         av_package_types: [],
         av_package_content_types: [],
+        av_title_publication_types: [],
     }),
     actions: {
         get_lib_from_av(arr_name, av) {
@@ -47,7 +48,7 @@ export const useAVStore = defineStore("authorised_values", {
                 return;
             }
             let o = this[arr_name].find((e) => e.authorised_value == av);
-            return o ? o.lib : "";
+            return o ? o.lib : av;
         },
     },
 });

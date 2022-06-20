@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else id="eholdings_resources_show">
+    <div v-else-if="resource" id="eholdings_resources_show">
         <h2>
             {{ $t("Resource .id", { id: resource.resource_id }) }}
         </h2>
@@ -24,12 +24,6 @@
                                 }}</router-link
                             ></span
                         >
-                    </li>
-                    <li>
-                        <label>{{ $t("First author") }}:</label>
-                        <span>
-                            {{ resource.title.first_author }}
-                        </span>
                     </li>
                     <li>
                         <label>{{ $t("Publisher name") }}:</label>
@@ -72,14 +66,11 @@
 
                     <li>
                         <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="resource.vendor_id">
-                            {{
-                                vendors.find((e) => e.id == resource.vendor_id)
-                                    .name
-                            }}
+                        <span v-if="resource.vendor">
+                            {{ resource.vendor.name }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="resource.package.content_type">
                         <label>{{ $t("Package content type") }}:</label>
                         <span>{{ resource.package.content_type }}</span>
                     </li>

@@ -12,12 +12,12 @@ export const useMainStore = defineStore("main", {
         setMessage(message) {
             this.error = null;
             this.message = message;
-            this.displayed_already = false;
+            this.displayed_already = false; /* Will be displayed on the next view */
         },
         setError(error) {
             this.error = error;
             this.message = null;
-            this.displayed_already = false;
+            this.displayed_already = true; /* Is displayed on the current view */
         },
         removeMessages() {
             if (this.displayed_already) {

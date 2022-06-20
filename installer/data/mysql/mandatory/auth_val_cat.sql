@@ -85,7 +85,8 @@ VALUES
     ('ERM_AGREEMENT_LICENSE_STATUS', 1),
     ('ERM_AGREEMENT_LICENSE_LOCATION', 1),
     ('ERM_PACKAGE_TYPE', 1),
-    ('ERM_PACKAGE_CONTENT_TYPE', 1);
+    ('ERM_PACKAGE_CONTENT_TYPE', 1),
+    ('ERM_TITLE_PUBLICATION_TYPE', 1);
 
 INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
 VALUES
@@ -115,13 +116,27 @@ VALUES
     ('ERM_AGREEMENT_LICENSE_LOCATION', 'cupboard', 'Cupboard'),
     ('ERM_PACKAGE_TYPE', 'local', 'Local'),
     ('ERM_PACKAGE_TYPE', 'complete', 'Complete'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Aggregated full'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Abstract and index'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'e_book', 'E-book'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'mixed_content', 'Mixed content'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'e_journal', 'E-journal'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'online_reference', 'Online reference'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'print', 'Print'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'streaming_media', 'Streaming media'),
-    ('ERM_PACKAGE_CONTENT_TYPE', 'unknown', 'Unknown');
-
+    ('ERM_PACKAGE_CONTENT_TYPE', 'AggregatedFullText', 'Aggregated full'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'AbstractAndIndex', 'Abstract and index'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'EBook', 'E-book'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'MixedContent', 'Mixed content'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'EJournal', 'E-journal'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'OnlineReference', 'Online reference'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'Print', 'Print'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'StreamingMedia', 'Streaming media'),
+    ('ERM_PACKAGE_CONTENT_TYPE', 'Unknown', 'Unknown'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'journal', 'Journal'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'newsletter', 'Newsletter'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'report', 'Report'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'proceedings', 'Proceedings'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'website', 'Website'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'newspaper', 'Newspaper'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'unspecified', 'Unspecified'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'book', 'Book'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'ebook', 'E-book'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'bookseries', 'Bookseries'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'database', 'Database'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'thesisdissertation', 'Thesis/Dissertation'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'streamingaudio', 'Streaming audio'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'streamingvideo', 'Streaming video'),
+    ('ERM_TITLE_PUBLICATION_TYPE', 'audiobook', 'AudioBook');

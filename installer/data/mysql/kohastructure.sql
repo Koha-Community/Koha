@@ -2929,7 +2929,6 @@ DROP TABLE IF EXISTS `erm_eholdings_titles`;
 CREATE TABLE `erm_eholdings_titles` (
     `title_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
     `biblio_id` INT(11) DEFAULT NULL,
-    `vendor_id` INT(11) DEFAULT NULL,
     `publication_title` VARCHAR(255) DEFAULT NULL,
     `external_id` VARCHAR(255) DEFAULT NULL,
     `print_identifier` VARCHAR(255) DEFAULT NULL,
@@ -2946,7 +2945,7 @@ CREATE TABLE `erm_eholdings_titles` (
     `coverage_depth` VARCHAR(255) DEFAULT NULL,
     `notes` VARCHAR(255) DEFAULT NULL,
     `publisher_name` VARCHAR(255) DEFAULT NULL,
-    `publication_type` VARCHAR(255) DEFAULT NULL,
+    `publication_type` VARCHAR(80) DEFAULT NULL,
     `date_monograph_published_print` VARCHAR(255) DEFAULT NULL,
     `date_monograph_published_online` VARCHAR(255) DEFAULT NULL,
     `monograph_volume` VARCHAR(255) DEFAULT NULL,
@@ -2955,7 +2954,6 @@ CREATE TABLE `erm_eholdings_titles` (
     `parent_publication_title_id` VARCHAR(255) DEFAULT NULL,
     `preceeding_publication_title_id` VARCHAR(255) DEFAULT NULL,
     `access_type` VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT `erm_eholdings_titles_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `erm_eholdings_titles_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
     PRIMARY KEY(`title_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2969,11 +2967,13 @@ CREATE TABLE `erm_eholdings_resources` (
     `resource_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
     `title_id` INT(11) NOT NULL,
     `package_id` INT(11) NOT NULL,
+    `vendor_id` INT(11) DEFAULT NULL,
     `started_on` DATE,
     `ended_on` DATE,
     `proxy` VARCHAR(80) DEFAULT NULL,
     CONSTRAINT `erm_eholdings_resources_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_eholdings_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `erm_eholdings_resources_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `erm_eholdings_resources_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     PRIMARY KEY(`resource_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

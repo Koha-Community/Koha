@@ -40,6 +40,23 @@
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
+                    <label for="title_vendor_id">{{ $t("Vendor") }}:</label>
+                    <select id="title_vendor_id" v-model="resource.vendor_id">
+                        <option value=""></option>
+                        <option
+                            v-for="vendor in vendors"
+                            :key="vendor.vendor_id"
+                            :value="vendor.id"
+                            :selected="
+                                vendor.id == resource.vendor_id ? true : false
+                            "
+                        >
+                            {{ vendor.name }}
+                        </option>
+                    </select>
+                </li>
+
+                <li>
                     <label :for="`started_on_${counter}`"
                         >{{ $t("Start date") }}:
                     </label>
@@ -80,9 +97,16 @@
 
 <script>
 import flatPickr from 'vue-flatpickr-component'
+import { useVendorStore } from "../../stores/vendors"
+import { storeToRefs } from "pinia"
 import { fetchPackages } from "../../fetch"
 
 export default {
+    setup() {
+        const vendorStore = useVendorStore() // FIXME We only need that for 'manual'
+        const { vendors } = storeToRefs(vendorStore)
+        return { vendors }
+    },
     data() {
         return {
             packages: [],
@@ -104,6 +128,7 @@ export default {
         addPackage() {
             this.resources.push({
                 package_id: null,
+                vendor_id: null,
                 started_on: null,
                 ended_on: null,
                 proxy: '',

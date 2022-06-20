@@ -18,24 +18,28 @@
     produces:
       - application/json
     responses:
-      "200":
+      200:
         description: A list of ERM' users
         schema:
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron"
-      "403":
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      "500":
+      500:
         description: |
           Internal server error. Possible `error_code` attribute values:
 
           * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      "503":
+      503:
         description: Under maintenance
         schema:
           $ref: "../swagger.yaml#/definitions/error"

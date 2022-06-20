@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::ERM::EHoldings::Resources;
+use Koha::REST::V1::ERM::EHoldings::Resources::Manual;
+use Koha::REST::V1::ERM::EHoldings::Resources::EBSCO;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
@@ -33,17 +34,12 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input or return;
-
-    return try {
-        my $resources_set = Koha::ERM::EHoldings::Resources->new;
-        my $resources = $c->objects->search( $resources_set );
-        return $c->render( status => 200, openapi => $resources );
+    my $provider = C4::Context->preference('ERMProvider');
+    if ( $provider eq 'ebsco' ) {
+        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::list(@_);
+    } else {
+        return Koha::REST::V1::ERM::EHoldings::Resources::Manual::list(@_);
     }
-    catch {
-        $c->unhandled_exception($_);
-    };
-
 }
 
 =head3 get
@@ -53,181 +49,12 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Resou
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input or return;
-
-    return try {
-        my $resource_id = $c->validation->param('resource_id');
-        my $resource = $c->objects->find( Koha::ERM::EHoldings::Resources->search, $resource_id );
-
-        unless ($resource ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "eHolding title not found" }
-            );
-        }
-
-        return $c->render(
-            status  => 200,
-            openapi => $resource,
-        );
+    my $provider = C4::Context->preference('ERMProvider');
+    if ( $provider eq 'ebsco' ) {
+        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::get(@_);
+    } else {
+        return Koha::REST::V1::ERM::EHoldings::Resources::Manual::get(@_);
     }
-    catch {
-        $c->unhandled_exception($_);
-    };
-}
-
-=head3 add
-
-Controller function that handles adding a new Koha::ERM::EHoldings::Resource object
-
-=cut
-
-sub add {
-    my $c = shift->openapi->valid_input or return;
-
-    return try {
-        Koha::Database->new->schema->txn_do(
-            sub {
-
-                my $body = $c->validation->param('body');
-
-                my $resource = Koha::ERM::EHoldings::Resource->new_from_api($body)->store;
-
-                $c->res->headers->location($c->req->url->to_string . '/' . $resource->resource_id);
-                return $c->render(
-                    status  => 201,
-                    openapi => $resource->to_api
-                );
-            }
-        );
-    }
-    catch {
-
-        my $to_api_mapping = Koha::ERM::EHoldings::Resource->new->to_api_mapping;
-
-        if ( blessed $_ ) {
-            if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
-                return $c->render(
-                    status  => 409,
-                    openapi => { error => $_->error, conflict => $_->duplicate_id }
-                );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
-                );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
-                );
-            }
-        }
-
-        $c->unhandled_exception($_);
-    };
-}
-
-=head3 update
-
-Controller function that handles updating a Koha::ERM::EHoldings::Resource object
-
-=cut
-
-sub update {
-    my $c = shift->openapi->valid_input or return;
-
-    my $resource_id = $c->validation->param('resource_id');
-    my $resource = Koha::ERM::EHoldings::Resources->find( $resource_id );
-
-    unless ($resource) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "eHolding title not found" }
-        );
-    }
-
-    return try {
-        Koha::Database->new->schema->txn_do(
-            sub {
-
-                my $body = $c->validation->param('body');
-
-                $resource->set_from_api($body)->store;
-
-                $c->res->headers->location($c->req->url->to_string . '/' . $resource->resource_id);
-                return $c->render(
-                    status  => 200,
-                    openapi => $resource->to_api
-                );
-            }
-        );
-    }
-    catch {
-        my $to_api_mapping = Koha::ERM::EHoldings::Resource->new->to_api_mapping;
-
-        if ( blessed $_ ) {
-            if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
-                );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
-                );
-            }
-        }
-
-        $c->unhandled_exception($_);
-    };
-};
-
-=head3 delete
-
-=cut
-
-sub delete {
-    my $c = shift->openapi->valid_input or return;
-
-    my $resource = Koha::ERM::EHoldings::Resources->find( $c->validation->param('resource_id') );
-    unless ($resource) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "eHolding title not found" }
-        );
-    }
-
-    return try {
-        $resource->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
-    }
-    catch {
-        $c->unhandled_exception($_);
-    };
 }
 
 1;

@@ -224,8 +224,6 @@
 </template>
 
 <script>
-import AgreementPeriods from './AgreementPeriods.vue'
-import AgreementUserRoles from './AgreementUserRoles.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchAgreement } from "../../fetch"
@@ -282,10 +280,6 @@ export default {
             this.agreement = agreement
             this.initialized = true
         },
-    },
-    components: {
-        AgreementPeriods,
-        AgreementUserRoles
     },
     name: "AgreementsShow",
 }

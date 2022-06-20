@@ -21,9 +21,10 @@ use MARC::Record;
 
 use Koha::Database;
 
+use Koha::Acquisition::Booksellers;
 use Koha::Biblios;
-use Koha::ERM::EHoldings::Title;
-use Koha::ERM::EHoldings::Package;
+use Koha::ERM::EHoldings::Titles;
+use Koha::ERM::EHoldings::Packages;
 
 use base qw(Koha::Object);
 
@@ -91,6 +92,20 @@ sub title {
     my $title_rs = $self->_result->title;
     return Koha::ERM::EHoldings::Title->_new_from_dbic($title_rs);
 }
+
+=head3 vendor
+
+Return the vendor for this resource
+
+=cut
+
+sub vendor {
+    my ( $self ) = @_;
+    my $vendor_rs = $self->_result->vendor;
+    return unless $vendor_rs;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
+}
+
 
 =head2 Internal methods
 

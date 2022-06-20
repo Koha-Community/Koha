@@ -1,9 +1,9 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else id="packages_show">
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-else-if="erm_package" id="packages_show">
         <h2>
             {{ $t("Package .id", { id: erm_package.package_id }) }}
-            <span class="action_links">
+            <span v-if="erm_provider == 'manual'" class="action_links">
                 <router-link
                     :to="`/cgi-bin/koha/erm/eholdings/packages/edit/${erm_package.package_id}`"
                     :title="$t('Edit')"
@@ -26,11 +26,15 @@
                             {{ erm_package.name }}
                         </span>
                     </li>
-                    <li>
+                    <li v-if="erm_package.vendor">
                         <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="erm_package.vendor"
-                            ><a :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`">{{ erm_package.vendor.name }}</a>
+                        <span v-if="erm_provider == 'manual'">
+                            <a
+                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`"
+                                >{{ erm_package.vendor.name }}</a
+                            >
                         </span>
+                        <span v-else>{{ erm_package.vendor.name }}</span>
                     </li>
                     <li v-if="erm_package.external_id">
                         <label>{{ $t("External ID") }}:</label>
@@ -61,38 +65,23 @@
                             )
                         }}</span>
                     </li>
-                    <li>
+                    <li v-if="erm_package.created_on">
                         <label>{{ $t("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
 
-                    <li v-if="erm_package.resources.length">
-                        <label>{{ $t("Titles") }}</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(
-                                        r, counter
-                                    ) in erm_package.resources"
-                                    v-bind:key="counter"
-                                >
-                                    <td>
-                                        <router-link
-                                            :to="`/cgi-bin/koha/erm/eholdings/resources/${r.resource_id}`"
-                                            :title="$t('Show resource')"
-                                        >
-                                            {{ r.title.publication_title }}
-                                        </router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <li>
+                        <label
+                            >Titles ({{ erm_package.resources_count }})</label
+                        >
+                        <div v-if="erm_package.resources_count">
+                            <EHoldingsPackageTitlesList
+                                :package_id="erm_package.package_id.toString()"
+                            />
+                        </div>
                     </li>
+
+                    <li></li>
                 </ol>
             </fieldset>
             <fieldset class="action">
@@ -108,6 +97,7 @@
 </template>
 
 <script>
+import EHoldingsPackageTitlesList from "./EHoldingsPackageTitlesList.vue"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchPackage } from "../../fetch"
 
@@ -123,6 +113,7 @@ export default {
             get_lib_from_av,
         }
     },
+    inject: ['erm_provider'],
     data() {
         return {
             erm_package: {
@@ -133,6 +124,7 @@ export default {
                 package_type: '',
                 content_type: '',
                 created_on: null,
+                resources: null,
             },
             initialized: false,
         }
@@ -152,6 +144,9 @@ export default {
             this.initialized = true
         },
     },
+    components: {
+        EHoldingsPackageTitlesList,
+    },
     name: "EHoldingsPackagesShow",
 }
 </script>
@@ -159,5 +154,8 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+}
+fieldset.rows label {
+    width: 25rem;
 }
 </style>
