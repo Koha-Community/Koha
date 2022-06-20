@@ -436,12 +436,12 @@
                                             <table class="table table-condensed table-bordered" id="items-bundle-contents-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>[% t('Title') | html %]</th>
-                                                        <th>[% t('Author') | html %]</th>
-                                                        <th>[% t('Item type') | html %]</th>
-                                                        <th>[% t('Barcode') | html %]</th>
+                                                        <th>Title</th>
+                                                        <th>Author</th>
+                                                        <th>Item type</th>
+                                                        <th>Barcode</th>
                                                         [% IF !item.onloan %]
-                                                        <th>[% t('Status') | html %]</th>
+                                                        <th>Status</th>
                                                         [% END %]
                                                     </tr>
                                                 </thead>
@@ -478,9 +478,9 @@
                                                 <label for="verify-items-bundle-contents-barcodes">Barcodes <span id="verify-progress" class="pull-right" style="display: none"><span id="verified">0</span> of <span id="expected"></span> verified</span></label>
                                                 <textarea autocomplete="off" id="verify-items-bundle-contents-barcodes" name="verify-items-bundle-contents-barcodes" class="form-control"></textarea>
                                                 [% IF item.onloan %]
-                                                <div class="help-block">[% t('Scan all barcodes of items found in the items bundle. If any items are missing, they will be marked as lost') | html %]</div>
+                                                <div class="help-block">Scan all barcodes of items found in the items bundle. If any items are missing, they will be marked as lost</div>
                                                 [% ELSE %]
-                                                <div class="help-block">[% t('Optionally scan all barcodes of items found in the items bundle to perform an inventory check. If any items are missing, they will be marked as lost') | html %]</div>
+                                                <div class="help-block">Optionally scan all barcodes of items found in the items bundle to perform an inventory check. If any items are missing, they will be marked as lost</div>
                                                 [% END %]
                                             </div>
 
@@ -496,11 +496,11 @@
                                             <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                             [% END %]
                                             [% IF item.onloan %]
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> [% t('Confirm checkin and mark missing items as lost') | html %]</button>
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Confirm checkin and mark missing items as lost</button>
                                             [% ELSE %]
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> [% t('Confirm inventory check and mark items as lost') | html %]</button>
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Confirm inventory check and mark items as lost</button>
                                             [% END %]
-                                            <button type="button" data-dismiss="modal" class="btn btn-default"><i class="fa fa-close"></i> [% t('Cancel') | html %]</button>
+                                            <button type="button" data-dismiss="modal" class="btn btn-default"><i class="fa fa-close"></i> Cancel</button>
                                         </div>
                                     </form>
                                 </div>

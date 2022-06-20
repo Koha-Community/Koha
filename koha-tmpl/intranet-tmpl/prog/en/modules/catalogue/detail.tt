@@ -1616,8 +1616,8 @@ Note that permanent location is a code, and location may be an authval.
 
                 // Toolbar
                 var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
-                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> Add to bundle</a>');
-                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> Remove from bundle</a>');
+                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
+                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
 
                 // This is the table we'll convert into a DataTable
                 var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
@@ -1649,7 +1649,7 @@ Note that permanent location is a code, and location may be an authval.
                     "columns": [
                         {
                             "data": "biblio.title:biblio.medium",
-                            "title": "Title",
+                            "title": _("Title"),
                             "searchable": true,
                             "orderable": true,
                             "render": function(data, type, row, meta) {
@@ -1668,37 +1668,37 @@ Note that permanent location is a code, and location may be an authval.
                         },
                         {
                             "data": "biblio.author",
-                            "title": "Author",
+                            "title": _("Author"),
                             "searchable": true,
                             "orderable": true,
                         },
                         {
                             "data": "collection_code",
-                            "title": "Collection code",
+                            "title": _("Collection"),
                             "searchable": true,
                             "orderable": true,
                         },
                         {
                             "data": "item_type",
-                            "title": "Item Type",
+                            "title": _("Item type"),
                             "searchable": false,
                             "orderable": true,
                         },
                         {
                             "data": "callnumber",
-                            "title": "Callnumber",
+                            "title": _("Callnumber"),
                             "searchable": true,
                             "orderable": true,
                         },
                         {
                             "data": "external_id",
-                            "title": "Barcode",
+                            "title": _("Barcode"),
                             "searchable": true,
                             "orderable": true,
                         },
                         {
                             "data": "lost_status:last_seen_date:return_claim.patron",
-                            "title": "Status",
+                            "title": _("Status"),
                             "searchable": false,
                             "orderable": true,
                             "render": function(data, type, row, meta) {
@@ -1720,7 +1720,7 @@ Note that permanent location is a code, and location may be an authval.
                                 var result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
                                 return result;
                             },
-                            "title": "Actions",
+                            "title": _("Actions"),
                             "searchable": false,
                             "orderable": false,
                             "class": "noExport"
@@ -1776,7 +1776,7 @@ Note that permanent location is a code, and location may be an authval.
                   /* Report the results */
                   posting.done(function(data) {
                       var barcode = $('#external_id').val();
-                      $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">Success: Added '+barcode+'</div>');
+                      $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">'+_("Success: Added '%s'").format(barcode)+'</div>');
                       $('#external_id').val('').focus();
                       bundle_changed = 1;
                   });
@@ -1785,12 +1785,12 @@ Note that permanent location is a code, and location may be an authval.
                       if ( data.status === 409 ) {
                           var response = data.responseJSON;
                           if ( response.key === "PRIMARY" ) {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' aready attached").format(barcode)+'</div>');
                           } else {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                           }
                       } else {
-                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">Failure: Check the logs for details</div>');
+                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                       }
                       $('#external_id').val('').focus();
                   });
@@ -1843,7 +1843,7 @@ Note that permanent location is a code, and location may be an authval.
                         /* Report the results */
                         deleteReq.done(function(data) {
                             var barcode = $('#rm_external_id').val();
-                            $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-success">'+_("Success: Removed ")+barcode+'</div>');
+                            $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-success">'+_("Success: Removed '%s'").format(barcode)+'</div>');
                             $('#rm_external_id').val('').focus();
                             bundle_changed = 1;
                         });
@@ -1852,21 +1852,21 @@ Note that permanent location is a code, and location may be an authval.
                             if ( data.status === 409 ) {
                                 var response = data.responseJSON;
                                 if ( response.key === "PRIMARY" ) {
-                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">Warning: Item '+barcode+' already attached</div>');
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
                                 } else {
-                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">Failure: Item '+barcode+' belongs to another bundle</div>');
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                                 }
                             } else {
-                                $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">Failure: Check the logs for details</div>');
+                                $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                             }
                             $('#rm_external_id').val('').focus();
                         });
                     } else {
-                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Barcode matched more than one item ")+barcode+'</div>');
+                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Barcode matched more than one item '%s'").format(barcode)+'</div>');
                     }
                 });
                 itemReq.fail(function(data) {
-                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Item not found ")+barcode+'</div>');
+                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Item not found '%s'").format(barcode)+'</div>');
                     $('#rm_external_id').val('').focus();
 
                 });
