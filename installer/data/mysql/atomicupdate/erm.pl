@@ -215,6 +215,7 @@ return {
             $dbh->do(q{
                 CREATE TABLE `erm_eholdings_titles` (
                     `title_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `biblio_id` INT(11) DEFAULT NULL,
                     `vendor_id` INT(11) DEFAULT NULL,
                     `publication_title` VARCHAR(255) DEFAULT NULL,
                     `external_id` VARCHAR(255) DEFAULT NULL,
@@ -242,6 +243,7 @@ return {
                     `preceeding_publication_title_id` VARCHAR(255) DEFAULT NULL,
                     `access_type` VARCHAR(255) DEFAULT NULL,
                     CONSTRAINT `erm_eholdings_titles_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+                    CONSTRAINT `erm_eholdings_titles_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
                     PRIMARY KEY(`title_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });

@@ -17,8 +17,11 @@ package Koha::ERM::EHoldings::Resource;
 
 use Modern::Perl;
 
+use MARC::Record;
+
 use Koha::Database;
 
+use Koha::Biblios;
 use Koha::ERM::EHoldings::Title;
 use Koha::ERM::EHoldings::Package;
 
@@ -33,6 +36,37 @@ Koha::ERM::EHoldings::Resource - Koha EHolding resource Object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    # FIXME This is terrible and ugly, we need to:
+    # * Provide a mapping for each attribute of title
+    # * Deal with marcflavour
+    # * Create a txn
+    my $title = $self->title;
+    my $biblio = $title->biblio_id ? Koha::Biblios->find($title->biblio_id) : undef;
+    my $marc_record = $biblio ? $biblio->metadata->record : MARC::Record->new;
+    eval {$marc_record->field('245')->delete_subfield('a');};
+    $marc_record->add_fields(MARC::Field->new(245, '', '', a => $title->publication_title));
+
+    my $biblio_id;
+    if ( $biblio ) {
+        $biblio_id = $title->biblio_id;
+        C4::Biblio::ModBiblio($marc_record, $title->biblio_id, '');
+    } else {
+        ( $biblio_id ) = C4::Biblio::AddBiblio($marc_record, '');
+    }
+
+    $title->biblio_id($biblio_id)->store;
+
+    $self = $self->SUPER::store;
+    return $self;
+}
 
 =head3 package
 

@@ -480,6 +480,7 @@ export default {
                 apiUrl += '/' + title.title_id
             }
             delete title.title_id
+            delete title.biblio_id
 
             title.resources.forEach(r => {
                 r.started_on = r.started_on ? $date_to_rfc3339(r.started_on) : null

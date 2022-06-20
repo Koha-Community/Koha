@@ -46,8 +46,10 @@ sub resources {
             sub {
                 $self->resources->delete;
 
-                for my $resources (@$resources) {
-                    $self->_result->add_to_erm_eholdings_resources($resources);
+                # Cannot use the dbic RS, we need to trigger ->store overwrite
+                for my $resource (@$resources) {
+                    Koha::ERM::EHoldings::Resource->new(
+                        { %$resource, title_id => $self->title_id } )->store;
                 }
             }
         );

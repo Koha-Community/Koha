@@ -21,17 +21,21 @@
             <fieldset class="rows">
                 <ol>
                     <li v-if="title.title_id">
-                        <label
-                            >{{ $t("Title identifier") }}:</label
-                        >
+                        <label>{{ $t("Title identifier") }}:</label>
                         <span>
-                            {{ title.title_id}}
+                            {{ title.title_id }}
                         </span>
                     </li>
                     <li>
                         <label>{{ $t("Publication title") }}:</label>
                         <span>
                             {{ title.publication_title }}
+                            <a
+                                v-if="title.biblio_id"
+                                :href="`/cgi-bin/koha/catalogue/detail.pl?biblionumber=${title.biblio_id}`"
+                            >
+                                {{ $t("Local bibliographic record") }}
+                            </a>
                         </span>
                     </li>
                     <li v-if="title.external_id">
@@ -250,9 +254,7 @@
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="(
-                                        r, counter
-                                    ) in title.resources"
+                                    v-for="(r, counter) in title.resources"
                                     v-bind:key="counter"
                                 >
                                     <td>
@@ -340,7 +342,7 @@ export default {
     },
     methods: {
         async getTitle(title_id) {
-            const title= await fetchTitle(title_id)
+            const title = await fetchTitle(title_id)
             this.title = title
             this.initialized = true
         },
