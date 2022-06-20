@@ -57,10 +57,10 @@
     [% FOREACH error IN errorloop %]
         <div class="dialog alert">
             [% error.barcode | html %]
-            [% IF (error.ERR_BARCODE) %]: <span>barcode not found</span>[% END %]
-            [% IF (error.ERR_WTHDRAWN) %]: <span>item withdrawn</span>[% END %]
-            [% IF (error.ERR_ONLOAN_RET) %]: <span>item was on loan. It was returned before marked as seen</span>[% END %]
-            [% IF (error.ERR_ONLOAN_NOT_RET) %]: <span>item was on loan. couldn't be returned.</span>[% END %]
+            [% IF (error.ERR_BARCODE) %]: <span>Barcode not found.</span>[% END %]
+            [% IF (error.ERR_WTHDRAWN) %]: <span>Item withdrawn.</span>[% END %]
+            [% IF (error.ERR_ONLOAN_RET) %]: <span>Item was on loan. It was checked in before being marked as seen.</span>[% END %]
+            [% IF (error.ERR_ONLOAN_NOT_RET) %]: <span>Item was on loan and could not be checked in.</span>[% END %]
         </div>
     [% END %]
        [% UNLESS op %]
