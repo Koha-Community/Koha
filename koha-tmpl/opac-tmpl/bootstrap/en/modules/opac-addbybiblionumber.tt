@@ -79,10 +79,10 @@
                                             <label for="newvirtualshelf">List name:</label>
                                             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
                                             <label for="category">Category:</label>
-                                            <select name="category" id="category">
-                                                <option value="1">Private</option>
+                                            <select name="public" id="public">
+                                                <option value="0">Private</option>
                                                 [% IF (OpacAllowPublicListCreation) %]
-                                                    <option value="2">Public</option>
+                                                    <option value="1">Public</option>
                                                 [% END %]
                                             </select>
                                     </fieldset>
