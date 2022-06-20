@@ -31,8 +31,13 @@ Patrons:
          - "When deleting a patron who owns public or shared lists,"
          - pref: ListOwnershipUponPatronDeletion
            choices:
-            delete: "delete all of their public and shared lists."
-            transfer: "transfer ownership of their public and shared lists to the patron who deleted the owner."
+            delete: "delete these lists."
+            transfer: "change owner of these lists."
+         - All public or shared lists of this patron are either deleted or transferred to a new owner according to your choice; other private lists (not shared) are deleted.
+         - "<br/>When changing owner at patron deletion, use borrowernumber "
+         - pref: ListOwnerDesignated
+           class: integer
+         - as new list owner, or leave this field empty in order to change owner to the active staff member who deletes the patron.
      -
          - The late fine for all checkouts will only go up to
          - pref: MaxFine
