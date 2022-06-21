@@ -172,7 +172,7 @@ if ( $op eq 'delete_confirm' ) {
     exit;
 } elsif ($op eq 'email') {
     my $err = eval {
-        SendAlerts( 'orderacquisition', $query->param('basketno'), 'ACQORDER' );
+        SendAlerts( 'orderacquisition', scalar $query->param('basketno'), 'ACQORDER' );
     };
     if ( $@ ) {
         push @messages, { type => 'error', code => $@ };
