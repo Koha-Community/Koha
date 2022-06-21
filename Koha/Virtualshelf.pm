@@ -265,6 +265,72 @@ sub can_biblios_be_removed {
     # Same answer since bug 18228
 }
 
+=head3 cannot_be_transferred
+
+    $shelf->cannot_be_transferred({
+        by => $p1, to => $p2, interface => opac|intranet|undef,
+            # p1 and p2 are borrowernumbers
+    });
+
+    This routine has two main goals:
+    [1] Decide if patron may transfer a shared list to another
+        sharee (patron).
+    [2] Decide if staff member may transfer a public list.
+
+    If you pass interface, we'll check if it supports transfer too.
+    NOTE: The explicit passing is still more reliable than via context,
+    since we could switch interface after login in the same session.
+
+    Returns a true value (read: error_code) when not allowed.
+    The following error codes are possible:
+        unauthorized_transfer, missing_by_parameter, new_owner_not_found,
+        new_owner_has_no_share, missing_to_parameter.
+    Otherwise returns false (zero).
+
+=cut
+
+sub cannot_be_transferred {
+    my ( $self, $params ) = @_;
+    my $to = $params->{to};
+    my $by = $params->{by};
+    my $interface = $params->{interface};
+
+    # Check on interface: currently we don't support transfer shared on intranet, transfer public on OPAC
+    if( $interface ) {
+        return 'unauthorized_transfer'
+            if ( $self->public && $interface eq 'opac' ) or
+               ( $self->is_private && $interface eq 'intranet' );
+                   # is_private call is enough here, get_shares tested below
+    }
+
+    my $shares = $self->public ? undef : $self->get_shares->search({ borrowernumber => { '!=' => undef } });
+    return 'unauthorized_transfer' if $self->is_private && !$shares->count;
+
+    if( $by ) {
+        if( $self->public ) {
+            my $by_patron = Koha::Patrons->find($by);
+            return 'unauthorized_transfer'
+                if !$by_patron || !haspermission( $by_patron->userid, { lists => 'edit_public_lists' });
+        } else {
+            return 'unauthorized_transfer' if !$self->can_be_managed($by);
+        }
+    } else {
+        return 'missing_by_parameter';
+    }
+
+    if( $to ) {
+        if( !Koha::Patrons->find($to) ) {
+            return 'new_owner_not_found';
+        }
+        if( !$self->public && !$shares->search({ borrowernumber => $to })->count ) {
+            return 'new_owner_has_no_share';
+        }
+    } else {
+        return 'missing_to_parameter';
+    }
+    return 0; # serving as green light
+}
+
 =head2 Internal methods
 
 =head3 _type

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use DateTime::Duration;
 
 use C4::Context;
@@ -590,6 +590,49 @@ subtest 'Get shelves containing biblios' => sub {
 
     teardown();
 };
+
+subtest 'cannot_be_transferred' => sub {
+    plan tests => 12;
+
+    # Three patrons and a deleted one
+    my $staff = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
+    my $listowner = $builder->build_object({ class => 'Koha::Patrons' });
+    my $receiver = $builder->build_object({ class => 'Koha::Patrons' });
+    my $removed_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $removed_patron->delete;
+
+    # Create three lists
+    my $private_list = Koha::Virtualshelf->new({ shelfname => "A", owner => $listowner->id })->store;
+    my $public_list = Koha::Virtualshelf->new({ shelfname => "B", public => 1, owner => $listowner->id })->store;
+    my $shared_list = Koha::Virtualshelf->new({ shelfname => "C", owner => $listowner->id })->store;
+    $shared_list->share("key")->accept( "key", $receiver->id );
+
+    # Test on private list
+    is( $private_list->cannot_be_transferred, 'unauthorized_transfer', 'Private list can never be transferred' );
+
+    # Test on public list
+    is( $public_list->cannot_be_transferred, 'missing_by_parameter', 'Public list, no parameters' );
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 'unauthorized_transfer', 'Lacks permission' );
+    my $perms = $builder->build({ source => 'UserPermission', value  => {
+        borrowernumber => $staff->id, module_bit => 20, code => 'edit_public_lists',
+    }});
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 0, 'Minimum permission passes' );
+    $staff->flags(1)->store;
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id }), 0, 'Superlibrarian permission passes' );
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $receiver->id, interface => 'opac' }), 'unauthorized_transfer',
+        'Not supported on OPAC' );
+    is( $public_list->cannot_be_transferred({ by => $staff->id, to => $removed_patron->id }), 'new_owner_not_found', 'Removed patron cannot own' );
+
+    # Test on shared list
+    is( $shared_list->cannot_be_transferred({ by => $staff->id }), 'unauthorized_transfer', 'Shared list, transfer limited to owner' );
+    is( $shared_list->cannot_be_transferred({ by => $receiver->id }), 'unauthorized_transfer', 'Shared list, transfer still limited to owner' );
+    is( $shared_list->cannot_be_transferred({ by => $listowner->id, to => $receiver->id }), 0, 'sharee could become owner' );
+    is( $shared_list->cannot_be_transferred({ by => $listowner->id, to => $receiver->id, interface => 'intranet' }), 'unauthorized_transfer',
+        'Intranet not supported' );
+    is( $shared_list->cannot_be_transferred({ by => $listowner->id, to => $staff->id }), 'new_owner_has_no_share', 'staff has no share' );
+};
+
+$schema->storage->txn_rollback;
 
 sub teardown {
     $dbh->do(q|DELETE FROM virtualshelfshares|);
