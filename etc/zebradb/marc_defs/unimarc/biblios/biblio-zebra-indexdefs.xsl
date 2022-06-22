@@ -51,6 +51,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <z:index name="Local-number:n">
       <xslo:value-of select="."/>
     </z:index>
+    <z:index name="Local-number:s">
+      <xslo:value-of select="format-number(.,&quot;00000000000&quot;)"/>
+    </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='009']">
     <z:index name="Identifier-standard:w">
