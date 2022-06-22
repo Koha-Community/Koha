@@ -306,7 +306,12 @@
                 </li>
             [% END %]
 
-                <li><span class="label">Total checkouts:</span>[% IF ( ITEM_DAT.issues ) %][% ITEM_DAT.issues | html %][% ELSE %]0[% END %]  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itm=[% ITEM_DAT.itemnumber | uri %]">View item's checkout history</a>)</li>
+                <li><span class="label">Total checkouts:</span>
+                    [% IF ( ITEM_DAT.issues ) %]
+                        [% ITEM_DAT.issues | html %]
+                    [% ELSE %]
+                        0
+                    [% END %]  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itm=[% ITEM_DAT.itemnumber | uri %]">View item's checkout history</a>)</li>
 
                 <li><span class="label">Last seen:</span>[% IF ( ITEM_DAT.datelastseen ) %][% ITEM_DAT.datelastseen | $KohaDates %] [%END %]&nbsp;</li>
                 <li><span class="label">Last borrowed:</span>[% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]&nbsp;</li>

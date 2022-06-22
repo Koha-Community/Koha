@@ -517,7 +517,12 @@
                                                     <li>
                                                         <label for="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]">Message body:</label>
                                                         [% IF letter.message_transport_type == 'sms' %]
-                                                            <span class="sms_counter" id="sms_counter_[% lang | html %]">[% IF letter.content && letter.content.length > 0 %][% letter.content.length | html %][% ELSE %]0[% END %]/160 characters</span>
+                                                            <span class="sms_counter" id="sms_counter_[% lang | html %]">
+                                                                [% IF letter.content && letter.content.length > 0 %]
+                                                                    [% letter.content.length | html %]
+                                                                [% ELSE %]
+                                                                    0
+                                                                [% END %]/160 characters</span>
                                                         [% END %]
                                                         <table>
                                                             <tr>

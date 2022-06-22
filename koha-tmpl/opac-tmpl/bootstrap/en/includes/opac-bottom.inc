@@ -223,7 +223,7 @@
     <script>var readCookie;</script>
 [% END %]
 
-[% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") | $raw %][% END %][% ELSE %][% END %]
+[% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") | $raw %][% END %][% END %]
 [% IF ( GoogleJackets ) %]
     [% Asset.js("js/google-jackets.js") | $raw %]
     <script>
