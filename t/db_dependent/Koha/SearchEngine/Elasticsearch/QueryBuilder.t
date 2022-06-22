@@ -725,37 +725,37 @@ subtest 'build_query_compat() SearchLimitLibrary tests' => sub {
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'both');
     my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
-    is( $limit, "(homebranch: CPL OR holdingbranch: CPL)", "Branch limit expanded to home/holding branch");
-    is( $limit_desc, "(homebranch: CPL OR holdingbranch: CPL)", "Limit description correctly expanded");
-    is( $limit_cgi, "&limit=branch%3ACPL", "Limit cgi does not get expanded");
+    is( $limit, '(homebranch: "CPL" OR holdingbranch: "CPL")', "Branch limit expanded to home/holding branch");
+    is( $limit_desc, '(homebranch: "CPL" OR holdingbranch: "CPL")', "Limit description correctly expanded");
+    is( $limit_cgi, '&limit=branch%3ACPL', "Limit cgi does not get expanded");
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
-    is( $limit, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1] OR holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Multibranch limit expanded to home/holding branches");
-    is( $limit_desc, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1] OR holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Multibranch limit description correctly expanded");
+    is( $limit, "(homebranch: \"$branchcodes[0]\" OR homebranch: \"$branchcodes[1]\" OR holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "Multibranch limit expanded to home/holding branches");
+    is( $limit_desc, "(homebranch: \"$branchcodes[0]\" OR homebranch: \"$branchcodes[1]\" OR holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "Multibranch limit description correctly expanded");
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Multibranch limit cgi does not get expanded");
 
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'homebranch');
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
-    is( $limit, "(homebranch: CPL)", "branch limit expanded to home branch");
-    is( $limit_desc, "(homebranch: CPL)", "limit description correctly expanded");
+    is( $limit, "(homebranch: \"CPL\")", "branch limit expanded to home branch");
+    is( $limit_desc, "(homebranch: \"CPL\")", "limit description correctly expanded");
     is( $limit_cgi, "&limit=branch%3ACPL", "limit cgi does not get expanded");
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
-    is( $limit, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1])", "branch limit expanded to home branch");
-    is( $limit_desc, "(homebranch: $branchcodes[0] OR homebranch: $branchcodes[1])", "limit description correctly expanded");
+    is( $limit, "(homebranch: \"$branchcodes[0]\" OR homebranch: \"$branchcodes[1]\")", "branch limit expanded to home branch");
+    is( $limit_desc, "(homebranch: \"$branchcodes[0]\" OR homebranch: \"$branchcodes[1]\")", "limit description correctly expanded");
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
 
     t::lib::Mocks::mock_preference('SearchLimitLibrary', 'holdingbranch');
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "branch:CPL" ], undef, undef, undef, undef );
-    is( $limit, "(holdingbranch: CPL)", "branch limit expanded to holding branch");
-    is( $limit_desc, "(holdingbranch: CPL)", "Limit description correctly expanded");
+    is( $limit, "(holdingbranch: \"CPL\")", "branch limit expanded to holding branch");
+    is( $limit_desc, "(holdingbranch: \"CPL\")", "Limit description correctly expanded");
     is( $limit_cgi, "&limit=branch%3ACPL", "Limit cgi does not get expanded");
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc, undef ) =
         $query_builder->build_query_compat( undef, undef, undef, [ "multibranchlimit:$groupid" ], undef, undef, undef, undef );
-    is( $limit, "(holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "branch limit expanded to holding branch");
-    is( $limit_desc, "(holdingbranch: $branchcodes[0] OR holdingbranch: $branchcodes[1])", "Limit description correctly expanded");
+    is( $limit, "(holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "branch limit expanded to holding branch");
+    is( $limit_desc, "(holdingbranch: \"$branchcodes[0]\" OR holdingbranch: \"$branchcodes[1]\")", "Limit description correctly expanded");
     is( $limit_cgi, "&limit=multibranchlimit%3A$groupid", "Limit cgi does not get expanded");
 
 };
