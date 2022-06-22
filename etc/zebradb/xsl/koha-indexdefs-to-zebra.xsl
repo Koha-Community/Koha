@@ -225,6 +225,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <xsl:template name="handle-one-index-control-field">
         <xsl:variable name="offset"><xsl:value-of select="@offset"/></xsl:variable>
         <xsl:variable name="length"><xsl:value-of select="@length"/></xsl:variable>
+        <xsl:variable name="zeropad"><xsl:value-of select="@zeropad"/></xsl:variable>
         <xsl:variable name="indexes">
             <xsl:call-template name="get-target-indexes"/>
         </xsl:variable>
@@ -239,6 +240,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                             <xsl:text>, </xsl:text>
                             <xsl:value-of select="$length"/>
                             <xsl:text>)</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="@zeropad">
+                            <xsl:text>format-number(.,"00000000000")</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:text>.</xsl:text>
