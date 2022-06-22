@@ -203,7 +203,11 @@
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
-                                    <td>[% IF ( c == undef ) %]1[% ELSE %]0[% END %]</td>
+                                    <td>[% IF ( c == undef ) %]
+                                            1
+                                        [% ELSE %]
+                                            0
+                                        [% END %]</td>
                                     <td>
                                         [% IF c == undef %]
                                             <em>All</em>
@@ -211,7 +215,11 @@
                                             [% Categories.GetName(c) | html %]
                                         [% END %]
                                     </td>
-                                    <td>[% IF ( i == undef ) %]1[% ELSE %]0[% END %]</td>
+                                    <td>[% IF ( i == undef ) %]
+                                            1
+                                        [% ELSE %]
+                                            0
+                                        [% END %]</td>
                                     <td>
                                         [% IF i == undef %]
                                             <em>All</em>
