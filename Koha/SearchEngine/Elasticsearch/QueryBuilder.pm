@@ -700,6 +700,7 @@ sub _convert_sort_fields {
         relevance   => undef,       # default
         title       => 'title',
         pubdate     => 'date-of-publication',
+        biblionumber => 'local-number',
     );
     my %sort_order_convert =
       ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
