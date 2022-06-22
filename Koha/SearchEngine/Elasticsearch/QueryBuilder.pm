@@ -1080,16 +1080,17 @@ sub _fix_limit_special_cases {
             }
 
             if (@branchcodes) {
+                # We quote the branchcodes here to prevent issues when codes are reserved words in ES, e.g. OR, AND, NOT, etc.
                 if ( $branchfield eq "homebranch" ) {
-                    push @new_lim, sprintf "(%s)", join " OR ", map { 'homebranch: ' . $_ } @branchcodes;
+                    push @new_lim, sprintf "(%s)", join " OR ", map { 'homebranch: "' . $_ . '"' } @branchcodes;
                 }
                 elsif ( $branchfield eq "holdingbranch" ) {
-                    push @new_lim, sprintf "(%s)", join " OR ", map { 'holdingbranch: ' . $_ } @branchcodes;
+                    push @new_lim, sprintf "(%s)", join " OR ", map { 'holdingbranch: "' . $_ . '"' } @branchcodes;
                 }
                 else {
                     push @new_lim, sprintf "(%s OR %s)",
-                      join( " OR ", map { 'homebranch: ' . $_ } @branchcodes ),
-                      join( " OR ", map { 'holdingbranch: ' . $_ } @branchcodes );
+                      join( " OR ", map { 'homebranch: "' . $_ . '"' } @branchcodes ),
+                      join( " OR ", map { 'holdingbranch: "' . $_ . '"' } @branchcodes );
                 }
             }
         }
