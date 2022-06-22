@@ -60,6 +60,7 @@ my $referer  = $query->param('referer') || $op;
 my $public   = $query->param('public') ? 1 : 0;
 my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 
+# PART1: Perform a few actions
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
@@ -239,23 +240,22 @@ if ( $op eq 'add_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
     my $new_owner = $query->param('new_owner'); # is a borrowernumber
+    my $error_code = $shelf
+        ? $shelf->cannot_be_transferred({ by => $loggedinuser, to => $new_owner, interface => 'intranet' })
+        : 'does_not_exist';
 
-    if( $new_owner ) {
+    if( !$new_owner && $error_code eq 'missing_to_parameter' ) {
+        # show form
+    } elsif( $error_code ) {
+        push @messages, { type => 'error', code => $error_code };
         $op = 'list';
-        # First check: shelf found, permission, patron found?
-        if( !$shelf ) {
-            push @messages, { type => 'alert', code => 'does_not_exist' };
-        } elsif( !haspermission(C4::Context->userenv->{id}, { lists => 'edit_public_lists' }) ) {
-            push @messages, { type => 'alert', code => 'unauthorized_transfer' };
-        } elsif( !Koha::Patrons->find($new_owner) ) {
-            push @messages, { type => 'alert', code => 'new_owner_not_found' };
-            $op = 'transfer'; # find again..
-        } else { # success
-            $shelf->owner($new_owner)->store;
-        }
+    } else {
+        $shelf->owner($new_owner)->store;
+        $op = 'list';
     }
 }
 
+# PART2: After a possible action, further prepare form
 if ( $op eq 'view' ) {
     $shelfnumber ||= $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
@@ -375,6 +375,7 @@ if ( $op eq 'view' ) {
     }
 } elsif( $op eq 'list' ) {
     $allow_transfer = haspermission( C4::Context->userenv->{id}, { lists => 'edit_public_lists' } ) ? 1 : 0;
+        # this check only serves for button display
 }
 
 $template->param(

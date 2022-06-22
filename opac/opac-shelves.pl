@@ -262,13 +262,11 @@ if ( $op eq 'add_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
     my $new_owner = $query->param('new_owner'); # borrowernumber or undef
+    my $error_code = $shelf
+        ? $shelf->cannot_be_transferred({ by => $loggedinuser, to => $new_owner, interface => 'opac' })
+        : 'does_not_exist';
 
-    $op = 'list';
-    if( !$shelf ) {
-        push @messages, { type => 'error', code => 'does_not_exist' };
-    } elsif( $shelf->public or !$shelf->is_shared or !$shelf->can_be_managed($loggedinuser) ) {
-        push @messages, { type => 'error', code => 'unauthorized_transfer' };
-    } elsif( !$new_owner ) {
+    if( !$new_owner && $error_code eq 'missing_to_parameter' ) { # show transfer form
         my $patrons = [];
         my $shares = $shelf->get_shares->search({ borrowernumber => { '!=' => undef } });
         while( my $share = $shares->next ) {
@@ -281,17 +279,16 @@ if ( $op eq 'add_form' ) {
         } else {
             push @messages, { type => 'error', code => 'no_email_found' };
         }
-    } elsif( !Koha::Patrons->find($new_owner) ) {
-        push @messages, { type => 'error', code => 'new_owner_not_found' };
-    } elsif( !$shelf->get_shares->search({ borrowernumber => $new_owner })->count ) {
-        push @messages, { type => 'error', code => 'new_owner_has_no_share' };
-    } else {
-        # Remove from virtualshelfshares new_owner, add loggedinuser
+    } elsif( $error_code ) {
+        push @messages, { type => 'error', code => $error_code };
+        $op = 'list';
+    } else { # transfer; remove new_owner from virtualshelfshares, add loggedinuser
         $shelf->_result->result_source->schema->txn_do( sub {
             $shelf->get_shares->search({ borrowernumber => $new_owner })->delete;
             Koha::Virtualshelfshare->new({ shelfnumber => $shelfnumber, borrowernumber => $loggedinuser, sharedate => dt_from_string })->store;
             $shelf->owner($new_owner)->store;
         });
+        $op = 'list';
     }
 }
 
