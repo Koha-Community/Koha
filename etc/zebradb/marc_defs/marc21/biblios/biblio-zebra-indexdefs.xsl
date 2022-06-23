@@ -722,7 +722,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='655']">
     <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
+      <xslo:if test="contains('axvyz', @code)">
         <z:index name="Index-term-genre:w Index-term-genre:p Subject:w Subject:p">
           <xslo:value-of select="."/>
         </z:index>
