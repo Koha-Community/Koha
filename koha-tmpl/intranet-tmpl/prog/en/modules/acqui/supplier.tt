@@ -172,7 +172,12 @@
             <li><label for="website">Website: </label>
                 <input type="text" size="40" id="website" name="website" value="[% url | html %]" class="url" /></li>
             <li><label for="accountnumber">Account number: </label>
-                <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber | html %]" /></li></ol>
+                <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber | html %]" /></li>
+                <li>
+                    <label for="vendor_type">Vendor type: </label>
+                    [% PROCESS 'av-build-dropbox.inc' name="vendor_type", category="VENDOR_TYPE", default=vendor_type, empty=1, size = 20 %]
+                </li>
+            </ol>
         </fieldset>
         <fieldset class="rows">
             <legend>Contacts</legend>
@@ -316,6 +321,7 @@
         <div class="row">
             <div id="supplier-company-details" class="col-sm-6">
                 <h2>Vendor details</h2>
+                <p><span class="label">Type: </span>[% vendor_type | html %]</p>
                 <p><span class="label">Company name: </span>[% name | html %]</p>
                 <p><span class="label">Postal address: </span>[% postal | html %]</p>
                 <p><span class="label">Physical address: </span>[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</p>

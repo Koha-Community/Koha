@@ -1,6 +1,7 @@
 [% PROCESS 'i18n.inc' %]
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -86,6 +87,7 @@
                             [% END %]
                         </a>
                         <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]"></a>
+                        [% IF (supplier.vendor_type) %]([% AuthorisedValues.GetByCode( 'VENDOR_TYPE', supplier.vendor_type ) | html %])[% END %]
                     [% IF ( !supplier.active ) %]<span class="vendor_inactive">(inactive)</span>[% END %]
                 </h2>
                 <span class="basketcounts">

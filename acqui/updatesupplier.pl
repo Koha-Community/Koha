@@ -76,6 +76,7 @@ $data{'address3'}=$addresses[2];
 $data{'address4'}=$addresses[3];
 $data{'phone'}=$input->param('company_phone');
 $data{'accountnumber'}=$input->param('accountnumber');
+$data{'vendor_type'}=$input->param('vendor_type');
 $data{'fax'}=$input->param('company_fax');
 $data{'url'}=$input->param('website');
 # warn "".$data{'contnotes'};
