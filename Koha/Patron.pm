@@ -1710,8 +1710,9 @@ sub extended_attributes {
                     Koha::Patron::Attribute::Types->search(
                         {
                             mandatory => 1,
+                            category_code => [ undef, $self->categorycode ],
                             'borrower_attribute_types_branches.b_branchcode' =>
-                              undef
+                              undef,
                         },
                         { join => 'borrower_attribute_types_branches' }
                     )->get_column('code');
