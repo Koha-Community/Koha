@@ -370,7 +370,7 @@ subtest 'is_superlibrarian() tests' => sub {
 
 subtest 'extended_attributes' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -641,14 +641,14 @@ subtest 'extended_attributes' => sub {
         my $attribute_type_1 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { mandatory => 1, class => 'a' }
+                value => { mandatory => 1, class => 'a', category_code => undef }
             }
         );
 
         my $attribute_type_2 = $builder->build_object(
             {
                 class => 'Koha::Patron::Attribute::Types',
-                value => { mandatory => 0, class => 'a' }
+                value => { mandatory => 0, class => 'a', category_code => undef }
             }
         );
 
@@ -680,6 +680,41 @@ subtest 'extended_attributes' => sub {
         $schema->storage->txn_rollback;
 
     };
+
+    subtest 'limited category mandatory attributes tests' => sub {
+
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+        Koha::Patron::Attribute::Types->search->delete;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+        my $attribute_type_1 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 1, class => 'a', category_code => $patron->categorycode }
+            }
+        );
+
+        $patron->extended_attributes(
+            [
+                { code => $attribute_type_1->code, attribute => 'a' }
+            ]
+        );
+
+        is( $patron->extended_attributes->count, 1, 'Extended attributes succeeded' );
+
+        $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        # new patron, new category - they shouldn't be required to have any attributes
+
+
+        ok( $patron->extended_attributes([]), "We can set no attributes, mandatory attribute for other category not required");
+
+
+    };
+
+
 
 };
 
