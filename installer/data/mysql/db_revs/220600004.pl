@@ -7,17 +7,17 @@ return {
         my ($args) = @_;
         my ($dbh) = @$args{qw(dbh)};
 
-        unless ( column_exists( 'categories', 'canbeguarantee' ) ) {
+        unless ( column_exists( 'categories', 'can_be_guarantee' ) ) {
             $dbh->do(q{
                 ALTER TABLE categories
-                    ADD COLUMN `canbeguarantee` tinyint(1) NOT NULL default 0 COMMENT 'if patrons of this category can be guarantees'
+                    ADD COLUMN `can_be_guarantee` tinyint(1) NOT NULL default 0 COMMENT 'if patrons of this category can be guarantees'
                     AFTER `checkprevcheckout`
             });
         }
 
         $dbh->do(q{
             UPDATE categories
-            SET canbeguarantee = 1
+            SET can_be_guarantee = 1
             WHERE category_type = 'P' OR category_type = 'C'
         });
     },

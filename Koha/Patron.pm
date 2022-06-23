@@ -307,7 +307,7 @@ sub store {
 
                     # Clean up guarantors on category change if required
                     $self->guarantor_relationships->delete
-                      unless ( $self->category->canbeguarantee );
+                      unless ( $self->category->can_be_guarantee );
 
                 }
 

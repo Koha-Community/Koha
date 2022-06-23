@@ -220,9 +220,9 @@
                     <span class="required">Required</span>
                 </li>
                 <li>
-                    <label for="canbeguarantee">Can be guarantee</label>
-                    <select name="canbeguarantee" id="canbeguarantee">
-                        [% IF category.canbeguarantee %]
+                    <label for="can_be_guarantee">Can be guarantee</label>
+                    <select name="can_be_guarantee" id="can_be_guarantee">
+                        [% IF category.can_be_guarantee %]
                             <option value="1" selected>Yes</option>
                             <option value="0">No</option>
                         [% ELSE %]
@@ -490,7 +490,7 @@
                       </td>
                   </tr>
                 [% END %]
-                <tr><th scope="row">Can be guarantee</th><td>[% IF category.canbeguarantee %]Yes[% ELSE %]No[% END %]</td></tr>
+                <tr><th scope="row">Can be guarantee</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
                 <tr>
                     <th scope="row">Default privacy: </th>
                     <td>
@@ -669,7 +669,7 @@
                               [% END %]
                           </td>
                         [% END %]
-                        <td>[% IF category.canbeguarantee %] Yes [% ELSE %] no [% END %]</td>
+                        <td>[% IF category.can_be_guarantee %] Yes [% ELSE %] no [% END %]</td>
                         <td>
                             [% SWITCH category.default_privacy %]
                             [% CASE 'default' %]

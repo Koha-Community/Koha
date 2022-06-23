@@ -162,7 +162,7 @@ Default privacy setting for this patron category
 
 produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
 
-=head2 canbeguarantee
+=head2 can_be_guarantee
 
   data_type: 'tinyint'
   default_value: 0
@@ -259,7 +259,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 7,
   },
-  "canbeguarantee",
+  "can_be_guarantee",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "reset_password",
   { data_type => "tinyint", is_nullable => 1 },
@@ -363,12 +363,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 15:17:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5gVAZYJ4TW6H2DjdmBXkBQ
-
-__PACKAGE__->add_columns(
-    '+exclude_from_local_holds_priority' => { is_boolean => 1 },
-);
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 16:29:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SKWF2QpqQtXoujwurKFQhA
 
 sub koha_object_class {
     'Koha::Patron::Category';
@@ -378,8 +374,9 @@ sub koha_objects_class {
 }
 
 __PACKAGE__->add_columns(
-    '+canbeguarantee'          => { is_boolean => 1 },
-    '+require_strong_password' => { is_boolean => 1 }
+    '+can_be_guarantee'                  => { is_boolean => 1 },
+    '+exclude_from_local_holds_priority' => { is_boolean => 1 },
+    '+require_strong_password'           => { is_boolean => 1 },
 );
 
 1;

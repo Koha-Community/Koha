@@ -674,7 +674,7 @@ my $no_categories = 1;
 my $no_add;
 foreach my $category_type (qw(C A S P I X)) {
     my $categories_limits = { category_type => $category_type };
-    $categories_limits->{canbeguarantee} = 1 if ($guarantor_id);
+    $categories_limits->{can_be_guarantee} = 1 if ($guarantor_id);
     my $patron_categories = Koha::Patron::Categories->search_with_library_limits( $categories_limits, {order_by => ['categorycode']} );
     $no_categories = 0 if $patron_categories->count > 0;
 
@@ -822,7 +822,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 $template->param( borrower_data => \%data );
-$template->param( "show_guarantor" => $categorycode ? Koha::Patron::Categories->find($categorycode)->canbeguarantee : 1); # associate with step to know where you are
+$template->param( "show_guarantor" => $categorycode ? Koha::Patron::Categories->find($categorycode)->can_be_guarantee : 1); # associate with step to know where you are
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
 $template->param(  step  => $step   ) if $step;	# associate with step to know where u are
 

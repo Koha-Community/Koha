@@ -112,16 +112,16 @@ subtest "Update patron categories" => sub {
             category_type=>'C',
             upperagelimit=>17,
             dateofbirthrequired=>5,
-            canbeguarantee=>1,
+            can_be_guarantee=>1,
         } })->{categorycode};
     my $c_categorycode_2 = $builder->build({ source => 'Category', value => {
             category_type=>'C',
             upperagelimit=>17,
             dateofbirthrequired=>5,
-            canbeguarantee=>1,
+            can_be_guarantee=>1,
         } })->{categorycode};
-    my $a_categorycode = $builder->build({ source => 'Category', value => {category_type=>'A', canbeguarantee=>0} })->{categorycode};
-    my $a_categorycode_2 = $builder->build({ source => 'Category', value => {category_type=>'A', canbeguarantee=>1} })->{categorycode};
+    my $a_categorycode = $builder->build({ source => 'Category', value => {category_type=>'A', can_be_guarantee=>0} })->{categorycode};
+    my $a_categorycode_2 = $builder->build({ source => 'Category', value => {category_type=>'A', can_be_guarantee=>1} })->{categorycode};
     my $p_categorycode = $builder->build({ source => 'Category', value => {category_type=>'P'} })->{categorycode};
     my $i_categorycode = $builder->build({ source => 'Category', value => {category_type=>'I'} })->{categorycode};
     my $branchcode1 = $builder->build({ source => 'Branch' })->{branchcode};

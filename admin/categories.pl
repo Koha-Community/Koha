@@ -80,7 +80,7 @@ elsif ( $op eq 'add_validate' ) {
     my $min_password_length = $input->param('min_password_length');
     my $require_strong_password = $input->param('require_strong_password');
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
-    my $canbeguarantee = $input->param('canbeguarantee');
+    my $can_be_guarantee = $input->param('can_be_guarantee');
 
     $reset_password = undef if $reset_password eq -1;
     $change_password = undef if $change_password eq -1;
@@ -113,7 +113,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->hidelostitems($hidelostitems);
         $category->overduenoticerequired($overduenoticerequired);
         $category->category_type($category_type);
-        $category->canbeguarantee($canbeguarantee);
+        $category->can_be_guarantee($can_be_guarantee);
         $category->BlockExpiredPatronOpacActions($BlockExpiredPatronOpacActions);
         $category->checkprevcheckout($checkPrevCheckout);
         $category->default_privacy($default_privacy);
@@ -146,7 +146,7 @@ elsif ( $op eq 'add_validate' ) {
             hidelostitems => $hidelostitems,
             overduenoticerequired => $overduenoticerequired,
             category_type => $category_type,
-            canbeguarantee => $canbeguarantee,
+            can_be_guarantee => $can_be_guarantee,
             BlockExpiredPatronOpacActions => $BlockExpiredPatronOpacActions,
             checkprevcheckout => $checkPrevCheckout,
             default_privacy => $default_privacy,
