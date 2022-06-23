@@ -162,6 +162,12 @@ Default privacy setting for this patron category
 
 produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
 
+=head2 canbeguarantee
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 reset_password
 
   data_type: 'tinyint'
@@ -251,6 +257,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 7,
   },
+  "canbeguarantee",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "reset_password",
   { data_type => "tinyint", is_nullable => 1 },
   "change_password",
@@ -353,8 +361,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-06 19:32:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:swAluUTlYu57KPUYB+00Dw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 14:48:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:onduD3AbdO0w18tOKuTLzA
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
@@ -368,6 +376,7 @@ sub koha_objects_class {
 }
 
 __PACKAGE__->add_columns(
+    '+canbeguarantee'          => { is_boolean => 1 },
     '+require_strong_password' => { is_boolean => 1 }
 );
 
