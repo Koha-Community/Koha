@@ -2151,7 +2151,7 @@ subtest 'AddIssue | recalls' => sub {
     AddReturn( $item->barcode, $item->homebranch );
 };
 
-subtest 'AddIssue & illrequests.date_due' => sub {
+subtest 'AddIssue & illrequests.due_date' => sub {
     plan tests => 2;
 
     t::lib::Mocks::mock_preference( 'ILLModule', 1 );
@@ -2167,7 +2167,7 @@ subtest 'AddIssue & illrequests.date_due' => sub {
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
         branchcode => $library->{'branchcode'},
-        date_due => $custom_date_due,
+        due_date => $custom_date_due,
     })->store;
 
     my $issue = AddIssue( $patron->unblessed, $item->barcode );
@@ -2181,7 +2181,7 @@ subtest 'AddIssue & illrequests.date_due' => sub {
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
         branchcode => $library->{'branchcode'},
-        date_due => $custom_date_due,
+        due_date => $custom_date_due,
     })->store;
 
     $issue = AddIssue( $patron->unblessed, $item->barcode );

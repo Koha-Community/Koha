@@ -1552,11 +1552,11 @@ sub AddIssue {
                     biblio_id => $item_object->biblionumber,
                     borrowernumber => $borrower->{'borrowernumber'},
                     completed => undef,
-                    date_due => { '!=', undef },
+                    due_date => { '!=', undef },
                 })->next;
 
-                if ( $ill_request and length( $ill_request->date_due ) > 0 ) {
-                    my $ill_dt = dt_from_string( $ill_request->date_due );
+                if ( $ill_request and length( $ill_request->due_date ) > 0 ) {
+                    my $ill_dt = dt_from_string( $ill_request->due_date );
                     $ill_dt->set_hour(23);
                     $ill_dt->set_minute(59);
                     $datedue = $ill_dt;
