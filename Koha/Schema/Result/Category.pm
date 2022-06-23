@@ -168,6 +168,8 @@ produce a warning for this patron category if this item has previously been chec
   default_value: 0
   is_nullable: 0
 
+if patrons of this category can be guarantees
+
 =head2 reset_password
 
   data_type: 'tinyint'
@@ -361,8 +363,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 14:48:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:onduD3AbdO0w18tOKuTLzA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-23 15:17:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5gVAZYJ4TW6H2DjdmBXkBQ
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },

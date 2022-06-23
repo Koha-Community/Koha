@@ -10,7 +10,8 @@ return {
         unless ( column_exists( 'categories', 'canbeguarantee' ) ) {
             $dbh->do(q{
                 ALTER TABLE categories
-                    ADD COLUMN `canbeguarantee` tinyint(1) NOT NULL default '0' AFTER `checkprevcheckout`
+                    ADD COLUMN `canbeguarantee` tinyint(1) NOT NULL default 0 COMMENT 'if patrons of this category can be guarantees'
+                    AFTER `checkprevcheckout`
             });
         }
 
