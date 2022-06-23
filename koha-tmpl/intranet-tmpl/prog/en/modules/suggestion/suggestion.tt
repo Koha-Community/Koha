@@ -716,7 +716,11 @@
             [% END # /UNLESS notabs %]
 
                 [% FOREACH suggestion IN suggestions %]
+                    [% UNLESS ( notabs ) %]
+                    <div id="[% suggestion.suggestiontype | html %]" role="tabpanel" class="tab-pane">
+                    [% ELSE %]
                     <div id="[% suggestion.suggestiontype | html %]">
+                    [% END %]
                         <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
 
                             [% IF suggestion.suggestions.size %]
