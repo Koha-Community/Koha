@@ -1785,7 +1785,7 @@ Note that permanent location is a code, and location may be an authval.
                       if ( data.status === 409 ) {
                           var response = data.responseJSON;
                           if ( response.key === "PRIMARY" ) {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' aready attached").format(barcode)+'</div>');
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                           }
