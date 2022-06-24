@@ -291,7 +291,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 [% IF Koha.Preference('RecordedBooksClientSecret') && Koha.Preference('RecordedBooksLibraryID') %]
 <script>
-  var SPINNER_THROBBER = "[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif";
+  var SPINNER_THROBBER = "[% interface | html %]/[% theme | html %]/images/spinner-small.gif";
 </script>
 [% END %]
 

@@ -312,7 +312,7 @@ KOHA.RecordedBooks = new function() {
         $('<div id="action_'+isbn+'" class="actions-menu">')
             .append(actions)
             .appendTo(el);
-        $("#action_"+isbn).before('<span id="waiting_'+isbn+'" style="display:none;"><img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>');
+        $("#action_"+isbn).before('<span id="waiting_'+isbn+'" style="display:none;"><img class="throbber" src="' + SPINNER_THROBBER + '" /></span>');
     };
 
     this.search = function( q, page_size, page, callback ) {
