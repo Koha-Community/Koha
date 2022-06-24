@@ -74,7 +74,7 @@
         var results_per_page = [% OPACnumSearchResults || 20 | html %];
 
         function search( page ) {
-            $( '#recordedbooks-status' ).html( MSG_SEARCHING.format("RecordedBooks") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+            $( '#recordedbooks-status' ).html( MSG_SEARCHING.format("RecordedBooks") + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></span>' );
 
             KOHA.RecordedBooks.search( querystring, results_per_page, page, function( data ) {
                 if ( data.error ) {
