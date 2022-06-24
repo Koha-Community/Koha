@@ -96,20 +96,20 @@
                                 </td>
                                 <td>[% register.starting_float | $Price %]</td>
                                 <td>
-                                    [% SET rbankable = ( register.outstanding_accountlines.total( payment_type => 'CASH') * -1 ) %]
+                                    [% SET rbankable = ( register.outstanding_accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 ) %]
                                     [% SET bankable = bankable + rbankable %]
                                     [% rbankable | $Price %]
                                 </td>
                                 <td>
                                     [% SET rctotal = ( register.outstanding_accountlines.credits_total * -1 ) %]
-                                    [% SET rcctotal = ( register.outstanding_accountlines.credits_total( payment_type => 'CASH') * -1 ) %]
+                                    [% SET rcctotal = ( register.outstanding_accountlines.credits_total( payment_type => [ 'CASH', 'SIP00' ]) * -1 ) %]
                                     [% rctotal | $Price %] ([% rcctotal | $Price %])
                                     [% SET ctotal = ctotal + rctotal %]
                                     [% SET cctotal = cctotal + rcctotal %]
                                 </td>
                                 <td>
                                     [% SET rdtotal = ( register.outstanding_accountlines.debits_total * -1 ) %]
-                                    [% SET rcdtotal = ( register.outstanding_accountlines.debits_total( payment_type => 'CASH') * -1 ) %]
+                                    [% SET rcdtotal = ( register.outstanding_accountlines.debits_total( payment_type => [ 'CASH', 'SIP00' ]) * -1 ) %]
                                     [% rdtotal | $Price %] ([% rcdtotal | $Price %])
                                     [% SET dtotal = dtotal + rdtotal %]
                                     [% SET cdtotal = cdtotal + rcdtotal %]
