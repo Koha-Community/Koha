@@ -68,13 +68,13 @@ subtest 'csv_delimiter() tests' => sub {
     plan tests => 4;
 
     t::lib::Mocks::mock_preference( 'CSVDelimiter', undef );
-    is( C4::Context->csv_delimiter, ';', "csv_delimiter returns semicolon if system preference CSVDelimiter is undefined" );
+    is( C4::Context->csv_delimiter, ',', "csv_delimiter returns comma if system preference CSVDelimiter is undefined" );
 
     t::lib::Mocks::mock_preference( 'CSVDelimiter', '' );
-    is( C4::Context->csv_delimiter, ';', "csv_delimiter returns semicolon if system preference CSVDelimiter is empty string" );
+    is( C4::Context->csv_delimiter, ',', "csv_delimiter returns comma if system preference CSVDelimiter is empty string" );
 
-    t::lib::Mocks::mock_preference( 'CSVDelimiter', ',' );
-    is( C4::Context->csv_delimiter, ',', "csv_delimiter returns comma if system preference CSVDelimiter is comma" );
+    t::lib::Mocks::mock_preference( 'CSVDelimiter', ';' );
+    is( C4::Context->csv_delimiter, ';', "csv_delimiter returns semicolon if system preference CSVDelimiter is semicolon" );
 
     t::lib::Mocks::mock_preference( 'CSVDelimiter', 'tabulation' );
     is( C4::Context->csv_delimiter, "\t", "csv_delimiter returns '\t' if system preference CSVDelimiter is tabulation" );
