@@ -16,19 +16,19 @@ $('#cashupSummaryModal').on('show.bs.modal', function(e) {
             var tbody = summary_modal.find('tbody')
             tbody.empty();
             for (out of data.summary.payout_grouped) {
-                tbody.append('<tr><td>' + out.credit_type.description + '</td><td>- ' + out.total + '</td></tr>');
+                tbody.append('<tr><td>' + out.credit_type.description + '</td><td>- ' + out.total.format_price() + '</td></tr>');
             }
 
             for (income of data.summary.income_grouped) {
-                tbody.append('<tr><td>' + income.debit_type.description + '</td><td>' + income.total + '</td></tr>');
+                tbody.append('<tr><td>' + income.debit_type.description + '</td><td>' + income.total.format_price() + '</td></tr>');
             }
 
             var tfoot = summary_modal.find('tfoot');
             tfoot.empty();
-            tfoot.append('<tr><td>Total</td><td>' + data.summary.total + '</td></tr>');
+            tfoot.append('<tr><td>Total</td><td>' + data.summary.total.format_price() + '</td></tr>');
             for (type of data.summary.total_grouped) {
                 if (type.total !== 0) {
-                    tfoot.append('<tr><td>' + type.payment_type + '</td><td>' + type.total + '</td></tr>');
+                    tfoot.append('<tr><td>' + type.payment_type + '</td><td>' + type.total.format_price() + '</td></tr>');
                 }
             }
         }
