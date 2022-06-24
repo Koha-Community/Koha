@@ -113,7 +113,7 @@
         }
 
         function search( offset ) {
-            $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+            $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></span>' );
 
             KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, results_per_page, offset, function( data ) {
                 if ( data.error ) {
