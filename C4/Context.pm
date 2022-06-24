@@ -483,8 +483,8 @@ sub delete_preference {
 
     $delimiter = C4::Context->csv_delimiter;
 
-    Returns prefered CSV delimiter, using system preference 'CSVDelimiter'.
-    If this preference is missing or empty semicolon will be returned.
+    Returns preferred CSV delimiter, using system preference 'CSVDelimiter'.
+    If this preference is missing or empty, comma will be returned.
     This method is needed because of special behavior for tabulation.
 
     You can, optionally, pass a value parameter to this routine
@@ -494,7 +494,7 @@ sub delete_preference {
 
 sub csv_delimiter {
     my ( $self, $value ) = @_;
-    my $delimiter = $value || $self->preference('CSVDelimiter') || ';';
+    my $delimiter = $value || $self->preference('CSVDelimiter') || ',';
     $delimiter = "\t" if $delimiter eq 'tabulation';
     return $delimiter;
 }
