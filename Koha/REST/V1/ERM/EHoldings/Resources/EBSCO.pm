@@ -39,8 +39,9 @@ sub list {
     return try {
 
         my $args = $c->validation->output;
+        my $ebsco      = Koha::ERM::Providers::EBSCO->new;
 
-  # FIXME Do we need more validation here? Don't think so we have the API specs.
+        # FIXME Do we need more validation here? Don't think so we have the API specs.
         my ( $vendor_id, $package_id ) = split '-',
           $c->validation->param('package_id') || q{};
         my $title_id = $c->validation->param('title_id') || q{};
@@ -55,7 +56,7 @@ sub list {
         my $result;
         try {
             $result =
-              Koha::ERM::Providers::EBSCO->request( GET => $url . $params );
+              $ebsco->request( GET => $url . $params );
         }
         catch {
             if ( blessed $_ ) {
@@ -73,26 +74,17 @@ sub list {
 
         my $base_total = $result->{totalResults};
 
-        my $per_page = $args->{_per_page}
-          // C4::Context->preference('RESTdefaultPageSize') // 20;
-        if ( $per_page == -1 || $per_page > 100 ) { $per_page = 100; }
-        my $page = $args->{_page} || 1;
+        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
 
         my ( $search, $content_type, $selection_type );
-        my $query_params = $c->req->params->to_hash;
-        my $additional_params;
-        if ( $query_params->{q} ) {
-            my $q = decode_json $query_params->{q};
-            while ( my ( $attr, $value ) = each %$q ) {
-                $additional_params->{$attr} = $value;
-            }
-        }
+        my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
         my $searchfield = 'titlename';
 
         $params =
           sprintf '?orderby=titlename&offset=%s&count=%s&searchfield=%s',
           $page, $per_page, $searchfield;
-        $result = Koha::ERM::Providers::EBSCO->request(
+
+        $result = $ebsco->request(
             GET => $url . $params,
             $additional_params
         );
@@ -101,30 +93,12 @@ sub list {
         for my $t ( @{ $result->{titles} } ) {
             my $r =
               $t->{customerResourcesList}->[0];   # FIXME What about the others?
-            my $resource = {
-                resource_id => $r->{vendorId} . '-'
-                  . $r->{packageId} . '-'
-                  . $r->{titleId},
-                package_id  => $r->{vendorId} . '-' . $r->{packageId},
-                title_id    => $r->{titleId},
-                is_selected => $r->{isSelected},
-                started_on  => $r->{managedCoverageList}->[0]->{beginCoverage},
-                ended_on    => $r->{managedCoverageList}->[0]->{endCoverage},
-            };
-            my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-            foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                if ( $embed_req eq 'title.publication_title' ) {
-                    $resource->{title} = {
-                        publication_title => $t->{titleName},
-                        publisher_name    => $t->{publisherName},
-                        publication_type  => $t->{pubType},
-                    };
-                }
-                elsif ( $embed_req eq 'package.name' ) {
-                    $resource->{package} = { name => $t->{packageName}, };
-                }
 
-            }
+            my $resource = $ebsco->build_resource($r);
+
+            $resource = $ebsco->embed( $resource, $t,
+                $c->req->headers->header('x-koha-embed') );
+
             push @resources, $resource;
         }
         my $total = $result->{totalResults};
@@ -153,10 +127,9 @@ sub get {
     return try {
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
           $c->validation->param('resource_id');
-        my $t;
-        try {
-            $t =
-              Koha::ERM::Providers::EBSCO->request( GET => '/vendors/'
+        my $ebsco      = Koha::ERM::Providers::EBSCO->new;
+        my $t = try {
+              return $ebsco->request( GET => '/vendors/'
                   . $vendor_id
                   . '/packages/'
                   . $package_id
@@ -186,55 +159,9 @@ sub get {
         }
 
         my $r = $t->{customerResourcesList}->[0]; # FIXME What about the others?
-        my $resource = {
-            resource_id => $r->{vendorId} . '-'
-              . $r->{packageId} . '-'
-              . $r->{titleId},
-            package_id => $r->{vendorId} . '-' . $r->{packageId},
-            title_id   => $r->{titleId},
-            started_on => $r->{managedCoverageList}->[0]->{beginCoverage},
-            ended_on   => $r->{managedCoverageList}->[0]->{endCoverage},
-        };
+        my $resource = $ebsco->build_resource($r);
 
-        my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-        foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-            if ( $embed_req eq 'title' ) {
-                $resource->{title} = {
-                    publication_title => $t->{titleName},
-                    publisher_name    => $t->{publisherName},
-                    publication_type  => $t->{pubType},
-                };
-                for my $identifier ( @{ $t->{identifiersList} } ) {
-
-                    # FIXME $identifier->{type} : 0 for ISSN and 1 for ISBN
-                    if ( $identifier->{subtype} == 1 ) {
-                        $resource->{title}->{print_identifier} =
-                          $identifier->{id};
-                    }
-                    elsif ( $identifier->{subtype} == 1 ) {
-                        $resource->{title}->{online_identifier} =
-                          $identifier->{id};
-                    }
-                }
-            }
-            elsif ( $embed_req eq 'package' ) {
-                $resource->{package} = {
-
-                    #content_type => $e->{contentType}, FIXME We don't have that
-                    name         => $r->{packageName},
-                    package_id   => $r->{vendorId} . '-' . $r->{packageId},
-                    package_type => $r->{packageType},
-                    vendor_id    => $r->{vendorId},
-                };
-            }
-            elsif ( $embed_req eq 'vendor' ) {
-                $resource->{vendor} = {
-                    name         => $r->{vendorName},
-                    id           => $r->{vendorId},
-                    package_type => $r->{packageType},
-                };
-            }
-        }
+        $resource = $ebsco->embed( $resource, {%$t, %$r}, $c->req->headers->header('x-koha-embed') );
 
         return $c->render(
             status  => 200,

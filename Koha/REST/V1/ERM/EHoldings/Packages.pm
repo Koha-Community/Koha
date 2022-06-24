@@ -96,7 +96,7 @@ sub delete {
     if ( $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Packages::Manual::update(@_);
+        return Koha::REST::V1::ERM::EHoldings::Packages::Manual::delete(@_);
     }
 }
 

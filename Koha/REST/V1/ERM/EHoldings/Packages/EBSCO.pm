@@ -30,56 +30,30 @@ sub list {
 
     return try {
 
-        my $args   = $c->validation->output;
-        my $params = '?orderby=packagename&offset=1&count=1';
-        my $result =
-          Koha::ERM::Providers::EBSCO->request( GET => '/packages' . $params );
+        my $args       = $c->validation->output;
+        my $params     = '?orderby=packagename&offset=1&count=1';
+        my $ebsco      = Koha::ERM::Providers::EBSCO->new;
+        my $result     = $ebsco->request( GET => '/packages' . $params );
         my $base_total = $result->{totalResults};
 
-        my $per_page = $args->{_per_page}
-          // C4::Context->preference('RESTdefaultPageSize') // 20;
-        if ( $per_page == -1 || $per_page > 100 ) { $per_page = 100; }
-        my $page = $args->{_page} || 1;
-
-        my ( $search, $content_type, $selection_type );
-        my $query_params = $c->req->params->to_hash;
-        my $additional_params;
-        if ( $query_params->{q} ) {
-            my $q = decode_json $query_params->{q};
-            while ( my ( $attr, $value ) = each %$q ) {
-                $additional_params->{$attr} = $value;
-            }
-        }
+        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
+        my $additional_params =
+          $ebsco->build_additional_params( $c->req->params->to_hash );
 
         my $orderby = $additional_params->{name} ? 'relevance' : 'packagename';
-        $params = sprintf '?orderby=%s&offset=%s&count=%s', $orderby, $page,
-          $per_page;
-        $result = Koha::ERM::Providers::EBSCO->request(
+        $params = sprintf '?orderby=%s&offset=%s&count=%s', $orderby, $page, $per_page;
+
+        $result = $ebsco->request(
             GET => '/packages' . $params,
             $additional_params
         );
 
         my @packages;
         for my $p ( @{ $result->{packagesList} } ) {
-            my $package = {
-                content_type => $p->{contentType},
-                created_on   => undef,
-                is_selected  => $p->{isSelected},
-                name         => $p->{packageName},
-                package_id   => $p->{vendorId} . '-' . $p->{packageId},
-                package_type => $p->{packageType},
-                vendor_id    => $p->{vendorId},
-            };
-            my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-            foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                if ( $embed_req eq 'vendor.name' ) {
-                    $package->{vendor} = { name => $p->{vendorName}, };
-                }
-                elsif ( $embed_req eq 'resources+count' ) {
-                    $package->{resources_count} = $p->{titleCount};
-                }
-            }
-            push @packages, $package;
+            my $package = $ebsco->build_package($p);
+            $package =
+              $ebsco->embed( $package, $p, $c->req->headers->header('x-koha-embed') );
+              push @packages, $package;
         }
         my $total = $result->{totalResults};
         $total = 10000 if $total > 10000;
@@ -104,7 +78,8 @@ sub get {
     return try {
         my ( $vendor_id, $package_id ) = split '-',
           $c->validation->param('package_id');
-        my $p = Koha::ERM::Providers::EBSCO->request(
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
+        my $p     = $ebsco->request(
             GET => '/vendors/' . $vendor_id . '/packages/' . $package_id );
         unless ($p) {
             return $c->render(
@@ -113,31 +88,16 @@ sub get {
             );
         }
 
-        my $package = {
-            content_type => $p->{contentType},
-            name         => $p->{packageName},
-            package_id   => $p->{vendorId} . '-' . $p->{packageId},
-            package_type => $p->{packageType},
-            vendor_id    => $p->{vendorId},
-        };
+        my $package = $ebsco->build_package($p);
 
-        my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-        foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-            if ( $embed_req eq 'vendor' ) {
-                $package->{vendor} = {
-                    id   => $p->{vendorId},
-                    name => $p->{vendorName},
-                };
-            }
-            elsif ( $embed_req eq 'resources+count' ) {
-                $package->{resources_count} = $p->{titleCount};
-            }
-        }
+        $package =
+          $ebsco->embed( $package, $p,
+            $c->req->headers->header('x-koha-embed') );
 
-        return $c->render(
+          return $c->render(
             status  => 200,
             openapi => $package
-        );
+          );
     }
     catch {
         $c->unhandled_exception($_);

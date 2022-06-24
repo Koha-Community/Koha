@@ -7,7 +7,7 @@ function get_package() {
         package_id: 1,
         name: "package 1",
         package_type: "complete",
-        content_type: "print",
+        content_type: "Print",
         package_agreements: [],
     };
 }

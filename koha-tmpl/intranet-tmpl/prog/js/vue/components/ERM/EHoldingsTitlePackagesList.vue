@@ -12,12 +12,16 @@
                         <input
                             type="text"
                             id="package_name_filter"
+                            v-model="this.filters.package_name"
                             @keyup.enter="filter_table"
                         />
                     </li>
                     <li>
                         <label>{{ $t("Selection status") }}:</label>
-                        <select id="selection_type_filter">
+                        <select
+                            id="selection_type_filter"
+                            v-model="this.filters.selection_type"
+                        >
                             <option value="0">{{ $t("All") }}</option>
                             <option value="1">{{ $t("Selected") }}</option>
                             <option value="2">{{ $t("Not selected") }}</option>
@@ -47,6 +51,10 @@ export default {
     },
     data() {
         return {
+            filters: {
+                package_name: "",
+                selection_type: 0,
+            },
             display_filters: false,
         }
     },
@@ -61,75 +69,73 @@ export default {
         filter_table: function () {
             $("#package_list").DataTable().draw()
         },
+        build_datatable: function () {
+            let show_resource = this.show_resource
+            let resources = this.resources
+            let filters = this.filters
+
+            $('#package_list').dataTable($.extend(true, {}, dataTablesDefaults, {
+                data: resources,
+                "embed": ['package.name'],
+                ...(erm_provider == 'manual' ? { order: [[0, "asc"]] } : {}),
+                ...(erm_provider != 'manual' ? { ordering: false } : {}),
+                ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
+                ...(erm_provider != 'manual' ? { aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
+                autoWidth: false,
+                "columns": [
+                    {
+                        "title": __("Name"),
+                        "data": "package.name",
+                        "searchable": (erm_provider == 'manual'),
+                        "orderable": (erm_provider == 'manul'),
+                        "render": function (data, type, row, meta) {
+                            // Rendering done in drawCallback
+                            return ""
+                        },
+                        width: '100%',
+                    },
+                ],
+                drawCallback: function (settings) {
+
+                    var api = new $.fn.dataTable.Api(settings)
+
+                    $.each($(this).find("tbody tr td:first-child"), function (index, e) {
+                        let row = api.row(index).data()
+                        if (!row) return // Happen if the table is empty
+                        let n = createVNode("a", {
+                            role: "button",
+                            href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
+                            onClick: (e) => {
+                                e.preventDefault()
+                                show_resource(row.resource_id)
+                            }
+                        },
+                            `${row.package.name}`
+                        )
+                        if (row.is_selected) {
+                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                        }
+                        render(n, e)
+                    })
+                },
+                ...(erm_provider != 'manual' ? {
+                    initComplete: function () {
+                        $.fn.dataTable.ext.search.push(
+                            function (settings, data, dataIndex, row) {
+                                console.log(filters.selection_type)
+                                return row.package.name.match(new RegExp(filters.package_name, "i"))
+                                    && (filters.selection_type == 0
+                                        || filters.selection_type == 1 && row.is_selected
+                                        || filters.selection_type == 2 && !row.is_selected)
+                            }
+                        )
+                    }
+                } : {}),
+            }))
+        },
     },
     mounted() {
-        let show_resource = this.show_resource
-        let resources = this.resources
-
-        let additional_filters = {}
-        if (erm_provider != 'manual') {
-            additional_filters = {
-                name: function () {
-                    let package_name_search = $("#package_name_filter").val()
-                    if (!package_name_search) return ""
-                    return package_name_search
-                },
-                selection_type: function () {
-                    let selection_type_search = $("#selection_type_filter").val()
-                    if (!selection_type_search) return ""
-                    return selection_type_search
-                },
-            }
-        }
-
-        $('#package_list').dataTable($.extend(true, {}, dataTablesDefaults, {
-            data: resources,
-            ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
-            ...(erm_provider != 'manual' ? { lengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
-            "embed": ['package.name'],
-            "columnDefs": [{ "width": "20%", "targets": 0 }
-            ],
-            autoWidth: false,
-            "columns": [
-                {
-                    "title": __("Name"),
-                    "data": "package_name",
-                    "searchable": true,
-                    "orderable": true,
-                    "render": function (data, type, row, meta) {
-                        // Rendering done in drawCallback
-                        return ""
-                    },
-                    width: '100%',
-                },
-            ],
-            drawCallback: function (settings) {
-
-                var api = new $.fn.dataTable.Api(settings)
-
-                $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                    let row = api.row(index).data()
-                    if (!row) return // Happen if the table is empty
-                    let n = createVNode("a", {
-                        role: "button",
-                        href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
-                        onClick: (e) => {
-                            e.preventDefault()
-                            show_resource(row.resource_id)
-                        }
-                    },
-                        `${row.package.name}`
-                    )
-                    if (row.is_selected) {
-                        n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
-                    }
-                    render(n, e)
-                })
-            },
-        }))
-
-        $('#package_list_result').css('display', 'block')
-        $("#package_list").DataTable().columns.adjust().draw()
+        this.build_datatable()
     },
     beforeUnmount() {
         $('#package_list')
@@ -145,7 +151,7 @@ export default {
 
 <style scoped>
 #package_list_result {
-    width: 50%;
+    width: 60%;
     padding-left: 26rem;
 }
 #package_list {

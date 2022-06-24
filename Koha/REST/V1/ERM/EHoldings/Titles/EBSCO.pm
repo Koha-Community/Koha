@@ -43,24 +43,11 @@ sub list {
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
 
         # We cannot get base_total as a search kw is required by the API
-        #my $params = '?orderby=relevance&offset=1&count=1&searchfield=titlename&search=a';
-        #my $result = $ebsco->request( GET => '/titles' . $params );
-        #my $base_total = $result->{totalResults};
 
-        my $per_page = $args->{_per_page}
-          // C4::Context->preference('RESTdefaultPageSize') // 20;
-        if ( $per_page == -1 || $per_page > 100 ) { $per_page = 100; }
-        my $page = $args->{_page} || 1;
+        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
 
         my ( $search, $content_type, $selection_type );
-        my $query_params = $c->req->params->to_hash;
-        my $additional_params;
-        if ( $query_params->{q} ) {
-            my $q = decode_json $query_params->{q};
-            while ( my ( $attr, $value ) = each %$q ) {
-                $additional_params->{$attr} = $value;
-            }
-        }
+        my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
 
         unless ( defined $additional_params->{publication_title} ) {
 
@@ -85,16 +72,11 @@ sub list {
         my $result =
           $ebsco->request( GET => '/titles' . $params, $additional_params );
 
+        my $embed_header = $c->req->headers->header('x-koha-embed');
         my @titles;
         for my $t ( @{ $result->{titles} } ) {
             my $title = $ebsco->build_title($t);
-
-            my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-            foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                if ( $embed_req eq 'vendor.name' ) {
-                    $title->{vendor} = $ebsco->build_vendor($t);
-                }
-            }
+            $title = $ebsco->embed( $title, $t, $embed_header );
             push @titles, $title;
         }
         my $total = $result->{totalResults};
@@ -132,20 +114,9 @@ sub get {
             );
         }
 
-        my $title        = $ebsco->build_title($t);
-        my $embed_header = $c->req->headers->header('x-koha-embed') || q{};
-        for my $r ( @{ $t->{customerResourcesList} } ) {
-            my $resource = {};
-            foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
-                if ( $embed_req eq 'resources' ) {
-                    $resource = $ebsco->build_resource($r);
-                }
-                elsif ( $embed_req eq 'resources.package' ) {
-                    $resource->{package} = $ebsco->build_package($r);
-                }
-            }
-            push @{ $title->{resources} }, $resource;
-        }
+        my $title = $ebsco->build_title($t);
+        $title =
+          $ebsco->embed( $title, $t, $c->req->headers->header('x-koha-embed') );
 
         return $c->render(
             status  => 200,

@@ -52,7 +52,7 @@ sub build_title {
         my @contributors = @{ $result->{contributorsList} };
         my $first_author = first { $_->{type} eq 'author' || $_->{type} eq 'Author' } @contributors;
         if ( $first_author ) {
-            $title->{first_author} = $first_author->{contributor}
+            $title->{first_author} = $first_author->{contributor};
         }
     }
     for my $identifier ( @{ $result->{identifiersList} } ) {
@@ -71,8 +71,9 @@ sub build_title {
 sub build_vendor {
     my ( $self, $result ) = @_;
     my $vendor = {
-        vendor_id => $result->{vendorId},
-        name      => $result->{vendorName},
+        vendor_id    => $result->{vendorId},
+        name         => $result->{vendorName},
+        package_type => $result->{packageType},
     };
     return $vendor;
 }
@@ -80,8 +81,13 @@ sub build_vendor {
 sub build_package {
     my ( $self, $result ) = @_;
     my $package = {
-        package_id => $result->{packageId},
-        name       => $result->{packageName},
+        package_id   => $result->{vendorId} . '-' . $result->{packageId},
+        name         => $result->{packageName},
+        content_type => $result->{contentType}, # This does not exist in /vendors/1/packages/2/titles/3
+        created_on   => undef,
+        is_selected  => $result->{isSelected},
+        package_type => $result->{packageType},
+        vendor_id    => $result->{vendorId},
     };
     return $package;
 }
@@ -89,11 +95,90 @@ sub build_package {
 sub build_resource {
     my ( $self, $result ) = @_;
     my $resource = {
-        resource_id  => $result->{vendorId} . '-' . $result->{packageId} . '-'. $result->{titleId},
-        is_selected  => $result->{isSelected},
-    }
+        resource_id => $result->{vendorId} . '-'
+          . $result->{packageId} . '-'
+          . $result->{titleId},
+        package_id  => $result->{vendorId} . '-' . $result->{packageId},
+        title_id    => $result->{titleId},
+        is_selected => $result->{isSelected},
+        started_on  => $result->{managedCoverageList}->[0]->{beginCoverage},
+        ended_on    => $result->{managedCoverageList}->[0]->{endCoverage},
+    };
+    return $resource;
 }
 
+sub build_additional_params {
+    my ( $self, $query_params ) = @_;
+
+    my $additional_params;
+    if ( $query_params->{q} ) {
+        my $q = decode_json $query_params->{q};
+        while ( my ( $attr, $value ) = each %$q ) {
+            $additional_params->{$attr} = $value;
+        }
+    }
+
+    return $additional_params;
+}
+
+sub embed {
+    my ( $self, $object, $info, $embed_header ) = @_;
+    $embed_header ||= q{};
+
+    my @embed_resources;
+    foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
+        if ( $embed_req eq 'vendor.name' ) {
+            $object->{vendor} = { name => $info->{vendorName}, };
+        }
+        elsif ( $embed_req eq 'vendor' ) {
+            $object->{vendor} = $self->build_vendor($info);
+        }
+        elsif ( $embed_req eq 'title' ) {
+            $object->{title} = $self->build_title($info);
+        }
+        elsif ( $embed_req eq 'resources+count' ) {
+            $object->{resources_count} = $info->{titleCount};
+        }
+        elsif ( $embed_req eq 'package' ) {
+            $object->{package} = $self->build_package($info);
+        }
+        elsif ( $embed_req eq 'package.name' ) {
+            $object->{package} = { name => $info->{packageName}, };
+        }
+        if ( $embed_req eq 'resources' || $embed_req eq 'resources.package' ) {
+            push @embed_resources, $embed_req;
+        }
+    }
+
+    if (@embed_resources) {
+        for my $r ( @{ $info->{customerResourcesList} } ) {
+            my $resource = {};
+            for my $embed_req ( @embed_resources ) {
+                if ( $embed_req eq 'resources' ) {
+                    $resource = $self->build_resource($r);
+                }
+                elsif ( $embed_req eq 'resources.package' ) {
+                    unless ( %$resource ) {
+                        $resource = $self->build_resource($r);
+                    }
+                    $resource->{package} = $self->build_package($r);
+                }
+            }
+            push @{$object->{resources}}, $resource;
+        }
+    }
+    return $object;
+}
+
+sub build_query_pagination {
+    my ( $self, $params ) = @_;
+    my $per_page = $params->{_per_page}
+      // C4::Context->preference('RESTdefaultPageSize') // 20;
+    if ( $per_page == -1 || $per_page > 100 ) { $per_page = 100; }
+    my $page = $params->{_page} || 1;
+
+    return ( $per_page, $page );
+}
 
 sub build_query {
     my ( $self, $url, $params ) = @_;

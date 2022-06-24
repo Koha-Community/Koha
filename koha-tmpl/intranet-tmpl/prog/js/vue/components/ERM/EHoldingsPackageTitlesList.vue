@@ -12,12 +12,16 @@
                         <input
                             type="text"
                             id="publication_title_filter"
+                            v-model="filters.publication_title"
                             @keyup.enter="filter_table"
                         />
                     </li>
                     <li>
                         <label>{{ $t("Publication type") }}:</label>
-                        <select id="publication_type_filter">
+                        <select
+                            id="publication_type_filter"
+                            v-model="filters.publication_type"
+                        >
                             <option value="">{{ $t("All") }}</option>
                             <option
                                 v-for="type in av_title_publication_types"
@@ -30,7 +34,10 @@
                     </li>
                     <li>
                         <label>{{ $t("Selection status") }}:</label>
-                        <select id="selection_type_filter">
+                        <select
+                            id="selection_type_filter"
+                            v-model="filters.selection_type"
+                        >
                             <option value="0">{{ $t("All") }}</option>
                             <option value="1">{{ $t("Selected") }}</option>
                             <option value="2">{{ $t("Not selected") }}</option>
@@ -69,6 +76,11 @@ export default {
     },
     data() {
         return {
+            filters: {
+                publication_title: "",
+                publication_type: "",
+                selection_type: "",
+            },
             display_filters: false,
         }
     },
@@ -83,101 +95,99 @@ export default {
         toggle_filters: function (e) {
             this.display_filters = !this.display_filters
         },
-    },
-    mounted() {
-        let show_resource = this.show_resource
-        let package_id = this.package_id
-        let get_lib_from_av = this.get_lib_from_av
+        build_datatable: function () {
+            let show_resource = this.show_resource
+            let package_id = this.package_id
+            let get_lib_from_av = this.get_lib_from_av
+            let filters = this.filters
 
-        window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
-            e['_id'] = e['authorised_value']
-            e['_str'] = e['lib']
-            return e
-        })
+            window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
+                e['_id'] = e['authorised_value']
+                e['_str'] = e['lib']
+                return e
+            })
 
-        let additional_filters = {}
-        if (erm_provider != 'manual') {
-            additional_filters = {
-                publication_title: function () {
-                    let publication_title_search = $("#publication_title_filter").val()
-                    if (!publication_title_search) return ""
-                    return publication_title_search
-                },
-                publication_type: function () {
-                    let content_type_search = $("#publication_type_filter").val()
-                    if (!content_type_search) return ""
-                    return content_type_search
-                },
-                selection_type: function () {
-                    let selection_type_search = $("#selection_type_filter").val()
-                    if (!selection_type_search) return ""
-                    return selection_type_search
-                },
+            let additional_filters = {}
+            if (erm_provider != 'manual') {
+                additional_filters = {
+                    publication_title: function () {
+                        return filters.publication_title || ""
+                    },
+                    publication_type: function () {
+                        return filters.publication_type || ""
+                    },
+                    selection_type: function () {
+                        return filters.selection_type || ""
+                    },
+                }
             }
-        }
 
-        $('#title_list').kohaTable({
-            "ajax": {
-                "url": "/api/v1/erm/eholdings/packages/" + package_id + "/resources",
-            },
-            ...(erm_provider != 'manual' ? { ordering: false } : {}),
-            ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
-            ...(erm_provider != 'manual' ? { lengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
-            "embed": ['title.publication_title'],
-            autoWidth: false,
-            "columns": [
-                {
-                    "title": __("Name"),
-                    "data": "title.publication_title",
-                    "searchable": (erm_provider == 'manual') ? 1 : 0,
-                    "orderable": (erm_provider == 'manul') ? 1 : 0,
-                    "render": function (data, type, row, meta) {
-                        // Rendering done in drawCallback
-                        return ""
-                    }
+            $('#title_list').kohaTable({
+                "ajax": {
+                    "url": "/api/v1/erm/eholdings/packages/" + package_id + "/resources",
                 },
-                {
-                    "title": __("Publication type"),
-                    "data": "title.publication_type",
-                    "searchable": (erm_provider == 'manual') ? 1 : 0,
-                    "orderable": (erm_provider == 'manul') ? 1 : 0,
-                    "render": function (data, type, row, meta) {
-                        return escape_str(get_lib_from_av("av_title_publication_types", row.title.publication_type))
-                    }
-                },
-            ],
-            drawCallback: function (settings) {
-
-                var api = new $.fn.dataTable.Api(settings)
-
-                $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                    let row = api.row(index).data()
-                    if (!row) return // Happen if the table is empty
-                    let n = createVNode("a", {
-                        role: "button",
-                        href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
-                        onClick: (e) => {
-                            e.preventDefault()
-                            show_resource(row.resource_id)
+                ...(erm_provider != 'manual' ? { ordering: false } : {}),
+                ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
+                ...(erm_provider != 'manual' ? { aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
+                "embed": ['title'],
+                autoWidth: false,
+                "columns": [
+                    {
+                        "title": __("Name"),
+                        "data": "title.publication_title",
+                        "searchable": (erm_provider == 'manual') ? 1 : 0,
+                        "orderable": (erm_provider == 'manul') ? 1 : 0,
+                        "render": function (data, type, row, meta) {
+                            // Rendering done in drawCallback
+                            return ""
                         }
                     },
-                        `${row.title.publication_title}`
-                    )
-                    if (row.is_selected) {
-                        n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                    {
+                        "title": __("Publication type"),
+                        "data": "title.publication_type",
+                        "searchable": (erm_provider == 'manual') ? 1 : 0,
+                        "orderable": (erm_provider == 'manul') ? 1 : 0,
+                        "render": function (data, type, row, meta) {
+                            return escape_str(get_lib_from_av("av_title_publication_types", row.title.publication_type))
+                        }
+                    },
+                ],
+                drawCallback: function (settings) {
+
+                    var api = new $.fn.dataTable.Api(settings)
+
+                    $.each($(this).find("tbody tr td:first-child"), function (index, e) {
+                        let row = api.row(index).data()
+                        if (!row) return // Happen if the table is empty
+                        let n = createVNode("a", {
+                            role: "button",
+                            href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
+                            onClick: (e) => {
+                                e.preventDefault()
+                                show_resource(row.resource_id)
+                            }
+                        },
+                            `${row.title.publication_title}`
+                        )
+                        if (row.is_selected) {
+                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                        }
+                        render(n, e)
+                    })
+                },
+                ...(erm_provider == 'manual' ? {
+                    preDrawCallback: function (settings) {
+                        var table_id = settings.nTable.id
+                        if (erm_provider == 'manual') {
+                            $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_title_publication_types')
+                        }
                     }
-                    render(n, e)
-                })
-            },
-            ...(erm_provider == 'manual' ? {
-                preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
-                    if (erm_provider == 'manual') {
-                        $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_title_publication_types')
-                    }
-                }
-            } : {}),
-        }, null, erm_provider == 'manual' ? 1 : 0, additional_filters)
+                } : {}),
+            }, null, erm_provider == 'manual' ? 1 : 0, additional_filters)
+        },
+    },
+    mounted() {
+        this.build_datatable()
     },
     beforeUnmount() {
         $('#title_list')
@@ -193,7 +203,7 @@ export default {
 
 <style scoped>
 #title_list_result {
-    width: 50%;
+    width: 60%;
     padding-left: 10rem;
 }
 #title_list {

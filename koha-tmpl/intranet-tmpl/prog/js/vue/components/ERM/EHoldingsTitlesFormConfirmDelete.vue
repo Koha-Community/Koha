@@ -55,7 +55,7 @@ export default {
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/eholdings/titles' + this.title_id
+            let apiUrl = '/api/v1/erm/eholdings/titles/' + this.eholding.title_id
 
             const options = {
                 method: 'DELETE',
