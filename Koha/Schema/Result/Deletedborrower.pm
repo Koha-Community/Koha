@@ -53,6 +53,13 @@ patron/borrower's last name (surname)
 
 patron/borrower's first name
 
+=head2 middle_name
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+patron/borrower's middle name
+
 =head2 title
 
   data_type: 'longtext'
@@ -641,6 +648,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "firstname",
   { data_type => "mediumtext", is_nullable => 1 },
+  "middle_name",
+  { data_type => "longtext", is_nullable => 1 },
   "title",
   { data_type => "longtext", is_nullable => 1 },
   "othernames",
@@ -820,8 +829,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-06 19:32:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/LuHiaHNVRk1bAYDWvT34w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-24 15:30:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1a3+JPG3eNWHWIZVM2SNfQ
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
