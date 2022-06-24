@@ -198,10 +198,6 @@ sub store {
 
     }
 
-    unless ( $self->dateaccessioned ) {
-        $self->dateaccessioned($today);
-    }
-
     my $result = $self->SUPER::store;
     if ( $log_action && C4::Context->preference("CataloguingLog") ) {
         $action eq 'create'
