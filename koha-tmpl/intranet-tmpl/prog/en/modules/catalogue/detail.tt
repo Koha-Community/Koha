@@ -1789,6 +1789,8 @@ Note that permanent location is a code, and location may be an authval.
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                           }
+                      } else if ( data.status === 404 ) {
+                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
                       } else {
                           $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                       }
@@ -1856,6 +1858,8 @@ Note that permanent location is a code, and location may be an authval.
                                 } else {
                                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                                 }
+                            } else if ( data.status === 404 ) {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
                             } else {
                                 $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                             }
