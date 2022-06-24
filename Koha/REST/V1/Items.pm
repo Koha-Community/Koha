@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Circulation qw( barcodedecode );
+
 use Koha::Items;
 
 use List::MoreUtils qw( any );
@@ -199,8 +201,8 @@ sub add_to_bundle {
         );
     }
 
-
     my $bundle_item_id = $c->validation->param('body')->{'external_id'};
+    $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { barcode => $bundle_item_id } );
 
     unless ($bundle_item) {
@@ -253,6 +255,7 @@ sub remove_from_bundle {
     }
 
     my $bundle_item_id = $c->validation->param('bundled_item_id');
+    $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { itemnumber => $bundle_item_id } );
 
     unless ($bundle_item) {
