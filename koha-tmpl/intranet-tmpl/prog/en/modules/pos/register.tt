@@ -76,9 +76,9 @@
                 <li>Last cashup: [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %] (<a data-toggle="modal" data-cashup="[% register.last_cashup.id | html %]" data-register="[% register.description | html %]" href="#cashupSummaryModal" class="button">Summary</a>)</li>
                 [% END %]
                 <li>Float: [% register.starting_float | $Price %]</li>
-                <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => 'CASH') * -1 | $Price %])</li>
-                <li>Total outgoing (cash): [% accountlines.debits_total * -1 | $Price %] ([% accountlines.debits_total( payment_type => 'CASH') * -1 | $Price %])</li>
-                <li>Total bankable: [% accountlines.total( payment_type => 'CASH') * -1 | $Price %]</li>
+                <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %])</li>
+                <li>Total outgoing (cash): [% accountlines.debits_total * -1 | $Price %] ([% accountlines.debits_total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %])</li>
+                <li>Total bankable: [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %]</li>
             </ul>
 
             [% IF register.last_cashup %]
@@ -278,7 +278,7 @@
                     <h4 class="modal-title" id="confirmCashupLabel">Confirm cashup of <em>[% register.description | html %]</em></h4>
                 </div>
                 <div class="modal-body">
-                    Please confirm that you have removed [% accountlines.total( payment_type => 'CASH') * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
+                    Please confirm that you have removed [% accountlines.total( payment_type => [ 'CASH', 'SIP00' ]) * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
                     <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default" id="pos_cashup_confirm">Confirm</a>

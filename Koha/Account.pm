@@ -209,7 +209,7 @@ sub add_credit {
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
         && defined($payment_type)
-        && ( $payment_type eq 'CASH' )
+        && ( $payment_type eq 'CASH' || $payment_type eq 'SIP00' )
         && !defined($cash_register) );
 
     my $line;
@@ -338,7 +338,7 @@ sub payin_amount {
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
         && defined( $params->{payment_type} )
-        && ( $params->{payment_type} eq 'CASH' )
+        && ( $params->{payment_type} eq 'CASH' || $params->{payment_type} eq 'SIP00' )
         && !defined($params->{cash_register}) );
 
     # amount should always be passed as a positive value
@@ -436,7 +436,7 @@ sub add_debit {
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
         && defined( $params->{transaction_type} )
-        && ( $params->{transaction_type} eq 'CASH' )
+        && ( $params->{transaction_type} eq 'CASH' || $params->{payment_type} eq 'SIP00' )
         && !defined( $params->{cash_register} ) );
 
     # amount should always be a positive value
@@ -570,7 +570,7 @@ sub payout_amount {
     # Check for mandatory register
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
-        && ( $params->{payout_type} eq 'CASH' )
+        && ( $params->{payout_type} eq 'CASH' || $params->{payout_type} eq 'SIP00' )
         && !defined($params->{cash_register}) );
 
     # Amount should always be passed as a positive value
