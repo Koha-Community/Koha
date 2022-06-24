@@ -758,7 +758,7 @@ sub payout {
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
         && defined( $params->{payout_type} )
-        && ( $params->{payout_type} eq 'CASH' )
+        && ( $params->{payout_type} eq 'CASH' || $params->{payout_type} eq 'SIP00' )
         && !defined( $params->{cash_register} ) );
 
     my $payout;
