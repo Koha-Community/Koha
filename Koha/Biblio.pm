@@ -565,7 +565,9 @@ sub get_components_query {
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $marc = $self->metadata->record;
-    my $sort = C4::Context->preference('ComponentSortField') . "_" . C4::Context->preference('ComponentSortOrder');
+    my $component_sort_field = C4::Context->preference('ComponentSortField') // "title";
+    my $component_sort_order = C4::Context->preference('ComponentSortOrder') // "asc";
+    my $sort = $component_sort_field . "_" . $component_sort_order;
 
     my $searchstr;
     if ( C4::Context->preference('UseControlNumber') ) {
