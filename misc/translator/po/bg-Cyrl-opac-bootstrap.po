@@ -2,40 +2,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-05-09 17:38-0300\n"
-"PO-Revision-Date: 2022-05-01 08:22-0300\n"
-"Language-Team: Koha Translation Team \n"
+"POT-Creation-Date: 2022-06-17 20:30-0300\n"
+"PO-Revision-Date: 2022-06-09 16:11+0000\n"
+"Last-Translator: Илиян Дамянов <aioiliyan@gmail.com>\n"
+"Language-Team: Koha Translation Team\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /bg/22.05/bg-Cyrl-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-
-#. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %4$s:  INCLUDE 'doc-head-open.inc' 
-#. %5$s:  IF ( LibraryNameTitle ) 
-#. %6$s:  LibraryNameTitle | html 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  INCLUDE 'doc-head-close.inc' 
-#. %10$s:  BLOCK cssinclude 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, c-format
-msgid "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s %s %s %s %s%s%sKoha online%s каталог &rsaquo; Плащане %s %s%s "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( HOLD.is_in_transit ) 
-#. %4$s:  SET transfer = HOLD.item.get_transfer 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:111
-#, c-format
-msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s %s В процес на прехвърляне "
+"X-POOTLE-MTIME: 1654791112.702259\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -197,37 +176,6 @@ msgstr "%s %s Имаше предвид: "
 msgid "%s %s End date: "
 msgstr "%s %s Крайна дата: "
 
-#. %1$s:  SWITCH error 
-#. %2$s:  CASE  'no_change' 
-#. %3$s:  CASE  'passwords_mismatch' 
-#. %4$s:  CASE 'password_too_short' 
-#. %5$s:  minPasswordLength | html 
-#. %6$s:  CASE 'password_too_weak' 
-#. %7$s:  CASE 'password_has_whitespaces' 
-#. %8$s:  CASE 'invalid_credentials' 
-#. %9$s:  IF Koha.Preference('FailedLoginAttempts') 
-#. %10$s:  END 
-#. %11$s:  CASE 'no_expire' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:38
-#, fuzzy, c-format
-msgid ""
-"%s %s New password must not be the same as old password. %s Passwords do not "
-"match. Please re-type your new password. %s Password must be at least %s "
-"characters long. %s Password must contain at least one digit, one lowercase "
-"and one uppercase. %s Password must not contain leading or trailing "
-"whitespaces. %s You entered an incorrect username or password. Please try "
-"again! But note that passwords are case sensitive%s and that your account "
-"will be locked out after a fixed number of failed login attempts%s. Please "
-"contact a library staff member if you continue to have problems. %s Please "
-"log-in to account to update your password."
-msgstr ""
-"%s Паролите не съвпадат. Моля, въведете отново новата си парола. %s %s "
-"Паролата трябва да бъде поне %s символа. %s %s Паролата трябва да съдържа "
-"поне една цифра, една главна и една малка буква. %s %s Паролата не трябва да "
-"съдържа интервали. %s %s Вашата текуща парола беше въведена неправилно. Ако "
-"този проблем продължава, моля, помолете библиотекар да зададе паролата Ви "
-"вместо вас. %s "
-
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -235,28 +183,6 @@ msgstr ""
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s Не са открити резултати. %s "
-
-#. %1$s:  IF Branches.all.size == 1 
-#. %2$s:  IF branchcode 
-#. %3$s:  Branches.GetName( branchcode ) | html 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  IF branchcode 
-#. %8$s:  Branches.GetName( branchcode ) | html 
-#. %9$s:  ELSE 
-#. %10$s:  END 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:128
-#, c-format
-msgid ""
-"%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
-"feed for %s and system-wide library news %s RSS feed for system-wide library "
-"news %s %s "
-msgstr ""
-"%s %s RSS емисия за %s новини от библиотеката %s RSS емисия за новини от "
-"библиотеката %s %s %s RSS емисия за %s и новини за цялата библиотека %s RSS "
-"емисия за новини за цялата библиотека %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  IF ( ms_value ) 
@@ -277,20 +203,6 @@ msgid ""
 msgstr ""
 "%s %s Резултати от търсене за '%s' %s Резултати от търсенето %s %s Не сте "
 "посочили критерии за търсене. %s &rsaquo; %s%s%sKoha online%s каталог "
-
-#. %1$s: - SWITCH index -
-#. %2$s: - CASE 'su-na' -
-#. %3$s: - CASE 'su-br' -
-#. %4$s: - CASE 'su-rl' -
-#. %5$s: - END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:1
-#, c-format
-msgid ""
-"%s %s Search also for narrower subjects %s Search also for broader subjects "
-"%s Search also for related subjects %s "
-msgstr ""
-"%s %s Търсене по-тесни теми %s Търсене по-широки теми %s Търсене свързани "
-"теми %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -353,17 +265,6 @@ msgstr "%s %s%s%sВръзка към ресурс%s "
 msgid "%s %s's fines and charges"
 msgstr "%s %s глоби и такси"
 
-#. %1$s:  IF s.is_private 
-#. %2$s:  IF s.is_shared 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
-#, c-format
-msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s %sСподелен%sЛичен%s %s Публичен %s "
-
 #. %1$s:  added_count | html 
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
@@ -418,52 +319,6 @@ msgstr "%s <?xml version=\"1.0\"?> "
 msgid "%s Account frozen %s %s "
 msgstr "%s Блокиран читателски акаунт %s %s "
 
-#. %1$s:  ELSIF (errMultipleAccountsForEmail) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
-#, c-format
-msgid "%s Account identification with this email address only is ambiguous. "
-msgstr ""
-"%s Идентификацията на Читателски акаунт само с този имейл адрес е "
-"двусмислена. "
-
-#. %1$s:  IF review.your_comment 
-#. %2$s:  review.datereviewed | $KohaDates 
-#. %3$s:  ELSE 
-#. %4$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
-#. %5$s:  review.datereviewed | $KohaDates 
-#. %6$s:  SWITCH ShowReviewer 
-#. %7$s:  CASE 'full' 
-#. %8$s:  review.borrtitle | html 
-#. %9$s:  review.firstname | html 
-#. %10$s:  review.surname | html 
-#. %11$s:  CASE 'first' 
-#. %12$s:  review.firstname | html 
-#. %13$s:  CASE 'surname' 
-#. %14$s:  review.surname | html 
-#. %15$s:  CASE 'firstandinitial' 
-#. %16$s:  review.firstname | html 
-#. %17$s:  review.surname|truncate(2,'.') | html 
-#. %18$s:  CASE 'username' 
-#. %19$s:  review.userid | html 
-#. %20$s:  END 
-#. %21$s:  END 
-#. %22$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
-#, c-format
-msgid ""
-"%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s "
-msgstr ""
-"%s Добавено %s от Вас %s %s Добавено %s от %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s "
-
-#. %1$s:  IF (sendmailError) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
-#, c-format
-msgid "%s An error has occurred while sending you the password recovery link. "
-msgstr ""
-"%s Възникна грешка при изпращане на връзката за възстановяване на паролата. "
-
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:36
@@ -475,17 +330,6 @@ msgstr ""
 "%s Възниква грешка при генериране на pdf файла. Моля, свържете се с "
 "персонала, за да разрешите този проблем. %s "
 
-#. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:247
-#, c-format
-msgid ""
-"%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr ""
-"%s Проверете, върнете или презапишете библиотечен документ: %s Проверете или "
-"презапишете библиотечен документ: %s "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:28
@@ -495,18 +339,6 @@ msgstr ""
 "%s Свържете се с вашата библиотека, за да бъдете прехвърлени от този клуб. "
 "%s "
 
-#. %1$s:  IF (errcode==1) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:100
-#, c-format
-msgid ""
-"%s Could not create new list. Please check if the name is unique. %s Sorry, "
-"you cannot add items to this list. %s "
-msgstr ""
-"%s Не можа да се създаде нов списък. Моля, проверете дали името е уникално. "
-"%s За съжаление не можете да добавите елементи към този списък. %s "
-
 #. %1$s:  IF ( context == "list" ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -514,30 +346,6 @@ msgstr ""
 #, c-format
 msgid "%s Delete %s Delete list %s "
 msgstr "%s Изтриване %s Изтриване на списък %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  RECALL.checkout.date_due | $KohaDates 
-#. %3$s:  ELSIF ( RECALL.waiting and RECALL.expiration_date ) 
-#. %4$s:  RECALL.expiration_date | $KohaDates 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:102
-#, c-format
-msgid "%s Due to be returned by %s %s Pick up by %s %s - %s "
-msgstr ""
-
-#. %1$s:  IF hold.found == 'F' 
-#. %2$s:  ELSIF hold.cancellationdate 
-#. %3$s:  ELSIF hold.found == 'W' 
-#. %4$s:  ELSIF hold.found == 'T' 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:150
-#, c-format
-msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr ""
-"%s Изпълнено %s Отменено %s В изчакване %s В процес на обработка %s В "
-"Очакване %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -581,29 +389,13 @@ msgstr ""
 "RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-DI &rsaquo; HoldItem %s ILS-DI "
 "&rsaquo; CancelHold %s ILS-DI %s &rsaquo; %s%s%sKoha online%s catalog "
 
-#. %1$s:  ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) 
+#. For the first occurrence,
+#. %1$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #, c-format
 msgid "%s If you have any questions, please contact the "
 msgstr "%s Ако имате някакви въпроси, моля свържете се с "
-
-#. %1$s:  IF ( RECALL.in_transit ) 
-#. %2$s:  RECALL.library.branchname | html 
-#. %3$s:  ELSIF ( RECALL.waiting ) 
-#. %4$s:  ELSIF ( RECALL.overdue ) 
-#. %5$s:  ELSIF ( RECALL.expired ) 
-#. %6$s:  RECALL.expiration_date | $KohaDates 
-#. %7$s:  ELSIF ( RECALL.cancelled ) 
-#. %8$s:  RECALL.completed_date | $KohaDates 
-#. %9$s:  ELSIF ( RECALL.fulfilled ) 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
-#, c-format
-msgid ""
-"%s In transit to %s %s Ready for pickup %s Overdue to be returned %s Expired "
-"on %s %s Cancelled on %s %s Fulfilled %s Requested %s "
-msgstr ""
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
@@ -637,14 +429,6 @@ msgstr "%s Екземплярът Ви очаква в "
 msgid "%s Item(s) checked out"
 msgstr "%s заети екземпляри"
 
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#, c-format
-msgid "%s Library %s Libraries %s "
-msgstr "%s Библиотека %s Библиотеки %s "
-
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -668,18 +452,6 @@ msgstr ""
 #, c-format
 msgid "%s No data available %s %s "
 msgstr "%s Няма данни в таблицата %s %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END # / # RECALLS.count 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:126
-#, fuzzy, c-format
-msgid ""
-"%s No recalls have been made. %s %s Recalls have not been enabled. Please "
-"contact your library. %s "
-msgstr ""
-"%s Бележките по изданието не са включени. Обърнете се към библиотекар. %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -711,73 +483,11 @@ msgstr "%s Без заглавие %s %s%s,%s "
 msgid "%s Not allowed"
 msgstr "%s Не е позволено"
 
-#. %1$s:  ELSIF ( OVERDUE.onreserve ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
-#, c-format
-msgid "%s On hold %s No renewals left %s "
-msgstr "%s Резервиран %s Не са останали презаписвания %s "
-
-#. %1$s:  IF ( passwords_mismatch ) 
-#. %2$s:  END 
-#. %3$s:  IF password_too_short 
-#. %4$s:  minPasswordLength | html 
-#. %5$s:  END 
-#. %6$s:  IF password_too_weak 
-#. %7$s:  END 
-#. %8$s:  IF password_has_whitespaces 
-#. %9$s:  END 
-#. %10$s:  IF ( WrongPass ) 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:44
-#, c-format
-msgid ""
-"%s Passwords do not match. Please re-type your new password. %s %s Password "
-"must be at least %s characters long. %s %s Password must contain at least "
-"one digit, one lowercase and one uppercase. %s %s Password must not contain "
-"leading or trailing whitespaces. %s %s Your current password was entered "
-"incorrectly. If this problem persists, please ask a librarian to reset your "
-"password for you. %s "
-msgstr ""
-"%s Паролите не съвпадат. Моля, въведете отново новата си парола. %s %s "
-"Паролата трябва да бъде поне %s символа. %s %s Паролата трябва да съдържа "
-"поне една цифра, една главна и една малка буква. %s %s Паролата не трябва да "
-"съдържа интервали. %s %s Вашата текуща парола беше въведена неправилно. Ако "
-"този проблем продължава, моля, помолете библиотекар да зададе паролата Ви "
-"вместо вас. %s "
-
-#. %1$s:  IF ar.status == 'PENDING' 
-#. %2$s:  ELSIF ar.status == 'PROCESSING' 
-#. %3$s:  ELSIF ar.status == 'REQUESTED' 
-#. %4$s:  ELSIF ar.status == 'COMPLETED' 
-#. %5$s:  ELSIF ar.status == 'CANCELED' 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
-#, c-format
-msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
-msgstr "%s В очакване %s Обработване %s Нов %s Завършено %s Отменено %s "
-
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:452
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Професионални критици"
-
-#. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( loggedinusername ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:282
-#, c-format
-msgid ""
-"%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
-"suggestions %s %s "
-msgstr ""
-"%s Предложения за покупка %s %s Вашите предложения за покупка %s Предложения "
-"за покупка %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
@@ -785,35 +495,12 @@ msgstr ""
 msgid "%s Quotations"
 msgstr "%s Цитати"
 
-#. %1$s:  IF nosyspref 
-#. %2$s:  ELSIF error == 'unavailable' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:39
-#, fuzzy, c-format
-msgid ""
-"%s Recalls have not been enabled. Please contact your library. %s There are "
-"no items available for recall. "
-msgstr ""
-"%s Бележките по изданието не са включени. Обърнете се към библиотекар. %s "
-
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s Презаписването не е позволено %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  ELSIF ( RECALL.overdue ) 
-#. %3$s:  ELSIF ( RECALL.in_transit ) 
-#. %4$s:  RECALL.library.branchname | html 
-#. %5$s:  ELSIF ( RECALL.waiting ) 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#, c-format
-msgid ""
-"%s Requested %s Overdue to be returned %s In transit to %s %s Ready for "
-"pickup %s "
-msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
@@ -856,28 +543,6 @@ msgstr "%s Самостоятелно връщане"
 msgid "%s Self checkout system"
 msgstr "%s Система за самообслужване"
 
-#. %1$s:  IF ( typeissue ) 
-#. %2$s:  ELSIF ( typeissuecancel ) 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:20
-#, c-format
-msgid ""
-"%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
-"alert %s "
-msgstr ""
-"%s Запишете се за съобщение за получен абонамент %s Отпишете се за съобщение "
-"за получен абонамент %s"
-
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
-#, c-format
-msgid "%s Tags to show from other users: %s Tags to show: %s "
-msgstr ""
-"%s Маркери, които да се показват от други потребители %s Маркери за "
-"показване %s:"
-
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #, c-format
@@ -890,13 +555,6 @@ msgstr "%s Връзката, която следвате, е или невали
 #, c-format
 msgid "%s The passwords do not match. %s "
 msgstr "%s Паролите не съвпадат. %s "
-
-#. %1$s:  CASE 'account_locked' 
-#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
-#, fuzzy, c-format
-msgid "%s This account has been locked! %s "
-msgstr "%s Този запис няма библиотечен документ. %s "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -919,45 +577,6 @@ msgstr "%s Този запис няма библиотечен документ.
 msgid "%s Video extracts"
 msgstr "%s Видео откъси"
 
-#. %1$s:  IF ( itemLoo.waitingdate ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#. %4$s:  IF ( itemLoo.waitingdate ) 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  itemLoo.ExpectedAtLibrary | html 
-#. %8$s:  IF ( itemLoo.waitingdate ) 
-#. %9$s:  itemLoo.waitingdate | $KohaDates 
-#. %10$s:  ELSE 
-#. %11$s:  IF ( itemLoo.reservedate ) 
-#. %12$s:  itemLoo.reservedate | html 
-#. %13$s:  END 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
-#, c-format
-msgid ""
-"%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
-"%s %s %s %s %s. "
-msgstr ""
-"%s В очакване на %s Резервирано %s за читател %s при %s очаквано при %s %s "
-"от %s %s %s %s %s %s %s. "
-
-#. %1$s:  IF ( item.recall.waitingdate ) 
-#. %2$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %3$s:  item.recall.waitingdate | $KohaDates 
-#. %4$s:  ELSE 
-#. %5$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %6$s:  item.recall.recalldate | $KohaDates 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
-#, fuzzy, c-format
-msgid ""
-"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
-"since %s. %s "
-msgstr ""
-"%s В очакване на %s Резервирано %s за читател %s при %s очаквано при %s %s "
-"от %s %s %s %s %s %s %s. "
-
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -965,32 +584,6 @@ msgstr ""
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Да %s Не %s "
-
-#. %1$s:  IF ( ISSUE.charges ) 
-#. %2$s:  ELSIF ( ISSUE.rentalfines ) 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:432
-#, c-format
-msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
-msgstr ""
-"%s Да (просрочен или изгубен библиотечен документ) %s Да (Такса за заемане) "
-"%s Не %s "
-
-#. %1$s:  IF bibitemloo.forced_hold_level == 'item' 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:171
-#, c-format
-msgid ""
-"%s You already have at least one item level hold on this title. All further "
-"holds must be item level. %s You already have at least one record level hold "
-"on this title. All further holds must be record level. %s "
-msgstr ""
-"%s Вече имате поне една резервация на ниво екземпляр за това заглавие. "
-"Всички допълнителни резервации трябва да бъдат на ниво екземпляр. %s Вече "
-"имате поне една резервация за ниво запис за това заглавие. Всички "
-"допълнителни резервации трябва да бъдат на ниво запис. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1005,35 +598,6 @@ msgstr "%s Не сте посочили критерии за търсене. %s
 #, c-format
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Никога не сте заемали от тази библиотека. %s "
-
-#. %1$s:  IF error == 'duplicate' 
-#. %2$s:  ELSIF error == 'unavailable' 
-#. %3$s:  ELSIF error == 'cannot' 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:47
-#, c-format
-msgid ""
-"%s You have reached the maximum number of recalls on this record. %s There "
-"are no items available for recall. %s You cannot place a recall on this "
-"item. %s An error has occurred while attempting to place a recall. Please "
-"contact your library. %s "
-msgstr ""
-
-#. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
-#. %2$s:  RESERVE_CHARGE | $Price 
-#. %3$s:  ELSE 
-#. %4$s:  RESERVE_CHARGE | $Price 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:145
-#, c-format
-msgid ""
-"%s You will be charged a hold fee of %s when you collect this item %s You "
-"will be charged a hold fee of %s for placing this hold %s "
-msgstr ""
-"%s Ще бъдете таксувани с такса за резервация от %s при получаване на този "
-"екземпляр %s Ще бъдете таксувани с такса за резервация от %s при поставяне "
-"на тази резервация %s "
 
 #. %1$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
@@ -1085,18 +649,6 @@ msgstr "%s на ден"
 #, c-format
 msgid "%s per hour"
 msgstr "%s на час"
-
-#. %1$s:  IF contents.count 
-#. %2$s:  contents.count | html 
-#. %3$s:  IF contents.count == 1 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
-#, c-format
-msgid "%s%s %sitem%sitems%s%sEmpty%s"
-msgstr "%s%s %sбиблиотечен документ%sбиблиотечни документи%s%sПразно%s"
 
 #. %1$s:  summary.mainentry | html 
 #. %2$s:  IF authtypetext 
@@ -1156,6 +708,14 @@ msgstr "%s%s%sНе е приложимо%s"
 #, c-format
 msgid "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
 msgstr "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
+
+#. %1$s:  LibraryNameTitle | html 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
+#, fuzzy, c-format
+msgid "%s%sKoha online%s catalog"
+msgstr "%s%s%sKoha online%s каталог"
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -1270,28 +830,6 @@ msgid ""
 msgstr ""
 "%sРезултати%sНяма намерени резултати%s &rsaquo; %s%s%sKoha online%s каталог"
 
-#. %1$s: - IF ( starting_homebranch ) 
-#. %2$s:  starting_homebranch | html 
-#. %3$s:  END -
-#. %4$s: - IF ( starting_homebranch && starting_location ) 
-#. %5$s:  END 
-#. %6$s: - IF ( starting_location ) 
-#. %7$s: - starting_location | html -
-#. %8$s:  END -
-#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
-#. %10$s:  END 
-#. %11$s: - IF ( starting_ccode ) 
-#. %12$s: - starting_ccode | html -
-#. %13$s:  END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
-msgid ""
-"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
-"%sCollection: %s%s "
-msgstr ""
-"%sРазглеждане на %s рафтове%s %s, %s%sМестоположение на стелажа: %s%s %s, %s "
-"%sКолекция: %s%s "
-
 #. %1$s:  IF op == 'view' 
 #. %2$s:  shelf.shelfname | html 
 #. %3$s:  ELSE 
@@ -1305,14 +843,6 @@ msgstr ""
 msgid "%sContents of %s%sYour lists%s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
 "Съдържание на %s%sВашите списъци%s &rsaquo; %s%s%sKoha online%s каталог%s"
-
-#. %1$s:  IF ar.format == 'PHOTOCOPY' 
-#. %2$s:  ELSIF ar.format == 'SCAN' 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
-#, c-format
-msgid "%sCopy%sScan%s"
-msgstr "%sКопиране%sСканиране%s"
 
 #. %1$s:  IF ( op_add ) 
 #. %2$s:  END 
@@ -1330,110 +860,6 @@ msgid ""
 msgstr ""
 "%sПредложения за покупка%s %sПредложения за покупка%s &rsaquo; %s%s%sKoha "
 "online%s каталог"
-
-#. %1$s:  IF ( serial.status1 ) 
-#. %2$s:  END 
-#. %3$s:  IF ( serial.status2 ) 
-#. %4$s:  END 
-#. %5$s:  IF ( serial.status3 ) 
-#. %6$s:  END 
-#. %7$s:  IF ( serial.status4 ) 
-#. %8$s:  END 
-#. %9$s:  IF ( serial.status41 ) 
-#. %10$s:  END 
-#. %11$s:  IF ( serial.status42 ) 
-#. %12$s:  END 
-#. %13$s:  IF ( serial.status43 ) 
-#. %14$s:  END 
-#. %15$s:  IF ( serial.status44 ) 
-#. %16$s:  END 
-#. %17$s:  IF ( serial.status5 ) 
-#. %18$s:  END 
-#. %19$s:  IF ( serial.status6 ) 
-#. %20$s:  END 
-#. %21$s:  IF ( serial.status7 ) 
-#. %22$s:  END 
-#. %23$s:  IF ( serial.status8 ) 
-#. %24$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:167
-#, c-format
-msgid ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
-"available%s %sDelete%s %sClaimed%s %sStopped%s "
-msgstr ""
-"%sОчаква се%s %sПолучен%s %sЗадържан%s %sЛипсва%s %sЛипсва (не е получен)%s "
-"%sЛипсва (продаден)%s %sЛипсва(повреден)%s %sЛипсва (загубен)%s %sНе е "
-"достъпен%s %sОтчислен%s %s Заявен%s %sСпрян%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sДължим екземпляр %sПредварително известие %sРезервации запълнени "
-"%sНапомняне за резервация %sВръщане %s %s Заемане и презаписване %s Заемане "
-"%s %sМеждубиблиотечно заемане получено %sМеждубиблиотечно заемане не е "
-"получено %sАвтоматично презаписване %sНеизвестно %s"
-
-#. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
-#. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
-#. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
-#, c-format
-msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr ""
-"%sВид библиотечен документ %sКолекция %sМестоположение на рафта %sНещо друго "
-"%s "
-
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
-#, c-format
-msgid "%sLibrary%sLibraries%s"
-msgstr "%sБиблиотека%sБиблиотеки%s"
-
-#. %1$s:  IF ( suggestions_loo.ASKED ) 
-#. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
-#. %3$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
-#. %4$s:  ELSIF ( suggestions_loo.ORDERED ) 
-#. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
-#. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
-#. %7$s:  ELSE 
-#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html 
-#. %9$s:  END 
-#. %10$s:  IF ( suggestions_loo.reason ) 
-#. %11$s:  suggestions_loo.reason | html 
-#. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
-#, c-format
-msgid ""
-"%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s "
-"%s(%s)%s "
-msgstr ""
-"%sЗаявени %sПроверен от библиотеката %sПриема се от библиотеката %sПоръчано "
-"от библиотеката %sОтказано предложение %sПредлага се в библиотеката %s %s %s "
-"%s(%s)%s "
 
 #. %1$s:  IF ( typeissue ) 
 #. %2$s:  ELSIF ( typeissuecancel ) 
@@ -1465,18 +891,6 @@ msgstr "%sТози класификатор не се използва в ник
 msgid "%sThis record has no items.%s "
 msgstr "%sТози запис няма библиотечен документ.%s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( Koha.Preference('OPACPatronDetails') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
-#, c-format
-msgid "%sUpdate your contact information%sGo to your contact information%s"
-msgstr ""
-"%sАктуализирайте информацията за контакт%sОтидете до Вашата информация за "
-"контакт%s"
-
 #. %1$s:  IF action == 'edit' 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -1507,23 +921,6 @@ msgstr "%sДа%s "
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sДа%sНе%s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
-#, c-format
-msgid "%sa list:%s"
-msgstr "%sсписък:%s"
-
-#. For the first occurrence,
-#. %1$s:  IF ( author ) 
-#. %2$s:  author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
-#, c-format
-msgid "%sby %s%s "
-msgstr "%sот %s%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
@@ -2520,16 +1917,12 @@ msgstr "-- Изберете формат --"
 msgid "-- none -- "
 msgstr "----- "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  CASE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:58
-#, c-format
-msgid ""
-". %s You must contact the library for assistance %s %s An unknown error "
-"occurred. PLease try again or contact the library for assistance %s "
-msgstr ""
+#. %1$s:  CASE 'account_locked' 
+#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
+#, fuzzy, c-format
+msgid ". %s This account has been locked! %s "
+msgstr "%s Този запис няма библиотечен документ. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
 #, fuzzy, c-format
@@ -2637,13 +2030,6 @@ msgstr "50 заглавия"
 msgid "6 months"
 msgstr "6 месеца"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
-#, c-format
-msgid ": %sa list:%s"
-msgstr ":%sсписък:%s"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
 msgid ""
@@ -2683,7 +2069,7 @@ msgstr ""
 msgid "A similar document already exists: "
 msgstr ")%s Подобен документ вече съществува: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
 #, c-format
 msgid "A specific item"
 msgstr "Конкретен библиотечен документ"
@@ -2702,6 +2088,11 @@ msgstr "Резюмета/обобщения"
 #, c-format
 msgid "Accept"
 msgstr "Приемам"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:442
+#, c-format
+msgid "Accepted by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
@@ -2723,6 +2114,13 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Account creation fee"
 msgstr "Изтичане на акаунта"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:88
+#, fuzzy, c-format
+msgid "Account identification with this email address only is ambiguous."
+msgstr ""
+"%s Идентификацията на Читателски акаунт само с този имейл адрес е "
+"двусмислена. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:37
 #, c-format
@@ -2838,6 +2236,18 @@ msgstr "Добавяне на списък &rsaquo; %s%s%sKoha online%s ката
 msgid "Add to..."
 msgstr "Добавяне на..."
 
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#, c-format
+msgid "Added %s by"
+msgstr ""
+
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#, c-format
+msgid "Added %s by you"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:379
 #, c-format
 msgid "Additional content types for books/printed materials"
@@ -2871,6 +2281,11 @@ msgstr "Деца на възраст (14-17 години)"
 #, c-format
 msgid "Adult"
 msgstr "Възрастен"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Добавете бележка"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -3027,6 +2442,20 @@ msgstr "Сума за плащане: "
 msgid "An error has occurred &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Възникна грешка &rsaquo; %s%s%sKoha online%s каталог"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:55
+#, fuzzy, c-format
+msgid ""
+"An error has occurred while attempting to place a recall. Please contact "
+"your library."
+msgstr ""
+"%s Възникна грешка при изпращане на връзката за възстановяване на паролата. "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
+#, fuzzy, c-format
+msgid "An error has occurred while sending you the password recovery link."
+msgstr ""
+"%s Възникна грешка при изпращане на връзката за възстановяване на паролата. "
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:42
 #, fuzzy, c-format
 msgid "An error has occurred."
@@ -3077,6 +2506,14 @@ msgstr ""
 msgid "An invitation to share list "
 msgstr "Покана за списък за споделяне"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:63
+#, fuzzy, c-format
+msgid ""
+"An unknown error occurred. Please try again or contact the library for "
+"assistance."
+msgstr ""
+"Моля, свържете се с библиотеката, ако имате нужда от допълнителна помощ."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:381
 #, c-format
 msgid "Any"
@@ -3103,7 +2540,7 @@ msgid "Any item "
 msgstr "Всеки библиотечен документ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
 #, c-format
 msgid "Any item type"
 msgstr "Всеки вид библиотечен документ"
@@ -3218,6 +2655,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "Сигурни ли сте, че искате да спрете всички резервации?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:169
 #, c-format
 msgid "Arrived"
 msgstr "Пристигна"
@@ -3405,7 +2843,7 @@ msgstr "Търсене на класификатор &rsaquo; %s%s%sKoha online%
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:96
 #, c-format
 msgid "Authority search results"
-msgstr "Резултати от търсене на институция"
+msgstr "Резултати от търсене на класификатори"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:45
 #, c-format
@@ -3421,6 +2859,11 @@ msgstr "Разрешени заглавия"
 #, c-format
 msgid "Authors"
 msgstr "Автори"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:78
+#, fuzzy, c-format
+msgid "Auto renewal"
+msgstr "Автоматично презаписване"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #, c-format
@@ -3461,10 +2904,15 @@ msgid "Availability: "
 msgstr "На разположение: "
 
 #. %1$s:  IF restrictedvalueopac 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:106
 #, c-format
 msgid "Available %s"
 msgstr "На разположение %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:445
+#, fuzzy, c-format
+msgid "Available in the library"
+msgstr "В наличност"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
 #, c-format
@@ -3529,7 +2977,7 @@ msgstr "Бекенд"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3720,6 +3168,12 @@ msgstr "Прегледайте търсенето"
 msgid "Browse shelf"
 msgstr "Разгледайте рафт"
 
+#. %1$s:  starting_homebranch | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:5
+#, fuzzy, c-format
+msgid "Browsing %s shelves"
+msgstr "Разгледайте рафт"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
 #, c-format
@@ -3758,7 +3212,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3886,15 +3340,31 @@ msgstr "CancelHold"
 msgid "CancelRecall "
 msgstr "CancelRecall "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#, fuzzy, c-format
+msgid "Canceled"
+msgstr "Отказ"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:111
 #, c-format
 msgid "Cancellation date"
 msgstr "Дата на анулиране"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:154
+#, fuzzy, c-format
+msgid "Cancelled"
+msgstr "(Изтрит)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:42
 #, c-format
 msgid "Cancelled charge"
 msgstr "Анулирано плащане"
+
+#. %1$s:  RECALL.completed_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:94
+#, fuzzy, c-format
+msgid "Cancelled on %s"
+msgstr "(Изтрит)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
@@ -3902,8 +3372,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Отменя активна заявка за резервация на читател."
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:393
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
 msgid "Cannot be put on hold"
 msgstr "Не може да бъде резервиран"
 
@@ -4031,10 +3501,27 @@ msgstr "Връщане на екземпляр"
 msgid "Check out"
 msgstr "Заемане"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:251
+#, fuzzy, c-format
+msgid "Check out or renew an item:"
+msgstr "Връщане на екземпляр"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:249
+#, fuzzy, c-format
+msgid "Check out, return, or renew an item:"
+msgstr ""
+"%s Проверете, върнете или презапишете библиотечен документ: %s Проверете или "
+"презапишете библиотечен документ: %s "
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:164
 #, c-format
 msgid "Check-in date:"
 msgstr "Дата на връщане:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:441
+#, c-format
+msgid "Checked by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:87
 #, c-format
@@ -4137,6 +3624,7 @@ msgid "City:"
 msgstr "Град:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:178
 #, c-format
 msgid "Claimed"
 msgstr "Искът е направен"
@@ -4178,7 +3666,7 @@ msgid "Clear date"
 msgstr "Изчисти датата"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Изчистване на дата за спиране за неопределено време"
@@ -4303,11 +3791,12 @@ msgstr "Изображение Coce от Open Library"
 msgid "Collect items you are interested in"
 msgstr "Съберете библиотечните документи, които ви интересуват"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:165
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -4324,6 +3813,12 @@ msgstr "Колекция на библиотеката:"
 #, c-format
 msgid "Collection title:"
 msgstr "Заглавие на колекцията:"
+
+#. %1$s: - starting_ccode | html -
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:9
+#, fuzzy, c-format
+msgid "Collection: %s"
+msgstr "Колекция: %s "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4405,6 +3900,11 @@ msgstr "Коментари за %s &rsaquo; %s%s%sKoha online%s каталог"
 msgid "Comments%s"
 msgstr "Коментари%s"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#, c-format
+msgid "Completed"
+msgstr ""
+
 #. %1$s:  ComponentParts.size | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
 #, c-format
@@ -4417,7 +3917,7 @@ msgid "Confirm"
 msgstr "Потвърждение"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:487
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
 msgid "Confirm hold"
 msgstr "Потвърдете резервацията"
 
@@ -4502,15 +4002,16 @@ msgstr "Копирани %d реда в клипборда"
 msgid "Copied one row to clipboard"
 msgstr "Копиран един ред в клипборда"
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
+#, c-format
 msgid "Copy"
 msgstr "Копие"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, c-format
 msgid "Copy number"
 msgstr "Номер на екземпляра"
@@ -4556,6 +4057,13 @@ msgstr "Година на издаване или публикуване, нап
 #, c-format
 msgid "Copyright year: %s "
 msgstr "Година на издаване: %s "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:102
+#, fuzzy, c-format
+msgid "Could not create new list. Please check if the name is unique."
+msgstr ""
+"%s Не можа да се създаде нов списък. Моля, проверете дали името е уникално. "
+"%s За съжаление не можете да добавите елементи към този списък. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:499
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:720
@@ -4882,6 +4390,7 @@ msgstr ""
 "стойности:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
 #, c-format
@@ -5154,7 +4663,7 @@ msgstr "Дължим"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
 #, c-format
 msgid "Due %s"
 msgstr "Дължим %s"
@@ -5169,6 +4678,12 @@ msgstr "Дата на връщане"
 #, c-format
 msgid "Due date is not valid."
 msgstr "Крайният срок не е валиден."
+
+#. %1$s:  RECALL.checkout.date_due | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:104
+#, c-format
+msgid "Due to be returned by %s"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
@@ -5185,6 +4700,23 @@ msgstr "ГРЕШКА: Не е намерен запис за запис id %s. "
 #, c-format
 msgid "ERROR: No record id specified. "
 msgstr "ГРЕШКА: Не е посочен идентификатор на запис. "
+
+#. %1$s:  ERROR.failed_delete | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:73
+#, fuzzy, c-format
+msgid "ERROR: You cannot delete the tag %s."
+msgstr "Грешка! Не можете да изтриете маркера"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
+#, fuzzy, c-format
+msgid "ERROR: You must log in to complete that action."
+msgstr "Трябва да сте влезли в системата, за да добавите маркери."
+
+#. %1$s:  ERROR.badparam | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
+#, fuzzy, c-format
+msgid "ERROR: illegal parameter %s"
+msgstr "Грешка! Невалиден параметър"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:27
 #, fuzzy, c-format
@@ -5273,6 +4805,11 @@ msgstr "Имейл:"
 #, c-format
 msgid "Emails do not match! "
 msgstr "Имейлите не съвпадат! "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, c-format
+msgid "Empty"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:44
 #, c-format
@@ -5529,12 +5066,13 @@ msgid "Excerpt provided by Syndetics"
 msgstr "Откъс, предоставен от Syndetics"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:168
 #, c-format
 msgid "Expected"
 msgstr "Очакван"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Expecting a specific item selection."
 msgstr "Очаква се избор на конкретен библиотечен документ."
 
@@ -5557,6 +5095,12 @@ msgstr "Изтича на дата:"
 #, c-format
 msgid "Expiration:"
 msgstr "Валиден до:"
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:92
+#, fuzzy, c-format
+msgid "Expired on %s"
+msgstr "Обяснете на"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:760
@@ -5802,6 +5346,12 @@ msgstr "Френски"
 msgid "From: "
 msgstr "От: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:96
+#, c-format
+msgid "Fulfilled"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:108
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:55
 #, c-format
@@ -6007,6 +5557,12 @@ msgstr "Предишна"
 msgid "Go to your account page"
 msgstr "Начална страница"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Go to your contact information"
+msgstr "Информация за контакт"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:833
 #, c-format
 msgid "GoToBibliographicRequestPage "
@@ -6095,11 +5651,11 @@ msgid "Hi,"
 msgstr "Здравейте,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hide options"
 msgstr "Скриване на опциите"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:475
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
 #, fuzzy, c-format
 msgid "Hide unholdable items"
 msgstr "Добавяне няколко екземпляра"
@@ -6126,7 +5682,7 @@ msgid "Hold date:"
 msgstr "Дата на резервация:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -6135,15 +5691,25 @@ msgstr ""
 msgid "Hold fee"
 msgstr "Такса за резервации"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "Такса за резервации"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Резервацията не е необходима след:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:316
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
 #, c-format
 msgid "Hold notes:"
 msgstr "Бележка за резервацията:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Такса за резервации"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6151,7 +5717,7 @@ msgid "Hold requests"
 msgstr "Направете резервации"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold start date should be filled."
 msgstr ""
 
@@ -6292,7 +5858,7 @@ msgstr "Основни библиотеки"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Home library"
 msgstr "Основна библиотека"
@@ -6647,16 +6213,29 @@ msgstr ""
 "лични данни, както е посочено в Общия регламент на ЕС за защита на данните "
 "от 25 май 2018г."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:158
+#, fuzzy, c-format
+msgid "In transit"
+msgstr "%s В процес на прехвърляне до "
+
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( item.get_transfer.frombranch ) | html 
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "В движение от %s до %s с %s"
+
+#. For the first occurrence,
+#. %1$s:  RECALL.library.branchname | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#, fuzzy, c-format
+msgid "In transit to %s"
+msgstr "%s В процес на прехвърляне до "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:35
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:64
@@ -6670,7 +6249,7 @@ msgid "Indexes"
 msgstr "Индекси"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
 #, c-format
 msgid "Information"
 msgstr "Информация"
@@ -6695,6 +6274,11 @@ msgstr "Преподаватели:"
 msgid "Interlibrary loan item availability"
 msgstr "Наличност на библиотечен документ от междубиблиотечно заемане"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:76
+#, fuzzy, c-format
+msgid "Interlibrary loan ready"
+msgstr "Искане за междубиблиотечно заемане"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
 #, c-format
 msgid "Interlibrary loan request"
@@ -6706,6 +6290,11 @@ msgstr "Искане за междубиблиотечно заемане"
 #, c-format
 msgid "Interlibrary loan requests"
 msgstr "Искания за междубиблиотечно заемане"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:77
+#, fuzzy, c-format
+msgid "Interlibrary loan unavailable"
+msgstr "Наличност на библиотечен документ от междубиблиотечно заемане"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:57
 #, c-format
@@ -6780,6 +6369,11 @@ msgstr "Сигнатура"
 msgid "Item cannot be checked out."
 msgstr "Библиотечният документ не може да бъде зает."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Библиотечният документ е върнат"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Item checked in"
@@ -6789,6 +6383,16 @@ msgstr "Библиотечният документ е върнат"
 #, c-format
 msgid "Item checked out"
 msgstr "Библиотечният документ е зает"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:74
+#, fuzzy, c-format
+msgid "Item checkout"
+msgstr "Библиотечният документ е зает"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:72
+#, fuzzy, c-format
+msgid "Item checkout and renewal"
+msgstr "Библиотечният документ е върнат"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:85
 #, c-format
@@ -6800,6 +6404,11 @@ msgstr "Библиотечният документ е повреден"
 msgid "Item details"
 msgstr "Информация за екземпляра"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "До дата"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
 msgid "Item hold queue priority"
@@ -6809,6 +6418,17 @@ msgstr "Приоритет на опашката за резервация на 
 #, c-format
 msgid "Item holds"
 msgstr "Библиотечнията документ е резервиран"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#, fuzzy, c-format
+msgid "Item in processing"
+msgstr "Обработка на екземпляри:"
+
+#. %1$s:  branch_name| $raw 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#, fuzzy, c-format
+msgid "Item in transit from %s since"
+msgstr "В движение от %s до %s с %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
@@ -6862,12 +6482,13 @@ msgstr "Презаписването не е позволено."
 msgid "Item renewed"
 msgstr "Библиотечният документ е презаписан"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -7017,7 +6638,7 @@ msgid "Last "
 msgstr "Последнa "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
 #, c-format
 msgid "Last location"
 msgstr "Последно местоположение"
@@ -7033,6 +6654,7 @@ msgid "Last updated:"
 msgstr "Последна актуализация:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:170
 #, c-format
 msgid "Late"
 msgstr "Закъснял"
@@ -7089,7 +6711,9 @@ msgstr "Ниво 4: Ясни/специфични за домейна платф
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:73
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:232
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:344
 #, c-format
 msgid "Libraries"
 msgstr "Библиотеки"
@@ -7097,7 +6721,9 @@ msgstr "Библиотеки"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:480
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:342
 #, c-format
 msgid "Library"
 msgstr "Библиотека"
@@ -7612,26 +7238,31 @@ msgid "Minimum amount needed by this service is %s"
 msgstr "Минималната сума, необходима за тази услуга, е %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:740
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:171
 #, c-format
 msgid "Missing"
 msgstr "Липсващ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:174
 #, c-format
 msgid "Missing (damaged)"
 msgstr "Липсващ (повреден)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:175
 #, c-format
 msgid "Missing (lost)"
 msgstr "Липсващ (изгубен)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:741
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:172
 #, c-format
 msgid "Missing (never received)"
 msgstr "Липсващ (никога не е получаван)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:742
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:173
 #, c-format
 msgid "Missing (sold out)"
 msgstr "Липсващ (продаден)"
@@ -7738,14 +7369,14 @@ msgstr "Никога"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
 #, c-format
 msgid "Never expires "
-msgstr "Никога не изтича"
+msgstr "Изтича на "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
 #, c-format
 msgid "Never expires %s %s "
-msgstr "Никога не изтича %s %s "
+msgstr "Изтича на %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:72
 #, fuzzy, c-format
@@ -7758,6 +7389,7 @@ msgstr ""
 "записи на библиотечни документи, които са били заемани или съответно върнати."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "New"
 msgstr "Нов"
@@ -7786,6 +7418,11 @@ msgstr "Нова заявка за междубиблиотечно заеман
 #, c-format
 msgid "New list"
 msgstr "Нов списък"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:41
+#, c-format
+msgid "New password must not be the same as old password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:154
@@ -7854,7 +7491,7 @@ msgstr "Следващ "
 msgid "Next &gt;&gt;"
 msgstr "Следваща&gt;&gt; "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:329
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
 #, c-format
 msgid "Next available item"
 msgstr "Следващият наличен екземпляр"
@@ -7868,6 +7505,7 @@ msgstr "Следващият наличен екземпляр"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:438
 #, c-format
 msgid "No"
 msgstr "Не"
@@ -7882,6 +7520,13 @@ msgstr "Не "
 #, c-format
 msgid "No XSLT file passed."
 msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
+#, fuzzy, c-format
+msgid "No account was found with the provided information."
+msgstr ""
+"Моля, опитайте отново по-късно. %s Не бе намерен акаунт с предоставената "
+"информация. %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:241
 #, c-format
@@ -8021,6 +7666,11 @@ msgstr "Няма списъци."
 msgid "No public lists."
 msgstr "Няма публични списъци."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:128
+#, fuzzy, c-format
+msgid "No recalls have been made."
+msgstr "Не са направени промени."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:186
 #, c-format
 msgid "No record was removed."
@@ -8035,6 +7685,11 @@ msgstr "Не са презаписвани преди %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:368
 #, c-format
 msgid "No renewals allowed"
+msgstr "Не са разрешени презаписвания"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#, fuzzy, c-format
+msgid "No renewals left"
 msgstr "Не са разрешени презаписвания"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:111
@@ -8164,6 +7819,11 @@ msgstr "Нормален изглед"
 msgid "Not allowed "
 msgstr "Не е позволено "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:176
+#, fuzzy, c-format
+msgid "Not available"
+msgstr "Няма налични копия."
+
 #. %1$s:  PROCESS error_message messages=error.messages 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:93
 #, c-format
@@ -8186,7 +7846,7 @@ msgstr "Не е за заемане %s"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Не е за заемане (%s)"
@@ -8196,7 +7856,7 @@ msgstr "Не е за заемане (%s)"
 msgid "Not issued"
 msgstr "Не се издава"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
 #, c-format
 msgid "Not on hold"
 msgstr "Не е резервирано"
@@ -8256,20 +7916,11 @@ msgstr ""
 msgid "Note: Your comment must be approved by a librarian. "
 msgstr "Забележка: Вашият коментар трябва да бъде одобрен от библиотеката. "
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "Note: you can only delete your own tags."
 msgstr "Забележка: можете да изтриете само собствените си маркери."
-
-#. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
-#, c-format
-msgid ""
-"Note: you can only delete your own tags. %s Note: your tag contained markup "
-"code that was removed. "
-msgstr ""
-"Забележка: можете да изтриете само собствените си маркери. %s Забележка: "
-"маркерът ви съдържа маркировъчен код, който беше премахнат."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8291,6 +7942,13 @@ msgstr ""
 "Забележка: Вашият коментар съдържаше невалиден код. Можете да редактирате "
 "или да отмените коментара допълнително, за да го запазите такъв, какъвто е."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:76
+#, fuzzy, c-format
+msgid "Note: your tag contained markup code that was removed."
+msgstr ""
+"Маркерът ви съдържа маркировъчен код, който беше премахнат. Маркерът беше "
+"добавен като"
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid ""
@@ -8299,13 +7957,19 @@ msgstr ""
 "Маркерът ви съдържа маркировъчен код, който беше премахнат. Маркерът беше "
 "добавен като"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
+#, fuzzy, c-format
+msgid "Note: your tag was entirely markup code. It was NOT added."
+msgstr ""
+"Грешка! Вашият коментар беше изцяло невалиден код за маркиране. НЕ е добавен."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:157
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -8398,6 +8062,8 @@ msgstr "OK"
 msgid "OR"
 msgstr "ИЛИ"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, c-format
@@ -8481,6 +8147,11 @@ msgstr "Сортиране по заглавие"
 #, c-format
 msgid "Order by: "
 msgstr "Сортирай по:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:443
+#, fuzzy, c-format
+msgid "Ordered by the library"
+msgstr "Настоящо местоположение"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:862
 #, c-format
@@ -8569,6 +8240,12 @@ msgstr "Общ приоритет на опашката: %s"
 msgid "Overdue (%s)"
 msgstr "Просрочен (%s)"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#, c-format
+msgid "Overdue to be returned"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #, c-format
 msgid "Overdues "
@@ -8628,7 +8305,9 @@ msgstr "Паролата не трябва да съдържа интервал�
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:45
 #, c-format
 msgid "Password must be at least %s characters long."
 msgstr "Паролата трябва да бъде най-малко %s символа."
@@ -8652,14 +8331,18 @@ msgstr ""
 "букви и цифри "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:47
 #, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
 msgstr "Паролата трябва да съдържа поне една цифра, една малка и главна буква."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:49
 #, c-format
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr "Паролата не трябва да съдържа интервали."
@@ -8695,6 +8378,12 @@ msgstr "Парола:"
 #, c-format
 msgid "Passwords do not match! "
 msgstr "Паролите не съвпадат!"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:43
+#, c-format
+msgid "Passwords do not match. Please re-type your new password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format
@@ -8732,9 +8421,27 @@ msgstr "Начин на плащане"
 msgid "Payout"
 msgstr "Оформление"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#, fuzzy, c-format
+msgid "Pending"
+msgstr "В очакване"
+
+#. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#, c-format
+msgid "Pending for next available item of item type '%s'"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:96
 #, c-format
 msgid "Pending hold"
+msgstr "В очакване"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#, fuzzy, c-format
+msgid "Pending recall"
 msgstr "В очакване"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:54
@@ -8758,6 +8465,12 @@ msgstr "Телефон: "
 #, c-format
 msgid "Photocopy"
 msgstr "Фотокопие"
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:106
+#, fuzzy, c-format
+msgid "Pick up by %s"
+msgstr "Изберете библиотека"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, c-format
@@ -8790,7 +8503,7 @@ msgid "Pickup location"
 msgstr "Място за получаване"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on"
 msgstr "Заявете резервация за"
 
@@ -8800,7 +8513,7 @@ msgid "Place a hold on "
 msgstr "Заявете резервация за "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on: "
 msgstr "Заявете резервация за: "
 
@@ -9030,7 +8743,7 @@ msgstr "Моля, въведете стойност, по-голяма или р
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Моля, въведете стойност, по-малка или равна на {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -9100,6 +8813,11 @@ msgstr "Коригирайте това поле."
 #, c-format
 msgid "Please log in to the catalog and try again. "
 msgstr "Моля, влезте в каталога и опитайте отново."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:53
+#, c-format
+msgid "Please log-in to account to update your password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:74
 #, c-format
@@ -9178,22 +8896,14 @@ msgstr "Моля, изберете конкретен библиотечен д�
 msgid "Please select a tag to delete."
 msgstr "Моля, изберете маркер, който да изтриете."
 
-#. %1$s:  ELSIF (errNoBorrowerFound) 
-#. %2$s:  ELSIF errResetForbidden 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
-#, c-format
-msgid ""
-"Please try again later. %s No account was found with the provided "
-"information. %s "
-msgstr ""
-"Моля, опитайте отново по-късно. %s Не бе намерен акаунт с предоставената "
-"информация. %s"
+#, fuzzy, c-format
+msgid "Please try again later."
+msgstr "Моля въведете валидна дата"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:80
-#, c-format
-msgid "Please try again with plain text. %sUnrecognized error. %s "
+#, fuzzy, c-format
+msgid "Please try again with plain text."
 msgstr "Моля, опитайте отново с обикновен текст. %s Неразпозната грешка. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:990
@@ -9201,19 +8911,10 @@ msgstr "Моля, опитайте отново с обикновен текст
 msgid "Please type the following characters into the preceding box: "
 msgstr "Моля, въведете следните знаци в предходното поле: "
 
-#. %1$s:  ELSIF (errNoBorrowerEmail) 
-#. %2$s:  ELSIF (errAlreadyStartRecovery) 
-#. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:89
 #, c-format
-msgid ""
-"Please use the field 'Login' as well. %s This account has no email address "
-"we can send the email to. %s The process of password recovery has already "
-"been started for this account %s (\""
+msgid "Please use the field 'Login' as well."
 msgstr ""
-"Моля, използвайте и полето 'Вход'. %s Този акаунт няма имейл адрес, на който "
-"да можем да изпратим имейла. %s Процесът на възстановяване на паролата вече "
-"е стартиран за този акаунт %s (\""
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -9376,6 +9077,7 @@ msgstr "Правило за поверителност"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
 #, c-format
 msgid "Private"
 msgstr "Личен"
@@ -9395,6 +9097,11 @@ msgstr "Лични списъци, споделени с мен"
 msgid "Problem found on page: "
 msgstr "Проблемът е намерен на страницата: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#, fuzzy, c-format
+msgid "Processing"
+msgstr "Обработване…"
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Processing..."
@@ -9413,6 +9120,7 @@ msgstr "Доставчик:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Public"
 msgstr "Публичен"
@@ -9474,7 +9182,15 @@ msgstr "Дата на публикация/издаване: низходящо"
 msgid "Publication:"
 msgstr "Публикация:"
 
-#. For the first occurrence,
+#. %1$s:  BIBLIO_RESULT.publishercode | $raw 
+#. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
+#. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
+#. %4$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:67
+#, fuzzy, c-format
+msgid "Published by: %s %s in %s %s"
+msgstr "Издадено на %s %s от "
+
 #. %1$s:  BIBLIO_RESULT.publishercode | $raw 
 #. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
 #. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
@@ -9483,9 +9199,8 @@ msgstr "Публикация:"
 #. %6$s:  BIBLIO_RESULT.pages | $raw 
 #. %7$s:  END 
 #. %8$s:  IF BIBLIO_RESULT.item('size') 
-#. %9$s:  BIBLIO_RESULT.item('size') | $raw 
+#. %9$s:  BIBLIO_RESULT.item('size') | html 
 #. %10$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
@@ -9515,6 +9230,8 @@ msgstr "Място на издаване"
 msgid "Publisher:"
 msgstr "Издател:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:289
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:335
 #, c-format
 msgid "Purchase suggestions"
@@ -9544,11 +9261,33 @@ msgstr "RIS"
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote, други)"
 
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#, c-format
+msgid "RSS feed for %s and system-wide library news"
+msgstr ""
+
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:131
+#, fuzzy, c-format
+msgid "RSS feed for %s library news"
+msgstr "RSS емисия за публичен списък %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:133
+#, fuzzy, c-format
+msgid "RSS feed for library news"
+msgstr "RSS емисия за публичен списък %s"
+
 #. %1$s:  shelf.shelfname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
 #, c-format
 msgid "RSS feed for public list %s"
 msgstr "RSS емисия за публичен списък %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:139
+#, c-format
+msgid "RSS feed for system-wide library news"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
@@ -9565,6 +9304,12 @@ msgstr "Оценете"
 #, c-format
 msgid "Re-type new password:"
 msgstr "Повтори новата парола:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:88
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#, c-format
+msgid "Ready for pickup"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:77
 #, c-format
@@ -9617,6 +9362,12 @@ msgstr "Резервацията не е необходима след:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#, c-format
+msgid "Recalled by patron expected at %s"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -9627,6 +9378,13 @@ msgstr "RecallItem "
 #, fuzzy, c-format
 msgid "Recalls (%s)"
 msgstr "Резервации (%s) "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:41
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:131
+#, fuzzy, c-format
+msgid "Recalls have not been enabled. Please contact your library."
+msgstr ""
+"%s Бележките по изданието не са включени. Обърнете се към библиотекар. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:30
 #, fuzzy, c-format
@@ -9961,7 +9719,7 @@ msgstr "Заявката е направена"
 msgid "Request placed:"
 msgstr "Направени заявки:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #, c-format
 msgid "Request specific item type:"
 msgstr "Заявен конкретен вид библиотечен документ:"
@@ -9980,6 +9738,13 @@ msgstr "Вид заявка:"
 #, c-format
 msgid "Request updated"
 msgstr "Заявката е актуализирана"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:798
+#, fuzzy, c-format
+msgid "Requested"
+msgstr "Заявки"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:139
 #, c-format
@@ -10059,7 +9824,7 @@ msgstr "Заявки"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -10135,12 +9900,12 @@ msgstr "Резултати от търсене за '%s'"
 msgid "Results per page: "
 msgstr "Резултати на страница:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:137
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
 #, c-format
 msgid "Resume"
 msgstr "Продължаване"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Възобновете всички спрени резервации"
@@ -10320,6 +10085,7 @@ msgstr "Запази"
 msgid "Save to your lists"
 msgstr "Запази"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, c-format
 msgid "Scan"
@@ -10387,6 +10153,21 @@ msgstr "Търсене "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:57
 msgid "Search %s"
 msgstr "Търсене %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:5
+#, c-format
+msgid "Search also for broader subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:3
+#, c-format
+msgid "Search also for narrower subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:7
+#, c-format
+msgid "Search also for related subjects"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:123
@@ -10568,7 +10349,7 @@ msgstr "Изберете списък"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
 #, c-format
 msgid "Select a specific item:"
 msgstr "Изберете конкретен библиотечен документ:"
@@ -10823,9 +10604,20 @@ msgstr "Сподели в LinkedIn"
 msgid "Share on Twitter"
 msgstr "Сподели в Twitter"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
+#, fuzzy, c-format
+msgid "Shared"
+msgstr "Споделяне"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:166
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
 #, c-format
 msgid "Shelving location"
+msgstr "Местоположение на стелажите"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:7
+#, fuzzy, c-format
+msgid "Shelving location:"
 msgstr "Местоположение на стелажите"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
@@ -10892,7 +10684,7 @@ msgid "Show more"
 msgstr "Още"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #, c-format
 msgid "Show more options"
 msgstr "Показване на още опции"
@@ -10902,7 +10694,7 @@ msgstr "Показване на още опции"
 msgid "Show the top "
 msgstr "Покажи най-популярните"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, fuzzy, c-format
 msgid "Show unholdable items"
 msgstr "Показване на всички"
@@ -10975,6 +10767,11 @@ msgid ""
 msgstr ""
 "Може да възникнат някои такси за текстови съобщения при използване на тази "
 "услуга. Моля, свържете се с вашия мобилен оператор."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:167
+#, c-format
+msgid "Something else"
+msgstr ""
 
 #. %1$s:  failaddress | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:109
@@ -11101,10 +10898,15 @@ msgstr ""
 "Моля, свържете се със системния администратор."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
-#, c-format
-msgid "Sorry, you are too young to reserve this material."
+#, fuzzy, c-format
+msgid "Sorry, you are too young to place a hold for this item."
 msgstr ""
 "За съжаление, има възрастово ограничение, за да резервирате този материал."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:104
+#, fuzzy, c-format
+msgid "Sorry, you cannot add items to this list."
+msgstr "За съжаление не можете да направите повече от %s резервации."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:33
 #, c-format
@@ -11267,6 +11069,7 @@ msgstr ""
 "един по един"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:179
 #, c-format
 msgid "Stopped"
 msgstr "Спрян"
@@ -11377,6 +11180,7 @@ msgstr "Изпратете заявка за актуализация"
 msgid "Submit your suggestion"
 msgstr "Изпратете предложение"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:37
 #, c-format
 msgid "Subscribe to a subscription alert"
@@ -11507,6 +11311,11 @@ msgstr "Предложено за:"
 msgid "Suggested on"
 msgstr "Предложено на"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:444
+#, fuzzy, c-format
+msgid "Suggestion declined"
+msgstr "Предложения"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:39
 #, c-format
 msgid "Suggestions"
@@ -11530,13 +11339,13 @@ msgstr "Проучвания"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
 #, c-format
 msgid "Suspend"
 msgstr "Изключване"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
 #, c-format
 msgid "Suspend all holds"
 msgstr "Прекъснете всички резервации"
@@ -11550,6 +11359,11 @@ msgstr "Резервация на пауза за"
 #, c-format
 msgid "Suspend until:"
 msgstr "Спряно до:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "Suspended"
+msgstr "Изключване"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:6
@@ -11655,6 +11469,18 @@ msgstr "Добавени маркери: "
 msgid "Tags from this library:"
 msgstr "Маркерите от тази библиотека:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:92
+#, fuzzy, c-format
+msgid "Tags to show from other users:"
+msgstr ""
+"%s Маркери, които да се показват от други потребители %s Маркери за "
+"показване %s:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:94
+#, c-format
+msgid "Tags to show:"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #, c-format
@@ -11733,12 +11559,11 @@ msgstr ""
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:43
-#, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
+#, fuzzy, c-format
 msgid ""
 "The %s%s%sKoha online%s catalog is offline for system maintenance. We'll be "
-"back soon! %s If you have any questions, please contact the "
+"back soon!"
 msgstr ""
 "Каталогът %s%s%sKoha онлайн%s е офлайн за поддръжка на системата. Ще се "
 "върнем скоро! %s Ако имате въпроси, моля, свържете се с "
@@ -11765,73 +11590,10 @@ msgid "The cart was sent to: %s"
 msgstr "Количката беше изпратена до: %s"
 
 #. %1$s:  subscription_LOO.startdate | html 
-#. %2$s:  IF ( subscription_LOO.periodicity1 ) 
-#. %3$s:  END 
-#. %4$s:  IF ( subscription_LOO.periodicity2 ) 
-#. %5$s:  END 
-#. %6$s:  IF ( subscription_LOO.periodicity3 ) 
-#. %7$s:  END 
-#. %8$s:  IF ( subscription_LOO.periodicity4 ) 
-#. %9$s:  END 
-#. %10$s:  IF ( subscription_LOO.periodicity5 ) 
-#. %11$s:  END 
-#. %12$s:  IF ( subscription_LOO.periodicity6 ) 
-#. %13$s:  END 
-#. %14$s:  IF ( subscription_LOO.periodicity7 ) 
-#. %15$s:  END 
-#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
-#. %17$s:  END 
-#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
-#. %19$s:  END 
-#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
-#. %21$s:  END 
-#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
-#. %23$s:  END 
-#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
-#. %25$s:  END 
-#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
-#. %27$s:  END 
-#. %28$s:  IF ( subscription_LOO.arrival1 ) 
-#. %29$s:  END 
-#. %30$s:  IF ( subscription_LOO.arrival2 ) 
-#. %31$s:  END 
-#. %32$s:  IF ( subscription_LOO.arrival3 ) 
-#. %33$s:  END 
-#. %34$s:  IF ( subscription_LOO.arrival4 ) 
-#. %35$s:  END 
-#. %36$s:  IF ( subscription_LOO.arrival5 ) 
-#. %37$s:  END 
-#. %38$s:  IF ( subscription_LOO.arrival6 ) 
-#. %39$s:  END 
-#. %40$s:  IF ( subscription_LOO.arrival7 ) 
-#. %41$s:  END 
-#. %42$s:  IF ( subscription_LOO.numberlength ) 
-#. %43$s:  subscription_LOO.numberlength | html 
-#. %44$s:  END 
-#. %45$s:  IF ( subscription_LOO.weeklength ) 
-#. %46$s:  subscription_LOO.weeklength | html 
-#. %47$s:  END 
-#. %48$s:  IF ( subscription_LOO.monthlength ) 
-#. %49$s:  subscription_LOO.monthlength | html 
-#. %50$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:61
-#, c-format
-msgid ""
-"The current subscription began on %s and is issued %s twice per day %s %s "
-"every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
-"%s every 3 weeks %s %s every month %s %s every 2 months %s %s every quarter "
-"%s %s twice per year %s %s every year %s %s every 2 years %s %s irregularly "
-"%s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s "
-"on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
-"%s %s%s months%s "
-msgstr ""
-"Текущият абонамент започна на %s и се издава %s два пъти на ден %s %s всеки "
-"ден %s %s три пъти седмично %s %s всяка седмица %s %s на всеки 2 седмици %s "
-"%s на всеки 3 седмици %s %s всеки месец %s %s на всеки 2 месеца %s %s на "
-"всяко тримесечие %s %s два пъти годишно %s %s всяка година %s %s на всеки 2 "
-"години %s %s нередовно %s %s в понеделник %s %s във вторник %s %s в сряда %s "
-"%s в четвъртък %s %s в петък %s %s в събота %s %s в неделя%s за %s%s издание"
-"%s %s%s седмици%s %s%s месеца%s "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:62
+#, fuzzy, c-format
+msgid "The current subscription began on %s and is issued"
+msgstr "Първият абонамент беше направен на %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:45
 #, c-format
@@ -11947,6 +11709,12 @@ msgstr "Резултатите от операцията ще бъдат пок�
 msgid "The password has been changed for user \"%s\"."
 msgstr "Паролата е променена за потребителя \"%s\"."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:93
+#, c-format
+msgid ""
+"The process of password recovery has already been started for this account"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
 #, c-format
 msgid "The selected suggestions have been deleted."
@@ -12001,15 +11769,10 @@ msgid "The system does not recognize this barcode."
 msgstr "Системата не разпознава този баркод."
 
 #. %1$s:  ERROR.scrubbed | html 
-#. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
 #, c-format
-msgid ""
-"The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
-"code. It was NOT added. "
+msgid "The tag was added as &quot;%s&quot;."
 msgstr ""
-"Маркерът беше добавен като &quot;%s&quot;.%s Забележка: маркерът ви беше "
-"изцяло код за маркиране. НЕ e добавен. "
 
 #. %1$s:  message_value | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:57
@@ -12033,6 +11796,12 @@ msgstr "Има %s абонамент(и), свързан(и) с това заг�
 msgid "There are no comments on this title."
 msgstr "Няма коментари за това заглавие."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:51
+#, fuzzy, c-format
+msgid "There are no items available for recall."
+msgstr "Няма библиотечни документи, които могат да бъдат резервирани."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
 #, c-format
 msgid "There are no items that can be placed on hold."
@@ -12054,21 +11823,10 @@ msgstr "Нямате предложения за покупка в очаква�
 msgid "There is no minimum or maximum character length."
 msgstr "Няма минимална или максимална дължина на символа."
 
-#. %1$s:  IF ( ERROR.badparam ) 
-#. %2$s:  ERROR.badparam | html 
-#. %3$s:  ELSIF ( ERROR.login ) 
-#. %4$s:  ELSIF ( ERROR.failed_delete ) 
-#. %5$s:  ERROR.failed_delete | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
-#, c-format
-msgid ""
-"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
-"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
-"the tag %s. "
-msgstr ""
-"Възникна проблем с тази операция: %s ГРЕШКА: невалиден параметър %s %s "
-"ГРЕШКА: Трябва да влезете, за да завършите това действие. %s ГРЕШКА: Не "
-"можете да изтриете маркера %s. "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:67
+#, fuzzy, c-format
+msgid "There was a problem with this operation:"
+msgstr "При изпращането възникна проблем"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:37
@@ -12109,6 +11867,11 @@ msgstr ""
 "Този &quot;облак&quot; показва най-използваните теми в нашия каталог. "
 "Кликнете върху всеки предмет по-долу, за да видите библиотечните документи в "
 "нашата колекция."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:91
+#, c-format
+msgid "This account has no email address we can send the email to."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:54
 #, c-format
@@ -12230,14 +11993,10 @@ msgstr "Този списък съдържа %s заглавия"
 msgid "This list does not exist."
 msgstr "Този списък не съществува."
 
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#, c-format
-msgid ""
-"This list is empty. %s You can add to your lists from the results of any "
-msgstr ""
-"Списък е празен. %s Можете да добавите към списъците си от резултатите на "
-"който и да е "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#, fuzzy, c-format
+msgid "This list is empty."
+msgstr "Този списък не съществува."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
@@ -12496,7 +12255,7 @@ msgid "Unable to update your setting!"
 msgstr "Вашата настройка не може да се актуализира!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Недостъпни (изгубен или липсващ)"
@@ -12525,11 +12284,18 @@ msgstr "Обединено заглавие"
 msgid "Unified title: %s "
 msgstr "Обединено заглавие: %s "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:195
 #, c-format
 msgid "Unknown"
 msgstr "Неизвестен"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#, c-format
+msgid "Unrecognized error."
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:51
 #, c-format
 msgid "Unsubscribe from a subscription alert"
@@ -12551,6 +12317,12 @@ msgstr "Актуализиране на настройка за автомати
 #, fuzzy
 msgid "Update password"
 msgstr "Смяна на паролата"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Update your contact information"
+msgstr "Информация за контакт"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
@@ -12713,7 +12485,7 @@ msgstr "уеб сайт"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
 #, c-format
 msgid "Vol info"
 msgstr "Пълна информация"
@@ -12729,17 +12501,29 @@ msgstr "Том"
 msgid "Volume:"
 msgstr "Том:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#, fuzzy, c-format
+msgid "Waiting"
+msgstr "Дата на изчакване"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:110
 #, c-format
 msgid "Waiting date"
 msgstr "Дата на изчакване"
 
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#, fuzzy, c-format
+msgid "Waiting for patron at %s"
+msgstr "Очаква се на %s от %s. "
+
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting for patron at %s since %s. "
-msgstr "Очаква се на %s%s, %s%s от %s."
+msgstr "Очаква се на %s от %s. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
@@ -12860,6 +12644,18 @@ msgstr "Да"
 msgid "Yes "
 msgstr "Да "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#, fuzzy, c-format
+msgid "Yes (Item overdue or lost)"
+msgstr ""
+"%s Да (просрочен или изгубен библиотечен документ) %s Да (Такса за заемане) "
+"%s Не %s "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:436
+#, fuzzy, c-format
+msgid "Yes (Rental fees)"
+msgstr "Такса за заемане"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:56
 #, c-format
 msgid "Yes, I agree."
@@ -12904,6 +12700,28 @@ msgstr "Да, възобновете всички резервации"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
 msgid "Yes, suspend all holds"
 msgstr "Да, прекъснете всички резервации"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:173
+#, fuzzy, c-format
+msgid ""
+"You already have at least one item level hold on this title. All further "
+"holds must be item level."
+msgstr ""
+"%s Вече имате поне една резервация на ниво екземпляр за това заглавие. "
+"Всички допълнителни резервации трябва да бъдат на ниво екземпляр. %s Вече "
+"имате поне една резервация за ниво запис за това заглавие. Всички "
+"допълнителни резервации трябва да бъдат на ниво запис. %s "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
+#, fuzzy, c-format
+msgid ""
+"You already have at least one record level hold on this title. All further "
+"holds must be record level."
+msgstr ""
+"%s Вече имате поне една резервация на ниво екземпляр за това заглавие. "
+"Всички допълнителни резервации трябва да бъдат на ниво екземпляр. %s Вече "
+"имате поне една резервация за ниво запис за това заглавие. Всички "
+"допълнителни резервации трябва да бъдат на ниво запис. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #, c-format
@@ -12971,6 +12789,13 @@ msgstr ""
 "Вие сте абонирани за списъци за следващи периодични заглавия. Ако искате да "
 "направите промени, моля, свържете се с библиотеката."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#, fuzzy, c-format
+msgid "You can add to your lists from the results of any "
+msgstr ""
+"Списък е празен. %s Можете да добавите към списъците си от резултатите на "
+"който и да е "
+
 #. I
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:57
 msgid ""
@@ -13031,6 +12856,11 @@ msgid ""
 msgstr ""
 "Не може да ви бъде издаден сертификат, вие сте заели библиотечни документи. "
 "Моля, върнете ги в библиотеката."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:53
+#, fuzzy, c-format
+msgid "You cannot place a recall on this item."
+msgstr "Вече сте искали това заглавие."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:52
@@ -13111,9 +12941,11 @@ msgstr "Нямате разрешение да актуализирате тоз
 msgid "You do not have permission to view this list."
 msgstr "Нямате разрешение за преглед на този списък."
 
+#. For the first occurrence,
 #. %1$s:  IF Koha.Preference('FailedLoginAttempts') 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:51
 #, c-format
 msgid ""
 "You entered an incorrect username or password. Please try again! But note "
@@ -13189,6 +13021,11 @@ msgstr "Моля, попълнете всички празни задължит�
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Нямате заети библиотечни документи"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
+#, fuzzy, c-format
+msgid "You have reached the maximum number of recalls on this record."
+msgstr "Презаписахте библиотечният документ максимално разрешения брой пъти."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
@@ -13287,6 +13124,11 @@ msgstr ""
 msgid "You must be logged in to place a recall."
 msgstr "Трябва да сте влезли в системата, за да добавите маркери."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:60
+#, fuzzy, c-format
+msgid "You must contact the library for assistance."
+msgstr "Не можете да нулирате паролата си."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:117
 #, fuzzy, c-format
@@ -13364,6 +13206,24 @@ msgid ""
 "again."
 msgstr ""
 "Въвели сте грешни знаци в полето преди да изпратите. Моля, опитайте отново."
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
+#, fuzzy, c-format
+msgid "You will be charged a hold fee of %s for placing this hold"
+msgstr ""
+"%s Ще бъдете таксувани с такса за резервация от %s при получаване на този "
+"екземпляр %s Ще бъдете таксувани с такса за резервация от %s при поставяне "
+"на тази резервация %s "
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#, fuzzy, c-format
+msgid "You will be charged a hold fee of %s when you collect this item"
+msgstr ""
+"%s Ще бъдете таксувани с такса за резервация от %s при получаване на този "
+"екземпляр %s Ще бъдете таксувани с такса за резервация от %s при поставяне "
+"на тази резервация %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:62
 #, c-format
@@ -13569,6 +13429,13 @@ msgstr ""
 "Вашите корекции са изпратени в библиотеката и ще се актуализират възможно "
 "най-скоро."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:59
+#, c-format
+msgid ""
+"Your current password was entered incorrectly. If this problem persists, "
+"please ask a librarian to reset your password for you."
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -13757,6 +13624,7 @@ msgstr ""
 "Вашата парола трябва да съдържа най-малко %s знака, включително "
 "ЗАДЪЛЖИТЕЛНО, малки букви и цифри."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:23
 #, c-format
 msgid "Your payment"
@@ -13812,6 +13680,7 @@ msgstr "Бележката ви за %s е запазена и изпратен�
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:287
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:370
 #, c-format
 msgid "Your purchase suggestions"
@@ -13984,6 +13853,12 @@ msgstr "[%s маркера не се поддържа от вашия брауз
 msgid "a an the"
 msgstr "някакъв"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
+#, fuzzy, c-format
+msgid "a list:"
+msgstr "%sсписък:%s"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:782
 #, c-format
@@ -14013,6 +13888,11 @@ msgstr "и се съгласявам с обработката на личнит
 msgid "ask for a discharge"
 msgstr "поискайте помощ"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#, fuzzy, c-format
+msgid "at"
+msgstr "Количка за книги"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:121
 #, c-format
@@ -14041,10 +13921,11 @@ msgstr "borrowernumber"
 msgid "breadcrumb"
 msgstr "breadcrumb"
 
-#. For the first occurrence,
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "by"
 msgstr "от"
 
@@ -14137,6 +14018,56 @@ msgstr "имейл"
 msgid "email address"
 msgstr "имейл адрес"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:85
+#, fuzzy, c-format
+msgid "every 2 months"
+msgstr "12 месеца"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:76
+#, c-format
+msgid "every 2 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:97
+#, c-format
+msgid "every 2 years"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:79
+#, c-format
+msgid "every 3 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:67
+#, fuzzy, c-format
+msgid "every day"
+msgstr "%s на ден"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:82
+#, fuzzy, c-format
+msgid "every month"
+msgstr "3 месеца"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:88
+#, c-format
+msgid "every quarter"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:73
+#, c-format
+msgid "every week"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:94
+#, c-format
+msgid "every year"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#, fuzzy, c-format
+msgid "expected at"
+msgstr "Очакван"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:785
 #, c-format
@@ -14148,6 +14079,11 @@ msgstr "expiry_date"
 msgid "firstname"
 msgstr "име"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:124
+#, fuzzy, c-format
+msgid "for"
+msgstr "или"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:63
 #, fuzzy, c-format
 msgid "for every request "
@@ -14157,6 +14093,11 @@ msgstr "Заявката е завършена "
 #, c-format
 msgid "for more information on what it does and how to configure it."
 msgstr "за повече информация какво прави и как да го конфигурирате."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#, fuzzy, c-format
+msgid "for patron"
+msgstr "LookupPatron"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
@@ -14264,13 +14205,24 @@ msgstr "в главен вход"
 msgid "in the complete record"
 msgstr "в пълния запис"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:100
+#, c-format
+msgid "irregularly"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:61
 #, c-format
 msgid "is exactly"
 msgstr "е точно"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:125
+#, fuzzy, c-format
+msgid "issues"
+msgstr "Издание"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
 #, c-format
 msgid "item"
 msgstr "библиотечен документ"
@@ -14282,6 +14234,11 @@ msgstr "библиотечен документ"
 #, c-format
 msgid "item_id"
 msgstr "item_id"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, fuzzy, c-format
+msgid "items"
+msgstr "библиотечен документ"
 
 #. ABBR
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:151
@@ -14313,6 +14270,11 @@ msgstr "списък на идентификаторите на системни
 msgid "log in using a different account"
 msgstr "влезте с друг акаунт"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:127
+#, fuzzy, c-format
+msgid "months"
+msgstr "3 месеца"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:256
 #, c-format
 msgid "negcap "
@@ -14322,6 +14284,41 @@ msgstr "negcap "
 #, c-format
 msgid "not"
 msgstr "без"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:115
+#, c-format
+msgid "on Friday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:103
+#, c-format
+msgid "on Monday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:118
+#, c-format
+msgid "on Saturday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:121
+#, c-format
+msgid "on Sunday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:112
+#, c-format
+msgid "on Thursday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:106
+#, c-format
+msgid "on Tuesday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:109
+#, c-format
+msgid "on Wednesday"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:156
 #, fuzzy, c-format
@@ -14481,27 +14478,12 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#. %1$s:  transfer.datesent | $KohaDates 
-#. %2$s:  ELSIF ( HOLD.is_in_processing ) 
-#. %3$s:  ELSIF ( HOLD.suspend ) 
-#. %4$s:  IF ( HOLD.suspend_until ) 
-#. %5$s:  HOLD.suspend_until | $KohaDates 
-#. %6$s:  END 
-#. %7$s:  ELSE 
-#. %8$s:  IF HOLD.itemtype 
-#. %9$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#. %12$s:  END 
-#. %13$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
-msgid ""
-"since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending for "
-"next available item of item type '%s' %s Pending %s %s %s "
+msgid "since"
 msgstr ""
-"от %s %s В обработка %s Прекратен %s до %s %s %s %s Изчакващ за следващия "
-"наличен библиотечен документ от вид '%s' %s В очакване %s %s %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:48
@@ -14625,17 +14607,37 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "възникна проблем при обработката на плащането Ви"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:70
+#, c-format
+msgid "three times per week"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
 #, c-format
 msgid "to post a comment. "
 msgstr "да публикувате коментар."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:64
+#, fuzzy, c-format
+msgid "twice per day"
+msgstr "%s на ден"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:91
+#, c-format
+msgid "twice per year"
+msgstr ""
 
 #. LINK
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:58
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "until"
+msgstr "до "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "until "
 msgstr "до "
@@ -14690,6 +14692,11 @@ msgstr "чакащи резервации:"
 #, c-format
 msgid "was not found in the database. Please try again."
 msgstr "не беше намерен в базата данни. Моля, опитайте отново."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:126
+#, c-format
+msgid "weeks"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:542
 #, c-format
@@ -14824,9 +14831,249 @@ msgstr "маркери"
 msgid "×"
 msgstr "×"
 
+#~ msgid ""
+#~ "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
+#~ msgstr "%s %s %s %s %s%s%sKoha online%s каталог &rsaquo; Плащане %s %s%s "
+
+#~ msgid "%s %s %s %s Item in transit from "
+#~ msgstr "%s %s %s %s В процес на прехвърляне "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s %s New password must not be the same as old password. %s Passwords do "
+#~ "not match. Please re-type your new password. %s Password must be at least "
+#~ "%s characters long. %s Password must contain at least one digit, one "
+#~ "lowercase and one uppercase. %s Password must not contain leading or "
+#~ "trailing whitespaces. %s You entered an incorrect username or password. "
+#~ "Please try again! But note that passwords are case sensitive%s and that "
+#~ "your account will be locked out after a fixed number of failed login "
+#~ "attempts%s. Please contact a library staff member if you continue to have "
+#~ "problems. %s Please log-in to account to update your password."
+#~ msgstr ""
+#~ "%s Паролите не съвпадат. Моля, въведете отново новата си парола. %s %s "
+#~ "Паролата трябва да бъде поне %s символа. %s %s Паролата трябва да съдържа "
+#~ "поне една цифра, една главна и една малка буква. %s %s Паролата не трябва "
+#~ "да съдържа интервали. %s %s Вашата текуща парола беше въведена "
+#~ "неправилно. Ако този проблем продължава, моля, помолете библиотекар да "
+#~ "зададе паролата Ви вместо вас. %s "
+
+#~ msgid ""
+#~ "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s "
+#~ "RSS feed for %s and system-wide library news %s RSS feed for system-wide "
+#~ "library news %s %s "
+#~ msgstr ""
+#~ "%s %s RSS емисия за %s новини от библиотеката %s RSS емисия за новини от "
+#~ "библиотеката %s %s %s RSS емисия за %s и новини за цялата библиотека %s "
+#~ "RSS емисия за новини за цялата библиотека %s %s "
+
+#~ msgid ""
+#~ "%s %s Search also for narrower subjects %s Search also for broader "
+#~ "subjects %s Search also for related subjects %s "
+#~ msgstr ""
+#~ "%s %s Търсене по-тесни теми %s Търсене по-широки теми %s Търсене свързани "
+#~ "теми %s "
+
+#~ msgid "%s %sShared%sPrivate%s %s Public %s "
+#~ msgstr "%s %sСподелен%sЛичен%s %s Публичен %s "
+
+#~ msgid ""
+#~ "%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s "
+#~ msgstr ""
+#~ "%s Добавено %s от Вас %s %s Добавено %s от %s %s %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s %s %s "
+
+#~ msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
+#~ msgstr ""
+#~ "%s Изпълнено %s Отменено %s В изчакване %s В процес на обработка %s В "
+#~ "Очакване %s "
+
+#~ msgid "%s Library %s Libraries %s "
+#~ msgstr "%s Библиотека %s Библиотеки %s "
+
+#~ msgid ""
+#~ "%s No recalls have been made. %s %s Recalls have not been enabled. Please "
+#~ "contact your library. %s "
+#~ msgstr ""
+#~ "%s Не са правени резервации. %s %s Резервациите не са разрешени. Моля, "
+#~ "свържете се с вашата библиотека. %s "
+
+#~ msgid "%s On hold %s No renewals left %s "
+#~ msgstr "%s Резервиран %s Не са останали презаписвания %s "
+
+#~ msgid ""
+#~ "%s Passwords do not match. Please re-type your new password. %s %s "
+#~ "Password must be at least %s characters long. %s %s Password must contain "
+#~ "at least one digit, one lowercase and one uppercase. %s %s Password must "
+#~ "not contain leading or trailing whitespaces. %s %s Your current password "
+#~ "was entered incorrectly. If this problem persists, please ask a librarian "
+#~ "to reset your password for you. %s "
+#~ msgstr ""
+#~ "%s Паролите не съвпадат. Моля, въведете отново новата си парола. %s %s "
+#~ "Паролата трябва да бъде поне %s символа. %s %s Паролата трябва да съдържа "
+#~ "поне една цифра, една главна и една малка буква. %s %s Паролата не трябва "
+#~ "да съдържа интервали. %s %s Вашата текуща парола беше въведена "
+#~ "неправилно. Ако този проблем продължава, моля, помолете библиотекар да "
+#~ "зададе паролата Ви вместо вас. %s "
+
+#~ msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
+#~ msgstr "%s В очакване %s Обработване %s Нов %s Завършено %s Отменено %s "
+
+#~ msgid ""
+#~ "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
+#~ "suggestions %s %s "
+#~ msgstr ""
+#~ "%s Предложения за покупка %s %s Вашите предложения за покупка %s "
+#~ "Предложения за покупка %s %s "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s Recalls have not been enabled. Please contact your library. %s There "
+#~ "are no items available for recall. "
+#~ msgstr ""
+#~ "%s Бележките по изданието не са включени. Обърнете се към библиотекар. %s "
+
+#~ msgid ""
+#~ "%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
+#~ "alert %s "
+#~ msgstr ""
+#~ "%s Запишете се за съобщение за получен абонамент %s Отпишете се за "
+#~ "съобщение за получен абонамент %s"
+
+#~ msgid ""
+#~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
+#~ "%s %s %s %s %s %s. "
+#~ msgstr ""
+#~ "%s В очакване на %s Резервирано %s за читател %s при %s очаквано при %s "
+#~ "%s от %s %s %s %s %s %s %s. "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
+#~ "%s since %s. %s "
+#~ msgstr ""
+#~ "%s В очакване на %s Резервирано %s за читател %s при %s очаквано при %s "
+#~ "%s от %s %s %s %s %s %s %s. "
+
+#~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
+#~ msgstr "%s%s %sбиблиотечен документ%sбиблиотечни документи%s%sПразно%s"
+
+#~ msgid ""
+#~ "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+#~ "%sCollection: %s%s "
+#~ msgstr ""
+#~ "%sРазглеждане на %s рафтове%s %s, %s%sМестоположение на стелажа: %s%s %s, "
+#~ "%s %sКолекция: %s%s "
+
+#~ msgid "%sCopy%sScan%s"
+#~ msgstr "%sКопиране%sСканиране%s"
+
+#~ msgid ""
+#~ "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never "
+#~ "received)%s %sMissing (sold out)%s %sMissing (damaged)%s %sMissing "
+#~ "(lost)%s %sNot available%s %sDelete%s %sClaimed%s %sStopped%s "
+#~ msgstr ""
+#~ "%sОчаква се%s %sПолучен%s %sЗадържан%s %sЛипсва%s %sЛипсва (не е "
+#~ "получен)%s %sЛипсва (продаден)%s %sЛипсва(повреден)%s %sЛипсва "
+#~ "(загубен)%s %sНе е достъпен%s %sОтчислен%s %s Заявен%s %sСпрян%s "
+
+#~ msgid ""
+#~ "%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in "
+#~ "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+#~ "ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+#~ msgstr ""
+#~ "%sДължим екземпляр %sПредварително известие %sРезервации запълнени "
+#~ "%sНапомняне за резервация %sВръщане %s %s Заемане и презаписване %s "
+#~ "Заемане %s %sМеждубиблиотечно заемане получено %sМеждубиблиотечно заемане "
+#~ "не е получено %sАвтоматично презаписване %sНеизвестно %s"
+
+#~ msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
+#~ msgstr ""
+#~ "%sВид библиотечен документ %sКолекция %sМестоположение на рафта %sНещо "
+#~ "друго %s "
+
+#~ msgid "%sLibrary%sLibraries%s"
+#~ msgstr "%sБиблиотека%sБиблиотеки%s"
+
+#~ msgid ""
+#~ "%sRequested %sChecked by the library %sAccepted by the library %sOrdered "
+#~ "by the library %sSuggestion declined %sAvailable in the library %s %s %s "
+#~ "%s(%s)%s "
+#~ msgstr ""
+#~ "%sЗаявени %sПроверен от библиотеката %sПриема се от библиотеката "
+#~ "%sПоръчано от библиотеката %sОтказано предложение %sПредлага се в "
+#~ "библиотеката %s %s %s %s(%s)%s "
+
+#~ msgid "%sUpdate your contact information%sGo to your contact information%s"
+#~ msgstr ""
+#~ "%sАктуализирайте информацията за контакт%sОтидете до Вашата информация за "
+#~ "контакт%s"
+
+#~ msgid "%sby %s%s "
+#~ msgstr "%sот %s%s "
+
+#~ msgid ": %sa list:%s"
+#~ msgstr ":%sсписък:%s"
+
 #, fuzzy
 #~ msgid "Clear text"
 #~ msgstr "Изчисти датата"
 
 #~ msgid "Copyright date:"
 #~ msgstr "Дата на издаване:"
+
+#~ msgid ""
+#~ "Note: you can only delete your own tags. %s Note: your tag contained "
+#~ "markup code that was removed. "
+#~ msgstr ""
+#~ "Забележка: можете да изтриете само собствените си маркери. %s Забележка: "
+#~ "маркерът ви съдържа маркировъчен код, който беше премахнат."
+
+#~ msgid ""
+#~ "Please use the field 'Login' as well. %s This account has no email "
+#~ "address we can send the email to. %s The process of password recovery has "
+#~ "already been started for this account %s (\""
+#~ msgstr ""
+#~ "Моля, използвайте и полето 'Вход'. %s Този акаунт няма имейл адрес, на "
+#~ "който да можем да изпратим имейла. %s Процесът на възстановяване на "
+#~ "паролата вече е стартиран за този акаунт %s (\""
+
+#~ msgid ""
+#~ "The current subscription began on %s and is issued %s twice per day %s %s "
+#~ "every day %s %s three times per week %s %s every week %s %s every 2 weeks "
+#~ "%s %s every 3 weeks %s %s every month %s %s every 2 months %s %s every "
+#~ "quarter %s %s twice per year %s %s every year %s %s every 2 years %s %s "
+#~ "irregularly %s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on "
+#~ "Thursday %s %s on Friday %s %s on Saturday %s %s on Sunday %s for %s%s "
+#~ "issues%s %s%s weeks%s %s%s months%s "
+#~ msgstr ""
+#~ "Текущият абонамент започна на %s и се издава %s два пъти на ден %s %s "
+#~ "всеки ден %s %s три пъти седмично %s %s всяка седмица %s %s на всеки 2 "
+#~ "седмици %s %s на всеки 3 седмици %s %s всеки месец %s %s на всеки 2 "
+#~ "месеца %s %s на всяко тримесечие %s %s два пъти годишно %s %s всяка "
+#~ "година %s %s на всеки 2 години %s %s нередовно %s %s в понеделник %s %s "
+#~ "във вторник %s %s в сряда %s %s в четвъртък %s %s в петък %s %s в събота "
+#~ "%s %s в неделя%s за %s%s издание%s %s%s седмици%s %s%s месеца%s "
+
+#~ msgid ""
+#~ "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely "
+#~ "markup code. It was NOT added. "
+#~ msgstr ""
+#~ "Маркерът беше добавен като &quot;%s&quot;.%s Забележка: маркерът ви беше "
+#~ "изцяло код за маркиране. НЕ e добавен. "
+
+#~ msgid ""
+#~ "There was a problem with this operation: %s ERROR: illegal parameter %s "
+#~ "%s ERROR: You must log in to complete that action. %s ERROR: You cannot "
+#~ "delete the tag %s. "
+#~ msgstr ""
+#~ "Възникна проблем с тази операция: %s ГРЕШКА: невалиден параметър %s %s "
+#~ "ГРЕШКА: Трябва да влезете, за да завършите това действие. %s ГРЕШКА: Не "
+#~ "можете да изтриете маркера %s. "
+
+#~ msgid ""
+#~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "
+#~ "for next available item of item type '%s' %s Pending %s %s %s "
+#~ msgstr ""
+#~ "от %s %s В обработка %s Прекратен %s до %s %s %s %s Изчакващ за следващия "
+#~ "наличен библиотечен документ от вид '%s' %s В очакване %s %s %s"

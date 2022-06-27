@@ -4597,6 +4597,27 @@ msgstr "Enable"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "Don't enable"
 
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff client default the pickup location to the"
+msgstr ""
+
+# Circulation > Checkout Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgstr "circulation.pref#AllowReturnToBranch# ցանկացած գրադարան։"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgstr "Enable"
+
+# Cataloging > Display
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "cataloguing.pref#SeparateHoldings# պահման գրադարան"
+
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the "
@@ -10118,7 +10139,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Ընտրություններ:<ul><li><a href=\"#\" "
@@ -10147,7 +10168,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Հնարավորություններ:<ul><li><a href="
@@ -10177,7 +10198,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Հնարավորություններ:<ul><li><a href="
@@ -10331,7 +10352,7 @@ msgstr "opac.pref#OpacStarRatings# էջեր։"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Այս պահին աջակցվող արժեքներ</em>: "
 "Նյութի տեսակներ (<strong>itemtypes</strong>), Հավաքածուի կոդեր "
@@ -12993,7 +13014,7 @@ msgstr ""
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Այս պահին աջակցվող արժեքներ</em>: "
 "Նյութի տեսակներ (<strong>itemtypes</strong>), Հավաքածուի կոդեր "
@@ -14190,7 +14211,8 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance > XSLTDetailsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14200,9 +14222,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"opac.pref#OPACXSLTDetailsDisplay# <br />Ընտրություններ:<ul><li><a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
+"\"\">Թող դատարկ</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class="
+"\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default"
+"\">լռակյաց</a>\" լռակյացի համար</li><li>դիր ուղի սահմանելու համար xslt "
+"ֆայլը</li><li>դիր URL արտաքին հատուկ ձևանմուշի համար.</li></ul>{langcode} "
+"կփոխարինվի միջերեսի ըմթացիկ լեզվով"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14213,7 +14242,8 @@ msgstr ""
 "staff_client.pref#XSLTDetailsDisplay# Արտածիր մանրմասները աշխատակազմի "
 "հաճախորդում օգտագործելով XSLT ձևաթուղթ: "
 
-# Staff interface > Appearance > XSLTListsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14222,9 +14252,16 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
+"opac.pref#OPACXSLTResultsDisplay# <br />Հնարավորություններ:<ul><li><a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-"
+"value=\"\">Թող դատարկ</a> for \"no xslt\"</li><li>մուտք \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">լռակյաց</a>\" լռակյացի համար</li><li> դիր ուղի սահմանելու համար "
+"xslt ֆայլը</li><li>դիր URL արտաքին հատուկ ձևաչափի համար.</li></ul>{langcode} "
+"կփոխարինվի միջերեսի ընթացիկ լեզվով"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14235,7 +14272,8 @@ msgstr ""
 "staff_client.pref#XSLTResultsDisplay# Արտածիր արդյունքները աշխատակազմի "
 "հաճախորդում օգտագործելով XSLT ձևաթուղթ: "
 
-# Staff interface > Appearance > XSLTResultsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14245,9 +14283,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"opac.pref#OPACXSLTResultsDisplay# <br />Հնարավորություններ:<ul><li><a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-"
+"value=\"\">Թող դատարկ</a> for \"no xslt\"</li><li>մուտք \"<a href=\"#\" "
+"class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
+"\"default\">լռակյաց</a>\" լռակյացի համար</li><li> դիր ուղի սահմանելու համար "
+"xslt ֆայլը</li><li>դիր URL արտաքին հատուկ ձևաչափի համար.</li></ul>{langcode} "
+"կփոխարինվի միջերեսի ընթացիկ լեզվով"
 
 # Staff Client > Appearance
 #, fuzzy

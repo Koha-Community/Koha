@@ -3,15 +3,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 16:46-0300\n"
+"POT-Creation-Date: 2022-06-18 00:39-0300\n"
 "PO-Revision-Date: 2022-05-01 12:40-0300\n"
-"Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team \n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Pootle-Path: /uk/22.05/uk-UA-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -27,6 +25,11 @@ msgid_plural "({age} years)"
 msgstr[0] "({age} рік)"
 msgstr[1] "({age} роки)"
 msgstr[2] "({age} років)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:14
+#, fuzzy
+msgid "Actions"
+msgstr "Розташування"
 
 #: Koha/Database/Columns.pm:168
 msgid "Additional subfields (XML)"
@@ -134,18 +137,13 @@ msgid "Alternate contact: ZIP/Postal code"
 msgstr "Запасні дані для зв’язку: поштовий індекс"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:48
-msgid ""
-"An error occurred when deleting the existing mappings. Nothing has been "
-"changed!"
-msgstr ""
-"Під час вилучення існуючих зіставлень сталася помилка. Нічого не змінилося!"
+msgid "An error occurred when deleting the existing mappings. Nothing has been changed!"
+msgstr "Під час вилучення існуючих зіставлень сталася помилка. Нічого не змінилося!"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
-msgid ""
-"An error occurred when updating Elasticsearch index mappings: {message}."
-msgstr ""
-"Сталася помилка при оновленні зіставлення індексів Elasticsearch: {message}."
+msgid "An error occurred when updating Elasticsearch index mappings: {message}."
+msgstr "Сталася помилка при оновленні зіставлення індексів Elasticsearch: {message}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:46
 #, perl-brace-format
@@ -159,6 +157,11 @@ msgstr "Автор"
 #: Koha/Database/Columns.pm:132
 msgid "Barcode"
 msgstr "Штрих-код"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:14
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:13
+msgid "Batches"
+msgstr ""
 
 #: Koha/Database/Columns.pm:191
 msgid "Biblio number"
@@ -188,7 +191,7 @@ msgstr "Номер абонента бібліотеки"
 msgid "Call number"
 msgstr "Шифр зберігання"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:159
 msgctxt "Cancel hold button"
 msgid "Cancel"
 msgstr "Відміна"
@@ -332,7 +335,7 @@ msgstr "Стать"
 msgid "Gone no address flag"
 msgstr "Позначка про не вказану чи недійсну адресу"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:957
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:975
 msgid "Hold"
 msgid_plural "Holds"
 msgstr[0] "Замовлення"
@@ -414,7 +417,7 @@ msgstr "Номер примірника"
 msgid "Item number (internal)"
 msgstr "Номер примірника (внутрішній)"
 
-# Withdrawn тут у контексті використання допустимого списку „Withdrawn“, краще підходить „списано“
+# Withdrawn тут у контексті використання допустимого списку \"Withdrawn\", краще підходить \"списано\"
 #: C4/ILSDI/Services.pm:982
 msgid "Item withdrawn"
 msgstr "Примірник списано"
@@ -437,8 +440,12 @@ msgstr "LCCN (ш.з.БК)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:287
 msgid "Last item for bibliographic record with biblio-level hold on it"
+msgstr "Останній примірник бібліографічного запису має замовлення на рівні бібзапису"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:8
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:7
+msgid "Layouts"
 msgstr ""
-"Останній примірник бібліографічного запису має замовлення на рівні бібзапису"
 
 #: Koha/Database/Columns.pm:175 Koha/Database/Columns.pm:221
 msgid "Library"
@@ -520,7 +527,7 @@ msgstr "Замовлення"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:189
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:215
 msgctxt "verb"
 msgid "Order"
 msgstr "Порядок"
@@ -577,6 +584,11 @@ msgstr "Основний телефон"
 #: Koha/Database/Columns.pm:125
 msgid "Privacy settings"
 msgstr "Параметри конфіденційності"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:11
+msgid "Profiles"
+msgstr ""
 
 # Загальнодоступна нотатка:
 # (задовге)
@@ -684,6 +696,11 @@ msgstr "Прізвище"
 msgid "System permissions"
 msgstr "Системні привілеї"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:9
+msgid "Templates"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
@@ -698,7 +715,7 @@ msgctxt "Semester"
 msgid "Term:"
 msgstr "Терм:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -777,12 +794,8 @@ msgid "Withdrawn status"
 msgstr "Статус вилучення"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
-msgid ""
-"You attempted to delete all mappings for a required index, you must leave at "
-"least one mapping"
-msgstr ""
-"Ви намагалися вилучити усі відображення для необхідного індексу, необхідно "
-"залишити принаймні одне відображення"
+msgid "You attempted to delete all mappings for a required index, you must leave at least one mapping"
+msgstr "Ви намагалися вилучити усі відображення для необхідного індексу, необхідно залишити принаймні одне відображення"
 
 #: Koha/Database/Columns.pm:77
 msgid "ZIP/Postal code"
@@ -804,6 +817,11 @@ msgid_plural "baskets"
 msgstr[0] ""
 msgstr[1] ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:12
+msgid "batch"
+msgstr ""
+
 #: cataloguing/value_builder/unimarc_field_146h.pl:67
 #: cataloguing/value_builder/unimarc_field_146i.pl:67
 msgid "bowed string instruments"
@@ -817,6 +835,19 @@ msgstr "Усі підрозділи"
 #: cataloguing/value_builder/unimarc_field_146h.pl:55
 #: cataloguing/value_builder/unimarc_field_146i.pl:55
 msgid "brass instruments"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:6
+#, fuzzy
+msgid "by item types"
+msgstr "Тип одиниці"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:5
+msgid "by libraries"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:4
+msgid "by months"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
@@ -908,6 +939,11 @@ msgstr "Тип одиниці"
 msgid "keyboard instruments"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:6
+msgid "layout"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
 msgid "message"
@@ -976,6 +1012,11 @@ msgstr "Місця"
 msgid "plucked string instruments"
 msgstr ""
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:10
+msgid "profile"
+msgstr ""
+
 #: Koha/Database/Columns.pm:227
 #, fuzzy
 msgid "publishercode"
@@ -1010,6 +1051,11 @@ msgid "subscription"
 msgid_plural "subscriptions"
 msgstr[0] ""
 msgstr[1] ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:8
+msgid "template"
+msgstr ""
 
 #: cataloguing/value_builder/unimarc_field_146a.pl:59
 msgid "undefined, variable (e.g. Renaissance vocal or instrumental music)"
@@ -1070,3 +1116,4 @@ msgid_plural "{title} ({barcode}) was removed from {count} courses."
 msgstr[0] "{title} ({barcode}) було вилучено з {count} курсу."
 msgstr[1] "{title} ({barcode}) було вилучено з {count} курсів."
 msgstr[2] "{title} ({barcode}) було вилучено з {count} курсів."
+

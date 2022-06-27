@@ -4789,6 +4789,27 @@ msgstr "주지 않음"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "줌"
 
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff client default the pickup location to the"
+msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgstr "항목의 지정 도서관"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgstr "주지 않음"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "예약 도서관"
+
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the "
@@ -10020,7 +10041,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -10047,7 +10068,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -10075,7 +10096,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
@@ -10221,7 +10242,7 @@ msgstr "검색 옵션 보기"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Nuværende understøttede værdier</"
 "em>: Materialetyper (<strong>itemtypes</strong>), Samlingskoder "
@@ -12782,7 +12803,7 @@ msgstr "드롭-다운 고급 검색에서의 제한 언어 목록"
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "searching.pref#AdvancedSearchTypes# <em>Nuværende understøttede værdier</"
 "em>: Materialetyper (<strong>itemtypes</strong>), Samlingskoder "
@@ -13985,7 +14006,8 @@ msgid ""
 "editing certain HTML system preferences."
 msgstr ""
 
-# Staff interface > Appearance > XSLTDetailsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -13995,9 +14017,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"\">Lad være tom</a> for \"no xslt\"</"
+"li><li>indtast \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv en sti for at defnere en xslt-fil</li><li>giv en "
+"URL for et eksternt specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interface-sprog"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14006,7 +14035,8 @@ msgid ""
 "interface using XSLT stylesheet at: "
 msgstr "Vis detaljer i intranetklienten med XSLT stylesheet på: "
 
-# Staff interface > Appearance > XSLTListsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14015,9 +14045,16 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
+"\"</li><li>indtast<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv stien for at definere en xslt-fil</li><li>sæt en "
+"URL til et eksternt  specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interfacesprog"
 
 # Staff Client > Appearance
 #, fuzzy
@@ -14026,7 +14063,8 @@ msgid ""
 "using XSLT stylesheet at: "
 msgstr "Vis resultater i intranetklienten med XSLT stylesheet på: "
 
-# Staff interface > Appearance > XSLTResultsDisplay
+# OPAC > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14036,9 +14074,16 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"<br />Optioner:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Lad være tom</a>for \"ingen xslt"
+"\"</li><li>indtast<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for "
+"standarden</li><li>angiv stien for at definere en xslt-fil</li><li>sæt en "
+"URL til et eksternt  specifikt stylesheet.</li></ul>{langcode} erstattes med "
+"det aktuelle interfacesprog"
 
 # Staff Client > Appearance
 #, fuzzy

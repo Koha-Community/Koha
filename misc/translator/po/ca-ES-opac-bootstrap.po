@@ -2,40 +2,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-05-09 17:40-0300\n"
-"PO-Revision-Date: 2022-05-01 08:30-0300\n"
-"Language-Team: Koha Translation Team \n"
+"POT-Creation-Date: 2022-06-17 20:37-0300\n"
+"PO-Revision-Date: 2022-06-21 11:29+0000\n"
+"Last-Translator: Rbellido <rbellido@orex.es>\n"
+"Language-Team: Koha Translation Team\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ca/22.05/ca-ES-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-
-#. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %4$s:  INCLUDE 'doc-head-open.inc' 
-#. %5$s:  IF ( LibraryNameTitle ) 
-#. %6$s:  LibraryNameTitle | html 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  INCLUDE 'doc-head-close.inc' 
-#. %10$s:  BLOCK cssinclude 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, fuzzy, c-format
-msgid "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s%s%s%sKoha en línia%s catàleg &rsaquo; El vostre pagament %s %s%s "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( HOLD.is_in_transit ) 
-#. %4$s:  SET transfer = HOLD.item.get_transfer 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:111
-#, c-format
-msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s %s Exemplar en trànsit des de"
+"X-POOTLE-MTIME: 1655810977.734971\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -160,9 +139,10 @@ msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s &rsaquo; %s Libraries &rsaquo; %s %s %s Koha online %s catalog "
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"%s %s &rsaquo; %s Biblioteques &rsaquo; %s %s %s Koha online %s catàleg "
 
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term | html 
@@ -199,38 +179,6 @@ msgstr "%s %s Voleu dir: "
 msgid "%s %s End date: "
 msgstr "%s %s Fins a data: "
 
-#. %1$s:  SWITCH error 
-#. %2$s:  CASE  'no_change' 
-#. %3$s:  CASE  'passwords_mismatch' 
-#. %4$s:  CASE 'password_too_short' 
-#. %5$s:  minPasswordLength | html 
-#. %6$s:  CASE 'password_too_weak' 
-#. %7$s:  CASE 'password_has_whitespaces' 
-#. %8$s:  CASE 'invalid_credentials' 
-#. %9$s:  IF Koha.Preference('FailedLoginAttempts') 
-#. %10$s:  END 
-#. %11$s:  CASE 'no_expire' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:38
-#, fuzzy, c-format
-msgid ""
-"%s %s New password must not be the same as old password. %s Passwords do not "
-"match. Please re-type your new password. %s Password must be at least %s "
-"characters long. %s Password must contain at least one digit, one lowercase "
-"and one uppercase. %s Password must not contain leading or trailing "
-"whitespaces. %s You entered an incorrect username or password. Please try "
-"again! But note that passwords are case sensitive%s and that your account "
-"will be locked out after a fixed number of failed login attempts%s. Please "
-"contact a library staff member if you continue to have problems. %s Please "
-"log-in to account to update your password."
-msgstr ""
-"%s La contrasenya no coincideix. Si us plau torneu a introduir la "
-"contrasenya. %s %s La nova contrasenya ha de tenir un mínim de %s caràcters "
-"de longitud. %s%s La contrasenya ha de contenir com a mínim un número, una "
-"minúscula i una majúscula. %s %s La contrasenya no ha de contenir espais en "
-"blanc inicials ni finals. %s %s La contrasenya s'ha introduït de manera "
-"incorrecta. Si el problema persisteix, demaneu al personal bibliotecari que "
-"restableixi la contrasenya. %s "
-
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -238,28 +186,6 @@ msgstr ""
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s No s'han trobat resultats. %s "
-
-#. %1$s:  IF Branches.all.size == 1 
-#. %2$s:  IF branchcode 
-#. %3$s:  Branches.GetName( branchcode ) | html 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  IF branchcode 
-#. %8$s:  Branches.GetName( branchcode ) | html 
-#. %9$s:  ELSE 
-#. %10$s:  END 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:128
-#, c-format
-msgid ""
-"%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
-"feed for %s and system-wide library news %s RSS feed for system-wide library "
-"news %s %s "
-msgstr ""
-"%s %s Canal RSS per %s novetats de la biblioteca %s Canal RSS per novetats "
-"bibliogràfiques %s %s %s canal RSS per %s i novetats de totes les "
-"biblioteques %s Canal RSS per novetats de totes les biblioteques %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  IF ( ms_value ) 
@@ -273,27 +199,13 @@ msgstr ""
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s Results of search for '%s' %s Search results %s %s You did not specify "
 "any search criteria. %s &rsaquo; %s%s%sKoha online%s catalog "
 msgstr ""
-"%s%s%sKoha online%s catàleg &rsaquo; %s %s Resultats de la cerca de '%s' %s "
-"Resultats de la cerca %s %s No has especificat cap criteri de cerca. %s"
-
-#. %1$s: - SWITCH index -
-#. %2$s: - CASE 'su-na' -
-#. %3$s: - CASE 'su-br' -
-#. %4$s: - CASE 'su-rl' -
-#. %5$s: - END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:1
-#, c-format
-msgid ""
-"%s %s Search also for narrower subjects %s Search also for broader subjects "
-"%s Search also for related subjects %s "
-msgstr ""
-"%s %s Cercar també per termes específics %s Cercar també per termes genèrics "
-"%s Cercar també per termes relacionats %s "
+"%s %s Resultats de la cerca de '%s' %s Resultats de la cerca %s %s No s'ha "
+"especificat cap criteri de cerca. %s &rsaquo; %s%s%sKoha online%s catàleg "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -357,17 +269,6 @@ msgstr "%s %s%s%sEnllaç al recurs%s "
 msgid "%s %s's fines and charges"
 msgstr "%s %s's sancions i càrrecs"
 
-#. %1$s:  IF s.is_private 
-#. %2$s:  IF s.is_shared 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
-#, c-format
-msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s %sCompartir%sPrivat%s %s Públic %s "
-
 #. %1$s:  added_count | html 
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
@@ -422,51 +323,6 @@ msgstr "%s <?xml version=\"1.0\"?> "
 msgid "%s Account frozen %s %s "
 msgstr "%s Compte bloquejat %s %s "
 
-#. %1$s:  ELSIF (errMultipleAccountsForEmail) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
-#, c-format
-msgid "%s Account identification with this email address only is ambiguous. "
-msgstr ""
-"%s La identificació del compte només amb aquesta adreça de correu electrònic "
-"és ambigua. "
-
-#. %1$s:  IF review.your_comment 
-#. %2$s:  review.datereviewed | $KohaDates 
-#. %3$s:  ELSE 
-#. %4$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
-#. %5$s:  review.datereviewed | $KohaDates 
-#. %6$s:  SWITCH ShowReviewer 
-#. %7$s:  CASE 'full' 
-#. %8$s:  review.borrtitle | html 
-#. %9$s:  review.firstname | html 
-#. %10$s:  review.surname | html 
-#. %11$s:  CASE 'first' 
-#. %12$s:  review.firstname | html 
-#. %13$s:  CASE 'surname' 
-#. %14$s:  review.surname | html 
-#. %15$s:  CASE 'firstandinitial' 
-#. %16$s:  review.firstname | html 
-#. %17$s:  review.surname|truncate(2,'.') | html 
-#. %18$s:  CASE 'username' 
-#. %19$s:  review.userid | html 
-#. %20$s:  END 
-#. %21$s:  END 
-#. %22$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
-#, c-format
-msgid ""
-"%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s "
-msgstr ""
-"%s Afegit %s per vostè %s %s Afegit %s per %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s "
-
-#. %1$s:  IF (sendmailError) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
-#, c-format
-msgid "%s An error has occurred while sending you the password recovery link. "
-msgstr "%s  S'ha produït un error en processar el vostre requeriment."
-
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:36
@@ -478,35 +334,12 @@ msgstr ""
 "%s Es produeix un error en generar l'arxiu pdf. Si us plau, poseu-vos en "
 "contacte amb el personal de la Biblioteca per resoldre aquest problema. %s "
 
-#. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:247
-#, c-format
-msgid ""
-"%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr ""
-"%s Prestar, tornar, o renovar un exemplar: %s Prestar o renovar un exemplar: "
-"%s "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:28
 #, c-format
 msgid "%s Contact your library to be disenrolled from this club. %s "
 msgstr "%s Contacta amb mostrador per demanar la baixa d'aquest club. %s "
-
-#. %1$s:  IF (errcode==1) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:100
-#, c-format
-msgid ""
-"%s Could not create new list. Please check if the name is unique. %s Sorry, "
-"you cannot add items to this list. %s "
-msgstr ""
-"%s No es por crear una nova llista. Comproveu que el nom és únic. %s No es "
-"poden agregar més ítems a aquesta llista. %s "
 
 #. %1$s:  IF ( context == "list" ) 
 #. %2$s:  ELSE 
@@ -515,28 +348,6 @@ msgstr ""
 #, c-format
 msgid "%s Delete %s Delete list %s "
 msgstr "%s Suprimeix %s Suprimeix la llista %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  RECALL.checkout.date_due | $KohaDates 
-#. %3$s:  ELSIF ( RECALL.waiting and RECALL.expiration_date ) 
-#. %4$s:  RECALL.expiration_date | $KohaDates 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:102
-#, c-format
-msgid "%s Due to be returned by %s %s Pick up by %s %s - %s "
-msgstr ""
-
-#. %1$s:  IF hold.found == 'F' 
-#. %2$s:  ELSIF hold.cancellationdate 
-#. %3$s:  ELSIF hold.found == 'W' 
-#. %4$s:  ELSIF hold.found == 'T' 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:150
-#, c-format
-msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr "%s Complert %s Cancel·lat %s Esperant %s En trànsit %s Pendents %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -580,29 +391,13 @@ msgstr ""
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
 "DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 
-#. %1$s:  ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) 
+#. For the first occurrence,
+#. %1$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
-#, fuzzy, c-format
-msgid "%s If you have any questions, please contact the "
-msgstr "Si això és un error, contacteu amb la Biblioteca."
-
-#. %1$s:  IF ( RECALL.in_transit ) 
-#. %2$s:  RECALL.library.branchname | html 
-#. %3$s:  ELSIF ( RECALL.waiting ) 
-#. %4$s:  ELSIF ( RECALL.overdue ) 
-#. %5$s:  ELSIF ( RECALL.expired ) 
-#. %6$s:  RECALL.expiration_date | $KohaDates 
-#. %7$s:  ELSIF ( RECALL.cancelled ) 
-#. %8$s:  RECALL.completed_date | $KohaDates 
-#. %9$s:  ELSIF ( RECALL.fulfilled ) 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #, c-format
-msgid ""
-"%s In transit to %s %s Ready for pickup %s Overdue to be returned %s Expired "
-"on %s %s Cancelled on %s %s Fulfilled %s Requested %s "
-msgstr ""
+msgid "%s If you have any questions, please contact the "
+msgstr "%s Si teniu cap pregunta, poseu-vos en contacte amb el "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
@@ -637,14 +432,6 @@ msgstr "%s Exemplar esperant a "
 msgid "%s Item(s) checked out"
 msgstr "%s Exemplar(s) prestats"
 
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#, c-format
-msgid "%s Library %s Libraries %s "
-msgstr "%s Biblioteca %s Biblioteques %s "
-
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -653,32 +440,21 @@ msgstr "%s Biblioteca %s Biblioteques %s "
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Log in to your account %s Catalog login disabled %s &rsaquo; %s%s%sKoha "
 "online%s catalog "
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"%s Inicieu sessió al vostre compte %s Inici de sessió al catàleg desactivat "
+"%s &rsaquo; %s%s%sKoha online%s catàleg "
 
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
 #. %3$s:  SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s No data available %s %s "
-msgstr "%s Sense títol %s %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END # / # RECALLS.count 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:126
-#, fuzzy, c-format
-msgid ""
-"%s No recalls have been made. %s %s Recalls have not been enabled. Please "
-"contact your library. %s "
-msgstr ""
-"%s Les notes de préstec no s'han activat. Si us plau contacta amb la "
-"biblioteca. %s "
+msgstr "%s No hi ha dades disponibles %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -710,74 +486,11 @@ msgstr "%s Sense títol %s %s%s,%s "
 msgid "%s Not allowed"
 msgstr "%s No permès"
 
-#. %1$s:  ELSIF ( OVERDUE.onreserve ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
-#, c-format
-msgid "%s On hold %s No renewals left %s "
-msgstr "%s En reserva %s No queden renovacions %s "
-
-#. %1$s:  IF ( passwords_mismatch ) 
-#. %2$s:  END 
-#. %3$s:  IF password_too_short 
-#. %4$s:  minPasswordLength | html 
-#. %5$s:  END 
-#. %6$s:  IF password_too_weak 
-#. %7$s:  END 
-#. %8$s:  IF password_has_whitespaces 
-#. %9$s:  END 
-#. %10$s:  IF ( WrongPass ) 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:44
-#, c-format
-msgid ""
-"%s Passwords do not match. Please re-type your new password. %s %s Password "
-"must be at least %s characters long. %s %s Password must contain at least "
-"one digit, one lowercase and one uppercase. %s %s Password must not contain "
-"leading or trailing whitespaces. %s %s Your current password was entered "
-"incorrectly. If this problem persists, please ask a librarian to reset your "
-"password for you. %s "
-msgstr ""
-"%s La contrasenya no coincideix. Si us plau torneu a introduir la "
-"contrasenya. %s %s La nova contrasenya ha de tenir un mínim de %s caràcters "
-"de longitud. %s%s La contrasenya ha de contenir com a mínim un número, una "
-"minúscula i una majúscula. %s %s La contrasenya no ha de contenir espais en "
-"blanc inicials ni finals. %s %s La contrasenya s'ha introduït de manera "
-"incorrecta. Si el problema persisteix, demaneu al personal bibliotecari que "
-"restableixi la contrasenya. %s "
-
-#. %1$s:  IF ar.status == 'PENDING' 
-#. %2$s:  ELSIF ar.status == 'PROCESSING' 
-#. %3$s:  ELSIF ar.status == 'REQUESTED' 
-#. %4$s:  ELSIF ar.status == 'COMPLETED' 
-#. %5$s:  ELSIF ar.status == 'CANCELED' 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
-#, fuzzy, c-format
-msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
-msgstr "%s Pendent %s En procés %s Completada %s Cancel·lada %s "
-
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:452
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Crítics professionals"
-
-#. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( loggedinusername ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:282
-#, c-format
-msgid ""
-"%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
-"suggestions %s %s "
-msgstr ""
-"%s Suggeriments de compra %s %s Els vostres suggeriments de compra%s "
-"Suggeriments de compra %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
@@ -785,36 +498,12 @@ msgstr ""
 msgid "%s Quotations"
 msgstr "%s Cites"
 
-#. %1$s:  IF nosyspref 
-#. %2$s:  ELSIF error == 'unavailable' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:39
-#, fuzzy, c-format
-msgid ""
-"%s Recalls have not been enabled. Please contact your library. %s There are "
-"no items available for recall. "
-msgstr ""
-"%s Les notes de préstec no s'han activat. Si us plau contacta amb la "
-"biblioteca. %s "
-
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s No es permet la renovació %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  ELSIF ( RECALL.overdue ) 
-#. %3$s:  ELSIF ( RECALL.in_transit ) 
-#. %4$s:  RECALL.library.branchname | html 
-#. %5$s:  ELSIF ( RECALL.waiting ) 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#, c-format
-msgid ""
-"%s Requested %s Overdue to be returned %s In transit to %s %s Ready for "
-"pickup %s "
-msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
@@ -858,27 +547,6 @@ msgstr "%s autodevolució"
 msgid "%s Self checkout system"
 msgstr "%s Sistema d'autopréstec"
 
-#. %1$s:  IF ( typeissue ) 
-#. %2$s:  ELSIF ( typeissuecancel ) 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:20
-#, fuzzy, c-format
-msgid ""
-"%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
-"alert %s "
-msgstr ""
-"%sSubscriviu-vos a l'alerta de recepció de nous números %s Doneu-vos de "
-"baixa a l'alerta de recepció de nous números %s"
-
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
-#, c-format
-msgid "%s Tags to show from other users: %s Tags to show: %s "
-msgstr ""
-"%s Etiquetes per mostrar d'altres usuaris %s Etiquetes per mostrar: %s "
-
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #, c-format
@@ -891,13 +559,6 @@ msgstr "%s L'enllaç que has clicat no és vàlid o ha caducat. "
 #, c-format
 msgid "%s The passwords do not match. %s "
 msgstr "%s Les contrasenyes no coincideixen. %s "
-
-#. %1$s:  CASE 'account_locked' 
-#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
-#, fuzzy, c-format
-msgid "%s This account has been locked! %s "
-msgstr "%s Aquest registre no té exemplars. %s "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -920,45 +581,6 @@ msgstr "%s Aquest registre no té exemplars. %s "
 msgid "%s Video extracts"
 msgstr "%s Extractes de vídeo"
 
-#. %1$s:  IF ( itemLoo.waitingdate ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#. %4$s:  IF ( itemLoo.waitingdate ) 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  itemLoo.ExpectedAtLibrary | html 
-#. %8$s:  IF ( itemLoo.waitingdate ) 
-#. %9$s:  itemLoo.waitingdate | $KohaDates 
-#. %10$s:  ELSE 
-#. %11$s:  IF ( itemLoo.reservedate ) 
-#. %12$s:  itemLoo.reservedate | html 
-#. %13$s:  END 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
-#, c-format
-msgid ""
-"%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
-"%s %s %s %s %s. "
-msgstr ""
-"%s Esperant %s Reservat%s per a usuari %s en %s esperat el %s %s des de %s "
-"%s %s %s %s %s %s. "
-
-#. %1$s:  IF ( item.recall.waitingdate ) 
-#. %2$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %3$s:  item.recall.waitingdate | $KohaDates 
-#. %4$s:  ELSE 
-#. %5$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %6$s:  item.recall.recalldate | $KohaDates 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
-#, fuzzy, c-format
-msgid ""
-"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
-"since %s. %s "
-msgstr ""
-"%s Esperant %s Reservat%s per a usuari %s en %s esperat el %s %s des de %s "
-"%s %s %s %s %s %s. "
-
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -966,31 +588,6 @@ msgstr ""
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Sí %s No %s"
-
-#. %1$s:  IF ( ISSUE.charges ) 
-#. %2$s:  ELSIF ( ISSUE.rentalfines ) 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:432
-#, c-format
-msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
-msgstr ""
-"%s Si (exemplar perdut o en préstec) %s Si (tarifa de préstec) %s No %s"
-
-#. %1$s:  IF bibitemloo.forced_hold_level == 'item' 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:171
-#, c-format
-msgid ""
-"%s You already have at least one item level hold on this title. All further "
-"holds must be item level. %s You already have at least one record level hold "
-"on this title. All further holds must be record level. %s "
-msgstr ""
-"%s Ja tens una reserva a nivell d'exemplar en aquest títol. Totes les "
-"reserves posteriors han de ser nivell d'exemplar.%s Ja tens una reserva a "
-"nivell de registre en aquest títol. Totes les reserves posteriors han de ser "
-"nivell registre. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1005,34 +602,6 @@ msgstr "%s No s'ha especificat cap criteri de cerca. %s "
 #, c-format
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Mai no heu demanat un préstec en aquesta biblioteca. %s "
-
-#. %1$s:  IF error == 'duplicate' 
-#. %2$s:  ELSIF error == 'unavailable' 
-#. %3$s:  ELSIF error == 'cannot' 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:47
-#, c-format
-msgid ""
-"%s You have reached the maximum number of recalls on this record. %s There "
-"are no items available for recall. %s You cannot place a recall on this "
-"item. %s An error has occurred while attempting to place a recall. Please "
-"contact your library. %s "
-msgstr ""
-
-#. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
-#. %2$s:  RESERVE_CHARGE | $Price 
-#. %3$s:  ELSE 
-#. %4$s:  RESERVE_CHARGE | $Price 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:145
-#, c-format
-msgid ""
-"%s You will be charged a hold fee of %s when you collect this item %s You "
-"will be charged a hold fee of %s for placing this hold %s "
-msgstr ""
-"%s Se't cobrarà una quota per la reserva de %s quan recollis aquest exemplar "
-"%s Se't cobrarà una quota de reserva de %s per demanar aquesta reserva %s "
 
 #. %1$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
@@ -1083,18 +652,6 @@ msgstr "%s per día"
 msgid "%s per hour"
 msgstr "%s per hores"
 
-#. %1$s:  IF contents.count 
-#. %2$s:  contents.count | html 
-#. %3$s:  IF contents.count == 1 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
-#, c-format
-msgid "%s%s %sitem%sitems%s%sEmpty%s"
-msgstr "%s%s %sítem%sítems%s%sBuit%s"
-
 #. %1$s:  summary.mainentry | html 
 #. %2$s:  IF authtypetext 
 #. %3$s:  authtypetext | html 
@@ -1104,10 +661,11 @@ msgstr "%s%s %sítem%sítems%s%sBuit%s"
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s (%s)%s &rsaquo; Authority search &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"%s%s (%s)%s &rsaquo; Cerca d'autoritats &rsaquo; %s%s%sKoha online%s catàleg"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1151,6 +709,14 @@ msgstr "%s%s%sN/A%s "
 #, c-format
 msgid "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
 msgstr "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
+
+#. %1$s:  LibraryNameTitle | html 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
+#, c-format
+msgid "%s%sKoha online%s catalog"
+msgstr "%s%sKoha online%s catàleg"
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -1264,28 +830,6 @@ msgid ""
 "catalog"
 msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
 
-#. %1$s: - IF ( starting_homebranch ) 
-#. %2$s:  starting_homebranch | html 
-#. %3$s:  END -
-#. %4$s: - IF ( starting_homebranch && starting_location ) 
-#. %5$s:  END 
-#. %6$s: - IF ( starting_location ) 
-#. %7$s: - starting_location | html -
-#. %8$s:  END -
-#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
-#. %10$s:  END 
-#. %11$s: - IF ( starting_ccode ) 
-#. %12$s: - starting_ccode | html -
-#. %13$s:  END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
-msgid ""
-"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
-"%sCollection: %s%s "
-msgstr ""
-"%sNavegació %s prestatges%s %s, %s %sUbicació de les prestatgeries: %s%s %s, "
-"%s %sCol·lecció: %s%s "
-
 #. %1$s:  IF op == 'view' 
 #. %2$s:  shelf.shelfname | html 
 #. %3$s:  ELSE 
@@ -1295,17 +839,10 @@ msgstr ""
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
-#, fuzzy, c-format
-msgid "%sContents of %s%sYour lists%s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
-
-#. %1$s:  IF ar.format == 'PHOTOCOPY' 
-#. %2$s:  ELSIF ar.format == 'SCAN' 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #, c-format
-msgid "%sCopy%sScan%s"
+msgid "%sContents of %s%sYour lists%s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
+"%sContingut de %s%sLes vostres llistes%s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #. %1$s:  IF ( op_add ) 
 #. %2$s:  END 
@@ -1316,115 +853,13 @@ msgstr ""
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sEnter a new purchase suggestion%s %sPurchase suggestions%s &rsaquo; %s%s"
 "%sKoha online%s catalog"
 msgstr ""
-"%s Suggeriments de compra %s %s Els vostres suggeriments de compra%s "
-"Suggeriments de compra %s %s "
-
-#. %1$s:  IF ( serial.status1 ) 
-#. %2$s:  END 
-#. %3$s:  IF ( serial.status2 ) 
-#. %4$s:  END 
-#. %5$s:  IF ( serial.status3 ) 
-#. %6$s:  END 
-#. %7$s:  IF ( serial.status4 ) 
-#. %8$s:  END 
-#. %9$s:  IF ( serial.status41 ) 
-#. %10$s:  END 
-#. %11$s:  IF ( serial.status42 ) 
-#. %12$s:  END 
-#. %13$s:  IF ( serial.status43 ) 
-#. %14$s:  END 
-#. %15$s:  IF ( serial.status44 ) 
-#. %16$s:  END 
-#. %17$s:  IF ( serial.status5 ) 
-#. %18$s:  END 
-#. %19$s:  IF ( serial.status6 ) 
-#. %20$s:  END 
-#. %21$s:  IF ( serial.status7 ) 
-#. %22$s:  END 
-#. %23$s:  IF ( serial.status8 ) 
-#. %24$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:167
-#, c-format
-msgid ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
-"available%s %sDelete%s %sClaimed%s %sStopped%s "
-msgstr ""
-"%sPendent%s %sRebut%s %sEndarrerit%s %sPerdut%s %sNo disponible (no rebut)%s "
-"%sNo disponible (esgotat)%s %sNo disponible (malmès)%s %sNo disponible "
-"(perdut)%s %sNo disponible%s %sSuprimit%s %sReclamat%s %sAturat%s "
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, fuzzy, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sVenciment d'exemplar %sAvís anticipat %sPropers esdeveniments %sReserva "
-"completada %sDevolució d'exemplar %s %sPréstec d'exemplar i renovació "
-"%sPréstec d'exemplar %s %sPréstec interbibliotecari disponible %sPréstec "
-"interbibliotecari no disponible %sDesconegut %s"
-
-#. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
-#. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
-#. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
-#, c-format
-msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%sTipus d'ítem %sCol·lecció %sLocalització %sUna altra cosa %s "
-
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
-#, c-format
-msgid "%sLibrary%sLibraries%s"
-msgstr "%sBiblioteca%sBiblioteques%s "
-
-#. %1$s:  IF ( suggestions_loo.ASKED ) 
-#. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
-#. %3$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
-#. %4$s:  ELSIF ( suggestions_loo.ORDERED ) 
-#. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
-#. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
-#. %7$s:  ELSE 
-#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html 
-#. %9$s:  END 
-#. %10$s:  IF ( suggestions_loo.reason ) 
-#. %11$s:  suggestions_loo.reason | html 
-#. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
-#, c-format
-msgid ""
-"%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s "
-"%s(%s)%s "
-msgstr ""
-"%sSol·licitat %sComprovat per la Biblioteca %sAcceptat per la Biblioteca "
-"%sDemanat per la Biblioteca %sSuggeriment refusat  %sDisponible a la "
-"Biblioteca %s %s %s %s(%s)%s "
+"%sIntroduïu un nou suggeriment de compra%s %sSuggeriments de compra%s "
+"&rsaquo; %s%s%sKoha online%s catàleg"
 
 #. %1$s:  IF ( typeissue ) 
 #. %2$s:  ELSIF ( typeissuecancel ) 
@@ -1434,13 +869,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sSubscribe to a subscription alert %s Unsubscribe from a subscription alert "
 "%s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
-"%sSubscriviu-vos a l'alerta de recepció de nous números %s Doneu-vos de "
-"baixa a l'alerta de recepció de nous números %s"
+"%sSubscriure's a l'alerta de subscripció %s cancel · lar la subscripció "
+"d'una alerta de subscripció %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1455,18 +890,6 @@ msgstr "%sAquesta autoritat no s'ha fet servir en cap registre.%s "
 #, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%sAquest registre no té exemplars.%s "
-
-#. For the first occurrence,
-#. %1$s:  IF ( Koha.Preference('OPACPatronDetails') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
-#, c-format
-msgid "%sUpdate your contact information%sGo to your contact information%s"
-msgstr ""
-"%sActualitzeu la informació de contacte %sAneu a la vostra informació de "
-"contacte %s"
 
 #. %1$s:  IF action == 'edit' 
 #. %2$s:  ELSE 
@@ -1498,23 +921,6 @@ msgstr "%sSí %s"
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sSí%sNo%s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
-#, c-format
-msgid "%sa list:%s"
-msgstr "%suna llista:%s"
-
-#. For the first occurrence,
-#. %1$s:  IF ( author ) 
-#. %2$s:  author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
-#, c-format
-msgid "%sby %s%s "
-msgstr "%sper %s%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
@@ -2189,9 +1595,9 @@ msgid "(Accruing)"
 msgstr "(Accruing)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:38
-#, fuzzy, c-format
+#, c-format
 msgid "(Acronym)"
-msgstr "%sd - Acrònim"
+msgstr "(Acrònim)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -2223,9 +1629,9 @@ msgid "(Checked out)"
 msgstr "(Prestat)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:36
-#, fuzzy, c-format
+#, c-format
 msgid "(Earlier heading)"
-msgstr "%sa - Encapçalament anterior"
+msgstr "(Encapçalament anterior)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:53
 #, c-format
@@ -2238,9 +1644,9 @@ msgid "(Hides shelf browser)"
 msgstr "(Amaga l'exploració per prestatgeria)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:42
-#, fuzzy, c-format
+#, c-format
 msgid "(Immediate parent body)"
-msgstr "%st - Institució superior"
+msgstr "(Institució superior)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:14
 #, c-format
@@ -2252,9 +1658,9 @@ msgstr ""
 "de la biblioteca per obtenir ajuda)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "(Later heading)"
-msgstr "%sb - Encapçalament posterior"
+msgstr "(Encapçalament posterior)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:55
 #, c-format
@@ -2262,9 +1668,9 @@ msgid "(Lost)"
 msgstr "(Perdut)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:39
-#, fuzzy, c-format
+#, c-format
 msgid "(Musical composition)"
-msgstr "%sf - Composició Musical"
+msgstr "(Composició Musical)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:41
 #, fuzzy, c-format
@@ -2512,23 +1918,18 @@ msgstr "-- Trieu format --"
 msgid "-- none -- "
 msgstr "-- cap -- "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  CASE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:58
-#, c-format
-msgid ""
-". %s You must contact the library for assistance %s %s An unknown error "
-"occurred. PLease try again or contact the library for assistance %s "
-msgstr ""
+#. %1$s:  CASE 'account_locked' 
+#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
+#, fuzzy, c-format
+msgid ". %s This account has been locked! %s "
+msgstr "%s Aquest compte s'ha bloquejat! %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid ". Click on \"Confirm your suggestion\" to ignore this message."
 msgstr ""
-". Fes clic a \"Confirma el teu suggeriment\" per ignorar aquest missatge. %s "
-"%s %s "
+" Fer clic a \"Confirma el teu suggeriment\" per ignorar aquest missatge."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:157
 #, c-format
@@ -2629,13 +2030,6 @@ msgstr "50 títols"
 msgid "6 months"
 msgstr "6 mesos"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
-#, c-format
-msgid ": %sa list:%s"
-msgstr ": %suna llista:%s"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
 msgid ""
@@ -2671,11 +2065,11 @@ msgstr ""
 "compte."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "A similar document already exists: "
-msgstr ") %s Ja existeix un fitxer similar: "
+msgstr "Ja existeix un fitxer similar: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
 #, c-format
 msgid "A specific item"
 msgstr "Còpia específica"
@@ -2694,6 +2088,11 @@ msgstr "Resums"
 #, fuzzy, c-format
 msgid "Accept"
 msgstr "Acceptat"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:442
+#, c-format
+msgid "Accepted by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
@@ -2716,6 +2115,13 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Account creation fee"
 msgstr "Crèdit del compte"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:88
+#, c-format
+msgid "Account identification with this email address only is ambiguous."
+msgstr ""
+"La identificació del compte només amb aquesta adreça de correu electrònic és "
+"ambigua."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:37
 #, fuzzy, c-format
@@ -2745,9 +2151,9 @@ msgid "Acquisition date: Oldest to newest"
 msgstr "Data d'adquisició: dels més antics als més recents"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:29
-#, fuzzy, c-format
+#, c-format
 msgid "Acronym"
-msgstr "%sd - Acrònim"
+msgstr "Acrònim"
 
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
@@ -2822,14 +2228,26 @@ msgstr "Afegir al cistell"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Add to your list &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Afegeix a la teva llista &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:228
 #, c-format
 msgid "Add to..."
 msgstr "Afegir a..."
+
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#, c-format
+msgid "Added %s by"
+msgstr ""
+
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#, c-format
+msgid "Added %s by you"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:379
 #, c-format
@@ -2865,6 +2283,11 @@ msgstr "Tot"
 msgid "Adult"
 msgstr "Adult"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "Afegeix una nota"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:43
@@ -2878,9 +2301,9 @@ msgstr "Cerca avançada"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Advanced search &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Cerca avançada &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -3013,9 +2436,25 @@ msgstr "Import a pagar:"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "An error has occurred &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "S'ha produït un error &rsaquo; %s%s%sKoha online%s catàleg"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:55
+#, c-format
+msgid ""
+"An error has occurred while attempting to place a recall. Please contact "
+"your library."
+msgstr ""
+"S'ha produït un error en intentar fer una reclamació. Si us plau, contacti "
+"amb biblioteca."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
+#, c-format
+msgid "An error has occurred while sending you the password recovery link."
+msgstr ""
+"S'ha produït un error en enviar-vos l'enllaç de recuperació de la "
+"contrasenya."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:42
 #, fuzzy, c-format
@@ -3067,6 +2506,13 @@ msgstr ""
 msgid "An invitation to share list "
 msgstr "Una invitació per compartir la llista"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:63
+#, fuzzy, c-format
+msgid ""
+"An unknown error occurred. Please try again or contact the library for "
+"assistance."
+msgstr "Si us plau, contacteu amb la Biblioteca si necessiteu més assistència."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:381
 #, c-format
 msgid "Any"
@@ -3093,7 +2539,7 @@ msgid "Any item "
 msgstr "Qualsevol exemplar "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
 #, c-format
 msgid "Any item type"
 msgstr "Qualsevol tipus d'exemplar"
@@ -3206,6 +2652,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "Esteu segurs que voleu cancel·lar totes les reserves?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:169
 #, c-format
 msgid "Arrived"
 msgstr "Rebuts"
@@ -3386,9 +2833,9 @@ msgstr "Cerca per autoritat"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Authority search &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Cerca d'autoritats &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:76
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:96
@@ -3411,6 +2858,11 @@ msgstr "Encapçalaments autoritzats"
 msgid "Authors"
 msgstr "Autors"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:78
+#, fuzzy, c-format
+msgid "Auto renewal"
+msgstr "Renovació automàtica"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #, c-format
 msgid "Auto-renewal"
@@ -3428,9 +2880,9 @@ msgstr ""
 "La renovació automàtica ha fallat, l'usuari té multes pendents de pagament"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:402
-#, fuzzy, c-format
+#, c-format
 msgid "Automatic renewal failed, your account is expired."
-msgstr "%s La renovació automàtica ha fallat, el vostre compte ha caducat"
+msgstr "La renovació automàtica ha fallat, el compte ha caducat."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:8
 #, c-format
@@ -3449,10 +2901,15 @@ msgid "Availability: "
 msgstr "Disponibilitat: "
 
 #. %1$s:  IF restrictedvalueopac 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:106
 #, c-format
 msgid "Available %s"
 msgstr "Disponible %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:445
+#, fuzzy, c-format
+msgid "Available in the library"
+msgstr "Disponibilitat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
 #, c-format
@@ -3517,7 +2974,7 @@ msgstr "Backend"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3684,9 +3141,9 @@ msgstr "Explora el nostre catàleg"
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Browse our catalog &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Navegar pel nostre catàleg &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
@@ -3707,6 +3164,12 @@ msgstr "Browse search"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
 #, c-format
 msgid "Browse shelf"
+msgstr "Explora per prestatgeria"
+
+#. %1$s:  starting_homebranch | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:5
+#, fuzzy, c-format
+msgid "Browsing %s shelves"
 msgstr "Explora per prestatgeria"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
@@ -3747,7 +3210,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3875,15 +3338,31 @@ msgstr "Cancel·leu la reserva"
 msgid "CancelRecall "
 msgstr "Cancel·leu la reclamació "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#, fuzzy, c-format
+msgid "Canceled"
+msgstr "Cancel·lar"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:111
 #, c-format
 msgid "Cancellation date"
 msgstr "Data de cancel·lació"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:154
+#, fuzzy, c-format
+msgid "Cancelled"
+msgstr "(Cancel·lat)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:42
 #, c-format
 msgid "Cancelled charge"
 msgstr "Càrrec cancel·lat"
+
+#. %1$s:  RECALL.completed_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:94
+#, c-format
+msgid "Cancelled on %s"
+msgstr "Cancel·lat el %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
@@ -3891,8 +3370,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Cancel·leu una sol·licitud de reserva activa de l'usuari."
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:393
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
 msgid "Cannot be put on hold"
 msgstr "No es pot reservar"
 
@@ -3975,9 +3454,9 @@ msgstr "Canvia la vostra contrasenya "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Change your password &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Canvia la teva contrasenya &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:840
 #, c-format
@@ -4020,10 +3499,25 @@ msgstr "Retorneu l'exemplar"
 msgid "Check out"
 msgstr "Prestar"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:251
+#, fuzzy, c-format
+msgid "Check out or renew an item:"
+msgstr "Retorneu l'exemplar"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:249
+#, c-format
+msgid "Check out, return, or renew an item:"
+msgstr "Prestar, tornar, o renovar un exemplar:"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:164
 #, c-format
 msgid "Check-in date:"
 msgstr "Data de retorn:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:441
+#, c-format
+msgid "Checked by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:87
 #, c-format
@@ -4126,6 +3620,7 @@ msgid "City:"
 msgstr "Ciutat:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:178
 #, c-format
 msgid "Claimed"
 msgstr "Reclamat"
@@ -4167,7 +3662,7 @@ msgid "Clear date"
 msgstr "Esborreu la data"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Esborreu la data per a suspensió indefinida"
@@ -4292,11 +3787,12 @@ msgstr "Coce image from Open Library"
 msgid "Collect items you are interested in"
 msgstr "Recolliu els exemplars del vostre interès"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:165
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -4313,6 +3809,12 @@ msgstr "Biblioteca de col·leccions:"
 #, c-format
 msgid "Collection title:"
 msgstr "Títol de col·lecció:"
+
+#. %1$s: - starting_ccode | html -
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:9
+#, fuzzy, c-format
+msgid "Collection: %s"
+msgstr "Col·lecció: %s "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4384,15 +3886,20 @@ msgstr "Comentaris sobre "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Comments on %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Comentaris a %s &rsaquo; %s%s%skoha online%s catàleg"
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:445
 #, c-format
 msgid "Comments%s"
 msgstr "Comentaris ( %s )"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#, c-format
+msgid "Completed"
+msgstr ""
 
 #. %1$s:  ComponentParts.size | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
@@ -4406,7 +3913,7 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:487
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
 msgid "Confirm hold"
 msgstr "Confirmeu reserva"
 
@@ -4491,15 +3998,16 @@ msgstr "Files %d copiades al porta-retalls"
 msgid "Copied one row to clipboard"
 msgstr "Copiar una fila al porta-retalls"
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
+#, c-format
 msgid "Copy"
 msgstr "Còpia"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, c-format
 msgid "Copy number"
 msgstr "Número de còpia"
@@ -4546,6 +4054,11 @@ msgstr "Copyright o any de publicació, per exemple: 2016"
 msgid "Copyright year: %s "
 msgstr "Any de copyright: %s "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:102
+#, c-format
+msgid "Could not create new list. Please check if the name is unique."
+msgstr "No s'ha pogut crear una llista nova. Comprovar si el nom és únic."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:499
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:720
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
@@ -4582,9 +4095,9 @@ msgstr "Bibliografia recomanada per"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Course reserves for %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Bibliografia recomenada per %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:31
 #, c-format
@@ -4603,9 +4116,9 @@ msgstr "Cursos"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Courses &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Cursos &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
@@ -4707,9 +4220,8 @@ msgstr "Sessió actual"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#, fuzzy
 msgid "Currently available"
-msgstr "Actualment disponibles %s"
+msgstr "Disponible actualment"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:33
 #, c-format
@@ -4728,9 +4240,8 @@ msgstr "Actualment en ús local per%s%s%s (%s)%s"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#, fuzzy
 msgid "Currently unavailable"
-msgstr "Actualment disponibles %s"
+msgstr "Actualment no disponible"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #, c-format
@@ -4872,6 +4383,7 @@ msgstr ""
 "valors possibles: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
 #, c-format
@@ -4969,9 +4481,9 @@ msgstr "Detalls per a %s"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Detalls per a: %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #. %1$s:  request.backend | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:227
@@ -5033,9 +4545,9 @@ msgstr "Carta de llibertat"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Discharge &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Descàrrega &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
 #, c-format
@@ -5104,9 +4616,9 @@ msgstr "Descarregueu el cistell"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Download cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Descarrega la cistella &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:55
@@ -5120,9 +4632,9 @@ msgstr "Descarregueu llista"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Download list %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Descarregar la llista %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:101
 #, fuzzy, c-format
@@ -5145,7 +4657,7 @@ msgstr "Venciment"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
 #, c-format
 msgid "Due %s"
 msgstr "Venciment %s"
@@ -5160,6 +4672,12 @@ msgstr "Data de venciment"
 #, fuzzy, c-format
 msgid "Due date is not valid."
 msgstr "Data de naixement no és vàlida."
+
+#. %1$s:  RECALL.checkout.date_due | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:104
+#, fuzzy, c-format
+msgid "Due to be returned by %s"
+msgstr "%s S'ha de retornar per %s %s Recollida per %s %s - %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
@@ -5177,10 +4695,27 @@ msgstr "ERROR: No hi ha registre trobat per l'identificador de registre %s. "
 msgid "ERROR: No record id specified. "
 msgstr "ERROR: Cap id de registre especificat."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:27
+#. %1$s:  ERROR.failed_delete | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:73
+#, c-format
+msgid "ERROR: You cannot delete the tag %s."
+msgstr "ERROR: No es pot eliminar l'etiqueta %s."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
 #, fuzzy, c-format
+msgid "ERROR: You must log in to complete that action."
+msgstr "Us heu d'autenticar per afegir etiquetes."
+
+#. %1$s:  ERROR.badparam | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
+#, c-format
+msgid "ERROR: illegal parameter %s"
+msgstr "ERROR: Paràmetre il·legal %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:27
+#, c-format
 msgid "Earlier heading"
-msgstr "%sa - Encapçalament anterior"
+msgstr "Encapçalament anterior"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:803
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
@@ -5230,9 +4765,11 @@ msgstr "Editant nota de fascicle per a %s %s"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Editing issue note for %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"S'està editant la nota del fascicle per a %s &rsaquo; %s%s%sKoha online%s "
+"catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:455
 #, c-format
@@ -5262,6 +4799,11 @@ msgstr "Correu electrònic: "
 #, c-format
 msgid "Emails do not match! "
 msgstr "Els correus electrònics no coincideixen!"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, c-format
+msgid "Empty"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:44
 #, c-format
@@ -5349,9 +4891,9 @@ msgstr "Entrada %s"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Entry %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Entrar %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:187
 #, c-format
@@ -5516,12 +5058,13 @@ msgid "Excerpt provided by Syndetics"
 msgstr "Fragment proporcionat per Syndetics"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:168
 #, c-format
 msgid "Expected"
 msgstr "Esperat"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Expecting a specific item selection."
 msgstr "Esperant la selecció d'una còpia específica."
 
@@ -5544,6 +5087,12 @@ msgstr "Data de venciment:"
 #, c-format
 msgid "Expiration:"
 msgstr "Venciment:"
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:92
+#, c-format
+msgid "Expired on %s"
+msgstr "Vençut el %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:760
@@ -5748,9 +5297,10 @@ msgstr "Recuperació de contrasenya oblidada"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Forgotten password recovery &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"Recuperació de contrasenya oblidada &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
@@ -5788,6 +5338,12 @@ msgstr ""
 msgid "From: "
 msgstr "De: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:96
+#, c-format
+msgid "Fulfilled"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:108
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:55
 #, c-format
@@ -5811,9 +5367,11 @@ msgstr "Informació de la subscripció per %s"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Full subscription history for %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr ""
+"Historial de subscripcions complet per a %s &rsaquo; %s%s%sKoha online%s "
+"catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:72
 #, c-format
@@ -5991,6 +5549,12 @@ msgstr "Anar a la pàgina anterior"
 msgid "Go to your account page"
 msgstr "Anar a la pàgina del vostre compte"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Go to your contact information"
+msgstr "Informació de contacte"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:833
 #, c-format
 msgid "GoToBibliographicRequestPage "
@@ -6079,11 +5643,11 @@ msgid "Hi,"
 msgstr "Hola,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hide options"
 msgstr "Menys opcions"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:475
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
 #, fuzzy, c-format
 msgid "Hide unholdable items"
 msgstr "Afegir múltiples exemplars"
@@ -6110,7 +5674,7 @@ msgid "Hold date:"
 msgstr "Data de la reserva:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -6119,15 +5683,25 @@ msgstr ""
 msgid "Hold fee"
 msgstr "Quota de reserva"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "Quota de reserva"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Reserva no necessària després del:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:316
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
 #, c-format
 msgid "Hold notes:"
 msgstr "Notes de la reserva:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "Quota de reserva"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, fuzzy, c-format
@@ -6135,7 +5709,7 @@ msgid "Hold requests"
 msgstr "Sol·licituds de PIB"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold start date should be filled."
 msgstr ""
 
@@ -6276,7 +5850,7 @@ msgstr "Biblioteques d'origen"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Home library"
 msgstr "Biblioteca d'origen"
@@ -6351,9 +5925,9 @@ msgstr "Vista ISBD"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "ISBD view &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "ISBD vista &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:109
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:102
@@ -6588,9 +6162,9 @@ msgstr "Imatges per "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Images for: %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Imatges per: %s &rsaquo; %s%s%sKoha online%s catàlog"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:155
 #, c-format
@@ -6635,16 +6209,29 @@ msgstr ""
 "dades personals tal com s'especifica al Reglament general de protecció de "
 "dades de la UE de 25 de maig de 2018."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:158
+#, c-format
+msgid "In transit"
+msgstr "En trànsit"
+
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( item.get_transfer.frombranch ) | html 
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "En trànsit de %s a %s, des de %s"
+
+#. For the first occurrence,
+#. %1$s:  RECALL.library.branchname | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#, fuzzy, c-format
+msgid "In transit to %s"
+msgstr "%s Exemplar en trànsit a "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:35
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:64
@@ -6658,7 +6245,7 @@ msgid "Indexes"
 msgstr "Índexs"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
 #, c-format
 msgid "Information"
 msgstr "Informació"
@@ -6683,6 +6270,11 @@ msgstr "Docents:"
 msgid "Interlibrary loan item availability"
 msgstr "Disponibilitat d'exemplars de préstec interbibliotecari"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:76
+#, fuzzy, c-format
+msgid "Interlibrary loan ready"
+msgstr "Sol·licitud de préstec interbibliotecari"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
 #, c-format
 msgid "Interlibrary loan request"
@@ -6694,6 +6286,11 @@ msgstr "Sol·licitud de préstec interbibliotecari"
 #, c-format
 msgid "Interlibrary loan requests"
 msgstr "Sol·licituds de préstec interbibliotecari"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:77
+#, fuzzy, c-format
+msgid "Interlibrary loan unavailable"
+msgstr "Disponibilitat d'exemplars de préstec interbibliotecari"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:57
 #, c-format
@@ -6732,9 +6329,9 @@ msgstr "Exemplars d'una subscripció"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Issues for a subscription &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Fascicles de la subscripció &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:154
 #, c-format
@@ -6766,6 +6363,11 @@ msgstr "Signatura topogràfica de l' exemplar"
 msgid "Item cannot be checked out."
 msgstr "L'exemplar no pot sortir en préstec."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "Exemplar retornat"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Item checked in"
@@ -6775,6 +6377,16 @@ msgstr "Exemplar retornat"
 #, c-format
 msgid "Item checked out"
 msgstr "Exemplar prestat"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:74
+#, fuzzy, c-format
+msgid "Item checkout"
+msgstr "Exemplar prestat"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:72
+#, fuzzy, c-format
+msgid "Item checkout and renewal"
+msgstr "Exemplar retornat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:85
 #, c-format
@@ -6786,6 +6398,11 @@ msgstr "Exemplar malmès"
 msgid "Item details"
 msgstr "Informació exemplars"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "Data de venciment"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
 msgid "Item hold queue priority"
@@ -6796,23 +6413,32 @@ msgstr "Exemplar amb prioritat a la cua de reserva"
 msgid "Item holds"
 msgstr "Reserva d'exemplars"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#, fuzzy, c-format
+msgid "Item in processing"
+msgstr "Processament d'exemplar:"
+
+#. %1$s:  branch_name| $raw 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#, c-format
+msgid "Item in transit from %s since"
+msgstr "Exemplar en trànsit des de %s fins"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
 msgid "Item lost"
 msgstr "Exemplar perdut"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Item must be checked out at a circulation desk."
-msgstr "%sexemplar prestat  %sExemplar te una reserva %s"
+msgstr "L'exemplar s'ha de prestar al taulell de circulació."
 
 #. %1$s:  ISSUE.renewsleft | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:388
-#, fuzzy, c-format
+#, c-format
 msgid "Item must be renewed at the library. %s renewals remaining"
-msgstr ""
-"%s No renovable %s L'exemplar s'ha de renovar a la biblioteca. %s "
-"renovacions disponibles %s No permès "
+msgstr "L'exemplar s'ha de renovar a la biblioteca. %s renovacions restants"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:215
 #, c-format
@@ -6828,9 +6454,9 @@ msgstr "Exemplar renovat"
 
 #. %1$s:  HOLD.item.barcode | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
-#, fuzzy, c-format
+#, c-format
 msgid "Item on hold: %s"
-msgstr "Reserva d'exemplars"
+msgstr "Exemplar en reserva: %s"
 
 #. %1$s:  RECALL.item.barcode | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:770
@@ -6848,12 +6474,13 @@ msgstr "No es permet la renovació de l'exemplar"
 msgid "Item renewed"
 msgstr "Exemplar renovat"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6897,9 +6524,9 @@ msgid "Items in catalog"
 msgstr "Exemplars a "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid "Items in your cart"
-msgstr "Registres a la cistella: %s"
+msgstr "Exemplars a la cistella"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
@@ -7003,7 +6630,7 @@ msgid "Last "
 msgstr "Últim "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
 #, c-format
 msgid "Last location"
 msgstr "Última localització"
@@ -7019,14 +6646,15 @@ msgid "Last updated:"
 msgstr "Ultima actualització:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:170
 #, c-format
 msgid "Late"
 msgstr "Endarrerit"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:28
-#, fuzzy, c-format
+#, c-format
 msgid "Later heading"
-msgstr "%sb - Encapçalament posterior"
+msgstr "Encapçalament posterior"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:720
 #, fuzzy, c-format
@@ -7075,7 +6703,9 @@ msgstr "Nivell 4: Plataformes de cerca específiques"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:73
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:232
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:344
 #, c-format
 msgid "Libraries"
 msgstr "Biblioteques"
@@ -7083,7 +6713,9 @@ msgstr "Biblioteques"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:480
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:342
 #, c-format
 msgid "Library"
 msgstr "Biblioteca"
@@ -7487,9 +7119,9 @@ msgstr "Més detalls"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "MARC details for record no. %s &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Detalls MARC del registre núm. %s &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:31
@@ -7598,26 +7230,31 @@ msgid "Minimum amount needed by this service is %s"
 msgstr "La quantitat mínima necessària per aquest servei és de %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:740
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:171
 #, c-format
 msgid "Missing"
 msgstr "Falta"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:174
 #, c-format
 msgid "Missing (damaged)"
 msgstr "Desapareguts (malmès)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:175
 #, c-format
 msgid "Missing (lost)"
 msgstr "Desapareguts (perdut)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:741
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:172
 #, c-format
 msgid "Missing (never received)"
 msgstr "No disponible (no hs'ha rebut mai)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:742
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:173
 #, c-format
 msgid "Missing (sold out)"
 msgstr "Desapareguts (esgotades)"
@@ -7665,14 +7302,14 @@ msgstr "Títols més populars"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Most popular titles &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Títols més populars &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:30
-#, fuzzy, c-format
+#, c-format
 msgid "Musical composition"
-msgstr "%sf - Composició Musical"
+msgstr "Composició Musical"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:348
 #, c-format
@@ -7729,9 +7366,9 @@ msgstr "No caduca mai "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
-#, fuzzy, c-format
+#, c-format
 msgid "Never expires %s %s "
-msgstr "No caduca mai "
+msgstr "No caduca mai %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:72
 #, fuzzy, c-format
@@ -7744,6 +7381,7 @@ msgstr ""
 "registres d'exemplars prestats o retornats."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "New"
 msgstr "NOU"
@@ -7772,6 +7410,11 @@ msgstr "Nova sol·licitud de préstec interbibliotecari"
 #, c-format
 msgid "New list"
 msgstr "Nova llista"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:41
+#, c-format
+msgid "New password must not be the same as old password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:154
@@ -7840,7 +7483,7 @@ msgstr "Següent "
 msgid "Next &gt;&gt;"
 msgstr "Següent &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:329
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
 #, c-format
 msgid "Next available item"
 msgstr "El primer exemplar disponible."
@@ -7854,6 +7497,7 @@ msgstr "El primer exemplar disponible."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:438
 #, c-format
 msgid "No"
 msgstr "No"
@@ -7868,6 +7512,11 @@ msgstr "No "
 #, c-format
 msgid "No XSLT file passed."
 msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
+#, c-format
+msgid "No account was found with the provided information."
+msgstr "No s'ha trobat cap compte amb la informació proporcionada."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:241
 #, c-format
@@ -8007,6 +7656,11 @@ msgstr "No hi ha llistes privades."
 msgid "No public lists."
 msgstr "No hi ha llistes públiques."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:128
+#, fuzzy, c-format
+msgid "No recalls have been made."
+msgstr "No s'han fet canvis."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:186
 #, c-format
 msgid "No record was removed."
@@ -8021,6 +7675,11 @@ msgstr "Cap renovació abans %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:368
 #, c-format
 msgid "No renewals allowed"
+msgstr "No es permeten renovacions"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#, fuzzy, c-format
+msgid "No renewals left"
 msgstr "No es permeten renovacions"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:111
@@ -8153,6 +7812,11 @@ msgstr "Vista normal"
 msgid "Not allowed "
 msgstr "No està permès"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:176
+#, fuzzy, c-format
+msgid "Not available"
+msgstr "No hi ha exemplars disponibles."
+
 #. %1$s:  PROCESS error_message messages=error.messages 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:93
 #, c-format
@@ -8175,7 +7839,7 @@ msgstr "Exclòs de préstec (%s)"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Exclòs de préstec (%s)"
@@ -8185,7 +7849,7 @@ msgstr "Exclòs de préstec (%s)"
 msgid "Not issued"
 msgstr "No emès"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
 #, c-format
 msgid "Not on hold"
 msgstr "No està reservat"
@@ -8245,20 +7909,11 @@ msgstr ""
 msgid "Note: Your comment must be approved by a librarian. "
 msgstr "Nota: el personal de la Biblioteca ha d'aprovar el vostre comentari. "
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "Note: you can only delete your own tags."
 msgstr "Nota: només podeu eliminar les vostres etiquetes."
-
-#. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
-#, c-format
-msgid ""
-"Note: you can only delete your own tags. %s Note: your tag contained markup "
-"code that was removed. "
-msgstr ""
-"Nota: només podeu eliminar les vostres etiquetes. %s Nota: la vostra "
-"etiqueta tenia un codi erroni que s'ha eliminat. "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8280,6 +7935,13 @@ msgstr ""
 "codi, com es mostra. Podeu continuar editant o bé cancel·lar i conservar el "
 "comentari tal com està. "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:76
+#, fuzzy, c-format
+msgid "Note: your tag contained markup code that was removed."
+msgstr ""
+"Nota: la vostra etiqueta tenia un codi erroni que s'ha eliminat. L'etiqueta "
+"s'ha agregat com a "
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid ""
@@ -8288,13 +7950,18 @@ msgstr ""
 "Nota: la vostra etiqueta tenia un codi erroni que s'ha eliminat. L'etiqueta "
 "s'ha agregat com a "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
+#, fuzzy, c-format
+msgid "Note: your tag was entirely markup code. It was NOT added."
+msgstr "Error! L'etiqueta era de codi marcat. NO s'ha afegit."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:157
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -8385,6 +8052,8 @@ msgstr "Acceptar"
 msgid "OR"
 msgstr "O"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, c-format
@@ -8468,6 +8137,11 @@ msgstr "Comandes per títol"
 #, c-format
 msgid "Order by: "
 msgstr "Comandes per: "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:443
+#, fuzzy, c-format
+msgid "Ordered by the library"
+msgstr "Biblioteca actual"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:862
 #, fuzzy, c-format
@@ -8556,6 +8230,12 @@ msgstr "Prioritat a la cua: %s"
 msgid "Overdue (%s)"
 msgstr "Vençuts (%s)"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#, c-format
+msgid "Overdue to be returned"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #, c-format
 msgid "Overdues "
@@ -8615,7 +8295,9 @@ msgstr "Clau conté símbols i / o espais finals."
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:45
 #, c-format
 msgid "Password must be at least %s characters long."
 msgstr "La contrasenya ha de tenir com a mínim %s caràcters ."
@@ -8639,7 +8321,9 @@ msgstr ""
 "minúscules i números"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:47
 #, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
@@ -8648,7 +8332,9 @@ msgstr ""
 "majúscules."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:49
 #, c-format
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr "Contrasenya no pot contenir espais en blanc principal o final."
@@ -8684,6 +8370,12 @@ msgstr "Contrasenya:"
 #, c-format
 msgid "Passwords do not match! "
 msgstr "Les contrasenyes no coincideixen!"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:43
+#, c-format
+msgid "Passwords do not match. Please re-type your new password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format
@@ -8721,9 +8413,27 @@ msgstr "Mètode de pagament:"
 msgid "Payout"
 msgstr "Layout"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#, fuzzy, c-format
+msgid "Pending"
+msgstr "Reserva pendent"
+
+#. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#, c-format
+msgid "Pending for next available item of item type '%s'"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:96
 #, c-format
 msgid "Pending hold"
+msgstr "Reserva pendent"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#, fuzzy, c-format
+msgid "Pending recall"
 msgstr "Reserva pendent"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:54
@@ -8747,6 +8457,12 @@ msgstr "Telèfon: "
 #, c-format
 msgid "Photocopy"
 msgstr ""
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:106
+#, c-format
+msgid "Pick up by %s"
+msgstr "Recollida per %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, c-format
@@ -8779,7 +8495,7 @@ msgid "Pickup location"
 msgstr "Ubicació de recollida"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on"
 msgstr "Reserva"
 
@@ -8789,7 +8505,7 @@ msgid "Place a hold on "
 msgstr "Reserva"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on: "
 msgstr "Efectua una reserva:"
 
@@ -8863,9 +8579,9 @@ msgstr "Reserva"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Placing a hold &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Fer una reserva &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:469
 #, c-format
@@ -8931,9 +8647,9 @@ msgstr "Si us plau, confirmeu el vostre registre"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Please confirm your registration &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Si us plau, confirmar el registre &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:58
@@ -9019,7 +8735,7 @@ msgstr "Si us plau, introduïu un valor més gran o igual que {0}."
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Si us plau, introduïu un valor inferior o igual a {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -9090,6 +8806,11 @@ msgstr "Si us plau corregiu aquest camp."
 #, c-format
 msgid "Please log in to the catalog and try again. "
 msgstr "Si us plau, inicieu sessió en el catàleg i torneu a intentar-ho."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:53
+#, c-format
+msgid "Please log-in to account to update your password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:74
 #, c-format
@@ -9171,42 +8892,25 @@ msgstr ""
 msgid "Please select a tag to delete."
 msgstr "Si us plau, selecciona una etiqueta per eliminar."
 
-#. %1$s:  ELSIF (errNoBorrowerFound) 
-#. %2$s:  ELSIF errResetForbidden 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
-#, c-format
-msgid ""
-"Please try again later. %s No account was found with the provided "
-"information. %s "
-msgstr ""
-"Si us plau, intenta-ho més tard. %s No s'ha trobat cap compte amb la "
-"informació proporcionada. %s "
+#, fuzzy, c-format
+msgid "Please try again later."
+msgstr "Si us plau, introdueixi una data vàlida."
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:80
 #, c-format
-msgid "Please try again with plain text. %sUnrecognized error. %s "
-msgstr "Torneu-ho a intentar amb text sense format. %s Error desconegut. %s "
+msgid "Please try again with plain text."
+msgstr "Si us plau, tornar a provar amb text sense format."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:990
 #, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr "Si us plau escriviu els caràcters següents a la casella anterior: "
 
-#. %1$s:  ELSIF (errNoBorrowerEmail) 
-#. %2$s:  ELSIF (errAlreadyStartRecovery) 
-#. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:89
 #, c-format
-msgid ""
-"Please use the field 'Login' as well. %s This account has no email address "
-"we can send the email to. %s The process of password recovery has already "
-"been started for this account %s (\""
+msgid "Please use the field 'Login' as well."
 msgstr ""
-"Si us plau utilitzi també el camp \"login\". %s Aquest compte no té cap "
-"adreça a la qual puguem enviar-li un correu electrònic. %s El procés de "
-"recuperació de contrasenya ja s'ha iniciat per a aquest compte %s (\""
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -9367,6 +9071,7 @@ msgstr "Pref de privacitat:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
 #, c-format
 msgid "Private"
 msgstr "Privat"
@@ -9386,6 +9091,11 @@ msgstr "Llistes privades compartides"
 msgid "Problem found on page: "
 msgstr "S'ha trobat un problema a la pàgina: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#, fuzzy, c-format
+msgid "Processing"
+msgstr "Processant…"
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Processing..."
@@ -9404,6 +9114,7 @@ msgstr "Proveïdor:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Public"
 msgstr "Públic"
@@ -9465,7 +9176,15 @@ msgstr "Data de publicació/Copyright: de més antic a més recent"
 msgid "Publication:"
 msgstr "Publicació:"
 
-#. For the first occurrence,
+#. %1$s:  BIBLIO_RESULT.publishercode | $raw 
+#. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
+#. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
+#. %4$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:67
+#, fuzzy, c-format
+msgid "Published by: %s %s in %s %s"
+msgstr "Publicat a %s %s %s %s per "
+
 #. %1$s:  BIBLIO_RESULT.publishercode | $raw 
 #. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
 #. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
@@ -9474,9 +9193,8 @@ msgstr "Publicació:"
 #. %6$s:  BIBLIO_RESULT.pages | $raw 
 #. %7$s:  END 
 #. %8$s:  IF BIBLIO_RESULT.item('size') 
-#. %9$s:  BIBLIO_RESULT.item('size') | $raw 
+#. %9$s:  BIBLIO_RESULT.item('size') | html 
 #. %10$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
@@ -9485,9 +9203,9 @@ msgstr "Publicat per: %s %s a %s %s %s , %s %s %s , %s %s "
 #. %1$s:  koha_new.published_on | $KohaDates 
 #. %2$s:  IF ( show_author && koha_new.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:112
-#, fuzzy, c-format
+#, c-format
 msgid "Published on %s %s by "
-msgstr "Publicat a %s %s %s %s per "
+msgstr "Publicat a %s %s per "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:129
@@ -9506,6 +9224,8 @@ msgstr "Lloc de publicació"
 msgid "Publisher:"
 msgstr "Editor:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:289
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:335
 #, c-format
 msgid "Purchase suggestions"
@@ -9535,11 +9255,33 @@ msgstr "RIS"
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote, altres)"
 
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#, c-format
+msgid "RSS feed for %s and system-wide library news"
+msgstr ""
+
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:131
+#, fuzzy, c-format
+msgid "RSS feed for %s library news"
+msgstr "RSS feed per a llista pública %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:133
+#, fuzzy, c-format
+msgid "RSS feed for library news"
+msgstr "RSS feed per a llista pública %s"
+
 #. %1$s:  shelf.shelfname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
 #, c-format
 msgid "RSS feed for public list %s"
 msgstr "RSS feed per a llista pública %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:139
+#, c-format
+msgid "RSS feed for system-wide library news"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
@@ -9556,6 +9298,12 @@ msgstr "Valoreu-me"
 #, c-format
 msgid "Re-type new password:"
 msgstr "Torneu a introduir la nova contrasenya:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:88
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#, c-format
+msgid "Ready for pickup"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:77
 #, c-format
@@ -9578,9 +9326,9 @@ msgstr "RecallItem "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Recall &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Reclama &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:92
 #, fuzzy, c-format
@@ -9608,6 +9356,12 @@ msgstr "Reserva no necessària després del:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#, c-format
+msgid "Recalled by patron expected at %s"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -9618,6 +9372,13 @@ msgstr "RecallItem "
 #, fuzzy, c-format
 msgid "Recalls (%s)"
 msgstr "Sancions (%s)"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:41
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:131
+#, c-format
+msgid "Recalls have not been enabled. Please contact your library."
+msgstr ""
+"No s'han activat les reclamacions. Poseu-vos en contacte amb la biblioteca"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:30
 #, fuzzy, c-format
@@ -9645,9 +9406,9 @@ msgstr "Comentaris recents "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Recent comments &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Comentaris recents &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:101
 #, c-format
@@ -9659,9 +9420,9 @@ msgstr "Registre URL"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Record blocked &rsaquo; %s %s %s Koha online %s catalog "
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Registre bloquejat &rsaquo; %s %s %s Koha online %s catàleg "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:192
 #, c-format
@@ -9692,9 +9453,9 @@ msgstr "Cerca a RecordedBooks per '%s'"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "RecordedBooks search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Cerca de RecordedBooks '%s' &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:102
 #, fuzzy, c-format
@@ -9901,9 +9662,9 @@ msgstr "Informa del problema"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Report a problem &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Informar d'un problema &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:76
 #, c-format
@@ -9932,9 +9693,9 @@ msgstr "Sol·licitar l'article"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Request article &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Sol·licitar article &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:240
 #, c-format
@@ -9952,7 +9713,7 @@ msgstr "Sol·licitud realitzada"
 msgid "Request placed:"
 msgstr "Sol·licitud realitzada:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #, c-format
 msgid "Request specific item type:"
 msgstr "Seleccioneu un tipus d'exemplar específic:"
@@ -9971,6 +9732,13 @@ msgstr "Tipus de consulta:"
 #, c-format
 msgid "Request updated"
 msgstr "Sol·licitud actualitzada"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:798
+#, c-format
+msgid "Requested"
+msgstr "Sol·licitat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:139
 #, c-format
@@ -9993,9 +9761,9 @@ msgid "Requested item:"
 msgstr "Tipus d'exemplar sol·licitat:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "Requests"
-msgstr "Sol·licitud %s"
+msgstr "Sol·licituds"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:19
@@ -10050,7 +9818,7 @@ msgstr "Sol·licitud %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -10081,9 +9849,9 @@ msgstr "Canvia la meva contrasenya"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Reset your password &rsaquo; %s%s%sKoha online%s catalog "
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Restablir la contrasenya &rsaquo; %s%s%sKoha online%s catàleg "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:111
 #, fuzzy, c-format
@@ -10126,12 +9894,12 @@ msgstr "Resultats de la cerca de '%s'"
 msgid "Results per page: "
 msgstr "Resultats per pàgina: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:137
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
 #, c-format
 msgid "Resume"
 msgstr "Continua"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Repreneu totes les reserves suspeses"
@@ -10155,9 +9923,9 @@ msgstr "Torneu aquest exemplar"
 
 #. %1$s:  biblio.title | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Return to %s"
-msgstr "Tornar a les rotacions"
+msgstr "Tornar a %s"
 
 #. INPUT type=submit name=confirm
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:114
@@ -10311,6 +10079,7 @@ msgstr "Guardeu a les llistes"
 msgid "Save to your lists"
 msgstr "Guardeu a les vostres llistes"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, fuzzy, c-format
 msgid "Scan"
@@ -10378,6 +10147,21 @@ msgstr "Cerqueu"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:57
 msgid "Search %s"
 msgstr "Cerca %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:5
+#, c-format
+msgid "Search also for broader subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:3
+#, c-format
+msgid "Search also for narrower subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:7
+#, c-format
+msgid "Search also for related subjects"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:123
@@ -10483,9 +10267,8 @@ msgstr "Recerca OverDrive..."
 
 #. INPUT type=text name=q
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:221
-#, fuzzy
 msgid "Searching in %s only"
-msgstr "Cercar encapçalament principal ($a només)"
+msgstr "Cercant només a %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:623
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
@@ -10561,7 +10344,7 @@ msgstr "Seleccioneu una llista"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
 #, c-format
 msgid "Select a specific item:"
 msgstr "Seleccioneu una còpia específica:"
@@ -10652,9 +10435,9 @@ msgstr "Ajuda per a l'autopréstec"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Self checkout help &rsaquo; %s%s%sKoha %s"
-msgstr "Ajuda per a l'autopréstec"
+msgstr "Ajuda per l'autopréstec &rsaquo; %s%s%sKoha %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:42
@@ -10694,9 +10477,9 @@ msgstr "Enviant al cistell"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Sending your cart &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Enviant a la cistella &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:34
 #, c-format
@@ -10708,9 +10491,9 @@ msgstr "Enviant la vostra llista"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Sending your list &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Enviant a la llista &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:192
 #, c-format
@@ -10780,9 +10563,9 @@ msgstr "Compartiu una llista"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Share a list &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Compartir una llista &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:47
 #, c-format
@@ -10815,9 +10598,20 @@ msgstr "Compartiu a Linkedin"
 msgid "Share on Twitter"
 msgstr "Comparteix a Twitter"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
+#, fuzzy, c-format
+msgid "Shared"
+msgstr "Compartiu"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:166
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
 #, c-format
 msgid "Shelving location"
+msgstr "Ubicació  a la prestatgeria"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:7
+#, fuzzy, c-format
+msgid "Shelving location:"
 msgstr "Ubicació  a la prestatgeria"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
@@ -10884,7 +10678,7 @@ msgid "Show more"
 msgstr "Mostra més"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #, c-format
 msgid "Show more options"
 msgstr "Més opcions"
@@ -10894,7 +10688,7 @@ msgstr "Més opcions"
 msgid "Show the top "
 msgstr "Mostra els primers "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, fuzzy, c-format
 msgid "Show unholdable items"
 msgstr "Mostra tots els exemplars"
@@ -10967,6 +10761,11 @@ msgid ""
 msgstr ""
 "Aquest servei pot generar algun càrrec. Si us plau, consulteu amb el "
 "proveïdor de serveis mòbils si teniu alguna pregunta. "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:167
+#, c-format
+msgid "Something else"
+msgstr ""
 
 #. %1$s:  failaddress | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:109
@@ -11096,9 +10895,14 @@ msgstr ""
 "l'administrador per resoldre el problema."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
-#, c-format
-msgid "Sorry, you are too young to reserve this material."
+#, fuzzy, c-format
+msgid "Sorry, you are too young to place a hold for this item."
 msgstr "Disculpeu, sou massa jove per reservar aquest material."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:104
+#, c-format
+msgid "Sorry, you cannot add items to this list."
+msgstr "Ho sentim, no es poden afegir exemplars en aquesta llista."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:33
 #, c-format
@@ -11258,6 +11062,7 @@ msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "Pas dos: escanegeu el codi de barres de cada exemplar, un cada cop"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:179
 #, c-format
 msgid "Stopped"
 msgstr "Aturat"
@@ -11368,6 +11173,7 @@ msgstr "Envieu les vostres dades actualitzades"
 msgid "Submit your suggestion"
 msgstr "Envieu el vostre suggeriment"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:37
 #, c-format
 msgid "Subscribe to a subscription alert"
@@ -11500,6 +11306,11 @@ msgstr "Suggerit per:"
 msgid "Suggested on"
 msgstr "Suggerit per"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:444
+#, fuzzy, c-format
+msgid "Suggestion declined"
+msgstr "Suggeriments"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:39
 #, c-format
 msgid "Suggestions"
@@ -11523,13 +11334,13 @@ msgstr "Revisions"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
 #, c-format
 msgid "Suspend"
 msgstr "Suspensió"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
 #, c-format
 msgid "Suspend all holds"
 msgstr "Suspeneu totes les reserves"
@@ -11543,6 +11354,11 @@ msgstr "Suspendre reserva en"
 #, c-format
 msgid "Suspend until:"
 msgstr "Suspès fins:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "Suspended"
+msgstr "Suspensió"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:6
@@ -11634,9 +11450,9 @@ msgstr "Etiquetes"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Tags &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Etiquetes &rsaquo; %s%s%sKoha online%s catàleg"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11649,6 +11465,16 @@ msgstr "Etiquetes agregades: "
 #, c-format
 msgid "Tags from this library:"
 msgstr "Etiquetes d'aquesta biblioteca:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:92
+#, c-format
+msgid "Tags to show from other users:"
+msgstr "Etiquetes per mostrar d'altres usuaris:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:94
+#, c-format
+msgid "Tags to show:"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
@@ -11730,12 +11556,11 @@ msgstr ""
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
 #, fuzzy, c-format
 msgid ""
 "The %s%s%sKoha online%s catalog is offline for system maintenance. We'll be "
-"back soon! %s If you have any questions, please contact the "
+"back soon!"
 msgstr ""
 "El catàleg %s%s%sKoha%s està fora de línia per manteniment. Tornarem aviat! "
 "Si teniu alguna consulta, contacteu amb "
@@ -11764,73 +11589,10 @@ msgid "The cart was sent to: %s"
 msgstr "El cistell s'ha enviat a: %s"
 
 #. %1$s:  subscription_LOO.startdate | html 
-#. %2$s:  IF ( subscription_LOO.periodicity1 ) 
-#. %3$s:  END 
-#. %4$s:  IF ( subscription_LOO.periodicity2 ) 
-#. %5$s:  END 
-#. %6$s:  IF ( subscription_LOO.periodicity3 ) 
-#. %7$s:  END 
-#. %8$s:  IF ( subscription_LOO.periodicity4 ) 
-#. %9$s:  END 
-#. %10$s:  IF ( subscription_LOO.periodicity5 ) 
-#. %11$s:  END 
-#. %12$s:  IF ( subscription_LOO.periodicity6 ) 
-#. %13$s:  END 
-#. %14$s:  IF ( subscription_LOO.periodicity7 ) 
-#. %15$s:  END 
-#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
-#. %17$s:  END 
-#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
-#. %19$s:  END 
-#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
-#. %21$s:  END 
-#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
-#. %23$s:  END 
-#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
-#. %25$s:  END 
-#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
-#. %27$s:  END 
-#. %28$s:  IF ( subscription_LOO.arrival1 ) 
-#. %29$s:  END 
-#. %30$s:  IF ( subscription_LOO.arrival2 ) 
-#. %31$s:  END 
-#. %32$s:  IF ( subscription_LOO.arrival3 ) 
-#. %33$s:  END 
-#. %34$s:  IF ( subscription_LOO.arrival4 ) 
-#. %35$s:  END 
-#. %36$s:  IF ( subscription_LOO.arrival5 ) 
-#. %37$s:  END 
-#. %38$s:  IF ( subscription_LOO.arrival6 ) 
-#. %39$s:  END 
-#. %40$s:  IF ( subscription_LOO.arrival7 ) 
-#. %41$s:  END 
-#. %42$s:  IF ( subscription_LOO.numberlength ) 
-#. %43$s:  subscription_LOO.numberlength | html 
-#. %44$s:  END 
-#. %45$s:  IF ( subscription_LOO.weeklength ) 
-#. %46$s:  subscription_LOO.weeklength | html 
-#. %47$s:  END 
-#. %48$s:  IF ( subscription_LOO.monthlength ) 
-#. %49$s:  subscription_LOO.monthlength | html 
-#. %50$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:61
-#, c-format
-msgid ""
-"The current subscription began on %s and is issued %s twice per day %s %s "
-"every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
-"%s every 3 weeks %s %s every month %s %s every 2 months %s %s every quarter "
-"%s %s twice per year %s %s every year %s %s every 2 years %s %s irregularly "
-"%s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s "
-"on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
-"%s %s%s months%s "
-msgstr ""
-"La subscripció comença el %s  i es publica %s dos cops per dia %s %s cada "
-"dia %s %s tres cops per setmana %s %s cada setmana %s %s cada dues setmanes "
-"%s %s cada tres setmanes %s %s cada mes %s %s cada dos mesos %s %s cada "
-"trimestre %s %s dos cops per any %s %s cada any %s %s cada dos anys %s %s "
-"irregular %s %s els dilluns %s %s els dimarts %s %s els dimecres %s %s els "
-"dijous %s %s els divendres %s %s els dissabtes %s %s els diumenges %s per %s"
-"%s fascicle%s %s%s setmanes%s %s%s mesos%s "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:62
+#, fuzzy, c-format
+msgid "The current subscription began on %s and is issued"
+msgstr "La primera subscripció va començar %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:45
 #, c-format
@@ -11943,7 +11705,13 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:182
 #, c-format
 msgid "The password has been changed for user \"%s\"."
-msgstr "La contrasenya s'ha canviat per a l'usuari “%s”."
+msgstr "La contrasenya s'ha canviat per a l'usuari \"%s\"."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:93
+#, c-format
+msgid ""
+"The process of password recovery has already been started for this account"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
 #, c-format
@@ -11967,24 +11735,23 @@ msgid "The subscription expired on %s"
 msgstr "Aquesta subscripció va expirar %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:301
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The suggestion has not been added. A suggestion with this title already "
 "exists."
 msgstr ""
-"%s %s El suggeriment no ha estat afegit. Un suggeriment amb aquest títol ja "
-"existeix ("
+"El suggeriment no s'ha afegit. Ja existeix un suggeriment amb aquest títol."
 
 #. %1$s:  Koha.Preference('MaxTotalSuggestions') | html 
 #. %2$s:  Koha.Preference('NumberOfSuggestionDays') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The suggestion has not been added. You have reached your limit for "
 "suggestions you can place at this time (%s in %s days)."
 msgstr ""
-"Has assolit el límit màxim de suggeriments que pots fer en aquest moment "
-"(%s)."
+"El suggeriment no s'ha afegit. Heu assolit el vostre límit de suggeriments "
+"que podeu fer en aquest moment (%s en %s dies)."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:299
@@ -12003,15 +11770,10 @@ msgid "The system does not recognize this barcode."
 msgstr ""
 
 #. %1$s:  ERROR.scrubbed | html 
-#. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
 #, c-format
-msgid ""
-"The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
-"code. It was NOT added. "
+msgid "The tag was added as &quot;%s&quot;."
 msgstr ""
-"L'etiqueta s'ha afegit com a &quot;%s&quot;. %s Nota: la vostra etiqueta "
-"estava totalment amb codi amb format. NO s'ha afegit. "
 
 #. %1$s:  message_value | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:57
@@ -12035,6 +11797,12 @@ msgstr "Hi ha %s subscripcions associades a aquest títol."
 msgid "There are no comments on this title."
 msgstr "No hi ha comentaris sobre aquest títol."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:51
+#, fuzzy, c-format
+msgid "There are no items available for recall."
+msgstr "No hi han exemplars que es puguin reservar."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
 #, c-format
 msgid "There are no items that can be placed on hold."
@@ -12057,21 +11825,10 @@ msgstr "No hi ha suggeriments de compra pendents."
 msgid "There is no minimum or maximum character length."
 msgstr "No hi ha cap longitud mínima o màxima de caràcters."
 
-#. %1$s:  IF ( ERROR.badparam ) 
-#. %2$s:  ERROR.badparam | html 
-#. %3$s:  ELSIF ( ERROR.login ) 
-#. %4$s:  ELSIF ( ERROR.failed_delete ) 
-#. %5$s:  ERROR.failed_delete | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
-#, c-format
-msgid ""
-"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
-"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
-"the tag %s. "
-msgstr ""
-"Hi ha hagut un problema amb aquesta operació: %sERROR: paràmetre il·legal %s "
-"%sERROR: Has d'iniciar sessió per completar aquesta acció. %sERROR: No es "
-"pot eliminar l'etiqueta %s. "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:67
+#, fuzzy, c-format
+msgid "There was a problem with this operation:"
+msgstr "Hi ha hagut un problema amb l'enviament"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:37
@@ -12111,6 +11868,11 @@ msgid ""
 msgstr ""
 "Aquesta &quot;nube&quot; mostra les matèries més consultades al catàleg. "
 "Cliqueu qualsevol matèria per veure els ítems de la col·lecció."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:91
+#, c-format
+msgid "This account has no email address we can send the email to."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:54
 #, c-format
@@ -12233,14 +11995,10 @@ msgstr "Aquesta llista conté %s títols."
 msgid "This list does not exist."
 msgstr "Aquesta llista no existeix."
 
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#, c-format
-msgid ""
-"This list is empty. %s You can add to your lists from the results of any "
-msgstr ""
-"La llista està buida.  %s Podeu agregar ítems a la vostra llista de "
-"resultats de qualsevol "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#, fuzzy, c-format
+msgid "This list is empty."
+msgstr "Aquesta llista no existeix."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
@@ -12498,7 +12256,7 @@ msgid "Unable to update your setting!"
 msgstr "No s'han pogut afegir les etiquetes!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "No disponible (perdut o desaparegut)"
@@ -12527,11 +12285,18 @@ msgstr "Títol unificat"
 msgid "Unified title: %s "
 msgstr "Títol unificat: %s "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:195
 #, c-format
 msgid "Unknown"
 msgstr "Desconegut"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#, c-format
+msgid "Unrecognized error."
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:51
 #, c-format
 msgid "Unsubscribe from a subscription alert"
@@ -12554,6 +12319,12 @@ msgstr "Actualitza la preferència de renovació automàtica"
 msgid "Update password"
 msgstr "Canviar la clau d'accès"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Update your contact information"
+msgstr "Informació de contacte"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
 #, fuzzy, c-format
@@ -12565,9 +12336,9 @@ msgstr "Actualitzat:"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Updates submitted &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s %s &rsaquo; %s %s %s %s Koha online %s catalog "
+msgstr "Actualitzacions enviades &rsaquo; %s%s%sKoha online%s catàleg"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:23
 #, c-format
@@ -12713,7 +12484,7 @@ msgstr "lloc web"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
 #, c-format
 msgid "Vol info"
 msgstr "Vol. info"
@@ -12729,17 +12500,29 @@ msgstr "Volum"
 msgid "Volume:"
 msgstr "Volum:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#, fuzzy, c-format
+msgid "Waiting"
+msgstr "Data d'espera"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:110
 #, c-format
 msgid "Waiting date"
 msgstr "Data d'espera"
 
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#, c-format
+msgid "Waiting for patron at %s"
+msgstr "Esperant per l'usuari a %s"
+
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting for patron at %s since %s. "
-msgstr "Esperant a %s%s, %s%s des de %s."
+msgstr "Esperant per l'usuari a %s des de %s. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
@@ -12860,6 +12643,16 @@ msgstr "Sí"
 msgid "Yes "
 msgstr "Sí"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#, c-format
+msgid "Yes (Item overdue or lost)"
+msgstr "Sí (exemplar endarrerit o perdut)"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:436
+#, fuzzy, c-format
+msgid "Yes (Rental fees)"
+msgstr "Cost lloguer"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:56
 #, c-format
 msgid "Yes, I agree."
@@ -12904,6 +12697,24 @@ msgstr "Sí, reprèn totes les reserves"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
 msgid "Yes, suspend all holds"
 msgstr "Sí, suspèn totes les reserves"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:173
+#, c-format
+msgid ""
+"You already have at least one item level hold on this title. All further "
+"holds must be item level."
+msgstr ""
+"Ja tens una reserva a nivell d'exemplar en aquest títol. Totes les reserves "
+"posteriors han de ser nivell d'exemplar."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
+#, c-format
+msgid ""
+"You already have at least one record level hold on this title. All further "
+"holds must be record level."
+msgstr ""
+"Ja tens una reserva a nivell de registre en aquest títol. Totes les reserves "
+"posteriors han de ser nivell de registre."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #, c-format
@@ -12972,6 +12783,11 @@ msgstr ""
 "Estàs subscrit a les llistes de circulació de les següents publicacions "
 "periòdiques. Si vols fer canvis posa't en contacte amb la biblioteca."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#, c-format
+msgid "You can add to your lists from the results of any "
+msgstr "Es pot afegir a la llista de resultats de qualsevol "
+
 #. I
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:57
 msgid ""
@@ -13034,6 +12850,11 @@ msgid ""
 msgstr ""
 "No podem certificar el vostre compte, teniu deutes o exemplars en préstec. "
 "Si us plau, torneu els exemplars abans de demanar la carta de llibertat."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:53
+#, fuzzy, c-format
+msgid "You cannot place a recall on this item."
+msgstr "Ja heu demanat aquest títol."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:52
@@ -13114,9 +12935,11 @@ msgstr "No teniu permís per actualitzar aquesta llista."
 msgid "You do not have permission to view this list."
 msgstr "No teniu permís per accedir a aquesta llista."
 
+#. For the first occurrence,
 #. %1$s:  IF Koha.Preference('FailedLoginAttempts') 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:51
 #, c-format
 msgid ""
 "You entered an incorrect username or password. Please try again! But note "
@@ -13195,6 +13018,11 @@ msgstr ""
 #, c-format
 msgid "You have nothing checked out"
 msgstr "No teniu res en préstec"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
+#, fuzzy, c-format
+msgid "You have reached the maximum number of recalls on this record."
+msgstr "Has renovat aquest element el nombre màxim de vegades permès."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
@@ -13303,6 +13131,11 @@ msgstr "Us heu d'autenticar per crear o afegir a les llistes"
 msgid "You must be logged in to place a recall."
 msgstr "Us heu d'autenticar per afegir etiquetes."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:60
+#, fuzzy, c-format
+msgid "You must contact the library for assistance."
+msgstr "No podeu restablir la contrasenya."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:117
 #, fuzzy, c-format
@@ -13379,6 +13212,22 @@ msgid ""
 msgstr ""
 "Heu fet servir un caràcter no acceptat. Si us plau, reviseu el document i "
 "torneu a enviar-lo."
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
+#, fuzzy, c-format
+msgid "You will be charged a hold fee of %s for placing this hold"
+msgstr ""
+"%s Se't cobrarà una quota per la reserva de %s quan recollis aquest exemplar "
+"%s Se't cobrarà una quota de reserva de %s per demanar aquesta reserva %s "
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#, fuzzy, c-format
+msgid "You will be charged a hold fee of %s when you collect this item"
+msgstr ""
+"%s Se't cobrarà una quota per la reserva de %s quan recollis aquest exemplar "
+"%s Se't cobrarà una quota de reserva de %s per demanar aquesta reserva %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:62
 #, c-format
@@ -13586,6 +13435,13 @@ msgstr ""
 "Les vostres correccions s'han enviat a la Biblioteca, i el personal "
 "actualitzarà el vostre registre tan aviat com sigui possible."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:59
+#, c-format
+msgid ""
+"Your current password was entered incorrectly. If this problem persists, "
+"please ask a librarian to reset your password for you."
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -13772,6 +13628,7 @@ msgstr ""
 "La teva contrasenya ha de contenir com a mínim %s caràcters, incloent "
 "majúscules, minúscules i números."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:23
 #, c-format
 msgid "Your payment"
@@ -13826,6 +13683,7 @@ msgstr "La teva nota sobre %s s'ha desat i enviat a la biblioteca."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:287
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:370
 #, c-format
 msgid "Your purchase suggestions"
@@ -13999,6 +13857,12 @@ msgstr "[L'etiqueta %s no és compatible amb el vostre navegador.]"
 msgid "a an the"
 msgstr "i la"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
+#, fuzzy, c-format
+msgid "a list:"
+msgstr "%suna llista:%s"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:782
 #, c-format
@@ -14030,6 +13894,11 @@ msgstr ""
 msgid "ask for a discharge"
 msgstr "demanar la carta de llibertat"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#, fuzzy, c-format
+msgid "at"
+msgstr "Cistell"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:121
 #, c-format
@@ -14058,10 +13927,11 @@ msgstr "borrowernumber"
 msgid "breadcrumb"
 msgstr "breadcrumb"
 
-#. For the first occurrence,
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "by"
 msgstr "per"
 
@@ -14155,6 +14025,56 @@ msgstr "email"
 msgid "email address"
 msgstr "Adreça de correu electrònic"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:85
+#, fuzzy, c-format
+msgid "every 2 months"
+msgstr "12 mesos"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:76
+#, c-format
+msgid "every 2 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:97
+#, c-format
+msgid "every 2 years"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:79
+#, c-format
+msgid "every 3 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:67
+#, fuzzy, c-format
+msgid "every day"
+msgstr "%s per día"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:82
+#, fuzzy, c-format
+msgid "every month"
+msgstr "3 mesos"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:88
+#, c-format
+msgid "every quarter"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:73
+#, c-format
+msgid "every week"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:94
+#, c-format
+msgid "every year"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#, fuzzy, c-format
+msgid "expected at"
+msgstr "Esperat"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:785
 #, c-format
@@ -14166,6 +14086,11 @@ msgstr "expiry_date"
 msgid "firstname"
 msgstr "nom"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:124
+#, fuzzy, c-format
+msgid "for"
+msgstr "o"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:63
 #, fuzzy, c-format
 msgid "for every request "
@@ -14175,6 +14100,11 @@ msgstr "Sol·licitud completa "
 #, c-format
 msgid "for more information on what it does and how to configure it."
 msgstr "per a més informació sobre com es fa i com configurar-ho."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#, fuzzy, c-format
+msgid "for patron"
+msgstr "LookupPatron"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
@@ -14282,13 +14212,24 @@ msgstr "a entrada principal"
 msgid "in the complete record"
 msgstr "en el registre complet"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:100
+#, c-format
+msgid "irregularly"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:61
 #, c-format
 msgid "is exactly"
 msgstr "és exactament"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:125
+#, fuzzy, c-format
+msgid "issues"
+msgstr "Fascicle"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
 #, c-format
 msgid "item"
 msgstr "exemplar"
@@ -14300,6 +14241,11 @@ msgstr "exemplar"
 #, c-format
 msgid "item_id"
 msgstr "item_id"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, fuzzy, c-format
+msgid "items"
+msgstr "exemplar"
 
 #. ABBR
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:151
@@ -14331,6 +14277,11 @@ msgstr "llista d'identificadors de registre del sistema"
 msgid "log in using a different account"
 msgstr "Inicieu sessió amb un altre compte:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:127
+#, fuzzy, c-format
+msgid "months"
+msgstr "3 mesos"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:256
 #, c-format
 msgid "negcap "
@@ -14340,6 +14291,41 @@ msgstr "negcap "
 #, c-format
 msgid "not"
 msgstr "no"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:115
+#, c-format
+msgid "on Friday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:103
+#, c-format
+msgid "on Monday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:118
+#, c-format
+msgid "on Saturday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:121
+#, c-format
+msgid "on Sunday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:112
+#, c-format
+msgid "on Thursday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:106
+#, c-format
+msgid "on Tuesday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:109
+#, c-format
+msgid "on Wednesday"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:156
 #, fuzzy, c-format
@@ -14499,27 +14485,12 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#. %1$s:  transfer.datesent | $KohaDates 
-#. %2$s:  ELSIF ( HOLD.is_in_processing ) 
-#. %3$s:  ELSIF ( HOLD.suspend ) 
-#. %4$s:  IF ( HOLD.suspend_until ) 
-#. %5$s:  HOLD.suspend_until | $KohaDates 
-#. %6$s:  END 
-#. %7$s:  ELSE 
-#. %8$s:  IF HOLD.itemtype 
-#. %9$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#. %12$s:  END 
-#. %13$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
-msgid ""
-"since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending for "
-"next available item of item type '%s' %s Pending %s %s %s "
+msgid "since"
 msgstr ""
-"des de %s %s exemplar en procés %s Suspès %s fins %s %s %s %s Esperar al "
-"proper exemplar disponible '%s' %s Esperant %s %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:48
@@ -14642,17 +14613,37 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "Hi ha hagut un problema amb el procés de pagament"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:70
+#, c-format
+msgid "three times per week"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
 #, c-format
 msgid "to post a comment. "
 msgstr "publica un comentari. "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:64
+#, fuzzy, c-format
+msgid "twice per day"
+msgstr "%s per día"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:91
+#, c-format
+msgid "twice per year"
+msgstr ""
 
 #. LINK
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:58
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "until"
+msgstr "fins "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "until "
 msgstr "fins "
@@ -14707,6 +14698,11 @@ msgstr "reserves:"
 #, c-format
 msgid "was not found in the database. Please try again."
 msgstr "no s'ha trobat a la base de dades. Intenteu-ho de nou."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:126
+#, c-format
+msgid "weeks"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:542
 #, c-format
@@ -14841,9 +14837,265 @@ msgstr "les vostres etiquetes"
 msgid "×"
 msgstr "×"
 
+#~ msgid ""
+#~ "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
+#~ msgstr ""
+#~ "%s %s %s %s %s%s%sKoha online%s catàleg &rsaquo; El teu pagament %s %s%s "
+
+#~ msgid "%s %s %s %s Item in transit from "
+#~ msgstr "%s %s %s %s Exemplar en trànsit des de"
+
+#~ msgid ""
+#~ "%s %s New password must not be the same as old password. %s Passwords do "
+#~ "not match. Please re-type your new password. %s Password must be at least "
+#~ "%s characters long. %s Password must contain at least one digit, one "
+#~ "lowercase and one uppercase. %s Password must not contain leading or "
+#~ "trailing whitespaces. %s You entered an incorrect username or password. "
+#~ "Please try again! But note that passwords are case sensitive%s and that "
+#~ "your account will be locked out after a fixed number of failed login "
+#~ "attempts%s. Please contact a library staff member if you continue to have "
+#~ "problems. %s Please log-in to account to update your password."
+#~ msgstr ""
+#~ "%s %s La contrasenya nova no ha de ser la mateixa que l'antiga. Les "
+#~ "contrasenyes de %s no coincideixen. Tornar a escriure la nova "
+#~ "contrasenya. %s La contrasenya ha de tenir com a mínim %s caràcters. La "
+#~ "contrasenya %s ha de contenir almenys un dígit, una minúscula i una "
+#~ "majúscula. La contrasenya %s no ha de contenir espais en blanc ni al "
+#~ "final. %s S'ha introduït un nom d'usuari o una contrasenya incorrectes. "
+#~ "Siusplau tornar a provar! Però tingueu en compte que les contrasenyes "
+#~ "distingeixen entre majúscules i minúscules%s i que el vostre compte es "
+#~ "bloquejarà després d'un nombre fix d'intents d'inici de sessió fallits%s. "
+#~ "Poseu-vos en contacte amb un membre del personal de la biblioteca si "
+#~ "continueu tenint problemes. %s Inicieu sessió al compte per actualitzar "
+#~ "la vostra contrasenya."
+
+#~ msgid ""
+#~ "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s "
+#~ "RSS feed for %s and system-wide library news %s RSS feed for system-wide "
+#~ "library news %s %s "
+#~ msgstr ""
+#~ "%s %s Canal RSS per %s novetats de la biblioteca %s Canal RSS per "
+#~ "novetats bibliogràfiques %s %s %s canal RSS per %s i novetats de totes "
+#~ "les biblioteques %s Canal RSS per novetats de totes les biblioteques %s "
+#~ "%s "
+
+#~ msgid ""
+#~ "%s %s Search also for narrower subjects %s Search also for broader "
+#~ "subjects %s Search also for related subjects %s "
+#~ msgstr ""
+#~ "%s %s Cercar també per termes específics %s Cercar també per termes "
+#~ "genèrics %s Cercar també per termes relacionats %s "
+
+#~ msgid "%s %sShared%sPrivate%s %s Public %s "
+#~ msgstr "%s %sCompartir%sPrivat%s %s Públic %s "
+
+#~ msgid ""
+#~ "%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s "
+#~ msgstr ""
+#~ "%s Afegit %s per vostè %s %s Afegit %s per %s %s %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s %s %s "
+
+#~ msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
+#~ msgstr "%s Complert %s Cancel·lat %s Esperant %s En trànsit %s Pendents %s "
+
+#~ msgid ""
+#~ "%s In transit to %s %s Ready for pickup %s Overdue to be returned %s "
+#~ "Expired on %s %s Cancelled on %s %s Fulfilled %s Requested %s "
+#~ msgstr ""
+#~ "%s En trànsit cap a %s %s A punt per a la recollida %s S'ha de tornar %s "
+#~ "Vençut el %s %s Cancel·lat el %s %s Complet %s Sol·licitat %s "
+
+#~ msgid "%s Library %s Libraries %s "
+#~ msgstr "%s Biblioteca %s Biblioteques %s "
+
+#~ msgid ""
+#~ "%s No recalls have been made. %s %s Recalls have not been enabled. Please "
+#~ "contact your library. %s "
+#~ msgstr ""
+#~ "%s No s'ha fet cap reclamació. %s %s No s'han habilitat les reclamacions. "
+#~ "Si us plau contacta amb la biblioteca. %s "
+
+#~ msgid "%s On hold %s No renewals left %s "
+#~ msgstr "%s En reserva %s No queden renovacions %s "
+
+#~ msgid ""
+#~ "%s Passwords do not match. Please re-type your new password. %s %s "
+#~ "Password must be at least %s characters long. %s %s Password must contain "
+#~ "at least one digit, one lowercase and one uppercase. %s %s Password must "
+#~ "not contain leading or trailing whitespaces. %s %s Your current password "
+#~ "was entered incorrectly. If this problem persists, please ask a librarian "
+#~ "to reset your password for you. %s "
+#~ msgstr ""
+#~ "%s La contrasenya no coincideix. Si us plau torneu a introduir la "
+#~ "contrasenya. %s %s La nova contrasenya ha de tenir un mínim de %s "
+#~ "caràcters de longitud. %s%s La contrasenya ha de contenir com a mínim un "
+#~ "número, una minúscula i una majúscula. %s %s La contrasenya no ha de "
+#~ "contenir espais en blanc inicials ni finals. %s %s La contrasenya s'ha "
+#~ "introduït de manera incorrecta. Si el problema persisteix, demaneu al "
+#~ "personal bibliotecari que restableixi la contrasenya. %s "
+
+#~ msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
+#~ msgstr "%s Pendent %s En procés %s Nova %s Completada %s Cancel·lada %s "
+
+#~ msgid ""
+#~ "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
+#~ "suggestions %s %s "
+#~ msgstr ""
+#~ "%s Suggeriments de compra %s %s Els vostres suggeriments de compra%s "
+#~ "Suggeriments de compra %s %s "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s Recalls have not been enabled. Please contact your library. %s There "
+#~ "are no items available for recall. "
+#~ msgstr ""
+#~ "%s Les notes de préstec no s'han activat. Si us plau contacta amb la "
+#~ "biblioteca. %s "
+
+#~ msgid ""
+#~ "%s Requested %s Overdue to be returned %s In transit to %s %s Ready for "
+#~ "pickup %s "
+#~ msgstr ""
+#~ "%s S'ha sol·licitat %s S'ha de retornar %s En trànsit a %s %s A punt per "
+#~ "recollir %s "
+
+#~ msgid ""
+#~ "%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
+#~ "alert %s "
+#~ msgstr ""
+#~ "%s Subscriu-te a l'alerta de subscripció %s Cancel·la la subscripció a "
+#~ "l'alerta de subscripció %s "
+
+#~ msgid ""
+#~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
+#~ "%s %s %s %s %s %s. "
+#~ msgstr ""
+#~ "%s Esperant %s Reservat%s per a usuari %s en %s esperat el %s %s des de "
+#~ "%s %s %s %s %s %s %s. "
+
+#~ msgid ""
+#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
+#~ "%s since %s. %s "
+#~ msgstr ""
+#~ "%s Esperant per l'usuari %s des de %s. %s Reclamat per l'usuari esperat "
+#~ "en %s des de %s. %s "
+
+#~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
+#~ msgstr "%s%s %sítem%sítems%s%sBuit%s"
+
+#~ msgid ""
+#~ "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+#~ "%sCollection: %s%s "
+#~ msgstr ""
+#~ "%sNavegació %s prestatges%s %s, %s %sUbicació de les prestatgeries: %s%s "
+#~ "%s, %s %sCol·lecció: %s%s "
+
+#~ msgid ""
+#~ "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never "
+#~ "received)%s %sMissing (sold out)%s %sMissing (damaged)%s %sMissing "
+#~ "(lost)%s %sNot available%s %sDelete%s %sClaimed%s %sStopped%s "
+#~ msgstr ""
+#~ "%sPendent%s %sRebut%s %sEndarrerit%s %sPerdut%s %sNo disponible (no "
+#~ "rebut)%s %sNo disponible (esgotat)%s %sNo disponible (malmès)%s %sNo "
+#~ "disponible (perdut)%s %sNo disponible%s %sSuprimit%s %sReclamat%s %sAturat"
+#~ "%s "
+
+#~ msgid ""
+#~ "%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in "
+#~ "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+#~ "ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+#~ msgstr ""
+#~ "%sVenciment d'exemplar %sPreavís %sReserva servida %sRecordatori de "
+#~ "reserva %sDevolució d'exemplar %s %sPréstec d'exemplar i renovació "
+#~ "%sPréstec d'exemplar %s %sPréstec interbibliotecari disponible %sPréstec "
+#~ "interbibliotecari no disponible %sRenovació automática %sDesconegut %s"
+
+#~ msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
+#~ msgstr "%sTipus d'ítem %sCol·lecció %sLocalització %sUna altra cosa %s "
+
+#~ msgid "%sLibrary%sLibraries%s"
+#~ msgstr "%sBiblioteca%sBiblioteques%s "
+
+#~ msgid ""
+#~ "%sRequested %sChecked by the library %sAccepted by the library %sOrdered "
+#~ "by the library %sSuggestion declined %sAvailable in the library %s %s %s "
+#~ "%s(%s)%s "
+#~ msgstr ""
+#~ "%sSol·licitat %sComprovat per la Biblioteca %sAcceptat per la Biblioteca "
+#~ "%sDemanat per la Biblioteca %sSuggeriment refusat  %sDisponible a la "
+#~ "Biblioteca %s %s %s %s(%s)%s "
+
+#~ msgid "%sUpdate your contact information%sGo to your contact information%s"
+#~ msgstr ""
+#~ "%sActualitzeu la informació de contacte %sAneu a la vostra informació de "
+#~ "contacte %s"
+
+#~ msgid "%sby %s%s "
+#~ msgstr "%sper %s%s "
+
+#~ msgid ": %sa list:%s"
+#~ msgstr ": %suna llista:%s"
+
 #, fuzzy
 #~ msgid "Clear text"
 #~ msgstr "Esborreu la data"
 
 #~ msgid "Copyright date:"
 #~ msgstr "Data de copyright:"
+
+#~ msgid ""
+#~ "Note: you can only delete your own tags. %s Note: your tag contained "
+#~ "markup code that was removed. "
+#~ msgstr ""
+#~ "Nota: només podeu eliminar les vostres etiquetes. %s Nota: la vostra "
+#~ "etiqueta tenia un codi erroni que s'ha eliminat. "
+
+#~ msgid ""
+#~ "Please use the field 'Login' as well. %s This account has no email "
+#~ "address we can send the email to. %s The process of password recovery has "
+#~ "already been started for this account %s (\""
+#~ msgstr ""
+#~ "Si us plau utilitzi també el camp \"login\". %s Aquest compte no té cap "
+#~ "adreça a la qual puguem enviar-li un correu electrònic. %s El procés de "
+#~ "recuperació de contrasenya ja s'ha iniciat per a aquest compte %s (\""
+
+#~ msgid ""
+#~ "The current subscription began on %s and is issued %s twice per day %s %s "
+#~ "every day %s %s three times per week %s %s every week %s %s every 2 weeks "
+#~ "%s %s every 3 weeks %s %s every month %s %s every 2 months %s %s every "
+#~ "quarter %s %s twice per year %s %s every year %s %s every 2 years %s %s "
+#~ "irregularly %s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on "
+#~ "Thursday %s %s on Friday %s %s on Saturday %s %s on Sunday %s for %s%s "
+#~ "issues%s %s%s weeks%s %s%s months%s "
+#~ msgstr ""
+#~ "La subscripció comença el %s  i es publica %s dos cops per dia %s %s cada "
+#~ "dia %s %s tres cops per setmana %s %s cada setmana %s %s cada dues "
+#~ "setmanes %s %s cada tres setmanes %s %s cada mes %s %s cada dos mesos %s "
+#~ "%s cada trimestre %s %s dos cops per any %s %s cada any %s %s cada dos "
+#~ "anys %s %s irregular %s %s els dilluns %s %s els dimarts %s %s els "
+#~ "dimecres %s %s els dijous %s %s els divendres %s %s els dissabtes %s %s "
+#~ "els diumenges %s per %s%s fascicle%s %s%s setmanes%s %s%s mesos%s "
+
+#~ msgid ""
+#~ "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely "
+#~ "markup code. It was NOT added. "
+#~ msgstr ""
+#~ "L'etiqueta s'ha afegit com a &quot;%s&quot;. %s Nota: la vostra etiqueta "
+#~ "estava totalment amb codi amb format. NO s'ha afegit. "
+
+#~ msgid ""
+#~ "There was a problem with this operation: %s ERROR: illegal parameter %s "
+#~ "%s ERROR: You must log in to complete that action. %s ERROR: You cannot "
+#~ "delete the tag %s. "
+#~ msgstr ""
+#~ "Hi ha hagut un problema amb aquesta operació: %sERROR: paràmetre il·legal "
+#~ "%s %sERROR: Has d'iniciar sessió per completar aquesta acció. %sERROR: No "
+#~ "es pot eliminar l'etiqueta %s. "
+
+#~ msgid ""
+#~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "
+#~ "for next available item of item type '%s' %s Pending %s %s %s "
+#~ msgstr ""
+#~ "des de %s %s exemplar en procés %s Suspès %s fins %s %s %s %s Esperar al "
+#~ "proper exemplar disponible '%s' %s Esperant %s %s %s "

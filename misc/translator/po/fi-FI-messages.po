@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 16:18-0300\n"
-"PO-Revision-Date: 2022-05-24 06:02+0000\n"
+"POT-Creation-Date: 2022-06-17 21:22-0300\n"
+"PO-Revision-Date: 2022-06-20 10:08+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.05/fi-FI-messages.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653372124.535382\n"
+"X-POOTLE-MTIME: 1655719733.824642\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 #, perl-brace-format
@@ -28,6 +28,11 @@ msgid "({age} year)"
 msgid_plural "({age} years)"
 msgstr[0] "({age} vuosi)"
 msgstr[1] "({age} vuotta)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:14
+#, fuzzy
+msgid "Actions"
+msgstr "Paikka"
 
 #: Koha/Database/Columns.pm:168
 msgid "Additional subfields (XML)"
@@ -161,6 +166,11 @@ msgstr "Tekijä"
 msgid "Barcode"
 msgstr "Viivakoodi"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:14
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:13
+msgid "Batches"
+msgstr ""
+
 #: Koha/Database/Columns.pm:191
 msgid "Biblio number"
 msgstr "Tietuenumero"
@@ -171,7 +181,7 @@ msgstr "Tietuenumero (sisäinen)"
 
 #: Koha/Database/Columns.pm:195
 msgid "Biblio-level item type"
-msgstr "Tietuetason aineistolaji"
+msgstr "Tietuetason nidetyypit"
 
 #: Koha/Database/Columns.pm:190
 msgid "Biblioitem number"
@@ -189,7 +199,7 @@ msgstr "Asiakkaan ID tai määre"
 msgid "Call number"
 msgstr "Luokka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:159
 msgctxt "Cancel hold button"
 msgid "Cancel"
 msgstr "Peruuta"
@@ -333,7 +343,7 @@ msgstr "Sukupuoli"
 msgid "Gone no address flag"
 msgstr "Tarkista osoite"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:957
+#: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:975
 msgid "Hold"
 msgid_plural "Holds"
 msgstr[0] "Varaus"
@@ -422,11 +432,11 @@ msgstr "Poistettu nide"
 
 #: Koha/Database/Columns.pm:180
 msgid "Itemtype"
-msgstr "Aineistolaji"
+msgstr "Nidetyyppi"
 
 #: Koha/Database/Columns.pm:162
 msgid "Koha itemtype"
-msgstr "Kohan aineistolaji"
+msgstr "Kohan nidetyyppi"
 
 #: Koha/Database/Columns.pm:144
 msgid "Koha normalized classification for sorting"
@@ -438,7 +448,12 @@ msgstr "LCCN"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:287
 msgid "Last item for bibliographic record with biblio-level hold on it"
-msgstr "Viimeinen nide tietueelle, jossa on tietuetason varaus"
+msgstr "Viimeinen nide nimeketietueelle, jossa on nimeketason varaus"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:8
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:7
+msgid "Layouts"
+msgstr ""
 
 #: Koha/Database/Columns.pm:175 Koha/Database/Columns.pm:221
 msgid "Library"
@@ -490,7 +505,7 @@ msgstr "Ei lainattavissa"
 
 #: Koha/Database/Columns.pm:207
 msgid "Notes"
-msgstr "Viestit"
+msgstr "Huomautukset"
 
 #: Koha/Database/Columns.pm:193
 msgid "Number"
@@ -519,7 +534,7 @@ msgstr "Tilaus"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:93
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:189
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:215
 msgctxt "verb"
 msgid "Order"
 msgstr "Tilaus"
@@ -575,6 +590,11 @@ msgstr "Puhelinnumero"
 #: Koha/Database/Columns.pm:125
 msgid "Privacy settings"
 msgstr "Yksityisyysasetukset"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:11
+msgid "Profiles"
+msgstr ""
 
 #: Koha/Database/Columns.pm:155
 msgid "Public note"
@@ -680,6 +700,11 @@ msgstr "Sukunimi"
 msgid "System permissions"
 msgstr "Järjestelmäoikeudet"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:9
+msgid "Templates"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
@@ -694,7 +719,7 @@ msgctxt "Semester"
 msgid "Term:"
 msgstr "Lukukausi:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
+#: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
 #, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
@@ -732,7 +757,7 @@ msgstr "URL"
 
 #: Koha/Database/Columns.pm:167
 msgid "Uniform Resource Identifier"
-msgstr "URL-osoite"
+msgstr "URI, Uniform Resource Identifier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/html_helpers.inc:288
 msgid "Unknown reason"
@@ -797,6 +822,11 @@ msgid_plural "baskets"
 msgstr[0] "tilauskori"
 msgstr[1] "tilauskorit"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:12
+msgid "batch"
+msgstr ""
+
 #: cataloguing/value_builder/unimarc_field_146h.pl:67
 #: cataloguing/value_builder/unimarc_field_146i.pl:67
 msgid "bowed string instruments"
@@ -809,7 +839,20 @@ msgstr "kirjasto"
 #: cataloguing/value_builder/unimarc_field_146h.pl:55
 #: cataloguing/value_builder/unimarc_field_146i.pl:55
 msgid "brass instruments"
-msgstr "vaskisoittimet"
+msgstr "vaskipuhaltimet"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:6
+#, fuzzy
+msgid "by item types"
+msgstr "nidetyyppi"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:5
+msgid "by libraries"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/budget_planning.inc:4
+msgid "by months"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
 msgid "checkout"
@@ -834,7 +877,7 @@ msgstr "kokoelmaotsikko"
 #: cataloguing/value_builder/unimarc_field_146h.pl:66
 #: cataloguing/value_builder/unimarc_field_146i.pl:66
 msgid "conductors"
-msgstr "kapellimestarit"
+msgstr "johtajat"
 
 #: Koha/Database/Columns.pm:225
 msgid "copyrightdate"
@@ -892,6 +935,11 @@ msgstr "nidetyyppi"
 #: cataloguing/value_builder/unimarc_field_146i.pl:61
 msgid "keyboard instruments"
 msgstr "kosketinsoittimet"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:6
+msgid "layout"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
@@ -956,6 +1004,11 @@ msgstr "paikka"
 msgid "plucked string instruments"
 msgstr "näppäilysoittimet"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:10
+msgid "profile"
+msgstr ""
+
 #: Koha/Database/Columns.pm:227
 msgid "publishercode"
 msgstr "kustantaja"
@@ -984,8 +1037,13 @@ msgstr "sooloäänet"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/booksellers.tt:102
 msgid "subscription"
 msgid_plural "subscriptions"
-msgstr[0] "tilaus"
-msgstr[1] "tilaukset"
+msgstr[0] "kausijulkaisutilaus"
+msgstr[1] "kausijulkaisutilaukset"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:8
+msgid "template"
+msgstr ""
 
 #: cataloguing/value_builder/unimarc_field_146a.pl:59
 msgid "undefined, variable (e.g. Renaissance vocal or instrumental music)"

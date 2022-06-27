@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-05-09 18:04-0300\n"
-"PO-Revision-Date: 2022-05-15 13:12+0000\n"
+"POT-Creation-Date: 2022-06-17 21:48-0300\n"
+"PO-Revision-Date: 2022-06-20 14:32+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hi\n"
@@ -14,32 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hi/22.05/hi-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1652620325.021754\n"
-
-#. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
-#. %4$s:  INCLUDE 'doc-head-open.inc' 
-#. %5$s:  IF ( LibraryNameTitle ) 
-#. %6$s:  LibraryNameTitle | html 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  INCLUDE 'doc-head-close.inc' 
-#. %10$s:  BLOCK cssinclude 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, c-format
-msgid "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s %s %s %s %s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; आपका भुगतान %s %s%s "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( HOLD.is_in_transit ) 
-#. %4$s:  SET transfer = HOLD.item.get_transfer 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:111
-#, c-format
-msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s %s से पारगमन में आइटम "
+"X-POOTLE-MTIME: 1655735553.707976\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -199,36 +174,6 @@ msgstr "%s %s आपका मतलब था: "
 msgid "%s %s End date: "
 msgstr "%s %s अंतिम तिथि: "
 
-#. %1$s:  SWITCH error 
-#. %2$s:  CASE  'no_change' 
-#. %3$s:  CASE  'passwords_mismatch' 
-#. %4$s:  CASE 'password_too_short' 
-#. %5$s:  minPasswordLength | html 
-#. %6$s:  CASE 'password_too_weak' 
-#. %7$s:  CASE 'password_has_whitespaces' 
-#. %8$s:  CASE 'invalid_credentials' 
-#. %9$s:  IF Koha.Preference('FailedLoginAttempts') 
-#. %10$s:  END 
-#. %11$s:  CASE 'no_expire' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:38
-#, fuzzy, c-format
-msgid ""
-"%s %s New password must not be the same as old password. %s Passwords do not "
-"match. Please re-type your new password. %s Password must be at least %s "
-"characters long. %s Password must contain at least one digit, one lowercase "
-"and one uppercase. %s Password must not contain leading or trailing "
-"whitespaces. %s You entered an incorrect username or password. Please try "
-"again! But note that passwords are case sensitive%s and that your account "
-"will be locked out after a fixed number of failed login attempts%s. Please "
-"contact a library staff member if you continue to have problems. %s Please "
-"log-in to account to update your password."
-msgstr ""
-"%s पासवर्ड मेल नहीं खाते हैं कृपया अपना नया पासवर्ड फिर से टाइप करें. %s %s पासवर्ड कम से "
-"कम %s वर्ण लंबा होना चाहिए. %s %s पासवर्ड में कम से कम एक अंक, एक लोअरकेस और एक "
-"अपरकेस होना चाहिए. %s %s पासवर्ड में अग्रणी या पिछड़े सफेद स्थान नहीं होना चाहिए. %s "
-"%s आपका वर्तमान पासवर्ड ग़लत ढंग से दर्ज किया गया था यदि यह समस्या बनी रहती है, तो "
-"कृपया अपने लिए अपना पासवर्ड रीसेट करने के लिए एक लाइब्रेरियन से पूछें. %s "
-
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -236,28 +181,6 @@ msgstr ""
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s कोई परिणाम नहीं मिला. %s "
-
-#. %1$s:  IF Branches.all.size == 1 
-#. %2$s:  IF branchcode 
-#. %3$s:  Branches.GetName( branchcode ) | html 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  IF branchcode 
-#. %8$s:  Branches.GetName( branchcode ) | html 
-#. %9$s:  ELSE 
-#. %10$s:  END 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:128
-#, c-format
-msgid ""
-"%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
-"feed for %s and system-wide library news %s RSS feed for system-wide library "
-"news %s %s "
-msgstr ""
-"%s %s के लिए आरएसएस फ़ीड %s पुस्तकालय समाचार. %s पुस्तकालय समाचार के लिए आरएसएस "
-"फ़ीड. %s %s %s के लिए आरएसएस फ़ीड %s और सिस्टम-वाइड लाइब्रेरी समाचार. %s सिस्टम-"
-"वाइड लाइब्रेरी समाचार के लिए आरएसएस फ़ीड. %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  IF ( ms_value ) 
@@ -278,20 +201,6 @@ msgid ""
 msgstr ""
 "%s %s के लिए खोज के परिणाम '%s' %s खोज के परिणाम %s %s आपने कोई खोज मापदंड "
 "निर्दिष्ट नहीं किया. %s &rsaquo; %s%s%sकोहा ऑनलाइन %s कैटलॉग "
-
-#. %1$s: - SWITCH index -
-#. %2$s: - CASE 'su-na' -
-#. %3$s: - CASE 'su-br' -
-#. %4$s: - CASE 'su-rl' -
-#. %5$s: - END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:1
-#, c-format
-msgid ""
-"%s %s Search also for narrower subjects %s Search also for broader subjects "
-"%s Search also for related subjects %s "
-msgstr ""
-"%s %s संकरा विषयों के लिए भी खोज %s व्यापक विषयों के लिए भी खोज %s संबंधित विषयों के "
-"लिए भी खोज %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -353,17 +262,6 @@ msgstr "%s %s%s%sसंसाधन से लिंक%s "
 msgid "%s %s's fines and charges"
 msgstr "%s %s's जुर्माना और शुल्क"
 
-#. %1$s:  IF s.is_private 
-#. %2$s:  IF s.is_shared 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
-#, c-format
-msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s %sसाझा %sनिजी%s %s सार्वजनिक %s "
-
 #. %1$s:  added_count | html 
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
@@ -418,49 +316,6 @@ msgstr "%s <?xml version=\"1.0\"?> "
 msgid "%s Account frozen %s %s "
 msgstr "%s खाता अवरुद्ध %s %s"
 
-#. %1$s:  ELSIF (errMultipleAccountsForEmail) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
-#, c-format
-msgid "%s Account identification with this email address only is ambiguous. "
-msgstr "%s इस ईमेल पते के साथ खाता पहचान केवल अस्पष्ट है. "
-
-#. %1$s:  IF review.your_comment 
-#. %2$s:  review.datereviewed | $KohaDates 
-#. %3$s:  ELSE 
-#. %4$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
-#. %5$s:  review.datereviewed | $KohaDates 
-#. %6$s:  SWITCH ShowReviewer 
-#. %7$s:  CASE 'full' 
-#. %8$s:  review.borrtitle | html 
-#. %9$s:  review.firstname | html 
-#. %10$s:  review.surname | html 
-#. %11$s:  CASE 'first' 
-#. %12$s:  review.firstname | html 
-#. %13$s:  CASE 'surname' 
-#. %14$s:  review.surname | html 
-#. %15$s:  CASE 'firstandinitial' 
-#. %16$s:  review.firstname | html 
-#. %17$s:  review.surname|truncate(2,'.') | html 
-#. %18$s:  CASE 'username' 
-#. %19$s:  review.userid | html 
-#. %20$s:  END 
-#. %21$s:  END 
-#. %22$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
-#, c-format
-msgid ""
-"%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s "
-msgstr ""
-"%s जोड़ा गया %sआपके द्वारा %s %s जोड़ा गया %s द्वारा %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s %s %s "
-
-#. %1$s:  IF (sendmailError) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
-#, c-format
-msgid "%s An error has occurred while sending you the password recovery link. "
-msgstr "%s जबकि आप पासवर्ड वसूली लिंक भेजते समय कोई त्रुटि हुई है. "
-
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:36
@@ -472,35 +327,12 @@ msgstr ""
 "%s जब पीडीएफ फाइल पैदा करने में त्रुटि हुई। इस समस्या को हल करने के लिए कर्मचारियों से "
 "संपर्क करें. %s "
 
-#. %1$s:  IF ( Koha.Preference('SCOAllowCheckin') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:247
-#, c-format
-msgid ""
-"%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr ""
-"%s किसी आइटम को देखें, वापस लौटाएँ या नवीनीकृत करें: %s किसी आइटम की जाँच करें या उसका "
-"नवीनीकरण करें: %s "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:28
 #, c-format
 msgid "%s Contact your library to be disenrolled from this club. %s "
 msgstr "%s इस क्लब से बेदखली करने के लिए अपनी लाइब्रेरी से संपर्क करें. %s "
-
-#. %1$s:  IF (errcode==1) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:100
-#, c-format
-msgid ""
-"%s Could not create new list. Please check if the name is unique. %s Sorry, "
-"you cannot add items to this list. %s "
-msgstr ""
-"%s नई सूची जारी नही की जा सकती है. कृपया जांच करें यदि नाम विशिष्ट है. %s क्षमा करें, "
-"इस सूची के लिए आप आइटम नहीं जोड़ सकते. %s "
 
 #. %1$s:  IF ( context == "list" ) 
 #. %2$s:  ELSE 
@@ -509,28 +341,6 @@ msgstr ""
 #, c-format
 msgid "%s Delete %s Delete list %s "
 msgstr "%s डिलीट%s डिलीट लिस्ट %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  RECALL.checkout.date_due | $KohaDates 
-#. %3$s:  ELSIF ( RECALL.waiting and RECALL.expiration_date ) 
-#. %4$s:  RECALL.expiration_date | $KohaDates 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:102
-#, c-format
-msgid "%s Due to be returned by %s %s Pick up by %s %s - %s "
-msgstr ""
-
-#. %1$s:  IF hold.found == 'F' 
-#. %2$s:  ELSIF hold.cancellationdate 
-#. %3$s:  ELSIF hold.found == 'W' 
-#. %4$s:  ELSIF hold.found == 'T' 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:150
-#, c-format
-msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr "%s पूर्ण %s रद्द %sप्रतीक्षारत %sपारगमन %s लंबित %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -574,29 +384,13 @@ msgstr ""
 "RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-DI &rsaquo; HoldItem %s ILS-DI "
 "&rsaquo; CancelHold %s ILS-DI %s &rsaquo; %s%s%sकोहा ऑनलाइन%s केटॉलाग "
 
-#. %1$s:  ELSIF ( Koha.Preference( 'KohaAdminEmailAddress' ) ) 
+#. For the first occurrence,
+#. %1$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #, c-format
 msgid "%s If you have any questions, please contact the "
 msgstr "%s यदि आपके कोई प्रश्न हैं, तो कृपया संपर्क करें "
-
-#. %1$s:  IF ( RECALL.in_transit ) 
-#. %2$s:  RECALL.library.branchname | html 
-#. %3$s:  ELSIF ( RECALL.waiting ) 
-#. %4$s:  ELSIF ( RECALL.overdue ) 
-#. %5$s:  ELSIF ( RECALL.expired ) 
-#. %6$s:  RECALL.expiration_date | $KohaDates 
-#. %7$s:  ELSIF ( RECALL.cancelled ) 
-#. %8$s:  RECALL.completed_date | $KohaDates 
-#. %9$s:  ELSIF ( RECALL.fulfilled ) 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
-#, c-format
-msgid ""
-"%s In transit to %s %s Ready for pickup %s Overdue to be returned %s Expired "
-"on %s %s Cancelled on %s %s Fulfilled %s Requested %s "
-msgstr ""
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
@@ -629,14 +423,6 @@ msgstr "%s पर आइटम प्रतीक्षा "
 msgid "%s Item(s) checked out"
 msgstr "%s मद(s) निर्गम करना"
 
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#, c-format
-msgid "%s Library %s Libraries %s "
-msgstr "%s पुस्तकालय %s पुस्तकालय %s "
-
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -660,19 +446,6 @@ msgstr ""
 #, c-format
 msgid "%s No data available %s %s "
 msgstr "%s कोई डेटा उपलब्ध नहीं है %s %s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END # / # RECALLS.count 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:126
-#, c-format
-msgid ""
-"%s No recalls have been made. %s %s Recalls have not been enabled. Please "
-"contact your library. %s "
-msgstr ""
-"%s कोई रिकॉल नहीं किया गया है. %s %s रिकॉल सक्षम नहीं किया गया है। कृपया अपने"
-" पुस्तकालय से संपर्क करें. %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
@@ -704,70 +477,11 @@ msgstr "%s शीर्षक नही %s %s%s,%s "
 msgid "%s Not allowed"
 msgstr "%s स्वीकार्य नहीं"
 
-#. %1$s:  ELSIF ( OVERDUE.onreserve ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
-#, c-format
-msgid "%s On hold %s No renewals left %s "
-msgstr "%s होल्ड पर %s नवीकरण नहीं छोड़ा %s "
-
-#. %1$s:  IF ( passwords_mismatch ) 
-#. %2$s:  END 
-#. %3$s:  IF password_too_short 
-#. %4$s:  minPasswordLength | html 
-#. %5$s:  END 
-#. %6$s:  IF password_too_weak 
-#. %7$s:  END 
-#. %8$s:  IF password_has_whitespaces 
-#. %9$s:  END 
-#. %10$s:  IF ( WrongPass ) 
-#. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:44
-#, c-format
-msgid ""
-"%s Passwords do not match. Please re-type your new password. %s %s Password "
-"must be at least %s characters long. %s %s Password must contain at least "
-"one digit, one lowercase and one uppercase. %s %s Password must not contain "
-"leading or trailing whitespaces. %s %s Your current password was entered "
-"incorrectly. If this problem persists, please ask a librarian to reset your "
-"password for you. %s "
-msgstr ""
-"%s पासवर्ड मेल नहीं खाते हैं कृपया अपना नया पासवर्ड फिर से टाइप करें. %s %s पासवर्ड कम से "
-"कम %s वर्ण लंबा होना चाहिए. %s %s पासवर्ड में कम से कम एक अंक, एक लोअरकेस और एक "
-"अपरकेस होना चाहिए. %s %s पासवर्ड में अग्रणी या पिछड़े सफेद स्थान नहीं होना चाहिए. %s "
-"%s आपका वर्तमान पासवर्ड ग़लत ढंग से दर्ज किया गया था यदि यह समस्या बनी रहती है, तो "
-"कृपया अपने लिए अपना पासवर्ड रीसेट करने के लिए एक लाइब्रेरियन से पूछें. %s "
-
-#. %1$s:  IF ar.status == 'PENDING' 
-#. %2$s:  ELSIF ar.status == 'PROCESSING' 
-#. %3$s:  ELSIF ar.status == 'REQUESTED' 
-#. %4$s:  ELSIF ar.status == 'COMPLETED' 
-#. %5$s:  ELSIF ar.status == 'CANCELED' 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
-#, c-format
-msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
-msgstr "%s विलंभ %s प्रसंस्करण %s नया %s पूरा हो गया है %s रद्द हो गया है %s "
-
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:452
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s पेशेवर आलोचक"
-
-#. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( loggedinusername ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:282
-#, c-format
-msgid ""
-"%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
-"suggestions %s %s "
-msgstr "%s क्रय सुझाव %s %s आपके क्रय सुझाव %s क्रय सुझाव %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
@@ -775,34 +489,12 @@ msgstr "%s क्रय सुझाव %s %s आपके क्रय सु�
 msgid "%s Quotations"
 msgstr "%s उद्धरण"
 
-#. %1$s:  IF nosyspref 
-#. %2$s:  ELSIF error == 'unavailable' 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:39
-#, fuzzy, c-format
-msgid ""
-"%s Recalls have not been enabled. Please contact your library. %s There are "
-"no items available for recall. "
-msgstr "%s अंक नोटों सक्षम नहीं किया गया है। कृपया पुस्तकालय से संपर्क करें. %s "
-
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s नवीनीकरण की अनुमति नहीं है %s "
-
-#. %1$s:  IF ( RECALL.requested ) 
-#. %2$s:  ELSIF ( RECALL.overdue ) 
-#. %3$s:  ELSIF ( RECALL.in_transit ) 
-#. %4$s:  RECALL.library.branchname | html 
-#. %5$s:  ELSIF ( RECALL.waiting ) 
-#. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#, c-format
-msgid ""
-"%s Requested %s Overdue to be returned %s In transit to %s %s Ready for "
-"pickup %s "
-msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
@@ -845,24 +537,6 @@ msgstr "%s स्व चेक-इन"
 msgid "%s Self checkout system"
 msgstr "%s स्व चेकआउट सिस्टम"
 
-#. %1$s:  IF ( typeissue ) 
-#. %2$s:  ELSIF ( typeissuecancel ) 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:20
-#, c-format
-msgid ""
-"%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
-"alert %s "
-msgstr "%sएक सदस्यता अलर्ट के लिए सदस्यता लें %s सदस्यता अलर्ट से सदस्यता समाप्त करें %s"
-
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
-#, c-format
-msgid "%s Tags to show from other users: %s Tags to show: %s "
-msgstr "%s अन्य उपयोगकर्ताओं के टैग प्रर्दशित करना %s प्रर्दशित करने वाले टैग: %s "
-
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #, c-format
@@ -875,13 +549,6 @@ msgstr "%s आपके द्वारा क्लिक किया गय�
 #, c-format
 msgid "%s The passwords do not match. %s "
 msgstr "%s पासवर्ड मेल नहीं खाता. %s "
-
-#. %1$s:  CASE 'account_locked' 
-#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
-#, fuzzy, c-format
-msgid "%s This account has been locked! %s "
-msgstr "%s यह रिकार्ड में कोई आइटम नहीं है. %s "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -904,45 +571,6 @@ msgstr "%s यह रिकार्ड में कोई आइटम नह�
 msgid "%s Video extracts"
 msgstr "%s वीडियो उद्धरण"
 
-#. %1$s:  IF ( itemLoo.waitingdate ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#. %4$s:  IF ( itemLoo.waitingdate ) 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  itemLoo.ExpectedAtLibrary | html 
-#. %8$s:  IF ( itemLoo.waitingdate ) 
-#. %9$s:  itemLoo.waitingdate | $KohaDates 
-#. %10$s:  ELSE 
-#. %11$s:  IF ( itemLoo.reservedate ) 
-#. %12$s:  itemLoo.reservedate | html 
-#. %13$s:  END 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
-#, c-format
-msgid ""
-"%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
-"%s %s %s %s %s. "
-msgstr ""
-"%s प्रतिक्षा %s होल्ड किया %s सदस्यों के लिए %s पर %se पर उम्मीद %s %s के बाद से  %s "
-"%s %s %s %s %s %s. "
-
-#. %1$s:  IF ( item.recall.waitingdate ) 
-#. %2$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %3$s:  item.recall.waitingdate | $KohaDates 
-#. %4$s:  ELSE 
-#. %5$s:  Branches.GetName( item.recall.branchcode ) | html 
-#. %6$s:  item.recall.recalldate | $KohaDates 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
-#, c-format
-msgid ""
-"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
-"since %s. %s "
-msgstr ""
-"%s संरक्षक के लिए प्रतीक्षा कर रहा है %s जबसे %s. %s अपेक्षित संरक्षक द्वारा "
-"वापस बुला लिया गया %s जबसे %s. %s "
-
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -950,29 +578,6 @@ msgstr ""
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s हाँ %s नही %s "
-
-#. %1$s:  IF ( ISSUE.charges ) 
-#. %2$s:  ELSIF ( ISSUE.rentalfines ) 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:432
-#, c-format
-msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
-msgstr "%s हां (आइटम अतिदेय या खो गए) %s हाँ (किराया शुल्क) %s नहीं %s "
-
-#. %1$s:  IF bibitemloo.forced_hold_level == 'item' 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:171
-#, c-format
-msgid ""
-"%s You already have at least one item level hold on this title. All further "
-"holds must be item level. %s You already have at least one record level hold "
-"on this title. All further holds must be record level. %s "
-msgstr ""
-"%s इस शीर्षक पर आपका पहले से ही कम से कम एक आइटम स्तर है। सभी अतिरिक्त होल्ड आइटम "
-"स्तर होना चाहिए. %s आपके पास पहले से ही इस शीर्षक पर कम से कम एक रिकॉर्ड स्तर है. आगे "
-"सभी होल्ड को रिकॉर्ड स्तर पर होना चाहिए. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -987,34 +592,6 @@ msgstr "%s आप किसी भी खोज मापदंड निर्�
 #, c-format
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s आप इस लाइब्रेरी से कभी भी कुछ उधार नहीं लिया है. %s "
-
-#. %1$s:  IF error == 'duplicate' 
-#. %2$s:  ELSIF error == 'unavailable' 
-#. %3$s:  ELSIF error == 'cannot' 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:47
-#, c-format
-msgid ""
-"%s You have reached the maximum number of recalls on this record. %s There "
-"are no items available for recall. %s You cannot place a recall on this "
-"item. %s An error has occurred while attempting to place a recall. Please "
-"contact your library. %s "
-msgstr ""
-
-#. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
-#. %2$s:  RESERVE_CHARGE | $Price 
-#. %3$s:  ELSE 
-#. %4$s:  RESERVE_CHARGE | $Price 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:145
-#, c-format
-msgid ""
-"%s You will be charged a hold fee of %s when you collect this item %s You "
-"will be charged a hold fee of %s for placing this hold %s "
-msgstr ""
-"%s आपको के एक होल्ड शुल्क नहीं देना होगा %sजब आप इकट्ठा इस आइटम %s आप इस होल्ड रखने के "
-"लिए %s के एक होल्ड शुल्क नहीं देना होगा %s "
 
 #. %1$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
@@ -1064,18 +641,6 @@ msgstr "%s प्रति दिन"
 #, c-format
 msgid "%s per hour"
 msgstr "%s प्रति घंटा"
-
-#. %1$s:  IF contents.count 
-#. %2$s:  contents.count | html 
-#. %3$s:  IF contents.count == 1 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
-#, c-format
-msgid "%s%s %sitem%sitems%s%sEmpty%s"
-msgstr "%s%s %sमद%sमदें%s%sखाली%s"
 
 #. %1$s:  summary.mainentry | html 
 #. %2$s:  IF authtypetext 
@@ -1133,6 +698,14 @@ msgstr "%s%s%sउपलब्ध नही%s "
 #, c-format
 msgid "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
 msgstr "%s%s<?xml version=\"1.0\" encoding=\"utf-8\"?> "
+
+#. %1$s:  LibraryNameTitle | html 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
+#, c-format
+msgid "%s%sKoha online%s catalog"
+msgstr "%s%sकोहा ऑनलाइन%s केटालॉग"
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -1248,26 +821,6 @@ msgstr ""
 "%sप्राधिकरण खोज परिणाम%sकोई परिणाम नहीं मिला%s &rsaquo; %s%s%sकोहा ऑनलाइन %s "
 "केटालॉग"
 
-#. %1$s: - IF ( starting_homebranch ) 
-#. %2$s:  starting_homebranch | html 
-#. %3$s:  END -
-#. %4$s: - IF ( starting_homebranch && starting_location ) 
-#. %5$s:  END 
-#. %6$s: - IF ( starting_location ) 
-#. %7$s: - starting_location | html -
-#. %8$s:  END -
-#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
-#. %10$s:  END 
-#. %11$s: - IF ( starting_ccode ) 
-#. %12$s: - starting_ccode | html -
-#. %13$s:  END -
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
-msgid ""
-"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
-"%sCollection: %s%s "
-msgstr "%sब्राउजिग %sअलमारियाँ%s %s, %s %sशैल्विग स्थान: %s%s %s, %s %sसंग्रह: %s%s "
-
 #. %1$s:  IF op == 'view' 
 #. %2$s:  shelf.shelfname | html 
 #. %3$s:  ELSE 
@@ -1280,14 +833,6 @@ msgstr "%sब्राउजिग %sअलमारियाँ%s %s, %s %sश�
 #, c-format
 msgid "%sContents of %s%sYour lists%s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%sकी सामग्री %s%sआपकी सूची %s &rsaquo; %s%s%sकोहा ऑनलाइन %s केटालॉग"
-
-#. %1$s:  IF ar.format == 'PHOTOCOPY' 
-#. %2$s:  ELSIF ar.format == 'SCAN' 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
-#, c-format
-msgid "%sCopy%sScan%s"
-msgstr "%sप्रतिलिपि%sस्कैन%s "
 
 #. %1$s:  IF ( op_add ) 
 #. %2$s:  END 
@@ -1305,106 +850,6 @@ msgid ""
 msgstr ""
 "%sएक नया खरीद सुझाव दर्ज करें %s %sक्रय सुझाव %s &rsaquo; %s%s%sकोहा ऑनलाइन %s "
 "केटालॉग"
-
-#. %1$s:  IF ( serial.status1 ) 
-#. %2$s:  END 
-#. %3$s:  IF ( serial.status2 ) 
-#. %4$s:  END 
-#. %5$s:  IF ( serial.status3 ) 
-#. %6$s:  END 
-#. %7$s:  IF ( serial.status4 ) 
-#. %8$s:  END 
-#. %9$s:  IF ( serial.status41 ) 
-#. %10$s:  END 
-#. %11$s:  IF ( serial.status42 ) 
-#. %12$s:  END 
-#. %13$s:  IF ( serial.status43 ) 
-#. %14$s:  END 
-#. %15$s:  IF ( serial.status44 ) 
-#. %16$s:  END 
-#. %17$s:  IF ( serial.status5 ) 
-#. %18$s:  END 
-#. %19$s:  IF ( serial.status6 ) 
-#. %20$s:  END 
-#. %21$s:  IF ( serial.status7 ) 
-#. %22$s:  END 
-#. %23$s:  IF ( serial.status8 ) 
-#. %24$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:167
-#, c-format
-msgid ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
-"available%s %sDelete%s %sClaimed%s %sStopped%s "
-msgstr ""
-"%sअनुमानित%s %sआगमन%s %sविलंभ%s %sलापता%s %sलापता (कभी प्राप्त नही)%s "
-"%sलापता(बेचा गया)%s %sलापता (क्षतिग्रस्त)%s %sलापता (गुम)%s %sउपलब्ध नही%s "
-"%sमिटाया गया%s %sदावा किया%s %sरोका गया%s"
-
-#. %1$s:  IF ( messaging_preference.Item_Due ) 
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
-#. %3$s:  ELSIF ( messaging_preference.Hold_Filled ) 
-#. %4$s:  ELSIF ( messaging_preference.Hold_Reminder ) 
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
-#. %7$s:  IF Koha.Preference( 'RenewalSendNotice' ) 
-#. %8$s:  ELSE 
-#. %9$s:  END 
-#. %10$s:  ELSIF ( messaging_preference.Ill_ready ) 
-#. %11$s:  ELSIF ( messaging_preference.Ill_unavailable ) 
-#. %12$s:  ELSIF ( messaging_preference.Auto_Renewals ) 
-#. %13$s:  ELSE 
-#. %14$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
-#, c-format
-msgid ""
-"%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in %s "
-"%s Item checkout and renewal %s Item checkout %s %sInterlibrary loan ready "
-"%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
-msgstr ""
-"%sआइटम देय %sअग्रिम नोटिस %sहोल्ड भरा गया %sहोल्ड स्मरण%sआइटम चैक-इन %s %sआइटम "
-"चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंतर पुस्तकालय ऋण तैयार %sइंटर लाइब्रेरी लोन "
-"अनुपलब्ध %sऑटो नवीकरण %sअंजान %s"
-
-#. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
-#. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
-#. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
-#, c-format
-msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%sआइटम प्रकार %sसंग्रह %sशैल्विग लोकेशन %sकुछ और %s "
-
-#. %1$s:  IF ( singleBranchMode ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
-#, c-format
-msgid "%sLibrary%sLibraries%s"
-msgstr "%s पुस्तकालय %s पुस्तकालयों %s "
-
-#. %1$s:  IF ( suggestions_loo.ASKED ) 
-#. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
-#. %3$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
-#. %4$s:  ELSIF ( suggestions_loo.ORDERED ) 
-#. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
-#. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
-#. %7$s:  ELSE 
-#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html 
-#. %9$s:  END 
-#. %10$s:  IF ( suggestions_loo.reason ) 
-#. %11$s:  suggestions_loo.reason | html 
-#. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
-#, c-format
-msgid ""
-"%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s "
-"%s(%s)%s "
-msgstr ""
-"%sनिवेदित%s पुस्तकालय द्वारा चैक आउट की गई%sपुस्तकालय द्वारा स्वीकृत%s पुस्तकालय द्वारा "
-"आदेश दिया%s सुझाव अस्वीकृत %s पुस्तकालय में उपलब्ध%s %s %s %s(%s)%s "
 
 #. %1$s:  IF ( typeissue ) 
 #. %2$s:  ELSIF ( typeissuecancel ) 
@@ -1436,16 +881,6 @@ msgstr "%sयह प्राधिकरण किसी भी रिकॉर
 msgid "%sThis record has no items.%s "
 msgstr "%sइस रिकार्ड में कोई आइटम नहीं जुड़ी है. .%s "
 
-#. For the first occurrence,
-#. %1$s:  IF ( Koha.Preference('OPACPatronDetails') ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
-#, c-format
-msgid "%sUpdate your contact information%sGo to your contact information%s"
-msgstr "%sअपनी संपर्क जानकारी अधतन करें%s अपनी संपर्क जानकारी में जाए%s"
-
 #. %1$s:  IF action == 'edit' 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -1476,23 +911,6 @@ msgstr "%sहाँ%s "
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sहाँ%sनही%s "
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
-#, c-format
-msgid "%sa list:%s"
-msgstr "%sएक सूची:%s"
-
-#. For the first occurrence,
-#. %1$s:  IF ( author ) 
-#. %2$s:  author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
-#, c-format
-msgid "%sby %s%s "
-msgstr "%sद्वारा %s%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
@@ -2484,23 +1902,17 @@ msgstr "-- पारीप चुने --"
 msgid "-- none -- "
 msgstr "-- कोई नहीं --"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  CASE 
-#. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:58
-#, c-format
-msgid ""
-". %s You must contact the library for assistance %s %s An unknown error "
-"occurred. PLease try again or contact the library for assistance %s "
-msgstr ""
+#. %1$s:  CASE 'account_locked' 
+#. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
+#, fuzzy, c-format
+msgid ". %s This account has been locked! %s "
+msgstr "%s यह रिकार्ड में कोई आइटम नहीं है. %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
 #, c-format
 msgid ". Click on \"Confirm your suggestion\" to ignore this message."
-msgstr ""
-". इस संदेश को अनदेखा करने के लिए \"अपने सुझाव की पुष्टि करें\" पर क्लिक करें"
-". "
+msgstr ". इस संदेश को अनदेखा करने के लिए \"अपने सुझाव की पुष्टि करें\" पर क्लिक करें. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:157
 #, c-format
@@ -2601,13 +2013,6 @@ msgstr "50 खिताब"
 msgid "6 months"
 msgstr "6 महीने"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
-#, c-format
-msgid ": %sa list:%s"
-msgstr ": %sa लिस्ट:%s"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:55
 #, c-format
 msgid ""
@@ -2644,7 +2049,7 @@ msgstr "लेनदेन आईडी के साथ एक भुगता�
 msgid "A similar document already exists: "
 msgstr "एक समान दस्तावेज़ पहले से मौजूद है: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
 #, c-format
 msgid "A specific item"
 msgstr "एक विशिष्ट मद"
@@ -2663,6 +2068,11 @@ msgstr "Abstracts / सारांश"
 #, c-format
 msgid "Accept"
 msgstr "स्वीकार"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:442
+#, c-format
+msgid "Accepted by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
@@ -2683,6 +2093,11 @@ msgstr "हमारे रिकॉर्ड के अनुसार, हम 
 #, fuzzy, c-format
 msgid "Account creation fee"
 msgstr "खाता समाप्ति"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:88
+#, c-format
+msgid "Account identification with this email address only is ambiguous."
+msgstr "केवल इस ईमेल पते के साथ खाता पहचान अस्पष्ट है।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:37
 #, c-format
@@ -2798,6 +2213,18 @@ msgstr "अपनी सूची में जोड़ें&rsaquo; %s%s%sक
 msgid "Add to..."
 msgstr "में जोड़ें..."
 
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#, c-format
+msgid "Added %s by"
+msgstr ""
+
+#. %1$s:  review.datereviewed | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#, c-format
+msgid "Added %s by you"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:379
 #, c-format
 msgid "Additional content types for books/printed materials"
@@ -2831,6 +2258,11 @@ msgstr "किशोर"
 #, c-format
 msgid "Adult"
 msgstr "प्रौढ़"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:66
+#, fuzzy, c-format
+msgid "Advance notice"
+msgstr "उद्धरण जोड़े"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
@@ -2985,6 +2417,20 @@ msgstr "भुगतान के लिए राशी"
 msgid "An error has occurred &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "एक त्रुटि हुई है &rsaquo; %s%s%sकोहा ऑनलाइन%s केटालॉग"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:55
+#, c-format
+msgid ""
+"An error has occurred while attempting to place a recall. Please contact "
+"your library."
+msgstr ""
+"वापस बुलाने का प्रयास करते समय एक त्रुटि हुई है। कृपया अपने पुस्तकालय से "
+"संपर्क करें।"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
+#, c-format
+msgid "An error has occurred while sending you the password recovery link."
+msgstr "आपको पासवर्ड पुनर्प्राप्ति लिंक भेजते समय एक त्रुटि हुई है।"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:42
 #, fuzzy, c-format
 msgid "An error has occurred."
@@ -3033,6 +2479,13 @@ msgstr "हमारी सूची होम पेज में एक आं
 msgid "An invitation to share list "
 msgstr "एक निमंत्रण सूची साझा करने के लिए"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:63
+#, fuzzy, c-format
+msgid ""
+"An unknown error occurred. Please try again or contact the library for "
+"assistance."
+msgstr "पुस्तकालय से संपर्क करें आप अधिक सहायता की जरूरत है."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:381
 #, c-format
 msgid "Any"
@@ -3059,7 +2512,7 @@ msgid "Any item "
 msgstr "कोई आइटम"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
 #, c-format
 msgid "Any item type"
 msgstr "कोई मद प्रकार"
@@ -3168,6 +2621,7 @@ msgid "Are you sure you want to suspend all holds?"
 msgstr "आप सुनिश्चित हैं कि आप सभी होल्ड को निलंबित करना चाहते हैं ?"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:169
 #, c-format
 msgid "Arrived"
 msgstr "पहुंच गए"
@@ -3371,6 +2825,11 @@ msgstr "अधिकृत शीर्षकों"
 msgid "Authors"
 msgstr "लेखकों"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:78
+#, fuzzy, c-format
+msgid "Auto renewal"
+msgstr "स्वचालित-नवीकरण"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #, c-format
 msgid "Auto-renewal"
@@ -3408,10 +2867,15 @@ msgid "Availability: "
 msgstr "उपलब्धता: "
 
 #. %1$s:  IF restrictedvalueopac 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:106
 #, c-format
 msgid "Available %s"
 msgstr "उपलब्ध  %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:445
+#, fuzzy, c-format
+msgid "Available in the library"
+msgstr "उपलब्धता"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
 #, c-format
@@ -3476,7 +2940,7 @@ msgstr "बैकएंड"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3667,6 +3131,12 @@ msgstr "खोज ब्राउज़ करें "
 msgid "Browse shelf"
 msgstr "ब्राउज़ अलमारी"
 
+#. %1$s:  starting_homebranch | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:5
+#, c-format
+msgid "Browsing %s shelves"
+msgstr "ब्राउजिंग %s शेल्फ"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
 #, c-format
@@ -3705,7 +3175,7 @@ msgstr "सीएसवी - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3833,15 +3303,31 @@ msgstr "होल्ड रद्द"
 msgid "CancelRecall "
 msgstr "रिकॉल रद्द"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#, fuzzy, c-format
+msgid "Canceled"
+msgstr "रद्द करें"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:111
 #, c-format
 msgid "Cancellation date"
 msgstr "रद्द करने की तारीख"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:154
+#, fuzzy, c-format
+msgid "Cancelled"
+msgstr "(रद्द किया)"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:42
 #, c-format
 msgid "Cancelled charge"
 msgstr "रद्द किया गया प्रभार"
+
+#. %1$s:  RECALL.completed_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:94
+#, c-format
+msgid "Cancelled on %s"
+msgstr "रद्द किया गया %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
@@ -3849,8 +3335,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "संरक्षक के लिए एक सक्रिय होल्ड अनुरोध रद्द "
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:393
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
 msgid "Cannot be put on hold"
 msgstr "होल्ड को रोक कर नही रखा जा सकता"
 
@@ -3978,10 +3464,25 @@ msgstr "मद वापसी"
 msgid "Check out"
 msgstr "चेकआउट"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:251
+#, fuzzy, c-format
+msgid "Check out or renew an item:"
+msgstr "मद वापसी"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:249
+#, c-format
+msgid "Check out, return, or renew an item:"
+msgstr "किसी आइटम को चेक आउट करें, वापस करें या नवीनीकृत करें:"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:164
 #, c-format
 msgid "Check-in date:"
 msgstr "वापसी दिनांक:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:441
+#, c-format
+msgid "Checked by the library"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:87
 #, c-format
@@ -4084,6 +3585,7 @@ msgid "City:"
 msgstr "शहर:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:178
 #, c-format
 msgid "Claimed"
 msgstr "दावा किया"
@@ -4125,7 +3627,7 @@ msgid "Clear date"
 msgstr "स्पष्ट दिनांक"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "स्पष्ट तारीख अनिश्चित काल के लिए स्थगित करने के लिए"
@@ -4250,11 +3752,12 @@ msgstr "ओपेन लाइब्रेरी से कोस की छव�
 msgid "Collect items you are interested in"
 msgstr "आइटम ले लीजिए आप में रुचि रखते हैं"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:165
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -4271,6 +3774,12 @@ msgstr "संग्रह लाइब्रेरी:"
 #, c-format
 msgid "Collection title:"
 msgstr "संग्रह शीर्षक:"
+
+#. %1$s: - starting_ccode | html -
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:9
+#, fuzzy, c-format
+msgid "Collection: %s"
+msgstr "संग्रह: %s "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle | $raw 
@@ -4352,6 +3861,11 @@ msgstr "पर टिप्पणी %s &rsaquo; %s%s%sकोहा ऑनला
 msgid "Comments%s"
 msgstr "टिप्पनियाँ%s"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#, c-format
+msgid "Completed"
+msgstr ""
+
 #. %1$s:  ComponentParts.size | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
 #, c-format
@@ -4364,7 +3878,7 @@ msgid "Confirm"
 msgstr "पुष्टि"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:487
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
 msgid "Confirm hold"
 msgstr "होल्ड पुष्टी"
 
@@ -4449,15 +3963,16 @@ msgstr "पंक्तियों को क्लिपबोर्ड पर
 msgid "Copied one row to clipboard"
 msgstr "एक पंक्ति को क्लिपबोर्ड पर कॉपी किया गया"
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
+#, c-format
 msgid "Copy"
 msgstr "प्रतिलिपि"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, c-format
 msgid "Copy number"
 msgstr "कापी नंबर"
@@ -4503,6 +4018,11 @@ msgstr "कॉपीराइट या प्रकाशन साल, उद�
 #, c-format
 msgid "Copyright year: %s "
 msgstr "कॉपीराइट वर्ष: %s "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:102
+#, c-format
+msgid "Could not create new list. Please check if the name is unique."
+msgstr "नई सूची नहीं बनाई जा सकी. कृपया जांचें कि क्या नाम अद्वितीय है।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:499
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:720
@@ -4824,6 +4344,7 @@ msgid ""
 msgstr "परिभाषित करता है मेटाडाटा स्कीमा जिसमें अभिलेख दिए गए हैं, संभव मूल्यों:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
 #, c-format
@@ -5092,7 +4613,7 @@ msgstr "देय"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
 #, c-format
 msgid "Due %s"
 msgstr "कारण %s"
@@ -5107,6 +4628,12 @@ msgstr "नियत तारीख"
 #, c-format
 msgid "Due date is not valid."
 msgstr "नियत तिथि मान्य नहीं है।"
+
+#. %1$s:  RECALL.checkout.date_due | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:104
+#, c-format
+msgid "Due to be returned by %s"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:111
 #, c-format
@@ -5123,6 +4650,23 @@ msgstr "त्रुटि: कोई रिकॉर्ड  नही मिल
 #, c-format
 msgid "ERROR: No record id specified. "
 msgstr "त्रुटि: रिकॉर्ड आईडी निर्दिष्ट नही"
+
+#. %1$s:  ERROR.failed_delete | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:73
+#, c-format
+msgid "ERROR: You cannot delete the tag %s."
+msgstr "त्रुटि! आप इस टैग को हटा नहीं कर सकते %s."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
+#, fuzzy, c-format
+msgid "ERROR: You must log in to complete that action."
+msgstr "आपको टैग्स जोड़ने के लिए लॉग इन करना ही होगा."
+
+#. %1$s:  ERROR.badparam | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
+#, c-format
+msgid "ERROR: illegal parameter %s"
+msgstr "त्रुटि:अवैध पैरामीटर %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-authorities.inc:27
 #, c-format
@@ -5209,6 +4753,11 @@ msgstr "ईमेलः"
 #, c-format
 msgid "Emails do not match! "
 msgstr "ईमेल मेल नहीं खाते!"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, c-format
+msgid "Empty"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:44
 #, c-format
@@ -5462,12 +5011,13 @@ msgid "Excerpt provided by Syndetics"
 msgstr "अंश Syndetics द्वारा प्रदान की"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:168
 #, c-format
 msgid "Expected"
 msgstr "प्रत्याशित"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Expecting a specific item selection."
 msgstr "एक विशेष आइटम के चयन की उम्मीद थी."
 
@@ -5490,6 +5040,12 @@ msgstr "समाप्ति तिथि:"
 #, c-format
 msgid "Expiration:"
 msgstr "निश्वासन:"
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:92
+#, c-format
+msgid "Expired on %s"
+msgstr "पर समाप्त हो गया %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:760
@@ -5733,6 +5289,12 @@ msgstr "फ्रेंच"
 msgid "From: "
 msgstr "से: "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:96
+#, c-format
+msgid "Fulfilled"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:108
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:55
 #, c-format
@@ -5936,6 +5498,12 @@ msgstr "पिछले पृष्ठ पर जाएँ"
 msgid "Go to your account page"
 msgstr "अपने लेखा पेज मे जाए"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Go to your contact information"
+msgstr "संपर्क सूचना"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:833
 #, c-format
 msgid "GoToBibliographicRequestPage "
@@ -6024,11 +5592,11 @@ msgid "Hi,"
 msgstr "नमस्ते,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hide options"
 msgstr "विकल्प छिपाना"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:475
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
 #, c-format
 msgid "Hide unholdable items"
 msgstr "न रखने योग्य आइटम छुपाएं"
@@ -6055,7 +5623,7 @@ msgid "Hold date:"
 msgstr "होल्ड दिनांक"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -6064,15 +5632,25 @@ msgstr ""
 msgid "Hold fee"
 msgstr "शुल्क पकड़ो"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:67
+#, fuzzy, c-format
+msgid "Hold filled"
+msgstr "शुल्क पकड़ो"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
 #, c-format
 msgid "Hold not needed after:"
 msgstr "होल्ड की आवश्यकता नही के बाद:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:316
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
 #, c-format
 msgid "Hold notes:"
 msgstr "होल्ड टिप्पणी:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:68
+#, fuzzy, c-format
+msgid "Hold reminder"
+msgstr "शुल्क पकड़ो"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
@@ -6080,7 +5658,7 @@ msgid "Hold requests"
 msgstr "होल्ड अनुरोध"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Hold start date should be filled."
 msgstr ""
 
@@ -6221,7 +5799,7 @@ msgstr "होम लाइब्रेरी"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Home library"
 msgstr "होम लाइब्रेरी"
@@ -6576,16 +6154,29 @@ msgstr ""
 "आपको लॉग इन रखने के लिए, हमें 25 मई, 2018 के यूरोपीय संघ सामान्य डेटा संरक्षण विनियमन में "
 "निर्दिष्ट व्यक्तिगत डेटा को संसाधित करने के लिए आपकी सहमति की आवश्यकता है।"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:158
+#, c-format
+msgid "In transit"
+msgstr "पारगमन में"
+
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( item.get_transfer.frombranch ) | html 
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "पारगमन में %sसे %s के बाद से %s"
+
+#. For the first occurrence,
+#. %1$s:  RECALL.library.branchname | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#, fuzzy, c-format
+msgid "In transit to %s"
+msgstr "%s में पारगमन के लिए आइटम "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:35
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:64
@@ -6599,7 +6190,7 @@ msgid "Indexes"
 msgstr "अनुक्रमणिका"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
 #, c-format
 msgid "Information"
 msgstr "जानकारी"
@@ -6624,6 +6215,11 @@ msgstr "निर्देशक:"
 msgid "Interlibrary loan item availability"
 msgstr "अंतर पुस्तकालय ऋण आइटम की उपलब्धता"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:76
+#, fuzzy, c-format
+msgid "Interlibrary loan ready"
+msgstr "अंतर पुस्तकालय ऋण अनुरोध"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
 #, c-format
 msgid "Interlibrary loan request"
@@ -6635,6 +6231,11 @@ msgstr "अंतर पुस्तकालय ऋण अनुरोध"
 #, c-format
 msgid "Interlibrary loan requests"
 msgstr "अंतर पुस्तकालय ऋण अनुरोध "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:77
+#, fuzzy, c-format
+msgid "Interlibrary loan unavailable"
+msgstr "अंतर पुस्तकालय ऋण आइटम की उपलब्धता"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:57
 #, c-format
@@ -6707,6 +6308,11 @@ msgstr "आइटम कॉल नंबर"
 msgid "Item cannot be checked out."
 msgstr "आइटम बाहर की जाँच नहीं की जा सकती."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:69
+#, fuzzy, c-format
+msgid "Item check-in"
+msgstr "चैकइन की गई आइटम"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Item checked in"
@@ -6716,6 +6322,16 @@ msgstr "चैकइन की गई आइटम"
 #, c-format
 msgid "Item checked out"
 msgstr "चैकआउट आइटम"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:74
+#, fuzzy, c-format
+msgid "Item checkout"
+msgstr "चैकआउट आइटम"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:72
+#, fuzzy, c-format
+msgid "Item checkout and renewal"
+msgstr "चैकइन की गई आइटम"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:85
 #, c-format
@@ -6727,6 +6343,11 @@ msgstr "मद क्षतिग्रस्त"
 msgid "Item details"
 msgstr "आइटम विवरण"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:65
+#, fuzzy, c-format
+msgid "Item due"
+msgstr "दिनांक कारण"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #, c-format
 msgid "Item hold queue priority"
@@ -6736,6 +6357,17 @@ msgstr "मद होल्ड कतार प्राथमिकता"
 #, c-format
 msgid "Item holds"
 msgstr "मद होल्ड"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#, fuzzy, c-format
+msgid "Item in processing"
+msgstr "खोई हुई आइटम प्रसंस्करण शुल्क "
+
+#. %1$s:  branch_name| $raw 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#, c-format
+msgid "Item in transit from %s since"
+msgstr "से ट्रांज़िट में आइटम %sजबसे"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
@@ -6785,12 +6417,13 @@ msgstr "आइटम नवीनीकरण की अनुमति नह�
 msgid "Item renewed"
 msgstr "आइटम नवीनीकृत"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6940,7 +6573,7 @@ msgid "Last "
 msgstr "अंतिम"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
 #, c-format
 msgid "Last location"
 msgstr "अंतिम स्थान"
@@ -6956,6 +6589,7 @@ msgid "Last updated:"
 msgstr "अंतिम अद्यतन:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:170
 #, c-format
 msgid "Late"
 msgstr "विलंब "
@@ -7012,7 +6646,9 @@ msgstr "स्तर 4: मजबूत/डोमेन विशिष्ट �
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:73
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:232
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:344
 #, c-format
 msgid "Libraries"
 msgstr "पुस्तकालय"
@@ -7020,7 +6656,9 @@ msgstr "पुस्तकालय"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:480
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:342
 #, c-format
 msgid "Library"
 msgstr "लाइब्रेरी"
@@ -7535,26 +7173,31 @@ msgid "Minimum amount needed by this service is %s"
 msgstr "इस सेवा के लिए आवश्यक न्यूनतम राशि है %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:740
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:171
 #, c-format
 msgid "Missing"
 msgstr "गायब"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:174
 #, c-format
 msgid "Missing (damaged)"
 msgstr "गुम (क्षतिग्रस्त)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:175
 #, c-format
 msgid "Missing (lost)"
 msgstr "गुम (खोया)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:741
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:172
 #, c-format
 msgid "Missing (never received)"
 msgstr "गुम (कभी प्राप्त नही)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:742
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:173
 #, c-format
 msgid "Missing (sold out)"
 msgstr "गुम (बेचा गया)"
@@ -7681,6 +7324,7 @@ msgstr ""
 "रिकॉर्ड को नष्ट करेगा."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "New"
 msgstr "नया"
@@ -7709,6 +7353,11 @@ msgstr "नया अंतर लाइब्रेरी ऋण अनुर�
 #, c-format
 msgid "New list"
 msgstr "नई सूची"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:41
+#, c-format
+msgid "New password must not be the same as old password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:154
@@ -7777,7 +7426,7 @@ msgstr "अगला"
 msgid "Next &gt;&gt;"
 msgstr "अगला &gt; पाउंड"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:329
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
 #, c-format
 msgid "Next available item"
 msgstr "अगली अपलब्ध मद"
@@ -7791,6 +7440,7 @@ msgstr "अगली अपलब्ध मद"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:438
 #, c-format
 msgid "No"
 msgstr "नहीं"
@@ -7805,6 +7455,11 @@ msgstr "नहीं "
 #, c-format
 msgid "No XSLT file passed."
 msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
+#, c-format
+msgid "No account was found with the provided information."
+msgstr "प्रदान की गई जानकारी के साथ कोई खाता नहीं मिला।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:241
 #, c-format
@@ -7944,6 +7599,11 @@ msgstr "निजी सूचिया नहीं ."
 msgid "No public lists."
 msgstr "सार्वजनिक सूचियों नहीं "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:128
+#, fuzzy, c-format
+msgid "No recalls have been made."
+msgstr "कोई परिवर्तन नहीं किए गए थे."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:186
 #, c-format
 msgid "No record was removed."
@@ -7958,6 +7618,11 @@ msgstr "कोई नवीकरण नही से पहले %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:368
 #, c-format
 msgid "No renewals allowed"
+msgstr "नवीकरण अनुमति नही"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#, fuzzy, c-format
+msgid "No renewals left"
 msgstr "नवीकरण अनुमति नही"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:111
@@ -8087,6 +7752,11 @@ msgstr "सामान्य देखें"
 msgid "Not allowed "
 msgstr "अनुमति नहीं है "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:176
+#, fuzzy, c-format
+msgid "Not available"
+msgstr "कोई आइटम उपलब्ध है."
+
 #. %1$s:  PROCESS error_message messages=error.messages 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:93
 #, c-format
@@ -8109,7 +7779,7 @@ msgstr "ऋण के लिए नहीं  %s"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "नहीं ऋण के लिए (%s)"
@@ -8119,7 +7789,7 @@ msgstr "नहीं ऋण के लिए (%s)"
 msgid "Not issued"
 msgstr "जारी नहीं किया"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:466
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
 #, c-format
 msgid "Not on hold"
 msgstr "नहीं पकड़ पर"
@@ -8178,20 +7848,11 @@ msgstr ""
 msgid "Note: Your comment must be approved by a librarian. "
 msgstr "ध्यान दें: आपकी टिप्पणी एक पुस्तकालय अध्यक्ष द्वारा अनुमोदित होना चाहिए. "
 
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "Note: you can only delete your own tags."
 msgstr "नोट: आप केवल अपने स्वयं के टैग नष्ट कर सकते हैं."
-
-#. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:74
-#, c-format
-msgid ""
-"Note: you can only delete your own tags. %s Note: your tag contained markup "
-"code that was removed. "
-msgstr ""
-"नोट: यदि आप केवल अपने खुद के टैग हटा सकते हैं. %s नोट: आपके टैग मार्कअप कोड है कि हटा "
-"दिया गया था।"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8213,11 +7874,21 @@ msgstr ""
 "मार्कअप निकाल दिया, जैसा कि नीचे.  आप टिप्पणी आगे संपादित करें, या टिप्पणी बनाए रखने के "
 "लिए है के रूप में रद्द कर सकते हैं।"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:76
+#, fuzzy, c-format
+msgid "Note: your tag contained markup code that was removed."
+msgstr "नोट: आपके टैग मार्कअप कोड है कि हटा दिया गया था। टैग के रूप में जोड़ा गया है"
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid ""
 "Note: your tag contained markup code that was removed. The tag was added as "
 msgstr "नोट: आपके टैग मार्कअप कोड है कि हटा दिया गया था। टैग के रूप में जोड़ा गया है"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
+#, fuzzy, c-format
+msgid "Note: your tag was entirely markup code. It was NOT added."
+msgstr "त्रुटि! आपकी टिप्पणी पूरी तरह से अवैध मार्कअप कोड था। ऐसा नहीं जोड़ा गया है।है."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:157
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:168
@@ -8225,7 +7896,7 @@ msgstr "नोट: आपके टैग मार्कअप कोड है
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -8317,6 +7988,8 @@ msgstr "ठीक है"
 msgid "OR"
 msgstr "या"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, c-format
@@ -8399,6 +8072,11 @@ msgstr "शीर्षक द्वारा आदेश"
 #, c-format
 msgid "Order by: "
 msgstr "आदेश द्वारा: "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:443
+#, fuzzy, c-format
+msgid "Ordered by the library"
+msgstr "वर्तमान लाइब्रेरी"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:862
 #, c-format
@@ -8487,6 +8165,12 @@ msgstr "कुल कतार प्राथमिकता: %s"
 msgid "Overdue (%s)"
 msgstr "अतिदेय राशि (%s)"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#, c-format
+msgid "Overdue to be returned"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #, c-format
 msgid "Overdues "
@@ -8546,7 +8230,9 @@ msgstr "पासवर्ड में प्रमुख और / या अ�
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:45
 #, c-format
 msgid "Password must be at least %s characters long."
 msgstr "अपना पासवर्ड %s अक्षरों में कम से कम लंबा होना चाहिए."
@@ -8569,14 +8255,18 @@ msgstr ""
 "पासवर्ड में कम से कम %s अक्षर होने चाहिए, जिनमें UPPERCASE, लोअरकेस और संख्याएं शामिल हैं"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:100
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:47
 #, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
 msgstr "पासवर्ड में कम से कम एक अंक, एक लोअरकेस और एक अपरकेस होना चाहिए।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:49
 #, c-format
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr "पासवर्ड में अग्रणी या पिछड़े सफेद स्थान नहीं होना चाहिए।"
@@ -8612,6 +8302,12 @@ msgstr "पासवर्ड:"
 #, c-format
 msgid "Passwords do not match! "
 msgstr "पासवर्ड मेल नहीं खाता! "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:43
+#, c-format
+msgid "Passwords do not match. Please re-type your new password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format
@@ -8649,9 +8345,27 @@ msgstr "भुगतान माध्यम"
 msgid "Payout"
 msgstr "लेआउट"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#, fuzzy, c-format
+msgid "Pending"
+msgstr "होल्ड लंबित"
+
+#. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#, c-format
+msgid "Pending for next available item of item type '%s'"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:96
 #, c-format
 msgid "Pending hold"
+msgstr "होल्ड लंबित"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:101
+#, fuzzy, c-format
+msgid "Pending recall"
 msgstr "होल्ड लंबित"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:54
@@ -8675,6 +8389,12 @@ msgstr "फोन: "
 #, c-format
 msgid "Photocopy"
 msgstr "फोटेकापी"
+
+#. %1$s:  RECALL.expiration_date | $KohaDates 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:106
+#, c-format
+msgid "Pick up by %s"
+msgstr "द्वारा पिक अप %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, c-format
@@ -8707,7 +8427,7 @@ msgid "Pickup location"
 msgstr "उठाने की जगह"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on"
 msgstr "होल्ड पर रखें"
 
@@ -8717,7 +8437,7 @@ msgid "Place a hold on "
 msgstr "होल्ड पर रखें "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 msgid "Place a hold on: "
 msgstr "होल्ड पर रखे:"
 
@@ -8944,7 +8664,7 @@ msgstr "कृपया एक मूल्य की तुलना में 
 msgid "Please enter a value less than or equal to {0}."
 msgstr "कृपया एक मूल्य दर्ज करें से अधिक या बराबर {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr "कृपया अनुरोधित आइटम के बारे में अतिरिक्त जानकारी दर्ज करें:"
@@ -9011,6 +8731,11 @@ msgstr "कृपया यह फ़ील्ड ठीक करें।"
 #, c-format
 msgid "Please log in to the catalog and try again. "
 msgstr "सूची में प्रवेश करें और फिर कोशिश करें."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:53
+#, c-format
+msgid "Please log-in to account to update your password."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:74
 #, c-format
@@ -9087,40 +8812,25 @@ msgstr "कृपया इस लेख के अनुरोध के लि
 msgid "Please select a tag to delete."
 msgstr "हटाने के लिए कृपया एक टैग चुनें"
 
-#. %1$s:  ELSIF (errNoBorrowerFound) 
-#. %2$s:  ELSIF errResetForbidden 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
-#, c-format
-msgid ""
-"Please try again later. %s No account was found with the provided "
-"information. %s "
-msgstr ""
-"बाद में पुन: प्रयास करें। %s प्रदान की गई जानकारी के साथ कोई खाता नहीं मिला. %s "
+#, fuzzy, c-format
+msgid "Please try again later."
+msgstr "कोई मान्य दिनांक दर्ज करें।"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:80
 #, c-format
-msgid "Please try again with plain text. %sUnrecognized error. %s "
-msgstr "कृपया फिर से सादे पाठ के साथ प्रयास करें%sअपरिचित त्रुटि. %s "
+msgid "Please try again with plain text."
+msgstr "कृपया फिर से सादे पाठ के साथ प्रयास करें."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:990
 #, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr "पूर्ववर्ती बॉक्स में कृपया निम्न वर्ण टाइप करें:"
 
-#. %1$s:  ELSIF (errNoBorrowerEmail) 
-#. %2$s:  ELSIF (errAlreadyStartRecovery) 
-#. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:89
 #, c-format
-msgid ""
-"Please use the field 'Login' as well. %s This account has no email address "
-"we can send the email to. %s The process of password recovery has already "
-"been started for this account %s (\""
+msgid "Please use the field 'Login' as well."
 msgstr ""
-"कृपया क्षेत्र 'लॉगिन' का भी उपयोग करें. %s Tउनके खाते का कोई ईमेल पता नहीं है जिसे हम "
-"ईमेल भेज सकते हैं. %s इस खाते के लिए पासवर्ड रिकवरी की प्रक्रिया शुरू की जा चुकी है %s (\""
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -9280,6 +8990,7 @@ msgstr "प्राइवेसी नियम"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:606
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
 #, c-format
 msgid "Private"
 msgstr "निजी"
@@ -9299,6 +9010,11 @@ msgstr "निजी सूचियों मेरे साथ साझा �
 msgid "Problem found on page: "
 msgstr "पृष्ठ पर पाई गई समस्या:  "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#, fuzzy, c-format
+msgid "Processing"
+msgstr "प्रोसेसिंग..."
+
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Processing..."
@@ -9317,6 +9033,7 @@ msgstr "प्रदाता:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #, c-format
 msgid "Public"
 msgstr "सार्वजनिक"
@@ -9378,7 +9095,15 @@ msgstr "प्रकाशन/कॉपीराइट दिनांक: प�
 msgid "Publication:"
 msgstr "प्रकाशन:"
 
-#. For the first occurrence,
+#. %1$s:  BIBLIO_RESULT.publishercode | $raw 
+#. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
+#. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
+#. %4$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:67
+#, c-format
+msgid "Published by: %s %s in %s %s"
+msgstr "द्वारा प्रकाशित: %s %s में %s %s"
+
 #. %1$s:  BIBLIO_RESULT.publishercode | $raw 
 #. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
 #. %3$s:  BIBLIO_RESULT.publicationyear | $raw 
@@ -9387,9 +9112,8 @@ msgstr "प्रकाशन:"
 #. %6$s:  BIBLIO_RESULT.pages | $raw 
 #. %7$s:  END 
 #. %8$s:  IF BIBLIO_RESULT.item('size') 
-#. %9$s:  BIBLIO_RESULT.item('size') | $raw 
+#. %9$s:  BIBLIO_RESULT.item('size') | html 
 #. %10$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
@@ -9419,6 +9143,8 @@ msgstr "प्रकाशक स्थान"
 msgid "Publisher:"
 msgstr "प्रकाशक:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:289
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:335
 #, c-format
 msgid "Purchase suggestions"
@@ -9448,11 +9174,33 @@ msgstr "RIS"
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote, अन्य)"
 
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:137
+#, c-format
+msgid "RSS feed for %s and system-wide library news"
+msgstr ""
+
+#. %1$s:  Branches.GetName( branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:131
+#, fuzzy, c-format
+msgid "RSS feed for %s library news"
+msgstr "सार्वजनिक सूचियों के लिए RSS फ़ीड %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:133
+#, c-format
+msgid "RSS feed for library news"
+msgstr "पुस्तकालय समाचार के लिए आरएसएस फ़ीड"
+
 #. %1$s:  shelf.shelfname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
 #, c-format
 msgid "RSS feed for public list %s"
 msgstr "सार्वजनिक सूचियों के लिए RSS फ़ीड %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:139
+#, c-format
+msgid "RSS feed for system-wide library news"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
@@ -9469,6 +9217,12 @@ msgstr "मुझे दर्जा दो"
 #, c-format
 msgid "Re-type new password:"
 msgstr "कूटशब्द फिर टाइप करें:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:88
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#, c-format
+msgid "Ready for pickup"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:77
 #, c-format
@@ -9521,6 +9275,12 @@ msgstr "होल्ड की आवश्यकता नही के बा�
 msgid "RecallItem "
 msgstr "RecallItem"
 
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#, c-format
+msgid "Recalled by patron expected at %s"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -9531,6 +9291,12 @@ msgstr "RecallItem"
 #, fuzzy, c-format
 msgid "Recalls (%s)"
 msgstr "जुर्माना (%s)"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:41
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:131
+#, c-format
+msgid "Recalls have not been enabled. Please contact your library."
+msgstr "रिकॉल सक्षम नहीं किया गया है। कृपया अपने पुस्तकालय से संपर्क करें।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:30
 #, fuzzy, c-format
@@ -9865,7 +9631,7 @@ msgstr "अनुरोध किया गया"
 msgid "Request placed:"
 msgstr "अनुरोध किया गया:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #, c-format
 msgid "Request specific item type:"
 msgstr "विशेष आइटम के प्रकार का अनुरोध :"
@@ -9884,6 +9650,13 @@ msgstr "अनुरोध का प्रकार:"
 #, c-format
 msgid "Request updated"
 msgstr "अनुरोध अपडेट किया गया"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:98
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:798
+#, fuzzy, c-format
+msgid "Requested"
+msgstr "अनुरोध"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:139
 #, c-format
@@ -9963,7 +9736,7 @@ msgstr "अनुरोध"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -10039,12 +9812,12 @@ msgstr "के लिए खोज के परिणाम '%s'"
 msgid "Results per page: "
 msgstr "प्रति पृष्ठ परिणाम:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:137
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
 #, c-format
 msgid "Resume"
 msgstr "पुनरारंभ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "सभी निलंबित होल्ड पुनरारंभ "
@@ -10222,6 +9995,7 @@ msgstr "सूची में सहेजें "
 msgid "Save to your lists"
 msgstr "आपकी सूची में सहेजें "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, c-format
 msgid "Scan"
@@ -10288,6 +10062,21 @@ msgstr "खोज "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:57
 msgid "Search %s"
 msgstr "खोज %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:5
+#, c-format
+msgid "Search also for broader subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:3
+#, c-format
+msgid "Search also for narrower subjects"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:7
+#, c-format
+msgid "Search also for related subjects"
+msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:123
@@ -10468,7 +10257,7 @@ msgstr "चुनें एक सूची"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
 #, c-format
 msgid "Select a specific item:"
 msgstr "एक विशेष आइटम का चयन करें:"
@@ -10722,9 +10511,20 @@ msgstr "LinkedIn पर शेयर करें"
 msgid "Share on Twitter"
 msgstr "ट्विटर पर साझा करें"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:695
+#, fuzzy, c-format
+msgid "Shared"
+msgstr "साझा"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:166
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
 #, c-format
 msgid "Shelving location"
+msgstr "शैल्विग स्थान"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:7
+#, fuzzy, c-format
+msgid "Shelving location:"
 msgstr "शैल्विग स्थान"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
@@ -10791,7 +10591,7 @@ msgid "Show more"
 msgstr "दिखाएँ अतिरिक्त"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
 #, c-format
 msgid "Show more options"
 msgstr "और अधिक विकल्प दिखाएँ "
@@ -10801,7 +10601,7 @@ msgstr "और अधिक विकल्प दिखाएँ "
 msgid "Show the top "
 msgstr "दिखाएँ शीर्ष "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, c-format
 msgid "Show unholdable items"
 msgstr "रोके न जाने योग्य आइटम दिखाएं"
@@ -10872,6 +10672,11 @@ msgid ""
 msgstr ""
 "जब इस सेवा का उपयोग कर पाठ संदेशों के लिए कुछ आरोप खर्च हो सकता है। यदि आप प्रश्न हैं "
 "अपने मोबाइल सेवा प्रदाता से संपर्क करें."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:167
+#, c-format
+msgid "Something else"
+msgstr ""
 
 #. %1$s:  failaddress | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:109
@@ -10997,9 +10802,14 @@ msgstr ""
 "व्यवस्थापक से संपर्क करें."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
-#, c-format
-msgid "Sorry, you are too young to reserve this material."
+#, fuzzy, c-format
+msgid "Sorry, you are too young to place a hold for this item."
 msgstr "क्षमा करें, आप इस सामग्री को आरक्षित करने के लिए ज्यादा जवान हैं।"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:104
+#, c-format
+msgid "Sorry, you cannot add items to this list."
+msgstr "क्षमा करें, आप इस सूची में आइटम नहीं जोड़ सकते।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:33
 #, c-format
@@ -11157,6 +10967,7 @@ msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "चरण दो: एक समय में, प्रत्येक आइटम के लिए स्कैन एक बारकोड"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:179
 #, c-format
 msgid "Stopped"
 msgstr "रुक गया"
@@ -11267,6 +11078,7 @@ msgstr "अद्यतन अनुरोध सबमिट करें"
 msgid "Submit your suggestion"
 msgstr "सुझाव सबमिट करें "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:37
 #, c-format
 msgid "Subscribe to a subscription alert"
@@ -11397,6 +11209,11 @@ msgstr "के लिए सुझाया गयाः"
 msgid "Suggested on"
 msgstr "सुझाव पर"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:444
+#, fuzzy, c-format
+msgid "Suggestion declined"
+msgstr "सुझाव"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:39
 #, c-format
 msgid "Suggestions"
@@ -11420,13 +11237,13 @@ msgstr "सर्वेक्षण"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:141
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
 #, c-format
 msgid "Suspend"
 msgstr "निलंबित"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
 #, c-format
 msgid "Suspend all holds"
 msgstr "सभी holds निलंबित: "
@@ -11440,6 +11257,11 @@ msgstr "होल्ड निलंबित"
 #, c-format
 msgid "Suspend until:"
 msgstr "जब तक निलंबित:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "Suspended"
+msgstr "निलंबित"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:6
@@ -11545,6 +11367,16 @@ msgstr "टैग जोड़े गए"
 msgid "Tags from this library:"
 msgstr "पुस्तकालय की ओर से टैगः"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:92
+#, c-format
+msgid "Tags to show from other users:"
+msgstr "अन्य उपयोगकर्ताओं से दिखाने के लिए टैग:"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:94
+#, c-format
+msgid "Tags to show:"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #, c-format
@@ -11621,15 +11453,14 @@ msgstr "ये %s अधिक निर्गम %s %s %s %s पर %s %s %s �
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( Koha.Preference( 'ReplytoDefault' ) ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:44
 #, c-format
 msgid ""
 "The %s%s%sKoha online%s catalog is offline for system maintenance. We'll be "
-"back soon! %s If you have any questions, please contact the "
+"back soon!"
 msgstr ""
-"यह %s%s%sकोहा ऑनलाइन%s सूची प्रणाली के रखरखाव के लिए ऑफ़लाइन है। हम जल्द ही वापस "
-"आएंगे! %s आप किसी भी प्रश्न हैं, कृपया संपर्क करें "
+"यह %s%s%sकोहा ऑनलाइन%s सूची प्रणाली के रखरखाव के लिए ऑफ़लाइन है। हम जल्द ही "
+"वापस आएंगे! "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:178
 #, c-format
@@ -11653,72 +11484,10 @@ msgid "The cart was sent to: %s"
 msgstr "कार्ट में भेजा गया था: %s"
 
 #. %1$s:  subscription_LOO.startdate | html 
-#. %2$s:  IF ( subscription_LOO.periodicity1 ) 
-#. %3$s:  END 
-#. %4$s:  IF ( subscription_LOO.periodicity2 ) 
-#. %5$s:  END 
-#. %6$s:  IF ( subscription_LOO.periodicity3 ) 
-#. %7$s:  END 
-#. %8$s:  IF ( subscription_LOO.periodicity4 ) 
-#. %9$s:  END 
-#. %10$s:  IF ( subscription_LOO.periodicity5 ) 
-#. %11$s:  END 
-#. %12$s:  IF ( subscription_LOO.periodicity6 ) 
-#. %13$s:  END 
-#. %14$s:  IF ( subscription_LOO.periodicity7 ) 
-#. %15$s:  END 
-#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
-#. %17$s:  END 
-#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
-#. %19$s:  END 
-#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
-#. %21$s:  END 
-#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
-#. %23$s:  END 
-#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
-#. %25$s:  END 
-#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
-#. %27$s:  END 
-#. %28$s:  IF ( subscription_LOO.arrival1 ) 
-#. %29$s:  END 
-#. %30$s:  IF ( subscription_LOO.arrival2 ) 
-#. %31$s:  END 
-#. %32$s:  IF ( subscription_LOO.arrival3 ) 
-#. %33$s:  END 
-#. %34$s:  IF ( subscription_LOO.arrival4 ) 
-#. %35$s:  END 
-#. %36$s:  IF ( subscription_LOO.arrival5 ) 
-#. %37$s:  END 
-#. %38$s:  IF ( subscription_LOO.arrival6 ) 
-#. %39$s:  END 
-#. %40$s:  IF ( subscription_LOO.arrival7 ) 
-#. %41$s:  END 
-#. %42$s:  IF ( subscription_LOO.numberlength ) 
-#. %43$s:  subscription_LOO.numberlength | html 
-#. %44$s:  END 
-#. %45$s:  IF ( subscription_LOO.weeklength ) 
-#. %46$s:  subscription_LOO.weeklength | html 
-#. %47$s:  END 
-#. %48$s:  IF ( subscription_LOO.monthlength ) 
-#. %49$s:  subscription_LOO.monthlength | html 
-#. %50$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:61
-#, c-format
-msgid ""
-"The current subscription began on %s and is issued %s twice per day %s %s "
-"every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
-"%s every 3 weeks %s %s every month %s %s every 2 months %s %s every quarter "
-"%s %s twice per year %s %s every year %s %s every 2 years %s %s irregularly "
-"%s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on Thursday %s %s "
-"on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
-"%s %s%s months%s "
-msgstr ""
-"वर्तमान सदस्यता शुरू हुआ को %s तथा इश्यू हैं %sदिन मे दो बार %s %s प्रत्येक दिन %s "
-"%sसप्ताह मे तीन बार %s %s प्रत्येक सप्ताह %s %s प्रत्येक 2 सप्ताह %s %s eप्रत्येक 3 सप्ताह "
-"%s %s प्रत्येक माह %s %s प्रत्येक 2 माह %s %s प्रत्येक तिमाही %s %s वर्ष में दो बार %s "
-"%s प्रत्येक वर्ष %s %s प्रत्येक 2 वर्ष  %s %sअनियमितता %s %sसोमवार को %s %s मंगलवार "
-"को %s %s बुधवार को %s %s गुरूवार को %s %s शुक्रवार को %s %s शनिवार को %s %s "
-"रविवार को %s for %s%sइश्यूज%s %s%s सप्ताह%s %s%s माह%s "
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:62
+#, fuzzy, c-format
+msgid "The current subscription began on %s and is issued"
+msgstr "पहला सदस्यता %s पर शुरू किया गया था"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:45
 #, c-format
@@ -11829,6 +11598,12 @@ msgstr "ऑपरेशन परिणाम प्रत्येक दर्
 msgid "The password has been changed for user \"%s\"."
 msgstr "पासवर्ड उपयोगकर्ता के लिए बदल दिया गया है \"%s\"."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:93
+#, c-format
+msgid ""
+"The process of password recovery has already been started for this account"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:310
 #, c-format
 msgid "The selected suggestions have been deleted."
@@ -11865,8 +11640,8 @@ msgid ""
 "The suggestion has not been added. You have reached your limit for "
 "suggestions you can place at this time (%s in %s days)."
 msgstr ""
-"सुझाव नहीं जोड़ा गया है। आप इस समय (%s दिनों में%s) सुझावों के लिए अपनी सीमा "
-"तक पहुँच चुके हैं।"
+"सुझाव नहीं जोड़ा गया है। आप इस समय (%s दिनों में%s) सुझावों के लिए अपनी सीमा तक पहुँच चुके "
+"हैं।"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:299
@@ -11885,15 +11660,10 @@ msgid "The system does not recognize this barcode."
 msgstr "सिस्टम इस बारकोड को नहीं पहचानता."
 
 #. %1$s:  ERROR.scrubbed | html 
-#. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
 #, c-format
-msgid ""
-"The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
-"code. It was NOT added. "
+msgid "The tag was added as &quot;%s&quot;."
 msgstr ""
-"टैग जोड़ा गया रूप में  &quot;%s&quot;. %s  नोट: आपके टैग पूरी तरह मार्कअप कोड था। ऐसा "
-"नहीं जोड़ा गया है. "
 
 #. %1$s:  message_value | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:57
@@ -11917,6 +11687,12 @@ msgstr "वहाँ %s सदस्यता(s) इस शीर्षक क�
 msgid "There are no comments on this title."
 msgstr "इस शीर्षक पर कोई टिप्पणी नहीं है."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:51
+#, fuzzy, c-format
+msgid "There are no items available for recall."
+msgstr "ऐसी कोई आइटम नहीं है जिसे होल्ड पर रखा जा सके।"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
 #, c-format
 msgid "There are no items that can be placed on hold."
@@ -11938,20 +11714,10 @@ msgstr "कोई सुझाव लंबित खरीद रहे है�
 msgid "There is no minimum or maximum character length."
 msgstr "कोई न्यूनतम या अधिकतम कैरेक्टर लंबाई नही है।"
 
-#. %1$s:  IF ( ERROR.badparam ) 
-#. %2$s:  ERROR.badparam | html 
-#. %3$s:  ELSIF ( ERROR.login ) 
-#. %4$s:  ELSIF ( ERROR.failed_delete ) 
-#. %5$s:  ERROR.failed_delete | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
-#, c-format
-msgid ""
-"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
-"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
-"the tag %s. "
-msgstr ""
-"इस आपरेशन के साथ एक समस्या थी: %s त्रुटि: अवैध पैरामीटर %s %s त्रुटि: आप उस क्रिया को "
-"पूरा करने के लिए लॉग इन करना होगा. %s त्रुटि: आप टैग हटा नहीं सकते। %s."
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:67
+#, fuzzy, c-format
+msgid "There was a problem with this operation:"
+msgstr "आपके सबमिशन के साथ एक समस्या थी"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:37
@@ -11990,6 +11756,11 @@ msgid ""
 msgstr ""
 "यह &quot;cloud&quot; हमारी सूची में सबसे अधिक उपयोग किया विषयों को दर्शाता है. नीचे "
 "किसी भी विषय पर क्लिक करें हमारे संग्रह में आइटम देखने के लिए."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:91
+#, c-format
+msgid "This account has no email address we can send the email to."
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:54
 #, c-format
@@ -12111,12 +11882,10 @@ msgstr "इस सूची में %s शीर्षक हैं"
 msgid "This list does not exist."
 msgstr "इस सूची में मौजूद नहीं है."
 
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
-#, c-format
-msgid ""
-"This list is empty. %s You can add to your lists from the results of any "
-msgstr "इस सूची खाली है. %s आप किसी के परिणामों से अपनी सूची में जोड़ सकते हैं"
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
+#, fuzzy, c-format
+msgid "This list is empty."
+msgstr "इस सूची में मौजूद नहीं है."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
@@ -12370,7 +12139,7 @@ msgid "Unable to update your setting!"
 msgstr "आपकी सेटिंग अपडेट करने में असमर्थ!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "अनुपलब्ध (खो या लापता)"
@@ -12399,11 +12168,18 @@ msgstr "एकीकृत शीर्षक"
 msgid "Unified title: %s "
 msgstr "एकीकृत शीर्षक: %s "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:195
 #, c-format
 msgid "Unknown"
 msgstr "अज्ञात"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#, c-format
+msgid "Unrecognized error."
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:51
 #, c-format
 msgid "Unsubscribe from a subscription alert"
@@ -12425,6 +12201,12 @@ msgstr "ऑटो-नवीनीकरण प्राथमिकता को
 #, fuzzy
 msgid "Update password"
 msgstr "पासवर्ड बदलें"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:151
+#, fuzzy, c-format
+msgid "Update your contact information"
+msgstr "संपर्क सूचना"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
@@ -12585,7 +12367,7 @@ msgstr "बेवसाइट देखें"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
 #, c-format
 msgid "Vol info"
 msgstr "Vol जानकारी"
@@ -12601,10 +12383,22 @@ msgstr "खंड"
 msgid "Volume:"
 msgstr "खंड:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#, fuzzy, c-format
+msgid "Waiting"
+msgstr "प्रतीक्षा की तिथि"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:110
 #, c-format
 msgid "Waiting date"
 msgstr "प्रतीक्षा की तिथि"
+
+#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#, c-format
+msgid "Waiting for patron at %s"
+msgstr "संरक्षक के लिए प्रतीक्षा कर रहा है %s"
 
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
@@ -12732,6 +12526,16 @@ msgstr "हाँ"
 msgid "Yes "
 msgstr "हाँ "
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#, c-format
+msgid "Yes (Item overdue or lost)"
+msgstr "हां (आइटम अतिदेय या खो गया)"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:436
+#, fuzzy, c-format
+msgid "Yes (Rental fees)"
+msgstr "किराया शुल्क"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:56
 #, c-format
 msgid "Yes, I agree."
@@ -12776,6 +12580,24 @@ msgstr "हां, सभी होल्ड फिर से शुरू क�
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
 msgid "Yes, suspend all holds"
 msgstr "हाँ, सभी होल्ड निलंबित कर दें"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:173
+#, c-format
+msgid ""
+"You already have at least one item level hold on this title. All further "
+"holds must be item level."
+msgstr ""
+"इस शीर्षक पर आपके पास पहले से ही कम से कम एक आइटम लेवल होल्ड है। आगे के सभी "
+"होल्ड आइटम स्तर के होने चाहिए।"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
+#, c-format
+msgid ""
+"You already have at least one record level hold on this title. All further "
+"holds must be record level."
+msgstr ""
+"इस शीर्षक पर आपके पास पहले से ही कम से कम एक रिकॉर्ड स्तर का होल्ड है। आगे के"
+" सभी होल्ड रिकॉर्ड स्तर के होने चाहिए।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #, c-format
@@ -12841,6 +12663,11 @@ msgstr ""
 "आप निम्नलिखित सीरियल शीर्षक के लिए रूटिंग सूचियों की सदस्यता ले चुके हैं। यदि आप परिवर्तन "
 "करना चाहते हैं, तो कृपया लाइब्रेरी से संपर्क करें।"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#, c-format
+msgid "You can add to your lists from the results of any "
+msgstr "आप किसी भी  . के परिणामों से अपनी सूचियों में जोड़ सकते हैं"
+
 #. I
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:57
 msgid ""
@@ -12899,6 +12726,11 @@ msgid ""
 msgstr ""
 "आपको डिस्चार्ज नहीं किया जा सकता है, तो आपने आइटम निर्गम कराई है. डिस्चार्ज के लिए पूछने "
 "से पहले आइटम वापस कर दें."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:53
+#, fuzzy, c-format
+msgid "You cannot place a recall on this item."
+msgstr "आपने पहले से ही इस शीर्षक का अनुरोध किया है।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:52
@@ -12978,9 +12810,11 @@ msgstr "आप इस सूची को अद्यतन करने की
 msgid "You do not have permission to view this list."
 msgstr "आपको इस सूची को देखने की अनुमति नहीं है"
 
+#. For the first occurrence,
 #. %1$s:  IF Koha.Preference('FailedLoginAttempts') 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:51
 #, c-format
 msgid ""
 "You entered an incorrect username or password. Please try again! But note "
@@ -13054,6 +12888,11 @@ msgstr "तुम बाहर सभी आवश्यक फ़ील्ड �
 #, c-format
 msgid "You have nothing checked out"
 msgstr "तुम कुछ भी नहीं है बाहर की जाँच"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
+#, fuzzy, c-format
+msgid "You have reached the maximum number of recalls on this record."
+msgstr "आपने इस आइटम की अधिकतम संख्या को नवीनीकृत कर दिया है।"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
@@ -13155,6 +12994,11 @@ msgstr "आप बना सकते हैं या सूची में �
 msgid "You must be logged in to place a recall."
 msgstr "आपको टैग्स जोड़ने के लिए लॉग इन करना ही होगा."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:60
+#, fuzzy, c-format
+msgid "You must contact the library for assistance."
+msgstr "आप अपना पासवर्ड बदल नहीं सकते."
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:117
 #, fuzzy, c-format
@@ -13227,6 +13071,18 @@ msgid ""
 "You typed in the wrong characters in the box before submitting. Please try "
 "again."
 msgstr "आप प्रस्तुत करने से पहले बॉक्स में गलत अक्षरों में टाइप किया है । कृपया पुन: प्रयास करें।"
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
+#, c-format
+msgid "You will be charged a hold fee of %s for placing this hold"
+msgstr "इस होल्ड को रखने के लिए आपसे %s का होल्ड शुल्क लिया जाएगा"
+
+#. %1$s:  RESERVE_CHARGE | $Price 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#, c-format
+msgid "You will be charged a hold fee of %s when you collect this item"
+msgstr "जब आप यह आइटम एकत्र करेंगे तो आपसे %s का होल्ड शुल्क लिया जाएगा"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:62
 #, c-format
@@ -13429,6 +13285,13 @@ msgstr ""
 "आपका सुधार पुस्तकालय, और प्रस्तुत किया गया है एक स्टाफ सदस्य जल्द से जल्द अपने रिकार्ड को "
 "अद्यतन करेगा."
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:59
+#, c-format
+msgid ""
+"Your current password was entered incorrectly. If this problem persists, "
+"please ask a librarian to reset your password for you."
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -13613,6 +13476,7 @@ msgid ""
 msgstr ""
 "आपके पासवर्ड में कम से कम %s अक्षर होने चाहिए, जिनमें अपरकेस, लोअरकेस और संख्याएं शामिल हैं"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:23
 #, c-format
 msgid "Your payment"
@@ -13667,6 +13531,7 @@ msgstr "आपकी समस्या की रिपोर्ट पुस�
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:287
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:370
 #, c-format
 msgid "Your purchase suggestions"
@@ -13838,6 +13703,12 @@ msgstr "[%s आपके ब्राउजर के द्वारा टै�
 msgid "a an the"
 msgstr "a an the"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
+#, c-format
+msgid "a list:"
+msgstr "एक सूची:"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:782
 #, c-format
@@ -13864,6 +13735,11 @@ msgstr "और उसमें उल्लिखित अनुसार म�
 #, c-format
 msgid "ask for a discharge"
 msgstr "डिस्चार्ज के लिए पुछे"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#, fuzzy, c-format
+msgid "at"
+msgstr "कार्ट"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:121
@@ -13893,10 +13769,11 @@ msgstr "आपका कार्डसंख्या"
 msgid "breadcrumb"
 msgstr "ब्रेडक्रम्ब"
 
-#. For the first occurrence,
-#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
+#, c-format
 msgid "by"
 msgstr "के द्वारा"
 
@@ -13988,6 +13865,56 @@ msgstr "ईमेल"
 msgid "email address"
 msgstr "ईमेल पता"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:85
+#, fuzzy, c-format
+msgid "every 2 months"
+msgstr "12 महीने"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:76
+#, c-format
+msgid "every 2 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:97
+#, c-format
+msgid "every 2 years"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:79
+#, c-format
+msgid "every 3 weeks"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:67
+#, c-format
+msgid "every day"
+msgstr "प्रति दिन"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:82
+#, fuzzy, c-format
+msgid "every month"
+msgstr "3 महीने"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:88
+#, c-format
+msgid "every quarter"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:73
+#, c-format
+msgid "every week"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:94
+#, c-format
+msgid "every year"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#, fuzzy, c-format
+msgid "expected at"
+msgstr "प्रत्याशित"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:785
 #, c-format
@@ -13999,6 +13926,11 @@ msgstr "expiry_date"
 msgid "firstname"
 msgstr "प्रथम नाम"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:124
+#, fuzzy, c-format
+msgid "for"
+msgstr "या"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:63
 #, c-format
 msgid "for every request "
@@ -14008,6 +13940,11 @@ msgstr "हर अनुरोध के लिए"
 #, c-format
 msgid "for more information on what it does and how to configure it."
 msgstr "यह क्या करता है के बारे में अधिक जानकारी के लिए और यह विन्यस्त करने के लिए कैसे."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#, fuzzy, c-format
+msgid "for patron"
+msgstr "संरक्षकदेखना"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
@@ -14115,13 +14052,24 @@ msgstr "मुख्य प्रविष्टी में"
 msgid "in the complete record"
 msgstr "पूर्ण रिकार्ड में"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:100
+#, c-format
+msgid "irregularly"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:61
 #, c-format
 msgid "is exactly"
 msgstr "ठीक है"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:125
+#, fuzzy, c-format
+msgid "issues"
+msgstr "अंक"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
 #, c-format
 msgid "item"
 msgstr "मद"
@@ -14133,6 +14081,11 @@ msgstr "मद"
 #, c-format
 msgid "item_id"
 msgstr "item_id"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
+#, fuzzy, c-format
+msgid "items"
+msgstr "मद"
 
 #. ABBR
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:151
@@ -14164,6 +14117,11 @@ msgstr "प्रणाली रिकॉर्ड पहचानकर्त�
 msgid "log in using a different account"
 msgstr "अलग खाते का उपयोग में लॉग इन"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:127
+#, fuzzy, c-format
+msgid "months"
+msgstr "3 महीने"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:256
 #, c-format
 msgid "negcap "
@@ -14173,6 +14131,41 @@ msgstr "negcap "
 #, c-format
 msgid "not"
 msgstr "नहीं"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:115
+#, c-format
+msgid "on Friday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:103
+#, c-format
+msgid "on Monday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:118
+#, c-format
+msgid "on Saturday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:121
+#, c-format
+msgid "on Sunday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:112
+#, c-format
+msgid "on Thursday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:106
+#, c-format
+msgid "on Tuesday"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:109
+#, c-format
+msgid "on Wednesday"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:156
 #, fuzzy, c-format
@@ -14329,27 +14322,12 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#. %1$s:  transfer.datesent | $KohaDates 
-#. %2$s:  ELSIF ( HOLD.is_in_processing ) 
-#. %3$s:  ELSIF ( HOLD.suspend ) 
-#. %4$s:  IF ( HOLD.suspend_until ) 
-#. %5$s:  HOLD.suspend_until | $KohaDates 
-#. %6$s:  END 
-#. %7$s:  ELSE 
-#. %8$s:  IF HOLD.itemtype 
-#. %9$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#. %12$s:  END 
-#. %13$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
-msgid ""
-"since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending for "
-"next available item of item type '%s' %s Pending %s %s %s "
+msgid "since"
 msgstr ""
-"के बाद %s %s प्रसंस्करण में आइटम %s निलंबित %s जब तक %s %s %s %s आइटम प्रकार के अगले "
-"उपलब्ध आइटम के लिए लंबित '%s' %sलंबित %s %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:48
@@ -14468,17 +14446,37 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "वहाँ एक समस्या आपका भुगतान संसाधित में था"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:70
+#, c-format
+msgid "three times per week"
+msgstr ""
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
 #, c-format
 msgid "to post a comment. "
 msgstr "एक टिप्पणी पोस्ट करने के लिए."
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:64
+#, c-format
+msgid "twice per day"
+msgstr "प्रति दिन दो बार"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:91
+#, c-format
+msgid "twice per year"
+msgstr ""
 
 #. LINK
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:58
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#, fuzzy, c-format
+msgid "until"
+msgstr "जब तक"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "until "
 msgstr "जब तक"
@@ -14533,6 +14531,11 @@ msgstr "होल्ड की प्रतिक्षा में"
 #, c-format
 msgid "was not found in the database. Please try again."
 msgstr "डेटाबेस में नहीं मिला था। कृपया पुन: प्रयास करें।"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:126
+#, c-format
+msgid "weeks"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:542
 #, c-format
@@ -14669,9 +14672,230 @@ msgstr "आपके टैग"
 msgid "×"
 msgstr "×"
 
+#~ msgid ""
+#~ "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
+#~ msgstr "%s %s %s %s %s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; आपका भुगतान %s %s%s "
+
+#~ msgid "%s %s %s %s Item in transit from "
+#~ msgstr "%s %s %s %s से पारगमन में आइटम "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s %s New password must not be the same as old password. %s Passwords do "
+#~ "not match. Please re-type your new password. %s Password must be at least "
+#~ "%s characters long. %s Password must contain at least one digit, one "
+#~ "lowercase and one uppercase. %s Password must not contain leading or "
+#~ "trailing whitespaces. %s You entered an incorrect username or password. "
+#~ "Please try again! But note that passwords are case sensitive%s and that "
+#~ "your account will be locked out after a fixed number of failed login "
+#~ "attempts%s. Please contact a library staff member if you continue to have "
+#~ "problems. %s Please log-in to account to update your password."
+#~ msgstr ""
+#~ "%s पासवर्ड मेल नहीं खाते हैं कृपया अपना नया पासवर्ड फिर से टाइप करें. %s %s पासवर्ड "
+#~ "कम से कम %s वर्ण लंबा होना चाहिए. %s %s पासवर्ड में कम से कम एक अंक, एक लोअरकेस और "
+#~ "एक अपरकेस होना चाहिए. %s %s पासवर्ड में अग्रणी या पिछड़े सफेद स्थान नहीं होना "
+#~ "चाहिए. %s %s आपका वर्तमान पासवर्ड ग़लत ढंग से दर्ज किया गया था यदि यह समस्या बनी "
+#~ "रहती है, तो कृपया अपने लिए अपना पासवर्ड रीसेट करने के लिए एक लाइब्रेरियन से पूछें. %s "
+
+#~ msgid ""
+#~ "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s "
+#~ "RSS feed for %s and system-wide library news %s RSS feed for system-wide "
+#~ "library news %s %s "
+#~ msgstr ""
+#~ "%s %s के लिए आरएसएस फ़ीड %s पुस्तकालय समाचार. %s पुस्तकालय समाचार के लिए आरएसएस "
+#~ "फ़ीड. %s %s %s के लिए आरएसएस फ़ीड %s और सिस्टम-वाइड लाइब्रेरी समाचार. %s सिस्टम-"
+#~ "वाइड लाइब्रेरी समाचार के लिए आरएसएस फ़ीड. %s %s "
+
+#~ msgid ""
+#~ "%s %s Search also for narrower subjects %s Search also for broader "
+#~ "subjects %s Search also for related subjects %s "
+#~ msgstr ""
+#~ "%s %s संकरा विषयों के लिए भी खोज %s व्यापक विषयों के लिए भी खोज %s संबंधित विषयों "
+#~ "के लिए भी खोज %s "
+
+#~ msgid "%s %sShared%sPrivate%s %s Public %s "
+#~ msgstr "%s %sसाझा %sनिजी%s %s सार्वजनिक %s "
+
+#~ msgid ""
+#~ "%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s "
+#~ msgstr ""
+#~ "%s जोड़ा गया %sआपके द्वारा %s %s जोड़ा गया %s द्वारा %s %s %s %s %s %s %s %s "
+#~ "%s %s %s %s %s %s %s %s %s "
+
+#~ msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
+#~ msgstr "%s पूर्ण %s रद्द %sप्रतीक्षारत %sपारगमन %s लंबित %s "
+
+#~ msgid "%s Library %s Libraries %s "
+#~ msgstr "%s पुस्तकालय %s पुस्तकालय %s "
+
+#~ msgid ""
+#~ "%s No recalls have been made. %s %s Recalls have not been enabled. Please "
+#~ "contact your library. %s "
+#~ msgstr ""
+#~ "%s कोई रिकॉल नहीं किया गया है. %s %s रिकॉल सक्षम नहीं किया गया है। कृपया अपने "
+#~ "पुस्तकालय से संपर्क करें. %s "
+
+#~ msgid "%s On hold %s No renewals left %s "
+#~ msgstr "%s होल्ड पर %s नवीकरण नहीं छोड़ा %s "
+
+#~ msgid ""
+#~ "%s Passwords do not match. Please re-type your new password. %s %s "
+#~ "Password must be at least %s characters long. %s %s Password must contain "
+#~ "at least one digit, one lowercase and one uppercase. %s %s Password must "
+#~ "not contain leading or trailing whitespaces. %s %s Your current password "
+#~ "was entered incorrectly. If this problem persists, please ask a librarian "
+#~ "to reset your password for you. %s "
+#~ msgstr ""
+#~ "%s पासवर्ड मेल नहीं खाते हैं कृपया अपना नया पासवर्ड फिर से टाइप करें. %s %s पासवर्ड "
+#~ "कम से कम %s वर्ण लंबा होना चाहिए. %s %s पासवर्ड में कम से कम एक अंक, एक लोअरकेस और "
+#~ "एक अपरकेस होना चाहिए. %s %s पासवर्ड में अग्रणी या पिछड़े सफेद स्थान नहीं होना "
+#~ "चाहिए. %s %s आपका वर्तमान पासवर्ड ग़लत ढंग से दर्ज किया गया था यदि यह समस्या बनी "
+#~ "रहती है, तो कृपया अपने लिए अपना पासवर्ड रीसेट करने के लिए एक लाइब्रेरियन से पूछें. %s "
+
+#~ msgid "%s Pending %s Processing %s New %s Completed %s Canceled %s "
+#~ msgstr "%s विलंभ %s प्रसंस्करण %s नया %s पूरा हो गया है %s रद्द हो गया है %s "
+
+#~ msgid ""
+#~ "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
+#~ "suggestions %s %s "
+#~ msgstr "%s क्रय सुझाव %s %s आपके क्रय सुझाव %s क्रय सुझाव %s %s "
+
+#, fuzzy
+#~ msgid ""
+#~ "%s Recalls have not been enabled. Please contact your library. %s There "
+#~ "are no items available for recall. "
+#~ msgstr "%s अंक नोटों सक्षम नहीं किया गया है। कृपया पुस्तकालय से संपर्क करें. %s "
+
+#~ msgid ""
+#~ "%s Subscribe to a subscription alert %s Unsubscribe from a subscription "
+#~ "alert %s "
+#~ msgstr "%sएक सदस्यता अलर्ट के लिए सदस्यता लें %s सदस्यता अलर्ट से सदस्यता समाप्त करें %s"
+
+#~ msgid ""
+#~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
+#~ "%s %s %s %s %s %s. "
+#~ msgstr ""
+#~ "%s प्रतिक्षा %s होल्ड किया %s सदस्यों के लिए %s पर %se पर उम्मीद %s %s के बाद से  "
+#~ "%s %s %s %s %s %s %s. "
+
+#~ msgid ""
+#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
+#~ "%s since %s. %s "
+#~ msgstr ""
+#~ "%s संरक्षक के लिए प्रतीक्षा कर रहा है %s जबसे %s. %s अपेक्षित संरक्षक द्वारा वापस बुला "
+#~ "लिया गया %s जबसे %s. %s "
+
+#~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
+#~ msgstr "%s%s %sमद%sमदें%s%sखाली%s"
+
+#~ msgid ""
+#~ "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+#~ "%sCollection: %s%s "
+#~ msgstr ""
+#~ "%sब्राउजिग %sअलमारियाँ%s %s, %s %sशैल्विग स्थान: %s%s %s, %s %sसंग्रह: %s%s "
+
+#~ msgid "%sCopy%sScan%s"
+#~ msgstr "%sप्रतिलिपि%sस्कैन%s "
+
+#~ msgid ""
+#~ "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never "
+#~ "received)%s %sMissing (sold out)%s %sMissing (damaged)%s %sMissing "
+#~ "(lost)%s %sNot available%s %sDelete%s %sClaimed%s %sStopped%s "
+#~ msgstr ""
+#~ "%sअनुमानित%s %sआगमन%s %sविलंभ%s %sलापता%s %sलापता (कभी प्राप्त नही)%s "
+#~ "%sलापता(बेचा गया)%s %sलापता (क्षतिग्रस्त)%s %sलापता (गुम)%s %sउपलब्ध नही%s "
+#~ "%sमिटाया गया%s %sदावा किया%s %sरोका गया%s"
+
+#~ msgid ""
+#~ "%sItem due %sAdvance notice %sHold filled %sHold reminder %sItem check-in "
+#~ "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
+#~ "ready %sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
+#~ msgstr ""
+#~ "%sआइटम देय %sअग्रिम नोटिस %sहोल्ड भरा गया %sहोल्ड स्मरण%sआइटम चैक-इन %s %sआइटम "
+#~ "चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंतर पुस्तकालय ऋण तैयार %sइंटर लाइब्रेरी लोन "
+#~ "अनुपलब्ध %sऑटो नवीकरण %sअंजान %s"
+
+#~ msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
+#~ msgstr "%sआइटम प्रकार %sसंग्रह %sशैल्विग लोकेशन %sकुछ और %s "
+
+#~ msgid "%sLibrary%sLibraries%s"
+#~ msgstr "%s पुस्तकालय %s पुस्तकालयों %s "
+
+#~ msgid ""
+#~ "%sRequested %sChecked by the library %sAccepted by the library %sOrdered "
+#~ "by the library %sSuggestion declined %sAvailable in the library %s %s %s "
+#~ "%s(%s)%s "
+#~ msgstr ""
+#~ "%sनिवेदित%s पुस्तकालय द्वारा चैक आउट की गई%sपुस्तकालय द्वारा स्वीकृत%s पुस्तकालय "
+#~ "द्वारा आदेश दिया%s सुझाव अस्वीकृत %s पुस्तकालय में उपलब्ध%s %s %s %s(%s)%s "
+
+#~ msgid "%sUpdate your contact information%sGo to your contact information%s"
+#~ msgstr "%sअपनी संपर्क जानकारी अधतन करें%s अपनी संपर्क जानकारी में जाए%s"
+
+#~ msgid "%sby %s%s "
+#~ msgstr "%sद्वारा %s%s "
+
+#~ msgid ": %sa list:%s"
+#~ msgstr ": %sa लिस्ट:%s"
+
 #, fuzzy
 #~ msgid "Clear text"
 #~ msgstr "स्पष्ट दिनांक"
 
 #~ msgid "Copyright date:"
 #~ msgstr "कॉपीराइट तिथि:"
+
+#~ msgid ""
+#~ "Note: you can only delete your own tags. %s Note: your tag contained "
+#~ "markup code that was removed. "
+#~ msgstr ""
+#~ "नोट: यदि आप केवल अपने खुद के टैग हटा सकते हैं. %s नोट: आपके टैग मार्कअप कोड है कि हटा "
+#~ "दिया गया था।"
+
+#~ msgid ""
+#~ "Please use the field 'Login' as well. %s This account has no email "
+#~ "address we can send the email to. %s The process of password recovery has "
+#~ "already been started for this account %s (\""
+#~ msgstr ""
+#~ "कृपया क्षेत्र 'लॉगिन' का भी उपयोग करें. %s Tउनके खाते का कोई ईमेल पता नहीं है जिसे हम "
+#~ "ईमेल भेज सकते हैं. %s इस खाते के लिए पासवर्ड रिकवरी की प्रक्रिया शुरू की जा चुकी है %s "
+#~ "(\""
+
+#~ msgid ""
+#~ "The current subscription began on %s and is issued %s twice per day %s %s "
+#~ "every day %s %s three times per week %s %s every week %s %s every 2 weeks "
+#~ "%s %s every 3 weeks %s %s every month %s %s every 2 months %s %s every "
+#~ "quarter %s %s twice per year %s %s every year %s %s every 2 years %s %s "
+#~ "irregularly %s %s on Monday %s %s on Tuesday %s %s on Wednesday %s %s on "
+#~ "Thursday %s %s on Friday %s %s on Saturday %s %s on Sunday %s for %s%s "
+#~ "issues%s %s%s weeks%s %s%s months%s "
+#~ msgstr ""
+#~ "वर्तमान सदस्यता शुरू हुआ को %s तथा इश्यू हैं %sदिन मे दो बार %s %s प्रत्येक दिन %s "
+#~ "%sसप्ताह मे तीन बार %s %s प्रत्येक सप्ताह %s %s प्रत्येक 2 सप्ताह %s %s eप्रत्येक 3 "
+#~ "सप्ताह %s %s प्रत्येक माह %s %s प्रत्येक 2 माह %s %s प्रत्येक तिमाही %s %s वर्ष में दो "
+#~ "बार %s %s प्रत्येक वर्ष %s %s प्रत्येक 2 वर्ष  %s %sअनियमितता %s %sसोमवार को %s "
+#~ "%s मंगलवार को %s %s बुधवार को %s %s गुरूवार को %s %s शुक्रवार को %s %s शनिवार "
+#~ "को %s %s रविवार को %s for %s%sइश्यूज%s %s%s सप्ताह%s %s%s माह%s "
+
+#~ msgid ""
+#~ "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely "
+#~ "markup code. It was NOT added. "
+#~ msgstr ""
+#~ "टैग जोड़ा गया रूप में  &quot;%s&quot;. %s  नोट: आपके टैग पूरी तरह मार्कअप कोड था। "
+#~ "ऐसा नहीं जोड़ा गया है. "
+
+#~ msgid ""
+#~ "There was a problem with this operation: %s ERROR: illegal parameter %s "
+#~ "%s ERROR: You must log in to complete that action. %s ERROR: You cannot "
+#~ "delete the tag %s. "
+#~ msgstr ""
+#~ "इस आपरेशन के साथ एक समस्या थी: %s त्रुटि: अवैध पैरामीटर %s %s त्रुटि: आप उस क्रिया "
+#~ "को पूरा करने के लिए लॉग इन करना होगा. %s त्रुटि: आप टैग हटा नहीं सकते। %s."
+
+#~ msgid ""
+#~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "
+#~ "for next available item of item type '%s' %s Pending %s %s %s "
+#~ msgstr ""
+#~ "के बाद %s %s प्रसंस्करण में आइटम %s निलंबित %s जब तक %s %s %s %s आइटम प्रकार के "
+#~ "अगले उपलब्ध आइटम के लिए लंबित '%s' %sलंबित %s %s %s "

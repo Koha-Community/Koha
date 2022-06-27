@@ -4,14 +4,19 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-01 11:46-0300\n"
-"Language-Team: Koha Translation Team \n"
+"PO-Revision-Date: 2022-06-06 06:57+0000\n"
+"Last-Translator: PolinaMolchanova <pum2014@tpu.ru>\n"
+"Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
+"X-POOTLE-MTIME: 1654498666.097799\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -150,7 +155,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "Выполнить"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -158,10 +162,11 @@ msgid ""
 "when no payment types are defined in the PAYMENT_TYPE authorised value "
 "category."
 msgstr ""
-"<br><strong>Примечание:</strong> Это значение не действует, если для "
-"системной настройки <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UsageStats\">UsageStats</a> установлено значение \"Нет"
-"\" (не предоставлять общий доступ)."
+"accounting.pref#RequirePaymentType# Этот параметр не действует, если "
+"включено <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">ИспользоватьCashRegisters</a> или "
+"когда ни один тип платежей не определен в категории разрешенных значений "
+"PAYMENT_TYPE."
 
 # Accounting > Policy
 #, fuzzy
@@ -2461,7 +2466,6 @@ msgstr ""
 "записей в модуле каталогизации."
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (requires <a "
@@ -2470,14 +2474,15 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"читателям выбирать собственные настройки конфиденциальности для своей "
-"истории книговыдачи. Для этого необходимы системные настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> и <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
+"authorities.pref#GenerateAuthorityField667# Используйте следующий текст в "
+"качестве значения по умолчанию для поля 667$a авторитетных записей поля "
+"667$a авторитетных записей MARC21 (требуется <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> и <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
 "default value for the 670$a field of MARC21 authority records (requires <a "
@@ -2486,11 +2491,12 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"читателям выбирать собственные настройки конфиденциальности для своей "
-"истории книговыдачи. Для этого необходимы системные настройки <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
-"\">opacreadinghistory</a> и <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>."
+"authorities.pref#GenerateAuthorityField670# Используйте следующий текст в "
+"качестве значения по умолчанию для поля 670$a авторитетных записей MARC21 "
+"(требуется <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> и <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -4778,6 +4784,28 @@ msgstr "Не использовать"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "Использовать"
 
+# Circulation > Holds policy > DefaultHoldPickupLocation
+msgid ""
+"circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
+"staff client default the pickup location to the"
+msgstr ""
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgstr ""
+"circulation.pref#RefundLostOnReturnControl# библиотеке хранения экземпляра."
+
+# Circulation > Fines Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgstr "Не использовать"
+
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
+msgstr "библиотека хранения"
+
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the "
@@ -6168,12 +6196,14 @@ msgid "circulation.pref#RestrictionBlockRenewing# block"
 msgstr "блокировать"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#RestrictionBlockRenewing# renewing of items from the staff "
 "interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> "
 "cronjob."
-msgstr "продление экземпляров."
+msgstr ""
+"circulation.pref#RestrictionBlockRenewing# обновление предметов из "
+"интерфейса персонала и через<code>misc/cronjobs/automatic_renewals.pl</code> "
+"cronjob."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -8902,15 +8932,16 @@ msgid "logs.pref#DumpSearchQueryTemplate# Don't"
 msgstr "Не"
 
 # Logging > Debugging
-#, fuzzy
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query as a template "
 "parameter, requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] to "
 "be visible."
 msgstr ""
-"сбрасывать поисковый запрос как параметр шаблона, требуется, чтобы "
-"DumpTemplateVars [interface] был видимым."
+"logs.pref#DumpSearchQueryTemplate# сбрасывать поисковый запрос как параметр "
+"шаблона, требуется, чтобы <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=DumpTemplateVars\">DumpTemplateVars</a>[interface] был "
+"видимым."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9396,12 +9427,14 @@ msgstr ""
 "опцию отображения QR-кода на странице библиографической информации в ЭК."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</a> "
 "option must be turned on."
-msgstr ". Примечание. Соответствующая опция OPACXSLT должна быть включена."
+msgstr ""
+"opac.pref#OPACDisplay856uAsImage# . Примечание: Соответствующая <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT\">OPACXSLT</"
+"a> опция должна быть включена."
 
 # OPAC > Appearance
 msgid ""
@@ -9664,13 +9697,14 @@ msgid "opac.pref#OPACReportProblem# <br/>"
 msgstr "<br/>"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a> enabled."
 msgstr ""
-"<strong>Примечание:</strong> У вас должен быть включен KohaAdminEmailAddress."
+"opac.pref#OPACReportProblem# <strong>Примечание:</strong> У вас должен быть "
+"включен <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a>."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# Allow"
@@ -9922,14 +9956,16 @@ msgstr ""
 "о покупке:"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# <br />Note: Do not make <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OPACSuggestionMandatoryFields"
 "\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
-"<br />Примечание. Не создавайте ненужные поля OPACSuggestionMandatoryFields"
+"opac.pref#OPACSuggestionUnwantedFields# <br />Примечание: Не создавайте "
+"нежелательные поля <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACSuggestionMandatoryFields"
+"\">OPACSuggestionMandatoryFields</a> "
 
 # OPAC > Policy
 msgid ""
@@ -10000,6 +10036,7 @@ msgstr ""
 " предложения о приобретении от других посетителей в электронном каталоге."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -10008,7 +10045,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Параметры:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -10028,6 +10065,7 @@ msgid ""
 msgstr "Показать детали ЭК с помощью таблицы стилей XSLT по:"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -10036,7 +10074,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Параметры:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -10056,6 +10094,7 @@ msgid ""
 msgstr "Показать списки в ЭК с помощью таблицы стилей XSLT по:"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -10064,7 +10103,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Параметры:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -10197,7 +10236,7 @@ msgstr "Подтипы"
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
-"Shelving Location (<strong>loc</strong>)."
+"Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>В настоящее время поддерживаются значения</em>: Классы экземпляров "
 "(<strong>itemtypes</strong>), Коды коллекций (<strong>ccode</strong>) и "
@@ -11762,14 +11801,15 @@ msgid ""
 msgstr "Если это не отменено типом читателя, не"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#CheckPrevCheckoutDelay# Requires <a href='/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</"
 "a> to be enabled. There is no time limit if 0 or empty."
 msgstr ""
-"Для активации требуется <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a>."
+"patrons.pref#CheckPrevCheckoutDelay# Требуется, чтобы <a href='/cgi-bin/koha/"
+"admin/preferences.pl?"
+"op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</a> было "
+"включено. Нет ограничения по времени, если 0 или пусто."
 
 # Patrons > General
 #, fuzzy
@@ -12883,7 +12923,7 @@ msgstr ""
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>В настоящее время поддерживаются значения</em>: Классы экземпляров "
 "(<strong>itemtypes</strong>), Коды коллекций (<strong>ccode</strong>) и "
@@ -13811,18 +13851,17 @@ msgstr ""
 "href=\"/cgi-bin/koha/admin/audio_alerts.pl\">audio alerts</a>."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# <br />Options:<ul><li>Put "
 "a path to define a xslt file</li><li>Put an URL for an external specific "
 "stylesheet.</li></ul>{langcode} will be replaced with current interface "
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
-"<br />Опции:<ul><li>Ввести \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">по умолчанию</a>\" для "
-"значений по умолчанию</li><li>Указать путь для определения файла xslt</"
-"li><li>Указать URL-адрес для внешней конкретной таблицы стилей.</li></"
-"ul>{langcode} будет заменен на текущий язык интерфейса"
+"staff_interface.pref#AuthorityXSLTResultsDisplay# <br />Options:"
+"<ul><li>Укажите путь для определения файла xslt</li><li>Поместите URL-адрес "
+"для внешней таблицы стилей.</li></ul>{langcode} будет заменен текущим языком "
+"интерфейса, а {authtypecode} будет заменен кодом типа авторитетного "
+"источника."
 
 # Staff interface > Appearance
 #, fuzzy
@@ -14080,6 +14119,7 @@ msgstr ""
 "редактор WYSIWYG при редактировании определенных системных настроек HTML."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14089,7 +14129,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 "<br />Опции:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -14111,6 +14151,7 @@ msgstr ""
 "адресу:"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -14119,7 +14160,7 @@ msgid ""
 "li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
 "pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
 "enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different langues the placeholder "
+"ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Опции:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
@@ -14141,6 +14182,7 @@ msgstr ""
 "адресу:"
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14150,7 +14192,7 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
 "\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
 "data in the item fields</li></ul>If you have multiple stylesheets for "
-"different langues the placeholder {langcode} will be replaced with current "
+"different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
 "<br />Опции:<ul><li>Введите \"<a href=\"#\" class=\"set_syspref\" data-"
