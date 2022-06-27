@@ -1258,6 +1258,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 curbside_pickups_borrowernumbers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CurbsidePickup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "curbside_pickups_borrowernumbers",
+  "Koha::Schema::Result::CurbsidePickup",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 curbside_pickups_staged_by
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CurbsidePickup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "curbside_pickups_staged_by",
+  "Koha::Schema::Result::CurbsidePickup",
+  { "foreign.staged_by" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 discharges
 
 Type: has_many
@@ -1989,8 +2019,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-05 12:41:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:e5ZH2Ise5JLYRXrq22L9rw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-07 12:48:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iffysIl9TxAnXVzpWiUJuw
 
 __PACKAGE__->has_many(
   "extended_attributes",

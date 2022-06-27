@@ -611,6 +611,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 curbside_pickup_policy
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::CurbsidePickupPolicy>
+
+=cut
+
+__PACKAGE__->might_have(
+  "curbside_pickup_policy",
+  "Koha::Schema::Result::CurbsidePickupPolicy",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 curbside_pickups
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CurbsidePickup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "curbside_pickups",
+  "Koha::Schema::Result::CurbsidePickup",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 desks
 
 Type: has_many
@@ -882,8 +912,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-03-28 22:07:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kpv55lV6FRGoxxu5nufXhg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-27 11:58:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1m1v0sml/1gBHxAkQl8BaA
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
