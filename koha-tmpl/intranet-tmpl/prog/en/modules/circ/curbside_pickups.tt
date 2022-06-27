@@ -90,8 +90,6 @@
                             <span>There are no more pickups available for this slot. Please choose another one.</span>
                         [% CASE 'cannot_checkout' %]
                             <span>Unable to check the items out to [% INCLUDE 'patron-title.inc' patron=m.patron %]</span>
-                        [% CASE 'no_patron_found' %]
-                            <span>No patron found with cardnumber [% m.cardnumber | html %].</span>
                         [% CASE %]
                             <span>[% m.code | html %]</span>
                         [% END %]
@@ -435,20 +433,13 @@
                                     [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %]) already has a scheduled pickup for this library.
                                 </div>
                             [% END %]
-                            <form method="post" class="form-inline">
-                                <input type="hidden" name="op" value="find-patron"/>
-                                <input type="hidden" name="tab" value="schedule-pickup"/>
-
-                                <div class="form-group">
-                                    <label class="sr-only" for="input-patron-cardnumber">Cardnumber</label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon">Card number</div>
-                                        <input type="text" class="form-control" name="cardnumber" id="input-patron-cardnumber" placeholder="Enter patron cardnumber"/>
-                                    </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="input-patron-cardnumber">Cardnumber</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">Search a patron</div>
+                                    <input autocomplete="off" id="find-patron" class="form-control" type="text" style="width:25%" class="noEnterSubmit" placeholder="Enter patron cardnumber or name"//>
                                 </div>
-
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </form>
+                            </div>
                         [% ELSE %]
                             [% SET waiting_holds = patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                             [% IF !policy.enable_waiting_holds_only || waiting_holds.count > 0 %]
@@ -523,6 +514,7 @@
     <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
     <script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     <script>
         let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
         let policy = [% To.json(policy.unblessed) | $raw %];
@@ -654,6 +646,15 @@
                 }
                 return true;
             });
+
+            if ( $("#find-patron").length ) {
+                patron_autocomplete($("#find-patron"), { 'on-select-callback': function( event, ui ) {
+                        window.location.href = "/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=" + ui.item.patron_id;
+                        return false;
+                    }
+                });
+            }
+
         });
     </script>
 [% END %]

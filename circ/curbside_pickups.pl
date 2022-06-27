@@ -45,31 +45,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $branchcode = C4::Context->userenv()->{'branch'};
 my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
 if ( $op eq 'find-patron' ) {
-    my $cardnumber     = $input->param('cardnumber');
     my $borrowernumber = $input->param('borrowernumber');
 
-    my $patron =
-      $cardnumber
-      ? Koha::Patrons->find( { cardnumber => $cardnumber } )
-      : Koha::Patrons->find($borrowernumber);
+    my $patron = Koha::Patrons->find($borrowernumber);
 
-    my $existing_curbside_pickups;
-
-    if ( $patron ){
-        $existing_curbside_pickups = Koha::CurbsidePickups->search(
-            {
-                branchcode                => $branchcode,
-                borrowernumber            => $patron->id,
-                delivered_datetime        => undef,
-            }
-        )->filter_by_scheduled_today;
-    } else {
-        push @messages, {
-            type => 'error',
-            code => 'no_patron_found',
-            cardnumber => $cardnumber
-        };
-    }
+    my $existing_curbside_pickups = Koha::CurbsidePickups->search(
+        {
+            branchcode                => $branchcode,
+            borrowernumber            => $patron->id,
+            delivered_datetime        => undef,
+        }
+    )->filter_by_scheduled_today;
 
     $tab = 'schedule-pickup';
     $template->param(
