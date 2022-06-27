@@ -1906,8 +1906,9 @@ Note that permanent location is a code, and location may be an authval.
                 [% IF bundlesEnabled %]
                 // Add event listener for opening and closing bundle details
                 $('#' + table_name + ' tbody').on('click', 'button.details-control', function () {
-                    var tr = $(this).closest('tr');
-                    var dTable = $(this).closest('table').DataTable({ 'retrieve': true });
+                    var button = $(this);
+                    var tr = button.closest('tr');
+                    var dTable = button.closest('table').DataTable({ 'retrieve': true });
 
                     var itemnumber = tr.data('itemnumber');
                     var duedate = tr.data('duedate');
@@ -1917,11 +1918,13 @@ Note that permanent location is a code, and location may be an authval.
                         // This row is already open - close it
                         row.child.hide();
                         tr.removeClass('shown');
+                        button.removeClass('active');
                     }
                     else {
                         // Open this row
                         createChild(row, itemnumber, duedate);
                         tr.addClass('shown');
+                        button.addClass('active');
                     }
                 } );
                 [% END %]
