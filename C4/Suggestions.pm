@@ -249,7 +249,8 @@ sub NewSuggestion {
 
     $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
 
-    delete $suggestion->{branchcode} if $suggestion->{branchcode} eq '';
+    delete $suggestion->{branchcode}
+      if defined $suggestion->{branchcode} and $suggestion->{branchcode} eq '';
 
     my $suggestion_object = Koha::Suggestion->new( $suggestion )->store;
     my $suggestion_id = $suggestion_object->suggestionid;
@@ -403,7 +404,9 @@ sub DelSuggestion {
     my $sth = $dbh->prepare($query);
     $sth->execute($suggestionid);
     my ($suggestedby) = $sth->fetchrow;
-    if ( $type eq 'intranet' || $suggestedby eq $borrowernumber ) {
+    $suggestedby //= '';
+    $borrowernumber //= '';
+    if ( defined $type && $type eq 'intranet' || $suggestedby eq $borrowernumber ) {
         my $queryDelete = q{
             DELETE FROM suggestions
             WHERE suggestionid=?
