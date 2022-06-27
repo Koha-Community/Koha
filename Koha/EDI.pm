@@ -41,6 +41,7 @@ use Koha::Edifact;
 use C4::Log qw( logaction );
 use Log::Log4perl;
 use Text::Unidecode qw( unidecode );
+use Koha::Plugins; # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
@@ -232,6 +233,7 @@ sub process_invoice {
 
     # Plugin has its own invoice processor, only run it and not the standard invoice processor below
     if ( $plugin_class ) {
+        eval "require $plugin_class"; # Import the class, eval is needed because requiring a string doesn't work like requiring a bareword
         my $plugin = $plugin_class->new();
         if ( $plugin->can('edifact_process_invoice') ) {
             Koha::Plugins::Handler->run(
