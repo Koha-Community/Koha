@@ -1598,6 +1598,7 @@ Note that permanent location is a code, and location may be an authval.
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
+    [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("js/table_filters.js") | $raw %]
     <script>
@@ -1653,22 +1654,12 @@ Note that permanent location is a code, and location may be an authval.
                     } ],
                     "columns": [
                         {
-                            "data": "biblio.title:biblio.medium",
+                            "data": "biblio.title:biblio.subtitle:biblio.medium",
                             "title": _("Title"),
                             "searchable": true,
                             "orderable": true,
                             "render": function(data, type, row, meta) {
-                                var title = "";
-                                if ( row.biblio.title ) {
-                                    title = title.concat('<span class="biblio-title">',row.biblio.title,'</span>');
-                                }
-                                if ( row.biblio.subtitle ) {
-                                    title = title.concat('<span class="biblio-subtitle">',row.biblio.subtitle,'</span>');
-                                }
-                                if ( row.biblio.medium ) {
-                                    title = title.concat('<span class="biblio-medium">',row.biblio.medium,'</span>');
-                                }
-                                return title;
+                                return $biblio_to_html(row.biblio, { link: 1 });
                             }
                         },
                         {
