@@ -82,7 +82,6 @@ sub under {
         }
 
         if ( $c->req->url->to_abs->path eq '/api/v1/oauth/token' ) {
-            #|| $c->req->url->to_abs->path eq '/api/v1/auth/send_otp_token' ) {
             # Requesting a token shouldn't go through the API authenticaction chain
             $status = 1;
         }
@@ -235,7 +234,10 @@ sub authenticate_api_request {
             if ( $c->req->url->to_abs->path eq '/api/v1/auth/send_otp_token' ) {
                 $user = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
-                $pending_auth = 1;
+            } else {
+                Koha::Exceptions::Authentication::Required->throw(
+                    error => 'Authentication failure.'
+                );
             }
         }
         elsif ($status eq "maintenance") {
@@ -271,7 +273,6 @@ sub authenticate_api_request {
          ( $params->{is_public} and
           ( C4::Context->preference('RESTPublicAnonymousRequests') or
             $user) or $params->{is_plugin} )
-        or $pending_auth
     ) {
         # We do not need any authorization
         # Check the parameters

@@ -1610,11 +1610,6 @@ sub _process_tt {
     $content = add_tt_filters( $content );
     $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
 
-    if ( $content =~ m|\[% otp_token %\]| ) {
-        my $patron = Koha::Patrons->find(C4::Context->userenv->{number});
-        $tt_params->{otp_token} = Koha::Auth::TwoFactorAuth->new({patron => $patron})->code;
-    }
-
     my $output;
     my $schema = Koha::Database->new->schema;
     $schema->txn_begin;

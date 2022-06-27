@@ -45,10 +45,12 @@ sub send_otp_token {
 
     return try {
 
+        my $code = Koha::Auth::TwoFactorAuth->new({patron => $patron})->code;
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'members',
             letter_code => '2FA_OTP_TOKEN',
             branchcode  => $patron->branchcode,
+            substitute  => { otp_token => $code },
             tables      => {
                 borrowers => $patron->unblessed,
             }
