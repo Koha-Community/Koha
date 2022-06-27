@@ -76,6 +76,10 @@
     <span class="item-status notforloan">Not for loan [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
 [% END %]
 
+[% IF ( item.bundle_host ) %]
+    <span class="bundled">In bundle: <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.bundle_host.biblionumber %]">[% INCLUDE 'biblio-title.inc' biblio = item.bundle_host.biblio %]</a></span>
+[% END %]
+
 [% IF ( item.damaged ) %]
     [% SET itemavailable = 0 %]
     [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged, opac => 1 ) %]

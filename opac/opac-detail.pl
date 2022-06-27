@@ -766,6 +766,11 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itm->{cover_images} = $item->cover_images;
     }
 
+    if ( $item->in_bundle ) {
+        my $host = $item->bundle_host;
+        $itm->{bundle_host} = $host;
+    }
+
     my $itembranch = $itm->{$separatebranch};
     if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
         if ($itembranch and $itembranch eq $currentbranch) {
