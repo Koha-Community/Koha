@@ -61,7 +61,7 @@ sub get_search_groups {
 
     my $field = $interface eq 'staff' ? 'ft_search_groups_staff' : 'ft_search_groups_opac';
 
-    return $self->search( { $field => 1 } );
+    return $self->search( { $field => 1 }, { order_by => 'title' } );
 }
 
 
