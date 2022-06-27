@@ -997,8 +997,13 @@ $(document).ready(function() {
                     {
                         "sClass": "return-claim-notes-td",
                         "mDataProp": function ( oObj ) {
-                            return '<span id="return-claim-notes-static-' + oObj.id + '" class="return-claim-notes" data-return-claim-id="' + oObj.id + '">' + oObj.notes + '</span>'
-                                + '<i style="float:right" class="fa fa-pencil-square-o" title="' + __("Double click to edit") + '"></i>';
+                            let notes =  '<span id="return-claim-notes-static-' + oObj.id + '" class="return-claim-notes" data-return-claim-id="' + oObj.id + '">';
+                            if ( oObj.notes ) {
+                                notes += oObj.notes;
+                            }
+                            notes += '</span>';
+                            notes += '<i style="float:right" class="fa fa-pencil-square-o" title="' + __("Double click to edit") + '"></i>';
+                            return notes;
                         }
                     },
                     {
