@@ -82,7 +82,7 @@ sub under {
         }
 
         if ( $c->req->url->to_abs->path eq '/api/v1/oauth/token' ) {
-            # Requesting a token shouldn't go through the API authenticaction chain
+            # Requesting a token shouldn't go through the API authentication chain
             $status = 1;
         }
         elsif ( $namespace eq '' or $namespace eq '.html' ) {
