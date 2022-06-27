@@ -456,8 +456,12 @@ foreach my $item (@items) {
         }
     }
 
-    if ($item_object->is_bundle) {
-        $itemfields{bundles} = 1;
+    if ( $item_object->is_bundle ) {
+        $item->{bundled} =
+          $item_object->bundle_items->search( { itemlost => { '!=' => 0 } } )
+          ->count;
+        $item->{bundled_lost} =
+          $item_object->bundle_items->search( { itemlost => 0 } )->count;
         $item->{is_bundle} = 1;
     }
 
