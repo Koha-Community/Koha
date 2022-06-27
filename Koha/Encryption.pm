@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use base qw( Crypt::CBC );
 
+use C4::Context;
 use Koha::Exceptions;
 
 =head1 NAME
