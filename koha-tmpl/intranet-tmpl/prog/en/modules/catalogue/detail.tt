@@ -373,7 +373,7 @@
         </thead>
         <tbody>
             [% FOREACH item IN items %]
-                <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]">
+                <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]" data-duedate="[% item.datedue | html %]">
                 [% IF (StaffDetailItemSelection) %]
                     <td style="text-align:center;vertical-align:middle">
                         <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
@@ -1612,12 +1612,17 @@ Note that permanent location is a code, and location may be an authval.
         $(document).ready(function() {
 
             [% IF bundlesEnabled %] // Bundle handling
-            function createChild ( row, itemnumber ) {
+            function createChild ( row, itemnumber, duedate ) {
 
                 // Toolbar
                 var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
                 bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
                 bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
+
+                // Disable management if there's a duedate
+                if(duedate) {
+                    bundle_toolbar.children('.btn').addClass("disabled");
+                }
 
                 // This is the table we'll convert into a DataTable
                 var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
@@ -1717,7 +1722,12 @@ Note that permanent location is a code, and location may be an authval.
                         },
                         {
                             "data": function( row, type, val, meta ) {
-                                var result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                var result;
+                                if (duedate) {
+                                    result = '<button class="btn btn-default btn-xs remove disabled" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                } else {
+                                    result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                }
                                 return result;
                             },
                             "title": _("Actions"),
@@ -1727,7 +1737,7 @@ Note that permanent location is a code, and location may be an authval.
                         }
                     ]
                 }, bundle_settings, 1);
-                $(".tbundle").on("click", ".remove", function(){
+                $(".tbundle").on("click", ".remove:not(.disabled)", function(){
                     var bundle_table = $(this).closest('table');
                     var host_itemnumber = bundle_table.data('itemnumber');
                     var component_itemnumber = $(this).data('itemnumber');
@@ -1909,6 +1919,7 @@ Note that permanent location is a code, and location may be an authval.
                     var dTable = $(this).closest('table').DataTable({ 'retrieve': true });
 
                     var itemnumber = tr.data('itemnumber');
+                    var duedate = tr.data('duedate');
                     var row = dTable.row( tr );
 
                     if ( row.child.isShown() ) {
@@ -1918,7 +1929,7 @@ Note that permanent location is a code, and location may be an authval.
                     }
                     else {
                         // Open this row
-                        createChild(row, itemnumber);
+                        createChild(row, itemnumber, duedate);
                         tr.addClass('shown');
                     }
                 } );
