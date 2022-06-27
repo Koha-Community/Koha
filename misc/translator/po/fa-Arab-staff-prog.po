@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-05-19 08:23-0300\n"
-"PO-Revision-Date: 2022-05-29 08:18+0000\n"
+"POT-Creation-Date: 2022-06-18 02:02-0300\n"
+"PO-Revision-Date: 2022-06-22 08:09+0000\n"
 "Last-Translator: shahab.bohlooli@gmail.com <shahab.bohlooli@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
 "Language: fa\n"
@@ -19,16 +19,16 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/21.05/fa-Arab-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653812313.259026\n"
+"X-POOTLE-MTIME: 1655885352.924853\n"
 
 #. %1$s:  data.borrowernumber | html 
 #. %2$s:  UNLESS loop.last 
 #. %3$s:  END 
 #. %4$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "\", \"borrowernumber\": \"%s\" }%s,%s %s ] } "
-msgstr "] %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
+msgstr "\", \"شماره امانت گیرنده\": \"%s\" }%s,%s %s ] } "
 
 #. %1$s:  data.borrowernotes | html_line_break | collapse | $To 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:33
@@ -613,6 +613,8 @@ msgid ""
 "%s %s %s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, "
 "\"iTotalDisplayRecords\": %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
 msgstr ""
+"%s %s %s %s %s %s { \"sEcho\": %s, \"iسندهای نهایی\": %s, \"iنمایش نهایی "
+"اسناد\": %s, \"aaداده\": [ %s { %s \"dt_شماره امانت گیرنده\": \""
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -1632,6 +1634,9 @@ msgid ""
 "%s %s %sORDER DATE%sESTIMATED DELIVERY DATE%sVENDOR%sINFORMATION%sTOTAL COST"
 "%sBASKET%sCLAIMS COUNT%sCLAIMED DATE%sINTERNAL NOTE%sVENDOR NOTE%sISBN%s "
 msgstr ""
+"%s %s %sتاریخ سفارش%sتاریخ تحویل تخمین زده شده%sفروشنده%sاطلاعات%sهزینه "
+"نهایی %sسبد خرید%sتعداد تقاضا%sتاریخ مطالبه%sیادداشت داخلی%sیادداشت فروشنده"
+"%sشابک%s "
 
 #. %1$s:  IF ( hold_info.barcodes.size ) 
 #. %2$s:  SET barcode = hold_info.barcodes.first 
@@ -2030,6 +2035,11 @@ msgid ""
 "updated successfully. %s CSV profile added successfully. %s CSV profile "
 "deleted successfully. %s This CSV profile already exists. %s %s %s "
 msgstr ""
+"%s %s هنگام به روز رسانی مشخصات SCV خطایی روی داد. شاید از قبل وجود داشته "
+"است. %s هنگام افزودن مشخصات CSV خطایی روی داد. %s هنگام حذف مشخصات CSV خطایی "
+"روی داد. لاگ ها را بررسی کنید. %s بروز رسانی مشخصات CSV موفقیت آمیز بوده "
+"است. %s مشخصات CSV با موفقیت افزوده شد. %s مشخصات CSV با موفقیت حذف شد. %s "
+"مشخصات CSV در حال حاضر موجود است. %s %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -3510,6 +3520,14 @@ msgid ""
 "%s %s %s %s %sIntranet %sOPAC %sSIP %sCommand-line %sREST API %sCron job "
 "%sUpgrade %s%s %s %s "
 msgstr ""
+"%s %s%s %s %s %s %s %sافزودن %sحذف %sاصلاح %sامانت %sعودت %sایجاد %sلغو "
+"%sتمدید %sتعلیق %sتمدید %sتمدید %sتغییر رمزعبور %sافزودن پیام گردش امانت "
+"%sحذف پیام گردش امانت%sدرخواست تغییر وضعیت ILL %sILL اخطار ارسال شده به "
+"کاربر %sایجاد یک سبد خرید %sاصلاح یک سبد خرید %sاصلاح هدر سبد خرید %sتغییر "
+"کاربران سبد خرید %sبستن یک سبد خرید %sتایید سبد خرید %sتصویب سبد خرید %sاجرا "
+"%sویرایش نگاشت ها %sبازنشانی نگاشت ها %sمطالبات پیاپی %sدرخواست مطالبات "
+"%sدرخواست سفارش %s%s %s %s %s %s %sاینترانت %sاپک %sSIP %sخط فرمان "
+"%sبازنشانی API %sکرون جاب %sارتقاء دادن %s%s %s %s "
 
 #. %1$s:  r.budget.budget_id | html 
 #. %2$s:  r.budget.budget_amount | $Price 
@@ -3901,6 +3919,12 @@ msgid ""
 "%sUnhandled email failure, check the logs for further details %sUnknown "
 "error %sError occurred while sending email. %s %s "
 msgstr ""
+"%s %sشماره امانت گیرنده نامعتبر است %s %sنمی توان آدرس پست الکترونیکی برای "
+"این امانت گیرنده یافت نشد %sنامعتبر %s آدرس پست الکترونیکی پیدا شد %s %sآدرس "
+"پست الکترونیکی موجود نیست %sشماره پیامک گم شده است %sپیام تکراری است %sهیچ "
+"یادداشتی از درایو پیامک موجود نیست %sخرابی پست الکترونیک کنترل نشده، برای "
+"جزئیات بیشتر گزارش ها را بررسی کنید %s خطای ناشناخته%sخطا هنگام ارسال پست "
+"الکترونیکی رخ داد. %s %s "
 
 #. %1$s:  nnoverdue | html 
 #. %2$s:  IF ( noverdue_is_plural ) 
@@ -4981,11 +5005,13 @@ msgstr "%s الفئة%s قيد الإستخدام. الحذف غير ممكن!%s
 #. %2$s: - ELSE -
 #. %3$s: - END -
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Change order vendor note %s Change order internal note %s &rsaquo; "
 "Acquisition &rsaquo; Koha "
-msgstr "كوها &rsaquo; التزويد &rsaquo; تغيير أمر الملاحظات"
+msgstr ""
+"%s تغییر یادداشت فروشنده سفارش %s تغییر یادداشت داخلی سفارش %s &rsaquo; خرید "
+"&rsaquo; کوها "
 
 #. %1$s:  IF cr.item.onloan 
 #. %2$s:  ELSE 
@@ -6320,6 +6346,8 @@ msgid ""
 "%s Patron attribute %s is invalid for patron with borrowernumber %s. %s "
 "Patron attribute %s is invalid for patron %s. %s "
 msgstr ""
+"%s ویژگی عضو %s برای کاربر با شماره امانت گیرنده نامعتبر است%s. %s ویژگی عضو "
+"%s برای عضو نامعتبر است %s. %s "
 
 #. %1$s:  IF e.borrowernumber 
 #. %2$s:  e.attribute.code | html 
@@ -6334,6 +6362,8 @@ msgid ""
 "%s Patron attribute %s is non-repeatable for patron with borrowernumber %s. "
 "%s Patron attribute %s is non-repeatable for patron %s. %s "
 msgstr ""
+"%s ویژگی عضو %s برای کاربر با شماره امانت گیرنده نامعتبر است %s. %s ویژگی "
+"عضو %s برای عضو نامعتبر است %s. %s "
 
 #. %1$s:  IF e.borrowernumber 
 #. %2$s:  e.attribute.code | html 
@@ -6348,6 +6378,8 @@ msgid ""
 "%s Patron attribute %s must be unique for patron with borrowernumber %s. %s "
 "Patron attribute %s must be unique for patron %s. %s "
 msgstr ""
+"%s ویژگی عضو %s باید شماره امانت گیرنده برای کاربر منحضر به فرد باشد %s. %s "
+"ویژگی عضو %s برای کاربر باید منحصر به فرد باشد %s. %s "
 
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  INCLUDE 'patron-title.inc' no_html = 1 
@@ -7331,16 +7363,17 @@ msgstr "التعليقات"
 #. %14$s:  missing_critical.surname | html 
 #. %15$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s could not be parsed! %s has &quot;%s&quot; in unrecognized format: &quot;"
 "%s&quot; %s Critical field &quot;%s&quot; %s has unrecognized value &quot;"
 "%s&quot; %s has unrecognized value &quot;%s&quot; %s missing %s "
 "(borrowernumber: %s; surname: %s). %s "
 msgstr ""
-"%s لا يمكن تحليله! %s لديه &quot;%s&quot; بشكل غير منظم: &quot;%s&quot; %s "
-"حقل هام &quot;%s&quot; %sفيه قيمة غير منتظمة &quot;%s&quot; %sفيه قيمة غير "
-"منتظمة &quot;%s&quot; %sمفقود %s (رقم المستعير: %s; كنيته: %s). %s "
+"%s قابل تجزیه نیست! %s has &quot;%s&quot; در فرمت ناشناخته: &quot;%s&quot; %"
+"s حوزه انتقادی &quot;%s&quot; %s دارای ارزش ناشناخته &quot;%s&quot; %s دارای "
+"ارزش ناشناخته &quot;%s&quot; %s ناموجود %s (کاربری: %s; نام خانوادگی: %s). %"
+"s "
 
 #. %1$s:  lis.level FILTER ucfirst | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step3.tt:175
@@ -8897,6 +8930,10 @@ msgid ""
 "\"Total RRP\"%s\"Total cost\"%s\"Entry date\"%s\"Date received\"%s\"Internal "
 "note\"%s\"Vendor note\"%s "
 msgstr ""
+"%sسرمایه%s\"شمارهسبد\"%s\"نام سبد\"%s\"مجوز توسط\"%s\"شماره کتابشناسی "
+"\"%sعنوان%sجاری%s\"قیمت فروشنده\"%sRRP%s\"نرخ بودجه\"%sکیفیت%s\"قیمت کلی \"%s"
+"\"بهای کلی\"%s\"تاریخ ورود\"%s\" تاریخ دریافت\"%s\"یادداشت داخلی\"%s\"یاداشت "
+"ورود\"%s "
 
 #. %1$s:  IF ( flagloo.key == 'gonenoaddress' ) 
 #. %2$s:  END 
@@ -11950,9 +11987,9 @@ msgid "Add by barcode(s) or itemnumbers(s): "
 msgstr "اضافة بواسطة الباركود (ق):"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "Add by borrowernumber(s): "
-msgstr "رقم المستعير."
+msgstr "افزودن بوسیله شماره امانت(ها): "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:43
 #, c-format
@@ -12039,14 +12076,14 @@ msgstr "ضمانات:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
-#, fuzzy, c-format
+#, c-format
 msgid "Add internal note"
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی را اضافه کنید"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:169
-#, fuzzy, c-format
+#, c-format
 msgid "Add internal note "
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی را اضافه کنید "
 
 #. INPUT type=submit name=add_submit
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:252
@@ -12343,13 +12380,13 @@ msgid ""
 msgstr "Koha &rsaquo; أدوات &rsaquo; منشئ بطاقات المستفيدين  &rsaquo; قوالب"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:131
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add patrons by borrowernumber using the text area above or leave empty to "
 "add via patron search."
 msgstr ""
-"إضافة عناصر من الباركود باستخدام مساحة النص أعلاه، أو اتركه فارعا لإضافة بند "
-"عن طريق البحث."
+"اضافه کردن اعضا بر اساس شماره امانت از طریق قسمت متن در بالا یا خالی گذاشتن "
+"برای اضافه کردن با جستجوی اعضا"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/routing.tt:103
 #, c-format
@@ -16987,22 +17024,22 @@ msgid "Borrower number"
 msgstr "رقم المستعير"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:4
-#, fuzzy, c-format
+#, c-format
 msgid "Borrowernumber"
-msgstr "رقم المستعير"
+msgstr "شماره عضویت"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:485
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
 #, c-format
 msgid "Borrowernumber: "
-msgstr "رقم المستعير."
+msgstr "شماره عضویت: "
 
 #. %1$s:  patron.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:114
-#, fuzzy, c-format
+#, c-format
 msgid "Borrowernumber: %s"
-msgstr "رقم المستعير."
+msgstr "شماره عضویت: %s"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -17916,9 +17953,9 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  error.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "Can not update patron. %s Cardnumber: %s %s (Borrowernumber: %s) "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "عضو نمی تواند به روز کند. %s شماره کارت: %s %s (شماره عضویت: %s) s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:585
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
@@ -18788,11 +18825,11 @@ msgstr "رقم البطاقة"
 #. %3$s:  e.borrowernumber | html 
 #. %4$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:137
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cardnumber %s is not a valid cardnumber %s (for patron with borrowernumber "
 "%s)%s "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "شماره کارت %s یک شماره کارت نامعتبر %s (برای عضو با شماره عضویت %s)%s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:146
 #, c-format
@@ -19285,9 +19322,9 @@ msgstr "تغيير الإطار:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
-#, fuzzy, c-format
+#, c-format
 msgid "Change internal note"
-msgstr "تغيير الملاحظة"
+msgstr "یادداشت داخلی را تغییر دهید"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:275
 #, fuzzy, c-format
@@ -19310,15 +19347,15 @@ msgstr "أدر الطلبات"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "Change order %svendor%sinternal%s note "
-msgstr "&rsaquo; ملاحظات تغيير الطلب"
+msgstr "تغییر سفارش %sفروشنده%sداخلی%s یادداشت "
 
 #. %1$s:  ordernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Change order internal note (order no. %s)"
-msgstr "ملاحظات تغيير الطلب (رقم الطلب. %s)"
+msgstr "تغییر یادداشت داخلی سفارش (شماره سفارش. %s)"
 
 #. %1$s:  ordernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:42
@@ -24697,9 +24734,9 @@ msgstr "حذف جميع المواد المقدمة"
 
 #. %1$s:  csv_profile.profile | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:272
-#, fuzzy, c-format
+#, c-format
 msgid "Delete CSV Profile \"%s?\""
-msgstr "ملفات CSV"
+msgstr "مشخصات CSV را حذف کنید \"%s؟\""
 
 #. %1$s:  ean.ean | html 
 #. %2$s:  ean.branch.branchname | html 
@@ -26937,14 +26974,14 @@ msgstr "تعديل في المضيف"
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:529
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:163
-#, fuzzy, c-format
+#, c-format
 msgid "Edit internal note"
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی را ویرایش کنید"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:164
-#, fuzzy, c-format
+#, c-format
 msgid "Edit internal note "
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی را ویرایش کنید "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:709
 #, fuzzy, c-format
@@ -27077,14 +27114,13 @@ msgstr "تعديل التسجيلة"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:524
-#, fuzzy
 msgid "Edit request"
-msgstr "فهرست ویرایش"
+msgstr "ویرایش تقاضا"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit request "
-msgstr "فهرست ویرایش"
+msgstr "ویرایش تقاضا "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:7
 #: koha-tmpl/intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:11
@@ -28740,6 +28776,8 @@ msgid ""
 "Failed to reject term (%s). %sNo match for user (%s). FILTER REQUIRES "
 "BORROWERNUMBER (not name). %s"
 msgstr ""
+"حذف جمله ناموفق بود (%s). %sبرای کاربر مطابقت ندارد (%s). فیلتر به تعداد "
+"امانت گیرندگان نیاز دارد (نام نیست). %s"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:74
 #, fuzzy, c-format
@@ -33642,15 +33680,15 @@ msgstr "أمين المكتبة"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:414
 #: koha-tmpl/intranet-tmpl/prog/en/columns.def:92
-#, fuzzy, c-format
+#, c-format
 msgid "Internal note"
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:71
 #, c-format
 msgid "Internal note:"
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:387
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:529
@@ -33660,9 +33698,9 @@ msgstr "ملاحظة داخلية"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:399
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
-#, fuzzy, c-format
+#, c-format
 msgid "Internal note: "
-msgstr "ملاحظة داخلية"
+msgstr "یادداشت داخلی: "
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
@@ -33712,7 +33750,7 @@ msgstr "الإنترانت"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:221
 #, c-format
 msgid "Invalid authority type"
-msgstr "نوع إستنادي باطل"
+msgstr "نوع مستند نامعتبر است"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:69
@@ -33755,9 +33793,9 @@ msgid "Invalid month entered in field %s"
 msgstr "أُدخل شهر غير صالح في الحقل"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:521
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of copies"
-msgstr "رقم الفاتورة"
+msgstr "تعداد نسخه ها نامعتبر است"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
@@ -33767,9 +33805,8 @@ msgstr "تعديل التسجيلة"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
-#, fuzzy
 msgid "Invalid tag number"
-msgstr "رقم الفاتورة"
+msgstr "شماره برچسب نامعتبر است"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/auth.tt:33
@@ -41196,9 +41233,9 @@ msgstr "دفعة جديدة"
 #. %1$s:  message_loo.approved_by | html 
 #. %2$s:  ELSIF ( message_loo.op_zero ) 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid "No match for borrowernumber (%s). %s"
-msgstr "رقم المستعير."
+msgstr "هیچ هم خوانی ​​برای شماره امانت گیرنده وجود ندارد (%s). %s"
 
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/preferences.tt:259
@@ -43088,9 +43125,9 @@ msgid ""
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:66
-#, fuzzy, c-format
+#, c-format
 msgid "One borrowernumber per line."
-msgstr "باركود واحد لكل سطر."
+msgstr "در هر خط یک شماره امانت."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:117
 #, fuzzy, c-format
@@ -44167,15 +44204,15 @@ msgstr ""
 
 #. %1$s:  e.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:153
-#, fuzzy, c-format
+#, c-format
 msgid "Password contains whitespace for patron with borrowernumber %s. "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "رمز عبور شامل فضای خالی برای عضو با شماره امانت گیرنده است %s. "
 
 #. %1$s:  e.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:168
-#, fuzzy, c-format
+#, c-format
 msgid "Password error for patron with borrowernumber %s. "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "خطای رمزعبور کاربر با شماره امانت گیرنده %s. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
 #, c-format
@@ -44196,6 +44233,7 @@ msgid ""
 "Password is too short for patron with borrowernumber %s. Minimum length is "
 "%s, length is %s "
 msgstr ""
+"رمزعبور برای کاربر امانت گیرنده بسیار کوتاه است %s. حداقل طول %s, طول است %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1159
 #, fuzzy, c-format
@@ -44204,9 +44242,9 @@ msgstr "كلمة المرور قصيرة جداً"
 
 #. %1$s:  e.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Password is too weak for patron with borrowernumber %s. "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "رمزعبور برای کاربر با شماره امانت گیرنده بسیار ضعیف است %s. "
 
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
@@ -44245,9 +44283,9 @@ msgstr ""
 
 #. %1$s:  e.borrowernumber | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:163
-#, fuzzy, c-format
+#, c-format
 msgid "Password plugin error for patron with borrowernumber %s. "
-msgstr "لا يمكن تحديث المستفيد برقم المستعير %s"
+msgstr "خطای افزونه رمز عبور برای کاربر با شماره امانت گیرنده %s. "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:227
 #, fuzzy, c-format
@@ -54520,9 +54558,9 @@ msgid "Staff "
 msgstr "موظف"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/members-toolbar.inc:103
-#, fuzzy, c-format
+#, c-format
 msgid "Staff - Internal note"
-msgstr "ملاحظة داخلية"
+msgstr "کارمند- یاد اشت داخلی"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/permissions.inc:10
 #, c-format
@@ -57526,9 +57564,9 @@ msgid "The original fund will be used"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
-#, fuzzy, c-format
+#, c-format
 msgid "The original internal note will be used"
-msgstr "البحث من خلال اسم فئة المستفيد:"
+msgstr "از یادداشت اصلی داخلی استفاده شده است"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:240
 #, c-format
@@ -57741,20 +57779,17 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The root koha user in your KOHA_CONF file (default: kohaadmin) is not a "
 "valid tag moderator. These actions are logged by borrowernumber, so the "
 "moderator must exist in your borrowers table. Please log in as a different "
 "authorized staff user to moderate tags. %sUnrecognized error! %s "
 msgstr ""
-"ليست قيمة قانونية (\"%s\"). %sخطأ: فشل بالموافقة على المصطلح (%s).%sخطأ: فشل "
-"في رفض المصطلح (%s).%sخطأ: المستخدم غير متطابق(%s). عامل التصفية يتطلب رقم "
-"المستعير (ليس الاسم). %sخطأ: رقم المستعير غير متطابق(%s). %sخطأ: المستخدم "
-"الجذر لكوها في ملف KOHA_CONF  (الإفتراضي : kohaadmin) ليس مخولاً للإشراف على "
-"الوسوم . يتم تسجيل هذه الأعمال من خلال رقم المستعير، لذلك المشرف يجب أن يكون "
-"موجوداً في جدول المستعيرين في نظامك. رجاءاً سجل دخولك باسم مستخدم موظف آخر "
-"معتمد ليدير الوسوم.%s خطأ غير معروف! %s "
+"کاربر اصلی koha در فایل KOHA_CONF شما (پیش فرض: مدیر کوها) تنظیم کننده برچسب "
+"معتبری نیست. این اقدامات با شماره امانت گیرنده ثبت می شوند, بنابراین مدیر "
+"باید در جدول امانت گیرندگان شما نظارت وجود داشته باشد. لطفاً برای مدیریت "
+"برچسب ها با نام کاربری یک کارمند مجاز دیگر وارد شوید. %sخطای ناشناخته! %s "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:63
 #, c-format
@@ -64955,9 +64990,8 @@ msgstr "بارکد"
 
 #. INPUT type=text name=data_preview
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:405
-#, fuzzy
 msgid "barcode|borrowernumber"
-msgstr "تعداد امانت ها"
+msgstr "بارکد|تعداد امانت ها"
 
 #. A
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/lateorders.tt:134
@@ -65036,9 +65070,8 @@ msgstr "تم تخطيط biblionumber و biblioitemnumber  بشكل صحيح"
 
 #. INPUT type=text name=data_preview
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:407
-#, fuzzy
 msgid "biblionumber|borrowernumber"
-msgstr "الببليوجرافية والرقم الببليوجرافي"
+msgstr "شماره کتابشناسی|شماره عضویت"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:259
 #, fuzzy, c-format
@@ -65930,7 +65963,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:213
 #, c-format
 msgid "invalid authority types"
-msgstr "نوع استناد غير صحيح"
+msgstr "انواع مستندات نامعتبر"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:40
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:89
