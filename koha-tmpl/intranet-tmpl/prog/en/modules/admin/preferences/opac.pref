@@ -530,6 +530,13 @@ OPAC:
             - "identifiers for authors and contributors to the detail pages in the OPAC."
             - "This feature requires authorities with 024$2 and 024$a."
             - "Valid source codes in $2 are currently: orcid, scopus, loop, rid and viaf."
+        -
+            - "Calculate the amount a patron has 'saved' by using the library based on replacement prices, and display:"
+            - pref: OPACShowSavings
+              multiple:
+                  checkouthistory: "on patron's checkout history page (the system preference <em>opacreadinghistory</em> must be enabled)"
+                  summary: "in user summary box on OPAC homepage (the system preference <em>OPACUserSummary</em> must be enabled)"
+                  user: "on patron's 'your summary' page"
     OpenURL:
         -
             - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
