@@ -1699,7 +1699,7 @@ Note that permanent location is a code, and location may be an authval.
                             "orderable": true,
                             "render": function(data, type, row, meta) {
                                 if ( row.lost_status == bundle_lost_value ) {
-                                    let out = '<span class="lost">' + _("Last seen") + ': ' + row.last_seen_date + '</span>';
+                                    let out = '<span class="lost">' + _("Last seen") + ': ' + $date(row.last_seen_date) + '</span>';
                                     if ( row.return_claim ) {
                                         out = out + '<span class="claims_return">' + _("Claims returned by") + ': ' + $patron_to_html( row.return_claim.patron, { display_cardnumber: false, url: true } ) + '</span>';
                                     }
