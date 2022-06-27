@@ -30,9 +30,11 @@ $(document).on('click', '#claims-returned-resolved-modal-btn-submit', function(e
         success: function(data) {
             $('#claims-returned-resolved-modal-btn-submit-spinner').hide();
             $('#claims-returned-resolved-modal-btn-submit-icon').show();
-            $('#claims-returned-resolved-modal').modal('hide')
+            $('#claims-returned-resolved-modal').modal('hide');
 
-            refreshReturnClaimsTable();
+            if ( $.fn.dataTable.isDataTable("#return-claims-table") ) {
+                $("#return-claims-table").DataTable().ajax.reload();
+            }
         },
         contentType: "json"
     });
