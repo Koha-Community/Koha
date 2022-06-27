@@ -52,6 +52,30 @@
     </ol>
 </nav>
 
+
+[% BLOCK waiting_holds %]
+    [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
+    [% FOREACH h IN waiting_holds %]
+       <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
+    [% END %]
+[% END %]
+
+[% BLOCK patron_info %]
+    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
+    [% IF cp.notes %]
+        <br/>
+        <span>Notes: </span>[% cp.notes | html %]
+    [% END %]
+    [% IF cp.patron.debarred %]
+        <br/>
+        <span>Patron's account is restricted</span>
+    [% END %]
+    [% IF cp.patron.has_overdues %]
+        <br />
+        <span>Patron has items overdue</span>
+    [% END %]
+[% END %]
+
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-12">
@@ -167,17 +191,10 @@
                                                 <tr class="[% class | html %]">
                                                     <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
-                                                        [% IF cp.notes %]
-                                                            <br/>
-                                                            Notes: [% cp.notes | html %]
-                                                        [% END %]
+                                                        [% PROCESS patron_info %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
-                                                        [% FOREACH h IN waiting_holds %]
-                                                           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
-                                                        [% END %]
+                                                        [% PROCESS waiting_holds %]
                                                     </td>
                                                     <td>
                                                         <form method="post" class="form">
@@ -237,17 +254,10 @@
                                                 <tr class="[% class | html %]">
                                                     <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
-                                                        [% IF cp.notes %]
-                                                            <br/>
-                                                            Notes: [% cp.notes | html %]
-                                                        [% END %]
+                                                        [% PROCESS patron_info %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
-                                                        [% FOREACH h IN waiting_holds %]
-                                                           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
-                                                        [% END %]
+                                                        [% PROCESS waiting_holds %]
                                                     </td>
                                                     <td>
                                                         [% cp.staged_by_staff.firstname | html %] [% cp.staged_by_staff.surname | html %]
@@ -319,17 +329,10 @@
                                                 <tr class="[% class | html %]">
                                                     <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
-                                                        [% IF cp.notes %]
-                                                            <br/>
-                                                            Notes: [% cp.notes | html %]
-                                                        [% END %]
+                                                        [% PROCESS patron_info %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
-                                                        [% FOREACH h IN waiting_holds %]
-                                                           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
-                                                        [% END %]
+                                                        [% PROCESS waiting_holds %]
                                                     </td>
                                                     <td>
                                                         [% cp.staged_by_staff.firstname | html %] [% cp.staged_by_staff.surname | html %]
@@ -399,11 +402,7 @@
                                                 <tr class="[% class | html %]">
                                                     <td>[% cp.delivered_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
-                                                        [% IF cp.notes %]
-                                                            <br/>
-                                                            Notes: [% cp.notes | html %]
-                                                        [% END %]
+                                                        [% PROCESS patron_info %]
                                                     </td>
                                                     <td>
                                                     [% FOREACH c IN cp.checkouts %]
