@@ -302,9 +302,9 @@ use C4::Biblio qw( GetMarcFromKohaField );
         foreach my $invalid_patron (@invalid_patrons) {
             my $category = $invalid_patron->category;
             new_item(
-                sprintf "Patron borrowernumber=%s has an invalid age of %s for their category '%s' (%s-%s)",
+                sprintf "Patron borrowernumber=%s has an invalid age of %s for their category '%s' (%s to %s)",
                 $invalid_patron->borrowernumber, $invalid_patron->get_age, $category->categorycode,
-                $category->dateofbirthrequired,  $category->upperagelimit
+                $category->dateofbirthrequired // '0',  $category->upperagelimit // 'unlimited'
             );
         }
         new_hint("You may change the patron's category automatically with misc/cronjobs/update_patrons_category.pl");
