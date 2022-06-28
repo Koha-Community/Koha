@@ -165,6 +165,11 @@ if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture')
     }
 }
 
+my $saving_display = C4::Context->preference('OPACShowSavings');
+if ( $saving_display =~ /user/ ) {
+    $template->param( savings => $patron->get_savings );
+}
+
 # pass on any renew errors to the template for displaying
 my $renew_error = $query->param('renew_error');
 

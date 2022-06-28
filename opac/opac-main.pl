@@ -94,7 +94,12 @@ if ( $patron ) {
             });
     my $patron_note = $patron->opacnote;
     my $total = $patron->account->balance;
-    if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 || $patron_note || $patron_messages->count ) {
+    my $saving_display = C4::Context->preference('OPACShowSavings');
+    my $savings = 0;
+    if ( $saving_display =~ /summary/ ) {
+        $savings = $patron->get_savings;
+    }
+    if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 || $patron_note || $patron_messages->count || $savings > 0 ) {
         $template->param(
             dashboard_info => 1,
             checkouts           => $checkouts,
@@ -104,6 +109,7 @@ if ( $patron ) {
             total_owing         => $total,
             patron_messages     => $patron_messages,
             opacnote            => $patron_note,
+            savings             => $savings,
         );
     }
 }

@@ -4,6 +4,7 @@
 [% USE TablesSettings %]
 [% USE AdditionalContents %]
 [% USE Asset %]
+[% USE Price %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -53,6 +54,12 @@
                         You have never borrowed anything from this library.
                     [% ELSE %]
                         <div id="opac-user-readingrec">
+
+                        [% IF savings %]
+                            <div class="alert alert-info">
+                                Congratulations, you have saved a total of [% savings | $Price with_symbol => 1 %] by using the [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog.
+                            </div>
+                        [% END %]
 
                             <div class="resultscontrol resort js-hide">
                                 <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">

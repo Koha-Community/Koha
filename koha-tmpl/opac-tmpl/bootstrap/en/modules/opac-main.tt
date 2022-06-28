@@ -300,6 +300,14 @@
                                             </li>
                                         [% END %]
                                     [% END %]
+                                    [% IF savings %]
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-user.pl">
+                                                <span class="count_label">[% savings | $Price with_symbol => 1 %]</span>
+                                                total savings
+                                            </a>
+                                        </li>
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]

@@ -141,6 +141,12 @@ for(qw(AmazonCoverImages GoogleJackets)) { # BakerTaylorEnabled handled above
 	$template->param(JacketImages=>1);
 }
 
+my $saving_display = C4::Context->preference('OPACShowSavings');
+if ( $saving_display =~ /checkouthistory/ ) {
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    $template->param( savings => $patron->get_savings );
+}
+
 $template->param(
     READING_RECORD => $issues,
     limit          => $limit,

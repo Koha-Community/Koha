@@ -2428,6 +2428,40 @@ sub virtualshelves {
     return Koha::Virtualshelves->_new_from_dbic( scalar $self->_result->virtualshelves );
 }
 
+=head3 get_savings
+
+    my $savings = $patron->get_savings;
+
+Use the replacement price of patron's old and current issues to calculate how much they have 'saved' by using the library.
+
+=cut
+
+sub get_savings {
+    my ( $self ) = @_;
+
+    my $savings = 0;
+
+    # get old issues
+    my $old_issues_rs = $self->_result->old_issues;
+    my @old_itemnumbers = $old_issues_rs->get_column('itemnumber')->all;
+
+    foreach my $itemnumber ( @old_itemnumbers ) {
+        my $item = Koha::Items->find( $itemnumber );
+        $savings += $item->replacementprice;
+    }
+
+    # get current issues
+    my $issues_rs = $self->_result->issues;
+    my @itemnumbers = $issues_rs->get_column('itemnumber')->all;
+
+    foreach my $itemnumber ( @itemnumbers ) {
+        my $item = Koha::Items->find( $itemnumber );
+        $savings += $item->replacementprice;
+    }
+
+    return $savings;
+}
+
 =head2 Internal methods
 
 =head3 _type
