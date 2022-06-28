@@ -184,7 +184,7 @@ sub _to_address {
             || $borrower->{emailpro}
             || $borrower->{B_email};
     } elsif ($transport eq 'sms') {
-        $address = $borrower->{smsalertnumber}
+        $address = $borrower->{smsalertnumber};
     } else {
         warn "'$transport' is an unknown message transport.";
     }
