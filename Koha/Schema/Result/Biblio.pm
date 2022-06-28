@@ -300,6 +300,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 erm_eholdings_titles
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmEholdingsTitle>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_eholdings_titles",
+  "Koha::Schema::Result::ErmEholdingsTitle",
+  { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 hold_fill_targets
 
 Type: has_many
@@ -556,8 +571,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-08 19:06:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QmW8BVyUx2F2MAp6ZG45mg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-13 12:25:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:C1RZYgDcw6WrZ5laTaKV6w
 
 __PACKAGE__->has_many(
   "biblioitem",

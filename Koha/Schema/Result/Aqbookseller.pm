@@ -186,6 +186,14 @@ vendor fax number
 
 vendor delivery time
 
+=head2 external_id
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+external id of the vendor
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -233,6 +241,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "deliverytime",
   { data_type => "integer", is_nullable => 1 },
+  "external_id",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -339,6 +349,66 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 erm_agreements
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmAgreement>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_agreements",
+  "Koha::Schema::Result::ErmAgreement",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 erm_eholdings_packages
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmEholdingsPackage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_eholdings_packages",
+  "Koha::Schema::Result::ErmEholdingsPackage",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 erm_eholdings_resources
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmEholdingsResource>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_eholdings_resources",
+  "Koha::Schema::Result::ErmEholdingsResource",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 erm_licenses
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmLicense>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_licenses",
+  "Koha::Schema::Result::ErmLicense",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 invoiceprice
 
 Type: belongs_to
@@ -395,8 +465,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 19:19:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EsIKCiL9L92WHNrL78MVaA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-19 09:20:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xxg454HATZToWE01NY8eJw
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },
