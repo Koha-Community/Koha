@@ -317,12 +317,12 @@
         });
 
         const job_statuses = [
-            {'_id': 'new',       '_str': _('New')},
-            {'_id': 'cancelled', '_str': _('Cancelled')},
-            {'_id': 'finished',  '_str': _('Finished')},
-            {'_id': 'started',   '_str': _('Started')},
-            {'_id': 'running',   '_str': _('Running')},
-            {'_id': 'failed',    '_str': _('Failed')},
+            {'_id': 'new',       '_str': _("New")},
+            {'_id': 'cancelled', '_str': _("Cancelled")},
+            {'_id': 'finished',  '_str': _("Finished")},
+            {'_id': 'started',   '_str': _("Started")},
+            {'_id': 'running',   '_str': _("Running")},
+            {'_id': 'failed',    '_str': _("Failed")},
         ];
         function get_job_status (status) {
             let status_lib = job_statuses.find( s => s._id == status );
@@ -335,39 +335,39 @@
         const job_types = [
             {
                 '_id': 'batch_biblio_record_modification',
-                '_str': _('Batch bibliographic record modification')
+                '_str': _("Batch bibliographic record modification")
             },
             {
                 '_id': 'batch_biblio_record_deletion',
-                '_str': _('Batch bibliographic record record deletion')
+                '_str': _("Batch bibliographic record record deletion")
             },
             {
                 '_id': 'batch_authority_record_modification',
-                '_str': _('Batch authority record modification')
+                '_str': _("Batch authority record modification")
             },
             {
                 '_id': 'batch_authority_record_deletion',
-                '_str': _('Batch authority record deletion')
+                '_str': _("Batch authority record deletion")
             },
             {
                 '_id': 'batch_item_record_modification',
-                '_str': _('Batch item record modification')
+                '_str': _("Batch item record modification")
             },
             {
                 '_id': 'batch_item_record_deletion',
-                '_str': _('Batch item record deletion')
+                '_str': _("Batch item record deletion")
             },
             {
                 '_id': 'batch_hold_cancel',
-                '_str': _('Batch hold cancellation')
+                '_str': _("Batch hold cancellation")
             },
             {
                 '_id': 'update_elastic_index'
-                , '_str': _('Update Elasticsearch index')
+                , '_str': _("Update Elasticsearch index")
             },
             {
                 '_id': 'update_holds_queue_for_biblios',
-                '_str': _('Holds queue update')
+                '_str': _("Holds queue update")
             }
         ];
 
@@ -387,7 +387,6 @@
                         now.setHours(now.getHours() - 1);
                         return { ">": now.toISOString() };
                     } else {
-                    console.log("not checked");
                         return { "<": now.toISOString() };
                     }
                 },
