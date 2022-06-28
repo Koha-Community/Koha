@@ -30,7 +30,7 @@ BEGIN {
 # cancel all expired hold requests
 
 use Koha::Script -cron;
-use C4::Reserves;
+use C4::Reserves qw(AutoUnsuspendReserves);
 use C4::Log qw( cronlogaction );
 
 cronlogaction();
