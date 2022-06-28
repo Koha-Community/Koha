@@ -17,8 +17,8 @@ sub new {
 
 sub config {
     return {
-        custid  => C4::Context->preference('ERMProviderEbscoCustomerID'),
-        api_key => C4::Context->preference('ERMProviderEbscoApiKey'),
+        custid  => C4::Context->preference('ERMProviderEbscoCustomerID') || C4::Context->config('ERMProviderEbscoCustomerID'),
+        api_key => C4::Context->preference('ERMProviderEbscoApiKey') || C4::Context->config('ERMProviderEbscoApiKey'),
     };
 }
 
