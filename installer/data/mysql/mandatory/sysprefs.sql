@@ -606,6 +606,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RestrictionBlockRenewing','0',NULL,'If patron is restricted, should renewal be allowed or blocked','YesNo'),
 ('OPACResultsMaxItems','1','','Maximum number of available items displayed in search results','Integer'),
 ('OPACResultsMaxItemsUnavailable','0','','Maximum number of unavailable items displayed in search results','Integer'),
+('RetainCatalogSearchTerms', '1', NULL, 'If enabled, searches entered into the catalog search bar will be retained', 'YesNo'),
+('RetainPatronsSearchTerms', '1', NULL, 'If enabled, searches entered into the checkout and patrons search bar will be retained', 'YesNo'),
 ('ReturnBeforeExpiry','0',NULL,'If ON, checkout will be prevented if returndate is after patron card expiry','YesNo'),
 ('ReturnLog','1',NULL,'If ON, enables the circulation (returns) log','YesNo'),
 ('ReturnpathDefault','',NULL,'Use this email address as return path or bounce address for undeliverable emails','Free'),

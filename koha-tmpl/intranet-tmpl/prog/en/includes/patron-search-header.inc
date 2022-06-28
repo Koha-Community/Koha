@@ -11,7 +11,11 @@
     <form action="/cgi-bin/koha/members/member.pl" method="post">
         <label class="tip" for="searchmember">Enter patron card number or partial name:</label>
     <div class="autocomplete">
+        [% IF ( Koha.Preference('RetainPatronsSearchTerms') ) %]
         <input id="searchmember" data-toggle="tooltip" size="25" class="head-searchbox" name="searchmember" type="text" value="[% searchmember | html %]" autocomplete="off" />
+        [% ELSE %]
+        <input id="searchmember" data-toggle="tooltip" size="25" class="head-searchbox" name="searchmember" type="text" autocomplete="off" />
+        [% END %]
         <input type="hidden" name="quicksearch" value="1" />
         <span class="filteraction" id="filteraction_off"> <a href="#">[-]</a></span>
         <span class="filteraction" id="filteraction_on"> <a href="#">[+]</a></span>
