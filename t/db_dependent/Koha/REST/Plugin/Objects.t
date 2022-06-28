@@ -422,6 +422,16 @@ subtest 'objects.search helper with query parameter' => sub {
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
     my $t = Test::Mojo->new;
+
+    # Set valid koha.user in stash for to_api
+    my $superlibrarian =
+      $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    $t->app->hook(before_dispatch => sub {
+       my $c = shift;
+       $c->stash('koha.user' => $superlibrarian);
+    });
+    t::lib::Mocks::mock_userenv({ patron => $superlibrarian });
+
     $t->get_ok('/biblios' => json => {"suggestions.suggester.patron_id" => $patron1->borrowernumber })
       ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
 
@@ -905,6 +915,10 @@ subtest 'objects.find_rs helper' => sub {
     plan tests => 9;
 
     $schema->storage->txn_begin;
+
+    my $superlibrarian =
+      $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    t::lib::Mocks::mock_userenv({ patron => $superlibrarian });
 
     # Remove existing cities to have more control on the search results
     Koha::Cities->delete;

@@ -322,7 +322,13 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } )->to_api;
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**4 }    # borrowers flag = 4
+        }
+    );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } )->to_api({ user => $librarian });
 
     unauthorized_access_tests('POST', undef, $patron);
 
@@ -344,8 +350,15 @@ subtest 'add() tests' => sub {
         # Mock early, so existing mandatory attributes don't break all the tests
         my $mocked_patron = Test::MockModule->new('Koha::Patron');
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-        my $newpatron = $patron->to_api;
+        my $librarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 2**4 }    # borrowers flag = 4
+            }
+        );
+
+        my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $newpatron = $patron->to_api({ user => $librarian });
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
@@ -357,12 +370,6 @@ subtest 'add() tests' => sub {
         # Delete library
         $library_to_delete->delete;
 
-        my $librarian = $builder->build_object(
-            {
-                class => 'Koha::Patrons',
-                value => { flags => 2**4 }    # borrowers flag = 4
-            }
-        );
         my $password = 'thePassword123';
         $librarian->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $librarian->userid;
@@ -396,7 +403,7 @@ subtest 'add() tests' => sub {
         delete $newpatron->{falseproperty};
 
         my $patron_to_delete = $builder->build_object({ class => 'Koha::Patrons' });
-        $newpatron = $patron_to_delete->to_api;
+        $newpatron = $patron_to_delete->to_api({ user => $librarian });
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
@@ -646,7 +653,7 @@ subtest 'update() tests' => sub {
 
         my $patron_1  = $authorized_patron;
         my $patron_2  = $unauthorized_patron;
-        my $newpatron = $unauthorized_patron->to_api;
+        my $newpatron = $unauthorized_patron->to_api({ user => $authorized_patron });
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
@@ -723,9 +730,9 @@ subtest 'update() tests' => sub {
           ->status_is(200, 'Patron updated successfully');
 
         # Put back the RO attributes
-        $newpatron->{patron_id} = $unauthorized_patron->to_api->{patron_id};
-        $newpatron->{restricted} = $unauthorized_patron->to_api->{restricted};
-        $newpatron->{anonymized} = $unauthorized_patron->to_api->{anonymized};
+        $newpatron->{patron_id} = $unauthorized_patron->to_api({ user => $authorized_patron })->{patron_id};
+        $newpatron->{restricted} = $unauthorized_patron->to_api({ user => $authorized_patron })->{restricted};
+        $newpatron->{anonymized} = $unauthorized_patron->to_api({ user => $authorized_patron })->{anonymized};
 
         my $got = $result->tx->res->json;
         my $updated_on_got = delete $got->{updated_on};

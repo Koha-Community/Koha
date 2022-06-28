@@ -41,6 +41,7 @@ use Koha::CurbsidePickups;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Encryption;
+use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::Old::Checkouts;
@@ -2288,11 +2289,9 @@ Returns 0 if the I<user> parameter is missing.
 sub is_accessible {
     my ( $self, $params ) = @_;
 
-    # FIXME? It felt tempting to return 0 instead
-    # but it would mean needing to explicitly add the 'user'
-    # param in all tests...
-    return 1
-      unless $params->{user};
+    unless ( defined( $params->{user} ) ) {
+        Koha::Exceptions::MissingParameter->throw( error => "The `user` parameter is mandatory" );
+    }
 
     my $consumer = $params->{user};
     return $consumer->can_see_patron_infos($self);

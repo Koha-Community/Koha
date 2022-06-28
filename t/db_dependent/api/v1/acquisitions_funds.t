@@ -113,11 +113,27 @@ subtest 'list_owners() and list_users() tests' => sub {
         }
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/funds/owners?q=$api_filter")
-      ->status_is(200)->json_is( [ $patron_with_permission->to_api, $superlibrarian->to_api ] );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/acquisitions/funds/owners?q=$api_filter")
+      ->status_is(200)->json_is(
+        [
+            $patron_with_permission->to_api(
+                { user => $patron_with_permission }
+            ),
+            $superlibrarian->to_api( { user => $superlibrarian } )
+        ]
+      );
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/funds/users?q=$api_filter")
-      ->status_is(200)->json_is( [ $patron_with_permission->to_api, $superlibrarian->to_api ] );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/acquisitions/funds/users?q=$api_filter")
+      ->status_is(200)->json_is(
+        [
+            $patron_with_permission->to_api(
+                { user => $patron_with_permission }
+            ),
+            $superlibrarian->to_api( { user => $superlibrarian } )
+        ]
+      );
 
     $schema->storage->txn_rollback;
 };

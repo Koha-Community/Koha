@@ -682,22 +682,26 @@ subtest 'to_api() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => {
-                debarred => undef
-            }
+            value => { debarred => undef }
         }
     );
 
-    my $restricted = $patron->to_api->{restricted};
+    my $consumer = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+        }
+    );
+
+    my $restricted = $patron->to_api( { user => $consumer } )->{restricted};
     ok( defined $restricted, 'restricted is defined' );
-    ok( !$restricted, 'debarred is undef, restricted evaluates to false' );
+    ok( !$restricted,        'debarred is undef, restricted evaluates to false' );
 
     $patron->debarred( dt_from_string->add( days => 1 ) )->store->discard_changes;
-    $restricted = $patron->to_api->{restricted};
+    $restricted = $patron->to_api( { user => $consumer } )->{restricted};
     ok( defined $restricted, 'restricted is defined' );
-    ok( $restricted, 'debarred is defined, restricted evaluates to true' );
+    ok( $restricted,         'debarred is defined, restricted evaluates to true' );
 
-    my $patron_json = $patron->to_api({ embed => { algo => {} } });
+    my $patron_json = $patron->to_api( { embed => { algo => {} }, user => $consumer } );
     ok( exists $patron_json->{algo} );
     is( $patron_json->{algo}, 'algo' );
 

@@ -57,8 +57,16 @@ subtest 'list_managers() tests' => sub {
         }
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets/managers?q=$api_filter")
-      ->status_is(200)->json_is( [ $patron_with_permission->to_api, $superlibrarian->to_api ] );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/acquisitions/baskets/managers?q=$api_filter"
+    )->status_is(200)->json_is(
+        [
+            $patron_with_permission->to_api(
+                { user => $patron_with_permission }
+            ),
+            $superlibrarian->to_api( { user => $superlibrarian } )
+        ]
+    );
 
     $schema->storage->txn_rollback;
 };

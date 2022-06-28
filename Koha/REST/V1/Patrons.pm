@@ -103,7 +103,8 @@ Controller function that handles adding a new Koha::Patron object
 =cut
 
 sub add {
-    my $c = shift->openapi->valid_input or return;
+    my $c            = shift->openapi->valid_input or return;
+    my $current_user = $c->stash('koha.user');
 
     return try {
 
@@ -168,7 +169,7 @@ sub add {
                 $c->res->headers->location($c->req->url->to_string . '/' . $patron->borrowernumber);
                 return $c->render(
                     status  => 201,
-                    openapi => $patron->to_api
+                    openapi => $patron->to_api( { user => $current_user } )
                 );
             }
         );
@@ -260,7 +261,8 @@ Controller function that handles updating a Koha::Patron object
 =cut
 
 sub update {
-    my $c = shift->openapi->valid_input or return;
+    my $c            = shift->openapi->valid_input or return;
+    my $current_user = $c->stash('koha.user');
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
@@ -307,7 +309,10 @@ sub update {
 
         $patron->set_from_api($body)->store;
         $patron->discard_changes;
-        return $c->render( status => 200, openapi => $patron->to_api );
+        return $c->render(
+            status  => 200,
+            openapi => $patron->to_api( { user => $current_user } )
+        );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
