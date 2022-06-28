@@ -219,6 +219,11 @@ a.add, a.delete {
                                     [% ELSE %]
                                         <option value="stdno">Std. Number</option>
                                     [% END %]
+                                    [% IF search_field.type == "callnumber" %]
+                                        <option value="callnumber" selected="selected">Call Number</option>
+                                    [% ELSE %]
+                                        <option value="callnumber">Call Number</option>
+                                    [% END %]
                                     </select>
                             </td>
                                 <td data-order="[% search_field.weight | html %]">
