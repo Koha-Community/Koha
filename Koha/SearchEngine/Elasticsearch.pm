@@ -209,6 +209,8 @@ sub get_elasticsearch_mappings {
                     $es_type = 'stdno';
                 } elsif ($type eq 'year') {
                     $es_type = 'year';
+                } elsif ($type eq 'callnumber') {
+                    $es_type = 'cn_sort';
                 }
 
                 if ($search) {
