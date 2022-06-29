@@ -86,21 +86,25 @@ if ($add) {
         my $item = Koha::Items->find( { barcode => $barcode } );
         $item_id = $item->itemnumber if $item;
     }
-    my $description = $input->param('desc');
-    my $note        = $input->param('note');
-    my $amount      = $input->param('amount') || 0;
-    my $type        = $input->param('type');
+    my $description  = $input->param('desc');
+    my $note         = $input->param('note');
+    my $amount       = $input->param('amount') || 0;
+    my $type         = $input->param('type');
+    my $payment_type = $input->param('payment_type');
+    my $cash_register_id = $input->param('cash_register');
 
     my $line = $patron->account->add_credit(
         {
-            amount      => $amount,
-            description => $description,
-            item_id     => $item_id,
-            library_id  => $library_id,
-            note        => $note,
-            type        => $type,
-            user_id     => $logged_in_user->id,
-            interface   => C4::Context->interface
+            amount        => $amount,
+            description   => $description,
+            item_id       => $item_id,
+            library_id    => $library_id,
+            note          => $note,
+            type          => $type,
+            user_id       => $logged_in_user->id,
+            interface     => C4::Context->interface,
+            payment_type  => $payment_type,
+            cash_register => $cash_register_id
         }
     );
 
