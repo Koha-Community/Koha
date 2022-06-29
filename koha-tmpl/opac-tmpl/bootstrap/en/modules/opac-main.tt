@@ -189,13 +189,15 @@
                                             <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-light" id="openid_connect"><i class="fa fa-google" aria-hidden="true"></i> Log in with Google</a>
                                             <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
                                         [% END # /IF GoogleOpenIDConnect %]
-                                        <label for="userid">Login:</label>
-                                        <input class="form-control" type="text" id="userid" name="userid" autocomplete="off" />
-                                        <label for="password">Password:</label>
-                                        <input class="form-control" type="password" id="password" name="password" autocomplete="off" />
-                                        <fieldset class="action">
-                                            <input type="submit" value="Log in" class="btn btn-primary" />
-                                        </fieldset>
+                                        <div class="local-login">
+                                            <label for="userid">Login:</label>
+                                            <input class="form-control" type="text" id="userid" name="userid" autocomplete="off" />
+                                            <label for="password">Password:</label>
+                                            <input class="form-control" type="password" id="password" name="password" autocomplete="off" />
+                                            <fieldset class="action">
+                                                <input type="submit" value="Log in" class="btn btn-primary" />
+                                            </fieldset>
+                                        </div>
                                         [% IF ( OpacLoginInstructions ) %]
                                             <div id="nologininstructions-main" class="nologininstructions">
                                                 [% PROCESS koha_news_block news => OpacLoginInstructions %]
