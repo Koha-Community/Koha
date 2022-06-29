@@ -896,19 +896,6 @@ sub _get_object_class {
     return ${type};
 }
 
-sub _get_objects_class {
-    my ( $self ) = @_;
-    return unless $self;
-
-    if ( $self->_result->can('koha_objects_class') ) {
-        return $self->_result->koha_objects_class;
-    }
-    my $type = ref($self);
-
-    $type =~ s|Schema::Result::||;
-    return $type . "s";
-}
-
 =head3 AUTOLOAD
 
 The autoload method is used only to get and set values for an objects properties.
