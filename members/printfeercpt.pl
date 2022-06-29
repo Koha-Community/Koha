@@ -57,7 +57,7 @@ output_and_exit_if_error(
 
 my $letter = C4::Letters::GetPreparedLetter(
     module                 => 'circulation',
-    letter_code            => $credit->credit_type_code,
+    letter_code            => 'CREDIT_' . $credit->credit_type_code,
     branchcode             => C4::Context::mybranch,
     message_transport_type => 'print',
     lang                   => $patron->lang,
