@@ -187,7 +187,7 @@
                     [% END %]
 
                     [% IF add_regex %]
-                        [% IF (mv.type == 'text' || mv.type == 'text2' || mv.type == 'textarea' ) %]
+                        [% IF (mv.type == 'text' || mv.type == 'text_plugin' || mv.type == 'textarea' ) %]
                             <a href="#" name="[% kohafield | html %]_field_regex" class="field_regex" id="[% subfield.id | html %]" >RegEx</a>
                         [% END %]
                     [% END %]
