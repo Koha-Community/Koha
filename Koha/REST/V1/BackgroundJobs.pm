@@ -35,24 +35,13 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $patron = $c->stash('koha.user');
-
-        my $can_manage_background_jobs =
-          $patron->has_permission( { parameters => 'manage_background_jobs' } );
-
-        my $background_jobs_set =
-          $can_manage_background_jobs
-          ? Koha::BackgroundJobs->new
-          : Koha::BackgroundJobs->search(
-            { borrowernumber => $patron->borrowernumber } );
-
-        my $background_jobs = $c->objects->search( $background_jobs_set );
+        my $background_jobs_set = Koha::BackgroundJobs->new;
+        my $background_jobs     = $c->objects->search($background_jobs_set);
         return $c->render( status => 200, openapi => $background_jobs );
     }
     catch {
         $c->unhandled_exception($_);
     };
-
 }
 
 sub get {
@@ -89,6 +78,5 @@ sub get {
         $c->unhandled_exception($_);
     };
 }
-
 
 1;

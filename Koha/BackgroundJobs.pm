@@ -29,6 +29,34 @@ Koha::BackgroundJobs - Koha BackgroundJob Object set class
 
 =cut
 
+=head2 search_limited
+
+  my $background_jobs = Koha::BackgroundJobs->search_limited( $params, $attributes );
+
+Returns all background jobs the logged in user should be allowed to see
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    # Assume permission if context has no user
+    my $can_manage_background_jobs = 1;
+
+    my $logged_in_user;
+    my $userenv = C4::Context->userenv;
+    if ( $userenv and $userenv->{number} ) {
+        $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        $can_manage_background_jobs = $logged_in_user->has_permission(
+            { parameters => 'manage_background_jobs' } );
+    }
+
+    return $can_manage_background_jobs
+      ? $self->search( $params, $attributes )
+      : $self->search( { borrowernumber => $logged_in_user->borrowernumber } )
+      ->search( $params, $attributes );
+}
+
 =head3 _type
 
 =cut
