@@ -2,11 +2,13 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Registers %]
 [% SET footerjs = 1 %]
 
 [% PROCESS 'accounts.inc' %]
 
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET registers = Registers.all( { filters => { current_branch => 1 } } ) %]
 <title>Create manual credit &rsaquo; Patrons &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -67,6 +69,31 @@
                             <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
                             <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value=""/> Example: 5.00</li>
+                            [% INCLUDE 'transaction_types.inc' %]
+                            [% IF Koha.Preference('UseCashRegisters') %]
+                            <li>
+                                [% IF Koha.Preference('RequireCashRegister') %]
+                                    <label for="cash_register" class="required">
+                                [% ELSE %]
+                                    <label for="cash_register">
+                                [% END %]
+                                    Cash register:
+                                </label>
+
+                                [% IF Koha.Preference('RequireCashRegister') %]
+                                    <select name="cash_register" id="cash_register" required>
+                                [% ELSE %]
+                                    <select name="cash_register" id="cash_register">
+                                [% END %]
+                                    <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                    [% PROCESS options_for_registers %]
+                                </select>
+
+                                [% IF Koha.Preference('RequireCashRegister') %]
+                                    <span class="required">Required</span>
+                                [% END %]
+                            </li>
+                            [% END %]
                         </ol>
                     </fieldset>
 
