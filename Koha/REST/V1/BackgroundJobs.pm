@@ -55,4 +55,40 @@ sub list {
 
 }
 
+sub get {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+
+        my $background_job_id = $c->validation->param('background_job_id');
+        my $patron            = $c->stash('koha.user');
+
+        my $can_manage_background_jobs =
+          $patron->has_permission( { parameters => 'manage_background_jobs' } );
+
+        my $background_job = Koha::BackgroundJobs->find($background_job_id);
+
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Object not found" }
+        ) unless $background_job;
+
+        return $c->render(
+            status  => 403,
+            openapi => { error => "Cannot see background job info" }
+          )
+          if !$can_manage_background_jobs
+          && $background_job->borrowernumber != $patron->borrowernumber;
+
+        return $c->render(
+            status  => 200,
+            openapi => $background_job->to_api
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+
 1;
