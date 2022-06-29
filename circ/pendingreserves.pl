@@ -219,6 +219,7 @@ my $holds_biblios_map = {
             {
                 join    => ['itembib', 'biblio'],
                 select  => ['me.biblionumber', 'me.reserve_id'],
+                order_by => { -desc => 'priority' }
             }
         )->unblessed
     }
