@@ -99,7 +99,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/packages"
+                        to="/cgi-bin/koha/erm/eholdings/local/packages"
                         role="button"
                         class="cancel"
                         >{{ $t("Cancel") }}</router-link
@@ -111,11 +111,11 @@
 </template>
 
 <script>
-import EHoldingsPackageAgreements from "./EHoldingsPackageAgreements.vue"
+import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
-import { fetchPackage } from '../../fetch'
+import { fetchLocalPackage } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -158,7 +158,7 @@ export default {
     },
     methods: {
         async getPackage(package_id) {
-            const erm_package = await fetchPackage(package_id)
+            const erm_package = await fetchLocalPackage(package_id)
             this.erm_package = erm_package
             this.initialized = true
         },
@@ -166,7 +166,7 @@ export default {
             e.preventDefault()
 
             let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
-            let apiUrl = '/api/v1/erm/eholdings/packages'
+            let apiUrl = '/api/v1/erm/eholdings/local/packages'
 
             let method = 'POST'
             if (erm_package.package_id) {
@@ -191,10 +191,10 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
                         setMessage(this.$t("Package updated"))
                     } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
                         setMessage(this.$t("Package created"))
                     } else {
                         setError(response.message || response.statusText)
@@ -207,6 +207,6 @@ export default {
     components: {
         EHoldingsPackageAgreements,
     },
-    name: "EHoldingsPackagesFormAdd",
+    name: "EHoldingsEBSCOPackagesFormAdd",
 }
 </script>

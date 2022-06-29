@@ -3,15 +3,15 @@
     <div v-else-if="erm_package" id="packages_show">
         <h2>
             {{ $t("Package .id", { id: erm_package.package_id }) }}
-            <span v-if="erm_provider == 'manual'" class="action_links">
+            <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/packages/edit/${erm_package.package_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/local/packages/edit/${erm_package.package_id}`"
                     :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/packages/delete/${erm_package.package_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/local/packages/delete/${erm_package.package_id}`"
                     :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
@@ -28,13 +28,12 @@
                     </li>
                     <li v-if="erm_package.vendor">
                         <label>{{ $t("Vendor") }}:</label>
-                        <span v-if="erm_provider == 'manual'">
+                        <span>
                             <a
                                 :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`"
                                 >{{ erm_package.vendor.name }}</a
                             >
                         </span>
-                        <span v-else>{{ erm_package.vendor.name }}</span>
                     </li>
                     <li v-if="erm_package.external_id">
                         <label>{{ $t("External ID") }}:</label>
@@ -86,7 +85,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings/packages"
+                    to="/cgi-bin/koha/erm/eholdings/local/packages"
                     role="button"
                     class="cancel"
                     >{{ $t("Close") }}</router-link
@@ -97,9 +96,9 @@
 </template>
 
 <script>
-import EHoldingsPackageTitlesList from "./EHoldingsPackageTitlesList.vue"
+import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
 import { useAVStore } from "../../stores/authorised_values"
-import { fetchPackage } from "../../fetch"
+import { fetchLocalPackage } from "../../fetch"
 
 export default {
     setup() {
@@ -113,7 +112,6 @@ export default {
             get_lib_from_av,
         }
     },
-    inject: ['erm_provider'],
     data() {
         return {
             erm_package: {
@@ -139,7 +137,7 @@ export default {
     },
     methods: {
         async getPackage(package_id) {
-            const erm_package = await fetchPackage(package_id)
+            const erm_package = await fetchLocalPackage(package_id)
             this.erm_package = erm_package
             this.initialized = true
         },
@@ -147,7 +145,7 @@ export default {
     components: {
         EHoldingsPackageTitlesList,
     },
-    name: "EHoldingsPackagesShow",
+    name: "EHoldingsLocalPackagesShow",
 }
 </script>
 <style scoped>

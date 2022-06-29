@@ -313,7 +313,7 @@ return {
 
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
-            VALUES ('ERMProvider', 'manual', 'manual|ebsco', 'Set the provider for the ERM module', 'Choice');
+            VALUES ('ERMProviders', 'local', 'local|ebsco', 'Set the providers for the ERM module', 'multiple');
         });
         $dbh->do(q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)

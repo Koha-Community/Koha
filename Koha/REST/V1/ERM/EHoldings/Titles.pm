@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 
-use Koha::REST::V1::ERM::EHoldings::Titles::Manual;
+use Koha::REST::V1::ERM::EHoldings::Titles::Local;
 use Koha::REST::V1::ERM::EHoldings::Titles::EBSCO;
 
 =head1 API
@@ -34,11 +34,13 @@ use Koha::REST::V1::ERM::EHoldings::Titles::EBSCO;
 =cut
 
 sub list {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
-        return Koha::REST::V1::ERM::EHoldings::Titles::EBSCO::list(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::EBSCO::list($c);
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Titles::Manual::list(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::Local::list($c);
     }
 }
 
@@ -49,11 +51,13 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Packa
 =cut
 
 sub get {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
-        return Koha::REST::V1::ERM::EHoldings::Titles::EBSCO::get(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::EBSCO::get($c);
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Titles::Manual::get(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::Local::get($c);
     }
 }
 
@@ -64,11 +68,13 @@ Controller function that handles adding a new Koha::ERM::EHoldings::Title object
 =cut
 
 sub add{
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Titles::Manual::add(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::Local::add($c);
     }
 }
 
@@ -80,11 +86,13 @@ Controller function that handles updating a Koha::ERM::EHoldings::Title object
 =cut
 
 sub update {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Titles::Manual::update(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::Local::update($c);
     }
 }
 
@@ -93,12 +101,14 @@ sub update {
 =cut
 
 sub delete {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Titles::Manual::delete(@_);
+        return Koha::REST::V1::ERM::EHoldings::Titles::Local::delete($c);
     }
-};
+}
 
 1;

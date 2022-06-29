@@ -79,6 +79,6 @@ export default {
     props: {
         package_agreements: Array,
     },
-    name: 'EHoldingsPackageAgreements',
+    name: 'EHoldingsEBSCOPackageAgreements',
 }
 </script>

@@ -99,7 +99,7 @@
 import flatPickr from 'vue-flatpickr-component'
 import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
-import { fetchPackages } from "../../fetch"
+import { fetchLocalPackages } from "../../fetch"
 
 export default {
     setup() {
@@ -115,7 +115,7 @@ export default {
         }
     },
     beforeCreate() {
-        fetchPackages().then((packages) => this.packages = packages)
+        fetchLocalPackages().then((packages) => this.packages = packages)
         if (!this.dates_fixed) {
             this.resources.forEach(r => {
                 r.started_on = $date(r.started_on)
@@ -142,6 +142,6 @@ export default {
         resources: Array,
     },
     components: { flatPickr },
-    name: 'EHoldingsResources',
+    name: 'EHoldingsLocalTitlesFormAddResources',
 }
 </script>

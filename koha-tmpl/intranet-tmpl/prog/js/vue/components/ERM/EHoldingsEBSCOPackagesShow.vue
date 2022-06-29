@@ -1,0 +1,137 @@
+<template>
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-else-if="erm_package" id="packages_show">
+        <h2>
+            {{ $t("Package .id", { id: erm_package.package_id }) }}
+        </h2>
+        <div>
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label>{{ $t("Package name") }}:</label>
+                        <span>
+                            {{ erm_package.name }}
+                        </span>
+                    </li>
+                    <li v-if="erm_package.vendor">
+                        <label>{{ $t("Vendor") }}:</label>
+                        <span>{{ erm_package.vendor.name }}</span>
+                    </li>
+                    <li v-if="erm_package.external_id">
+                        <label>{{ $t("External ID") }}:</label>
+                        <span>
+                            <!-- FIXME Create a syspref to store the URL -->
+                            <a
+                                :href="`https://replace_with_syspref_value_here.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
+                            >
+                                {{ erm_package.external_id }}
+                            </a>
+                        </span>
+                    </li>
+                    <li>
+                        <label>{{ $t("Package type") }}:</label>
+                        <span>{{
+                            get_lib_from_av(
+                                "av_package_types",
+                                erm_package.package_type
+                            )
+                        }}</span>
+                    </li>
+                    <li>
+                        <label>{{ $t("Content type") }}:</label>
+                        <span>{{
+                            get_lib_from_av(
+                                "av_package_content_types",
+                                erm_package.content_type
+                            )
+                        }}</span>
+                    </li>
+                    <li v-if="erm_package.created_on">
+                        <label>{{ $t("Created on") }}:</label>
+                        <span>{{ format_date(erm_package.created_on) }}</span>
+                    </li>
+
+                    <li>
+                        <label
+                            >Titles ({{ erm_package.resources_count }})</label
+                        >
+                        <div v-if="erm_package.resources_count">
+                            <EHoldingsPackageTitlesList
+                                :package_id="erm_package.package_id.toString()"
+                            />
+                        </div>
+                    </li>
+
+                    <li></li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                <router-link
+                    to="/cgi-bin/koha/erm/eholdings/ebsco/packages"
+                    role="button"
+                    class="cancel"
+                    >{{ $t("Close") }}</router-link
+                >
+            </fieldset>
+        </div>
+    </div>
+</template>
+
+<script>
+import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
+import { useAVStore } from "../../stores/authorised_values"
+import { fetchEBSCOPackage } from "../../fetch"
+
+export default {
+    setup() {
+        const format_date = $date
+
+        const AVStore = useAVStore()
+        const { get_lib_from_av } = AVStore
+
+        return {
+            format_date,
+            get_lib_from_av,
+        }
+    },
+    data() {
+        return {
+            erm_package: {
+                package_id: null,
+                vendor_id: null,
+                name: '',
+                external_id: '',
+                package_type: '',
+                content_type: '',
+                created_on: null,
+                resources: null,
+            },
+            initialized: false,
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getPackage(to.params.package_id)
+        })
+    },
+    beforeRouteUpdate(to, from) {
+        this.erm_package = this.getPackage(to.params.package_id)
+    },
+    methods: {
+        async getPackage(package_id) {
+            const erm_package = await fetchEBSCOPackage(package_id)
+            this.erm_package = erm_package
+            this.initialized = true
+        },
+    },
+    components: {
+        EHoldingsPackageTitlesList,
+    },
+    name: "EHoldingsEBSCOPackagesShow",
+}
+</script>
+<style scoped>
+fieldset.rows label {
+    width: 25rem;
+}
+</style>

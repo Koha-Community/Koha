@@ -3,15 +3,15 @@
     <div v-else-if="title" id="eholdings_title_show">
         <h2>
             {{ $t("Title .id", { id: title.title_id }) }}
-            <span v-if="erm_provider == 'manual'" class="action_links">
+            <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/titles/edit/${title.title_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/local/titles/edit/${title.title_id}`"
                     :title="$t('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
 
                 <router-link
-                    :to="`/cgi-bin/koha/erm/eholdings/titles/delete/${title.title_id}`"
+                    :to="`/cgi-bin/koha/erm/eholdings/local/titles/delete/${title.title_id}`"
                     :title="$t('Delete')"
                     ><i class="fa fa-trash"></i
                 ></router-link>
@@ -228,7 +228,7 @@
                         </span>
                     </li>
                     <li v-if="title.access_type">
-                        <label>{{ $t("Acces type") }}:</label>
+                        <label>{{ $t("Access type") }}:</label>
                         <span>
                             {{ title.access_type }}
                         </span>
@@ -245,7 +245,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/erm/eholdings/titles"
+                    to="/cgi-bin/koha/erm/eholdings/local/titles"
                     role="button"
                     class="cancel"
                     >{{ $t("Close") }}</router-link
@@ -256,8 +256,8 @@
 </template>
 
 <script>
-import EHoldingsTitlePackagesList from "./EHoldingsTitlePackagesList.vue"
-import { fetchTitle } from "../../fetch"
+import EHoldingsTitlePackagesList from "./EHoldingsLocalTitlePackagesList.vue"
+import { fetchLocalTitle } from "../../fetch"
 import { useAVStore } from "../../stores/authorised_values"
 export default {
     setup() {
@@ -302,7 +302,6 @@ export default {
             initialized: false,
         }
     },
-    inject: ['erm_provider'],
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.getTitle(to.params.title_id)
@@ -313,7 +312,7 @@ export default {
     },
     methods: {
         async getTitle(title_id) {
-            const title = await fetchTitle(title_id)
+            const title = await fetchLocalTitle(title_id)
             this.title = title
             this.initialized = true
         },
@@ -321,7 +320,7 @@ export default {
     components: {
         EHoldingsTitlePackagesList,
     },
-    name: "EHoldingsTitlesShow",
+    name: "EHoldingsLocalTitlesShow",
 }
 </script>
 <style scoped>

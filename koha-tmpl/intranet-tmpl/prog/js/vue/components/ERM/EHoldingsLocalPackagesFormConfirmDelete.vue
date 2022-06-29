@@ -19,7 +19,7 @@
                         :value="$t('Yes, delete')"
                     />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/packages"
+                        to="/cgi-bin/koha/erm/eholdings/local/packages"
                         role="button"
                         class="cancel"
                         >{{ $t("No, do not delete") }}</router-link
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { fetchPackage } from "../../fetch"
+import { fetchLocalPackage } from "../../fetch"
 import { setMessage, setError } from "../../messages"
 
 export default {
@@ -48,14 +48,14 @@ export default {
     },
     methods: {
         async getPackage(package_id) {
-            const erm_package = await fetchPackage(package_id)
+            const erm_package = await fetchLocalPackage(package_id)
             this.erm_package = erm_package
             this.initialized = true
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/eholdings/packages/' + this.erm_package.package_id
+            let apiUrl = '/api/v1/erm/eholdings/local/packages/' + this.erm_package.package_id
 
             const options = {
                 method: 'DELETE',
@@ -69,7 +69,7 @@ export default {
                     (response) => {
                         if (response.status == 204) {
                             setMessage(this.$t("Package deleted"))
-                            this.$router.push("/cgi-bin/koha/erm/eholdings/packages")
+                            this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
                         } else {
                             setError(response.message || response.statusText)
                         }
@@ -81,6 +81,6 @@ export default {
                 )
         }
     },
-    name: "EHoldingsPackagesFormConfirmDelete",
+    name: "EHoldingsLocalPackagesFormConfirmDelete",
 }
 </script>

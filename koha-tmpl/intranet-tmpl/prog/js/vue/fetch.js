@@ -104,9 +104,8 @@ export const fetchVendors = async function () {
     return vendors;
 };
 
-export const fetchPackage = async function (package_id) {
+const _fetchPackage = async function (apiUrl, package_id) {
     if (!package_id) return;
-    const apiUrl = "/api/v1/erm/eholdings/packages/" + package_id;
     let erm_package;
     await fetch(apiUrl, {
         headers: {
@@ -125,9 +124,16 @@ export const fetchPackage = async function (package_id) {
         );
     return erm_package;
 };
+export const fetchLocalPackage = function (package_id) {
+    const apiUrl = "/api/v1/erm/eholdings/local/packages/" + package_id;
+    return _fetchPackage(apiUrl, package_id);
+};
+export const fetchEBSCOPackage = function (package_id) {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/packages/" + package_id;
+    return _fetchPackage(apiUrl, package_id);
+};
 
-export const fetchPackages = async function () {
-    const apiUrl = "/api/v1/erm/eholdings/packages";
+export const _fetchPackages = async function (apiUrl) {
     let packages;
     await fetch(apiUrl, {
         headers: {
@@ -145,10 +151,17 @@ export const fetchPackages = async function () {
         );
     return packages;
 };
+export const fetchLocalPackages = function () {
+    const apiUrl = "/api/v1/erm/eholdings/local/packages";
+    return _fetchPackages(apiUrl);
+};
+export const fetchEBSCOPackages = function () {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/packages";
+    return _fetchPackages(apiUrl);
+};
 
-export const fetchTitle = async function (title_id) {
+export const _fetchTitle = async function (apiUrl, title_id) {
     if (!title_id) return;
-    const apiUrl = "/api/v1/erm/eholdings/titles/" + title_id;
     let title;
     await fetch(apiUrl, {
         headers: {
@@ -166,9 +179,16 @@ export const fetchTitle = async function (title_id) {
         );
     return title;
 };
+export const fetchLocalTitle = function (title_id) {
+    const apiUrl = "/api/v1/erm/eholdings/local/titles/" + title_id;
+    return _fetchTitle(apiUrl, title_id);
+};
+export const fetchEBSCOTitle = function (title_id) {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/titles/" + title_id;
+    return _fetchTitle(apiUrl, title_id);
+};
 
-export const fetchTitles = async function () {
-    const apiUrl = "/api/v1/erm/eholdings/titles";
+export const _fetchTitles = async function (apiUrl) {
     let titles;
     await fetch(apiUrl)
         .then(checkError)
@@ -182,10 +202,17 @@ export const fetchTitles = async function () {
         );
     return titles;
 };
+export const fetchLocalTitles = function () {
+    const apiUrl = "/api/v1/erm/eholdings/local/titles";
+    return _fetchTitles(apiUrl);
+};
+export const fetchEBSCOTitles = function () {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/titles";
+    return _fetchTitles(apiUrl);
+};
 
-export const fetchResource = async function (resource_id) {
+export const _fetchResource = async function (apiUrl, resource_id) {
     if (!resource_id) return;
-    const apiUrl = "/api/v1/erm/eholdings/resources/" + resource_id;
     let resource;
     await fetch(apiUrl, {
         headers: {
@@ -203,9 +230,16 @@ export const fetchResource = async function (resource_id) {
         );
     return resource;
 };
+export const fetchLocalResource = function (resource_id) {
+    const apiUrl = "/api/v1/erm/eholdings/local/resources/" + resource_id;
+    return _fetchResource(apiUrl, resource_id);
+};
+export const fetchEBSCOResource = function (resource_id) {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/resources/" + resource_id;
+    return _fetchResource(apiUrl, resource_id);
+};
 
-export const fetchResources = async function () {
-    const apiUrl = "/api/v1/erm/eholdings/resources";
+export const _fetchResources = async function (apiUrl) {
     let resources;
     await fetch(apiUrl)
         .then(checkError)
@@ -220,25 +254,13 @@ export const fetchResources = async function () {
     return resources;
 };
 
-export const fetchPackageResources = async function (package_id) {
-    const apiUrl =
-        "/api/v1/erm/eholdings/packages/" + package_id + "/resources";
-    let resources;
-    await fetch(apiUrl, {
-        headers: {
-            "x-koha-embed": "title.publication_title",
-        },
-    })
-        .then(checkError)
-        .then(
-            (result) => {
-                resources = result;
-            },
-            (error) => {
-                setError(error);
-            }
-        );
-    return resources;
+export const fetchLocalResources = function () {
+    const apiUrl = "/api/v1/erm/eholdings/local/resources";
+    return _fetchResources(apiUrl);
+};
+export const fetchEBSCOResources = function () {
+    const apiUrl = "/api/v1/erm/eholdings/ebsco/resources";
+    return _fetchResources(apiUrl);
 };
 
 function checkError(response) {

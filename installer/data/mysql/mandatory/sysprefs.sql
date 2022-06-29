@@ -222,7 +222,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnhancedMessagingPreferences','1','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
 ('ERMModule', '0', NULL, 'Enable the E-Resource management module', 'YesNo'),
-('ERMProvider', 'manual', 'manual|ebsco', 'Set the provider for the ERM module', 'Choice'),
+('ERMProviders', 'local', 'local|ebsco', 'Set the providers for the ERM module', 'Choice'),
 ('ERMProviderEbscoApiKey', '', '', 'API key for EBSCO', 'free'),
 ('ERMProviderEbscoCustomerID', '', '', 'Customer ID for EBSCO', 'free'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),

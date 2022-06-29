@@ -18,7 +18,7 @@
                         <label>{{ $t("Publication title") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/titles/${resource.title_id}`"
+                                :to="`/cgi-bin/koha/erm/eholdings/local/titles/${resource.title_id}`"
                                 >{{
                                     resource.title.publication_title
                                 }}</router-link
@@ -58,7 +58,7 @@
                         <label>{{ $t("Package") }}:</label>
                         <span
                             ><router-link
-                                :to="`/cgi-bin/koha/erm/eholdings/packages/${resource.package_id}`"
+                                :to="`/cgi-bin/koha/erm/eholdings/local/packages/${resource.package_id}`"
                                 >{{ resource.package.name }}</router-link
                             ></span
                         >
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { fetchResource } from "../../fetch"
+import { fetchLocalResource } from "../../fetch"
 import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
 export default {
@@ -135,12 +135,12 @@ export default {
     },
     methods: {
         async getResource(resource_id) {
-            const resource = await fetchResource(resource_id)
+            const resource = await fetchLocalResource(resource_id)
             this.resource = resource
             this.initialized = true
         },
     },
-    name: "EHoldingsResourcesShow",
+    name: "EHoldingsLocalResourcesShow",
 }
 </script>
 <style scoped>

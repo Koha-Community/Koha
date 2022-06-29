@@ -171,22 +171,22 @@ paths:
     $ref: ./paths/erm_agreements.yaml#/~1erm~1agreements
   "/erm/agreements/{agreement_id}":
     $ref: "./paths/erm_agreements.yaml#/~1erm~1agreements~1{agreement_id}"
-  /erm/eholdings/titles:
-    $ref: ./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1titles
-  "/erm/eholdings/titles/{title_id}":
-    $ref: "./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1titles~1{title_id}"
-  "/erm/eholdings/titles/{title_id}/resources":
-    $ref: "./paths/erm_eholdings_titles_resources.yaml#/~1erm~1eholdings~1titles~1{title_id}~1resources"
-  /erm/eholdings/packages:
-    $ref: ./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages
-  /erm/eholdings/resources:
-    $ref: ./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1resources
-  "/erm/eholdings/resources/{resource_id}":
-    $ref: "./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1resources~1{resource_id}"
-  "/erm/eholdings/packages/{package_id}":
-    $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1packages~1{package_id}"
-  "/erm/eholdings/packages/{package_id}/resources":
-    $ref: "./paths/erm_eholdings_packages_resources.yaml#/~1erm~1eholdings~1packages~1{package_id}~1resources"
+  "/erm/eholdings/{provider}/titles":
+    $ref: ./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1{provider}~1titles
+  "/erm/eholdings/{provider}/titles/{title_id}":
+    $ref: "./paths/erm_eholdings_titles.yaml#/~1erm~1eholdings~1{provider}~1titles~1{title_id}"
+  "/erm/eholdings/{provider}/titles/{title_id}/resources":
+    $ref: "./paths/erm_eholdings_titles_resources.yaml#/~1erm~1eholdings~1{provider}~1titles~1{title_id}~1resources"
+  "/erm/eholdings/{provider}/packages":
+    $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1{provider}~1packages"
+  "/erm/eholdings/{provider}/resources":
+    $ref: "./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1{provider}~1resources"
+  "/erm/eholdings/{provider}/resources/{resource_id}":
+    $ref: "./paths/erm_eholdings_resources.yaml#/~1erm~1eholdings~1{provider}~1resources~1{resource_id}"
+  "/erm/eholdings/{provider}/packages/{package_id}":
+    $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1{provider}~1packages~1{package_id}"
+  "/erm/eholdings/{provider}/packages/{package_id}/resources":
+    $ref: "./paths/erm_eholdings_packages_resources.yaml#/~1erm~1eholdings~1{provider}~1packages~1{package_id}~1resources"
   /erm/licenses:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":

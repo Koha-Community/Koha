@@ -19,7 +19,7 @@
                         :value="$t('Yes, delete')"
                     />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/titles"
+                        to="/cgi-bin/koha/erm/eholdings/local/titles"
                         role="button"
                         class="cancel"
                         >{{ $t("No, do not delete") }}</router-link
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { fetchTitle } from "../../fetch"
+import { fetchLocalTitle } from "../../fetch"
 import { setMessage, setError } from "../../messages"
 
 export default {
@@ -48,14 +48,14 @@ export default {
     },
     methods: {
         async getEHolding(title_id) {
-            const eholding = await fetchTitle(title_id)
+            const eholding = await fetchLocalTitle(title_id)
             this.eholding = eholding
             this.initialized = true
         },
         onSubmit(e) {
             e.preventDefault()
 
-            let apiUrl = '/api/v1/erm/eholdings/titles/' + this.eholding.title_id
+            let apiUrl = '/api/v1/erm/eholdings/local/titles/' + this.eholding.title_id
 
             const options = {
                 method: 'DELETE',
@@ -69,7 +69,7 @@ export default {
                     (response) => {
                         if (response.status == 204) {
                             setMessage(this.$t("Title deleted"))
-                            this.$router.push("/cgi-bin/koha/erm/eholdings/titles")
+                            this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
                         } else {
                             setError(response.message || response.statusText)
                         }
@@ -81,6 +81,6 @@ export default {
                 )
         }
     },
-    name: "EHoldingsTitlesFormConfirmDelete",
+    name: "EHoldingsLocalTitlesFormConfirmDelete",
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div id="title_list_result">
-        <div id="filters" v-if="erm_provider != 'manual'">
+        <div id="filters">
             <a href="#" @click.prevent="toggle_filters($event)"
                 ><i class="fa fa-search"></i>
                 {{ display_filters ? $t("Hide filters") : $t("Show filters") }}
@@ -84,10 +84,9 @@ export default {
             display_filters: false,
         }
     },
-    inject: ['erm_provider'],
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/resources/" + resource_id)
+            this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id)
         },
         filter_table: function () {
             $("#title_list").DataTable().draw()
@@ -107,47 +106,44 @@ export default {
                 return e
             })
 
-            let additional_filters = {}
-            if (erm_provider != 'manual') {
-                additional_filters = {
-                    publication_title: function () {
-                        return filters.publication_title || ""
-                    },
-                    publication_type: function () {
-                        return filters.publication_type || ""
-                    },
-                    selection_type: function () {
-                        return filters.selection_type || ""
-                    },
-                }
+            let additional_filters = {
+                publication_title: function () {
+                    return filters.publication_title || ""
+                },
+                publication_type: function () {
+                    return filters.publication_type || ""
+                },
+                selection_type: function () {
+                    return filters.selection_type || ""
+                },
             }
 
             $('#title_list').kohaTable({
-                "ajax": {
-                    "url": "/api/v1/erm/eholdings/packages/" + package_id + "/resources",
+                ajax: {
+                    url: "/api/v1/erm/eholdings/ebsco/packages/" + package_id + "/resources",
                 },
-                ...(erm_provider != 'manual' ? { ordering: false } : {}),
-                ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
-                ...(erm_provider != 'manual' ? { aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
-                "embed": ['title'],
+                ordering: false,
+                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                embed: ['title'],
                 autoWidth: false,
-                "columns": [
+                columns: [
                     {
-                        "title": __("Name"),
-                        "data": "title.publication_title",
-                        "searchable": (erm_provider == 'manual') ? 1 : 0,
-                        "orderable": (erm_provider == 'manul') ? 1 : 0,
-                        "render": function (data, type, row, meta) {
+                        title: __("Name"),
+                        data: "title.publication_title",
+                        searchable: false,
+                        orderable: false,
+                        render: function (data, type, row, meta) {
                             // Rendering done in drawCallback
                             return ""
                         }
                     },
                     {
-                        "title": __("Publication type"),
-                        "data": "title.publication_type",
-                        "searchable": (erm_provider == 'manual') ? 1 : 0,
-                        "orderable": (erm_provider == 'manul') ? 1 : 0,
-                        "render": function (data, type, row, meta) {
+                        title: __("Publication type"),
+                        data: "title.publication_type",
+                        searchable: false,
+                        orderable: false,
+                        render: function (data, type, row, meta) {
                             return escape_str(get_lib_from_av("av_title_publication_types", row.title.publication_type))
                         }
                     },
@@ -161,7 +157,7 @@ export default {
                         if (!row) return // Happen if the table is empty
                         let n = createVNode("a", {
                             role: "button",
-                            href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
+                            href: "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + row.resource_id,
                             onClick: (e) => {
                                 e.preventDefault()
                                 show_resource(row.resource_id)
@@ -175,15 +171,7 @@ export default {
                         render(n, e)
                     })
                 },
-                ...(erm_provider == 'manual' ? {
-                    preDrawCallback: function (settings) {
-                        var table_id = settings.nTable.id
-                        if (erm_provider == 'manual') {
-                            $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_title_publication_types')
-                        }
-                    }
-                } : {}),
-            }, null, erm_provider == 'manual' ? 1 : 0, additional_filters)
+            }, null, 0, additional_filters)
         },
     },
     mounted() {
@@ -197,7 +185,7 @@ export default {
     props: {
         package_id: String,
     },
-    name: 'EHoldingsPackageTitlesList',
+    name: 'EHoldingsEBSCOPackageTitlesList',
 }
 </script>
 

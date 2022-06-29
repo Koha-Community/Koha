@@ -6,15 +6,22 @@ import AgreementsShow from "./components/ERM/AgreementsShow.vue";
 import AgreementsFormAdd from "./components/ERM/AgreementsFormAdd.vue";
 import AgreementsFormConfirmDelete from "./components/ERM/AgreementsFormConfirmDelete.vue";
 import EHoldingsMain from "./components/ERM/EHoldingsMain.vue";
-import EHoldingsPackagesList from "./components/ERM/EHoldingsPackagesList.vue";
-import EHoldingsPackagesShow from "./components/ERM/EHoldingsPackagesShow.vue";
-import EHoldingsPackagesFormAdd from "./components/ERM/EHoldingsPackagesFormAdd.vue";
-import EHoldingsPackagesFormConfirmDelete from "./components/ERM/EHoldingsPackagesFormConfirmDelete.vue";
-import EHoldingsResourcesShow from "./components/ERM/EHoldingsResourcesShow.vue";
-import EHoldingsTitlesList from "./components/ERM/EHoldingsTitlesList.vue";
-import EHoldingsTitlesShow from "./components/ERM/EHoldingsTitlesShow.vue";
-import EHoldingsTitlesFormAdd from "./components/ERM/EHoldingsTitlesFormAdd.vue";
-import EHoldingsTitlesFormConfirmDelete from "./components/ERM/EHoldingsTitlesFormConfirmDelete.vue";
+import EHoldingsLocalHome from "./components/ERM/EHoldingsLocalHome.vue";
+import EHoldingsLocalPackagesFormAdd from "./components/ERM/EHoldingsLocalPackagesFormAdd.vue";
+import EHoldingsLocalTitlesFormConfirmDelete from "./components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue";
+import EHoldingsLocalTitlesFormAdd from "./components/ERM/EHoldingsLocalTitlesFormAdd.vue";
+import EHoldingsLocalPackagesList from "./components/ERM/EHoldingsLocalPackagesList.vue";
+import EHoldingsLocalPackagesShow from "./components/ERM/EHoldingsLocalPackagesShow.vue";
+import EHoldingsLocalPackagesFormConfirmDelete from "./components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue";
+import EHoldingsLocalResourcesShow from "./components/ERM/EHoldingsLocalResourcesShow.vue";
+import EHoldingsLocalTitlesList from "./components/ERM/EHoldingsLocalTitlesList.vue";
+import EHoldingsLocalTitlesShow from "./components/ERM/EHoldingsLocalTitlesShow.vue";
+import EHoldingsEBSCOHome from "./components/ERM/EHoldingsEBSCOHome.vue";
+import EHoldingsEBSCOPackagesList from "./components/ERM/EHoldingsEBSCOPackagesList.vue";
+import EHoldingsEBSCOPackagesShow from "./components/ERM/EHoldingsEBSCOPackagesShow.vue";
+import EHoldingsEBSCOResourcesShow from "./components/ERM/EHoldingsEBSCOResourcesShow.vue";
+import EHoldingsEBSCOTitlesList from "./components/ERM/EHoldingsEBSCOTitlesList.vue";
+import EHoldingsEBSCOTitlesShow from "./components/ERM/EHoldingsEBSCOTitlesShow.vue";
 import LicensesList from "./components/ERM/LicensesList.vue";
 import LicensesShow from "./components/ERM/LicensesShow.vue";
 import LicensesFormAdd from "./components/ERM/LicensesFormAdd.vue";
@@ -38,13 +45,33 @@ const breadcrumbs = {
             text: "eHoldings", // $t("eHoldings")
             path: "/cgi-bin/koha/erm/eholdings",
         },
-        titles: {
-            text: "Titles", // $t("Titles")
-            path: "/cgi-bin/koha/erm/eholdings/titles",
+        local: {
+            home: {
+                text: "Local", // $t("Local")
+                path: "/cgi-bin/koha/erm/eholdings/local",
+            },
+            titles: {
+                text: "Titles", // $t("Titles")
+                path: "/cgi-bin/koha/erm/eholdings/local/titles",
+            },
+            packages: {
+                text: "Packages", // $t("Packages")
+                path: "/cgi-bin/koha/erm/eholdings/local/packages",
+            },
         },
-        packages: {
-            text: "Packages", // $t("Packages")
-            path: "/cgi-bin/koha/erm/eholdings/packages",
+        ebsco: {
+            home: {
+                text: "EBSCO", // $t("EBSCO")
+                path: "/cgi-bin/koha/erm/eholdings/ebsco",
+            },
+            titles: {
+                text: "Titles", // $t("Titles")
+                path: "/cgi-bin/koha/erm/eholdings/ebsco/titles",
+            },
+            packages: {
+                text: "Packages", // $t("Packages")
+                path: "/cgi-bin/koha/erm/eholdings/ebsco/packages",
+            },
         },
     },
     licenses: {
@@ -63,8 +90,21 @@ const breadcrumb_paths = {
         breadcrumbs.erm_home,
         breadcrumbs.eholdings.home,
     ],
+    eholdings_local: [
+        breadcrumbs.home,
+        breadcrumbs.erm_home,
+        breadcrumbs.eholdings.home,
+        breadcrumbs.eholdings.local.home,
+    ],
+    eholdings_ebsco: [
+        breadcrumbs.home,
+        breadcrumbs.erm_home,
+        breadcrumbs.eholdings.home,
+        breadcrumbs.eholdings.ebsco.home,
+    ],
     licenses: [breadcrumbs.home, breadcrumbs.erm_home, breadcrumbs.licenses],
 };
+
 function build_breadcrumb(parent_breadcrumb, current) {
     let breadcrumb = parent_breadcrumb.flat(Infinity);
     if (current) {
@@ -144,6 +184,9 @@ export const routes = [
     {
         path: "/cgi-bin/koha/erm/eholdings",
         component: { render: () => h(RouterView) },
+        meta: {
+            breadcrumb: () => breadcrumb_paths.eholdings,
+        },
         children: [
             {
                 path: "",
@@ -153,164 +196,280 @@ export const routes = [
                 },
             },
             {
-                path: "packages",
+                path: "local",
                 component: { render: () => h(RouterView) },
                 children: [
                     {
                         path: "",
-                        component: EHoldingsPackagesList,
+                        component: EHoldingsLocalHome,
                         meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb([
-                                    breadcrumb_paths.eholdings,
-                                    breadcrumbs.eholdings.packages,
-                                ]),
+                            breadcrumb: () => breadcrumb_paths.eholdings_local,
                         },
                     },
                     {
-                        path: ":package_id",
-                        component: EHoldingsPackagesShow,
+                        path: "packages",
+                        component: { render: () => h(RouterView) },
+                        children: [
+                            {
+                                path: "",
+                                component: EHoldingsLocalPackagesList,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb([
+                                            breadcrumb_paths.eholdings_local,
+                                            breadcrumbs.eholdings.local
+                                                .packages,
+                                        ]),
+                                },
+                            },
+                            {
+                                path: ":package_id",
+                                component: EHoldingsLocalPackagesShow,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .packages,
+                                            ],
+                                            "Show package" // $t("Show package")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "delete/:package_id",
+                                component:
+                                    EHoldingsLocalPackagesFormConfirmDelete,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .packages,
+                                            ],
+                                            "Delete package" // $t("Delete package")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "add",
+                                component: EHoldingsLocalPackagesFormAdd,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .packages,
+                                            ],
+                                            "Add package" // $t("Add package")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "edit/:package_id",
+                                component: EHoldingsLocalPackagesFormAdd,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .packages,
+                                            ],
+                                            "Edit package" // $t("Edit package")
+                                        ),
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        path: "titles",
+                        component: { render: () => h(RouterView) },
+                        children: [
+                            {
+                                path: "",
+                                component: EHoldingsLocalTitlesList,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb([
+                                            breadcrumb_paths.eholdings_local,
+                                            breadcrumbs.eholdings.local.titles,
+                                        ]),
+                                },
+                            },
+                            {
+                                path: ":title_id",
+                                component: EHoldingsLocalTitlesShow,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .titles,
+                                            ],
+                                            "Show title" // $t("Show title")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "delete/:title_id",
+                                component:
+                                    EHoldingsLocalTitlesFormConfirmDelete,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .titles,
+                                            ],
+                                            "Delete title" // $t("Delete title")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "add",
+                                component: EHoldingsLocalTitlesFormAdd,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .titles,
+                                            ],
+                                            "Add title" // $t("Add title")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "edit/:title_id",
+                                component: EHoldingsLocalTitlesFormAdd,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .titles,
+                                            ],
+                                            "Edit title" // $t("Edit title")
+                                        ),
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        path: "resources/:resource_id",
+                        component: EHoldingsLocalResourcesShow,
                         meta: {
                             breadcrumb: () =>
                                 build_breadcrumb(
                                     [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.packages,
+                                        breadcrumb_paths.eholdings_local,
+                                        breadcrumbs.eholdings.local.titles,
                                     ],
-                                    "Show package" // $t("Show package")
-                                ),
-                        },
-                    },
-                    {
-                        path: "delete/:package_id",
-                        component: EHoldingsPackagesFormConfirmDelete,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.packages,
-                                    ],
-                                    "Delete package" // $t("Delete package")
-                                ),
-                        },
-                    },
-                    {
-                        path: "add",
-                        component: EHoldingsPackagesFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.packages,
-                                    ],
-                                    "Add package" // $t("Add package")
-                                ),
-                        },
-                    },
-                    {
-                        path: "edit/:package_id",
-                        component: EHoldingsPackagesFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.packages,
-                                    ],
-                                    "Edit package" // $t("Edit package")
+                                    "Resource" // $t("Resource")
                                 ),
                         },
                     },
                 ],
             },
             {
-                path: "titles",
+                path: "ebsco",
                 component: { render: () => h(RouterView) },
                 children: [
                     {
                         path: "",
-                        component: EHoldingsTitlesList,
+                        component: EHoldingsEBSCOHome,
                         meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb([
-                                    breadcrumb_paths.eholdings,
-                                    breadcrumbs.eholdings.titles,
-                                ]),
+                            breadcrumb: () => breadcrumb_paths.eholdings_ebsco,
                         },
                     },
                     {
-                        path: ":title_id",
-                        component: EHoldingsTitlesShow,
+                        path: "packages",
+                        component: { render: () => h(RouterView) },
+                        children: [
+                            {
+                                path: "",
+                                component: EHoldingsEBSCOPackagesList,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb([
+                                            breadcrumb_paths.eholdings_ebsco,
+                                            breadcrumbs.eholdings.ebsco
+                                                .packages,
+                                        ]),
+                                },
+                            },
+                            {
+                                path: ":package_id",
+                                component: EHoldingsEBSCOPackagesShow,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_ebsco,
+                                                breadcrumbs.eholdings.ebsco
+                                                    .packages,
+                                            ],
+                                            "Show package" // $t("Show package")
+                                        ),
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        path: "titles",
+                        component: { render: () => h(RouterView) },
+                        children: [
+                            {
+                                path: "",
+                                component: EHoldingsEBSCOTitlesList,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb([
+                                            breadcrumb_paths.eholdings_ebsco,
+                                            breadcrumbs.eholdings.ebsco.titles,
+                                        ]),
+                                },
+                            },
+                            {
+                                path: ":title_id",
+                                component: EHoldingsEBSCOTitlesShow,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_ebsco,
+                                                breadcrumbs.eholdings.ebsco
+                                                    .titles,
+                                            ],
+                                            "Show title" // $t("Show title")
+                                        ),
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        path: "resources/:resource_id",
+                        component: EHoldingsEBSCOResourcesShow,
                         meta: {
                             breadcrumb: () =>
                                 build_breadcrumb(
                                     [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.titles,
+                                        breadcrumb_paths.eholdings_ebsco,
+                                        breadcrumbs.eholdings.ebsco.titles,
                                     ],
-                                    "Show title" // $t("Show title")
-                                ),
-                        },
-                    },
-                    {
-                        path: "delete/:title_id",
-                        component: EHoldingsTitlesFormConfirmDelete,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.titles,
-                                    ],
-                                    "Delete title" // $t("Delete title")
-                                ),
-                        },
-                    },
-                    {
-                        path: "add",
-                        component: EHoldingsTitlesFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.titles,
-                                    ],
-                                    "Add title" // $t("Add title")
-                                ),
-                        },
-                    },
-                    {
-                        path: "edit/:title_id",
-                        component: EHoldingsTitlesFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    [
-                                        breadcrumb_paths.eholdings,
-                                        breadcrumbs.eholdings.titles,
-                                    ],
-                                    "Edit title" // $t("Edit title")
+                                    "Resource" // $t("Resource")
                                 ),
                         },
                     },
                 ],
-            },
-            {
-                path: "resources/:resource_id",
-                component: EHoldingsResourcesShow,
-                meta: {
-                    breadcrumb: () =>
-                        build_breadcrumb(
-                            [
-                                breadcrumb_paths.eholdings,
-                                breadcrumbs.eholdings.titles,
-                            ],
-                            "Resource" // $t("Resource")
-                        ),
-                },
             },
         ],
     },

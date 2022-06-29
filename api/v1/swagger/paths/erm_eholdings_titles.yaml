@@ -1,5 +1,5 @@
 ---
-/erm/eholdings/titles:
+/erm/eholdings/{provider}/titles:
   get:
     x-mojo-to: ERM::EHoldings::Titles#list
     operationId: listErmEHoldingsTitles
@@ -9,6 +9,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - description: Case insensitive search on title title_id
         in: query
         name: title_id
@@ -230,7 +235,7 @@
     x-koha-authorization:
       permissions:
         erm: 1
-"/erm/eholdings/titles/{title_id}":
+"/erm/eholdings/{provider}/titles/{title_id}":
   get:
     x-mojo-to: ERM::EHoldings::Titles#get
     operationId: getErmEHoldingsTitles
@@ -240,6 +245,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_title_id_pp"
     responses:
       200:

@@ -1,5 +1,5 @@
 ---
-/erm/eholdings/packages:
+/erm/eholdings/{provider}/packages:
   get:
     x-mojo-to: ERM::EHoldings::Packages#list
     operationId: listErmEHoldingsPackages
@@ -9,6 +9,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - description: Case insensitive search on package package_id
         in: query
         name: package_id
@@ -138,7 +143,7 @@
     x-koha-authorization:
       permissions:
         erm: 1
-"/erm/eholdings/packages/{package_id}":
+"/erm/eholdings/{provider}/packages/{package_id}":
   get:
     x-mojo-to: ERM::EHoldings::Packages#get
     operationId: getErmEHoldingsPackages
@@ -148,6 +153,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - $ref: "../swagger.yaml#/parameters/eholdings_package_id_pp"
     responses:
       200:

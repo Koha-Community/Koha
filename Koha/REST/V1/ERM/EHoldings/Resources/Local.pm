@@ -1,4 +1,4 @@
-package Koha::REST::V1::ERM::EHoldings::Resources::Manual;
+package Koha::REST::V1::ERM::EHoldings::Resources::Local;
 
 # This file is part of Koha.
 #

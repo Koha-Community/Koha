@@ -1,5 +1,5 @@
 ---
-/erm/eholdings/packages/{package_id}/resources:
+/erm/eholdings/{provider}/packages/{package_id}/resources:
   get:
     x-mojo-to: ERM::EHoldings::Resources#list
     operationId: listErmEHoldingsPackagesResources
@@ -9,6 +9,11 @@
     produces:
       - application/json
     parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
       - description: Case insensitive search on resource_id
         in: query
         name: resource_id

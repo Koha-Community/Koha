@@ -13,11 +13,9 @@
                             <label for="title_title_id"
                                 >{{ $t("Title identifier") }}:</label
                             >
-                            <input
-                                id="title_title_id"
-                                v-model="title.title_id"
-                                :placeholder="$t('Title identifier')"
-                            />
+                            <span>
+                                {{ title.title_id }}
+                            </span>
                         </li>
 
                         <li>
@@ -381,7 +379,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/erm/eholdings/titles"
+                        to="/cgi-bin/koha/erm/eholdings/local/titles"
                         role="button"
                         class="cancel"
                         >{{ $t("Cancel") }}</router-link
@@ -395,9 +393,9 @@
 <script>
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import EHoldingsTitlesFormAddResources from "./EHoldingsTitlesFormAddResources.vue"
+import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
 import { setMessage, setError } from "../../messages"
-import { fetchTitle } from '../../fetch'
+import { fetchLocalTitle } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -460,7 +458,7 @@ export default {
     },
     methods: {
         async getTitle(title_id) {
-            const title = await fetchTitle(title_id)
+            const title = await fetchLocalTitle(title_id)
             this.title = title
             this.initialized = true
         },
@@ -468,7 +466,7 @@ export default {
             e.preventDefault()
 
             let title = JSON.parse(JSON.stringify(this.title)) // copy
-            let apiUrl = '/api/v1/erm/eholdings/titles'
+            let apiUrl = '/api/v1/erm/eholdings/local/titles'
 
             let method = 'POST'
             if (title.title_id) {
@@ -497,10 +495,10 @@ export default {
             fetch(apiUrl, options)
                 .then(response => {
                     if (response.status == 200) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/titles")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
                         setMessage(this.$t("Title updated"))
                     } else if (response.status == 201) {
-                        this.$router.push("/cgi-bin/koha/erm/eholdings/titles")
+                        this.$router.push("/cgi-bin/koha/erm/eholdings/local/titles")
                         setMessage(this.$t("Title created"))
                     } else {
                         setError(response.message || response.statusText)
@@ -511,7 +509,7 @@ export default {
         },
     },
     components: { EHoldingsTitlesFormAddResources },
-    name: "EHoldingsTitlesFormAdd",
+    name: "EHoldingsLocalTitlesFormAdd",
 }
 </script>
 <style scoped>

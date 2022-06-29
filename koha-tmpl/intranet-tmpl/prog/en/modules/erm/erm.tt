@@ -49,7 +49,8 @@
         const eholdings_packages_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'packages', 'json' ) | $raw %];
         const eholdings_titles_table_settings = [% TablesSettings.GetTableSettings( 'erm', 'eholdings', 'titles', 'json' ) | $raw %];
 
-        const erm_provider = "[% Koha.Preference('ERMProvider') | html %]";
+        const ERMProviders  = "[% Koha.Preference('ERMProviders') | html %]";
+        const erm_providers = ERMProviders.split(',');
 
     </script>
 

@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::REST::V1::ERM::EHoldings::Resources::Manual;
+use Koha::REST::V1::ERM::EHoldings::Resources::Local;
 use Koha::REST::V1::ERM::EHoldings::Resources::EBSCO;
 
 use Scalar::Util qw( blessed );
@@ -34,11 +34,13 @@ use Try::Tiny qw( catch try );
 =cut
 
 sub list {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
-        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::list(@_);
+        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::list($c);
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Resources::Manual::list(@_);
+        return Koha::REST::V1::ERM::EHoldings::Resources::Local::list($c);
     }
 }
 
@@ -49,11 +51,13 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Resou
 =cut
 
 sub get {
-    my $provider = C4::Context->preference('ERMProvider');
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
     if ( $provider eq 'ebsco' ) {
-        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::get(@_);
+        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::get($c);
     } else {
-        return Koha::REST::V1::ERM::EHoldings::Resources::Manual::get(@_);
+        return Koha::REST::V1::ERM::EHoldings::Resources::Local::get($c);
     }
 }
 

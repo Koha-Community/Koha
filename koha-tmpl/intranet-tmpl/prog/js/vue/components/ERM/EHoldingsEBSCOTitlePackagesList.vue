@@ -1,6 +1,6 @@
 <template>
     <div id="package_list_result">
-        <div id="filters" v-if="erm_provider != 'manual'">
+        <div id="filters">
             <a href="#" @click.prevent="toggle_filters($event)"
                 ><i class="fa fa-search"></i>
                 {{ display_filters ? $t("Hide filters") : $t("Show filters") }}
@@ -58,10 +58,9 @@ export default {
             display_filters: false,
         }
     },
-    inject: ['erm_provider'],
     methods: {
         show_resource: function (resource_id) {
-            this.$router.push("/cgi-bin/koha/erm/eholdings/resources/" + resource_id)
+            this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id)
         },
         toggle_filters: function (e) {
             this.display_filters = !this.display_filters
@@ -74,21 +73,21 @@ export default {
             let resources = this.resources
             let filters = this.filters
 
+            $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter((search) => search.name != 'apply_filter')
             $('#package_list').dataTable($.extend(true, {}, dataTablesDefaults, {
                 data: resources,
-                "embed": ['package.name'],
-                ...(erm_provider == 'manual' ? { order: [[0, "asc"]] } : {}),
-                ...(erm_provider != 'manual' ? { ordering: false } : {}),
-                ...(erm_provider != 'manual' ? { dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>' } : {}),
-                ...(erm_provider != 'manual' ? { aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]] } : {}),
+                embed: ['package.name'],
+                ordering: false,
+                dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
                 autoWidth: false,
-                "columns": [
+                columns: [
                     {
-                        "title": __("Name"),
-                        "data": "package.name",
-                        "searchable": (erm_provider == 'manual'),
-                        "orderable": (erm_provider == 'manul'),
-                        "render": function (data, type, row, meta) {
+                        title: __("Name"),
+                        data: "package.name",
+                        searchable: false,
+                        orderable: false,
+                        render: function (data, type, row, meta) {
                             // Rendering done in drawCallback
                             return ""
                         },
@@ -99,12 +98,14 @@ export default {
 
                     var api = new $.fn.dataTable.Api(settings)
 
+                    if (!api.rows({ search: 'applied' }).count()) return
+
                     $.each($(this).find("tbody tr td:first-child"), function (index, e) {
                         let row = api.row(index).data()
                         if (!row) return // Happen if the table is empty
                         let n = createVNode("a", {
                             role: "button",
-                            href: "/cgi-bin/koha/erm/eholdings/resources/" + row.resource_id,
+                            href: "/cgi-bin/koha/erm/eholdings/ebsco/resources/" + row.resource_id,
                             onClick: (e) => {
                                 e.preventDefault()
                                 show_resource(row.resource_id)
@@ -118,21 +119,18 @@ export default {
                         render(n, e)
                     })
                 },
-                ...(erm_provider != 'manual' ? {
-                    initComplete: function () {
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex, row) {
-                                console.log(filters.selection_type)
-                                return row.package.name.match(new RegExp(filters.package_name, "i"))
-                                    && (filters.selection_type == 0
-                                        || filters.selection_type == 1 && row.is_selected
-                                        || filters.selection_type == 2 && !row.is_selected)
-                            }
-                        )
-                    }
-                } : {}),
+                initComplete: function () {
+                    $.fn.dataTable.ext.search.push(
+                        function apply_filter(settings, data, dataIndex, row) {
+                            return row.package.name.match(new RegExp(filters.package_name, "i"))
+                                && (filters.selection_type == 0
+                                    || filters.selection_type == 1 && row.is_selected
+                                    || filters.selection_type == 2 && !row.is_selected)
+                        }
+                    )
+                }
             }))
-        },
+        }
     },
     mounted() {
         this.build_datatable()
@@ -145,7 +143,7 @@ export default {
     props: {
         resources: Array,
     },
-    name: 'EHoldingsTitlePackagesList',
+    name: 'EHoldingsEBSCOTitlePackagesList',
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/cgi-bin/koha/erm/eholdings/packages/add" class="btn btn-default"
+    <router-link to="/cgi-bin/koha/erm/eholdings/local/packages/add" class="btn btn-default"
         ><font-awesome-icon icon="plus" />
         {{ $t("New package") }}</router-link
     >
@@ -7,6 +7,6 @@
 
 <script>
 export default {
-    name: "EHoldingsPackagesToolbar",
+    name: "EHoldingsLocalPackagesToolbar",
 }
 </script>

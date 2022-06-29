@@ -23,12 +23,13 @@ const languages = { en };
 const messages = Object.assign(languages);
 const i18n = createI18n({ locale: "en", messages });
 
-createApp(App)
+const app = createApp(App)
     .use(createPinia())
     .use(router)
     .use(i18n)
-    .component("font-awesome-icon", FontAwesomeIcon)
-    .mount("#erm");
+    .component("font-awesome-icon", FontAwesomeIcon);
+app.config.unwrapInjectedRef = true
+app.mount("#erm");
 const mainStore = useMainStore();
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
