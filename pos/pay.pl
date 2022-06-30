@@ -23,8 +23,9 @@ use CGI;
 use JSON qw( from_json );
 
 use C4::Auth qw( get_session get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
+use C4::Output  qw( output_html_with_http_headers );
 
 use Koha::Account::DebitTypes;
 use Koha::AuthorisedValues;
@@ -39,16 +40,17 @@ my $session   = get_session($sessionID);
 
 my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
     {
-        template_name   => 'pos/pay.tt',
-        query           => $input,
-        type            => 'intranet',
-        flagsrequired   => { cash_management => 'takepayment' },
+        template_name => 'pos/pay.tt',
+        query         => $input,
+        type          => 'intranet',
+        flagsrequired => { cash_management => 'takepayment' },
     }
 );
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 
-my $library_id         = C4::Context->userenv->{'branch'};
-my $registerid         = $input->param('registerid');
+my $library_id = C4::Context->userenv->{'branch'};
+my $registerid = $input->param('registerid');
+my $action     = $input->param('action') || '';
 
 my $invoice_types =
   Koha::Account::DebitTypes->search_with_library_limits(
@@ -79,6 +81,48 @@ if ( $total_paid and $total_paid ne '0.00' ) {
         payment_id => $payment->accountlines_id,
         collected  => scalar $input->param('collected'),
         change     => scalar $input->param('change')
+    );
+}
+
+if ( $action eq 'send' ) {
+    my $payment_id = $input->param('payment_id');
+    my $change     = $input->param('change');
+    my $collected  = $input->param('collected');
+    my $toaddr     = $input->param('toaddr');
+
+    # Create our letter from the template
+    my $letter = GetPreparedLetter(
+        module                 => 'pos',
+        letter_code            => 'RECEIPT',
+        branchcode             => C4::Context->userenv->{'branch'},
+        message_transport_type => 'email',
+        tables                 => {
+            credits => $payment_id,
+        },
+        substitute => {
+            collected => $collected,
+            change    => $change
+        }
+    );
+
+    # Add letter to the queue
+    my $message_id = EnqueueLetter(
+        {
+            letter                 => $letter,
+            message_transport_type => 'email',
+            from_address => C4::Context->preference('KohaAdminEmailAddress'),
+            to_address   => $toaddr,
+        }
+    );
+
+    # Send immediately
+    SendQueuedMessages( { message_id => $message_id } );
+
+    # Set variables for template to allow printing still
+    $template->param(
+        payment_id => $payment_id,
+        collected  => $collected,
+        change     => $change
     );
 }
 
