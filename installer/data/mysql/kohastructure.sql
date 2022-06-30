@@ -984,7 +984,7 @@ CREATE TABLE `background_jobs` (
   `type` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `queue` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default' COMMENT 'Name of the queue the job is sent to',
   `data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `context` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `context` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'JSON-serialized context information for the job',
   `enqueued_on` datetime DEFAULT NULL,
   `started_on` datetime DEFAULT NULL,
   `ended_on` datetime DEFAULT NULL,
