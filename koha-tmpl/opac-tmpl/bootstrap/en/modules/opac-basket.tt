@@ -238,13 +238,15 @@
 
                                         [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
                                             <tr>
-                                                <th scope="row">Host item entries</th>
+                                                <th scope="row">Host item entry</th>
                                                 <td>
-                                                    [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                        <p>
-                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
-                                                        </p>
-                                                    [% END %]
+                                                    <p>
+                                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                        [% ELSE %]
+                                                            [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        [% END %]
+                                                    </p>
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -309,11 +311,13 @@
                                                 [% END %]
 
                                                 [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                    [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                        <p>Host item entry:
-                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
-                                                        </p>
-                                                    [% END %]
+                                                    <p>Host item entry:
+                                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                        [% ELSE %]
+                                                        [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        [% END %]
+                                                    </p>
                                                 [% END %]
                                             </td>
                                             <td>[% BIBLIO_RESULT.author | html %]</td>

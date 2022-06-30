@@ -1237,6 +1237,12 @@ sub get_marc_host {
             last;
         }
     }
+    if ( !$hostfld and $record->subfield('773','t') ) {
+        # not linked using $w so just return plaintext
+        my $unlinkedf = $record->field('773');
+        my $host = join( ", ", $unlinkedf->subfield('a'), $unlinkedf->subfield('t'), $unlinkedf->subfield('g') );
+        return wantarray ? ( $host, $unlinkedf->subfield('g') ) : $host;
+    }
     return if !$hostfld;
     my $rcn = $hostfld->subfield('w');
 
