@@ -68,11 +68,26 @@
                         <label>{{ $t("Created on") }}:</label>
                         <span>{{ format_date(erm_package.created_on) }}</span>
                     </li>
-
-                    <li>
-                        <label
-                            >Titles ({{ erm_package.resources_count }})</label
+                    <li v-if="erm_package.package_agreements.length">
+                        <label>{{ $t("Agreements") }}</label>
+                        <div
+                            v-for="package_agreement in erm_package.package_agreements"
+                            :key="package_agreement.agreement_id"
                         >
+                            <router-link
+                                :to="`/cgi-bin/koha/erm/agreements/${package_agreement.agreement.agreement_id}`"
+                                >{{
+                                    package_agreement.agreement.name
+                                }}</router-link
+                            >
+                        </div>
+                    </li>
+                    <li>
+                        <label>{{
+                            $t("Titles ({count})", {
+                                count: erm_package.resources_count,
+                            })
+                        }}</label>
                         <div v-if="erm_package.resources_count">
                             <EHoldingsPackageTitlesList
                                 :package_id="erm_package.package_id.toString()"
@@ -123,6 +138,7 @@ export default {
                 content_type: '',
                 created_on: null,
                 resources: null,
+                package_agreements: [],
             },
             initialized: false,
         }
