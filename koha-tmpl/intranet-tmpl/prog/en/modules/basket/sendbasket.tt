@@ -129,12 +129,14 @@ Your cart
             [% END %]
 
             [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
-                    <span>Host item entry:
-                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
-                    </span>
-                    <br/>
+            <span>Host item entry:
+                [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | $raw %]
+                [% ELSE %]
+                [% BIBLIO_RESULT.HOSTITEMENTRIES %]
                 [% END %]
+            </span>
+            <br/>
             [% END %]
 
             [% IF ( BIBLIO_RESULT.url ) %]

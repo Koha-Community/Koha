@@ -137,12 +137,14 @@ Your list : [% shelfname | $raw %]
             [% END %]
 
             [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
                     <span>Host item entry:
-                        <a href="[% OPACBaseURL | $raw %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
+                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                        <a href="[% OPACBaseURL | $raw %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | $raw %]
+                        [% ELSE %]
+                        [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                        [% END %]
                     </span>
                     <br/>
-                [% END %]
             [% END %]
 
             [% IF ( BIBLIO_RESULT.url ) %]

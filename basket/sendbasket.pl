@@ -86,7 +86,9 @@ if ( $email_add ) {
         $dat->{HASAUTHORS}     = $hasauthors;
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = $biblio->items->search_ordered;
-        $dat->{HOSTITEMENTRIES} = $biblio->get_marc_host;
+        my ( $host, $relatedparts ) = $biblio->get_marc_host;
+        $dat->{HOSTITEMENTRIES} = $host;
+        $dat->{RELATEDPARTS} = $relatedparts;
 
         $iso2709 .= $record->as_usmarc();
 

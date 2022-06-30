@@ -36,7 +36,7 @@ $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
 
 subtest 'get_marc_host' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     t::lib::Mocks::mock_preference( 'MARCOrgCode', 'xyz' );
@@ -72,6 +72,12 @@ subtest 'get_marc_host' => sub {
     $marc->field('773')->update( w => '(xyz) bad data' ); # causes no results
     $host = $bib1->get_marc_host;
     is( $bib1->get_marc_host, undef, 'No results for bad 773' );
+    # Test plaintext when no $w
+    $marc->field('773')->update( t => 'title' );
+    $marc->field('773')->delete_subfield( code => 'w' );
+    $host = $bib1->get_marc_host;
+    is( $host, "title, relpart", '773$atg returned when no $w' );
+    $marc->field('773')->delete_subfield( code => 't' ); # restore
     # Add second 773
     $marc->append_fields( MARC::Field->new( '773', '', '', g => 'relpart2', w => '234' ) );
     $host = $bib1->get_marc_host;

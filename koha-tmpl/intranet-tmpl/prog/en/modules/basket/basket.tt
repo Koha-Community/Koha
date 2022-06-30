@@ -221,12 +221,12 @@
 
                                     [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
                                         <tr>
-                                            <th scope="row">Host item entries</th>
+                                            <th scope="row">Host item entry</th>
                                             <td>
-                                                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                    <p>
-                                                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
-                                                    </p>
+                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                                                    <p>[% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]</p>
+                                                [% ELSE %]
+                                                    <p>[% BIBLIO_RESULT.HOSTITEMENTRIES | html %]</p>
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -299,11 +299,13 @@
                                                 <p>[% BIBLIO_RESULT.notes | html %]</p>
                                             [% END %]
                                             [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                    <p>Host item entry:
-                                                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
-                                                    </p>
+                                                <p>Host item entry:
+                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
+                                                    [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                [% ELSE %]
+                                                    [% BIBLIO_RESULT.HOSTITEMENTRIES | html %]
                                                 [% END %]
+                                                </p>
                                             [% END %]
                                             <!-- COinS / Openurl -->
                                             <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>

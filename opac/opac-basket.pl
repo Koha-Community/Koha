@@ -117,7 +117,9 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{MARCSERIES}  = $marcseriesarray;
     $dat->{MARCURLS}    = $marcurlsarray;
     $dat->{HASAUTHORS}  = $hasauthors;
-    $dat->{HOSTITEMENTRIES} = $biblio->get_marc_host;
+    my ( $host, $relatedparts ) = $biblio->get_marc_host;
+    $dat->{HOSTITEMENTRIES} = $host;
+    $dat->{RELATEDPARTS} = $relatedparts;
 
     push( @results, $dat );
 }
