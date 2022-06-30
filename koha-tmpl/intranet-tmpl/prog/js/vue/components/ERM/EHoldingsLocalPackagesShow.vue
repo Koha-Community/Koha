@@ -35,17 +35,6 @@
                             >
                         </span>
                     </li>
-                    <li v-if="erm_package.external_id">
-                        <label>{{ $t("External ID") }}:</label>
-                        <span>
-                            <!-- FIXME Create a syspref to store the URL -->
-                            <a
-                                :href="`https://ptfs-europe-demo.folio.ebsco.com/eholdings/packages/${erm_package.vendor.external_id}-${erm_package.external_id}`"
-                            >
-                                {{ erm_package.external_id }}
-                            </a>
-                        </span>
-                    </li>
                     <li>
                         <label>{{ $t("Package type") }}:</label>
                         <span>{{

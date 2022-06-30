@@ -191,6 +191,7 @@ return {
                     `vendor_id` INT(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
                     `name` VARCHAR(255) NOT NULL COMMENT 'name of the package',
                     `external_id` VARCHAR(255) DEFAULT NULL COMMENT 'External key',
+                    `provider` ENUM('ebsco') DEFAULT NULL COMMENT 'External provider',
                     `package_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
                     `content_type` VARCHAR(80) DEFAULT NULL COMMENT 'type of the package',
                     `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date of creation of the package',

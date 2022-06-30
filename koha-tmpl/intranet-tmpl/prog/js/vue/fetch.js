@@ -104,6 +104,53 @@ export const fetchVendors = async function () {
     return vendors;
 };
 
+const _createEditPackage = async function (method, erm_package) {
+    let apiUrl = "/api/v1/erm/eholdings/local/packages";
+
+    if (method == "PUT") {
+        apiUrl += "/" + erm_package.package_id;
+    }
+    delete erm_package.package_id;
+    delete erm_package.resources;
+    delete erm_package.vendor;
+    delete erm_package.resources_count;
+    delete erm_package.is_selected;
+
+    erm_package.package_agreements = erm_package.package_agreements.map(
+        ({ package_id, agreement, ...keepAttrs }) => keepAttrs
+    );
+
+    const options = {
+        method: method,
+        body: JSON.stringify(erm_package),
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+    };
+
+    let r;
+    await fetch(apiUrl, options)
+        .then(
+            (response) => {
+                r = response;
+            },
+            (error) => {
+                setError(error);
+            }
+        )
+        .catch((e) => {
+            console.log(e);
+        });
+    return r;
+};
+
+export const createPackage = function (erm_package) {
+    return _createEditPackage("POST", erm_package);
+};
+export const editPackage = function (erm_package) {
+    return _createEditPackage("PUT", erm_package);
+};
+
 const _fetchPackage = async function (apiUrl, package_id) {
     if (!package_id) return;
     let erm_package;

@@ -9,6 +9,8 @@ use List::Util qw( first );
 
 use Koha::Exceptions;
 
+use Koha::ERM::EHoldings::Packages;
+
 sub new {
     my $class = shift;
     my $self = {};
@@ -80,8 +82,13 @@ sub build_vendor {
 
 sub build_package {
     my ( $self, $result ) = @_;
+    my $local_package = $self->get_local_package(
+        $result->{vendorId} . '-' . $result->{packageId} );
     my $package = {
         package_id   => $result->{vendorId} . '-' . $result->{packageId},
+        ( $local_package
+            ? ( koha_internal_id => $local_package->package_id )
+            : () ),
         name         => $result->{packageName},
         content_type => $result->{contentType}, # This does not exist in /vendors/1/packages/2/titles/3
         created_on   => undef,
@@ -121,11 +128,18 @@ sub build_additional_params {
     return $additional_params;
 }
 
+sub get_local_package {
+    my ( $self, $package_id ) = @_;
+    return Koha::ERM::EHoldings::Packages->find(
+        { provider => 'ebsco', external_id => $package_id } );
+}
+
 sub embed {
     my ( $self, $object, $info, $embed_header ) = @_;
     $embed_header ||= q{};
 
     my @embed_resources;
+
     foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
         if ( $embed_req eq 'vendor.name' ) {
             $object->{vendor} = { name => $info->{vendorName}, };
@@ -144,6 +158,23 @@ sub embed {
         }
         elsif ( $embed_req eq 'package.name' ) {
             $object->{package} = { name => $info->{packageName}, };
+        }
+        elsif ( $embed_req eq 'package_agreements.agreement' ) {
+            # How to deal with 'package_agreements.agreement'?
+            $object->{package_agreements} = [];
+            my $package_id = $info->{vendorId} . '-' . $info->{packageId};
+            my $local_package = $self->get_local_package($package_id);
+            if ( $local_package ) {
+                for my $package_agreement (
+                    @{ $local_package->package_agreements->as_list } )
+                {
+                    push @{ $object->{package_agreements} },
+                      {
+                        %{ $package_agreement->unblessed },
+                        agreement => $package_agreement->agreement->unblessed,
+                      };
+                }
+            }
         }
         if ( $embed_req eq 'resources' || $embed_req eq 'resources.package' ) {
             push @embed_resources, $embed_req;

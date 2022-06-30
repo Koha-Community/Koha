@@ -35,7 +35,8 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
     return try {
-        my $packages_set = Koha::ERM::EHoldings::Packages->new;
+        my $packages_set =
+          Koha::ERM::EHoldings::Packages->search( { 'me.external_id' => undef } );
         my $packages     = $c->objects->search($packages_set);
         return $c->render( status => 200, openapi => $packages );
     }
@@ -89,6 +90,7 @@ sub add {
                 my $body = $c->validation->param('body');
 
                 my $package_agreements = delete $body->{package_agreements} // [];
+                delete $body->{external_id} unless $body->{external_id};
 
                 my $package = Koha::ERM::EHoldings::Package->new_from_api($body)->store;
                 $package->package_agreements($package_agreements);
@@ -164,9 +166,12 @@ sub update {
                 my $body = $c->validation->param('body');
 
                 my $package_agreements = delete $body->{package_agreements} // [];
-                use Data::Printer colored => 1; warn p $package_agreements;
+                delete $body->{external_id} unless $body->{external_id};
 
                 $package->set_from_api($body)->store;
+
+                # FIXME If there is no package_agreements and external_id is set, we could delete the row
+                # ie. It's coming from EBSCO and we don't have local data linked to it
                 $package->package_agreements($package_agreements);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);

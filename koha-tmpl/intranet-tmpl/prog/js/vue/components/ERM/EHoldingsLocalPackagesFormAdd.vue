@@ -115,7 +115,7 @@ import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
-import { fetchLocalPackage } from '../../fetch'
+import { fetchLocalPackage, createPackage, editPackage } from '../../fetch'
 import { storeToRefs } from "pinia"
 
 export default {
@@ -138,10 +138,13 @@ export default {
         return {
             erm_package: {
                 package_id: null,
+                vendor_id: null,
                 name: '',
                 external_id: '',
                 package_type: '',
                 content_type: '',
+                created_on: null,
+                resources: null,
                 package_agreements: [],
             },
             initialized: false,
@@ -166,42 +169,26 @@ export default {
             e.preventDefault()
 
             let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
-            let apiUrl = '/api/v1/erm/eholdings/local/packages'
 
-            let method = 'POST'
             if (erm_package.package_id) {
-                method = 'PUT'
-                apiUrl += '/' + erm_package.package_id
-            }
-            delete erm_package.package_id
-            delete erm_package.resources
-            delete erm_package.vendor
-            delete erm_package.resources_count
-
-            erm_package.package_agreements = erm_package.package_agreements.map(({ package_id, agreement, ...keepAttrs }) => keepAttrs)
-
-            const options = {
-                method: method,
-                body: JSON.stringify(erm_package),
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-            }
-
-            fetch(apiUrl, options)
-                .then(response => {
+                editPackage(erm_package).then(response => {
                     if (response.status == 200) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
                         setMessage(this.$t("Package updated"))
-                    } else if (response.status == 201) {
+                    } else {
+                        setError(response.message || response.statusText)
+                    }
+                })
+            } else {
+                createPackage(erm_package).then(response => {
+                    if (response.status == 201) {
                         this.$router.push("/cgi-bin/koha/erm/eholdings/local/packages")
                         setMessage(this.$t("Package created"))
                     } else {
                         setError(response.message || response.statusText)
                     }
-                }, (error) => {
-                    setError(error)
-                }).catch(e => { console.log(e) })
+                })
+            }
         },
     },
     components: {

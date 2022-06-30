@@ -175,7 +175,7 @@ export const routes = [
                     breadcrumb: () =>
                         build_breadcrumb(
                             breadcrumb_paths.agreements,
-                            "Edit agreement" // $t("Edit agreemetn")
+                            "Edit agreement" // $t("Edit agreement")
                         ),
                 },
             },

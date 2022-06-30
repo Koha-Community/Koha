@@ -52,6 +52,14 @@
                     </li>
 
                     <li>
+                        <label>Agreements</label>
+                        <EHoldingsPackageAgreements
+                            :erm_package="erm_package"
+                            @refresh-agreements="refreshAgreements"
+                        />
+                    </li>
+
+                    <li>
                         <label
                             >Titles ({{ erm_package.resources_count }})</label
                         >
@@ -78,6 +86,7 @@
 </template>
 
 <script>
+import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchEBSCOPackage } from "../../fetch"
@@ -101,10 +110,12 @@ export default {
                 vendor_id: null,
                 name: '',
                 external_id: '',
+                provider: '',
                 package_type: '',
                 content_type: '',
                 created_on: null,
                 resources: null,
+                package_agreements: [],
             },
             initialized: false,
         }
@@ -123,8 +134,14 @@ export default {
             this.erm_package = erm_package
             this.initialized = true
         },
+        refreshAgreements() {
+            // FIXME We could GET /erm/eholdings/packages/$package_id/agreements instead
+            this.initialized = false
+            this.getPackage(this.erm_package.package_id)
+        },
     },
     components: {
+        EHoldingsPackageAgreements,
         EHoldingsPackageTitlesList,
     },
     name: "EHoldingsEBSCOPackagesShow",
