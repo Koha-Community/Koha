@@ -138,7 +138,7 @@ if ( $xslfile ) {
     my $query =
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
       ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
-      : "Host-item:($cleaned_title)";
+      : "Host-item:(\"$cleaned_title\")";
     my ( $err, $result, $count );
     eval {
         ( $err, $result, $count ) =
@@ -153,8 +153,11 @@ if ( $xslfile ) {
         $template->param( analytics_error => 1 );
     }
 
+    my $show_analytics_link = defined $count && $count > 0 ? 1 : 0;
+
     my $variables = {
-        show_analytics_link => defined $count && $count > 0 ? 1 : 0
+        show_analytics_link => $show_analytics_link,
+        ( $show_analytics_link ? ( analytics_query => $cleaned_title ) : () )
     };
 
     $template->param(

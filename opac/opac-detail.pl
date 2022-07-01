@@ -195,7 +195,7 @@ if ( $xslfile ) {
     my $query =
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
       ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
-      : "Host-item:($cleaned_title)";
+      : "Host-item:(\"$cleaned_title\")";
     my ( $err, $result, $count );
     eval {
         ( $err, $result, $count ) =
@@ -208,9 +208,12 @@ if ( $xslfile ) {
         warn "Warning from simple_search_compat: $error";
     }
 
+    my $show_analytics_link = defined $count && $count > 0 ? 1 : 0;
+
     my $variables = {
         anonymous_session   => ($borrowernumber) ? 0 : 1,
-        show_analytics_link => defined $count && $count > 0 ? 1 : 0
+        show_analytics_link => $show_analytics_link,
+        ( $show_analytics_link ? ( analytics_query => $cleaned_title ) : () )
     };
 
     my @plugin_responses = Koha::Plugins->call(
