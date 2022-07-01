@@ -28,9 +28,11 @@ use Koha::BackgroundJob::BatchUpdateItem;
 use JSON qw( decode_json encode_json );
 
 use t::lib::Mocks;
+use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 use t::lib::Koha::BackgroundJob::BatchTest;
 
+my $logger  = t::lib::Mocks::Logger->new;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
@@ -176,7 +178,7 @@ subtest 'start(), step() and finish() tests' => sub {
 
 subtest 'process tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -220,6 +222,23 @@ subtest 'process tests' => sub {
     $job->process();
     is_deeply( C4::Context->userenv, $job_context, "Userenv set from job context on process" );
     is_deeply( C4::Context->interface, 'intranet', "Interface set from job context on process" );
+
+    # Manually add a job (->new->store) without context
+    my $incomplete_job = t::lib::Koha::BackgroundJob::BatchTest->new(
+        {   status         => 'new',
+            size           => 1,
+            borrowernumber => $patron->borrowernumber,
+            type           => 'batch_test',
+            data           => encode_json {
+                a => 'a',
+                b => 'b',
+            },
+        }
+    )->store;
+
+    $incomplete_job = Koha::BackgroundJobs->find( $incomplete_job->id );
+    $incomplete_job->process();
+    $logger->warn_is( "A background job didn't have context defined (" . $incomplete_job->id . ")" );
 
     $schema->storage->txn_rollback;
 };
