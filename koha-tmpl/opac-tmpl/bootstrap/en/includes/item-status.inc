@@ -77,7 +77,7 @@
 [% END %]
 
 [% IF ( item.bundle_host ) %]
-    <span class="bundled">In bundle: <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.bundle_host.biblionumber %]">[% INCLUDE 'biblio-title.inc' biblio = item.bundle_host.biblio %]</a></span>
+    <span class="bundled">In bundle: <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.bundle_host.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio = item.bundle_host.biblio %]</a></span>
 [% END %]
 
 [% IF ( item.damaged ) %]
