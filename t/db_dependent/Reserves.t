@@ -559,14 +559,14 @@ my $borrowernumber_tmp_2 = $bor_tmp_2->borrowernumber;
 my $date_in_future = dt_from_string();
 $date_in_future = $date_in_future->add_duration(DateTime::Duration->new(days => 1));
 AddReserve({
-    branch => 'CPL',
+    branchcode => 'CPL',
     borrowernumber => $borrowernumber_tmp_1,
     biblionumber => $bibnum,
     priority => 3,
     reservation_date => output_pref($date_in_future)
 });
 AddReserve({
-    branch => 'CPL',
+    branchcode => 'CPL',
     borrowernumber => $borrowernumber_tmp_2,
     biblionumber => $bibnum,
     priority => 4,

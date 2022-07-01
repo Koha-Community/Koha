@@ -155,6 +155,7 @@ is( $hold->suspend_until, '2013-01-01 00:00:00', "Test ModReserve, suspend until
 
 ModReserve({ # call without reserve_id
     rank          => '3',
+    branchcode    => $branch_1,
     biblionumber  => $biblio->biblionumber,
     itemnumber    => $itemnumber,
     borrowernumber => $borrowernumber,
@@ -348,6 +349,7 @@ $hold = Koha::Hold->new(
         borrowernumber => $borrowernumbers[0],
         itemnumber     => $itemnumber,
         biblionumber   => $biblio->biblionumber,
+        branchcode     => $branch_1,
     }
 )->store();
 is( CanItemBeReserved( $patrons[0], $damaged_item )->{status},
@@ -527,7 +529,7 @@ subtest 'CanItemBeReserved' => sub {
 
         # Biblio-level hold
         AddReserve({
-            branch => $branch_1,
+            branchcode => $branch_1,
             borrowernumber => $borrowernumbers[0],
             biblionumber => $biblionumber_1,
         });
@@ -543,7 +545,7 @@ subtest 'CanItemBeReserved' => sub {
         Koha::Holds->search({borrowernumber => $borrowernumbers[0]})->delete;
         # Item-level hold
         AddReserve({
-            branch => $branch_1,
+            branchcode => $branch_1,
             borrowernumber => $borrowernumbers[0],
             biblionumber => $biblionumber_1,
             itemnumber => $item_11->itemnumber,
@@ -597,7 +599,7 @@ subtest 'CanItemBeReserved' => sub {
         );
 
         AddReserve({
-            branch => $branch_1,
+            branchcode => $branch_1,
             borrowernumber => $borrowernumbers[0],
             biblionumber => $biblionumber_2,
             itemnumber => $item_21->itemnumber
