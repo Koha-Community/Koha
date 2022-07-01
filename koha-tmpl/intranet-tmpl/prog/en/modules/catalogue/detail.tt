@@ -1644,7 +1644,7 @@ Note that permanent location is a code, and location may be an authval.
                     ],
                     "order": [[ 1, "asc" ]],
                     "columnDefs": [ {
-                        "targets": [0,1,2,3,4,5],
+                        "targets": [0,1,2,3],
                         "render": function (data, type, row, meta) {
                             if ( data && type == 'display' ) {
                                 return data.escapeHtml();
@@ -1666,18 +1666,6 @@ Note that permanent location is a code, and location may be an authval.
                             "data": "biblio.author",
                             "title": _("Author"),
                             "searchable": true,
-                            "orderable": true,
-                        },
-                        {
-                            "data": "collection_code",
-                            "title": _("Collection"),
-                            "searchable": true,
-                            "orderable": true,
-                        },
-                        {
-                            "data": "item_type",
-                            "title": _("Item type"),
-                            "searchable": false,
                             "orderable": true,
                         },
                         {
