@@ -215,7 +215,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 59;
+    plan tests => 60;
 
     my $qb;
 
@@ -337,6 +337,14 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         '(date-of-publication:[2019 TO *]) AND date-of-publication:[* TO 2019]',
         'Open end year in year range of an st-year search is handled properly'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['2019-'], ['yr,st-year'],
+        ['yr,st-numeric:-2019','yr,st-numeric:2005','yr,st-numeric:1984-2022'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:[2019 TO *]) AND (date-of-publication:[* TO 2019]) AND (date-of-publication:2005) AND (date-of-publication:[1984 TO 2022])',
+        'Limit on year search is handled properly when colon used'
     );
 
     # Enable auto-truncation

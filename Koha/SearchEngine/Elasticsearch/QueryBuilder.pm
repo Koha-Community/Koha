@@ -1062,14 +1062,14 @@ sub _fix_limit_special_cases {
     foreach my $l (@$limits) {
 
         # This is set up by opac-search.pl
-        if ( $l =~ /^yr,st-numeric,ge=/ ) {
+        if ( $l =~ /^yr,st-numeric,ge[=:]/ ) {
             my ( $start, $end ) =
-              ( $l =~ /^yr,st-numeric,ge=(.*) and yr,st-numeric,le=(.*)$/ );
+              ( $l =~ /^yr,st-numeric,ge[=:](.*) and yr,st-numeric,le[=:](.*)$/ );
             next unless defined($start) && defined($end);
             push @new_lim, "date-of-publication:[$start TO $end]";
         }
-        elsif ( $l =~ /^yr,st-numeric=/ ) {
-            my ($date) = ( $l =~ /^yr,st-numeric=(.*)$/ );
+        elsif ( $l =~ /^yr,st-numeric[=:]/ ) {
+            my ($date) = ( $l =~ /^yr,st-numeric[=:](.*)$/ );
             next unless defined($date);
             $date = $self->_modify_string_by_type(type => 'st-year', operand => $date);
             push @new_lim, "date-of-publication:$date";
