@@ -166,18 +166,23 @@ sub process {
 
     $args ||= {};
 
-    my $context = decode_json($self->context);
-    C4::Context->_new_userenv(-1);
-    C4::Context->interface( $context->{interface} );
-    C4::Context->set_userenv(
-        $context->{number},       $context->{id},
-        $context->{cardnumber},   $context->{firstname},
-        $context->{surname},      $context->{branch},
-        $context->{branchname},   $context->{flags},
-        $context->{emailaddress}, undef,
-        $context->{desk_id},      $context->{desk_name},
-        $context->{register_id},  $context->{register_name}
-    );
+    if ( $self->context ) {
+        my $context = decode_json($self->context);
+        C4::Context->_new_userenv(-1);
+        C4::Context->interface( $context->{interface} );
+        C4::Context->set_userenv(
+            $context->{number},       $context->{id},
+            $context->{cardnumber},   $context->{firstname},
+            $context->{surname},      $context->{branch},
+            $context->{branchname},   $context->{flags},
+            $context->{emailaddress}, undef,
+            $context->{desk_id},      $context->{desk_name},
+            $context->{register_id},  $context->{register_name}
+        );
+    }
+    else {
+        Koha::Logger->get->warn("A background job didn't have context defined (" . $self->id . ")");
+    }
 
     return $derived_class->process( $args );
 }
