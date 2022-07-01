@@ -611,6 +611,8 @@ expirationdate for holds.
 sub store {
     my ($self) = @_;
 
+    Koha::Exceptions::Hold::MissingPickupLocation->throw() unless $self->branchcode;
+
     if ( !$self->in_storage ) {
         if (
             C4::Context->preference('DefaultHoldExpirationdate')

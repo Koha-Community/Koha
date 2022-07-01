@@ -31,6 +31,10 @@ use Exception::Class (
     'Koha::Exceptions::Hold::InvalidPickupLocation' => {
         isa         => 'Koha::Exceptions::Hold',
         description => 'The supplied pickup location is not valid'
+    },
+    'Koha::Exceptions::Hold::MissingPickupLocation' => {
+        isa         => 'Koha::Exceptions::Hold',
+        description => 'You must supply a pickup location when placing a hold'
     }
 );
 
