@@ -713,6 +713,8 @@ expirationdate for holds.
 sub store {
     my ($self) = @_;
 
+    Koha::Exceptions::Hold::MissingPickupLocation->throw() unless $self->branchcode;
+
     if ( !$self->in_storage ) {
         if ( ! $self->expirationdate && $self->patron_expiration_date ) {
             $self->expirationdate($self->patron_expiration_date);
