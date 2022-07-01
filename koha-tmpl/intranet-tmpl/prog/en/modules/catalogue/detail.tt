@@ -1794,6 +1794,13 @@ Note that permanent location is a code, and location may be an authval.
                           }
                       } else if ( data.status === 404 ) {
                           $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
+                      } else if ( data.status === 400 ) {
+                          var response = data.responseJSON;
+                          if ( response.error === "Bundles cannot be nested" ) {
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode)+'</div>');
+                          } else {
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
+                          }
                       } else {
                           $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                       }

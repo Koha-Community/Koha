@@ -38,6 +38,7 @@ use Koha::CirculationRules;
 use Koha::CoverImages;
 use Koha::Exceptions::Item::Transfer;
 use Koha::Item::Attributes;
+use Koha::Exceptions::Item::Bundle;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
 use Koha::ItemTypes;
@@ -1706,6 +1707,11 @@ Adds the bundle_item passed to this item
 
 sub add_to_bundle {
     my ( $self, $bundle_item ) = @_;
+
+    Koha::Exceptions::Item::Bundle::IsBundle->throw()
+      if ( $self->itemnumber eq $bundle_item->itemnumber
+        || $bundle_item->is_bundle
+        || $self->in_bundle );
 
     my $schema = Koha::Database->new->schema;
 

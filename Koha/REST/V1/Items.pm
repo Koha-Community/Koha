@@ -229,6 +229,14 @@ sub add_to_bundle {
                 }
             );
         }
+        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::IsBundle' ) {
+            return $c->render(
+                status => 400,
+                openapi => {
+                    error => 'Bundles cannot be nested'
+                }
+            );
+        }
         else {
             $c->unhandled_exception($_);
         }
