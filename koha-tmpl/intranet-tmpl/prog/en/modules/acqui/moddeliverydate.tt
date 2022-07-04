@@ -35,7 +35,7 @@
       <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
         <fieldset class="brief">
           <label for="estimated_delivery_date">Estimated delivery date:</label>
-          <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="datepicker" value="[% estimated_delivery_date | html %]"/>
+          <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr flatpickr-input noEnterSubmit" value="[% estimated_delivery_date | html %]"/>
           <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </fieldset>
         <input type="hidden" name="referrer" value="[% referrer | html %]" />
