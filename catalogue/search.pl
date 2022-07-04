@@ -237,7 +237,6 @@ if($cgi->cookie("intranet_bib_list")){
 
 my @search_groups =
   Koha::Library::Groups->get_search_groups( { interface => 'staff' } )->as_list;
-@search_groups = sort { $a->title cmp $b->title } @search_groups;
 
 $template->param(
     search_groups    => \@search_groups,
