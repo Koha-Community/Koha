@@ -8,6 +8,7 @@
 [% PROCESS 'member-main-address-style.inc' %]
 [% PROCESS 'member-alt-address-style.inc' %]
 [% PROCESS 'member-alt-contact-style.inc' %]
+[% PROCESS 'patron_restrictions.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>
@@ -1402,8 +1403,12 @@ legend:hover {
                                                         <label for="debarred_type">Type:</label>
                                                         <select name="debarred_type">
                                                             [% FOREACH code IN restriction_types.keys %]
-                                                                [% IF restriction_types.$code.can_be_added_manually %]
-                                                                    <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                                                                [% IF !restriction_types.$code.is_system %]
+                                                                    [% IF restriction_types.$code.is_default %]
+                                                                    <option value="[% code | html %]" selected>[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
+                                                                    [% ELSE %]
+                                                                    <option value="[% code | html %]">[% PROCESS restriction_type_description restriction=restriction_types.$code %]</option>
+                                                                    [% END %]
                                                                 [% END %]
                                                             [% END %]
                                                         </select>
