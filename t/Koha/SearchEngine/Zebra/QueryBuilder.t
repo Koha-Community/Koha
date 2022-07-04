@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 
 use_ok('Koha::SearchEngine::Zebra::QueryBuilder');
@@ -75,4 +75,18 @@ subtest 'build_query_compat() tests' => sub {
 
     ( undef, $query ) = $qb->build_query_compat( undef, undef, undef, undef, undef, undef, undef, { suppress => 0 } );
     is( $query, 'query', 'Suppress part of the query not added (PQF)');
+};
+
+subtest 'clean_search_term() tests' => sub {
+
+    plan tests => 2;
+
+    my $qb;
+    ok(
+        $qb = Koha::SearchEngine::Zebra::QueryBuilder->new(),
+        'Creating a new QueryBuilder object'
+    );
+
+    my $res = $qb->clean_search_term('test "query":');
+    is($res, 'test \"query\":', 'Double-quotes are escaped');
 };
