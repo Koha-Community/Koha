@@ -169,7 +169,7 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => logged_in_user.branchcode ) %]
+                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                                                         [% FOREACH h IN waiting_holds %]
                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
                                                         [% END %]
@@ -239,7 +239,7 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => logged_in_user.branchcode ) %]
+                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                                                         [% FOREACH h IN waiting_holds %]
                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
                                                         [% END %]
@@ -321,7 +321,7 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
-                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => logged_in_user.branchcode ) %]
+                                                        [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                                                         [% FOREACH h IN waiting_holds %]
                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
                                                         [% END %]
@@ -443,7 +443,7 @@
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </form>
                         [% ELSE %]
-                            [% SET waiting_holds = patron.holds.search( found => 'W', branchcode => logged_in_user.branchcode ) %]
+                            [% SET waiting_holds = patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                             [% IF !policy.enable_waiting_holds_only || waiting_holds.count > 0 %]
                                 <form id="create-pickup" method="post">
                                     <fieldset class="rows" style="float: none;">
