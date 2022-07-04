@@ -213,7 +213,7 @@ subtest 'bundle_host tests' => sub {
 };
 
 subtest 'add_to_bundle tests' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -223,12 +223,24 @@ subtest 'add_to_bundle tests' => sub {
     my $bundle_item1 = $builder->build_sample_item();
     my $bundle_item2 = $builder->build_sample_item();
 
+    throws_ok { $host_item->add_to_bundle($host_item) }
+    'Koha::Exceptions::Item::Bundle::IsBundle',
+      'Exception thrown if you try to add the item to itself';
+
     ok($host_item->add_to_bundle($bundle_item1), 'bundle_item1 added to bundle');
     is($bundle_item1->notforloan, 1, 'add_to_bundle sets notforloan to BundleNotLoanValue');
 
     throws_ok { $host_item->add_to_bundle($bundle_item1) }
     'Koha::Exceptions::Object::DuplicateID',
       'Exception thrown if you try to add the same item twice';
+
+    throws_ok { $bundle_item1->add_to_bundle($bundle_item2) }
+    'Koha::Exceptions::Item::Bundle::IsBundle',
+      'Exception thrown if you try to add an item to a bundled item';
+
+    throws_ok { $bundle_item2->add_to_bundle($host_item) }
+    'Koha::Exceptions::Item::Bundle::IsBundle',
+      'Exception thrown if you try to add a bundle host to a bundle item';
 
     $schema->storage->txn_rollback;
 };
