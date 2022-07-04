@@ -23,7 +23,7 @@
 
             // add subtitle
             if (biblio.subtitle != null && biblio.subtitle != '') {
-                title += '<span class="biblio-subtitle">' + escape_str(biblio.subtitle) + '</span>';
+                title += ' <span class="biblio-subtitle">' + escape_str(biblio.subtitle) + '</span>';
             }
 
             // set title as link
@@ -41,7 +41,7 @@
 
             // add medium
             if (biblio.medium != null && biblio.medium != '') {
-                title += '<span class="biblio-medium">' + escape_str(biblio.medium) + '</span>';
+                title += ' <span class="biblio-medium">' + escape_str(biblio.medium) + '</span>';
             }
 
             // add part numbers/names
@@ -50,10 +50,10 @@
             let i = 0;
             while (part_numbers[i] || part_names[i]) {
                 if (part_numbers[i]) {
-                    title += '<span class="part-number">' + escape_str(part_numbers[i]) + '</span>';
+                    title += ' <span class="part-number">' + escape_str(part_numbers[i]) + '</span>';
                 }
                 if (part_names[i]) {
-                    title += '<span class="part-name">' + escape_str(part_name[i]) + '</span>';
+                    title += ' <span class="part-name">' + escape_str(part_names[i]) + '</span>';
                 }
                 i++;
             }
