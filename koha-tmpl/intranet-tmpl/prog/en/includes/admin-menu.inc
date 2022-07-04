@@ -26,7 +26,7 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_parameters_manage_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities || CAN_user_parameters_manage_curbside_pickups ) %]
+    [% IF ( CAN_user_parameters_manage_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities || CAN_user_parameters_manage_curbside_pickups || CAN_user_parameters_manage_patron_restrictions ) %]
         <h5>Patrons and circulation</h5>
         <ul>
             [% IF ( CAN_user_parameters_manage_patron_categories ) %]
@@ -54,7 +54,9 @@
             [% IF ( CAN_user_parameters_manage_curbside_pickups ) %]
                 <li><a href="/cgi-bin/koha/admin/curbside_pickup.pl">Curbside pickup</a></li>
             [% END %]
-
+            [% IF ( CAN_user_parameters_manage_patron_restrictions ) %]
+                <li><a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a></li>
+            [% END %]
         </ul>
     [% END %]
 
