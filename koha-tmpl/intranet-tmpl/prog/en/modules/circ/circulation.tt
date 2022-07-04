@@ -827,7 +827,9 @@
                             </li>
                         [% END %]
 
-                        <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.count | html %] Restrictions</a></li>
+                        <li>
+                            <a id="debarments-tab-link" href="#reldebarments">Restrictions ([% debarments.size || 0 | html %])</a>
+                        </li>
 
                         [% SET enrollments = patron.get_club_enrollments(1) %]
                         [% SET enrollable  = patron.get_enrollable_clubs(0,1) %]
