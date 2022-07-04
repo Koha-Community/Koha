@@ -127,6 +127,8 @@ sub build_authorities_query_compat {
 sub clean_search_term {
     my ( $self, $term ) = @_;
 
+    $term =~ s/"/\\"/g;
+
     return $term;
 }
 
