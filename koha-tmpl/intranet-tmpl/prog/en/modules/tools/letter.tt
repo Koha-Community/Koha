@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -476,7 +477,7 @@
                                             <a role="button" class="collapsed" data-toggle="collapse" data-parent="#group_[% lang | html %]" href="#[% letter.message_transport_type | html %]_[% lang | html %]" aria-expanded="false" aria-controls="[% letter.message_transport_type | html %]_[% lang | html %]">
                                                 [% SWITCH letter.message_transport_type %]
                                                     [% CASE 'email' %]<span>Email</span>
-                                                    [% CASE 'print' %]<span>Print</span>
+                                                    [% CASE 'print' %]<span>[% tp('Message transport type', 'Print') | html %]</span>
                                                     [% CASE 'sms' %]<span>SMS</span>
                                                     [% CASE 'feed' %]<span>Feed</span>
                                                     [% CASE 'itiva' %]<span>Phone (i-tiva)</span>
