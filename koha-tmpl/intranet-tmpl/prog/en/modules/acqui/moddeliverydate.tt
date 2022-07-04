@@ -16,10 +16,10 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a>
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketname | html %] ([% basketno | html %])</a>
+            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketname | html %] ([% basketno | html %])</a>
         </li>
         <li>
             <a href="#" aria-current="page">Change estimated delivery date</a>
