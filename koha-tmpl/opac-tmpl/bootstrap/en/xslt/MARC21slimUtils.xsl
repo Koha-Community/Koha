@@ -542,6 +542,36 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="fix_query_term">
+        <xsl:param name="term" />
+        <xsl:variable name="fixed_term">
+            <xsl:call-template name="remove_quotes">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="$term"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="str:encode-uri(translate($fixed_term, '()', ''), true())"/>
+    </xsl:template>
+
+    <xsl:template name="remove_quotes">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text, '&quot;')">
+                <xsl:variable name="before" select="substring-before($text,'&quot;')"/>
+                <xsl:variable name="next" select="substring-after($text,'&quot;')"/>
+                <xsl:value-of select="$before"/>
+                <xsl:text></xsl:text>
+                <xsl:call-template name="remove_quotes">
+                    <xsl:with-param name="text" select="$next"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.

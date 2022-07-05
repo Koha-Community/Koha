@@ -1175,8 +1175,23 @@
                             </a>
                         </xsl:when>
                         <xsl:otherwise>
+                            <xsl:variable name="title_query">
+                                <xsl:call-template name="fix_query_term">
+                                    <xsl:with-param name="term"><xsl:value-of select="marc:subfield[@code='t']"/></xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:variable name="author_query">
+                                <xsl:if test="marc:subfield[@code='a']">
+                                    <xsl:call-template name="fix_query_term">
+                                        <xsl:with-param name="term">
+                                            <xsl:value-of select="marc:subfield[@code='a']"/>
+                                        </xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:if>
+                            </xsl:variable>
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='t'], '()', ''), true())"/><xsl:if test="marc:subfield[@code='a']">+AND+au:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='a'], '()', ''), true())"/></xsl:if></xsl:attribute>
+                            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:("<xsl:value-of select="$title_query" />")<xsl:if test="$author_query">+AND+au:("<xsl:value-of select="$author_query"/>")</xsl:if>
+                            </xsl:attribute>
                                 <xsl:value-of select="$f773"/>
                             </a>
                         </xsl:otherwise>
