@@ -15,6 +15,7 @@ return {
         $dbh->do(q{
             ALTER TABLE subscription
             MODIFY COLUMN staffdisplaycount INT(11) NULL DEFAULT NULL
+            COMMENT 'how many issues to show to the staff'
         });
 
         $dbh->do(q{
@@ -25,6 +26,7 @@ return {
         $dbh->do(q{
             ALTER TABLE subscription
             MODIFY COLUMN opacdisplaycount INT(11) NULL DEFAULT NULL
+            COMMENT 'how many issues to show to the public'
         });
     },
 };
