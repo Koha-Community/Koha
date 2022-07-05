@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
@@ -1159,4 +1159,33 @@ subtest 'columns_to_str' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 1;
+
+    subtest 'dateaccessioned handling' => sub {
+
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        my $item = $builder->build_sample_item;
+
+        ok( defined $item->dateaccessioned, 'dateaccessioned is set' );
+
+        # reset dateaccessioned on the DB
+        $schema->resultset('Item')->find({ itemnumber => $item->id })->update({ dateaccessioned => undef });
+        $item->discard_changes;
+
+        ok( !defined $item->dateaccessioned );
+
+        # update something
+        $item->replacementprice(100)->store->discard_changes;
+
+        ok( !defined $item->dateaccessioned, 'dateaccessioned not set on update if undefined' );
+
+        $schema->storage->txn_rollback;
+    };
 };
