@@ -207,6 +207,30 @@ export const fetchEBSCOPackages = function () {
     return _fetchPackages(apiUrl);
 };
 
+export const fetchCountLocalPackages = async function (filters) {
+    const q = {
+        "me.name": { like: "%" + filters.package_name + "%" },
+        ...(filters.content_type
+            ? { "me.content_type": filters.content_type }
+            : {}),
+    };
+
+    const params = {
+        _page: 1,
+        _per_page: 1,
+        q: JSON.stringify(q),
+    };
+    let count_local_packages;
+    var apiUrl = "/api/v1/erm/eholdings/local/packages";
+    await fetch(apiUrl + "?" + new URLSearchParams(params))
+        //.then(checkError)
+        .then(
+            (response) =>
+                (count_local_packages = response.headers.get("X-Total-Count"))
+        );
+    return count_local_packages;
+};
+
 export const _fetchTitle = async function (apiUrl, title_id) {
     if (!title_id) return;
     let title;
@@ -256,6 +280,31 @@ export const fetchLocalTitles = function () {
 export const fetchEBSCOTitles = function () {
     const apiUrl = "/api/v1/erm/eholdings/ebsco/titles";
     return _fetchTitles(apiUrl);
+};
+
+export const fetchCountLocalTitles = async function (filters) {
+    const q = {
+        "me.publication_title": {
+            like: "%" + filters.publication_title + "%",
+        },
+        ...(filters.publication_type
+            ? { "me.publication_type": filters.publication_type }
+            : {}),
+    };
+    const params = {
+        _page: 1,
+        _per_page: 1,
+        q: JSON.stringify(q),
+    };
+    let count_local_titles;
+    var apiUrl = "/api/v1/erm/eholdings/local/titles";
+    await fetch(apiUrl + "?" + new URLSearchParams(params))
+        //.then(checkError)
+        .then(
+            (response) =>
+                (count_local_titles = response.headers.get("X-Total-Count"))
+        );
+    return count_local_titles;
 };
 
 export const _fetchResource = async function (apiUrl, resource_id) {

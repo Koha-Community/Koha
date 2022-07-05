@@ -12,8 +12,8 @@
 
     <div id="package_search" class="residentsearch">
         <form action="/cgi-bin/koha/erm/eholdings/local/packages" method="get">
-            <label class="tip" for="package_filter">Package search:</label>
-            <input class="head-searchbox" type="text" name="q" id="package_filter" size="40" />
+            <label class="tip" for="package_name_filter">Package search:</label>
+            <input class="head-searchbox" type="text" name="package_name" id="package_name_filter" size="40" />
             <input type="submit" value="OK" class="submit" />
         </form>
     </div>
@@ -21,7 +21,7 @@
     <div id="title_search" class="residentsearch">
         <form action="/cgi-bin/koha/erm/eholdings/local/titles" method="get">
             <label class="tip" for="title_filter">Title search:</label>
-            <input class="head-searchbox" type="text" name="q" id="title_filter" size="40" />
+            <input class="head-searchbox" type="text" name="publication_title" id="title_filter" size="40" />
             <input type="submit" value="OK" class="submit" />
         </form>
     </div>

@@ -42,7 +42,8 @@ export default {
             packages: [],
             initialized: false,
             filters: {
-                package_name: this.$route.query.q || "",
+                package_name: this.$route.query.package_name || "",
+                content_type: this.$route.query.content_type || "",
             },
         }
     },
@@ -95,8 +96,15 @@ export default {
                 },
                 embed: ['resources+count', 'vendor.name'],
                 order: [[0, "asc"]],
-                search: { search: filters.package_name },
                 autoWidth: false,
+                searchCols: [
+                    { search: filters.package_name },
+                    null,
+                    null,
+                    { search: filters.content_type },
+                    null,
+                    null,
+                ],
                 columns: [
                     {
                         title: __("Name"),
@@ -200,6 +208,11 @@ export default {
                     $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_package_content_types')
                 }
             }, eholdings_packages_table_settings, 1)
+
+            if (filters.package_name) {
+                //$("#package_list").DataTable().column(0).search(filters.package_name).draw()
+            }
+            //myTable.column(0).search(control_id).column(1).search(sample_id).draw();
         },
     },
     components: { Toolbar },

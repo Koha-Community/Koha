@@ -41,7 +41,8 @@ export default {
             titles: [],
             initialized: false,
             filters: {
-                publication_title: this.$route.query.q || "",
+                publication_title: this.$route.query.publication_title || "",
+                publication_type: this.$route.query.publication_type || "",
             },
             cannot_search: false,
         }
@@ -94,8 +95,13 @@ export default {
                 },
                 embed: ["resources.package"],
                 order: [[0, "asc"]],
-                search: { search: filters.publication_title },
                 autoWidth: false,
+                searchCols: [
+                    { search: filters.publication_title },
+                    null,
+                    { search: filters.publication_type },
+                    null,
+                ],
                 columns: [
                     {
                         title: __("Title"),

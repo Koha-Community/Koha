@@ -32,8 +32,31 @@
                 :value="$t('Submit')"
             />
         </fieldset>
-        <div id="package_list_result" style="display: none">
-            <table id="package_list"></table>
+
+        <!-- We need to display the table element to initiate DataTable -->
+        <div
+            id="package_list_result"
+            :style="show_table ? 'display: block' : 'display: none'"
+        >
+            <div
+                v-if="
+                    local_count_packages !== undefined &&
+                    local_count_packages !== null
+                "
+            >
+                <router-link
+                    :to="local_packages_url"
+                >
+                    {{
+                        $t("{count} packages found locally", {
+                            count: local_count_packages,
+                        })
+                    }}</router-link
+                >
+            </div>
+            <div id="package_list_result">
+                <table id="package_list"></table>
+            </div>
         </div>
     </div>
 </template>
@@ -43,6 +66,7 @@ import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
+import { fetchCountLocalPackages } from './../../fetch'
 
 export default {
     setup() {
@@ -58,6 +82,7 @@ export default {
             av_package_types,
             av_package_content_types,
             get_lib_from_av,
+            erm_providers,
         }
     },
     data: function () {
@@ -65,11 +90,16 @@ export default {
             packages: [],
             initialized: true,
             filters: {
-                package_name: this.$route.query.q || "",
-                content_type: "",
-                selection_type: "",
+                package_name: this.$route.query.package_name || "",
+                content_type: this.$route.query.content_type || "",
+                selection_type: this.$route.query.selection_type || "",
             },
+            show_table: false,
+            local_count_packages: null,
         }
+    },
+    computed: {
+        local_packages_url() { return this.build_url("/cgi-bin/koha/erm/eholdings/local/packages") },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -80,14 +110,34 @@ export default {
         show_package: function (package_id) {
             this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/packages/" + package_id)
         },
-        filter_table: function () {
-            $("#package_list_result").show()
+        build_url_params: function () {
+            return Object.entries(this.filters)
+                .map(([k, v]) => v ? k + "=" + v : undefined)
+                .filter(e => e !== undefined)
+                .join('&')
+        },
+        build_url: function (base_url) {
+            let params = this.build_url_params()
+            return base_url + (params.length ? '?' + params : '')
+        },
+        filter_table: async function () {
+            let new_route = this.build_url("/cgi-bin/koha/erm/eholdings/ebsco/packages")
+            this.$router.push(new_route)
+            this.show_table = true
+            this.local_count_packages = null
             $("#package_list").DataTable().draw()
+            if (this.erm_providers.includes('local')) {
+                this.local_count_packages = await fetchCountLocalPackages(this.filters)
+            }
         },
         build_datatable: function () {
             let show_package = this.show_package
             let get_lib_from_av = this.get_lib_from_av
+            if (!this.show_table) {
+                this.show_table = this.build_url_params().length ? true : false
+            }
             let filters = this.filters
+            let show_table = this.show_table
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -125,7 +175,7 @@ export default {
                 ordering: false,
                 dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
                 aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
-                deferLoading: true,
+                deferLoading: show_table ? false : true,
                 autoWidth: false,
                 columns: [
                     {

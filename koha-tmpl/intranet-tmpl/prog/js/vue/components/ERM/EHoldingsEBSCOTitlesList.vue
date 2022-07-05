@@ -38,8 +38,29 @@
                 $t("Please enter a search term")
             }}</span>
         </fieldset>
-        <div id="title_list_result" style="display: none">
-            <table id="title_list"></table>
+
+        <!-- We need to display the table element to initiate DataTable -->
+        <div
+            id="title_list_result"
+            :style="show_table ? 'display: block' : 'display: none'"
+        >
+            <div
+                v-if="
+                    local_count_titles !== undefined &&
+                    local_count_titles !== null
+                "
+            >
+                <router-link :to="local_titles_url">
+                    {{
+                        $t("{count} titles found locally", {
+                            count: local_count_titles,
+                        })
+                    }}</router-link
+                >
+            </div>
+            <div id="title_list_result">
+                <table id="title_list"></table>
+            </div>
         </div>
     </div>
 </template>
@@ -49,6 +70,7 @@ import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
+import { fetchCountLocalTitles } from "./../../fetch"
 
 export default {
     setup() {
@@ -63,6 +85,7 @@ export default {
             vendors,
             av_title_publication_types,
             get_lib_from_av,
+            erm_providers,
         }
     },
     data: function () {
@@ -70,12 +93,17 @@ export default {
             titles: [],
             initialized: true,
             filters: {
-                publication_title: this.$route.query.q || "",
-                publication_type: "",
-                selection_type: "",
+                publication_title: this.$route.query.publication_title || "",
+                publication_type: this.$route.query.publication_type || "",
+                selection_type: this.$route.query.selection_type || "",
             },
             cannot_search: false,
+            show_table: false,
+            local_count_titles: null,
         }
+    },
+    computed: {
+        local_titles_url() { return this.build_url("/cgi-bin/koha/erm/eholdings/local/titles") },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -86,11 +114,27 @@ export default {
         show_title: function (title_id) {
             this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/titles/" + title_id)
         },
-        filter_table: function () {
+        build_url_params: function () {
+            return Object.entries(this.filters)
+                .map(([k, v]) => v ? k + "=" + v : undefined)
+                .filter(e => e !== undefined)
+                .join('&')
+        },
+        build_url: function (base_url) {
+            let params = this.build_url_params()
+            return base_url + (params.length ? '?' + params : '')
+        },
+        filter_table: async function () {
             if (this.filters.publication_title.length) {
                 this.cannot_search = false
-                $("#title_list_result").show()
+                let new_route = this.build_url("/cgi-bin/koha/erm/eholdings/ebsco/titles")
+                this.$router.push(new_route)
+                this.show_table = true
+                this.local_count_titles = null
                 $("#title_list").DataTable().draw()
+                if (this.erm_providers.includes('local')) {
+                    this.local_count_titles = await fetchCountLocalTitles(this.filters)
+                }
             } else {
                 this.cannot_search = true
             }
@@ -98,7 +142,11 @@ export default {
         build_datatable: function () {
             let show_title = this.show_title
             let get_lib_from_av = this.get_lib_from_av
+            if (!this.show_table) {
+                this.show_table = this.build_url_params().length ? true : false
+            }
             let filters = this.filters
+            let show_table = this.show_table
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -120,7 +168,7 @@ export default {
                     return filters.publication_title || ""
                 },
                 publication_type: function () {
-                    return filters.content_type_search || ""
+                    return filters.publication_type || ""
                 },
                 selection_type: function () {
                     return filters.selection_type || ""

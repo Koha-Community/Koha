@@ -109,7 +109,7 @@
     <div v-else>
         {{
             $t(
-                "The E-Resource management module is disabled. Turn on 'ERMModule' to use it."
+                "The E-Resource management module is disabled, turn on 'ERMModule' to use it"
             )
         }}
     </div>
