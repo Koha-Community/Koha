@@ -1171,7 +1171,31 @@ subtest 'columns_to_str' => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
+
+    subtest 'dateaccessioned handling' => sub {
+
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        my $item = $builder->build_sample_item;
+
+        ok( defined $item->dateaccessioned, 'dateaccessioned is set' );
+
+        # reset dateaccessioned on the DB
+        $schema->resultset('Item')->find({ itemnumber => $item->id })->update({ dateaccessioned => undef });
+        $item->discard_changes;
+
+        ok( !defined $item->dateaccessioned );
+
+        # update something
+        $item->replacementprice(100)->store->discard_changes;
+
+        ok( !defined $item->dateaccessioned, 'dateaccessioned not set on update if undefined' );
+
+        $schema->storage->txn_rollback;
+    };
 
     subtest '_set_found_trigger() tests' => sub {
 
