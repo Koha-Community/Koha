@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 
 use C4::Biblio;
@@ -815,4 +815,33 @@ subtest 'get_transfers' => sub {
     is( $result_1->branchtransfer_id, $transfer_3->branchtransfer_id, 'Koha::Item->get_transfers returns the only transfer that remains');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 1;
+
+    subtest 'dateaccessioned handling' => sub {
+
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        my $item = $builder->build_sample_item;
+
+        ok( defined $item->dateaccessioned, 'dateaccessioned is set' );
+
+        # reset dateaccessioned on the DB
+        $schema->resultset('Item')->find({ itemnumber => $item->id })->update({ dateaccessioned => undef });
+        $item->discard_changes;
+
+        ok( !defined $item->dateaccessioned );
+
+        # update something
+        $item->replacementprice(100)->store->discard_changes;
+
+        ok( !defined $item->dateaccessioned, 'dateaccessioned not set on update if undefined' );
+
+        $schema->storage->txn_rollback;
+    };
 };
