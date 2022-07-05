@@ -181,8 +181,8 @@ if ( !C4::Context->preference('AllowHoldsOnDamagedItems') ){
     $where{'itembib.damaged'} = 0;
 }
 
-if ( C4::Context->preference('IndependentBranches') ){
-    $where{'itembib.holdingbranch'} = C4::Context->userenv->{'branch'};
+if ( C4::Context->only_my_library() ){
+    $where{'me.branchcode'} = C4::Context->userenv->{'branch'};
 }
 
 # get all distinct unfulfilled reserves
