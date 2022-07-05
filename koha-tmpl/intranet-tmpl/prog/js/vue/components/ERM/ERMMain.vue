@@ -1,102 +1,117 @@
 <template>
-    <Breadcrumb />
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
-                <main>
-                    <Dialog />
-                    <router-view />
-                </main>
-            </div>
+    <div v-if="ERMModule">
+        <Breadcrumb />
+        <div class="main container-fluid">
+            <div class="row">
+                <div class="col-sm-10 col-sm-push-2">
+                    <main>
+                        <Dialog />
+                        <router-view />
+                    </main>
+                </div>
 
-            <div class="col-sm-2 col-sm-pull-10">
-                <aside>
-                    <div id="navmenu">
-                        <div id="navmenulist">
-                            <h5>{{ $t("E-Resource management") }}</h5>
-                            <ul>
-                                <li>
-                                    <router-link
-                                        to="/cgi-bin/koha/erm/agreements"
-                                    >
-                                        <i class="fa fa-upload"></i>
-                                        {{ $t("Agreements") }}</router-link
-                                    >
-                                </li>
-                                <li>
-                                    <router-link
-                                        to="/cgi-bin/koha/erm/licenses"
-                                    >
-                                        <i class="fa fa-file-text-o"></i>
-                                        {{ $t("Licenses") }}</router-link
-                                    >
-                                </li>
-                                <li>
-                                    <router-link
-                                        to="/cgi-bin/koha/erm/eholdings"
-                                    >
-                                        <i class="fa fa-file-text-o"></i>
-                                        {{ $t("eHoldings") }}</router-link
-                                    >
-                                </li>
-
+                <div class="col-sm-2 col-sm-pull-10">
+                    <aside>
+                        <div id="navmenu">
+                            <div id="navmenulist">
+                                <h5>{{ $t("E-Resource management") }}</h5>
                                 <ul>
-                                    <li
-                                        v-for="provider in erm_providers"
-                                        :key="provider"
-                                    >
+                                    <li>
                                         <router-link
-                                            v-if="provider == 'local'"
-                                            :to="`/cgi-bin/koha/erm/eholdings/local`"
+                                            to="/cgi-bin/koha/erm/agreements"
                                         >
-                                            <i class="fa fa-file-text-o"></i>
-                                            {{ $t("Local") }}</router-link
+                                            <i class="fa fa-upload"></i>
+                                            {{ $t("Agreements") }}</router-link
                                         >
-                                        <router-link
-                                            v-else-if="provider == 'ebsco'"
-                                            :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
-                                        >
-                                            <i class="fa fa-file-text-o"></i>
-                                            {{ $t("EBSCO") }}</router-link
-                                        >
-                                        <ul>
-                                            <li>
-                                                <router-link
-                                                    :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
-                                                >
-                                                    <i
-                                                        class="
-                                                            fa fa-file-text-o
-                                                        "
-                                                    ></i>
-                                                    {{
-                                                        $t("Packages")
-                                                    }}</router-link
-                                                >
-                                            </li>
-                                            <li>
-                                                <router-link
-                                                    :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
-                                                >
-                                                    <i
-                                                        class="
-                                                            fa fa-file-text-o
-                                                        "
-                                                    ></i>
-                                                    {{
-                                                        $t("Titles")
-                                                    }}</router-link
-                                                >
-                                            </li>
-                                        </ul>
                                     </li>
+                                    <li>
+                                        <router-link
+                                            to="/cgi-bin/koha/erm/licenses"
+                                        >
+                                            <i class="fa fa-file-text-o"></i>
+                                            {{ $t("Licenses") }}</router-link
+                                        >
+                                    </li>
+                                    <li>
+                                        <router-link
+                                            to="/cgi-bin/koha/erm/eholdings"
+                                        >
+                                            <i class="fa fa-file-text-o"></i>
+                                            {{ $t("eHoldings") }}</router-link
+                                        >
+                                    </li>
+
+                                    <ul>
+                                        <li
+                                            v-for="provider in erm_providers"
+                                            :key="provider"
+                                        >
+                                            <router-link
+                                                v-if="provider == 'local'"
+                                                :to="`/cgi-bin/koha/erm/eholdings/local`"
+                                            >
+                                                <i
+                                                    class="fa fa-file-text-o"
+                                                ></i>
+                                                {{ $t("Local") }}</router-link
+                                            >
+                                            <router-link
+                                                v-else-if="provider == 'ebsco'"
+                                                :to="`/cgi-bin/koha/erm/eholdings/ebsco`"
+                                            >
+                                                <i
+                                                    class="fa fa-file-text-o"
+                                                ></i>
+                                                {{ $t("EBSCO") }}</router-link
+                                            >
+                                            <ul>
+                                                <li>
+                                                    <router-link
+                                                        :to="`/cgi-bin/koha/erm/eholdings/${provider}/packages`"
+                                                    >
+                                                        <i
+                                                            class="
+                                                                fa
+                                                                fa-file-text-o
+                                                            "
+                                                        ></i>
+                                                        {{
+                                                            $t("Packages")
+                                                        }}</router-link
+                                                    >
+                                                </li>
+                                                <li>
+                                                    <router-link
+                                                        :to="`/cgi-bin/koha/erm/eholdings/${provider}/titles`"
+                                                    >
+                                                        <i
+                                                            class="
+                                                                fa
+                                                                fa-file-text-o
+                                                            "
+                                                        ></i>
+                                                        {{
+                                                            $t("Titles")
+                                                        }}</router-link
+                                                    >
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </ul>
-                            </ul>
+                            </div>
                         </div>
-                    </div>
-                </aside>
+                    </aside>
+                </div>
             </div>
         </div>
+    </div>
+    <div v-else>
+        {{
+            $t(
+                "The E-Resource management module is disabled. Turn on 'ERMModule' to use it."
+            )
+        }}
     </div>
 </template>
 
@@ -126,6 +141,7 @@ export default {
         return {
             vendorStore,
             erm_providers,
+            ERMModule,
         }
     },
     data() {
