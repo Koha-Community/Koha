@@ -265,17 +265,15 @@ does receiving this serial create an item record
 
 =head2 staffdisplaycount
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_nullable: 1
-  size: 10
 
 how many issues to show to the staff
 
 =head2 opacdisplaycount
 
-  data_type: 'varchar'
+  data_type: 'integer'
   is_nullable: 1
-  size: 10
 
 how many issues to show to the public
 
@@ -408,9 +406,9 @@ __PACKAGE__->add_columns(
   "serialsadditems",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "staffdisplaycount",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "integer", is_nullable => 1 },
   "opacdisplaycount",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "integer", is_nullable => 1 },
   "graceperiod",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "enddate",
@@ -559,8 +557,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-12-13 16:00:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RXlOmAbIjAyLxVqqt36LHQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-07-05 17:45:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MFOz3AKUVSPuQv6kMb1EbA
 
 __PACKAGE__->has_many(
   "additional_field_values",
