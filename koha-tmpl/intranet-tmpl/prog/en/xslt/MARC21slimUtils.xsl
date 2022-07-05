@@ -578,6 +578,35 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="quote_search_term">
+        <xsl:param name="term" />
+        <xsl:text>"</xsl:text>
+        <xsl:call-template name="escape_quotes">
+            <xsl:with-param name="text">
+                <xsl:value-of select="$term"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>"</xsl:text>
+    </xsl:template>
+
+    <xsl:template name="escape_quotes">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text, '&quot;')">
+                <xsl:variable name="before" select="substring-before($text,'&quot;')"/>
+                <xsl:variable name="next" select="substring-after($text,'&quot;')"/>
+                <xsl:value-of select="$before"/>
+                <xsl:text>\&quot;</xsl:text>
+                <xsl:call-template name="escape_quotes">
+                    <xsl:with-param name="text" select="$next"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
