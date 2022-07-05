@@ -222,7 +222,14 @@
                         <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+AND+(bib-level:a+OR+bib-level:b)</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Host-item:(<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/>)</xsl:attribute>
+                        <xsl:variable name="title_query">
+                            <xsl:text>Host-item:(</xsl:text>
+                            <xsl:call-template name="quote_search_term">
+                                <xsl:with-param name="term"><xsl:value-of select="marc:datafield[@tag=245]/marc:subfield[@code='a']"/></xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text>)</xsl:text>
+                        </xsl:variable>
+                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($title_query, true())"/></xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <xsl:text>Show analytics</xsl:text>
@@ -1100,8 +1107,25 @@
                             </a>
                         </xsl:when>
                         <xsl:otherwise>
+                            <xsl:variable name="host_query">
+                                <xsl:text>ti,phr:(</xsl:text>
+                                <xsl:call-template name="quote_search_term">
+                                    <xsl:with-param name="term"><xsl:value-of select="marc:subfield[@code='t']"/></xsl:with-param>
+                                </xsl:call-template>
+                                <xsl:text>)</xsl:text>
+                                <xsl:if test="marc:subfield[@code='a']">
+                                    <xsl:text> AND au:(</xsl:text>
+                                    <xsl:call-template name="quote_search_term">
+                                        <xsl:with-param name="term">
+                                            <xsl:value-of select="marc:subfield[@code='a']"/>
+                                        </xsl:with-param>
+                                    </xsl:call-template>
+                                    <xsl:text>)</xsl:text>
+                                </xsl:if>
+                            </xsl:variable>
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='t'], '()', ''), true())"/><xsl:if test="marc:subfield[@code='a']">+AND+au:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='a'], '()', ''), true())"/></xsl:if></xsl:attribute>
+                            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($host_query, true())" />
+                            </xsl:attribute>
                                 <xsl:value-of select="$f773"/>
                             </a>
                         </xsl:otherwise>
