@@ -874,6 +874,7 @@
     <script>
 
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
+        table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'relatives-issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
             $("#info_digests").tooltip();

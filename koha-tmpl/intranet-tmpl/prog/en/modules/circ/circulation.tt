@@ -1063,6 +1063,7 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
+        table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %]
         table_settings_borrowers_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         [% IF borrowernumber and patron %]

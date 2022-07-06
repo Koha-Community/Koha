@@ -703,9 +703,9 @@ $(document).ready(function() {
     var relativesIssuesTable;
     $("#relatives-issues-tab").click( function() {
         if ( ! relativesIssuesTable ) {
-            relativesIssuesTable = $("#relatives-issues-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            relativesIssuesTable = KohaTable("relatives-issues-table", {
                 "bAutoWidth": false,
-                "sDom": "rt",
+                "dom": 'B<"clearfix">rt',
                 "aaSorting": [],
                 "aoColumns": [
                     {
@@ -868,7 +868,7 @@ $(document).ready(function() {
                         fnCallback(json)
                     } );
                 },
-            }));
+            }, table_settings_relatives_issues_table);
         }
     });
 
