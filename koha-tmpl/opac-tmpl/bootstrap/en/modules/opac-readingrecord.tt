@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% USE AdditionalContents %]
+[% USE Asset %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -76,14 +77,21 @@
                             [% END %]
 
                             [% IF Koha.Preference( 'OnSiteCheckouts' ) == 1 %]
-                            <div id="tabs" class="toptabs">
-                                <ul class="js-show">
-                                    <li id="tab_all"><a href="#tabs-container">All</a></li>
-                                    <li id="tab_checkout"><a href="#tabs-container">Checkouts</a></li>
-                                    <li id="tab_onsite_checkout"><a href="#tabs-container">On-site checkouts</a></li>
-                                </ul>
+                                <div id="tabs" class="toptabs">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a id="tab_all" class="nav-link active" data-toggle="tab" role="tab" aria-controls="tabs-container" aria-selected="true"  href="#tabs-container">All</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a id="tab_checkout" class="nav-link" data-toggle="tab" role="tab" aria-controls="tabs-container" aria-selected="false"  href="#tabs-container">Checkouts</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a id="tab_onsite_checkout" class="nav-link" data-toggle="tab" role="tab" aria-controls="tabs-container" aria-selected="false"  href="#tabs-container">On-site checkouts</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
                             [% END %]
-                                <div id="tabs-container" style="overflow:hidden">
+                                <div class="tab-pane active" role="tabpanel" id="tabs-container">
                                     <table id="readingrec" class="table table-bordered table-striped">
                                         <caption class="sr-only">Checkout history</caption>
                                         <thead>
@@ -177,6 +185,7 @@
                                     </table>
                                 </div> <!-- / .tabs-container -->
                             [% IF ( Koha.Preference( 'OnSiteCheckouts' ) == 1 ) %]
+                                    </div> <!-- /.tab-content -->
                                 </div> <!-- /#tabs -->
                             [% END %]
                         </div> <!-- / .opac-user-readingrec -->
@@ -208,16 +217,14 @@
             }
         }, columns_settings);
 
-        var tabs = $("#tabs").tabs({
-            activate: function(e, ui) {
-                var id = $(ui.newTab).attr("id");
-                if ( id == "tab_checkout" ) {
-                    table.fnFilter("standard_checkout", 0);
-                } else if ( id == "tab_onsite_checkout" ) {
-                    table.fnFilter("onsite_checkout", 0);
-                } else { // all
-                    table.fnFilter('', 0);
-                }
+        $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            var id = e.target.id;
+            if ( id == "tab_checkout" ) {
+                table.fnFilter("standard_checkout", 0);
+            } else if ( id == "tab_onsite_checkout" ) {
+                table.fnFilter("onsite_checkout", 0);
+            } else { // all
+                table.fnFilter('', 0);
             }
         });
     });
