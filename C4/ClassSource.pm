@@ -1,7 +1,6 @@
 package C4::ClassSource;
 
-# Copyright (C) 2007 LibLime
-# 
+# Copyright 2022 Koha Development Team
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -17,8 +16,7 @@ package C4::ClassSource;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Context;
 use C4::ClassSortRoutine qw( GetClassSortKey );
