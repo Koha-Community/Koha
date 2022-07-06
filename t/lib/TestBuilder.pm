@@ -433,7 +433,8 @@ sub _should_be_fk {
 # A column is not marked as FK, but a belongs_to relation is defined
     my ( $source, $column ) = @_;
     my $inconsistencies = {
-        'Item.biblionumber' => 1, #FIXME: Please remove me when I become FK
+        'Item.biblionumber'           => 1, #FIXME: Please remove me when I become FK
+        'CheckoutRenewal.checkout_id' => 1, #FIXME: Please remove when issues and old_issues are merged
     };
     return $inconsistencies->{ "$source.$column" };
 }
