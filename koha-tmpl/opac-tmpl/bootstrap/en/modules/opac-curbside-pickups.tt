@@ -218,7 +218,9 @@
 [% BLOCK jsinclude %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+    [% Asset.js("lib/dayjs/plugin/customParseFormat.js") | $raw %]
     <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
+    <script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
     [% INCLUDE 'calendar.inc' %]
     <script>
         [% SET pickup_exists_in = [] %]
@@ -298,7 +300,7 @@
             let branchcode = $("#pickup-branch").val();
             let policy = policies[branchcode];
 
-            let selectedDate = dayjs(currentDate);
+            let selectedDate = dayjs(currentDate, get_dateformat_str(dateformat_pref).toUpperCase());
 
             let pickupSlots = [];
             let available_count = 0;

@@ -32,6 +32,20 @@
         default:
             flatpickr_dateformat_string = "Y-m-d";
     }
+
+    function get_dateformat_str(dateformat) {
+        var dateformat_str;
+        if (dateformat == 'us') {
+            dateformat_str = 'mm/dd/yyyy';
+        } else if (dateformat == 'metric') {
+            dateformat_str = 'dd/mm/yyyy';
+        } else if (dateformat == 'iso') {
+            dateformat_str = 'yyyy-mm-dd';
+        } else if (dateformat == 'dmydot') {
+            dateformat_str = 'dd.mm.yyyy';
+        }
+        return dateformat_str;
+    }
 </script>
 [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
 <script>
