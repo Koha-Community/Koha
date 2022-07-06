@@ -157,48 +157,50 @@
                 [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) %]
                     <div class="col order-first order-md-first order-lg-2">
                         <div id="advsearches" class="toptabs">
-                            <ul>
+                            <ul class="nav nav-tabs" role="tablist">
                                 [% FOREACH advsearchloo IN advancedsearchesloop %]
-                                    <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
-                                    <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]">
-                                   [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
-                                   [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
-                                   [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
-                                   [% ELSE %]<span>Something else</span>
-                                   [% END %]
-                                   </a></li>
+                                    <li class="nav-item" role="presentation" id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+                                        <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]" class="nav-link" aria-controls="advsearch-[% advsearchloo.advanced_search_type | html %]" aria-selected="false" role="tab" data-toggle="tab">
+                                            [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
+                                            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
+                                            [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
+                                            [% ELSE %]<span>Something else</span>
+                                            [% END %]
+                                        </a>
+                                    </li>
                                 [% END %]
                             </ul>
-
-                            [% FOREACH advsearchloo IN advancedsearchesloop %]
-                                <div id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch">
-                                    <fieldset>
-                                        <legend>Limit to any of the following:</legend>
-                                        <div class="row">
-                                            [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-                                                [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input type="checkbox"
-                                                            id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
-                                                            name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
-                                                            value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
-                                                        />
-                                                        <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
-                                                            [% UNLESS ( Koha.Preference('OpacNoItemTypeImages')) %]
-                                                                [% IF ( itemtypeloo.imageurl ) %]
-                                                                    <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                            <div class="tab-content">
+                                [% FOREACH advsearchloo IN advancedsearchesloop %]
+                                    <div role="tabpanel" class="tab-pane" id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch" aria-labelledby="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+                                        <fieldset>
+                                            <legend>Limit to any of the following:</legend>
+                                            <div class="row">
+                                                [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
+                                                    [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
+                                                        <div class="col-sm-6 col-lg-3">
+                                                            <input type="checkbox"
+                                                                id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
+                                                                name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
+                                                                value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
+                                                            />
+                                                            <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
+                                                                [% UNLESS ( Koha.Preference('OpacNoItemTypeImages')) %]
+                                                                    [% IF ( itemtypeloo.imageurl ) %]
+                                                                        <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                                    [% END %]
+                                                                    &nbsp;
                                                                 [% END %]
-                                                                &nbsp;
-                                                            [% END %]
-                                                            [% itemtypeloo.description | html %]
-                                                        </label>
-                                                    </div>
-                                                [% IF ( loop.last ) %]</div>[% ELSE %][% UNLESS ( loop.count % 4 ) %]</div><div class="row">[% END %][% END %]
+                                                                [% itemtypeloo.description | html %]
+                                                            </label>
+                                                        </div>
+                                                    [% IF ( loop.last ) %]</div>[% ELSE %][% UNLESS ( loop.count % 4 ) %]</div><div class="row">[% END %][% END %]
+                                                    [% END %]
                                                 [% END %]
-                                            [% END %]
-                                    </fieldset>
-                                </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type | html %] -->
-                            [% END # / FOREACH advancedsearchesloop %]
+                                        </fieldset>
+                                    </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type | html %] -->
+                                [% END # / FOREACH advancedsearchesloop %]
+                            </div> <!-- /.tab-content -->
                         </div> <!-- / #advsearches -->
                     </div> <!-- / .col -->
                 [% END # /IF OpacAdvSearchOptions %]
@@ -470,7 +472,9 @@ $(document).ready(function() {
         });
     [% END %]
 
-    $('#advsearches').tabs();
+    if( $("#advsearches .tab-pane.active").length < 1 ){
+        $("#advsearches a:first").tab("show");
+    }
 
     $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
 

@@ -370,12 +370,8 @@
                 </div> <!-- / #catalogue_detail_biblio -->
 
                 <div id="bibliodescriptions" class="toptabs">
-                    <ul>
-                        [% IF ( defaulttab == 'holdings' ) %]
-                            <li id="tab_holdings" class="ui-tabs-active">
-                        [% ELSE %]
-                            <li id="tab_holdings">
-                        [% END %]
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li id="tab_holdings" class="nav-item" role="presentation">
                             [% BLOCK holding_tab_title %]
                                 [% IF SeparateHoldings %]
                                     <span>[% Branches.GetLoggedInBranchname | html %] holdings</span>
@@ -387,10 +383,14 @@
                                     [% END %]
                                 [% END %]
                             [% END %]
-                            <a href="#holdings">[% PROCESS holding_tab_title %] [% UNLESS too_many_items OR specific_item %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]</a>
+                            <a href="#holdings" class="nav-link" id="holdings-tab" data-toggle="tab" role="tab" aria-controls="holdings" aria-selected="false">
+                                [% PROCESS holding_tab_title %] [% UNLESS too_many_items OR specific_item %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]
+                            </a>
                         </li>
                         [% IF (SeparateHoldings) %]
-                            <li><a href="#otherholdings">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a></li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#otherholdings" class="nav-link" id="otherholdings-tab" data-toggle="tab" role="tab" aria-controls="otherholdings" aria-selected="false">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a>
+                            </li>
                         [% END %]
                         [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
                             [% SET title_notes_count = 0 %]
@@ -398,26 +398,31 @@
                                 [% SET title_notes_count = MARCNOTES.size %]
                             [% END %]
                             [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
-                            <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count | html %] )</a></li>
+                            <li id="tab_descriptions" class="nav-item" role="presentation">
+                                <a href="#descriptions" class="nav-link" id="tab_descriptions-tab" data-toggle="tab" role="tab" aria-controls="tab_descriptions" aria-selected="false">Title notes ( [% title_notes_count | html %] )</a>
+                            </li>
                         [% END %]
                         [% IF ComponentParts && ComponentParts.size %]
-                            [% IF defaulttab == 'components' %]
-                            <li id="tab_components" class="ui-tabs-active">
-                            [% ELSE %]
-                            <li id="tab_components">
-                            [% END %]
-                                <a href="#components">Components ([% ComponentParts.size | html %])</a>
+                            <li id="tab_components" class="nav-item" role="presentation">
+                                <a href="#components" class="nav-link" id="tab_components-tab" data-toggle="tab" role="tab" aria-controls="tab_components" aria-selected="false">
+                                Components ([% ComponentParts.size | html %])</a>
                             </li>
                         [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
-                            <li id="tab_toc"> <a href="#toc">TOC</a></li>
+                            <li id="tab_toc" class="nav-item" role="presentation">
+                                <a href="#toc" class="nav-link" id="tab_toc-tab" data-toggle="tab" role="tab" aria-controls="tab_toc" aria-selected="false">TOC</a>
+                            </li>
                         [% END %]
                         [% IF ( SyndeticsEnabled ) %]
                             [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
-                                <li id="tab_excerpt"> <a href="#excerpt">Excerpt</a></li>
+                                <li id="tab_excerpt" class="nav-item" role="presentation">
+                                    <a href="#excerpt" class="nav-link" id="tab_excerpt-tab" data-toggle="tab" role="tab" aria-controls="tab_excerpt" aria-selected="false">Excerpt</a>
+                                </li>
                             [% END %]
                             [% IF ( ( SyndeticsReviews && SYNDETICS_REVIEWS ) || ( LibraryThingForLibrariesTabbedView && LibraryThingForLibrariesID) ) %]
-                                <li id="tab_reviews"> <a href="#reviews">Reviews</a></li>
+                                <li id="tab_reviews" class="nav-item" role="presentation">
+                                    <a href="#reviews" class="nav-link" id="tab_reviews-tab" data-toggle="tab" role="tab" aria-controls="tab_reviews" aria-selected="false">Reviews</a>
+                                </li>
                                 [% IF ( LibraryThingForLibrariesID ) %]
                                     <li id="tab_LTFLreviews">
                                         <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID | html %]"></script>
@@ -426,530 +431,552 @@
                                 [% END %]
                             [% END %]
                             [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
-                                <li id="tab_anotes"> <a href="#anotes">About the author</a></li>
+                                <li id="tab_anotes" class="nav-item" role="presentation">
+                                    <a href="#anotes" class="nav-link" id="tab_anotes-tab" data-toggle="tab" role="tab" aria-controls="tab_anotes" aria-selected="false">About the author</a>
+                                </li>
                             [% END %]
                         [% END # / IF SyndeticsEnabled %]
 
                         [% IF ( LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView ) %]
-                            <li id="tab_LFTLSimilarItems"> <a href="#LFTLSimilarItems">Similar items</a></li>
-                            <li id="tab_LTFLTagBrowse"> <a href="#LTFLTagBrowse">Tag browser</a></li>
+                            <li id="tab_LFTLSimilarItems" class="nav-item" role="presentation">
+                                <a href="#LFTLSimilarItems" class="nav-link" id="tab_LFTLSimilarItems-tab" data-toggle="tab" role="tab" aria-controls="tab_LFTLSimilarItems" aria-selected="false">Similar items</a>
+                            </li>
+                            <li id="tab_LTFLTagBrowse">
+                                <a href="#LTFLTagBrowse" class="nav-link" id="tab_LTFLTagBrowse-tab" data-toggle="tab" role="tab" aria-controls="tab_LTFLTagBrowse" aria-selected="false">Tag browser</a>
+                            </li>
                         [% END %]
 
                         [% IF ( subscriptionsnumber ) %]
-                            [% IF ( defaulttab == 'subscriptions' ) %]<li id="tab_subscriptions" class="ui-tabs-active">[% ELSE %]<li id="tab_subscriptions">[% END %]
-                                <a href="#subscriptions">Subscriptions ( [% subscriptionsnumber | html %] )</a>
+                            <li id="tab_subscriptions" class="nav-item" role="presentation">
+                                <a href="#subscriptions" class="nav-link" id="tab_subscriptions-tab" data-toggle="tab" role="tab" aria-controls="tab_subscriptions" aria-selected="false">
+                                Subscriptions ( [% subscriptionsnumber | html %] )</a>
                             </li>
                         [% END %]
 
                         [% IF Koha.Preference( 'OPACComments' ) == 1 %]
-                            <li id="tab_comments"><a href="#comments">Comments[% ' ( ' _ (reviews.size || 0) _ ' )' | html %]</a></li>
+                            <li id="tab_comments" class="nav-item" role="presentation">
+                                <a href="#comments" class="nav-link" id="tab_comments-tab" data-toggle="tab" role="tab" aria-controls="tab_comments" aria-selected="false">Comments[% ' ( ' _ (reviews.size || 0) _ ' )' | html %]</a>
+                            </li>
                         [% END %]
 
                         [% IF ( NovelistSelectProfile && (normalized_isbn || normalized_upc) ) %]
                             [% IF ( NovelistSelectView == 'tab') %]
-                                <li id="tab_NovelistSelect" class="NovelistSelect" style="display:none;"> <a href="#NovelistSelect">Novelist Select</a></li>
+                                <li id="tab_NovelistSelect" class="NovelistSelect" style="display:none;" class="nav-item" role="presentation">
+                                    <a href="#NovelistSelect" class="nav-link" id="tab_NovelistSelect-tab" data-toggle="tab" role="tab" aria-controls="tab_NovelistSelect" aria-selected="false">Novelist Select</a>
+                                </li>
                             [% END %]
                         [% END %]
 
                         [% IF ( OPACFRBRizeEditions && XISBNS ) %]
-                            <li id="tab_editions"><a href="#editions">Editions</a></li>
+                            <li id="tab_editions" class="nav-item" role="presentation">
+                                <a href="#editions" class="nav-link" id="tab_editions-tab" data-toggle="tab" role="tab" aria-controls="tab_editions" aria-selected="false">Editions</a>
+                            </li>
                         [% END %]
 
                         [% IF ( serialcollection ) %]
-                            [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-active">[% ELSE %]<li id="tab_serialcollection">[% END %]
-                                <a href="#serialcollection">Serial collection</a>
+                            <li id="tab_serialcollection" class="nav-item" role="presentation">
+                                <a href="#serialcollection" class="nav-link" id="tab_serialcollection-tab" data-toggle="tab" role="tab" aria-controls="tab_serialcollection" aria-selected="false">
+                                    Serial collection
+                                </a>
                             </li>
                         [% END %]
 
                         [% IF ( OPACLocalCoverImages && localimages.count ) %]
-                            <li id="tab_images"><a href="#images">Images</a></li>
+                            <li id="tab_images" class="nav-item" role="presentation">
+                                <a href="#images" class="nav-link" id="tab_images-tab" data-toggle="tab" role="tab" aria-controls="tab_images" aria-selected="false">Images</a>
+                            </li>
                         [% END %]
 
                         [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
-                            [% IF ( defaulttab == 'media' ) %]<li id="tab_html5media" class="ui-tabs-active">[% ELSE %]<li id="tab_html5media">[% END %]<a href="#html5media">Play media</a></li>
+                            <li id="tab_html5media" class="nav-item" role="presentation">
+                                <a href="#html5media" class="nav-link" id="tab_html5media-tab" data-toggle="tab" role="tab" aria-controls="tab_html5media" aria-selected="false">
+                                    Play media
+                                </a>
+                            </li>
                         [% END %]
-
                     </ul>
 
-                    [% IF ( serialcollection ) %]
-                        <div id="serialcollection">
-                            <table id="serialcollectiont" class="table table-bordered table-striped">
-                                <caption class="sr-only">Serial collections</caption>
-                                <thead>
-                                    <tr>
-                                        <th id="serial_library">Library</th>
-                                        <th id="serial_collection">Serial collection</th>
-                                        <th id="serial_itemcallnumber">Item call number</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH serialcollection IN serialcollections %]
+                    <div class="tab-content">
+                        [% IF ( serialcollection ) %]
+                            <div id="serialcollection" class="tab-pane" role="tabpanel" aria-labelledby="tab_serialcollection-tab">
+                                <table id="serialcollectiont" class="table table-bordered table-striped">
+                                    <caption class="sr-only">Serial collections</caption>
+                                    <thead>
                                         <tr>
-                                            <td>[% serialcollection.branch | html %]</td>
-                                            <td>[% serialcollection.text | html %]</td>
-                                            <td>[% serialcollection.itemcallnumber | html %]</td>
+                                            <th id="serial_library">Library</th>
+                                            <th id="serial_collection">Serial collection</th>
+                                            <th id="serial_itemcallnumber">Item call number</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
-                        </div> <!-- /#serialcollection -->
-                    [% END # / IF serialcollection %]
-
-
-                    <div id="holdings">
-                        [% IF too_many_items %]
-                            <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">View all the physical items.</a></p>
-                        [% ELSIF ( itemloop.size ) %]
-                            [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
-                            [% IF specific_item %]
-                                <p><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Show all items</a></p>
-                            [% ELSE %]
-                                [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
-                                    [% IF acquisition_details.total_quantity == 1 %]
-                                        <span>1 item is on order.</span>
-                                    [% ELSE %]
-                                        <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
-                                    [% END %]
-                                [% END %]
-                                [% IF holds_count.defined || priority %]
-                                    <div id="bib_holds">
-                                        [% IF holds_count.defined %]
-                                            <span>Total holds: [% holds_count | html %]</span>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH serialcollection IN serialcollections %]
+                                            <tr>
+                                                <td>[% serialcollection.branch | html %]</td>
+                                                <td>[% serialcollection.text | html %]</td>
+                                                <td>[% serialcollection.itemcallnumber | html %]</td>
+                                            </tr>
                                         [% END %]
-                                        [% IF priority %]
+                                    </tbody>
+                                </table>
+                            </div> <!-- /#serialcollection -->
+                        [% END # / IF serialcollection %]
+
+
+                        <div id="holdings" class="tab-pane" role="tabpanel" aria-labelledby="holdings-tab">
+                            [% IF too_many_items %]
+                                <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">View all the physical items.</a></p>
+                            [% ELSIF ( itemloop.size ) %]
+                                [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
+                                [% IF specific_item %]
+                                    <p><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Show all items</a></p>
+                                [% ELSE %]
+                                    [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
+                                        [% IF acquisition_details.total_quantity == 1 %]
+                                            <span>1 item is on order.</span>
+                                        [% ELSE %]
+                                            <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF holds_count.defined || priority %]
+                                        <div id="bib_holds">
                                             [% IF holds_count.defined %]
-                                                <span>(priority [% priority | html %])</span>
-                                            [% ELSE %]
-                                                <span>Overall queue priority: [% priority | html %]</span>
+                                                <span>Total holds: [% holds_count | html %]</span>
                                             [% END %]
-                                        [% END %]
-                                    </div>
-                                [% END %]
+                                            [% IF priority %]
+                                                [% IF holds_count.defined %]
+                                                    <span>(priority [% priority | html %])</span>
+                                                [% ELSE %]
+                                                    <span>Overall queue priority: [% priority | html %]</span>
+                                                [% END %]
+                                            [% END %]
+                                        </div>
+                                    [% END %]
 
-                            [% END # /IF specific_item %]
-                        [% ELSE %]
-                            [% IF ( ALTERNATEHOLDINGS ) %]
-                                [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
-                                    <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
-                                [% END %]
+                                [% END # /IF specific_item %]
                             [% ELSE %]
-                                [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
-                                    [% IF acquisition_details.total_quantity == 1 %]
-                                        <span>1 item is on order.</span>
-                                    [% ELSE %]
-                                        <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
+                                [% IF ( ALTERNATEHOLDINGS ) %]
+                                    [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+                                        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
                                     [% END %]
                                 [% ELSE %]
-                                    <div id="noitems">No physical items for this record</div>
-                                [% END %]
-                            [% END %]
-                        [% END # IF itemloop.size %]
-                        [% PROCESS 'shelfbrowser.inc' %]
-                        [% INCLUDE shelfbrowser tab='holdings' %]
-                        <br style="clear:both;" />
-                    </div> <!-- / #holdings -->
-
-                    [% IF (SeparateHoldings) %]
-                        <div id="otherholdings">
-                            [% IF (otheritemloop.size) %]
-                                [% INCLUDE items_table items=otheritemloop tab="otherholdings" table_id="otherholdingst" %]
-                            [% ELSE %]
-                                <span>No other items.</span>
-                            [% END %]
-                            [% INCLUDE shelfbrowser tab='otherholdings' %]
-                        </div>
-                    [% END # / SeparateHoldings %]
-
-                    [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
-                        <div id="descriptions">
-                            <div class="content_set">
-
-                                [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
-                                    <h2>Enhanced descriptions from Syndetics:</h2>
-                                    <p>[% SYNDETICS_SUMMARY | $raw %]</p>
-                                [% END %]
-
-                                [% IF ( MARCNOTES ) %]
-                                    <div id="marcnotes">
-                                    [% FOREACH MARCNOTE IN MARCNOTES %]
-                                        <p>
-                                        [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                            <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                    [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
+                                        [% IF acquisition_details.total_quantity == 1 %]
+                                            <span>1 item is on order.</span>
                                         [% ELSE %]
-                                            [% MARCNOTE.marcnote | html | html_line_break %]
+                                            <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
                                         [% END %]
-                                        </p>
-                                    [% END %]
-                                    </div>
-                                [% END %]
-
-                            </div> <!-- /.content_set -->
-                        </div> <!-- / #descriptions -->
-                    [% END # / IF MARCNOTES %]
-
-                    [% IF ComponentParts && ComponentParts.size %]
-                    <div id="components">
-                        <div class="content_set">
-                            <table>
-                                [% FOR PART IN ComponentParts %]
-                                <tr>
-                                    <td>
-                                        [% PART | $raw %]
-                                    </td>
-                                </tr>
-                                [% END %]
-                            </table>
-                            [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
-                            <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/opac-search.pl?q=[% ComponentPartsQuery | url %]"/>show all component parts</a></p>
-                            [% END %]
-                        </div>
-                    </div>
-                    [% END %]
-
-                    [% IF ( SyndeticsEnabled ) %]
-                        [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]
-                            <div id="toc">
-                                <div class="content_set">
-                                    <h2>Table of contents provided by Syndetics</h2>
-                                        <ul>
-                                            [% FOREACH SYNDETICS_TO IN SYNDETICS_TOC %]
-                                                <li><strong>[% SYNDETICS_TO.l | html %] [% SYNDETICS_TO.t | html %]</strong>[% IF ( SYNDETICS_TO.p ) %] ([% SYNDETICS_TO.p | $raw %])[% END %]</li>
-                                            [% END %]
-                                        </ul>
-                                </div>
-                            </div>
-                        [% END # / IF SyndeticsTOC && SYNDETICS_TOC %]
-
-                        [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
-                            <div id="excerpt">
-                                <div class="content_set">
-                                    <h2>Excerpt provided by Syndetics</h2>
-                                    [% SYNDETICS_EXCERPT | $raw %]
-                                </div>
-                            </div>
-                        [% END # / IF SyndeticsExcerpt && SYNDETICS_EXCERPT %]
-
-                        [% IF ( SyndeticsReviews && SYNDETICS_REVIEWS ) %]
-                            <div id="reviews">
-                                <div class="content_set">
-                                    <h2>Reviews provided by Syndetics</h2>
-                                    [% FOREACH SYNDETICS_REVIEW IN SYNDETICS_REVIEWS %]
-                                        [% IF ( SYNDETICS_REVIEW.title ) %]
-                                            <h3>[% SYNDETICS_REVIEW.title | html %]</h3>
-                                                [% FOREACH review IN SYNDETICS_REVIEW.reviews %]
-
-                                                    [% IF ( review.content ) %]
-                                                        [% review.content | $raw %]
-                                                    [% END %]
-
-                                                [% END %]
-                                        [% END %]
-                                    [% END %]
-                                </div>
-                            </div>
-                        [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
-
-                        [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
-                            <div id="anotes">
-                                <div class="content_set">
-                                    <h2>Author notes provided by Syndetics</h2>
-                                    [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
-                                        [% IF ( SYNDETICS_ANOTE.content ) %]
-                                            [% SYNDETICS_ANOTE.content | $raw %]
-                                        [% END %]
-                                    [% END %]
-                                </div>
-                            </div>
-                        [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
-                    [% END # / IF SyndeticsEnabled %]
-
-                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && (normalized_isbn || normalized_upc) ) %]
-                       <div id="NovelistSelect" >
-                            <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]></div>
-                       </div>
-                    [% END # / IF NovelistSelectProfile && NovelistSelectView == 'tab' %]
-
-                    [% IF ( subscriptionsnumber ) %]
-                        <div id="subscriptions">
-                            <h2>This is a serial</h2>
-                            <p class="subscription_count">There are [% subscriptionsnumber | html %] subscription(s) associated with this title.</p>
-                            [% FOREACH subscription IN subscriptions %]
-                                <div class="subscription">
-                                    [% IF ( subscription.branchcode ) %]
-                                        <h3>At library: [% Branches.GetName( subscription.branchcode ) | html %]</h3>
                                     [% ELSE %]
-                                        [% IF ( subscription.branchcode ) %]
-                                            <h3>At library: [% subscription.branchcode | html %]</h3>
-                                        [% END %]
+                                        <div id="noitems">No physical items for this record</div>
                                     [% END %]
-                                    [% IF ( subscription.closed ) %]
-                                        <p class="subscription_closed">This subscription is closed.</p>
+                                [% END %]
+                            [% END # IF itemloop.size %]
+                            [% PROCESS 'shelfbrowser.inc' %]
+                            [% INCLUDE shelfbrowser tab='holdings' %]
+                            <br style="clear:both;" />
+                        </div> <!-- / #holdings -->
+
+                        [% IF (SeparateHoldings) %]
+                            <div id="otherholdings" class="tab-pane" role="tabpanel" aria-labelledby="otherholdings-tab">
+                                [% IF (otheritemloop.size) %]
+                                    [% INCLUDE items_table items=otheritemloop tab="otherholdings" table_id="otherholdingst" %]
+                                [% ELSE %]
+                                    <span>No other items.</span>
+                                [% END %]
+                                [% INCLUDE shelfbrowser tab='otherholdings' %]
+                            </div>
+                        [% END # / SeparateHoldings %]
+
+                        [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                            <div id="descriptions" class="tab-pane" role="tabpanel" aria-labelledby="tab_descriptions-tab">
+                                <div class="content_set">
+
+                                    [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
+                                        <h2>Enhanced descriptions from Syndetics:</h2>
+                                        <p>[% SYNDETICS_SUMMARY | $raw %]</p>
                                     [% END %]
-                                    [% IF ( subscription.location ) %]
-                                        <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html %]
-                                    [% END %]
-                                    [% IF ( subscription.callnumber ) %]
-                                        <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
-                                    [% END %]
-                                    [% IF ( subscription.subscriptionnotes ) %]
-                                        <p class="subscription_notes">[% subscription.subscriptionnotes | html | html_line_break %] </p>
-                                    [% END %]
-                                    <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
-                                    [% IF ( subscription.letter ) %]
-                                        <span class="email_notifications">
-                                            [% IF ( loggedinusername ) %]
-                                                [% IF ( subscription.hasalert ) %]
-                                                    <span>You have subscribed to email notification on new issues. </span><a class="btn btn-secondary" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Cancel email notification</a>
-                                                [% ELSE %]
-                                                    <a class="btn btn-secondary" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Subscribe to email notification on new issues</a>
-                                                [% END %]
+
+                                    [% IF ( MARCNOTES ) %]
+                                        <div id="marcnotes">
+                                        [% FOREACH MARCNOTE IN MARCNOTES %]
+                                            <p>
+                                            [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                             [% ELSE %]
-                                                <span>You must log in if you want to subscribe to email notification on new issues</span>
+                                                [% MARCNOTE.marcnote | html | html_line_break %]
                                             [% END %]
-                                        </span>
+                                            </p>
+                                        [% END %]
+                                        </div>
                                     [% END %]
-                                    [% IF ( subscription.missinglist ) %]
-                                        <p class="subscription_missing">Missing issues: [% subscription.missinglist | html | html_line_break %] </p>
+
+                                </div> <!-- /.content_set -->
+                            </div> <!-- / #descriptions -->
+                        [% END # / IF MARCNOTES %]
+
+                        [% IF ComponentParts && ComponentParts.size %]
+                            <div id="components" class="tab-pane" role="tabpanel" aria-labelledby="tab_components-tab">
+                                <div class="content_set">
+                                    <table>
+                                        [% FOR PART IN ComponentParts %]
+                                            <tr>
+                                                <td>
+                                                    [% PART | $raw %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                    </table>
+                                    [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
+                                        <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/opac-search.pl?q=[% ComponentPartsQuery | uri %]"/>show all component parts</a></p>
                                     [% END %]
-                                    [% IF ( subscription.opacnote ) %]
-                                        <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>
-                                    [% END %]
-                                    [% IF ( subscription.latestserials ) %]
-                                        <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
-                                        <table class="table table-bordered table-striped" id="subscriptionst">
-                                            <caption class="sr-only">Latest serials</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
-                                                    <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
-                                                    <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
-                                                    <th id="serial_status" data-colname="serial_status">Status</th>
-                                                    <th id="serial_notes" data-colname="serial_notes">Note</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                [% FOREACH latestserial IN subscription.latestserials %]
-                                                    <tr>
-                                                        <td class="serialseq">[% latestserial.serialseq | html %]</td>
-                                                        <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
-                                                        <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
-                                                        <td class="serial_status">
-                                                            [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
-                                                            [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
-                                                            [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
-                                                            [% IF (latestserial.status4 ) %]<span>Missing</span>[% END %]
-                                                                [% IF (latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
-                                                                [% IF (latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
-                                                                [% IF (latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
-                                                                [% IF (latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
-                                                            [% IF (latestserial.status5 ) %]<span>Not issued</span>[% END %]
-                                                            [% IF (latestserial.status6 ) %]<span>Delete</span>[% END %]
-                                                            [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
-                                                            [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
-                                                        </td>
-                                                        <td class="serial_notes">[% latestserial.notes | html %]</td>
-                                                    </tr>
-                                                [% END # / FOREACH latestserials %]
-                                            </tbody>
-                                        </table>
-                                    [% END # / IF subscription.latestserials %]
                                 </div>
-                            [% END # / FOREACH subscriptions %]
-                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | uri %]">More details</a></p>
-                        </div> <!-- / #subscriptions -->
-                    [% END # IF subscriptionsnumber %]
-
-                    [% IF ( LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView ) %]
-                        <!-- Library Thing for Libraries Content -->
-                        <div id="LFTLSimilarItems">
-                            <div class="content_set">
-                                <!-- Uncommenting this span makes the font smaller in the tab for LTFL -->
-                                <!-- but breaks Xhtml validation -->
-                                <!--    <span class="results_summary">-->
-                                <div id="ltfl_related"></div>
-                                <div id="ltfl_similars"></div>
-                                <!--            </span>-->
                             </div>
-                        </div>
-                        <div id="LTFLTagBrowse">
-                            <div class="content_set">
-                                <!-- <span class="results_summary"> -->
-                                <div id="ltfl_tagbrowse" class="ltfl"></div>
-                                <!-- </span> -->
-                            </div>
-                        </div>
-                    [% END # / IF LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView %]
+                        [% END %]
 
-                    [% IF Koha.Preference( 'OPACComments' ) == 1 %]
-                        <div id="comments">
-                            <div id="newcomment"></div>
-                                [% IF ( reviews ) %]
-                                    [% FOREACH review IN reviews %]
-                                        [% IF borrowernumber && review.borrowernumber == borrowernumber %]
-                                            <div class="commentline yours" id="c[% review.reviewid | html %]">
-                                                [% IF ( review.avatarurl ) %]
-                                                    <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
+                        [% IF ( SyndeticsEnabled ) %]
+                            [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]
+                                <div id="toc" class="tab-pane" role="tabpanel" aria-labelledby="tab_toc-tab">
+                                    <div class="content_set">
+                                        <h2>Table of contents provided by Syndetics</h2>
+                                            <ul>
+                                                [% FOREACH SYNDETICS_TO IN SYNDETICS_TOC %]
+                                                    <li><strong>[% SYNDETICS_TO.l | html %] [% SYNDETICS_TO.t | html %]</strong>[% IF ( SYNDETICS_TO.p ) %] ([% SYNDETICS_TO.p | $raw %])[% END %]</li>
                                                 [% END %]
-                                                [% IF review.approved %]
-                                                    <h2 id="comment">Your comment</h2>
-                                                [% ELSE %]
-                                                    <h2 id="comment">Your comment (preview, pending approval)</h2>
-                                                [% END %]
-                                                <small>[% review.datereviewed | $KohaDates %]</small>
-                                                <p>
-                                                    [% FILTER html_break %]
-                                                        [% review.review | html %]
+                                            </ul>
+                                    </div>
+                                </div>
+                            [% END # / IF SyndeticsTOC && SYNDETICS_TOC %]
+
+                            [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
+                                <div id="excerpt" class="tab-pane" role="tabpanel" aria-labelledby="tab_excerpt-tab">
+                                    <div class="content_set">
+                                        <h2>Excerpt provided by Syndetics</h2>
+                                        [% SYNDETICS_EXCERPT | $raw %]
+                                    </div>
+                                </div>
+                            [% END # / IF SyndeticsExcerpt && SYNDETICS_EXCERPT %]
+
+                            [% IF ( SyndeticsReviews && SYNDETICS_REVIEWS ) %]
+                                <div id="reviews" class="tab-pane" role="tabpanel" aria-labelledby="tab_reviews-tab">
+                                    <div class="content_set">
+                                        <h2>Reviews provided by Syndetics</h2>
+                                        [% FOREACH SYNDETICS_REVIEW IN SYNDETICS_REVIEWS %]
+                                            [% IF ( SYNDETICS_REVIEW.title ) %]
+                                                <h3>[% SYNDETICS_REVIEW.title | html %]</h3>
+                                                    [% FOREACH review IN SYNDETICS_REVIEW.reviews %]
+
+                                                        [% IF ( review.content ) %]
+                                                            [% review.content | $raw %]
+                                                        [% END %]
+
                                                     [% END %]
-                                                    <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | uri %]&amp;reviewid=[% review.reviewid | uri %]');">Edit</a>
-                                                </p>
-                                            </div>
-                                        [% ELSE %]
-                                            <div class="commentline">
-                                                [% IF ( ShowReviewer != "none" && review.patron) %]
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                </div>
+                            [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
 
+                            [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
+                                <div id="anotes" class="tab-pane" role="tabpanel" aria-labelledby="tab_anotes-tab">
+                                    <div class="content_set">
+                                        <h2>Author notes provided by Syndetics</h2>
+                                        [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
+                                            [% IF ( SYNDETICS_ANOTE.content ) %]
+                                                [% SYNDETICS_ANOTE.content | $raw %]
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                </div>
+                            [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
+                        [% END # / IF SyndeticsEnabled %]
+
+                        [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && (normalized_isbn || normalized_upc) ) %]
+                            <div id="NovelistSelect" class="tab-pane" role="tabpanel" aria-labelledby="tab_NovelistSelect-tab">
+                                    <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]></div>
+                            </div>
+                        [% END # / IF NovelistSelectProfile && NovelistSelectView == 'tab' %]
+
+                        [% IF ( subscriptionsnumber ) %]
+                            <div id="subscriptions" class="tab-pane" role="tabpanel" aria-labelledby="tab_subscriptions-tab">
+                                <h2>This is a serial</h2>
+                                <p class="subscription_count">There are [% subscriptionsnumber | html %] subscription(s) associated with this title.</p>
+                                [% FOREACH subscription IN subscriptions %]
+                                    <div class="subscription">
+                                        [% IF ( subscription.branchcode ) %]
+                                            <h3>At library: [% Branches.GetName( subscription.branchcode ) | html %]</h3>
+                                        [% ELSE %]
+                                            [% IF ( subscription.branchcode ) %]
+                                                <h3>At library: [% subscription.branchcode | html %]</h3>
+                                            [% END %]
+                                        [% END %]
+                                        [% IF ( subscription.closed ) %]
+                                            <p class="subscription_closed">This subscription is closed.</p>
+                                        [% END %]
+                                        [% IF ( subscription.location ) %]
+                                            <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html %]
+                                        [% END %]
+                                        [% IF ( subscription.callnumber ) %]
+                                            <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
+                                        [% END %]
+                                        [% IF ( subscription.subscriptionnotes ) %]
+                                            <p class="subscription_notes">[% subscription.subscriptionnotes | html | html_line_break %] </p>
+                                        [% END %]
+                                        <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
+                                        [% IF ( subscription.letter ) %]
+                                            <span class="email_notifications">
+                                                [% IF ( loggedinusername ) %]
+                                                    [% IF ( subscription.hasalert ) %]
+                                                        <span>You have subscribed to email notification on new issues. </span><a class="btn btn-secondary" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Cancel email notification</a>
+                                                    [% ELSE %]
+                                                        <a class="btn btn-secondary" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;biblionumber=[% subscription.biblionumber | html %]">Subscribe to email notification on new issues</a>
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    <span>You must log in if you want to subscribe to email notification on new issues</span>
+                                                [% END %]
+                                            </span>
+                                        [% END %]
+                                        [% IF ( subscription.missinglist ) %]
+                                            <p class="subscription_missing">Missing issues: [% subscription.missinglist | html | html_line_break %] </p>
+                                        [% END %]
+                                        [% IF ( subscription.opacnote ) %]
+                                            <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>
+                                        [% END %]
+                                        [% IF ( subscription.latestserials ) %]
+                                            <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>
+                                            <table class="table table-bordered table-striped" id="subscriptionst">
+                                                <caption class="sr-only">Latest serials</caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
+                                                        <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
+                                                        <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
+                                                        <th id="serial_status" data-colname="serial_status">Status</th>
+                                                        <th id="serial_notes" data-colname="serial_notes">Note</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    [% FOREACH latestserial IN subscription.latestserials %]
+                                                        <tr>
+                                                            <td class="serialseq">[% latestserial.serialseq | html %]</td>
+                                                            <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                                            <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
+                                                            <td class="serial_status">
+                                                                [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
+                                                                [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
+                                                                [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
+                                                                [% IF (latestserial.status4 ) %]<span>Missing</span>[% END %]
+                                                                    [% IF (latestserial.status41 ) %]<span>Missing (never received)</span>[% END %]
+                                                                    [% IF (latestserial.status42 ) %]<span>Missing (sold out)</span>[% END %]
+                                                                    [% IF (latestserial.status43 ) %]<span>Missing (damaged)</span>[% END %]
+                                                                    [% IF (latestserial.status44 ) %]<span>Missing (lost)</span>[% END %]
+                                                                [% IF (latestserial.status5 ) %]<span>Not issued</span>[% END %]
+                                                                [% IF (latestserial.status6 ) %]<span>Delete</span>[% END %]
+                                                                [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
+                                                                [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
+                                                            </td>
+                                                            <td class="serial_notes">[% latestserial.notes | html %]</td>
+                                                        </tr>
+                                                    [% END # / FOREACH latestserials %]
+                                                </tbody>
+                                            </table>
+                                        [% END # / IF subscription.latestserials %]
+                                    </div>
+                                [% END # / FOREACH subscriptions %]
+                                <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | uri %]">More details</a></p>
+                            </div> <!-- / #subscriptions -->
+                        [% END # IF subscriptionsnumber %]
+
+                        [% IF ( LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView ) %]
+                            <!-- Library Thing for Libraries Content -->
+                            <div id="LFTLSimilarItems" class="tab-pane" role="tabpanel" aria-labelledby="tab_LFTLSimilarItems-tab">
+                                <div class="content_set">
+                                    <!-- Uncommenting this span makes the font smaller in the tab for LTFL -->
+                                    <!-- but breaks Xhtml validation -->
+                                    <!--    <span class="results_summary">-->
+                                    <div id="ltfl_related"></div>
+                                    <div id="ltfl_similars"></div>
+                                    <!--            </span>-->
+                                </div>
+                            </div>
+                            <div id="LTFLTagBrowse" class="tab-pane" role="tabpanel" aria-labelledby="tab_LTFLTagBrowse-tab">
+                                <div class="content_set">
+                                    <!-- <span class="results_summary"> -->
+                                    <div id="ltfl_tagbrowse" class="ltfl"></div>
+                                    <!-- </span> -->
+                                </div>
+                            </div>
+                        [% END # / IF LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView %]
+
+                        [% IF Koha.Preference( 'OPACComments' ) == 1 %]
+                            <div id="comments" class="tab-pane" role="tabpanel" aria-labelledby="tab_comments-tab">
+                                <div id="newcomment"></div>
+                                    [% IF ( reviews ) %]
+                                        [% FOREACH review IN reviews %]
+                                            [% IF borrowernumber && review.borrowernumber == borrowernumber %]
+                                                <div class="commentline yours" id="c[% review.reviewid | html %]">
                                                     [% IF ( review.avatarurl ) %]
                                                         <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
                                                     [% END %]
-                                                    [% SWITCH ShowReviewer %]
-                                                    [% CASE 'full' %]
-                                                        <h2 id="comment">Comment by [% review.patron.title | html %] [% review.patron.firstname | html %] [% review.patron.surname | html %]</h2>
-                                                    [% CASE 'first' %]
-                                                        <h2 id="comment">Comment by [% review.patron.firstname | html %]</h2>
-                                                    [% CASE 'surname' %]
-                                                        <h2 id="comment">Comment by [% review.patron.surname | html %]</h2>
-                                                    [% CASE 'firstandinitial' %]
-                                                        <h2 id="comment">Comment by [% review.patron.firstname | html %] [% review.patron.surname|truncate(2,'.') | html %]</h2>
-                                                    [% CASE 'username' %]
-                                                        <h2 id="comment">Comment by [% review.patron.userid | html %]</h2>
-                                                    [% END %]
-
-                                                    <small>[% review.datereviewed | $KohaDates %]</small>
-                                                [% ELSE %]
-                                                    <h2 id="comment">Patron comment on [% review.datereviewed | $KohaDates %]</h2>
-                                                [% END # / IF ShowReviewer != "none" && review.patron %]
-                                                <p>
-                                                    [% FILTER html_break %]
-                                                    [% review.review | html %]
-                                                    [% END %]
-                                                </p>
-                                            </div> <!-- / .commentline -->
-                                        [% END %]
-                                    [% END # / FOREACH reviews %]
-                                [% ELSE %]
-                                    <p>There are no comments on this title.</p>
-                                [% END # / IF reviews %]
-
-                                [% IF ( loggedinusername ) %]
-                                    [% UNLESS ( loggedincommenter ) %]
-                                        <div id="addcomment">
-                                            <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]'); return false;">
-                                            Post your comments on this title.
-                                            </a>
-                                        </div>
-                                    [% END %]
-                                [% ELSE %]
-                                    <div id="addcomment">
-                                        <a class="login-link loginModal-trigger" role="button" data-toggle="modal" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
-                                    </div>
-                                [% END # / IF loggedinusername %]
-                            </div> <!-- / #comments -->
-                        [% END # / IF OPACComments %]
-
-                        [% IF ( OPACFRBRizeEditions && XISBNS ) %]
-                            <div id="editions">
-                                <h2>Other editions of this work</h2>
-                                <table class="table table-bordered table-striped">
-                                    <caption class="sr-only">Other editions</caption>
-                                    [% FOREACH XISBN IN XISBNS %]
-                                        <tr>
-                                            <td>
-                                                [% IF ( OPACAmazonCoverImages ) %]
-                                                    <img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
-                                                [% END %]
-
-                                                [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                    [% IF ( XISBN.content_identifier_exists ) %]
-                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | html %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
+                                                    [% IF review.approved %]
+                                                        <h2 id="comment">Your comment</h2>
                                                     [% ELSE %]
-                                                        <span class="no-image">No cover image available</span>
-                                                    [% END # / IF  XISBN.content_identifier_exists %]
-                                                [% END # / IF SyndeticsEnabled && SyndeticsCoverImages %]
-                                            </td>
-
-                                            [% UNLESS ( item_level_itypes ) %]
-                                                <td>[% XISBN.description | html %]</td>
-                                            [% END %]
-                                            <td>
-                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a>
-                                                [% IF ( XISBN.author ) %]<span> by </span>[% XISBN.author | html %][% END %]
-                                                [% IF ( XISBN.copyrightdate ) %]<span> &copy;</span>[% XISBN.copyrightdate | html %][% END %]
-                                                [% IF ( XISBN.publishercode ) %]
-                                                    <p>[% XISBN.publishercode | html %]
-                                                        [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
-                                                        [% IF ( XISBN.publicationyear ) %][% ', ' _ XISBN.publicationyear | html %][% END %]
-                                                        [% IF ( XISBN.pages ) %][% XISBN.pages | html %] [% XISBN.illus | html %] [% XISBN.size | html %][% END %]
+                                                        <h2 id="comment">Your comment (preview, pending approval)</h2>
+                                                    [% END %]
+                                                    <small>[% review.datereviewed | $KohaDates %]</small>
+                                                    <p>
+                                                        [% FILTER html_break %]
+                                                            [% review.review | html %]
+                                                        [% END %]
+                                                        <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | uri %]&amp;reviewid=[% review.reviewid | uri %]');">Edit</a>
                                                     </p>
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END # / FOREACH XISBNS %]
-                                </table>
-                            </div> <!-- / #editions -->
-                        [% END # / IF OPACFRBRizeEditions && XISBNS %]
+                                                </div>
+                                            [% ELSE %]
+                                                <div class="commentline">
+                                                    [% IF ( ShowReviewer != "none" && review.patron) %]
 
-                        [% IF ( HTML5MediaEnabled ) %]
-                            <div id="html5media">
-                              [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
-                                <p>
-                                    [% IF HTML5MediaSet.is_youtube %]
-                                        <iframe id="player" type="text/html" width="640" height="360"
-                                            src="[% HTML5MediaSet.srcblock | url %]" frameborder="0"></iframe>
+                                                        [% IF ( review.avatarurl ) %]
+                                                            <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
+                                                        [% END %]
+                                                        [% SWITCH ShowReviewer %]
+                                                        [% CASE 'full' %]
+                                                            <h2 id="comment">Comment by [% review.patron.title | html %] [% review.patron.firstname | html %] [% review.patron.surname | html %]</h2>
+                                                        [% CASE 'first' %]
+                                                            <h2 id="comment">Comment by [% review.patron.firstname | html %]</h2>
+                                                        [% CASE 'surname' %]
+                                                            <h2 id="comment">Comment by [% review.patron.surname | html %]</h2>
+                                                        [% CASE 'firstandinitial' %]
+                                                            <h2 id="comment">Comment by [% review.patron.firstname | html %] [% review.patron.surname|truncate(2,'.') | html %]</h2>
+                                                        [% CASE 'username' %]
+                                                            <h2 id="comment">Comment by [% review.patron.userid | html %]</h2>
+                                                        [% END %]
+
+                                                        <small>[% review.datereviewed | $KohaDates %]</small>
+                                                    [% ELSE %]
+                                                        <h2 id="comment">Patron comment on [% review.datereviewed | $KohaDates %]</h2>
+                                                    [% END # / IF ShowReviewer != "none" && review.patron %]
+                                                    <p>
+                                                        [% FILTER html_break %]
+                                                        [% review.review | html %]
+                                                        [% END %]
+                                                    </p>
+                                                </div> <!-- / .commentline -->
+                                            [% END %]
+                                        [% END # / FOREACH reviews %]
                                     [% ELSE %]
-                                        [% SET ctrl_preload = ' controls preload=none' #translatability %]
-                                        <[% HTML5MediaParent _ ctrl_preload | html %] >
-                                          <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]" [% HTML5MediaSet.typeblock | html %] />
-                                          <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
-                                        </[% HTML5MediaParent | html %]>
-                                    [% END %]
-                                </p>
-                              [% END %]
-                            </div>
-                        [% END # / IF HTML5MediaEnabled %]
+                                        <p>There are no comments on this title.</p>
+                                    [% END # / IF reviews %]
 
-                        [% IF ( OPACLocalCoverImages && localimages.count ) %]
-                            <div id="images">
-                                <p>Click on an image to view it in the image viewer</p>
-                                [% FOREACH image IN localimages %]
-                                    <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
-                                        <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
-                                    </a>
+                                    [% IF ( loggedinusername ) %]
+                                        [% UNLESS ( loggedincommenter ) %]
+                                            <div id="addcomment">
+                                                <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]'); return false;">
+                                                Post your comments on this title.
+                                                </a>
+                                            </div>
+                                        [% END %]
+                                    [% ELSE %]
+                                        <div id="addcomment">
+                                            <a class="login-link loginModal-trigger" role="button" data-toggle="modal" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
+                                        </div>
+                                    [% END # / IF loggedinusername %]
+                                </div> <!-- / #comments -->
+                            [% END # / IF OPACComments %]
+
+                            [% IF ( OPACFRBRizeEditions && XISBNS ) %]
+                                <div id="editions" class="tab-pane" role="tabpanel" aria-labelledby="tab_editions-tab">
+                                    <h2>Other editions of this work</h2>
+                                    <table class="table table-bordered table-striped">
+                                        <caption class="sr-only">Other editions</caption>
+                                        [% FOREACH XISBN IN XISBNS %]
+                                            <tr>
+                                                <td>
+                                                    [% IF ( OPACAmazonCoverImages ) %]
+                                                        <img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
+                                                    [% END %]
+
+                                                    [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
+                                                        [% IF ( XISBN.content_identifier_exists ) %]
+                                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | html %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
+                                                        [% ELSE %]
+                                                            <span class="no-image">No cover image available</span>
+                                                        [% END # / IF  XISBN.content_identifier_exists %]
+                                                    [% END # / IF SyndeticsEnabled && SyndeticsCoverImages %]
+                                                </td>
+
+                                                [% UNLESS ( item_level_itypes ) %]
+                                                    <td>[% XISBN.description | html %]</td>
+                                                [% END %]
+                                                <td>
+                                                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a>
+                                                    [% IF ( XISBN.author ) %]<span> by </span>[% XISBN.author | html %][% END %]
+                                                    [% IF ( XISBN.copyrightdate ) %]<span> &copy;</span>[% XISBN.copyrightdate | html %][% END %]
+                                                    [% IF ( XISBN.publishercode ) %]
+                                                        <p>[% XISBN.publishercode | html %]
+                                                            [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
+                                                            [% IF ( XISBN.publicationyear ) %][% ', ' _ XISBN.publicationyear | html %][% END %]
+                                                            [% IF ( XISBN.pages ) %][% XISBN.pages | html %] [% XISBN.illus | html %] [% XISBN.size | html %][% END %]
+                                                        </p>
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END # / FOREACH XISBNS %]
+                                    </table>
+                                </div> <!-- / #editions -->
+                            [% END # / IF OPACFRBRizeEditions && XISBNS %]
+
+                            [% IF ( HTML5MediaEnabled ) %]
+                                <div id="html5media" class="tab-pane" role="tabpanel" aria-labelledby="tab_html5media-tab">
+                                [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
+                                    <p>
+                                        [% IF HTML5MediaSet.is_youtube %]
+                                            <iframe id="player" type="text/html" width="640" height="360"
+                                                src="[% HTML5MediaSet.srcblock | url %]" frameborder="0"></iframe>
+                                        [% ELSE %]
+                                            [% SET ctrl_preload = ' controls preload=none' #translatability %]
+                                            <[% HTML5MediaParent _ ctrl_preload | html %] >
+                                            <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]" [% HTML5MediaSet.typeblock | html %] />
+                                            <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
+                                            </[% HTML5MediaParent | html %]>
+                                        [% END %]
+                                    </p>
                                 [% END %]
-                            </div><!-- / #images -->
-                        [% END # / IF OPACLocalCoverImages && localimages.size %]
+                                </div>
+                            [% END # / IF HTML5MediaEnabled %]
 
-                </div> <!-- / #bibliodescriptions -->
+                            [% IF ( OPACLocalCoverImages && localimages.count ) %]
+                                <div id="images" class="tab-pane" role="tabpanel" aria-labelledby="tab_images-tab">
+                                    <p>Click on an image to view it in the image viewer</p>
+                                    [% FOREACH image IN localimages %]
+                                        <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                            <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                        </a>
+                                    [% END %]
+                                </div><!-- / #images -->
+                            [% END # / IF OPACLocalCoverImages && localimages.size %]
 
-                [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
-                    <div id="NovelistSelect">
-                        <h2>Novelist Select</h2>
-                        <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
-                    </div>
-                [% END %]
+                    </div> <!-- / #bibliodescriptions -->
 
-                [% IF ( Babeltheque ) %]
-                    <div>
-                        <div id="BW_etiquettes"></div>
-                        <div id="BW_suggestions"></div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div>
-                        <div id="BW_podcasts"></div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div>
-                        <div id="BW_videos"></div>
-                    </div>
-                [% END # / IF Babeltheque %]
+                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
+                        <div id="NovelistSelect" class="tab-pane" role="tabpanel" aria-labelledby="tab_NovelistSelect-tab">
+                            <h2>Novelist Select</h2>
+                            <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
+                        </div>
+                    [% END %]
+
+                    [% IF ( Babeltheque ) %]
+                        <div>
+                            <div id="BW_etiquettes"></div>
+                            <div id="BW_suggestions"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div>
+                            <div id="BW_podcasts"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div>
+                            <div id="BW_videos"></div>
+                        </div>
+                    [% END # / IF Babeltheque %]
+                </div> <!-- /.tab-content -->
 
             </div> <!-- /.col-lg-10 -->
 
@@ -1624,7 +1651,20 @@
                 });
             [% END # /IF OPACDetailQRCode %]
 
-            $('#bibliodescriptions').tabs();
+            [% SWITCH defaulttab -%]
+            [%   CASE 'holdings' -%]
+                showBsTab("bibliodescriptions", "holdings");
+            [%   CASE 'components' -%]
+                showBsTab("bibliodescriptions", "components");
+            [%   CASE 'subscriptions' -%]
+                showBsTab("bibliodescriptions", "subscriptions");
+            [%   CASE 'serialcollection' -%]
+                showBsTab("bibliodescriptions", "serialcollection");
+            [%   CASE 'media' -%]
+                showBsTab("bibliodescriptions", "html5media");
+            [%   CASE  -%]
+                showBsTab("bibliodescriptions", "holdings");
+            [% END -%]
 
             [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
                 $(".l_Results").show();
@@ -1960,6 +2000,14 @@
                 $("#libraryInfoLink").attr("href", "");
             });
         });
+
+        function showBsTab( container, panelid ){
+            if( $( "#" + panelid ).length == 1 ){
+                $("#" + container + " a[href='#" + panelid + "']").tab("show");
+            } else {
+                $("#" + container + " a:first").tab("show");
+            }
+        }
 
         function multiSearchRequest(){
             var values = [];

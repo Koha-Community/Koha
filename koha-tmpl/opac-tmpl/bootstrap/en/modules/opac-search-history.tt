@@ -51,12 +51,17 @@
                     <h1>Search history</h1>
                     [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
                         <div id="tabs" class="toptabs">
-                            <ul>
-                                <li><a href="#biblio_tab">Catalog</a></li>
-                                <li><a href="#authority_tab">Authority</a></li>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="biblio-tab-link" href="#biblio_tab" aria-controls="biblio_tab" role="tab" data-toggle="tab" aria-selected="true">Catalog</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="authority-tab-link" href="#authority_tab" aria-controls="authority_tab" role="tab" data-toggle="tab" aria-selected="false">Authority</a>
+                                </li>
                             </ul>
+                        <div class="tab-content">
                     [% END %]
-                        <div id="biblio_tab">
+                        <div id="biblio_tab" role="tabpanel" class="tab-pane active" aria-labelledby="biblio-tab-link">
                             <div id="current_biblio">
                                 [% IF ( current_biblio_searches ) %]
                                     <h2>Current session</h2>
@@ -155,85 +160,90 @@
                         </div> <!-- / #biblio_tab -->
 
                         [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
-                            <div id="authority_tab">
-                                [% IF ( current_authority_searches ) %]
-                                    <h2>Current session</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
-                                        <legend class="sr-only">Toolbar control</legend>
-                                        [% INCLUDE 'toolbar_controls' %]
-                                        <input type="hidden" name="action" value="delete" />
-                                        <table class="historyt table table-bordered table-striped">
-                                            <caption class="sr-only">Current session</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Date</th>
-                                                    <th>Search</th>
-                                                    <th>Results</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                [% FOREACH s IN current_authority_searches %]
+                            <div id="authority_tab" role="tabpanel" class="tab-pane" aria-labelledby="authority-tab-link">
+                                <div id="current_authority">
+                                    [% IF ( current_authority_searches ) %]
+                                        <h2>Current session</h2>
+                                        <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                            <legend class="sr-only">Toolbar control</legend>
+                                            [% INCLUDE 'toolbar_controls' %]
+                                            <input type="hidden" name="action" value="delete" />
+                                            <table class="historyt table table-bordered table-striped">
+                                                <caption class="sr-only">Current session</caption>
+                                                <thead>
                                                     <tr>
-                                                        <td class="selectcol">
-                                                            <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
-                                                        </td>
-                                                        <td data-order="[% s.time | html %]">
-                                                            <label for="result[% s.id | html %]">
-                                                                [% s.time |$KohaDates  with_hours => 1 %]
-                                                            </label>
-                                                        </td>
-                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                                        <td>[% s.total | html %]</td>
+                                                        <th></th>
+                                                        <th>Date</th>
+                                                        <th>Search</th>
+                                                        <th>Results</th>
                                                     </tr>
-                                                [% END %]
-                                            </tbody>
-                                        </table>
-                                        <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
-                                    </form>
-                                [% END # / IF ( current_authority_searches ) %]
-
-                                [% IF ( previous_authority_searches ) %]
-                                    <h2>Previous sessions</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
-                                        <legend class="sr-only">Toolbar control</legend>
-                                        [% INCLUDE 'toolbar_controls' %]
-                                        <input type="hidden" name="action" value="delete" />
-                                        <table class="historyt table table-bordered table-striped">
-                                            <caption class="sr-only">Previous sessions</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Date</th>
-                                                    <th>Search</th>
-                                                    <th>Results</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                [% FOREACH s IN previous_authority_searches %]
+                                                </thead>
+                                                <tbody>
+                                                    [% FOREACH s IN current_authority_searches %]
+                                                        <tr>
+                                                            <td class="selectcol">
+                                                                <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
+                                                            </td>
+                                                            <td data-order="[% s.time | html %]">
+                                                                <label for="result[% s.id | html %]">
+                                                                    [% s.time |$KohaDates  with_hours => 1 %]
+                                                                </label>
+                                                            </td>
+                                                            <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                            <td>[% s.total | html %]</td>
+                                                        </tr>
+                                                    [% END %]
+                                                </tbody>
+                                            </table>
+                                            <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                                        </form>
+                                    [% END # / IF ( current_authority_searches ) %]
+                                </div> <!-- / #current_authority -->
+                                <hr />
+                                <div id="previous_authority">
+                                    [% IF ( previous_authority_searches ) %]
+                                        <h2>Previous sessions</h2>
+                                        <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                                            <legend class="sr-only">Toolbar control</legend>
+                                            [% INCLUDE 'toolbar_controls' %]
+                                            <input type="hidden" name="action" value="delete" />
+                                            <table class="historyt table table-bordered table-striped">
+                                                <caption class="sr-only">Previous sessions</caption>
+                                                <thead>
                                                     <tr>
-                                                        <td class="selectcol">
-                                                            <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
-                                                        </td>
-                                                        <td data-order="[% s.time | html %]">
-                                                            <label for="result[% s.id | html %]">
-                                                                [% s.time |$KohaDates  with_hours => 1 %]
-                                                            </label>
-                                                        </td>
-                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
-                                                        <td>[% s.total | html %]</td>
+                                                        <th></th>
+                                                        <th>Date</th>
+                                                        <th>Search</th>
+                                                        <th>Results</th>
                                                     </tr>
-                                                [% END %]
-                                            </tbody>
-                                        </table>
-                                        <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
-                                    </form>
-                                [% END # / IF ( previous_authority_searches )%]
+                                                </thead>
+                                                <tbody>
+                                                    [% FOREACH s IN previous_authority_searches %]
+                                                        <tr>
+                                                            <td class="selectcol">
+                                                                <input type="checkbox" name="id" value="[% s.id | html %]" id="result[% s.id | html %]" />
+                                                            </td>
+                                                            <td data-order="[% s.time | html %]">
+                                                                <label for="result[% s.id | html %]">
+                                                                    [% s.time |$KohaDates  with_hours => 1 %]
+                                                                </label>
+                                                            </td>
+                                                            <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                            <td>[% s.total | html %]</td>
+                                                        </tr>
+                                                    [% END %]
+                                                </tbody>
+                                            </table>
+                                            <input type="submit" class="btn btn-danger remove-selected" value="Remove selected searches">
+                                        </form>
+                                    [% END # / IF ( previous_authority_searches )%]
+                                </div>
 
                                 [% IF !current_authority_searches && !previous_authority_searches %]
                                     <p>Your authority search history is empty.</p>
                                 [% END %]
                             </div> <!-- / #authority_tab -->
+                        </div> <!-- /.tab-content -->
                         [% END # / IF Koha.Preference( 'OpacAuthorities' ) %]
                     </div> <!-- / #tabs -->
                 </div> <!-- / #searchhistory -->
@@ -277,8 +287,6 @@
                 "searchPlaceholder": _("Search")
             }
         }));
-
-        [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]$('#tabs').tabs();[% END %]
 
         $(".CheckNone").click(function(e){
             e.preventDefault();

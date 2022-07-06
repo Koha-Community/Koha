@@ -901,6 +901,40 @@ ul {
 
 /* end jQueryUI core */
 
+/* Bootstrap Tabs */
+
+.tab-content {
+    background-color: #FFF;
+    border: 1px solid #d8d8d8;
+    border-top-width: 0;
+    margin-bottom: 1em;
+    padding: 1em;
+}
+
+.nav-tabs {
+    .nav-link {
+        background-color: #f0f3f3;
+        border: 1px solid #d8d8d8;
+        border-radius: 0;
+        margin-right: .4em;
+
+        &:hover,
+        &:focus {
+            border-color: #d8d8d8;
+        }
+
+        &.active {
+            background-color: #fff;
+            border: 1px solid #d8d8d8;
+            border-bottom-color: transparent;
+            color: #000;
+            cursor: default;
+        }
+    }
+}
+
+/* end Bootstrap Tabs */
+
 .close {
     color: #0088CC;
     filter: none;
@@ -1000,16 +1034,6 @@ button {
     form {
         margin: 0;
     }
-}
-
-.nav-link {
-    &.active {
-        font-weight: bold;
-    }
-}
-
-.tab-content {
-    padding: 15px 0;
 }
 
 #logo {

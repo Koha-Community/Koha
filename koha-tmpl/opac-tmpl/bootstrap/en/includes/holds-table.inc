@@ -4,7 +4,7 @@
 [% PROCESS 'i18n.inc' %]
 
 [% IF ( HOLDS.count ) %]
-    <div id="opac-user-holds">
+    <div id="opac-user-holds" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-holds-tab">
         <table id="holdst" class="table table-bordered table-striped">
             <caption>Holds <span class="count">([% HOLDS.count | html %] total)</span></caption>
             <!-- HOLDS TABLE ROWS -->
