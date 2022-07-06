@@ -779,9 +779,9 @@ subtest 'TranslateNotices' => sub {
 
 };
 
-subtest 'SendQueuedMessages' => sub {
+subtest 'Test SMS handling in SendQueuedMessages' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
@@ -854,6 +854,19 @@ subtest 'SendQueuedMessages' => sub {
         status => 'sent'
     })->next()->to_address();
     is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address is set incorrectly' );
+
+    # Test using SMS::Send::Test driver that's bundled with SMS::Send
+    t::lib::Mocks::mock_preference('SMSSendDriver', "AU::Test");
+
+    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+    C4::Letters::EnqueueLetter($my_message);
+    C4::Letters::SendQueuedMessages();
+
+    $sms_message_address = $schema->resultset('MessageQueue')->search({
+        borrowernumber => $borrowernumber,
+        status => 'sent'
+    })->next()->to_address();
+    is( $sms_message_address, '5555555555', 'SendQueuedMessages populates the to address correctly for SMS by SMS::Send driver to smsalertnumber when to_address is set incorrectly' );
 
 };
 
