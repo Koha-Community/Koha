@@ -684,7 +684,7 @@
                 </div> <!-- /.dialog -->
             [% END # /FOR m %]
 
-            [% UNLESS ( notabs ) %]
+            [% IF suggestions.size && !notabs %]
                 <div id="suggestiontabs" class="toptabs">
                     <ul class="nav nav-tabs" role="tablist">
                         [% FOREACH suggestion IN suggestions %]
@@ -713,7 +713,7 @@
                         [% END # /FOREACH suggestion %]
                     </ul> <!-- /.ui-tabs-nav -->
                     <div class="tab-content">
-            [% END # /UNLESS notabs %]
+                [% END # IF suggestions.size && !notabs %]
 
                 [% FOREACH suggestion IN suggestions %]
                     [% UNLESS ( notabs ) %]
@@ -975,7 +975,7 @@
                         </form> <!-- /.update_suggestions -->
                     </div> <!-- /#[% suggestion.suggestiontype | html %] -->
                 [% END # /FOREACH suggestion %]
-            [% UNLESS ( notabs ) %]
+            [% IF suggestions.size && !notabs %]
                     </div> <!-- /.tab-content -->
                 </div> <!-- /.notabs -->
             [% END # /UNLESS notabs %]
