@@ -326,10 +326,12 @@
                 let pickupIntervalEndMoment   = listStartMoment.add(pickup_interval, 'minutes');
                 while (keep_going) {
                     let available = true;
+                    let display_slot = true;
 
                     if (pickupIntervalStartMoment.isBefore(now)) {
                         // Slots in the past are unavailable
                         available = false;
+                        display_slot = false;
                     }
 
                     if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
@@ -353,13 +355,15 @@
                         available = false;
                     }
 
-                    pickupSlots.push(
-                        {
-                            "available": available,
-                            "moment": pickupIntervalStartMoment,
-                            "pickups_scheduled": pickups_scheduled
-                        }
-                    );
+                    if ( display_slot ) {
+                        pickupSlots.push(
+                            {
+                                "available": available,
+                                "moment": pickupIntervalStartMoment,
+                                "pickups_scheduled": pickups_scheduled
+                            }
+                        );
+                    }
 
                     if ( available ) {
                         available_count++;
