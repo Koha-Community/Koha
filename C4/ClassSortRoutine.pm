@@ -1,7 +1,7 @@
 package C4::ClassSortRoutine;
 
-# Copyright (C) 2007 LibLime
-# 
+# Copyright 2022 Koha Development Team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -17,11 +17,9 @@ package C4::ClassSortRoutine;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Class::Factory::Util;
-use C4::Context;
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
