@@ -1,6 +1,6 @@
 package C4::ClassSplitRoutine;
 
-# Copyright 2018 Koha Development Team
+# Copyright 2022 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -19,10 +19,16 @@ package C4::ClassSplitRoutine;
 
 use Modern::Perl;
 
-require Exporter;
+use Class::Factory::Util;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT_OK = qw(
+       GetSplitRoutineNames
+    );
+}
 
 =head1 NAME
 
@@ -35,11 +41,6 @@ use C4::ClassSplitRoutine;
 =head1 FUNCTIONS
 
 =cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-   GetSplitRoutineNames
-);
 
 =head2 GetSplitRoutineNames
 
