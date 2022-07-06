@@ -111,7 +111,9 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
                 { page => $pages, per_page => $per_page, rel => 'last', params => $args->{params} } );
 
             # Add Link header
-            $c->res->headers->add( 'Link' => join( ',', @links ) );
+            foreach my $link (@links) {
+                $c->res->headers->add( 'Link' => $link );
+            }
 
             # Add X-Total-Count header
             $c->res->headers->add( 'X-Total-Count' => $total );
