@@ -5043,7 +5043,7 @@ subtest "updateWrongTransfer tests" => sub {
 };
 
 subtest "SendCirculationAlert" => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     # When you would unsuspectingly call this unit test (with perl, not prove), you will be bitten by LOCK.
     # LOCK will commit changes and ruin your data
@@ -5056,7 +5056,7 @@ subtest "SendCirculationAlert" => sub {
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     C4::Members::Messaging::SetMessagingPreference({
         borrowernumber => $patron->id,
-        message_transport_types => ['email'],
+        message_transport_types => ['sms'],
         message_attribute_id => 5
     });
     my $item = $builder->build_sample_item();
@@ -5069,7 +5069,7 @@ subtest "SendCirculationAlert" => sub {
             name => 'Test Checkin',
             is_html => 0,
             content => "Checkins:\n----\n[% biblio.title %]-[% old_checkout.issue_id %]\n----Thank you.",
-            message_transport_type => 'email',
+            message_transport_type => 'sms',
             lang => 'default'
         }
     })->store;
@@ -5086,6 +5086,7 @@ subtest "SendCirculationAlert" => sub {
     });
     my $notice = Koha::Notice::Messages->find({ borrowernumber => $patron->id, letter_code => 'CHECKIN' });
     is($notice->content,"Checkins:\n".$item->biblio->title."-".$issue_1->id."\nThank you.", 'Letter generated with expected output on first checkin' );
+    is($notice->to_address, $patron->smsalertnumber, "Letter has the correct to_address set to smsalertnumber for SMS type notices");
 
     # Checkout an item, mark it returned, generate a notice
     my $issue_2 = AddIssue( $patron->unblessed, $item->barcode);
