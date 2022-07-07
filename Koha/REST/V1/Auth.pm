@@ -231,7 +231,7 @@ sub authenticate_api_request {
             $cookie_auth = 1;
         }
         elsif ($status eq "additional-auth-needed") {
-            if ( $c->req->url->to_abs->path eq '/api/v1/auth/send_otp_token' ) {
+            if ( $c->req->url->to_abs->path eq '/api/v1/auth/otp/token_delivery' ) {
                 $user = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
             } else {

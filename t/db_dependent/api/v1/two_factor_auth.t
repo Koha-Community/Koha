@@ -58,7 +58,7 @@ subtest 'send_otp_token' => sub {
     $session->param( 'lasttime', time() );
     $session->flush;
 
-    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/send_otp_token" );
+    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
@@ -85,7 +85,7 @@ subtest 'send_otp_token' => sub {
     $patron->email(undef);
     $patron->store;
 
-    $tx = $t->ua->build_tx( POST => "/api/v1/auth/send_otp_token" );
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
@@ -93,7 +93,7 @@ subtest 'send_otp_token' => sub {
     $t->request_ok($tx)->status_is(400)->json_is({ error => 'email_not_sent' });
 
     $patron->email('to@example.org')->store;
-    $tx = $t->ua->build_tx( POST => "/api/v1/auth/send_otp_token" );
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 

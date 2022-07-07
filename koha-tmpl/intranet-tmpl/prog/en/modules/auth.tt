@@ -198,7 +198,7 @@
                 $("#email_success").hide();
                 $("#email_error").hide();
                 $.ajax({
-                    url: '/api/v1/auth/send_otp_token',
+                    url: '/api/v1/auth/otp/token_delivery',
                     type: 'POST',
                     success: function(data){
                         let message = _("The code has been sent by email, please check your inbox.")
