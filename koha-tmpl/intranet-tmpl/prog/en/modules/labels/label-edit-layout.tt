@@ -3,8 +3,8 @@
 [%- BLOCK translate_label_types -%]
     [%-  SWITCH type -%]
         [%- CASE 'BIB' -%] Only the bibliographic data is printed
-        [%- CASE 'BARBIB'-%] Barcode proceeds bibliographic data
-        [%- CASE 'BIBBAR'-%] Bibliographic data proceeds barcode
+        [%- CASE 'BARBIB'-%] Barcode precedes bibliographic data
+        [%- CASE 'BIBBAR'-%] Bibliographic data precedes barcode
         [%- CASE 'ALT' -%] Barcode and bibliographic data are printed on alternating labels
         [%- CASE 'BAR' -%] Only the barcode is printed
     [%- END -%]
