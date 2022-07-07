@@ -590,7 +590,7 @@ $(document).ready(function() {
                             content += "<span class='renewals-info'>(";
                             content += __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed);
                             if (UnseenRenewals && oObj.unseen_allowed) {
-                                content += __("%s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
+                                content += __(" & %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
                             }
                             content += ")</span>";
                         }
