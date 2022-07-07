@@ -3608,7 +3608,7 @@ sub CalcDateDue {
     my $loanlength =
             GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch );
 
-    my $length_key = ( $isrenewal and defined $loanlength->{renewalperiod} )
+    my $length_key = ( $isrenewal and defined $loanlength->{renewalperiod} and $loanlength->{renewalperiod} ne q{} )
             ? qq{renewalperiod}
             : qq{issuelength};
 
