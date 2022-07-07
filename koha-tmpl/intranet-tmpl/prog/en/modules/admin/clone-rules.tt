@@ -35,7 +35,7 @@
             <main>
 
     <h1>Cloning circulation and fine rules
-        [% IF frombranch %] from "[% Branches.GetName( frombranch ) | html %]"[% END %]
+        [% IF frombranch == "*" %] from standard rules[% ELSIF frombranch %] from "[% Branches.GetName( frombranch ) | html %]"[% END %]
         [% IF tobranch %] to "[% Branches.GetName( tobranch ) | html %]"[% END %]
     </h1>
 
