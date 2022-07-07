@@ -46,7 +46,7 @@ subtest 'send_otp_token' => sub {
         {
             class => 'Koha::Patrons',
             value  => {
-                flags => 16
+                flags => 20, # Staff access and Patron info
             }
         }
     );
@@ -63,7 +63,7 @@ subtest 'send_otp_token' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
     # Patron is not authenticated yet
-    $t->request_ok($tx)->status_is(403);
+    $t->request_ok($tx)->status_is(500); # FIXME Check the exception instead?
 
     $session->param('waiting-for-2FA', 1);
     $session->flush;
