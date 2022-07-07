@@ -200,6 +200,13 @@ export default {
             }, eholdings_titles_table_settings, 1)
         },
     },
+    beforeUnmount() {
+        if (!$.fn.DataTable.isDataTable('#title_list')) {
+            $('#title_list')
+                .DataTable()
+                .destroy(true)
+        }
+    },
     components: { Toolbar },
     name: "EHoldingsLocalTitlesList",
 }

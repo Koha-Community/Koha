@@ -44,9 +44,7 @@
                     local_count_packages !== null
                 "
             >
-                <router-link
-                    :to="local_packages_url"
-                >
+                <router-link :to="local_packages_url">
                     {{
                         $t("{count} packages found locally", {
                             count: local_count_packages,
@@ -243,6 +241,13 @@ export default {
                 this.filter_table()
             }
         },
+    },
+    beforeUnmount() {
+        if (!$.fn.DataTable.isDataTable('#package_list')) {
+            $('#package_list')
+                .DataTable()
+                .destroy(true)
+        }
     },
     name: "EHoldingsEBSCOPackagesList",
 }

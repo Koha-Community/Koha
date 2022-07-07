@@ -3,7 +3,7 @@
         <div v-if="!this.initialized">{{ $t("Loading") }}</div>
         <div v-else-if="this.packages" id="packages_list">
             <Toolbar />
-            <div v-if="this.packages.length" id="package_list_result">
+            <div v-if="packages.length" id="package_list_result">
                 <table id="package_list"></table>
             </div>
             <div v-else-if="this.initialized" class="dialog message">
@@ -208,12 +208,14 @@ export default {
                     $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_package_content_types')
                 }
             }, eholdings_packages_table_settings, 1)
-
-            if (filters.package_name) {
-                //$("#package_list").DataTable().column(0).search(filters.package_name).draw()
-            }
-            //myTable.column(0).search(control_id).column(1).search(sample_id).draw();
         },
+    },
+    beforeUnmount() {
+        if (!$.fn.DataTable.isDataTable('#package_list')) {
+            $('#package_list')
+                .DataTable()
+                .destroy(true)
+        }
     },
     components: { Toolbar },
     name: "EHoldingsLocalPackagesList",
