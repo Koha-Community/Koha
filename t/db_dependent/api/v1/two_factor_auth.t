@@ -38,7 +38,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'send_otp_token' => sub {
 
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -63,7 +63,7 @@ subtest 'send_otp_token' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
     # Patron is not authenticated yet
-    $t->request_ok($tx)->status_is(500); # FIXME Check the exception instead?
+    $t->request_ok($tx)->status_is(401);
 
     $session->param('waiting-for-2FA', 1);
     $session->flush;
@@ -99,6 +99,14 @@ subtest 'send_otp_token' => sub {
 
     # Everything is ok, the email will be sent
     $t->request_ok($tx)->status_is(200);
+
+    $session->param('waiting-for-2FA', 0);
+    $session->flush;
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+
+    $t->request_ok($tx)->status_is(401);
 
     $schema->storage->txn_rollback;
 };

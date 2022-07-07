@@ -223,42 +223,50 @@ sub authenticate_api_request {
         my ($status, $session) = check_cookie_auth(
                                                 $cookie, undef,
                                                 { remote_addr => $remote_addr });
-        if ($status eq "ok") {
-            $user = Koha::Patrons->find( $session->param('number') );
-            $cookie_auth = 1;
-        }
-        elsif ($status eq "anon") {
-            $cookie_auth = 1;
-        }
-        elsif ($status eq "additional-auth-needed") {
-            if ( $c->req->url->to_abs->path eq '/api/v1/auth/otp/token_delivery' ) {
+
+        if ( $c->req->url->to_abs->path eq '/api/v1/auth/otp/token_delivery' ) {
+            if ( $status eq 'additional-auth-needed' ) {
+                $user        = Koha::Patrons->find( $session->param('number') );
+                $cookie_auth = 1;
+            }
+            elsif ( $status eq 'ok' ) {
+                Koha::Exceptions::Authentication->throw(
+                    error => 'Cannot request a new token.' );
+            }
+            else {
+                Koha::Exceptions::Authentication::Required->throw(
+                    error => 'Authentication failure.' );
+            }
+        } else {
+            if ($status eq "ok") {
                 $user = Koha::Patrons->find( $session->param('number') );
                 $cookie_auth = 1;
-            } else {
+            }
+            elsif ($status eq "anon") {
+                $cookie_auth = 1;
+            }
+            elsif ($status eq "additional-auth-needed") {
+            }
+            elsif ($status eq "maintenance") {
+                Koha::Exceptions::UnderMaintenance->throw(
+                    error => 'System is under maintenance.'
+                );
+            }
+            elsif ($status eq "expired" and $authorization) {
+                Koha::Exceptions::Authentication::SessionExpired->throw(
+                    error => 'Session has been expired.'
+                );
+            }
+            elsif ($status eq "failed" and $authorization) {
                 Koha::Exceptions::Authentication::Required->throw(
                     error => 'Authentication failure.'
                 );
             }
-        }
-        elsif ($status eq "maintenance") {
-            Koha::Exceptions::UnderMaintenance->throw(
-                error => 'System is under maintenance.'
-            );
-        }
-        elsif ($status eq "expired" and $authorization) {
-            Koha::Exceptions::Authentication::SessionExpired->throw(
-                error => 'Session has been expired.'
-            );
-        }
-        elsif ($status eq "failed" and $authorization) {
-            Koha::Exceptions::Authentication::Required->throw(
-                error => 'Authentication failure.'
-            );
-        }
-        elsif ($authorization) {
-            Koha::Exceptions::Authentication->throw(
-                error => 'Unexpected authentication status.'
-            );
+            elsif ($authorization) {
+                Koha::Exceptions::Authentication->throw(
+                    error => 'Unexpected authentication status.'
+                );
+            }
         }
     }
 
