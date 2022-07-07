@@ -1,8 +1,10 @@
 [% USE KohaDates %]
+[% USE Koha %]
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE raw %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -148,7 +150,12 @@
 
     <div class="main container-fluid starthidden">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+
+            [% IF Koha.Preference('CircSidebar') %]
+            <div class="col-sm-10 col-sm-push-2">
+            [% ELSE %]
+            <div class="col-md-12 col-lg-10 col-lg-offset-1">
+            [% END %]
 
                 <h1>Article requests</h1>
                 [% PROCESS urls_modal %]
@@ -511,6 +518,14 @@
                     <br/>
                 </div>
             </div>
+
+            [% IF Koha.Preference('CircSidebar') %]
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    [% INCLUDE 'circ-nav.inc' %]
+                </aside>
+            </div>
+            [% END %]
         </div>
     </div>
     [% PROCESS cancel_modal %]

@@ -32,6 +32,13 @@
             [% END %]
         </ul>
 
+        [% IF Koha.Preference('ArticleRequests') %]
+        <h5>Patron request</h5>
+        <ul>
+            <li><a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a></li>
+        </ul>
+        [% END %]
+
         <h5>Circulation reports</h5>
         <ul>
             <li><a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a></li>
