@@ -12,8 +12,10 @@ $(document).ready(function() {
             },
             async: false,
             success: function(data) {
-                summary_modal.find('#from_date').text(data.summary.from_date);
-                summary_modal.find('#to_date').text(data.summary.to_date);
+                let from_date = $datetime(data.summary.from_date);
+                summary_modal.find('#from_date').text(from_date);
+                let to_date = $datetime(data.summary.to_date);
+                summary_modal.find('#to_date').text(to_date);
                 var tbody = summary_modal.find('tbody')
                 tbody.empty();
                 for (out of data.summary.payout_grouped) {
