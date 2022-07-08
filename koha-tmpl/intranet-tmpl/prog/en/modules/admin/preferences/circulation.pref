@@ -724,14 +724,15 @@ Circulation:
                   0: "Don't allow"
             - patrons to place holds that don't enter the waiting list until a certain future date. (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture">AllowHoldDateInFuture</a> must also be enabled).
         -
-            - On the "Placing a hold" form, make
+            - When placing a hold from the OPAC, make
             - pref: OPACMandatoryHoldDates
               choices:
                   "": "no hold dates"
                   "start": "hold start date"
                   "end": "hold end date"
                   "both": "both hold dates"
-            - mandatory. Note this pref only is effective for the hold start date when OPACAllowHoldDateInFuture is enabled too.
+            - mandatory.
+            - '<br><strong>NOTE:</strong> The hold start date option is only effective and shown on the hold form when <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture">AllowHoldDateInFuture</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACAllowHoldDateInFuture">OPACAllowHoldDateInFuture</a> are enabled.'
         -
             - Confirm future hold requests (starting no later than
             - pref: ConfirmFutureHolds
