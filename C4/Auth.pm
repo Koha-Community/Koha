@@ -1415,9 +1415,11 @@ sub checkauth {
     $template->param( OpacPublic => C4::Context->preference("OpacPublic") );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
     if ( $auth_state eq 'additional-auth-needed' ) {
+        my $patron = Koha::Patrons->find( { userid => $userid } );
         $template->param(
             TwoFA_prompt => 1,
             invalid_otp_token => $invalid_otp_token,
+            notice_email_address => $patron->notice_email_address, # We could also pass logged_in_user if necessary
         );
     }
 

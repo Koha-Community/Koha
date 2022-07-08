@@ -195,22 +195,26 @@
 
             $("#send_otp").on("click", function(e){
                 e.preventDefault();
+                [% UNLESS notice_email_address %]
+                    alert("Cannot send the notice, you don't have an email address defined.")
+                [% ELSE %]
                 $("#email_success").hide();
                 $("#email_error").hide();
-                $.ajax({
-                    url: '/api/v1/auth/otp/token_delivery',
-                    type: 'POST',
-                    success: function(data){
-                        let message = _("The code has been sent by email, please check your inbox.")
-                        $("#email_success").show().html(message);
-                    },
-                    error: function(data){
-                        let error = data.responseJSON && data.responseJSON.error == "email_not_sent"
-                            ? _("Email not sent, maybe you don't have an email address defined?")
-                            : _("Email not sent");
-                        $("#email_error").show().html(error);
-                    }
-                });
+                    $.ajax({
+                        url: '/api/v1/auth/otp/token_delivery',
+                        type: 'POST',
+                        success: function(data){
+                            let message = _("The code has been sent by email, please check your inbox.")
+                            $("#email_success").show().html(message);
+                        },
+                        error: function(data){
+                            let error = data.responseJSON && data.responseJSON.error == "email_not_sent"
+                                ? _("Email not sent, please contact the Koha administrator")
+                                : _("Something wrong happened, please contact the Koha administrator");
+                            $("#email_error").show().html(error);
+                        }
+                    });
+                [% END %]
             });
         });
     </script>
