@@ -41,7 +41,7 @@
             [% IF ( add_form or copy_form) %]
                 [% IF ( modify ) %]
                     <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a>
+                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
                     </li>
                     <li>
                         <a href="#" aria-current="page">
@@ -50,7 +50,7 @@
                     </li>
                 [% ELSE %]
                     <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a>
+                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
                     </li>
                     <li>
                         <a href="#" aria-current="page">
@@ -61,7 +61,7 @@
             [% ELSE %]
                 [% IF ( add_validate or copy_validate) %]
                     <li>
-                        <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a>
+                        <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
                     </li>
                     <li>
                         <a href="#" aria-current="page">
@@ -71,7 +71,7 @@
                 [% ELSE %]
                     [% IF ( delete_confirm ) %]
                         <li>
-                            <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a>
+                            <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
                         </li>
                         <li>
                             <a href="#" aria-current="page">
@@ -81,7 +81,7 @@
                     [% ELSE %]
                         <li>
                             <a href="#" aria-current="page">
-                                Notices &amp; slips
+                                Notices and slips
                             </a>
                         </li>
                     [% END %]
@@ -122,7 +122,7 @@
     [% END %]
 
                 [% IF ( no_op_set ) %]
-                    <h1>Notices &amp; slips</h1>
+                    <h1>Notices and slips</h1>
                     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
                         <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
                         [% UNLESS independant_branch %]

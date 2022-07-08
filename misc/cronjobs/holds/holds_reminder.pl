@@ -139,7 +139,7 @@ holds.
 =head2 Configuration
 
 This script sends reminders to patrons with waiting holds using a notice
-defined in the Tools->Notices & slips module within Koha. The lettercode
+defined in the Tools > Notices and slips module within Koha. The lettercode
 is passed into this script and, along with other options, determine the content
 of the notices sent to patrons.
 
