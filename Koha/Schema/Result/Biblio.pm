@@ -315,6 +315,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 item_groups
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemGroup>
+
+=cut
+
+__PACKAGE__->has_many(
+  "item_groups",
+  "Koha::Schema::Result::ItemGroup",
+  { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 items
 
 Type: has_many
@@ -541,8 +556,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-03-28 22:07:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sh8waM4ivuiNao0VV5403Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-08 19:06:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QmW8BVyUx2F2MAp6ZG45mg
 
 __PACKAGE__->has_many(
   "biblioitem",
