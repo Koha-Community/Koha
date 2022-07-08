@@ -36,6 +36,11 @@ t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
+my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+$mocked_koha_email->mock( 'send_or_die', sub {
+    return 1;
+});
+
 subtest 'send_otp_token' => sub {
 
     plan tests => 9;
