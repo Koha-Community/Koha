@@ -43,7 +43,7 @@ $mocked_koha_email->mock( 'send_or_die', sub {
 
 subtest 'send_otp_token' => sub {
 
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -73,11 +73,6 @@ subtest 'send_otp_token' => sub {
     $session->param('waiting-for-2FA', 1);
     $session->flush;
 
-    $session = C4::Auth::get_session($session->id);
-
-    my $auth = Test::MockModule->new("C4::Auth");
-    $auth->mock('check_cookie_auth', sub { return 'additional-auth-needed'});
-
     $patron->library->set(
         {
             branchemail      => 'from@example.org',
@@ -104,6 +99,14 @@ subtest 'send_otp_token' => sub {
 
     # Everything is ok, the email will be sent
     $t->request_ok($tx)->status_is(200);
+
+    # Change flags: not enough authorization anymore
+    $patron->flags(16)->store;
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(403);
+    $patron->flags(20)->store;
 
     $session->param('waiting-for-2FA', 0);
     $session->flush;

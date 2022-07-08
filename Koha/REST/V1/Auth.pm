@@ -288,7 +288,7 @@ sub authenticate_api_request {
         return 1;
     }
     else {
-        # We are required authorizarion, there needs
+        # We are required authorization, there needs
         # to be an identified user
         Koha::Exceptions::Authentication::Required->throw(
             error => 'Authentication failure.' )
