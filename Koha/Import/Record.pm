@@ -31,7 +31,7 @@ Koha::Import::Record - Koha Import Record Object class
 
 =head1 API
 
-=head2 Public methods
+=head2 Class methods
 
 =head3 get_marc_record
 
