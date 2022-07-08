@@ -9,15 +9,26 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course details for [% course.course_name | html %] &rsaquo; Course reserves &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<style>
-    #instructors {
-        float: left;
-    }
-    .instructor_line {
-        padding: 0 .1em;
-    }
-</style>
+[% FILTER collapse %]
+    <style>
+        #instructors {
+            float: left;
+        }
+        .instructor_line {
+            padding: 0 .1em;
+        }
+        .biblio-level-info {
+            background-color: #f3f3f3;
+            border-radius:5px;
+            box-shadow: 0px 1px 1px 0px rgba(50, 50, 50, 0.2);
+            display:block;
+            font-style: italic;
+            margin: -3px 0 0 -3px;
+            padding:.5em;
+            position:absolute;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="courses_course_details" class="course">
@@ -120,6 +131,9 @@
 
                             [% IF cr.item %]
                                 <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | uri %]&amp;biblionumber=[% cr.biblio.biblionumber | uri %]&amp;bi=[% cr.biblioitem.biblioitemnumber | uri %]">[% cr.item.barcode | html %]</a></td>
+
+
+
                                 <td>[% cr.item.itemcallnumber | html %]</td>
                                 [% IF item_level_itypes %]
                                 <td>
@@ -220,13 +234,15 @@
                                     [% END %]
                                 </td>
                             [% ELSE # record-level course reserve %]
-                                [% IF ( item_level_itypes ) %]
-                                    <td colspan="7">
-                                [% ELSE %]
-                                    <td colspan="6">
-                                [% END %]
-                                        <em>Information not available for record-level course reserve</em>
-                                    </td>
+                                <td>
+                                    <div class="biblio-level-info">Item information is not available for record-level course reserve</div>
+                                </td>
+                                <td><!-- Call number --></td>
+                                <td><!-- Item type --></td>
+                                <td><!-- Collection --></td>
+                                <td><!-- Location --></td>
+                                <td><!-- Home library --></td>
+                                <td><!-- Holding library --></td>
                             [% END %]
 
                             <td>[% IF (cr.staff_note) %]
