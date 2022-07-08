@@ -13,7 +13,7 @@ return {
         });
 
         $dbh->do(q{
-            INSERT INTO permissions (module_bit, code, description) VALUES
+            INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
             ( 9, 'manage_item_groups', 'Create, update and delete item groups, add or remove items from a item groups');
         });
 
