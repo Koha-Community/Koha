@@ -1,8 +1,9 @@
+[% PROCESS 'i18n.inc' %]
 [%- SWITCH index -%]
 [%- CASE 'su-na' -%]
-<span>Search also for narrower subjects</span>
+[% t('Search also for narrower subjects') | html %]
 [%- CASE 'su-br' -%]
-<span>Search also for broader subjects</span>
+[% t('Search also for broader subjects') | html %]
 [%- CASE 'su-rl' -%]
-<span>Search also for related subjects</span>
+[% t('Search also for related subjects') | html %]
 [%- END -%]
