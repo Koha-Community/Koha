@@ -31,7 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "store() tests" => sub {
 
-    plan tests => 13;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -108,31 +108,6 @@ subtest "store() tests" => sub {
 
     is( ref($claim), 'Koha::Checkouts::ReturnClaim', 'Object type is correct' );
     is( Koha::Checkouts::ReturnClaims->search( { issue_id => $checkout->id } )->count, 1, 'Claim stored on the DB');
-
-    {   # hide useless warnings
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        throws_ok {
-            Koha::Checkouts::ReturnClaim->new(
-                {
-                    issue_id       => $checkout->id,
-                    itemnumber     => $checkout->itemnumber,
-                    borrowernumber => $checkout->borrowernumber,
-                    notes          => 'Some notes',
-                    created_by     => $librarian->borrowernumber
-                }
-            )->store;
-        }
-        'Koha::Exceptions::Object::DuplicateID',
-            'An exception is thrown on duplicate issue_id';
-        close STDERR;
-
-        like(
-            $@->duplicate_id,
-            qr/(return_claims\.)?issue_id/,
-            'Exception field is correct'
-        );
-    }
 
     {    # hide useless warnings
         local *STDERR;
