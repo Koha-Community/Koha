@@ -609,6 +609,7 @@ sub UpdateOAISetsBiblio {
 
     return unless($biblionumber and $record);
 
+    $record = $record->clone;
     if (C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData')) {
         C4::Biblio::EmbedItemsInMarcBiblio({
             marc_record  => $record,
