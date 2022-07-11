@@ -93,6 +93,9 @@ $(document).ready(function(){
         },
         minLength: 3,
     });
+    $("#clear-form").click(function(){
+        $(":input[type='text']").val('');
+    });
 });
 
 function finderjump(page, full){
