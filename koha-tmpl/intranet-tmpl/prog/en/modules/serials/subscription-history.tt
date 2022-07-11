@@ -41,14 +41,14 @@
               <tr>
                 <td>Subscription start date</td>
                 <td>
-                    <input type="text" size="10" name="histstartdate" value="[% histstartdate | $KohaDates %]" class="flatpickr" data-date_to="histenddate" /> (start date of the 1st subscription)
+                    <input type="text" size="10" name="histstartdate" value="[% histstartdate | html %]" class="flatpickr" data-date_to="histenddate" /> (start date of the 1st subscription)
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </td>
               </tr>
               <tr>
                 <td>Subscription end date</td>
                 <td>
-                    <input type="text" size="10" id="histenddate" name="histenddate" value="[% histenddate | $KohaDates %]" class="flatpickr" />(if empty, subscription is still active)
+                    <input type="text" size="10" id="histenddate" name="histenddate" value="[% histenddate | html %]" class="flatpickr" />(if empty, subscription is still active)
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </td>
               </tr>

@@ -694,6 +694,7 @@ sub RenewLoan {
     # Hashref building
     my $out;
     $out->{'renewals'} = $issue->renewals_count;
+    # FIXME Unusual date formatting
     $out->{date_due}   = dt_from_string($issue->date_due)->strftime('%Y-%m-%d %H:%M');
     $out->{'success'}  = $renewal[0];
     $out->{'error'}    = $renewal[1];
@@ -774,15 +775,8 @@ sub HoldTitle {
     return { code => 'libraryNotPickupLocation' } unless $destination->pickup_location;
     return { code => 'cannotBeTransferred' } unless $biblio->can_be_transferred({ to => $destination });
 
-    my $resdate;
-    if ( $cgi->param('start_date') ) {
-        $resdate = $cgi->param('start_date');
-    }
-
-    my $expdate;
-    if ( $cgi->param('expiry_date') ) {
-        $expdate = $cgi->param('expiry_date');
-    }
+    my $resdate = $cgi->param('start_date');
+    my $expdate = $cgi->param('expiry_date');
 
     # Add the reserve
     #    $branch,    $borrowernumber, $biblionumber,
@@ -876,15 +870,8 @@ sub HoldItem {
     my $canitembereserved = C4::Reserves::CanItemBeReserved( $patron, $item, $branch )->{status};
     return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
-    my $resdate;
-    if ( $cgi->param('start_date') ) {
-        $resdate = $cgi->param('start_date');
-    }
-
-    my $expdate;
-    if ( $cgi->param('expiry_date') ) {
-        $expdate = $cgi->param('expiry_date');
-    }
+    my $resdate = $cgi->param('start_date');
+    my $expdate = $cgi->param('expiry_date');
 
     # Add the reserve
     my $priority = C4::Reserves::CalculatePriority($biblionumber);

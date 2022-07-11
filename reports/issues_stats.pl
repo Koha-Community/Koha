@@ -28,7 +28,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ItemTypes;
 use Koha::Patron::Attribute::Types;
 
@@ -48,10 +47,6 @@ my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");
 my @filters  = $input->multi_param("Filter");
-$filters[0] = eval { output_pref( { dt => dt_from_string( $filters[0]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[0] );
-$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[1] );
 my $podsp    = $input->param("DisplayBy");
 my $type     = $input->param("PeriodTypeSel");
 my $daysel   = $input->param("PeriodDaySel");
@@ -220,12 +215,7 @@ sub calculate {
             $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
         }
             # format the dates filters, otherwise just fill as is
-        if ($i>=2) {
-            $cell{filter} = @$filters[$i];
-        } else {
-            $cell{filter} = eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
-              if ( @$filters[$i] );
-        }
+        $cell{filter} = @$filters[$i];
         $cell{crit} = $i;
 
         push @loopfilter, \%cell;

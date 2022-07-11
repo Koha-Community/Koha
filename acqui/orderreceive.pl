@@ -119,7 +119,7 @@ my $creator = Koha::Patrons->find( $order->created_by );
 
 my $budget = GetBudget( $order->budget_id );
 
-my $datereceived = $order->datereceived ? dt_from_string( $order->datereceived ) : dt_from_string;
+my $datereceived = $order->datereceived || dt_from_string;
 
 # get option values for TaxRates syspref
 my @gst_values = map {

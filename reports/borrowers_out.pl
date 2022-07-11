@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patron::Categories;
 
 =head1 NAME
@@ -44,8 +43,6 @@ my $fullreportname = "reports/borrowers_out.tt";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
 my @filters = $input->multi_param("Filter");
-$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[1] );
 
 my $output = $input->param("output");
 my $basename = $input->param("basename");

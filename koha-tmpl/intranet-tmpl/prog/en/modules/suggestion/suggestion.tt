@@ -500,7 +500,7 @@
                                             <label for="suggesteddate">[% tp('purchase suggestion created by', 'Created by:') | html %]</label>
                                         </th>
                                         <td>
-                                            <input type="text" id="suggesteddate" name="suggesteddate" class="flatpickr" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/> [% INCLUDE 'date-format.inc' %]
+                                            <input type="text" id="suggesteddate" name="suggesteddate" class="flatpickr" size="10" maxlength="10" value="[% suggesteddate | html %]"/> [% INCLUDE 'date-format.inc' %]
                                         </td>
                                         <td id="tdsuggestedby">
                                             <input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>
@@ -517,7 +517,7 @@
                                             <label for="accepteddate">Accepted on:</label>
                                         </th>
                                         <td>
-                                            <input type="text" id="accepteddate" name="accepteddate" class="flatpickr" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]
+                                            <input type="text" id="accepteddate" name="accepteddate" class="flatpickr" size="10" maxlength="10" value="[% accepteddate | html %]" />[% INCLUDE 'date-format.inc' %]
                                         </td>
                                         <td>
                                             <input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>
@@ -547,7 +547,7 @@
                         </li>
                         <li>
                             <label for="managedon">Managed on:</label>
-                            <input type="text" id="managedon" name="manageddate" class="flatpickr" size="10" maxlength="10" value="[% manageddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]
+                            <input type="text" id="managedon" name="manageddate" class="flatpickr" size="10" maxlength="10" value="[% manageddate | html %]" />[% INCLUDE 'date-format.inc' %]
                         </li>
                         <li>
                             <label for="managedby_name">by:</label>

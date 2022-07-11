@@ -91,11 +91,8 @@ elsif ( $op eq 'add_validate' ) {
 
     my @lang       = $cgi->multi_param('lang');
 
-    my $expirationdate;
-    if ( $cgi->param('expirationdate') ) {
-        $expirationdate = dt_from_string( scalar $cgi->param('expirationdate') );
-    }
-    my $published_on = dt_from_string( scalar $cgi->param('published_on') );
+    my $expirationdate = $cgi->param('expirationdate');
+    my $published_on = $cgi->param('published_on');
     my $number = $cgi->param('number');
 
     my $original_default = $idnew ? Koha::AdditionalContents->find($idnew) : undef;

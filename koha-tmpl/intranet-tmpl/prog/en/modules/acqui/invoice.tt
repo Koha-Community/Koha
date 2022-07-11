@@ -69,7 +69,7 @@
                 [% IF readonly %]
                     [% shipmentdate | $KohaDates %]
                 [% ELSE %]
-                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" class="flatpickr" />
+                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | html %]" class="flatpickr" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 [% END %]
             </li>
@@ -79,7 +79,7 @@
                 [% IF readonly %]
                     [% billingdate | $KohaDates %]
                 [% ELSE %]
-                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" class="flatpickr" />
+                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | html %]" class="flatpickr" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 [% END %]
             </li>

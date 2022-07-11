@@ -26,7 +26,6 @@ use CGI::Cookie;     # need to check cookies before having CGI parse the POST re
 use URI::Escape qw( uri_escape_utf8 );
 use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Context;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use C4::Output qw( output_with_http_headers is_ajax pagination_bar output_html_with_http_headers );
 use C4::Tags qw(
     approval_counts
@@ -162,23 +161,15 @@ if ($filter = $input->param('tag')) {
     $template->param(filter_tag=>$filter);
     $filters{term} = $filter;
 }
-if ($filter = $input->param('from')) {
-        $date_from = eval { output_pref( { dt => dt_from_string( $filter ), dateonly => 1, dateformat => 'iso' } ); };
-        if ( $date_from ) {
-        $template->param(filter_date_approved_from=>$filter);
-        $filters{date_approved} = ">=$date_from";
-    } else {
-        push @errors, {date_from=>$filter};
-    }
+if ( $filter = $input->param('from') ) {
+    $date_from = $filter;
+    $template->param( filter_date_approved_from => $filter );
+    $filters{date_approved} = ">=$date_from";
 }
-if ($filter = $input->param('to')) {
-        $date_to = eval { output_pref( { dt => dt_from_string( $filter ), dateonly => 1, dateformat => 'iso' } ); };
-        if ( $date_to ) {
-        $template->param(filter_date_approved_to=>$filter);
-        $filters{date_approved} = "<=$date_to";
-    } else {
-        push @errors, {date_to=>$filter};
-    }
+if ( $filter = $input->param('to') ) {
+    $date_to = $filter;
+    $template->param( filter_date_approved_to => $filter );
+    $filters{date_approved} = "<=$date_to";
 }
 if ($filter = $input->param('approver')) {      # name (or borrowernumber) from input box
     if ($filter =~ /^\d+$/ and $filter > 0) {

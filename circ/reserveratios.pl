@@ -27,7 +27,7 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Acquisition qw/GetOrdersByBiblionumber/;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Baskets;
 
 my $input = CGI->new;
@@ -62,9 +62,6 @@ if ( $basketno ){
     }
 }
 
-$startdate = eval { dt_from_string( $startdate ) } if $startdate;
-$enddate = eval { dt_from_string( $enddate ) } if $enddate;
-
 my $todaysdate = dt_from_string;
 
 #    A default of the prior years's holds is a reasonable way to pull holds
@@ -85,9 +82,9 @@ my $sqldatewhere = "";
 my @query_params = ();
 
 $sqldatewhere .= " AND reservedate >= ?";
-push @query_params, output_pref({ dt => $startdate, dateformat => 'iso' }) ;
+push @query_params, $startdate;
 $sqldatewhere .= " AND reservedate <= ?";
-push @query_params, output_pref({ dt => $enddate, dateformat => 'iso' });
+push @query_params, $enddate;
 
 my $include_aqorders_qty =
   $effective_create_items eq 'receiving'

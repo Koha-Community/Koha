@@ -25,7 +25,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Reports qw( GetDelimiterChoices );
 
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ItemTypes;
 use Koha::Patron::Categories;
 
@@ -43,9 +42,6 @@ my $do_it   = $input->param('do_it');
 my $limit   = $input->param("Limit");
 my $column  = $input->param("Criteria");
 my @filters = $input->multi_param("Filter");
-foreach ( @filters[0..3] ) {
-    $_ and $_ = eval { output_pref( { dt => dt_from_string ( $_ ), dateonly => 1, dateformat => 'iso' }); };
-}
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
 my ($template, $borrowernumber, $cookie)
@@ -143,7 +139,6 @@ sub calculate {
             if (($i==1) and (@$filters[$i-1])) {
                 $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
             }
-            # format the dates filters, otherwise just fill as is
             $cell{filter} .= @$filters[$i];
 			defined ($cellmap[$i]) and
 				$cell{crit} .= $cellmap[$i];

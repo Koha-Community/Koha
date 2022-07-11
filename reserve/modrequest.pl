@@ -31,7 +31,6 @@ use Try::Tiny;
 use C4::Output;
 use C4::Reserves qw( ModReserve ModReserveCancelAll );
 use C4::Auth qw( get_template_and_user );
-use Koha::DateUtils qw( dt_from_string );
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 my $query = CGI->new;
@@ -77,14 +76,14 @@ else {
         my $params = {
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
-            expirationdate => $expirationdates[$i] ? dt_from_string($expirationdates[$i]) : undef,
+            expirationdate => $expirationdates[$i] || undef,
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
             defined $suspend_until ? ( suspend_until => $suspend_until ) : (),
             cancellation_reason => $cancellation_reason,
         };
         if (C4::Context->preference('AllowHoldDateInFuture')) {
-            $params->{reservedate} = $reservedates[$i] ? dt_from_string($reservedates[$i]) : undef;
+            $params->{reservedate} = $reservedates[$i] || undef;
         }
 
         try {

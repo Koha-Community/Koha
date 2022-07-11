@@ -47,7 +47,6 @@ script to administer the budget periods table
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Koha::DateUtils qw( dt_from_string );
 use JSON qw( encode_json );
 use Koha::Database;
 use C4::Koha;
@@ -72,8 +71,8 @@ my $op                   = $input->param('op')||"else";
 # get only the columns of aqbudgetperiods in budget_period_hashref
 my @columns = Koha::Database->new()->schema->source('Aqbudgetperiod')->columns;
 my $budget_period_hashref = { map { join(' ',@columns) =~ /$_/ ? ( $_ => scalar $input->param($_) )  : () } keys( %{$input->Vars()} ) } ;
-$budget_period_hashref->{budget_period_startdate} = dt_from_string( scalar $input->param('budget_period_startdate') );
-$budget_period_hashref->{budget_period_enddate}   = dt_from_string( scalar $input->param('budget_period_enddate') );
+$budget_period_hashref->{budget_period_startdate} = $input->param('budget_period_startdate');
+$budget_period_hashref->{budget_period_enddate}   = $input->param('budget_period_enddate');
 
 $searchfield =~ s/\,//g;
 
@@ -190,8 +189,8 @@ elsif ( $op eq 'duplicate_form'){
 elsif ( $op eq 'duplicate_budget' ){
     die "please specify a budget period id\n" if( !defined $budget_period_id || $budget_period_id eq '' );
 
-    my $budget_period_startdate = dt_from_string scalar $input->param('budget_period_startdate');
-    my $budget_period_enddate   = dt_from_string scalar $input->param('budget_period_enddate');
+    my $budget_period_startdate = $input->param('budget_period_startdate');
+    my $budget_period_enddate   = $input->param('budget_period_enddate');
     my $budget_period_description = $input->param('budget_period_description');
     my $amount_change_percentage = $input->param('amount_change_percentage');
     my $amount_change_round_increment = $input->param('amount_change_round_increment');

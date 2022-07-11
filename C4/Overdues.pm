@@ -31,6 +31,7 @@ use C4::Accounts;
 use C4::Context;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::DateUtils qw( output_pref );
 use Koha::Libraries;
 use Koha::Recalls;
 use Koha::Logger;
@@ -512,7 +513,7 @@ has the book on loan.
 
 C<$amount> is the current amount owed by the patron.
 
-C<$due> is the due date formatted to the currently specified date format
+C<$due> is the date
 
 C<&UpdateFine> looks up the amount currently owed on the given item
 and sets it to C<$amount>, creating, if necessary, a new entry in the
@@ -552,7 +553,6 @@ sub UpdateFine {
 
     my $accountline;
     my $total_amount_other = 0.00;
-    my $due_qr = qr/$due/;
     # Cycle through the fines and
     # - find line that relates to the requested $itemnum
     # - accumulate fines for other items
@@ -610,7 +610,7 @@ sub UpdateFine {
                     items     => $itemnum,
                 },
             ) };
-            my $desc = $letter ? $letter->{content} : "Item $itemnum - due $due";
+            my $desc = $letter ? $letter->{content} : sprintf("Item %s - due %s", $itemnum, output_pref($due) );
 
             my $account = Koha::Account->new({ patron_id => $borrowernumber });
             $accountline = $account->add_debit(

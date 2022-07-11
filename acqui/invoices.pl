@@ -34,7 +34,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 use C4::Acquisition qw( GetInvoices GetInvoice );
 use C4::Budgets qw( GetBudget GetBudgets CanUserUseBudget );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Booksellers;
 
 my $input = CGI->new;
@@ -62,20 +62,15 @@ my $branch           = $input->param('branch');
 my $message_id       = $input->param('message_id');
 my $op               = $input->param('op');
 
-$shipmentdatefrom and $shipmentdatefrom = eval { dt_from_string( $shipmentdatefrom ) };
-$shipmentdateto   and $shipmentdateto   = eval { dt_from_string( $shipmentdateto ) };
-$billingdatefrom  and $billingdatefrom  = eval { dt_from_string( $billingdatefrom ) };
-$billingdateto    and $billingdateto    = eval { dt_from_string( $billingdateto ) };
-
 my $invoices = [];
 if ( $op and $op eq 'do_search' ) {
     @{$invoices} = GetInvoices(
         invoicenumber    => $invoicenumber,
         supplierid       => $supplierid,
-        shipmentdatefrom => $shipmentdatefrom ? output_pref( { str => $shipmentdatefrom, dateformat => 'iso' } ) : undef,
-        shipmentdateto   => $shipmentdateto   ? output_pref( { str => $shipmentdateto,   dateformat => 'iso' } ) : undef,
-        billingdatefrom  => $billingdatefrom  ? output_pref( { str => $billingdatefrom,  dateformat => 'iso' } ) : undef,
-        billingdateto    => $billingdateto    ? output_pref( { str => $billingdateto,    dateformat => 'iso' } ) : undef,
+        shipmentdatefrom => $shipmentdatefrom,
+        shipmentdateto   => $shipmentdateto,
+        billingdatefrom  => $billingdatefrom,
+        billingdateto    => $billingdateto,
         isbneanissn      => $isbneanissn,
         title            => $title,
         author           => $author,

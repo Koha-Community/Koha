@@ -302,7 +302,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     <li>
                                         <label for="acqui_date" class="required">First issue publication date:</label>
                                         [% UNLESS (more_than_one_serial) %]
-                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="flatpickr required" required="required" />
+                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | html %]" class="flatpickr required" required="required" />
                                         [% ELSE %]
                                           [% firstacquidate | $KohaDates %]
                                           <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
@@ -312,7 +312,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     [% IF (more_than_one_serial) %]
                                       <li>
                                         <label for="nextacquidate">Next issue publication date:</label>
-                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | $KohaDates %]" class="flatpickr" />
+                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | html %]" class="flatpickr" />
                                       </li>
                                     [% END %]
                                     <li>
@@ -366,11 +366,11 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </li>
                                     <li>
                                         <label for="from" class="required"> Subscription start date:</label>
-                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | $KohaDates %]" class="flatpickr required" data-date_to="to" required="required" />
+                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | html %]" class="flatpickr required" data-date_to="to" required="required" />
                                     </li>
                                     <li>
                                         <label for="to">Subscription end date:</label>
-                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | $KohaDates %]" class="flatpickr" />
+                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | html %]" class="flatpickr" />
                                     </li>
                                     <li>
                                         <label for="numberpattern" class="required">Numbering pattern:</label>

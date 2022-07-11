@@ -30,7 +30,6 @@ use C4::Output qw( pagination_bar output_html_with_http_headers );
 use C4::Context;
 use Koha::Caches;
 use C4::Log qw( logaction );
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
@@ -401,32 +400,13 @@ elsif ( $phase eq 'Choose these criteria' ) {
 
         # If value is not defined, then it may be range values
         if (!defined $value) {
-
             my $fromvalue = $input->param( "from_" . $crit . "_value" );
             my $tovalue   = $input->param( "to_"   . $crit . "_value" );
-
-            # If the range values are dates
-            my $fromvalue_dt;
-            $fromvalue_dt = eval { dt_from_string( $fromvalue ); } if ( $fromvalue );
-            my $tovalue_dt;
-            $tovalue_dt = eval { dt_from_string( $tovalue ); } if ($tovalue);
-            if ( $fromvalue_dt && $tovalue_dt ) {
-                $fromvalue = output_pref( { dt => dt_from_string( $fromvalue_dt ), dateonly => 1, dateformat => 'iso' } );
-                $tovalue   = output_pref( { dt => dt_from_string( $tovalue_dt ), dateonly => 1, dateformat => 'iso' } );
-            }
 
             if ($fromvalue && $tovalue) {
                 $query_criteria .= " AND $crit >= '$fromvalue' AND $crit <= '$tovalue'";
             }
-
         } else {
-
-            # If value is a date
-            my $value_dt;
-            $value_dt  =  eval { dt_from_string( $value ); } if ( $value );
-            if ( $value_dt ) {
-                $value = output_pref( { dt => dt_from_string( $value_dt ), dateonly => 1, dateformat => 'iso' } );
-            }
             # don't escape runtime parameters, they'll be at runtime
             if ($value =~ /<<.*>>/) {
                 $query_criteria .= " AND $crit=$value";

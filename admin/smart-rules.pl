@@ -23,7 +23,6 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use Koha::Exception;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Logger;
 use Koha::Libraries;
@@ -272,8 +271,6 @@ elsif ($op eq 'add') {
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = q{} if $no_auto_renewal_after =~ /^\s*$/;
     my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || q{};
-    $no_auto_renewal_after_hard_limit = eval { dt_from_string( scalar $no_auto_renewal_after_hard_limit ) } if ( $no_auto_renewal_after_hard_limit );
-    $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = strip_non_numeric( scalar $input->param('reservesallowed') );
     my $holds_per_record = strip_non_numeric( scalar $input->param('holds_per_record') );
     my $holds_per_day    = strip_non_numeric( scalar $input->param('holds_per_day') );
@@ -282,8 +279,6 @@ elsif ($op eq 'add') {
     my $daysmode = $input->param('daysmode');
     my $lengthunit  = $input->param('lengthunit');
     my $hardduedate = $input->param('hardduedate') || q{};
-    $hardduedate = eval { dt_from_string( scalar $hardduedate ) } if ( $hardduedate );
-    $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount') || 0;
     my $opacitemholds = $input->param('opacitemholds') || 0;

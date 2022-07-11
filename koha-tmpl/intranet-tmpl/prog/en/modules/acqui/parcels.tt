@@ -163,7 +163,7 @@
         </li> -->
          <li>
             <label for="shipmentdate">Shipment date: </label>
-            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | $KohaDates %]" class="flatpickr" />
+            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today | html %]" class="flatpickr" />
             <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </li>
         <li>

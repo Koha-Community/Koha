@@ -163,7 +163,7 @@ for my $overdue ( @{$overdues} ) {
                 itemnumber     => $overdue->{itemnumber},
                 borrowernumber => $overdue->{borrowernumber},
                 amount         => $amount,
-                due            => output_pref($datedue),
+                due            => $datedue,
             }
         );
         $updated++;

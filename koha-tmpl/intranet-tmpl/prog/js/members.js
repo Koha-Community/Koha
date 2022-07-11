@@ -128,7 +128,7 @@ function select_user(borrowernumber, borrower, relationship) {
 
 function CalculateAge(dateofbirth) {
     var today = new Date();
-    var dob = Date_from_syspref(dateofbirth);
+    var dob = new Date(dateofbirth);
     var age = {};
 
     age.year = today.getFullYear() - dob.getFullYear();

@@ -58,12 +58,12 @@
                 <br>
                 <li>
                     <label for="from">From: </label>
-                    <input type="text" size="10" id="from" name="from" value="[% beginDate | $KohaDates %]" class="flatpickr" data-date_to="to" />
+                    <input type="text" size="10" id="from" name="from" value="[% beginDate | html %]" class="flatpickr" data-date_to="to" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
                 <li>
                     <label for="to">To: </label>
-                    <input type="text" size="10" id="to" name="to" value="[% endDate | $KohaDates %]" class="flatpickr" />
+                    <input type="text" size="10" id="to" name="to" value="[% endDate | html %]" class="flatpickr" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
 

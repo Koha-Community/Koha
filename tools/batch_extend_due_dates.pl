@@ -25,7 +25,7 @@ use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Checkouts;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
 my $op = $input->param('op') // q|form|;
@@ -107,19 +107,13 @@ elsif ( $op eq 'list' ) {
         if ($preview_results) {
             push(
                 @new_due_dates,
-                output_pref(
+                calc_new_due_date(
                     {
-                        dt => calc_new_due_date(
-                            {
-                                due_date =>
-                                  dt_from_string( $checkout->date_due ),
-                                new_hard_due_date => $new_hard_due_date,
-                                add_days          => $due_date_days
-                            }
-                        ),
-                        dateformat => 'iso'
+                        due_date => dt_from_string( $checkout->date_due ),
+                        new_hard_due_date => $new_hard_due_date,
+                        add_days          => $due_date_days
                     }
-                )
+                ),
             );
         } else {
             push( @issue_ids, $checkout->id );
@@ -129,9 +123,7 @@ elsif ( $op eq 'list' ) {
     if ( $preview_results ) {
         $template->param(
             checkouts         => $checkouts,
-            new_hard_due_date => $new_hard_due_date
-            ? dt_from_string($new_hard_due_date)
-            : undef,
+            new_hard_due_date => $new_hard_due_date,
             due_date_days => $due_date_days,
             new_due_dates => \@new_due_dates,
             view          => 'list',

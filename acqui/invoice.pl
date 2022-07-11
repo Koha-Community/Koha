@@ -102,8 +102,8 @@ elsif ( $op && $op eq 'mod' ) {
     ModInvoice(
         invoiceid             => $invoiceid,
         invoicenumber         => $invoicenumber,
-        shipmentdate          => scalar output_pref( { str => scalar $input->param('shipmentdate'), dateformat => 'iso', dateonly => 1 } ),
-        billingdate           => scalar output_pref( { str => scalar $input->param('billingdate'),  dateformat => 'iso', dateonly => 1 } ),
+        shipmentdate          => scalar $input->param('shipmentdate'),
+        billingdate           => scalar $input->param('billingdate'),
         shipmentcost          => $shipmentcost,
         shipmentcost_budgetid => $shipment_budget_id
     );

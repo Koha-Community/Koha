@@ -28,7 +28,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 use C4::Members;
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patron::Categories;
@@ -170,21 +169,13 @@ sub calculate {
     my @loopfilter;
     foreach my $filter ( keys %$filters_hashref ) {
         $filters_hashref->{$filter} =~ s/\*/%/;
-        if ( $filter =~ /date/ ) {
-            $filters_hashref->{$filter} =
-                eval { output_pref( { dt => dt_from_string( $filters_hashref->{$filter} ), dateonly => 1, dateformat => 'iso' }); };
-        }
     }
 
     #display
     @loopfilter = map {
         {
             crit   => $_,
-            filter => (
-                $_ =~ /date/
-                ? eval { output_pref( { dt => dt_from_string( $filters_hashref->{$_} ), dateonly => 1 }); }
-                : $filters_hashref->{$_}
-            )
+            filter => $filters_hashref->{$_},
         }
     } sort keys %$filters_hashref;
 

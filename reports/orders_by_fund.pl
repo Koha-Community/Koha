@@ -33,7 +33,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Budgets qw( GetBudgetsReport GetBudgetHierarchy );
 use C4::Acquisition qw( GetBasket get_rounded_price );
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -106,9 +105,7 @@ if ( $get_orders ) {
         $order->{'total_rrp'} = get_rounded_price($order->{'quantity'}) * $order->{'rrp'};
         $order->{'total_ecost'} = get_rounded_price($order->{'quantity'}) * $order->{'ecost'};
 
-        # Format the dates and currencies correctly
-        $order->{'datereceived'} = output_pref(dt_from_string($order->{'datereceived'}));
-        $order->{'entrydate'} = output_pref(dt_from_string($order->{'entrydate'}));
+        # Format the currencies correctly
         $total_quantity += $order->{'quantity'};
         $total_rrp += $order->{'total_rrp'};
         $total_ecost += $order->{'total_ecost'};

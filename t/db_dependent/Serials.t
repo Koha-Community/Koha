@@ -306,17 +306,17 @@ subtest 'test_updateClaim' => sub {
     is($result_1, 2, 'Got the expected 2 from update claim with 2 serial ids');
 
     my @late_or_missing_issues_1_0 = C4::Serials::GetLateOrMissingIssues(undef, $serial1->serialid);
-    is($late_or_missing_issues_1_0[0]->{claimdate}, $today, 'Got the expected first different claim date from update claim');
+    is(output_pref({str => $late_or_missing_issues_1_0[0]->{claimdate}, dateonly => 1}), $today, 'Got the expected first different claim date from update claim');
     is($late_or_missing_issues_1_0[0]->{claims_count}, $claim_count_1+1, 'Got the expected first claim count from update claim');
     is($late_or_missing_issues_1_0[0]->{status}, 7, 'Got the expected first claim status from update claim');
 
     my @late_or_missing_issues_1_1 = C4::Serials::GetLateOrMissingIssues(undef, $serial2->serialid);
-    is($late_or_missing_issues_1_1[0]->{claimdate}, $today, 'Got the expected second different claim date from update claim');
+    is(output_pref({str => $late_or_missing_issues_1_1[0]->{claimdate}, dateonly => 1}), $today, 'Got the expected second different claim date from update claim');
     is($late_or_missing_issues_1_1[0]->{claims_count}, $claim_count_1+1, 'Got the expected second claim count from update claim');
     is($late_or_missing_issues_1_1[0]->{status}, 7, 'Got the expected second claim status from update claim');
 
     my @late_or_missing_issues_1_2 = C4::Serials::GetLateOrMissingIssues(undef, $serial3->serialid);
-    is($late_or_missing_issues_1_2[0]->{claimdate}, output_pref({ dt => $claimdate_1, dateonly => 1}), 'Got the expected unchanged claim date from update claim');
+    is(output_pref({str => $late_or_missing_issues_1_2[0]->{claimdate}, dateonly => 1}), output_pref({ dt => $claimdate_1, dateonly => 1}), 'Got the expected unchanged claim date from update claim');
     is($late_or_missing_issues_1_2[0]->{claims_count}, $claim_count_1, 'Got the expected unchanged claim count from update claim');
     is($late_or_missing_issues_1_2[0]->{status}, 3, 'Got the expected unchanged claim status from update claim');
 };

@@ -1,6 +1,5 @@
 [% USE Koha %]
 [% USE Branches %]
-[% USE KohaDates %]
 [% PROCESS 'html_helpers.inc' %]
 <ol>
     <li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% filters.title | html %]" /></li>
@@ -106,11 +105,11 @@
     </li>
 
     <li><label for="from">From: </label>
-        <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | $KohaDates %]" class="flatpickr" data-date_to="to" />
+        <input type="text" size="10" id="from" name="from" value="[% filters.from_placed_on | html %]" class="flatpickr" data-date_to="to" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li><label for="to">To: </label>
-        <input type="text" size="10" id="to" name="to" value="[% filters.to_placed_on | $KohaDates %]" class="flatpickr" />
+        <input type="text" size="10" id="to" name="to" value="[% filters.to_placed_on | html %]" class="flatpickr" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 </ol>

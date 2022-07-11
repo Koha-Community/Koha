@@ -38,11 +38,10 @@ use C4::Items qw( get_hostitemnumbers_of );
 use C4::Koha qw( getitemtypeimagelocation );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
 use C4::Circulation qw( GetTransfers _GetCircControlBranch GetBranchItemRule );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use C4::Search qw( enabled_staff_search_views );
 
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Checkouts;
 use Koha::Holds;
 use Koha::CirculationRules;
@@ -90,7 +89,6 @@ my $messages;
 my $exceeded_maxreserves;
 my $exceeded_holds_per_record;
 
-my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 my $action = $input->param('action');
 $action ||= q{};
 
@@ -456,7 +454,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                   GetTransfers($item_object->itemnumber); # FIXME replace with get_transfer
 
                 if ( defined $transfertwhen && $transfertwhen ne '' ) {
-                    $item->{transfertwhen} = output_pref({ dt => dt_from_string( $transfertwhen ), dateonly => 1 });
+                    $item->{transfertwhen} = $transfertwhen;
                     $item->{transfertfrom} = $transfertfrom;
                     $item->{transfertto} = $transfertto;
                     $item->{nocancel} = 1;
@@ -663,7 +661,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         $template->param(
                          itemdata_enumchron => $itemdata_enumchron,
                          itemdata_ccode    => $itemdata_ccode,
-                         date              => $date,
+                         date              => dt_from_string,
                          biblionumber      => $biblionumber,
                          findborrower      => $findborrower,
                          biblio            => $biblio,

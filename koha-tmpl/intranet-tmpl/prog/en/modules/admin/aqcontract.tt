@@ -132,12 +132,12 @@
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="[% contractdescription | html %]" />
                                 </li>
                                 <li><label for="from" class="required">Start date:</label> &nbsp;
-                                        <input type="text" name="contractstartdate" id="from" value="[% contractstartdate | $KohaDates %]" maxlength="10" size="10" class="flatpickr" data-date_to="to" />
+                                        <input type="text" name="contractstartdate" id="from" value="[% contractstartdate | html %]" maxlength="10" size="10" class="flatpickr" data-date_to="to" />
                                         <span class="required">Required</span>
                                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
                                 <li><label for="to" class="required">End date:</label> &nbsp;
-                                        <input type="text" name="contractenddate" id="to" value="[% contractenddate | $KohaDates %]" maxlength="10"  size="10" class="flatpickr" />
+                                        <input type="text" name="contractenddate" id="to" value="[% contractenddate | html %]" maxlength="10"  size="10" class="flatpickr" />
                                         <span class="required">Required</span>
                                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>

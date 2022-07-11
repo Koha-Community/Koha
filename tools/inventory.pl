@@ -36,7 +36,7 @@ use C4::Reports::Guided qw( );
 use C4::Charset qw( NormalizeString );
 
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database::Columns;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
@@ -247,7 +247,7 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
             }
         }
     }
-    $template->param( date => output_pref ( { str => $date, dateformat => 'iso' } ) );
+    $template->param( date => $date );
     $template->param( errorloop => \@errorloop ) if (@errorloop);
 }
 

@@ -55,7 +55,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Acquisition qw( GetHistory );
 use Koha::AdditionalFields;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
 my $do_search               = $input->param('do_search') || 0;
@@ -98,8 +98,8 @@ unless ( $input->param('from') ) {
     # Fill the form with year-1
     $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
-$filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } );
-$filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } );
+$filters->{from_placed_on} = $from_placed_on;
+$filters->{to_placed_on}   = $to_placed_on;
 my $additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket', searchable => 1 } );
 $template->param( available_additional_fields => $additional_fields );
 my @additional_field_filters;

@@ -24,7 +24,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Overdues qw( GetOverduesForBranch );
 use C4::Biblio qw( GetMarcFromKohaField GetMarcStructure );
 use C4::Koha qw( GetAuthorisedValues );
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::BiblioFrameworks;
 
 =head1 branchoverdues.pl
@@ -71,8 +70,7 @@ if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 # now display infos
 foreach my $num (@getoverdues) {
     my %overdueforbranch;
-    my $dt = dt_from_string($num->{date_due}, 'sql');
-    $overdueforbranch{'date_due'}          = output_pref($dt);
+    $overdueforbranch{'date_due'}          = $num->{date_due};
     $overdueforbranch{'title'}             = $num->{'title'};
     $overdueforbranch{'subtitle'}          = $num->{'subtitle'};
     $overdueforbranch{'medium'}            = $num->{'medium'};

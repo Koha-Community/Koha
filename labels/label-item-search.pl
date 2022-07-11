@@ -30,7 +30,6 @@ use C4::Biblio qw( TransformMarcToKoha );
 use C4::Creators::Lib qw( html_table );
 
 use Koha::Logger;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::SearchEngine::Search;
@@ -67,21 +66,13 @@ if ( $op eq "do_search" ) {
     $dateto   = $query->param('dateto');
 
     if ($datefrom) {
-        $datefrom = eval { dt_from_string ( $datefrom ) };
-        if ($datefrom) {
-            $datefrom = output_pref( { dt => $datefrom, dateonly => 1, dateformat => 'iso' } );
-            $ccl_query .= ' AND ' if $ccl_textbox;
-            $ccl_query .= "acqdate,ge,st-date-normalized=" . $datefrom;
-        }
+        $ccl_query .= ' AND ' if $ccl_textbox;
+        $ccl_query .= "acqdate,ge,st-date-normalized=" . $datefrom;
     }
 
     if ($dateto) {
-        $dateto = eval { dt_from_string ( $dateto ) };
-        if ($dateto) {
-           $dateto = output_pref( { dt => $dateto, dateonly => 1, dateformat => 'iso' } );
-            $ccl_query .= ' AND ' if ( $ccl_textbox || $datefrom );
-            $ccl_query .= "acqdate,le,st-date-normalized=" . $dateto;
-        }
+        $ccl_query .= ' AND ' if ( $ccl_textbox || $datefrom );
+        $ccl_query .= "acqdate,le,st-date-normalized=" . $dateto;
     }
 
     my $offset = $startfrom > 1 ? $startfrom - 1 : 0;

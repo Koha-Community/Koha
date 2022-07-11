@@ -25,7 +25,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Barcodes::ValueBuilder;
 use C4::Biblio qw( GetMarcFromKohaField );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 use Algorithm::CheckDigits qw( CheckDigits );
 
@@ -35,7 +35,7 @@ my $builder = sub {
     my %args;
 
 	# find today's date
-    ($args{year}, $args{mon}, $args{day}) = split('-', output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }));
+    ($args{year}, $args{mon}, $args{day}) = split('-', dt_from_string()->ymd());
     ($args{tag},$args{subfield})       =  GetMarcFromKohaField( "items.barcode" );
 
 	my $nextnum;

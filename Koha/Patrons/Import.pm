@@ -57,6 +57,7 @@ Further pod documentation needed here.
 =cut
 
 has 'today_iso' => ( is => 'ro', lazy => 1,
+    # FIXME We shouldn't need to call output_pref here, passing a DateTime object should work
     default => sub { output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } ); }, );
 
 has 'text_csv' => ( is => 'rw', lazy => 1,

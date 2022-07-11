@@ -24,7 +24,6 @@ use POSIX qw( floor );
 use YAML::XS;
 use Encode;
 
-use Koha::DateUtils qw( dt_from_string output_pref );
 use C4::Context;
 use C4::Stats qw( UpdateStats );
 use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsItemOnHoldAndFound IsAvailableForItemLevelRequest ItemsAnyAvailableAndNotRestricted );
@@ -43,7 +42,7 @@ use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Biblioitems;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Checkouts;
 use Koha::Illrequests;
@@ -798,7 +797,7 @@ sub CanBookBeIssued {
     my $now = dt_from_string();
     $duedate ||= CalcDateDue( $now, $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
     if (DateTime->compare($duedate,$now) == -1 ) { # duedate cannot be before now
-         $needsconfirmation{INVALID_DATE} = output_pref($duedate);
+         $needsconfirmation{INVALID_DATE} = $duedate;
     }
 
     my $fees = Koha::Charges::Fees->new(
@@ -1235,19 +1234,16 @@ sub CanBookBeIssued {
         my $check = checkHighHolds( $item_object, $patron );
 
         if ( $check->{exceeded} ) {
+            my $highholds = {
+                num_holds  => $check->{outstanding},
+                duration   => $check->{duration},
+                returndate => $check->{due_date},
+            };
             if ($override_high_holds) {
-                $alerts{HIGHHOLDS} = {
-                    num_holds  => $check->{outstanding},
-                    duration   => $check->{duration},
-                    returndate => output_pref( { dt => dt_from_string($check->{due_date}), dateformat => 'iso', timeformat => '24hr' }),
-                };
+                $alerts{HIGHHOLDS} = $highholds;
             }
             else {
-                $needsconfirmation{HIGHHOLDS} = {
-                    num_holds  => $check->{outstanding},
-                    duration   => $check->{duration},
-                    returndate => output_pref( { dt => dt_from_string($check->{due_date}), dateformat => 'iso', timeformat => '24hr' }),
-                };
+                $needsconfirmation{HIGHHOLDS} = $highholds;
             }
         }
     }
@@ -1462,8 +1458,8 @@ Calculated if empty.
 
 =item C<$cancelreserve> is 1 to override and cancel any pending reserves for the item (optional).
 
-=item C<$issuedate> is the date to issue the item in iso (YYYY-MM-DD) format (optional).
-Defaults to today.  Unlike C<$datedue>, NOT a DateTime object, unfortunately.
+=item C<$issuedate> is a DateTime object for the date to issue the item (optional).
+Defaults to today.
 
 AddIssue does the following things :
 
@@ -1635,8 +1631,8 @@ sub AddIssue {
 
             my $issue_attributes = {
                 borrowernumber  => $borrower->{'borrowernumber'},
-                issuedate       => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
-                date_due        => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
+                issuedate       => $issuedate,
+                date_due        => $datedue,
                 branchcode      => C4::Context->userenv->{'branch'},
                 onsite_checkout => $onsite_checkout,
                 auto_renew      => $auto_renew ? 1 : 0,
@@ -4423,7 +4419,7 @@ sub _CalculateAndUpdateFine {
                 itemnumber     => $issue->itemnumber,
                 borrowernumber => $issue->borrowernumber,
                 amount         => $amount,
-                due            => output_pref($datedue),
+                due            => $datedue,
             });
         }
         elsif ($return_date) {
@@ -4436,7 +4432,7 @@ sub _CalculateAndUpdateFine {
                 itemnumber     => $issue->itemnumber,
                 borrowernumber => $issue->borrowernumber,
                 amount         => 0,
-                due            => output_pref($datedue),
+                due            => $datedue,
             });
         }
     }

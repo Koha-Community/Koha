@@ -137,9 +137,6 @@ elsif ( $phase eq 'New Term step 5' ) {
             $tmp_hash{'name'}  = $crit;
             $tmp_hash{'value'} = $value;
             push @criteria_loop, \%tmp_hash;
-            my $value_dt = eval { dt_from_string( $value ) };
-            $value = output_pref( { dt => $value_dt, dateonly => 1, dateformat => 'iso' } )
-                if ( $value_dt );
 
             $query_criteria .= " AND $crit='$value'";
         }
@@ -151,9 +148,6 @@ elsif ( $phase eq 'New Term step 5' ) {
                     $tmp_hash{'name'}  = "$crit Start";
                     $tmp_hash{'value'} = $value;
                     push @criteria_loop, \%tmp_hash;
-                    my $value_dt = eval { dt_from_string( $value ) };
-                    $value = output_pref( { dt => $value_dt, dateonly => 1, dateformat => 'iso' } )
-                        if ( $value_dt );
 
                     $query_criteria .= " AND $crit >= '$value'";
                 }
@@ -163,9 +157,6 @@ elsif ( $phase eq 'New Term step 5' ) {
                     $tmp_hash{'name'}  = "$crit End";
                     $tmp_hash{'value'} = $value;
                     push @criteria_loop, \%tmp_hash;
-                    my $value_dt = eval { dt_from_string( $value ) };
-                    $value = output_pref( { dt => $value_dt, dateonly => 1, dateformat => 'iso' } )
-                        if ( $value_dt );
 
                     $query_criteria .= " AND $crit <= '$value'";
                 }

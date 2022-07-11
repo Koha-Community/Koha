@@ -236,12 +236,12 @@
                 [% END %]
                 <li>
                     <label for="from">Publication date: </label>
-                    <input id="from" type="text" name="published_on" size="15" value="[% additional_content.published_on | $KohaDates %]" class="flatpickr" data-date_to="to" />
+                    <input id="from" type="text" name="published_on" size="15" value="[% additional_content.published_on | html %]" class="flatpickr" data-date_to="to" />
                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 </li>
                 <li>
                     <label for="to">Expiration date: </label>
-                    <input id="to" type="text" name="expirationdate" size="15" value="[% additional_content.expirationdate | $KohaDates %]" class="flatpickr" />
+                    <input id="to" type="text" name="expirationdate" size="15" value="[% additional_content.expirationdate | html %]" class="flatpickr" />
                     <div class="hint">
                         [% INCLUDE 'date-format.inc' %]
                         [% IF category == 'news' %]

@@ -36,7 +36,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Serials qw( GetSubscription GetFictiveIssueNumber GetSeq GetSubscriptionIrregularities GetNextDate GetNextSeq );
 use C4::Serials::Frequency;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
@@ -90,16 +90,11 @@ my %pattern = (
     every3          => scalar $input->param('every3') // '',
 );
 
-$firstacquidate = eval { output_pref( { str => $firstacquidate, dateonly => 1, dateformat => 'iso' } ); }
-    or output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
+$firstacquidate = $firstacquidate ? dt_from_string($firstacquidate)->ymd : dt_from_string->ymd;
 
-$enddate = eval { output_pref( { str => $enddate, dateonly => 1, dateformat => 'iso' } ); };
+$enddate = dt_from_string($enddate)->ymd;
 
-if($nextacquidate) {
-    $nextacquidate =  eval { output_pref( { str => $nextacquidate, dateonly => 1, dateformat => 'iso' } ); };
-} else {
-    $nextacquidate = $firstacquidate;
-}
+$nextacquidate = $nextacquidate ? dt_from_string($nextacquidate)->ymd : $firstacquidate;
 my $date = $nextacquidate;
 
 my %subscription = (
@@ -112,7 +107,7 @@ my %subscription = (
     innerloop3      => scalar $input->param('innerloop3') // '',
     irregularity    => '',
     countissuesperunit  => 1,
-    firstacquidate  => $firstacquidate,
+    firstacquidate  => $firstacquidate->ymd,
 );
 
 my $issuenumber;

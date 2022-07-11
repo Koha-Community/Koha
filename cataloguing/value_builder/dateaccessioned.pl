@@ -21,13 +21,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Koha::DateUtils qw( dt_from_string output_pref flatpickr_date_format );
+use Koha::DateUtils qw( flatpickr_date_format );
 
 my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
 
-    my $date = output_pref({ dt => dt_from_string, dateonly => 1 });
     my $dateformat = flatpickr_date_format();
 
     my $res  = <<END_OF_JS;

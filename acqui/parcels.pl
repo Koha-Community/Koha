@@ -75,7 +75,7 @@ use C4::Acquisition qw( GetInvoices GetInvoice AddInvoice );
 use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
 
 use Koha::Acquisition::Booksellers;
-use Koha::DateUtils qw( output_pref dt_from_string );
+use Koha::DateUtils qw( dt_from_string );
 
 my $input          = CGI->new;
 my $booksellerid     = $input->param('booksellerid');
@@ -100,7 +100,6 @@ my $invoicenumber = $input->param('invoice');
 my $shipmentcost = $input->param('shipmentcost');
 my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
 my $shipmentdate = $input->param('shipmentdate');
-$shipmentdate and $shipmentdate = output_pref({ str => $shipmentdate, dateformat => 'iso', dateonly => 1 });
 
 if ( $op and $op eq 'new' ) {
     if ( C4::Context->preference('AcqWarnOnDuplicateInvoice') ) {
@@ -140,8 +139,8 @@ my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my @parcels = GetInvoices(
     supplierid => $booksellerid,
     invoicenumber => $code,
-    ( $datefrom ? ( shipmentdatefrom => output_pref({ dt => dt_from_string($datefrom), dateformat => 'iso' }) ) : () ),
-    ( $dateto   ? ( shipmentdateto   => output_pref({ dt => dt_from_string($dateto),   dateformat => 'iso' }) )    : () ),
+    ( $datefrom ? ( shipmentdatefrom => $datefrom ) : () ),
+    ( $dateto   ? ( shipmentdateto   => $dateto   ) : () ),
     order_by => $order
 );
 my $count_parcels = @parcels;

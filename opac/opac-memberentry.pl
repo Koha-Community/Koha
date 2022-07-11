@@ -35,7 +35,7 @@ use Koha::Patron::Consent;
 use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use C4::Scrubber;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Email;
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
@@ -542,20 +542,6 @@ sub ParseCgiForBorrower {
                 # Allow html characters for passwords
                 $borrower{$key} = $cgi->param($field);
             }
-        }
-    }
-
-    if ( defined $borrower{'dateofbirth'} ) {
-        my $dob_dt;
-        $dob_dt = eval { dt_from_string( $borrower{'dateofbirth'} ); }
-            if ( $borrower{'dateofbirth'} );
-
-        if ( $dob_dt ) {
-            $borrower{'dateofbirth'} = output_pref( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' } );
-        }
-        else {
-            # Trigger validation
-            $borrower{'dateofbirth'} = undef;
         }
     }
 

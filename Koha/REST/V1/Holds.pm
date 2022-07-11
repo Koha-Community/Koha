@@ -26,7 +26,7 @@ use C4::Reserves;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Holds;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 use List::MoreUtils qw( any );
 use Try::Tiny qw( catch try );
@@ -183,11 +183,6 @@ sub add {
 
         my $priority = C4::Reserves::CalculatePriority($biblio_id);
 
-        # AddReserve expects date to be in syspref format
-        if ($expiration_date) {
-            $expiration_date = output_pref( { dt => dt_from_string($expiration_date, 'iso'), dateformat => 'iso', dateonly => 1 } );
-        }
-
         my $hold_id = C4::Reserves::AddReserve(
             {
                 branchcode       => $pickup_library_id,
@@ -280,19 +275,14 @@ sub edit {
         $pickup_library_id //= $hold->branchcode;
         my $priority         = $body->{priority} // $hold->priority;
         # suspended_until can also be set to undef
-        my $suspended_until =
-          exists $body->{suspended_until}
-          ? dt_from_string( $body->{suspended_until}, 'rfc3339' )
-          : $hold->suspend_until     && dt_from_string( $hold->suspend_until,     'iso' );
+        my $suspended_until = $body->{suspended_until} || $hold->suspend_until;
 
         my $params = {
             reserve_id    => $hold_id,
             branchcode    => $pickup_library_id,
             rank          => $priority,
-            suspend_until => $suspended_until
-              ? output_pref({ dt => $suspended_until, dateformat => 'iso', dateonly => 1 })
-              : '',
-            itemnumber    => $hold->itemnumber
+            suspend_until => $suspended_until,
+            itemnumber    => $hold->itemnumber,
         };
 
         C4::Reserves::ModReserve($params);
@@ -356,23 +346,15 @@ sub suspend {
     }
 
     return try {
-        my $date = ($end_date) ? dt_from_string( $end_date, 'iso' ) : undef;
-        $hold->suspend_hold($date);
+        $hold->suspend_hold($end_date);
         $hold->discard_changes;
         $c->res->headers->location( $c->req->url->to_string );
-        my $suspend_end_date;
-        if ($hold->suspend_until) {
-            $suspend_end_date = output_pref({
-                dt         => dt_from_string( $hold->suspend_until, 'iso' ),
-                dateformat => 'iso',
-                dateonly   => 1
-                }
-            );
-        }
+
+        my $suspend_until = $end_date ? dt_from_string($hold->suspend_until)->ymd : undef;
         return $c->render(
             status  => 201,
             openapi => {
-                end_date => $suspend_end_date
+                end_date => $suspend_until,
             }
         );
     }

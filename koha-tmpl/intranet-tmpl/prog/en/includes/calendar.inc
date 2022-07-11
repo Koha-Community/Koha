@@ -35,7 +35,10 @@
     flatpickr.l10ns.default.months   = flatpickr_months;
     flatpickr.setDefaults({
         allowInput: true,
-        dateFormat: flatpickr_dateformat_string,
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: flatpickr_dateformat_string,
+        altInputClass: 'flatpickr-input',
         nextArrow: '<i class="fa fa-fw fa-arrow-right"></i>',
         prevArrow: '<i class="fa fa-fw fa-arrow-left"></i>',
         time_24hr: flatpickr_timeformat,
@@ -46,7 +49,7 @@
         },
         onReady: function( selectedDates, dateStr, instance ){
             /* When flatpickr instance is created, automatically append a "clear date" link */
-            $(instance.input)
+            $(instance.input).siblings('input.flatpickr')
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
                 .attr("autocomplete", "off")

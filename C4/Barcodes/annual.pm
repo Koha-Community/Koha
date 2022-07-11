@@ -24,6 +24,7 @@ use Carp qw( carp );
 
 use C4::Context;
 
+# FIXME We should certainly remove output_pref from here
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use vars qw(@ISA);

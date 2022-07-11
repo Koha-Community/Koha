@@ -85,7 +85,7 @@
         <fieldset class="rows">
             <legend>Parameters</legend>
             <ol>
-                <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="flatpickr" /></li>
+                <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | html %]" class="flatpickr" /></li>
                 <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
                 <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
                 <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
@@ -185,7 +185,7 @@
         <li>
             <br/>
             <label for="datelastseen">Last inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | $KohaDates %]" class="flatpickr" />
+            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | html %]" class="flatpickr" />
             (Skip records marked as seen on or after this date.)
         </li>
         <li>

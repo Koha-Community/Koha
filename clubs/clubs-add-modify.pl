@@ -55,10 +55,8 @@ my $club_template_id = $cgi->param('club_template_id');
 my $club_template = $club->club_template() || Koha::Club::Templates->find($club_template_id);
 $club_template_id ||= $club_template->id();
 
-my $date_start = $cgi->param('date_start');
-$date_start = $date_start ? dt_from_string($date_start) : undef;
-my $date_end = $cgi->param('date_end');
-$date_end = $date_end ? dt_from_string($date_end) : undef;
+my $date_start = $cgi->param('date_start') || undef;
+my $date_end = $cgi->param('date_end') || undef;
 
 if ( $cgi->param('name') ) {    # Update or create club
     $club->set(

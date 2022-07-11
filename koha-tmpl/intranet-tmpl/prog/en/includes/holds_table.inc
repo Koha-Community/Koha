@@ -117,13 +117,13 @@
             <td>[% hold.notes | html | html_line_break %]</td>
             <td>
                 [% IF Koha.Preference('AllowHoldDateInFuture') %]
-                    <input type="text" class="flatpickr" value="[% hold.date | $KohaDates %]" required="required" size="10" name="reservedate" />
+                    <input type="text" class="flatpickr" value="[% hold.date | html %]" required="required" size="10" name="reservedate" />
                 [% ELSE %]
                     [% hold.date | $KohaDates %]
                 [% END %]
             </td>
             <td>
-                <input type="text" class="flatpickr" data-flatpickr-futuredate="true" value="[% hold.expirationdate | $KohaDates %]" size="10" name="expirationdate" />
+                <input type="text" class="flatpickr" data-flatpickr-futuredate="true" value="[% hold.expirationdate | html %]" size="10" name="expirationdate" />
             </td>
             <td>
                 [%- IF ( hold.found ) -%]
@@ -224,7 +224,7 @@
 
                         [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                             <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
-                            <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="flatpickr" data-flatpickr-futuredate="true" />
+                            <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | html %]" class="flatpickr" data-flatpickr-futuredate="true" />
                         [%- ELSE -%]
                             <input type="hidden" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
                         [%- END -%]

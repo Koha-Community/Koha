@@ -26,7 +26,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Items qw( ModItemTransfer );
 use Date::Calc qw( Date_to_Days Today );
 use C4::Reserves qw( ModReserve ModReserveCancelAll );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -127,7 +127,7 @@ $template->param(
     overcount   => scalar @over_loop,
     cancel_reqs_count => $holds_with_cancellation_requests->count,
     cancel_reqs => $holds_with_cancellation_requests,
-    show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
+    show_date   => dt_from_string,
     tab => $tab,
 );
 

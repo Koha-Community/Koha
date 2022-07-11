@@ -25,7 +25,7 @@ use C4::Output qw( output_html_with_http_headers );
 use CGI qw(-oldstyle_urls -utf8);
 use C4::Auth qw( get_template_and_user );
 use Text::CSV_XS;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron::Attribute::Types;
 use DateTime;
 use DateTime::Format::MySQL;
@@ -337,7 +337,7 @@ if ($noreport) {
             branchcode             => $data->{branchcode},
             barcode                => $data->{barcode},
             itemnum                => $data->{itemnumber},
-            issuedate              => output_pref({ dt => dt_from_string( $data->{issuedate} ), dateonly => 1 }),
+            issuedate              => $data->{issuedate},
             biblionumber           => $data->{biblionumber},
             title                  => $data->{title},
             subtitle               => $data->{subtitle},
@@ -374,7 +374,7 @@ if ($noreport) {
     $new_cgi->delete('op');
 
     $template->param(
-        todaysdate              => output_pref($today_dt),
+        todaysdate              => $today_dt,
         overdueloop             => \@overduedata,
         nnoverdue               => scalar(@overduedata),
         noverdue_is_plural      => scalar(@overduedata) != 1,

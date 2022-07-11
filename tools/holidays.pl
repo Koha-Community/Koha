@@ -39,6 +39,7 @@ my ($template, $loggedinuser, $cookie)
 
 # calendardate - date passed in url for human readability (syspref)
 # if the url has an invalid date default to 'now.'
+# FIXME There is something to improve in the date handling here
 my $calendarinput_dt = eval { dt_from_string( scalar $input->param('calendardate') ); } || dt_from_string;
 my $calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
 

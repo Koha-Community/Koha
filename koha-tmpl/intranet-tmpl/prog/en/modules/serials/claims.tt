@@ -166,15 +166,15 @@
                                                 [% IF ( missingissue.status44 ) %]<span class="status-missing_lost">Missing (lost)</span>[% END %]
                                                 [% IF ( missingissue.status7 ) %]<span class="status-claimed">Claimed</span>[% END %]
                                             </td>
-                                            <td class="planneddate" data-order="[% missingissue.planneddateISO | html %]">
-                                                [% missingissue.planneddate | html %]
+                                            <td class="planneddate" data-order="[% missingissue.planneddate | html %]">
+                                                [% missingissue.planneddate | $KohaDates %]
                                             </td>
                                             <td class="publisheddate" data-order="[% missingissue.publisheddate | html %]">
                                                 [% missingissue.publisheddate | $KohaDates %]
                                             </td>
                                             <td>[% missingissue.claims_count | html %]</td>
-                                            <td data-order="[% missingissue.claimdateISO | html %]">
-                                                [% missingissue.claimdate | html %]
+                                            <td data-order="[% missingissue.claimdate | html %]">
+                                                [% missingissue.claimdate | $KohaDates %]
                                             </td>
                                             [% FOR field IN additional_fields_for_subscription %]
                                                 [% IF field.authorised_value_category %]

@@ -72,7 +72,7 @@ use C4::Context;
 use C4::Serials qw( GetSerials GetSerials2 GetSerialInformation HasSubscriptionExpired GetSubscription abouttoexpire NewIssue ModSerialStatus GetPreviousSerialid AddItem2Serial );
 use C4::Search qw( enabled_staff_search_views );
 
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Serial::Items;
 
@@ -128,7 +128,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @serialdatalist;
 my %processedserialid;
 
-my $today = output_pref( { dt => dt_from_string, dateonly => 1 } );
+my $today = dt_from_string;
 
 foreach my $serialid (@serialids) {
 
@@ -140,14 +140,6 @@ foreach my $serialid (@serialids) {
     {
         my $serinfo = GetSerialInformation($serialid); #TODO duplicates work done by GetSerials2 above
 
-        for my $d ( qw( publisheddate planneddate )){
-            if ( $serinfo->{$d} =~m/^00/ ) {
-                $serinfo->{$d} = q{};
-            }
-            else {
-                $serinfo->{$d} = output_pref( { dt => dt_from_string( $serinfo->{$d} ), dateonly => 1 } );
-            }
-        }
         $serinfo->{arriveddate} = $today;
 
         $serinfo->{'editdisable'} = (
@@ -216,10 +208,10 @@ if ( $op and $op eq 'serialchangestatus' ) {
         my ($plan_date, $pub_date);
 
         if (defined $planneddates[$i] && $planneddates[$i] ne 'XXX') {
-            $plan_date = eval { output_pref( { dt => dt_from_string( $planneddates[$i] ), dateonly => 1, dateformat => 'iso' } ); };
+            $plan_date = $planneddates[$i];
         }
         if (defined $publisheddates[$i] && $publisheddates[$i] ne 'XXX') {
-            $pub_date = eval { output_pref( { dt => dt_from_string( $publisheddates[$i] ), dateonly => 1, dateformat => 'iso' } ); };
+            $pub_date = $publisheddates[$i];
         }
 
         if ( $serialids[$i] && $serialids[$i] eq 'NEW' ) {

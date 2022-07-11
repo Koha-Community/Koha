@@ -28,7 +28,7 @@ use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget GetBudgetPerio
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 my $input    = CGI->new;
 my $basketno = $input->param('basketno');
@@ -76,10 +76,8 @@ unless ( $input->param('from') ) {
     # Fill the form with year-1
     $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
-$filters->{from_placed_on} =
-  output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
-  $filters->{to_placed_on} =
-  output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } ),
+$filters->{from_placed_on} = $from_placed_on;
+$filters->{to_placed_on}   = $to_placed_on;
 
   my ( @result_order_loop, @selected_order_loop );
 my @ordernumbers = split ',', scalar $input->param('ordernumbers') || '';

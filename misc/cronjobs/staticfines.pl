@@ -36,7 +36,7 @@ use C4::Calendar qw();    # don't need any exports from Calendar
 use C4::Log qw( cronlogaction );
 use Getopt::Long qw( GetOptions );
 use List::MoreUtils qw( none );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 my $help    = 0;
@@ -126,7 +126,7 @@ if (defined $borrowernumberlimit) {
 my $overdueItemsCounted = 0;
 my %calendars           = ();
 $today      = dt_from_string;
-$today_iso  = output_pref( { dt => $today, dateonly => 1, dateformat => 'iso' } );
+$today_iso  = $today->ymd;
 my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
 $today_days = Date_to_Days( $tyear, $tmonth, $tday );
 

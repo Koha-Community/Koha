@@ -32,7 +32,7 @@ use C4::Contract qw(
     GetContracts
     ModContract
 );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Acquisition::Booksellers;
 
@@ -96,8 +96,8 @@ elsif ( $op eq 'add_validate' ) {
 
     my $is_a_modif = $input->param("is_a_modif");
 
-    my $contractstart_dt = eval { dt_from_string( scalar $input->param('contractstartdate') ); };
-    my $contractend_dt = eval { dt_from_string( scalar $input->param('contractenddate') ); };
+    my $contractstart_dt = $input->param('contractstartdate');
+    my $contractend_dt = $input->param('contractenddate');
     unless ( $contractstart_dt and $contractend_dt ) {
         my $today = dt_from_string;
         $contractstart_dt ||= $today;
@@ -106,8 +106,8 @@ elsif ( $op eq 'add_validate' ) {
 
     if ( $is_a_modif ) {
         ModContract({
-            contractstartdate   => eval { output_pref({ dt => dt_from_string( $contractstart_dt ), dateformat => 'iso', dateonly => 1 } ); },
-            contractenddate     => eval { output_pref({ dt => dt_from_string( $contractend_dt ), dateformat => 'iso', dateonly => 1 } ); },
+            contractstartdate   => $contractstart_dt,
+            contractenddate     => $contractend_dt,
             contractname        => scalar $input->param('contractname'),
             contractdescription => scalar $input->param('contractdescription'),
             booksellerid        => scalar $input->param('booksellerid'),
@@ -118,8 +118,8 @@ elsif ( $op eq 'add_validate' ) {
             contractname        => scalar $input->param('contractname'),
             contractdescription => scalar $input->param('contractdescription'),
             booksellerid        => scalar $input->param('booksellerid'),
-            contractstartdate   => eval { output_pref({ dt => dt_from_string( scalar $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 } ); },
-            contractenddate     => eval { output_pref({ dt => dt_from_string( scalar $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 } ); },
+            contractstartdate   => scalar $input->param('contractstartdate'),
+            contractenddate     => scalar $input->param('contractenddate'),
         });
     }
 
@@ -164,12 +164,6 @@ if ( $op eq 'list' ) {
 
     # get contracts
     my @contracts = @{GetContracts( { booksellerid => $booksellerid } )};
-
-    # format dates
-    for my $contract ( @contracts ) {
-        $contract->{contractstartdate} =  output_pref({ dt => dt_from_string( $contract->{contractstartdate} ), dateonly => 1 });
-        $contract->{contractenddate}   =  output_pref({ dt => dt_from_string( $contract->{contractenddate} ), dateonly => 1 }),
-    }
 
     $template->param(loop => \@contracts);
 

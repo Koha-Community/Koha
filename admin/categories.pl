@@ -27,7 +27,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patron::Categories;
 use Koha::Libraries;
 
@@ -88,16 +87,6 @@ elsif ( $op eq 'add_validate' ) {
     $require_strong_password = undef if $require_strong_password eq -1;
 
     my $is_a_modif = $input->param("is_a_modif");
-
-    if ($enrolmentperioddate) {
-        $enrolmentperioddate = output_pref(
-            {
-                dt         => dt_from_string($enrolmentperioddate),
-                dateformat => 'iso',
-                dateonly   => 1,
-            }
-        );
-    }
 
     if ($is_a_modif) {
         my $category = Koha::Patron::Categories->find( $categorycode );

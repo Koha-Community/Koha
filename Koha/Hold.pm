@@ -85,14 +85,14 @@ sub age {
 
 =head3 suspend_hold
 
-my $hold = $hold->suspend_hold( $suspend_until_dt );
+my $hold = $hold->suspend_hold( $suspend_until );
 
 =cut
 
 sub suspend_hold {
-    my ( $self, $dt ) = @_;
+    my ( $self, $date ) = @_;
 
-    my $date = $dt ? $dt->clone()->truncate( to => 'day' )->datetime : undef;
+    $date &&= dt_from_string($date)->truncate( to => 'day' )->datetime;
 
     if ( $self->is_found ) {    # We can't suspend found holds
         if ( $self->is_waiting ) {

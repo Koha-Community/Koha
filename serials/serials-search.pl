@@ -88,7 +88,6 @@ for my $field ( @additional_fields ) {
     }
 }
 
-my $expiration_date_dt = $expiration_date ? dt_from_string( $expiration_date ) : undef;
 my @subscriptions;
 my $mana_statuscode;
 if ($searched){
@@ -115,7 +114,7 @@ if ($searched){
             branch       => $branch,
             additional_fields => \@additional_field_filters,
             location     => $location,
-            expiration_date => $expiration_date_dt,
+            expiration_date => $expiration_date,
         });
     }
 }
@@ -133,7 +132,7 @@ if ($mana) {
         bookseller_filter  => $bookseller,
         branch_filter => $branch,
         location_filter => $location,
-        expiration_date_filter => $expiration_date_dt,
+        expiration_date_filter => $expiration_date,
         done_searched => $searched,
         routing       => $routing,
         additional_field_filters => \@additional_field_filters,
@@ -187,7 +186,7 @@ else
         bookseller_filter  => $bookseller,
         branch_filter => $branch,
         location_filter => $location,
-        expiration_date_filter => $expiration_date_dt,
+        expiration_date_filter => $expiration_date,
         branches_loop => \@branches_loop,
         done_searched => $searched,
         routing       => $routing,

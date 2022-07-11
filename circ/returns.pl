@@ -47,7 +47,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Calendar;
 use Koha::Checkouts;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::Items;
 use Koha::Item::Transfers;
@@ -215,28 +215,21 @@ my $dest = $query->param('dest');
 #dropbox: get last open day (today - 1)
 my $dropboxdate = Koha::Checkouts::calculate_dropbox_date();
 
-my $return_date_override = $query->param('return_date_override');
-my $return_date_override_dt;
-my $return_date_override_remember =
-  $query->param('return_date_override_remember');
+my $return_date_override = $query->param('return_date_override') || q{};
 if ($return_date_override) {
     if ( C4::Context->preference('SpecifyReturnDate') ) {
-        $return_date_override_dt = eval {dt_from_string( $return_date_override ) };
-        if ( $return_date_override_dt ) {
-            # note that we've overriden the return date
-            $template->param( return_date_was_overriden => 1);
-            # Save the original format if we are remembering for this series
-            $template->param(
-                return_date_override          => $return_date_override,
-                return_date_override_remember => 1
-            ) if ($return_date_override_remember);
 
-            $return_date_override =
-              DateTime::Format::MySQL->format_datetime( $return_date_override_dt );
-        }
-    }
-    else {
-        $return_date_override = q{};
+        # note that we've overriden the return date
+        $template->param( return_date_was_overriden => 1 );
+
+        my $return_date_override_remember =
+          $query->param('return_date_override_remember');
+
+        # Save the original format if we are remembering for this series
+        $template->param(
+            return_date_override          => $return_date_override,
+            return_date_override_remember => 1
+        ) if ($return_date_override_remember);
     }
 }
 
@@ -327,7 +320,10 @@ if ($barcode) {
         barcode => $barcode,
     );
 
-    my $return_date = $dropboxmode ? $dropboxdate : $return_date_override_dt;
+    my $return_date =
+        $dropboxmode
+      ? $dropboxdate
+      : dt_from_string( $return_date_override );
 
     # Block return if multi-part and confirm has not been received
     my $needs_confirm =
@@ -762,7 +758,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{day}   = $duedate->day();
             $ri{hour}   = $duedate->hour();
             $ri{minute}   = $duedate->minute();
-            $ri{duedate} = output_pref($duedate);
+            $ri{duedate} = $duedate;
             my $patron = Koha::Patrons->find( $riborrowernumber{$_} );
             unless ( $dropboxmode ) {
                 $ri{return_overdue} = 1 if (DateTime->compare($duedate, dt_from_string()) == -1);

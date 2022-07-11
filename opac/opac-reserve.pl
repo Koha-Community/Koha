@@ -34,7 +34,6 @@ use C4::Overdues;
 
 use Koha::AuthorisedValues;
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::CirculationRules;
 use Koha::Items;
 use Koha::ItemTypes;

@@ -25,7 +25,7 @@ use JSON qw( from_json );
 use C4::Context;
 use C4::Templates qw/themelanguage/;
 use C4::Koha qw( GetAuthorisedValues );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::Reports;
 use C4::Output;
@@ -753,7 +753,6 @@ sub get_saved_reports {
     my (@cond,@args);
     if ($filter) {
         if (my $date = $filter->{date}) {
-            $date = eval { output_pref( { dt => dt_from_string( $date ), dateonly => 1, dateformat => 'iso' }); };
             push @cond, "DATE(last_modified) = ? OR
                          DATE(last_run) = ?";
             push @args, $date, $date;

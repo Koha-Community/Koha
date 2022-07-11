@@ -176,11 +176,11 @@
 
             <li class="date_due_filter">
                 <label for="from">From:</label>
-                <input type="text" id="from" name="dateduefrom" size="10" value="[% filters.dateduefrom | $KohaDates %]" class="flatpickr" data-date_to="to" />
+                <input type="text" id="from" name="dateduefrom" size="10" value="[% filters.dateduefrom | html %]" class="flatpickr" data-date_to="to" />
             </li>
             <li class="date_due_filter">
                 <label for="to">To:</label>
-                <input type="text" id="to" name="datedueto" size="10" value="[% filters.datedueto | $KohaDates %]" class="flatpickr" />
+                <input type="text" id="to" name="datedueto" size="10" value="[% filters.datedueto | html %]" class="flatpickr" />
             </li>
         </ol>
     </fieldset>

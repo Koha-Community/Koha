@@ -29,7 +29,6 @@ use C4::Members;
 use C4::Log qw( logaction );
 use C4::SMS;
 use C4::Templates;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::SMS::Providers;
 
 use Koha::Email;
@@ -788,6 +787,7 @@ sub _parseletter {
     # in callers ( by changing / formatting values )
     my $values = $values_in ? { %$values_in } : {};
 
+    # FIXME Dates formatting must be done in notice's templates
     if ( $table eq 'borrowers' && $values->{'dateexpiry'} ){
         $values->{'dateexpiry'} = output_pref({ dt => dt_from_string( $values->{'dateexpiry'} ), dateonly => 1 });
     }

@@ -166,11 +166,7 @@ sub store {
                 && !$pre_mod_item->$field )
             {
                 my $field_on = "${field}_on";
-                $self->$field_on(
-                    DateTime::Format::MySQL->format_datetime(
-                        dt_from_string()
-                    )
-                );
+                $self->$field_on(dt_from_string);
             }
         }
 

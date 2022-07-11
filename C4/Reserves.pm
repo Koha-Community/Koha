@@ -38,7 +38,7 @@ use Koha::Biblios;
 use Koha::Calendar;
 use Koha::CirculationRules;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Hold;
 use Koha::Holds;
 use Koha::ItemTypes;
@@ -194,10 +194,7 @@ sub AddReserve {
     my $itemtype       = $params->{itemtype};
     my $non_priority   = $params->{non_priority};
 
-    $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
-        or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
-
-    $patron_expiration_date = output_pref({ str => $patron_expiration_date, dateonly => 1, dateformat => 'iso' });
+    $resdate ||= dt_from_string;
 
     # if we have an item selectionned, and the pickup branch is the same as the holdingbranch
     # of the document, we force the value $priority and $found .
@@ -1124,7 +1121,7 @@ sub ModReserve {
             if C4::Context->preference('HoldsLog');
 
         # The only column that can be updated for a found hold is the expiration date
-        $hold->expirationdate(dt_from_string($date))->store();
+        $hold->expirationdate($date)->store();
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, $hold )
@@ -1148,7 +1145,6 @@ sub ModReserve {
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
-                $suspend_until = eval { dt_from_string( $suspend_until ) };
                 $hold->suspend_hold( $suspend_until );
             } else {
                 # If the hold is suspended leave the hold suspended, but convert it to an indefinite hold.
@@ -1523,8 +1519,6 @@ be cleared when it is unsuspended.
 sub ToggleSuspend {
     my ( $reserve_id, $suspend_until ) = @_;
 
-    $suspend_until = dt_from_string($suspend_until) if ($suspend_until);
-
     my $hold = Koha::Holds->find( $reserve_id );
 
     if ( $hold->is_suspended ) {
@@ -1557,9 +1551,6 @@ sub SuspendAll {
     my $biblionumber   = $params{'biblionumber'}   || undef;
     my $suspend_until  = $params{'suspend_until'}  || undef;
     my $suspend = defined( $params{'suspend'} ) ? $params{'suspend'} : 1;
-
-    $suspend_until = eval { dt_from_string($suspend_until) }
-      if ( defined($suspend_until) );
 
     return unless ( $borrowernumber || $biblionumber );
 

@@ -596,6 +596,7 @@ sub IssueSlip {
 
             # FIXME We keep newdate and timestamp for backward compatibility (from GetNewsToDisplay)
             # But we should remove them and adjust the existing templates in a db rev
+            # FIXME This must be formatted in the notice template
             my $published_on_dt = output_pref({ dt => dt_from_string( $all->{published_on} ), dateonly => 1 });
             $all->{newdate} = $published_on_dt;
             $all->{timestamp} = $published_on_dt;

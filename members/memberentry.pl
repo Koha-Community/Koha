@@ -37,7 +37,7 @@ use Koha::AuthorisedValues;
 use Koha::Email;
 use Koha::Patron::Debarments qw( AddDebarment DelDebarment GetDebarments );
 use Koha::Cities;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Attribute::Types;
@@ -188,19 +188,6 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
     foreach my $key (@names) {
         if (defined $input->param($key)) {
             $newdata{$key} = $input->param($key);
-        }
-    }
-
-    foreach (qw(dateenrolled dateexpiry dateofbirth password_expiration_date)) {
-        next unless exists $newdata{$_};
-        my $userdate = $newdata{$_} or next;
-
-        my $formatteddate = eval { output_pref({ dt => dt_from_string( $userdate ), dateformat => 'iso', dateonly => 1 } ); };
-        if ( $formatteddate ) {
-            $newdata{$_} = $formatteddate;
-        } else {
-            $template->param( "ERROR_$_" => 1 );
-            push(@errors,"ERROR_$_");
         }
     }
 
@@ -761,22 +748,15 @@ if ($nok) {
   #Formatting data for display    
   
 if (!defined($data{'dateenrolled'}) or $data{'dateenrolled'} eq ''){
-  $data{'dateenrolled'} = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+  $data{'dateenrolled'} = dt_from_string;
 }
 if ( $op eq 'duplicate' ) {
-    $data{'dateenrolled'} = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+    $data{'dateenrolled'} = dt_from_string;
     $data{dateexpiry} = $category->get_expiry_date( $data{dateenrolled} );
 }
 if (C4::Context->preference('uppercasesurnames')) {
     $data{'surname'} &&= uc( $data{'surname'} );
     $data{'contactname'} &&= uc( $data{'contactname'} );
-}
-
-foreach (qw(dateenrolled dateexpiry dateofbirth password_expiration_date)) {
-    if ( $data{$_} ) {
-       $data{$_} = eval { output_pref({ dt => dt_from_string( $data{$_} ), dateonly => 1 } ); };  # back to syspref for display
-    }
-    $template->param( $_ => $data{$_});
 }
 
 if ( C4::Context->preference('ExtendedPatronAttributes') ) {

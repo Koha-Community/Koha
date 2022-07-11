@@ -22,7 +22,7 @@ use C4::Context;
 use C4::Reports qw( GetDelimiterChoices );
 use C4::Output qw( output_html_with_http_headers );
 use DateTime;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Text::CSV::Encoded;
 use List::Util qw( any );
 
@@ -51,8 +51,8 @@ $template->param(
 );
 
 #Initialize date pickers to today
-my $fromDate = dt_from_string;
-my $toDate   = dt_from_string;
+my $fromDate = $input->param("from") || dt_from_string;
+my $toDate   = $input->param("to")   || dt_from_string;
 
 my @debit_types =
   Koha::Account::DebitTypes->search()->as_list;
@@ -62,10 +62,6 @@ my $registerid;
 
 if ($do_it) {
 
-    $fromDate = output_pref({ dt => eval { dt_from_string(scalar $input->param("from")) } || dt_from_string,
-            dateformat => 'sql', dateonly => 1 }); #for sql query
-    $toDate   = output_pref({ dt => eval { dt_from_string(scalar $input->param("to")) } || dt_from_string,
-            dateformat => 'sql', dateonly => 1 }); #for sql query
 
     my $whereTType = q{};
     my @extra_params; # if we add conditions to the select we need extra params

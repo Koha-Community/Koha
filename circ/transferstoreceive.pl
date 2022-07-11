@@ -31,7 +31,7 @@ use C4::Reserves;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
 
@@ -129,7 +129,7 @@ while ( my $library = $libraries->next ) {
 
 $template->param(
     branchesloop => \@branchesloop,
-    show_date    => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
+    show_date    => dt_from_string,
     TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
     latetransfers => $latetransfers ? 1 : 0,
 );

@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::ItemTypes;
 use Koha::Patron::Categories;
 use Date::Calc qw( Delta_Days );
@@ -43,15 +42,6 @@ my $fullreportname = "reports/issues_avg_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->multi_param("Filter");
-$filters[0] = eval { output_pref( { dt => dt_from_string( $filters[0]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[0] );
-$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[1] );
-$filters[2] = eval { output_pref( { dt => dt_from_string( $filters[2]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[2] );
-$filters[3] = eval { output_pref( { dt => dt_from_string( $filters[3]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[3] );
-
 
 my $podsp = $input->param("IssueDisplay");
 my $rodsp = $input->param("ReturnDisplay");
@@ -186,13 +176,7 @@ sub calculate {
             if (($i==1) and (@$filters[$i-1])) {
                 $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
             }
-            # format the dates filters, otherwise just fill as is
-            if ($i>=4) {
-                $cell{filter} .= @$filters[$i];
-            } else {
-                $cell{filter} .= eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
-                   if ( @$filters[$i] );
-            }
+            $cell{filter} .= @$filters[$i];
             $cell{crit} .="Issue From" if ($i==0);
             $cell{crit} .="Issue To" if ($i==1);
             $cell{crit} .="Issue Month" if ($i==2);

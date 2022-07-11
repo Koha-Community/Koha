@@ -51,6 +51,7 @@ sub add_to_session {
         query_cgi  => $query_cgi,
         total      => "$total",
         type       => $type,
+        # FIXME We shouldn't store the formatted date
         time       => output_pref( { dt => $now, dateformat => 'iso', timeformat => '24hr' } ),
         id         => $id,
     };

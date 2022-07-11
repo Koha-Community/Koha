@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Serials qw( GetSubscription GetNextDate ModSerialStatus );
 use C4::Serials::Frequency;
 use C4::Log qw( cronlogaction );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 
 use Date::Calc qw( check_date Date_to_Days );
 use Getopt::Long qw( GetOptions );
@@ -113,7 +113,7 @@ while ( my $issue = $sth->fetchrow_hashref ) {
     if ( $subscription && $publisheddate ) {
         my $freqdata = GetSubscriptionFrequency($subscription->{'periodicity'});
         my $nextpublisheddate = GetNextDate( $subscription, $publisheddate, $freqdata );
-        my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+        my $today = dt_from_string->ymd;
 
         if ( $nextpublisheddate && $today ) {
             my ( $year,  $month,  $day )  = split( /-/, $nextpublisheddate );

@@ -30,7 +30,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use DateTime;
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -124,7 +123,7 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # simple display.
     $visit->set({
         borrowernumber      => scalar $input->param('borrowernumber')      // q{},
-        appointment_date    => dt_from_string($input->param('date') // q{}),
+        appointment_date    => scalar $input->param('date')                // q{},
         day_segment         => scalar $input->param('segment')             // q{},
         chooser_brwnumber   => scalar $input->param('chooser')             // q{},
         deliverer_brwnumber => scalar $input->param('deliverer')           // q{},
@@ -138,7 +137,7 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # to simple display.
     my $visit = Koha::Patron::HouseboundVisit->new({
         borrowernumber      => scalar $input->param('borrowernumber')      // q{},
-        appointment_date    => dt_from_string($input->param('date') // q{}),
+        appointment_date    => scalar $input->param('date')                // q{},
         day_segment         => scalar $input->param('segment')             // q{},
         chooser_brwnumber   => scalar $input->param('chooser')             // q{},
         deliverer_brwnumber => scalar $input->param('deliverer')           // q{},

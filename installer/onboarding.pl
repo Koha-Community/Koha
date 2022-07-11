@@ -26,7 +26,6 @@ use C4::Members qw( checkcardnumber );
 use Koha::Patrons;
 use Koha::Libraries;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::ItemTypes;
@@ -99,17 +98,6 @@ if ( $step == 2 ) {
         my $default_privacy       = $input->param('default_privacy');
         my $enrolmentperiod       = $input->param('enrolmentperiod');
         my $enrolmentperioddate = $input->param('enrolmentperioddate') || undef;
-
-        #Converts the string into a date format
-        if ($enrolmentperioddate) {
-            $enrolmentperioddate = output_pref(
-                {
-                    dt         => dt_from_string($enrolmentperioddate),
-                    dateformat => 'DateTime',
-                    dateonly   => 1,
-                }
-            );
-        }
 
         #Adds a new patron category to the database
         $category = Koha::Patron::Category->new(

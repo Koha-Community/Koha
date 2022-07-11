@@ -51,7 +51,6 @@ use Carp qw( croak );
 use C4::Context;
 use C4::Koha;
 use C4::Biblio qw( GetMarcStructure TransformMarcToKoha );
-use Koha::DateUtils qw( dt_from_string output_pref );
 use MARC::Record;
 use C4::ClassSource qw( GetClassSort GetClassSources GetClassSource );
 use C4::Log qw( logaction );
@@ -60,7 +59,7 @@ use DateTime::Format::MySQL;
                   # debugging; so please don't remove this
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 
 use Koha::Biblios;
@@ -403,10 +402,8 @@ The last optional parameter allows for passing skip_record_index through to the 
 sub ModDateLastSeen {
     my ( $itemnumber, $leave_item_lost, $params ) = @_;
 
-    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-
     my $item = Koha::Items->find($itemnumber);
-    $item->datelastseen($today);
+    $item->datelastseen(dt_from_string);
     $item->itemlost(0) unless $leave_item_lost;
     $item->store({ log_action => 0, skip_record_index => $params->{skip_record_index}, skip_holds_queue => $params->{skip_holds_queue} });
 }
@@ -587,7 +584,6 @@ sub GetItemsForInventory {
     }
 
     if ($datelastseen) {
-        $datelastseen = output_pref({ str => $datelastseen, dateformat => 'iso', dateonly => 1 });
         push @where_strings, '(datelastseen < ? OR datelastseen IS NULL)';
         push @bind_params, $datelastseen;
     }

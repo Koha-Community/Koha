@@ -38,7 +38,6 @@ use C4::Serials::Frequency qw( GetSubscriptionFrequency );
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
@@ -427,23 +426,11 @@ sub GetSubscriptionsFromBiblionumber {
     $sth->execute($biblionumber);
     my @res;
     while ( my $subs = $sth->fetchrow_hashref ) {
-        $subs->{startdate}     = output_pref( { dt => dt_from_string( $subs->{startdate} ),     dateonly => 1 } );
-        $subs->{histstartdate} = output_pref( { dt => dt_from_string( $subs->{histstartdate} ), dateonly => 1 } );
-        if ( defined $subs->{histenddate} ) {
-           $subs->{histenddate}   = output_pref( { dt => dt_from_string( $subs->{histenddate} ),   dateonly => 1 } );
-        } else {
-            $subs->{histenddate} = "";
-        }
         $subs->{opacnote}     //= "";
         $subs->{ "periodicity" . $subs->{periodicity} }     = 1;
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} }             = 1;
 
-        if (not defined $subs->{enddate} ) {
-            $subs->{enddate} = '';
-        } else {
-            $subs->{enddate} = output_pref( { dt => dt_from_string( $subs->{enddate}), dateonly => 1 } );
-        }
         $subs->{'abouttoexpire'}       = abouttoexpire( $subs->{'subscriptionid'} );
         $subs->{'subscriptionexpired'} = HasSubscriptionExpired( $subs->{'subscriptionid'} );
         $subs->{cannotedit} = not can_edit_subscription( $subs );
@@ -677,13 +664,6 @@ sub GetSerials {
 
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
-        for my $datefield ( qw( planneddate publisheddate) ) {
-            if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
-                $line->{$datefield} =  output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
-            } else {
-                $line->{$datefield} = q{};
-            }
-        }
         push @serials, $line;
     }
 
@@ -700,13 +680,6 @@ sub GetSerials {
     while ( ( my $line = $sth->fetchrow_hashref ) && $counter < $count ) {
         $counter++;
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
-        for my $datefield ( qw( planneddate publisheddate) ) {
-            if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
-                $line->{$datefield} = output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
-            } else {
-                $line->{$datefield} = q{};
-            }
-        }
 
         push @serials, $line;
     }
@@ -751,15 +724,6 @@ sub GetSerials2 {
 
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{ "status" . $line->{status} } = 1; # fills a "statusX" value, used for template status select list
-        # Format dates for display
-        for my $datefield ( qw( planneddate publisheddate ) ) {
-            if (!defined($line->{$datefield}) || $line->{$datefield} =~m/^00/) {
-                $line->{$datefield} = q{};
-            }
-            else {
-                $line->{$datefield} = output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
-            }
-        }
         push @serials, $line;
     }
     return @serials;
@@ -1900,15 +1864,6 @@ sub GetLateOrMissingIssues {
     $sth->execute( EXPECTED, LATE, CLAIMED );
     my @issuelist;
     while ( my $line = $sth->fetchrow_hashref ) {
-
-        if ($line->{planneddate} && $line->{planneddate} !~/^0+\-/) {
-            $line->{planneddateISO} = $line->{planneddate};
-            $line->{planneddate} = output_pref( { dt => dt_from_string( $line->{"planneddate"} ), dateonly => 1 } );
-        }
-        if ($line->{claimdate} && $line->{claimdate} !~/^0+\-/) {
-            $line->{claimdateISO} = $line->{claimdate};
-            $line->{claimdate}   = output_pref( { dt => dt_from_string( $line->{"claimdate"} ), dateonly => 1 } );
-        }
         $line->{"status".$line->{status}}   = 1;
 
         my $subscription_object = Koha::Subscriptions->find($line->{subscriptionid});

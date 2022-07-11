@@ -20,7 +20,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Reports;
-use Koha::DateUtils qw( dt_from_string output_pref );
+#use Koha::DateUtils qw( dt_from_string output_pref );
 
 use base qw(Koha::Object);
 #
@@ -159,15 +159,15 @@ sub prep_report {
 
         # if there are special regexp chars, we must \ them
         $split[ $i * 2 + 1 ] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
-        if ( $split[ $i * 2 + 1 ] =~ /\|\s*date\s*$/ ) {
-            $quoted = output_pref(
-                {
-                    dt         => dt_from_string($quoted),
-                    dateformat => 'iso',
-                    dateonly   => 1
-                }
-            ) if $quoted;
-        }
+        #if ( $split[ $i * 2 + 1 ] =~ /\|\s*date\s*$/ ) {
+        #    $quoted = output_pref(
+        #        {
+        #            dt         => dt_from_string($quoted),
+        #            dateformat => 'iso',
+        #            dateonly   => 1
+        #        }
+        #    ) if $quoted;
+        #}
         unless ( $split[ $i * 2 + 1 ] =~ /\|\s*list\s*$/ && $quoted ) {
             $quoted = C4::Context->dbh->quote($quoted);
         }

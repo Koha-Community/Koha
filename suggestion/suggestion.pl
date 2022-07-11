@@ -165,6 +165,7 @@ if ( $op =~ /save/i ) {
     else {
 
         for my $date_key ( qw( suggesteddate manageddate accepteddate rejecteddate ) ) {
+            # FIXME Do we need this?
             $suggestion_only->{$date_key} = dt_from_string( $suggestion_only->{$date_key} )
                 if $suggestion_only->{$date_key};
         }

@@ -45,7 +45,7 @@ use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( GetDebarments );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Plugins;
 use Koha::Database;
 use Koha::BiblioFrameworks;
@@ -159,8 +159,6 @@ for my $barcode ( @$barcodes ) {
 
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
-$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
-    if ( $duedatespec );
 my $restoreduedatespec  = $query->param('restoreduedatespec') || $duedatespec || $session->param('stickyduedate');
 if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {
     undef $restoreduedatespec;
@@ -628,7 +626,7 @@ $template->param(
     SpecifyDueDate            => $duedatespec_allow,
     PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
     debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
-    todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
+    todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),

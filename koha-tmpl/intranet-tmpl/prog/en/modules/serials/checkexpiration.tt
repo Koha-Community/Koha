@@ -54,7 +54,7 @@
         [% END %]
 
         <li><label for="date" class="required">Expiring before:</label>
-            <input id="date" type="text" name="date" size="10" value="[% date | $KohaDates %]" class="required focus flatpickr" required="required" />
+            <input id="date" type="text" name="date" size="10" value="[% date | html %]" class="required focus flatpickr" required="required" />
         <span class="required">Required</span>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
 			</ol>

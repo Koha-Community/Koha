@@ -49,7 +49,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Letters qw( SendAlerts GetLetters );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Orders qw( filter_by_lates );
 use Koha::CsvProfiles;
 
@@ -70,25 +70,11 @@ my $delay        = $input->param('delay') // 0;
 my $estimateddeliverydatefrom = $input->param('estimateddeliverydatefrom');
 my $estimateddeliverydateto   = $input->param('estimateddeliverydateto');
 
-my $estimateddeliverydatefrom_dt =
-  $estimateddeliverydatefrom
-  ? dt_from_string($estimateddeliverydatefrom)
-  : undef;
-
 # Get the "date to" param. If it is not defined and $delay is not defined too, it is the today's date.
-my $estimateddeliverydateto_dt = $estimateddeliverydateto
-    ? dt_from_string($estimateddeliverydateto)
-    : ( not defined $delay and not defined $estimateddeliverydatefrom)
-        ? dt_from_string()
-        : undef;
-
-# Format the output of "date from" and "date to"
-if ($estimateddeliverydatefrom_dt) {
-    $estimateddeliverydatefrom = output_pref({dt => $estimateddeliverydatefrom_dt, dateonly => 1});
-}
-if ($estimateddeliverydateto_dt) {
-    $estimateddeliverydateto = output_pref({dt => $estimateddeliverydateto_dt, dateonly => 1});
-}
+$estimateddeliverydateto ||=
+  ( not defined $delay and not defined $estimateddeliverydatefrom )
+  ? dt_from_string()
+  : undef;
 
 my $branch     = $input->param('branch');
 my $op         = $input->param('op');
@@ -123,13 +109,13 @@ my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
     {
         delay        => $delay,
         (
-            $estimateddeliverydatefrom_dt
-            ? ( estimated_from => $estimateddeliverydatefrom_dt )
+            $estimateddeliverydatefrom
+            ? ( estimated_from => $estimateddeliverydatefrom )
             : ()
         ),
         (
-            $estimateddeliverydateto_dt
-            ? ( estimated_to => $estimateddeliverydateto_dt )
+            $estimateddeliverydateto
+            ? ( estimated_to => $estimateddeliverydateto )
             : ()
         )
     },

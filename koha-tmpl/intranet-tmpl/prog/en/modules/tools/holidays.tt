@@ -484,7 +484,7 @@
 
         function changeBranch () {
             var branch = $("#branch option:selected").val();
-            location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate | html %]";
+            location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate | $KohaDates %]";
         }
 
         /**

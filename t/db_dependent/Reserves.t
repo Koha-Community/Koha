@@ -356,7 +356,6 @@ $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 my $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 4));
-$resdate=output_pref($resdate);
 my $reserve_id = AddReserve(
     {
         branchcode       => $branch_1,
@@ -397,7 +396,7 @@ my $now_reserve_id = AddReserve(
         borrowernumber   => $requesters{$branch_1},
         biblionumber     => $bibnum,
         priority         => 2,
-        reservation_date => output_pref(dt_from_string()),
+        reservation_date => dt_from_string(),
     }
 );
 my $which_highest;
@@ -441,7 +440,6 @@ t::lib::Mocks::mock_preference('ConfirmFutureHolds', 2);
 t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 2));
-$resdate=output_pref($resdate);
 AddReserve(
     {
         branchcode       => $branch_1,
@@ -530,7 +528,7 @@ AddReserve(
         borrowernumber => $requesters{'CPL2'},
         biblionumber   => $bibnum,
         priority       => $p,
-        reservation_date => output_pref($resdate),
+        reservation_date => $resdate,
     }
 );
 $p = C4::Reserves::CalculatePriority($bibnum);
@@ -564,14 +562,14 @@ AddReserve({
     borrowernumber => $borrowernumber_tmp_1,
     biblionumber => $bibnum,
     priority => 3,
-    reservation_date => output_pref($date_in_future)
+    reservation_date => $date_in_future
 });
 AddReserve({
     branchcode => 'CPL',
     borrowernumber => $borrowernumber_tmp_2,
     biblionumber => $bibnum,
     priority => 4,
-    reservation_date => output_pref($date_in_future)
+    reservation_date => $date_in_future
 });
 my @r1 = Koha::Holds->search({ borrowernumber => $borrowernumber_tmp_1 })->as_list;
 my @r2 = Koha::Holds->search({ borrowernumber => $borrowernumber_tmp_2 })->as_list;
@@ -729,7 +727,6 @@ is( $status, '', 'MoveReserve filled waiting hold');
 #   hold from A pos 1, tomorrow, no fut holds: not filled
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
-$resdate=output_pref($resdate);
 AddReserve(
     {
         branchcode     => $branch_1,
@@ -773,7 +770,6 @@ is( $status, '', 'MoveReserve filled future waiting hold now');
 #   hold from A pos 1, today+3, fut holds=2: MoveReserve should not fill it
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 3));
-$resdate=output_pref($resdate);
 AddReserve(
     {
         branchcode     => $branch_1,

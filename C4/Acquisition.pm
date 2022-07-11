@@ -27,7 +27,7 @@ use C4::Biblio qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal
 use C4::Contract qw( GetContract );
 use C4::Log qw( logaction );
 use C4::Templates qw(gettemplate);
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
@@ -1374,13 +1374,8 @@ sub ModReceiveOrder {
     my $received_items = $params->{received_items};
 
     my $dbh = C4::Context->dbh;
-    $datereceived = output_pref(
-        {
-            dt => ( $datereceived ? dt_from_string( $datereceived ) : dt_from_string ),
-            dateformat => 'iso',
-            dateonly => 1,
-        }
-    );
+    $datereceived = $datereceived ? dt_from_string( $datereceived ) : dt_from_string;
+    $datereceived = $datereceived->ymd;
 
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
@@ -2728,7 +2723,7 @@ sub CloseInvoice {
 
 Reopen an invoice
 
-Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => output_pref({ dt=>dt_from_string, dateonly=>1, otputpref=>'iso' }))
+Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => $closedate );
 
 =cut
 

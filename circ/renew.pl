@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Circulation qw( barcodedecode CanBookBeRenewed GetLatestAutoRenewDate AddRenewal );
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 use Koha::BiblioFrameworks;
 
@@ -92,13 +92,12 @@ if ($barcode) {
                 }
                 if ($can_renew) {
                     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-                    my $date_due;
-                    if ( $cgi->param('renewonholdduedate') ) {
-                        $date_due = dt_from_string( scalar $cgi->param('renewonholdduedate'));
-                    }
-                    if ( C4::Context->preference('SpecifyDueDate') && $hard_due_date ) {
-                        $date_due = dt_from_string( $hard_due_date );
-                    }
+                    my $date_due =
+                      ( C4::Context->preference('SpecifyDueDate')
+                          && $hard_due_date )
+                      ? $hard_due_date
+                      : $cgi->param('renewonholdduedate');
+
                     $date_due = AddRenewal(
                         undef,
                         $item->itemnumber(),
@@ -133,7 +132,7 @@ if ($barcode) {
     );
 }
 
-$template->param( hard_due_date => ($hard_due_date ? output_pref({ str => $hard_due_date, dateformat => 'iso' }) : undef) );
+$template->param( hard_due_date => $hard_due_date );
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 

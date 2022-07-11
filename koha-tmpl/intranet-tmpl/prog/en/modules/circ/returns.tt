@@ -1203,9 +1203,9 @@
                                         <td class="ci-duedate">
                                             [% IF ( riloo.duedate ) %]
                                                 [% IF ( riloo.return_overdue ) %]
-                                                    <span class="overdue">[% riloo.duedate | html %] (overdue)</span>
+                                                    <span class="overdue">[% riloo.duedate | $KohaDates as_due_date => 1 %] (overdue)</span>
                                                 [% ELSE %]
-                                                    [% riloo.duedate | html %]
+                                                    [% riloo.duedate | $KohaDates as_due_date => 1 %]
                                                 [% END %]
                                             [% ELSE %]
                                                 <span>Not checked out</span>

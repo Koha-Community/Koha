@@ -277,7 +277,7 @@
         <ol>
             <li>
                 <label for="datereceived">Date received: </label>
-                <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | $KohaDates %]" class="flatpickr" />
+                <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | html %]" class="flatpickr" />
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
        <li><label for="bookfund">Fund: </label><select id="bookfund" name="bookfund">

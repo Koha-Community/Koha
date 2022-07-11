@@ -64,9 +64,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   [% IF ( message_loop ) %]
   <div class="dialog alert" id="main_error">
     [% FOREACH message_loo IN message_loop %]
-        [% IF ( message_loo.date_from ) %]<strong>Error: </strong><span>"Date from" is not a legal value ("[% message_loo.date_from | html %]").</span>
-        [% ELSIF ( message_loo.date_to ) %]<strong>Error: </strong><span>"Date to" is not a legal value ("[% message_loo.date_to | html %]").</span>
-        [% ELSIF ( message_loo.failed_ok ) %]<strong>Error: </strong><span>Failed to approve term ([% message_loo.failed_ok | html %]).</span>
+        [% IF ( message_loo.failed_ok ) %]<strong>Error: </strong><span>Failed to approve term ([% message_loo.failed_ok | html %]).</span>
         [% ELSIF ( message_loo.failed_rej ) %]<strong>Error: </strong><span>Failed to reject term ([% message_loo.failed_rej | html %]).</span>
         [% ELSIF ( message_loo.approver ) %]<span>No match for user ([% message_loo.approver | html %]). FILTER REQUIRES BORROWERNUMBER (not name).</span>
         [% ELSIF ( message_loo.approved_by ) %]<strong>Error: </strong><span>No match for borrowernumber ([% message_loo.approved_by | html %]).</span>

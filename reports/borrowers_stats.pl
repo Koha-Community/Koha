@@ -27,7 +27,6 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Reports qw( GetDelimiterChoices );
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
@@ -48,10 +47,6 @@ my $fullreportname = "reports/borrowers_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->multi_param("Filter");
-$filters[3] = eval { output_pref( { dt => dt_from_string( $filters[3]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[3] );
-$filters[4] = eval { output_pref ({ dt => dt_from_string( $filters[4]), dateonly => 1, dateformat => 'iso' } ); }
-    if ( $filters[4] );
 my $digits = $input->param("digits");
 our $period = $input->param("period");
 my $borstat = $input->param("status");
@@ -190,13 +185,6 @@ sub calculate {
     foreach my $i (0 .. scalar @$filters) {
         my %cell;
         if ( @$filters[$i] ) {
-            if ($i == 3 or $i == 4) {
-                $cell{filter} = eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
-                    if ( @$filters[$i] );
-            } else {
-                $cell{filter} = @$filters[$i];
-            }
-
             if    ( $i == 0)  { $cell{crit} = "Cat code"; }
             elsif ( $i == 1 ) { $cell{crit} = "ZIP/Postal code"; }
             elsif ( $i == 2 ) { $cell{crit} = "Branch code"; }
