@@ -21,7 +21,7 @@ return {
         }
         say $out "item_bundles table added";
 
-        my ($lost_val) = $dbh->selectrow_array( "SELECT MAX(authorised_value) FROM authorised_values WHERE category = 'LOST'", {} );
+        my ($lost_val) = $dbh->selectrow_array( "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'LOST'", {} );
         $lost_val++;
 
         $dbh->do(qq{
@@ -29,7 +29,7 @@ return {
         });
         say $out "Missing from bundle LOST AV added";
 
-        my ($nfl_val) = $dbh->selectrow_array( "SELECT MAX(authorised_value) FROM authorised_values WHERE category = 'NOT_LOAN'", {} );
+        my ($nfl_val) = $dbh->selectrow_array( "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'NOT_LOAN'", {} );
         $nfl_val++;
 
         $dbh->do(qq{
