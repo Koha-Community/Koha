@@ -101,7 +101,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 30;
 
     $schema->storage->txn_begin;
 
@@ -143,21 +143,46 @@ subtest 'get() tests' => sub {
 
     my $biblio = $builder->build_sample_biblio;
     my $itype =
-      $builder->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
+      $builder->build_object( { class => 'Koha::ItemTypes' } );
     $item = $builder->build_sample_item(
-        { biblionumber => $biblio->biblionumber, itype => $itype } );
+        { biblionumber => $biblio->biblionumber, itype => $itype->itemtype } );
+
+    isnt( $biblio->itemtype, $itype->itemtype, "Test biblio level itemtype and item level itemtype do not match");
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
       ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '/item_type_id' => $itype, 'item-level_itypes:0' )
+      ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itypes:0' )
       ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
       ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '/item_type_id' => $itype, 'item-level_itype:1' )
-      ->json_is( '/effective_item_type_id' => $itype, 'item-level_itypes:1' );
+      ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itype:1' )
+      ->json_is( '/effective_item_type_id' => $itype->itemtype, 'item-level_itypes:1' );
+
+
+    my $biblio_itype = Koha::ItemTypes->find($biblio->itemtype);
+    $biblio_itype->notforloan(3)->store();
+    $itype->notforloan(2)->store();
+    $item->notforloan(1)->store();
+
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/not_for_loan_status' => 1, 'not_for_loan_status is 1' )
+      ->json_is( '/effective_not_for_loan_status' => 1, 'effective_not_for_loan_status picks up item level' );
+
+    $item->notforloan(0)->store();
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
+      ->json_is( '/effective_not_for_loan_status' => 2, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1' );
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
+      ->json_is( '/effective_not_for_loan_status' => 3, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0' );
 
     $schema->storage->txn_rollback;
 };
