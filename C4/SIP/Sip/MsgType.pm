@@ -72,12 +72,12 @@ my %handlers = (
         handler  => \&handle_checkout,
         protocol => {
             1 => {
-                template     => "CCA18A18",
+                template     => "A1A1A18A18",
                 template_len => 38,
                 fields       => [ (FID_INST_ID), (FID_PATRON_ID), (FID_ITEM_ID), (FID_TERMINAL_PWD) ],
             },
             2 => {
-                template     => "CCA18A18",
+                template     => "A1A1A18A18",
                 template_len => 38,
                 fields       => [ (FID_INST_ID), (FID_PATRON_ID), (FID_ITEM_ID), (FID_TERMINAL_PWD), (FID_ITEM_PROPS), (FID_PATRON_PWD), (FID_FEE_ACK), (FID_CANCEL) ],
             },
@@ -88,12 +88,12 @@ my %handlers = (
         handler  => \&handle_checkin,
         protocol => {
             1 => {
-                template     => "CA18A18",
+                template     => "A1A18A18",
                 template_len => 37,
                 fields       => [ (FID_CURRENT_LOCN), (FID_INST_ID), (FID_ITEM_ID), (FID_TERMINAL_PWD) ],
             },
             2 => {
-                template     => "CA18A18",
+                template     => "A1A18A18",
                 template_len => 37,
                 fields       => [ (FID_CURRENT_LOCN), (FID_INST_ID), (FID_ITEM_ID), (FID_TERMINAL_PWD), (FID_ITEM_PROPS), (FID_CANCEL) ],
             }
@@ -104,7 +104,7 @@ my %handlers = (
         handler  => \&handle_block_patron,
         protocol => {
             1 => {
-                template     => "CA18",
+                template     => "A1A18",
                 template_len => 19,
                 fields       => [ (FID_INST_ID), (FID_BLOCKED_CARD_MSG), (FID_PATRON_ID), (FID_TERMINAL_PWD) ],
             },
@@ -115,7 +115,7 @@ my %handlers = (
         handler  => \&handle_sc_status,
         protocol => {
             1 => {
-                template     => "CA3A4",
+                template     => "A1A3A4",
                 template_len => 8,
                 fields       => [],
             }
@@ -126,7 +126,7 @@ my %handlers = (
         handler  => \&handle_request_acs_resend,
         protocol => {
             1 => {
-                template     => "",
+                template     => q{},
                 template_len => 0,
                 fields       => [],
             }
@@ -228,7 +228,7 @@ my %handlers = (
         handler  => \&handle_renew,
         protocol => {
             2 => {
-                template     => "CCA18A18",
+                template     => "A1A1A18A18",
                 template_len => 38,
                 fields       => [ (FID_INST_ID), (FID_PATRON_ID), (FID_PATRON_PWD), (FID_ITEM_ID), (FID_TITLE_ID), (FID_TERMINAL_PWD), (FID_ITEM_PROPS), (FID_FEE_ACK) ],
             }
