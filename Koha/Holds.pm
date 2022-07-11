@@ -163,6 +163,21 @@ sub filter_by_has_cancellation_requests {
         { join => 'cancellation_requests' } );
 }
 
+=head3 filter_out_has_cancellation_requests
+
+    my $holds_without_cancellation_requests = $holds->filter_out_has_cancellation_requests;
+
+Returns a filtered resultset without holds with cancellation requests.
+
+=cut
+
+sub filter_out_has_cancellation_requests {
+    my ($self) = @_;
+
+    return $self->search( { 'hold_cancellation_request_id' => { '=' => undef } },
+        { join => 'cancellation_requests' } );
+}
+
 =head2 Internal methods
 
 =head3 _type

@@ -326,7 +326,7 @@ if ($show_barcode) {
 $template->param( show_barcode => 1 ) if $show_barcode;
 
 # now the reserved items....
-my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
+my $reserves = $patron->holds->filter_out_has_cancellation_requests;
 
 $template->param(
     RESERVES       => $reserves,

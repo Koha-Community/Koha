@@ -644,9 +644,9 @@ subtest 'set_waiting+patron_expiration_date' => sub {
 
 $schema->storage->txn_rollback;
 
-subtest 'filter_by_has_cancellation_requests() tests' => sub {
+subtest 'filter_by_has_cancellation_requests() and filter_out_has_cancellation_requests() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -699,12 +699,21 @@ subtest 'filter_by_has_cancellation_requests() tests' => sub {
 
     is( $filtered_rs->count, 0 );
 
+    my $filtered_out_rs = $rs->filter_out_has_cancellation_requests;
+
+    is( $filtered_out_rs->count, 3 );
+
     $hold_2->add_cancellation_request;
 
     $filtered_rs = $rs->filter_by_has_cancellation_requests;
 
     is( $filtered_rs->count,    1 );
     is( $filtered_rs->next->id, $hold_2->id );
+
+    $filtered_out_rs = $rs->filter_out_has_cancellation_requests;
+
+    is( $filtered_out_rs->count,    2 );
+    is( $filtered_out_rs->next->id, $hold_1->id );
 
     $schema->storage->txn_rollback;
 };

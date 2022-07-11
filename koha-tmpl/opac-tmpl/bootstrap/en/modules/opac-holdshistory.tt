@@ -153,7 +153,11 @@
                                         [% ELSIF hold.cancellationdate %]
                                             <span>Cancelled</span>
                                         [% ELSIF hold.found == 'W' %]
-                                            <span>Waiting</span>
+                                            [% IF hold.cancellation_requests.count == 0 %]
+                                                <span>Waiting</span>
+                                            [% ELSE %]
+                                                <span>Cancelled</span>
+                                            [% END %]
                                         [% ELSIF hold.found == 'T' %]
                                             <span>In transit</span>
                                         [% ELSE %]
