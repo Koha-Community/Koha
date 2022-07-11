@@ -128,14 +128,57 @@ subtest 'get_elasticsearch_settings() tests' => sub {
 
 subtest 'get_elasticsearch_mappings() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     my $mappings;
 
-    # test reading mappings
-    my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
-    $mappings = $es->get_elasticsearch_mappings();
+    my @mappings = (
+        {
+            name => 'cn-sort',
+            type => 'callnumber',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '001',
+        },
+        {
+            name => 'isbn',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '020a',
+        },
+    );
+    my $search_engine_module = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+    $search_engine_module->mock('_foreach_mapping', sub {
+        my ($self, $sub) = @_;
+
+        foreach my $map (@mappings) {
+            $sub->(
+                $map->{name},
+                $map->{type},
+                $map->{facet},
+                $map->{suggestible},
+                $map->{sort},
+                $map->{searchable},
+                $map->{marc_type},
+                $map->{marc_field}
+            );
+        }
+    });
+
+    my $search_engine_elasticsearch = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
+    $mappings = $search_engine_elasticsearch->get_elasticsearch_mappings();
+
+    is( $mappings->{properties}{"cn-sort__sort"}{index}, 'false', 'Field mappings parsed correctly for sort for callnumber type' );
+    is( $mappings->{properties}{"cn-sort__sort"}{numeric}, 'false', 'Field mappings parsed correctly for sort for callnumber type' );
     is( $mappings->{properties}{isbn__sort}{index}, 'false', 'Field mappings parsed correctly' );
+
 };
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
