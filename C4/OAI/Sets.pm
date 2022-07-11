@@ -610,6 +610,7 @@ sub UpdateOAISetsBiblio {
 
     return unless($biblionumber and $record);
 
+    $record = $record->clone;
     if (C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData')) {
         $record = Koha::Biblio::Metadata->record(
             {
