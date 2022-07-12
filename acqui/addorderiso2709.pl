@@ -276,10 +276,7 @@ if ($op eq ""){
                         $orderinfo{tax_rate} = $bookseller->tax_rate;
                         my $c = $c_discount ? $c_discount : $bookseller->discount;
                         $orderinfo{discount} = $c;
-                        if ( $c_discount ) {
-                            $orderinfo{ecost} = $price;
-                            $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c / 100 );
-                        } else {
+                        if ( $c ) {
                             $orderinfo{ecost} = $price * ( 1 - $c / 100 );
                             $orderinfo{rrp}   = $price;
                         }
@@ -337,10 +334,7 @@ if ($op eq ""){
                 $orderinfo{tax_rate} = $bookseller->tax_rate;
                 my $c = $c_discount ? $c_discount : $bookseller->discount;
                 $orderinfo{discount} = $c;
-                if ( $c_discount ) {
-                    $orderinfo{ecost} = $c_price;
-                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c / 100 );
-                } else {
+                if ( $c ) {
                     $orderinfo{ecost} = $c_price * ( 1 - $c / 100 );
                     $orderinfo{rrp}   = $c_price;
                 }
