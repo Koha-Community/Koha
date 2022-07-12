@@ -123,9 +123,16 @@ sub build {
     # loop thru all fk and create linked records if needed
     # fills remaining entries in $col_values
     my $foreign_keys = $self->_getForeignKeys( { source => $source } );
+    my $col_names = {};
     for my $fk ( @$foreign_keys ) {
         # skip when FK points to itself: e.g. borrowers:guarantorid
         next if $fk->{source} eq $source;
+
+        # If we have more than one FK on the same column, we only generate values for the first one
+        next
+          if scalar @{ $fk->{keys} } == 1
+          && exists $col_names->{ $fk->{keys}->[0]->{col_name} };
+
         my $keys = $fk->{keys};
         my $tbl = $fk->{source};
         my $res = $self->_create_links( $tbl, $keys, $col_values, $value );
@@ -133,6 +140,9 @@ sub build {
         foreach( keys %$res ) { # save new values
             $col_values->{$_} = $res->{$_};
         }
+
+        $col_names->{ $fk->{keys}->[0]->{col_name} } = 1
+          if scalar @{ $fk->{keys} } == 1
     }
 
     # store this record and return hashref
