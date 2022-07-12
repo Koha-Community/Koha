@@ -610,6 +610,13 @@
                                                                                 [% END %]
                                                                                 <span class="item_count">[% items_loo.count | html %]</span>
                                                                             </div> <!-- /.result_item_details -->
+
+                                                                            [% IF status_count == "onloancount" %]
+                                                                                <span class="item-date-due">
+                                                                                    Due: [% items_loo.due_date | $KohaDates %]
+                                                                                </span>
+                                                                            [% END %]
+
                                                                             [% IF item_level_itypes && items_loo.description %]
                                                                                 <span class="item-itype-desc">[% items_loo.description | html %]</span>
                                                                             [% END %]
