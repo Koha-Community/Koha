@@ -140,7 +140,7 @@ Related object: L<Koha::Schema::Result::Issue>
 __PACKAGE__->belongs_to(
     "checkout",
     "Koha::Schema::Result::Issue",
-    { issue_id => "checkout_id" },
+    { "foreign.issue_id" => "self.checkout_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",
@@ -158,7 +158,7 @@ Related object: L<Koha::Schema::Result::OldIssue>
 __PACKAGE__->belongs_to(
     "old_checkout",
     "Koha::Schema::Result::OldIssue",
-    { issue_id => "checkout_id" },
+    { "foreign.issue_id" => "self.checkout_id" },
     {
         is_deferrable => 1,
         join_type     => "LEFT",
