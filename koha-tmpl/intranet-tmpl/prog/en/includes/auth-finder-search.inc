@@ -179,6 +179,6 @@
             </ol>
         </fieldset>
         [% END %]
-        <fieldset class="action"> <input type="submit" value="Search" class="submit" id="search" /> <a id="clear-form" href="#" class="btn btn-link">Clear form</a> <a id="cancel" class="cancel close" href="#">Cancel</a>
+        <fieldset class="action"> <input type="submit" value="Search" class="submit" id="search" /> <input type="reset" id="clear-form" value="Clear form"> <a id="cancel" class="cancel close" href="#">Cancel</a>
         </fieldset>
 </form>

@@ -94,7 +94,15 @@ $(document).ready(function(){
         minLength: 3,
     });
     $("#clear-form").click(function(){
-        $(":input[type='text']").val('');
+        setTimeout(function(){
+            $(":input[type='text']").val('');
+            $("#mainmainentry").val("contains");
+            $("#mainentry").val("contains");
+            $("#marclistheading").val("contains");
+            $("#marclistanywhere").val("contains");
+            $("#orderby").val("HeadingAsc");
+        }, 50);
+        return true;
     });
 });
 
