@@ -590,6 +590,11 @@ sub _gen_default_values {
         Aqbookseller => {
             tax_rate => 0,
             discount => 0,
+            url  => undef,
+        },
+        Aqbudget => {
+            sort1_authcat => undef,
+            sort2_authcat => undef,
         },
         AuthHeader => {
             marcxml => '',
