@@ -532,7 +532,7 @@ sub handle_checkout {
         # not a lot we can do about it
         siplog( "LOG_WARNING", "received no-block checkout from terminal '%s'", $account->{id} );
 
-        $status = $ils->checkout_no_block( $patron_id, $item_id, $sc_renewal_policy, $trans_date, $nb_due_date );
+        $status = $ils->checkout( $patron_id, $item_id, $sc_renewal_policy, $fee_ack, $account, $nb_due_date );
     } else {
 
         # Does the transaction date really matter for items that are
