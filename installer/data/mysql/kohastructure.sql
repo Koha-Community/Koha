@@ -4383,7 +4383,7 @@ CREATE TABLE `reserves` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this hold is for',
   `reservedate` date DEFAULT NULL COMMENT 'the date the hold was placed',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the biblio table defining which bib record this hold is on',
-  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 0 COMMENT 'foreign key from the branches table defining which branch the patron wishes to pick this hold up at',
+  `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'foreign key from the branches table defining which branch the patron wishes to pick this hold up at',
   `desk_id` int(11) DEFAULT NULL COMMENT 'foreign key from the desks table defining which desk the patron should pick this hold up at',
   `notificationdate` date DEFAULT NULL COMMENT 'currently unused',
   `reminderdate` date DEFAULT NULL COMMENT 'currently unused',
