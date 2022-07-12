@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Test::Exception;
 use Test::MockModule;
@@ -35,6 +35,36 @@ use Koha::Old::Holds;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'store() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item   = $builder->build_sample_item;
+    throws_ok {
+        Koha::Hold->new(
+            {
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => 1,
+                itemnumber     => $item->itemnumber,
+            }
+        )->store
+    }
+    'Koha::Exceptions::Hold::MissingPickupLocation',
+      'Exception thrown because branchcode was not passed';
+
+    my $hold = $builder->build_object( { class => 'Koha::Holds' } );
+    throws_ok {
+        $hold->branchcode(undef)->store;
+    }
+    'Koha::Exceptions::Hold::MissingPickupLocation',
+      'Exception thrown if one tries to set branchcode to null';
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'fill() tests' => sub {
 
