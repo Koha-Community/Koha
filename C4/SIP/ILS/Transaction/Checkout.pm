@@ -17,7 +17,7 @@ use C4::SIP::ILS::Transaction;
 use C4::Context;
 use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued );
 use C4::Members;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use parent qw(C4::SIP::ILS::Transaction);
 
@@ -41,6 +41,7 @@ sub new {
 sub do_checkout {
 	my $self = shift;
     my $account = shift;
+    my $no_block_due_date = shift;
 	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
     my $shelf          = $self->{item}->hold_attached;
 	my $barcode        = $self->{item}->id;
@@ -48,6 +49,18 @@ sub do_checkout {
     my $overridden_duedate; # usually passed as undef to AddIssue
     my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
     my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode, 0);
+
+    if ( $no_block_due_date ) {
+        my $year = substr($no_block_due_date,0,4);
+        my $month = substr($no_block_due_date,4,2);
+        my $day = substr($no_block_due_date,6,2);
+        my $hour = substr($no_block_due_date,12,2);
+        my $minute = substr($no_block_due_date,14,2);
+        my $second = substr($no_block_due_date,16,2);
+
+        my $iso = "$year-$month-$day $hour:$minute:$second";
+        $no_block_due_date = dt_from_string( $iso, "iso" );
+    }
 
     my $noerror=1;  # If set to zero we block the issue
     if (keys %{$issuingimpossible}) {
@@ -113,10 +126,17 @@ sub do_checkout {
             $noerror = 0;
         }
     }
+
+    if ( $no_block_due_date ) {
+        $overridden_duedate = $no_block_due_date;
+        $noerror = 1;
+    }
+
 	unless ($noerror) {
 		$self->ok(0);
 		return $self;
 	}
+
 	# can issue
     my $issue = AddIssue( $patron->unblessed, $barcode, $overridden_duedate, 0 );
     $self->{due} = $self->duedatefromissue($issue, $itemnumber);

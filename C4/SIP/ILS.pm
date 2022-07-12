@@ -121,7 +121,7 @@ sub offline_ok {
 # the response.
 #
 sub checkout {
-    my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack, $account ) = @_;
+    my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack, $account, $no_block_due_date ) = @_;
     my ( $patron, $item, $circ );
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
     # BEGIN TRANSACTION
@@ -153,7 +153,7 @@ sub checkout {
         $circ->screen_msg("Item checked out to another patron");
     }
     else {
-        $circ->do_checkout($account);
+        $circ->do_checkout($account, $no_block_due_date);
         if ( $circ->ok ) {
 
             # If the item is already associated with this patron, then
