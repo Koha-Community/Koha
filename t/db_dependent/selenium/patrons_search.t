@@ -40,14 +40,14 @@ eval { require Selenium::Remote::Driver; };
 if ( $@ ) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 1;
+    plan tests => 2;
 }
 
 
 my $s             = t::lib::Selenium->new;
 my $driver        = $s->driver;
-my $opac_base_url = $s->opac_base_url;
 my $base_url      = $s->base_url;
+my $mainpage      = $s->base_url . q|mainpage.pl|;
 my $builder       = t::lib::TestBuilder->new;
 
 subtest 'Search patrons' => sub {
@@ -152,6 +152,7 @@ subtest 'Search patrons' => sub {
     my $total_number_of_patrons = Koha::Patrons->search->count;
     my $table_id = "memberresultst";
 
+    $driver->get($mainpage . q|?logout.x=1|);
     $s->auth;
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     my $PatronsPerPage = 15;
@@ -283,6 +284,19 @@ subtest 'Search patrons' => sub {
     push @cleanup, $attribute_type, $attribute_type_searchable;
     C4::Context->set_preference('DefaultPatronSearchFields',$default_patron_search_fields);
     C4::Context->set_preference('PatronsPerPage',$default_patron_per_page);
-
-    $driver->quit();
 };
+
+subtest 'Error too long' => sub {
+    plan tests => 1;
+    $driver->get($mainpage . q|?logout.x=1|);
+    $s->auth;
+
+    my $very_long_string = q{some long test to search in patron fields some long test to search in patron fields some long test to search in patron fields};
+    $driver->get( $base_url . "/members/members-home.pl" );
+    $s->fill_form( { search_patron_filter => $very_long_string } );
+    $s->submit_form;
+    $s->wait_for_ajax;
+    ok( 1, "No error when querying a very long search" );
+};
+
+$driver->quit();
