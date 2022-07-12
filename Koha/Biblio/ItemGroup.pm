@@ -131,12 +131,4 @@ sub _type {
     return 'ItemGroup';
 }
 
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Biblio::ItemGroup';
-}
-
 1;

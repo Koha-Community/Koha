@@ -39,8 +39,4 @@ sub _type {
 
 =cut
 
-sub object_class {
-    return 'Koha::Biblio::ItemGroup::Item';
-}
-
 1;
