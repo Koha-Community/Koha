@@ -784,15 +784,11 @@ Comments : an improvement would be to return All the records that match.
 sub FindDuplicateAuthority {
 
     my ($record,$authtypecode)=@_;
-#    warn "IN for ".$record->as_formatted;
     my $dbh = C4::Context->dbh;
-#    warn "".$record->as_formatted;
     my $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
-#     warn "record :".$record->as_formatted."  auth_tag_to_report :$auth_tag_to_report";
     # build a request for SearchAuthorities
     my $op = 'AND';
-    $authtypecode =~ s#/#\\/#; # GENRE/FORM contains forward slash which is a reserved character
-    my $query='at:'.$authtypecode.' ';
+    my $query='at:"'.$authtypecode.'" '; # Quote authtype code to avoid unescaping slash in GENRE/FORM later
     my $filtervalues=qr([\001-\040\Q!'"`#$%&*+,-./:;<=>?@(){[}_|~\E\]]);
     if ($record->field($auth_tag_to_report)) {
         foreach ($record->field($auth_tag_to_report)->subfields()) {
