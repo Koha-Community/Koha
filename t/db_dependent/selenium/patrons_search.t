@@ -155,28 +155,29 @@ subtest 'Search patrons' => sub {
     $s->auth;
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     my $PatronsPerPage = 15;
+    my $nb_standard_fields = 13;
     C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
     $driver->get( $base_url . "/members/members-home.pl" );
     my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
-    is( scalar @adv_options, 13, 'All standard fields are searchable if DefaultPatronSearchFields not set');
-    is( $adv_options[0]->get_value(), 'firstname,surname,othernames,cardnumber,userid', 'Standard search uses hard coded list when DefaultPatronSearchFields not set');
+    is( scalar @adv_options, $nb_standard_fields + 1, 'All standard fields are searchable if DefaultPatronSearchFields not set. middle_name is there.');
+    is( $adv_options[0]->get_value(), 'firstname,middle_name,surname,othernames,cardnumber,userid', 'Standard search uses hard coded list when DefaultPatronSearchFields not set');
     my @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @filter_options, 13, 'All standard fields are searchable by filter if DefaultPatronSearchFields not set');
-    is( $filter_options[0]->get_value(), 'firstname,surname,othernames,cardnumber,userid', 'Standard filter uses hard coded list when DefaultPatronSearchFields not set');
+    is( scalar @filter_options, $nb_standard_fields + 1, 'All standard fields + middle_name are searchable by filter if DefaultPatronSearchFields not set');
+    is( $filter_options[0]->get_value(), 'firstname,middle_name,surname,othernames,cardnumber,userid', 'Standard filter uses hard coded list when DefaultPatronSearchFields not set');
     C4::Context->set_preference('DefaultPatronSearchFields',"firstname,initials");
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
-    is( scalar @adv_options, 13, 'New option added when DefaultPatronSearchFields is populated with a field');
+    is( scalar @adv_options, $nb_standard_fields, 'New option added when DefaultPatronSearchFields is populated with a field. Note that middle_name disappears, we do not want it if not part of DefaultPatronSearchFields');
     is( $adv_options[0]->get_value(), 'firstname,initials', 'Standard search uses DefaultPatronSearchFields when populated');
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @filter_options, 13, 'New filter option added when DefaultPatronSearchFields is populated with a field');
+    is( scalar @filter_options, $nb_standard_fields, 'New filter option added when DefaultPatronSearchFields is populated with a field');
     is( $filter_options[0]->get_value(), 'firstname,initials', 'Standard filter uses DefaultPatronSearchFields when populated');
     C4::Context->set_preference('DefaultPatronSearchFields',"firstname,initials,horses");
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
-    is( scalar @adv_options, 13, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
-    is( scalar @filter_options, 13, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @adv_options, $nb_standard_fields, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @filter_options, $nb_standard_fields, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     $driver->get( $base_url . "/members/members-home.pl" );
@@ -209,8 +210,8 @@ subtest 'Search patrons' => sub {
     is(
         $driver->get_title,
         sprintf(
-            "Modify patron %s %s (%s) %s (%s) (%s) › Patrons › Koha",
-            $first_patron->title, $first_patron->firstname, $first_patron->othernames, $first_patron->surname, $first_patron->cardnumber,
+            "Modify patron %s %s %s (%s) %s (%s) (%s) › Patrons › Koha",
+            $first_patron->title, $first_patron->firstname, $first_patron->middle_name, $first_patron->othernames, $first_patron->surname, $first_patron->cardnumber,
             $first_patron->category->description,
         ),
         'Page title is correct after following modification link'
