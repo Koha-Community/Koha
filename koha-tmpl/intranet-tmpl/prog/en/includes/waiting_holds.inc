@@ -3,11 +3,10 @@
 <table class="holds_table" id="[% table_name | html %]">
     <thead>
         <tr>
-            [% IF select_column %]
             <th class="NoSort"><input type="checkbox" class="select_hold_all"/></th>
-            [% END %]
-            <th class="title-string">Waiting since</th>
-            <th class="title-string">Date hold placed</th>
+            <th>Waiting since</th>
+            <th>Date hold placed</th>
+            <th>Expiration date</th>
             <th class="anti-the">Title</th>
             <th>Patron</th>
             <th>Home library</th>
@@ -22,11 +21,10 @@
     <tbody>
         [% FOREACH reserveloo IN reserveloop %]
             <tr>
-                [% IF select_column %]
                 <th><input type="checkbox" class="select_hold" data-id="[% reserveloo.reserve_id | html %]"/></th>
-                [% END %]
-                <td><span title="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
-                <td><span title="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
+                <td><span data-order="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
+                <td><span data-order="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
+                <td><span data-order="[% reserveloo.expirationdate | html %]">[% reserveloo.expirationdate | $KohaDates %]</span></td>
                 <td>
                     [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio link = 1 %]
                         [% UNLESS ( item_level_itypes ) %]

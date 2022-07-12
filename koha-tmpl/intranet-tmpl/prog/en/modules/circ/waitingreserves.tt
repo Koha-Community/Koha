@@ -93,7 +93,7 @@
             <div id="toolbar" class="btn-toolbar">
                 <button class="cancel_selected_holds" data-bulk="true"></button>
             </div>
-            [% INCLUDE waiting_holds.inc select_column='1' table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
+            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
         [% ELSE %]
             <div class="dialog message">No holds found.</div>
         [% END %]
@@ -118,7 +118,7 @@
                    [% END %]
 
                 </span>
-               [% INCLUDE waiting_holds.inc select_column='1' table_name='holdso' reserveloop=overloop tab='holdsover' %]
+               [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
             [% ELSE %]
                 <div class="dialog message">No holds found.</div>
             [% END %]
