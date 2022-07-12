@@ -183,6 +183,7 @@ SKIP: {
             my $id = $input->get_attribute('id');
             next unless $id =~ m|^tag_952_subfield|;
 
+            my $effective_input = $input;
             my $v;
 
             # FIXME This is based on default values
@@ -201,6 +202,7 @@ SKIP: {
                 $id =~ m|^tag_952_subfield_w| # replacementpricedate
             ) {
                 $v = strftime("%Y-%m-%d", localtime);
+                $effective_input = $driver->find_element('//div[@id="subfield952w"]/input[@class="input_marceditor flatpickr-input"]');
             }
             elsif (
                 $id =~ m|^tag_952_subfield_d| # dateaccessioned
@@ -215,7 +217,7 @@ SKIP: {
             else {
                 $v = 't_value_bib' . $biblionumber;
             }
-            $input->send_keys( $v );
+            $effective_input->send_keys( $v );
         }
 
         $driver->find_element('//input[@name="add_submit"]')->click;
