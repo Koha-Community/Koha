@@ -432,10 +432,13 @@ subtest 'get_items_that_can_fill' => sub {
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
 
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+
     t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
 
     my $reserve_id_1 = C4::Reserves::AddReserve(
         {
+            branchcode     => $library_1->branchcode,
             borrowernumber => $patron_1->borrowernumber,
             biblionumber   => $biblio->biblionumber,
             priority       => 1,
@@ -449,6 +452,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     my $reserve_id_2 = C4::Reserves::AddReserve(
         {
+            branchcode     => $library_1->branchcode,
             borrowernumber => $patron_2->borrowernumber,
             biblionumber   => $biblio->biblionumber,
             priority       => 2,
@@ -458,6 +462,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     my $waiting_reserve_id = C4::Reserves::AddReserve(
         {
+            branchcode     => $library_1->branchcode,
             borrowernumber => $patron_2->borrowernumber,
             biblionumber   => $biblio->biblionumber,
             priority       => 0,
@@ -468,6 +473,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     my $notforloan_reserve_id = C4::Reserves::AddReserve(
         {
+            branchcode     => $library_1->branchcode,
             borrowernumber => $patron_2->borrowernumber,
             biblionumber   => $biblio->biblionumber,
             priority       => 0,
