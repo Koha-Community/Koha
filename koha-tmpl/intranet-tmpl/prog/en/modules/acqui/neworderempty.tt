@@ -446,7 +446,7 @@
             [% END %]
             <li>
                 <label for="discount">Discount: </label>
-                [% IF ( orderdiscount ) %]
+                [% IF ( ordernumber ) %]
                     <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount | html %]" onchange="updateCosts();" />%
                 [% ELSE %]
                     <input type="text" size="6" name="discount" id="discount" value="[% discount | html %]" onchange="updateCosts();" />%
