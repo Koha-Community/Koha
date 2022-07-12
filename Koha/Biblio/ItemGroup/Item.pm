@@ -35,8 +35,4 @@ sub _type {
     return 'ItemGroupItem';
 }
 
-=head3 object_class
-
-=cut
-
 1;
