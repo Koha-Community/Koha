@@ -37,6 +37,7 @@
         var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
     </script>
     <!-- / calendar.inc -->
+    [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
     [% Asset.js("js/calendar.js") | $raw %]
     [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
     [% Asset.js("lib/flatpickr/shortcut-buttons-flatpickr.min.js") | $raw %]
