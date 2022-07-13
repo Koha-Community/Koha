@@ -4514,6 +4514,7 @@ CREATE TABLE `return_claims` (
   `resolved_on` timestamp NULL DEFAULT NULL COMMENT 'Time and date the claim was resolved',
   `resolved_by` int(11) DEFAULT NULL COMMENT 'ID of the staff member that resolved the claim',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `item_issue` (`itemnumber`, `issue_id`),
   KEY `itemnumber` (`itemnumber`),
   KEY `rc_borrowers_ibfk` (`borrowernumber`),
   KEY `rc_created_by_ibfk` (`created_by`),
