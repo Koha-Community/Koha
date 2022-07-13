@@ -729,6 +729,36 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 item_bundles_hosts
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemBundle>
+
+=cut
+
+__PACKAGE__->has_many(
+  "item_bundles_hosts",
+  "Koha::Schema::Result::ItemBundle",
+  { "foreign.host" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 item_bundles_item
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::ItemBundle>
+
+=cut
+
+__PACKAGE__->might_have(
+  "item_bundles_item",
+  "Koha::Schema::Result::ItemBundle",
+  { "foreign.item" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 item_group_item
 
 Type: might_have
@@ -895,8 +925,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-08 19:06:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y5EYc49JqMIr3A3aQBTtTQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-13 13:32:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CjfZjLZeYYp3VMuSFJX25A
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
