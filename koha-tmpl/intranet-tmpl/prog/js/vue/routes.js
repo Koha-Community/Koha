@@ -116,7 +116,12 @@ function build_breadcrumb(parent_breadcrumb, current) {
 }
 
 export const routes = [
-    { path: "/cgi-bin/koha/mainpage.pl" },
+    {
+        path: "/cgi-bin/koha/mainpage.pl",
+        beforeEnter(to, from, next) {
+            window.location.href = "/cgi-bin/koha/mainpage.pl";
+        },
+    },
     {
         path: "/cgi-bin/koha/erm/erm.pl",
         component: ERMHome,
