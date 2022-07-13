@@ -17,7 +17,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 50;
+use Test::More tests => 49;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -451,23 +451,4 @@ subtest "NewSubscription|ModSubscription" => sub {
     $serials = Koha::Serials->search({ subscriptionid => $subscriptionid });
     is( $serials->count, 1, "Still only one serial" );
     is( $serials->next->biblionumber, $biblio_2->biblionumber, 'ModSubscription should have updated serial.biblionumber');
-};
-
-subtest "_numeration" => sub {
-
-    plan tests => 6;
-
-    my $s = C4::Serials::_numeration(0, 'monthname', 'cat');
-    is( $s, "gener" );
-    $s = C4::Serials::_numeration(0, 'monthname', 'es');
-    is( $s, "enero" );
-    $s = C4::Serials::_numeration(0, 'monthname', 'fr');
-    is( $s, "janvier" );
-
-    $s = C4::Serials::_numeration(0, 'monthabrv', 'cat');
-    is( $s, "de gen." );
-    $s = C4::Serials::_numeration(0, 'monthabrv', 'es');
-    is( $s, "ene" );
-    $s = C4::Serials::_numeration(0, 'monthabrv', 'fr');
-    is( $s, "janv." );
 };

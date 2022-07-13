@@ -2503,7 +2503,7 @@ sub _numeration {
             locale  => $locale,
         );
         $string = $num_type =~ /^monthname$/
-            ? $dt->format_cldr( "LLLL" )
+            ? $dt->strftime("%B")
             : $dt->strftime("%b");
     } elsif ( $num_type =~ /^season$/ ) {
         my @seasons= qw( Spring Summer Fall Winter );
