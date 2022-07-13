@@ -15,7 +15,7 @@ use CGI qw ( -utf8 );
 use C4::SIP::ILS::Transaction;
 
 use C4::Context;
-use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued );
+use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued ProcessOfflineIssue );
 use C4::Members;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -127,19 +127,23 @@ sub do_checkout {
         }
     }
 
-    if ( $no_block_due_date ) {
-        $overridden_duedate = $no_block_due_date;
-        $noerror = 1;
-    }
-
-	unless ($noerror) {
+    if ( $noerror == 0 && !$no_block_due_date ) {
 		$self->ok(0);
 		return $self;
 	}
 
-	# can issue
-    my $issue = AddIssue( $patron->unblessed, $barcode, $overridden_duedate, 0 );
-    $self->{due} = $self->duedatefromissue($issue, $itemnumber);
+    if ( $no_block_due_date ) {
+        $overridden_duedate = $no_block_due_date;
+        ProcessOfflineIssue({
+            cardnumber => $patron->cardnumber,
+            barcode    => $barcode,
+            timestamp  => $no_block_due_date,
+        });
+    } else {
+        # can issue
+        my $issue = AddIssue( $patron->unblessed, $barcode, $overridden_duedate, 0 );
+        $self->{due} = $self->duedatefromissue($issue, $itemnumber);
+    }
 
     $self->ok(1);
     return $self;
