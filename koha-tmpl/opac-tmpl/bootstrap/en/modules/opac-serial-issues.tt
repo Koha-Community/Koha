@@ -121,10 +121,9 @@
                                                 <span>on Sunday</span>
                                         [% END %]
 
-                                        <span>for</span>
-                                            [% IF ( subscription_LOO.numberlength ) %][% subscription_LOO.numberlength | html %] <span>issues</span>[% END %]
-                                            [% IF ( subscription_LOO.weeklength ) %][% subscription_LOO.weeklength | html %] <span>weeks</span>[% END %]
-                                            [% IF ( subscription_LOO.monthlength ) %][% subscription_LOO.monthlength | html %] <span>months</span>[% END %]
+                                            [% IF ( subscription_LOO.numberlength ) %]<span>for [% subscription_LOO.numberlength | html %] issues</span>[% END %]
+                                            [% IF ( subscription_LOO.weeklength ) %]<span>for [% subscription_LOO.weeklength | html %] weeks</span>[% END %]
+                                            [% IF ( subscription_LOO.monthlength ) %]<span>for [% subscription_LOO.monthlength | html %] months</span>[% END %]
                                     </p>
                                     <p>The first subscription was started on  [% subscription_LOO.histstartdate | html %]</p>
                                     [% IF ( subscription_LOO.histenddate ) %]
