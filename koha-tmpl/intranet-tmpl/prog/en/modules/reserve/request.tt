@@ -801,19 +801,25 @@
                                                         [% IF ( itemloo.nocancel ) %]
                                                                 <span>Can't be cancelled when item is in transit</span>
                                                         [% ELSE %]
-                                                            [% IF ( itemloo.waitingdate ) %]<span>Waiting</span>[% ELSE %]<span>On hold</span>[% END %]
-                                                            [% IF ( itemloo.canreservefromotherbranches ) %]
-                                                                <span>for</span> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>
-                                                            [% END %]
-                                                            [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %]
-                                                            [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] <span>since</span>
                                                             [% IF ( itemloo.waitingdate ) %]
-                                                                [% itemloo.waitingdate | $KohaDates %]
-                                                            [% ELSE %]
-                                                                [% IF ( itemloo.reservedate ) %]
-                                                                    [% itemloo.reservedate | html %]
+                                                                [% IF ( itemloo.canreservefromotherbranches ) %]
+                                                                    <span>Waiting for [% INCLUDE 'patron-title.inc' patron=itemloo.ReservedFor %] at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since [% itemloo.waitingdate | $KohaDates %]</span>
+                                                                [% ELSE %]
+                                                                    <span>Waiting at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since [% itemloo.waitingdate | $KohaDates %]</span>
                                                                 [% END %]
-                                                            [% END %].
+                                                            [% ELSE %]
+                                                                [% IF ( itemloo.canreservefromotherbranches ) %]
+                                                                    [% IF itemloo.reservedate %]
+                                                                        <span>On hold for [% INCLUDE 'patron-title.inc' patron=itemloo.ReservedFor %] expected at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since</span>
+                                                                    [% ELSE %]
+                                                                        <span>On hold expected at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]</span>
+                                                                    [% END %]
+                                                                [% ELSIF itemloo.reservedate %]
+                                                                    <span>On hold expected at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %] since [% itemloo.reservedate | $KohaDates %]</span>
+                                                                [% ELSE %]
+                                                                    <span>On hold expected at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]</span>
+                                                                [% END %]
+                                                            [% END %]
                                                             <a class="info cancel-hold" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]">Cancel hold</a>
                                                         [% END # /IF itemloo.nocancel %]
                                                     [% ELSE %]

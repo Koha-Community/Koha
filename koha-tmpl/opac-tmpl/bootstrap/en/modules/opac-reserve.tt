@@ -438,24 +438,12 @@
                                                                 [% IF ( itemLoo.reservedate ) %]
                                                                     <span class="waiting">
                                                                         [% IF ( itemLoo.waitingdate ) %]
-                                                                            <span>Waiting</span>
+                                                                            <span>Waiting for patron at [% itemLoo.ExpectedAtLibrary | html %] since [% itemLoo.waitingdate | $KohaDates %]</span>
+                                                                        [% ELSIF ( itemLoo.reservedate ) %]
+                                                                            <span>On hold for patron expected at [% itemLoo.ExpectedAtLibrary | html %] since [% itemLoo.reservedate | $KohaDates %]</span>
                                                                         [% ELSE %]
-                                                                            <span>On hold</span>
+                                                                            <span>On hold for patron expected at [% itemLoo.ExpectedAtLibrary | html %]</span>
                                                                         [% END %]
-                                                                            <span>for patron</span>
-                                                                        [% IF ( itemLoo.waitingdate ) %]
-                                                                            <span>at</span>
-                                                                        [% ELSE %]
-                                                                            <span>expected at</span>
-                                                                        [% END %]
-                                                                        [% itemLoo.ExpectedAtLibrary | html %] <span>since</span>
-                                                                        [% IF ( itemLoo.waitingdate ) %]
-                                                                            [% itemLoo.waitingdate | $KohaDates %]
-                                                                        [% ELSE %]
-                                                                            [% IF ( itemLoo.reservedate ) %]
-                                                                                [% itemLoo.reservedate | html %]
-                                                                            [% END %]
-                                                                        [% END %].
                                                                     </span>
                                                                 [% ELSE %]
                                                                     <span class="notonhold">Not on hold</span>
