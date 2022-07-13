@@ -266,11 +266,6 @@ export default {
 
             }, agreement_table_settings, 1)
         },
-        destroy_table: function () {
-            $('#agreement_list')
-                .DataTable()
-                .destroy(true)
-        },
     },
     mounted() {
         if (!this.building_table) {
@@ -279,8 +274,11 @@ export default {
         }
     },
     beforeUnmount() {
-        // This delays the closing of the modal, do we really need it?
-        //this.destroy_table()
+        if ($.fn.DataTable.isDataTable('#agreement_list')) {
+            $('#agreement_list')
+                .DataTable()
+                .destroy(true)
+        }
     },
     components: { Toolbar },
     name: "AgreementsList",

@@ -136,9 +136,11 @@ export default {
         this.build_datatable()
     },
     beforeUnmount() {
-        $('#package_list')
-            .DataTable()
-            .destroy(true)
+        if ($.fn.DataTable.isDataTable('#package_list')) {
+            $('#package_list')
+                .DataTable()
+                .destroy(true)
+        }
     },
     props: {
         resources: Array,

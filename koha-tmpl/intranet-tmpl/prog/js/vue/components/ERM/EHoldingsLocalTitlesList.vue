@@ -201,7 +201,7 @@ export default {
         },
     },
     beforeUnmount() {
-        if (!$.fn.DataTable.isDataTable('#title_list')) {
+        if ($.fn.DataTable.isDataTable('#title_list')) {
             $('#title_list')
                 .DataTable()
                 .destroy(true)

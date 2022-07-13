@@ -98,9 +98,11 @@ export default {
         this.build_datatable()
     },
     beforeUnmount() {
-        $('#title_list')
-            .DataTable()
-            .destroy(true)
+        if ($.fn.DataTable.isDataTable('#title_list')) {
+            $('#title_list')
+                .DataTable()
+                .destroy(true)
+        }
     },
     props: {
         package_id: String,

@@ -243,7 +243,7 @@ export default {
         },
     },
     beforeUnmount() {
-        if (!$.fn.DataTable.isDataTable('#package_list')) {
+        if ($.fn.DataTable.isDataTable('#package_list')) {
             $('#package_list')
                 .DataTable()
                 .destroy(true)
