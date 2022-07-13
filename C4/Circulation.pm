@@ -123,6 +123,7 @@ BEGIN {
       DeleteOfflineOperation
       ProcessOfflineOperation
       ProcessOfflinePayment
+      ProcessOfflineIssue
     );
     push @EXPORT_OK, '_GetCircControlBranch';    # This is wrong!
 }
