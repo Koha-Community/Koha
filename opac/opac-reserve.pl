@@ -515,7 +515,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         if ( my $first_hold = $holds->next ) {
             $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($first_hold->reservedate), dateonly => 1 }); # FIXME Should be formatted in the template
+            $itemLoopIter->{reservedate}     = $first_hold->reservedate,
             $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
             $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
         }

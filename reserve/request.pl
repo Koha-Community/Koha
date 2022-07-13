@@ -431,7 +431,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     my $p = Koha::Patrons->find( $first_hold->borrowernumber );
 
                     $item->{backgroundcolor} = 'reserved';
-                    $item->{reservedate}     = output_pref({ dt => dt_from_string( $first_hold->reservedate ), dateonly => 1 }); # FIXME Should be formatted in the template
+                    $item->{reservedate}     = $first_hold->reservedate;
                     $item->{ReservedFor}     = $p;
                     $item->{ExpectedAtLibrary}     = $first_hold->branchcode;
                     $item->{waitingdate} = $first_hold->waitingdate;
