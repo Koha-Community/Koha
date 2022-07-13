@@ -467,7 +467,7 @@ subtest "_numeration" => sub {
     $s = C4::Serials::_numeration(0, 'monthabrv', 'cat');
     is( $s, "de gen." );
     $s = C4::Serials::_numeration(0, 'monthabrv', 'es');
-    like( $s, qr{^ene\.?} );
+    is( $s, "ene" );
     $s = C4::Serials::_numeration(0, 'monthabrv', 'fr');
     is( $s, "janv." );
 };
