@@ -312,6 +312,8 @@ export default {
 
             agreement.documents = agreement.documents.map(({ document_id, ...keepAttrs }) => keepAttrs)
 
+            delete agreement.agreement_packages
+
             const options = {
                 method: method,
                 body: JSON.stringify(agreement),

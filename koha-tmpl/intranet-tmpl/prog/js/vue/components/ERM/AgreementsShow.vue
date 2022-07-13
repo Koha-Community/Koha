@@ -78,7 +78,7 @@
                         <span>{{ agreement.license_info }}</span>
                     </li>
 
-                    <li>
+                    <li v-if="agreement.periods.length">
                         <label>{{ $t("Periods") }}</label>
                         <table>
                             <thead>
@@ -111,7 +111,7 @@
                         </table>
                     </li>
 
-                    <li>
+                    <li v-if="agreement.user_roles.length">
                         <label>{{ $t("Users") }}</label>
                         <table>
                             <thead>
@@ -139,7 +139,7 @@
                         </table>
                     </li>
 
-                    <li>
+                    <li v-if="agreement.agreement_licenses.length">
                         <label>{{ $t("Licenses") }}</label>
                         <table>
                             <thead>
@@ -186,27 +186,64 @@
                         </table>
                     </li>
 
-                    <li>
+                    <li v-if="agreement.agreement_relationships.length">
                         <label>{{ $t("Related agreements") }}</label>
-                        <div
-                            v-for="relationship in agreement.agreement_relationships"
-                            v-bind:key="relationship.related_agreement_id"
-                        >
-                            <span
-                                ><router-link
-                                    :to="`/cgi-bin/koha/erm/agreements/${relationship.related_agreement.agreement_id}`"
-                                    >{{
-                                        relationship.related_agreement.name
-                                    }}</router-link
-                                ></span
+                        <div id="agreement_relationships">
+                            <div
+                                v-for="relationship in agreement.agreement_relationships"
+                                v-bind:key="relationship.related_agreement_id"
                             >
-                            {{
-                                get_lib_from_av(
-                                    "av_agreement_relationships",
-                                    relationship.relationship
-                                )
-                            }}
-                            {{ agreement.name }}
+                                <span
+                                    ><router-link
+                                        :to="`/cgi-bin/koha/erm/agreements/${relationship.related_agreement.agreement_id}`"
+                                        >{{
+                                            relationship.related_agreement.name
+                                        }}</router-link
+                                    ></span
+                                >
+                                {{
+                                    get_lib_from_av(
+                                        "av_agreement_relationships",
+                                        relationship.relationship
+                                    )
+                                }}
+                                {{ agreement.name }}
+                            </div>
+                        </div>
+                    </li>
+
+                    <li v-if="agreement.agreement_packages.length">
+                        <label>{{ $t("Packages") }}</label>
+                        <div id="agreement_packages">
+                            <div
+                                v-for="agreement_package in agreement.agreement_packages"
+                                v-bind:key="agreement_package.package_id"
+                            >
+                                <span
+                                    v-if="
+                                        agreement_package.package.external_id &&
+                                        agreement_package.package.provider ==
+                                            'ebsco'
+                                    "
+                                >
+                                    <router-link
+                                        :to="`/cgi-bin/koha/erm/eholdings/ebsco/packages/${agreement_package.package.external_id}`"
+                                        >{{
+                                            agreement_package.package.name
+                                        }}</router-link
+                                    >
+                                    (EBSCO)</span
+                                >
+                                <span v-else
+                                    ><router-link
+                                        :to="`/cgi-bin/koha/erm/eholdings/local/packages/${agreement_package.package.package_id}`"
+                                        >{{
+                                            agreement_package.package.name
+                                        }}</router-link
+                                    >
+                                    (local)</span
+                                >
+                            </div>
                         </div>
                     </li>
                 </ol>
@@ -262,6 +299,7 @@ export default {
                 license_info: '',
                 periods: [],
                 user_roles: [],
+                agreement_packages: [],
             },
             initialized: false,
         }
@@ -288,5 +326,9 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+}
+#agreement_relationships,
+#agreement_packages {
+    padding-left: 10rem;
 }
 </style>

@@ -27,6 +27,7 @@ use Koha::ERM::Agreement::UserRoles;
 use Koha::ERM::Agreement::Licenses;
 use Koha::ERM::Agreement::Relationships;
 use Koha::ERM::Agreement::Documents;
+use Koha::ERM::EHoldings::Package::Agreements;
 
 =head1 NAME
 
@@ -198,6 +199,18 @@ sub documents {
     }
     my $documents_rs = $self->_result->erm_agreement_documents;
     return Koha::ERM::Agreement::Documents->_new_from_dbic($documents_rs);
+}
+
+=head3 agreement_packages
+
+Return the local packages for this agreement (and the other ones that have an entry locally)
+
+=cut
+
+sub agreement_packages {
+    my ( $self ) = @_;
+    my $packages_agreements_rs = $self->_result->erm_eholdings_packages_agreements;
+    return Koha::ERM::EHoldings::Package::Agreements->_new_from_dbic($packages_agreements_rs);
 }
 
 =head2 Internal methods

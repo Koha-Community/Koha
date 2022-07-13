@@ -84,26 +84,6 @@ sub vendor {
     return Koha::Acquisition::Bookseller->_new_from_dbic($rs);
 }
 
-=head3 to_api_mapping
-
-=cut
-
-sub to_api_mapping {
-    my ( $self ) = @_;
-
-    return {
-        external_id => undef,
-        ( # Do we really need this?
-            $self->external_id
-            ? (
-                package_id       => $self->external_id,
-                koha_internal_id => $self->package_id
-              )
-            : ()
-        )
-    };
-}
-
 =head2 Internal methods
 
 =head3 _type

@@ -20,6 +20,7 @@ use Modern::Perl;
 use Koha::Database;
 
 use Koha::ERM::Agreement;
+use Koha::ERM::EHoldings::Package;
 
 use base qw(Koha::Object);
 
@@ -43,6 +44,18 @@ sub agreement {
     my ( $self ) = @_;
     my $agreement_rs = $self->_result->agreement;
     return Koha::ERM::Agreement->_new_from_dbic($agreement_rs);
+}
+
+=head3 package
+
+Return the package linked to this package package
+
+=cut
+
+sub package {
+    my ( $self ) = @_;
+    my $package_rs = $self->_result->package;
+    return Koha::ERM::EHoldings::Package->_new_from_dbic($package_rs);
 }
 
 =head2 Internal methods
