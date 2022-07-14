@@ -16,22 +16,17 @@
 <script>
 import Toolbar from "./EHoldingsLocalTitlesToolbar.vue"
 import { createVNode, render } from 'vue'
-import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchLocalTitles } from "../../fetch"
 
 export default {
     setup() {
-        const vendorStore = useVendorStore()
-        const { vendors } = storeToRefs(vendorStore)
-
         const AVStore = useAVStore()
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
         return {
-            vendors,
             av_title_publication_types,
             get_lib_from_av,
         }
@@ -74,15 +69,6 @@ export default {
             let get_lib_from_av = this.get_lib_from_av
             let filters = this.filters
 
-            window['vendors'] = this.vendors.map(e => {
-                e['_id'] = e['id']
-                e['_str'] = e['name']
-                return e
-            })
-            let vendors_map = this.vendors.reduce((map, e) => {
-                map[e.id] = e
-                return map
-            }, {})
             window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
                 e['_id'] = e['authorised_value']
                 e['_str'] = e['lib']
@@ -114,12 +100,12 @@ export default {
                         }
                     },
                     {
-                        title: __("Vendor"),
-                        data: "vendor_id",
+                        title: __("Contributors"),
+                        data: "first_author:first_editor",
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
+                            return escape_str(row.first_author) + (row.first_author && row.first_editor ? "<br/>" : "") + escape_str(row.first_editor)
                         }
                     },
                     {
@@ -195,7 +181,7 @@ export default {
                 },
                 preDrawCallback: function (settings) {
                     var table_id = settings.nTable.id
-                    $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
+                    $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_title_publication_types')
                 }
             }, eholdings_titles_table_settings, 1)
         },
