@@ -338,6 +338,7 @@ if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
 die "--frombranch takes item-homebranch or item-issuebranch only"
     unless ( $frombranch eq 'item-issuebranch'
         || $frombranch eq 'item-homebranch' );
+$frombranch = C4::Context->preference('OverdueNoticeFrom') ne 'cron' ? C4::Context->preference('OverdueNoticeFrom') : $frombranch;
 my $owning_library = ( $frombranch eq 'item-homebranch' ) ? 1 : 0;
 
 my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();    # Branches with overdue rules

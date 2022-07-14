@@ -521,6 +521,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OverDrivePasswordRequired','0',NULL,'Does the library require passwords for OverDrive SIP authentication','YesNo'),
 ('OverDriveUsername','cardnumber','cardnumber|userid','Which patron information should be passed as OverDrive username','Choice'),
 ('OverdueNoticeCalendar',0,NULL,'Take the calendar into consideration when generating overdue notices','YesNo'),
+('OverdueNoticeFrom', 'cron', 'cron|item-issuebranch|item-homebranch', 'Use the choice as the from address when generating overdue notices', 'Choice'),
 ('OverduesBlockCirc','noblock','noblock|confirmation|block','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','Choice'),
 ('OverduesBlockRenewing','allow','allow|blockitem|block','If any of patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','Choice'),
 ('PassItemMarcToXSLT','0',NULL,'If enabled, item fields in the MARC record will be made avaiable to XSLT sheets. Otherwise they will be removed.','YesNo'),

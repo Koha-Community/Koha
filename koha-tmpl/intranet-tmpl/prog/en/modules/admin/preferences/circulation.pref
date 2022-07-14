@@ -408,6 +408,14 @@ Circulation:
                   0: "Ignore calendar"
             - "when working out the period for overdue notices."
         -
+            - "Use the"
+            - pref: OverdueNoticeFrom
+              choices:
+                  cron: "system default"
+                  item-issuebranch: "checkout library"
+                  item-homebranch: "item home library"
+            - "as the from address when generating overdue notices."
+        -
             - Include up to
             - pref: PrintNoticesMaxLines
               class: integer
