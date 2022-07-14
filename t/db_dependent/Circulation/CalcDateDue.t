@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 use Test::MockModule;
 use DBI;
 use DateTime;
@@ -302,6 +302,43 @@ is($date, $dayweek_renewal_expected->strftime('%F') . 'T23:59:00', "useDaysMode 
 $calendar->delete_holiday(
     weekday => 6
 );
+
+# Renewal period of 0 is valid
+Koha::CirculationRules->search()->delete();
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            issuelength   => 9999,
+            renewalperiod => 0,
+            lengthunit    => 'days',
+            daysmode      => 'Days',
+        }
+    }
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
+is( $date->ymd, $start_date->ymd, "Dates should match for renewalperiod of 0" );
+
+# Renewal period of "" should trigger fallover to issuelength for renewal
+Koha::CirculationRules->search()->delete();
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            issuelength   => 7,
+            renewalperiod => q{},
+            lengthunit    => 'days',
+            daysmode      => 'Days',
+        }
+    }
+);
+my $renewed_date = $start_date->clone->add( days => 7 );
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
+is( $date->ymd, $renewed_date->ymd, 'Renewal period of "" should trigger fallover to issuelength for renewal' );
 
 $cache->clear_from_cache($key);
 $schema->storage->txn_rollback;
