@@ -4,8 +4,10 @@ use warnings;
 use FindBin qw( $Bin );
 
 use Test::More tests => 13;
+use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::Edifact::Order') }
+t::lib::Mocks::mock_preference('EdifactLSQ', 'location');
 
 # The following tests are for internal methods but they could
 # error spectacularly so best
