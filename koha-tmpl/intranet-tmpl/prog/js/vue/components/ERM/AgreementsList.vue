@@ -2,7 +2,7 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else-if="this.agreements" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
-        <table v-if="this.agreements.length" id="agreement_list"></table>
+        <table v-if="this.agreements.length" :id="table_id"></table>
         <div v-else-if="this.initialized" class="dialog message">
             {{ $t("There are no agreements defined") }}
         </div>
@@ -16,6 +16,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchAgreements } from "../../fetch"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -25,11 +26,15 @@ export default {
         const AVStore = useAVStore()
         const { av_agreement_statuses, av_agreement_closure_reasons, av_agreement_renewal_priorities } = storeToRefs(AVStore)
 
+        const table_id = "agreement_list"
+        useDataTable(table_id)
+
         return {
             vendors,
             av_agreement_statuses,
             av_agreement_closure_reasons,
             av_agreement_renewal_priorities,
+            table_id,
         }
     },
     data: function () {
@@ -75,6 +80,7 @@ export default {
             let select_agreement = this.select_agreement
             let default_search = this.$route.query.q
             let actions = this.before_route_entered ? 'edit_delete' : 'select'
+            let table_id = this.table_id
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -114,92 +120,92 @@ export default {
             }, {})
             window['av_agreement_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
-            const table = $('#agreement_list').kohaTable({
-                "ajax": {
-                    "url": "/api/v1/erm/agreements",
+            const table = $("#" + table_id).kohaTable({
+                ajax: {
+                    url: "/api/v1/erm/agreements",
                 },
-                "order": [[0, "asc"]],
+                order: [[0, "asc"]],
                 autoWidth: false,
-                "search": { search: default_search },
-                "columnDefs": [{
-                    "targets": [0, 2],
-                    "render": function (data, type, row, meta) {
+                search: { search: default_search },
+                columnDefs: [{
+                    targets: [0, 2],
+                    render: function (data, type, row, meta) {
                         if (type == 'display') {
                             return escape_str(data)
                         }
                         return data
                     }
                 }],
-                "columns": [
+                columns: [
                     {
-                        "title": __("Name"),
-                        "data": "me.agreement_id:me.name",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Name"),
+                        data: "me.agreement_id:me.name",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             // Rendering done in drawCallback
                             return ""
                         }
                     },
                     {
-                        "title": __("Vendor"),
-                        "data": "vendor_id",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Vendor"),
+                        data: "vendor_id",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
                         }
                     },
                     {
-                        "title": __("Description"),
-                        "data": "description",
-                        "searchable": true,
-                        "orderable": true
+                        title: __("Description"),
+                        data: "description",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "title": __("Status"),
-                        "data": "status",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Status"),
+                        data: "status",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return escape_str(av_agreement_statuses_map[row.status].lib)
                         }
                     },
                     {
-                        "title": __("Closure reason"),
-                        "data": "closure_reason",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Closure reason"),
+                        data: "closure_reason",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return row.closure_reason != undefined && row.closure_reason != "" ? escape_str(av_agreement_closure_reasons_map[row.closure_reason].lib) : ""
                         }
                     },
                     {
-                        "title": __("Is perpetual"),
-                        "data": "is_perpetual",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Is perpetual"),
+                        data: "is_perpetual",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return escape_str(row.is_perpetual ? _("Yes") : _("No"))
                         }
                     },
                     {
-                        "title": __("Renewal priority"),
-                        "data": "renewal_priority",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Renewal priority"),
+                        data: "renewal_priority",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return row.renewal_priority != undefined && row.renewal_priority != "" ? escape_str(av_agreement_renewal_priorities_map[row.renewal_priority].lib) : ""
                         }
                     },
                     {
-                        "title": __("Actions"),
-                        "data": function (row, type, val, meta) {
+                        title: __("Actions"),
+                        data: function (row, type, val, meta) {
                             return '<div class="actions"></div>'
                         },
-                        "className": "actions noExport",
-                        "searchable": false,
-                        "orderable": false
+                        className: "actions noExport",
+                        searchable: false,
+                        orderable: false
                     }
                 ],
                 drawCallback: function (settings) {
@@ -256,7 +262,6 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
                     $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
                     $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_agreement_statuses')
                     $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_agreement_closure_reasons')
@@ -271,13 +276,6 @@ export default {
         if (!this.building_table) {
             this.building_table = true
             this.getAgreements().then(() => this.build_datatable())
-        }
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#agreement_list')) {
-            $('#agreement_list')
-                .DataTable()
-                .destroy(true)
         }
     },
     components: { Toolbar },

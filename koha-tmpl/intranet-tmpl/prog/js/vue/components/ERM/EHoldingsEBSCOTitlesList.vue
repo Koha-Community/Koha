@@ -59,7 +59,7 @@
                 >
             </div>
             <div id="title_list_result">
-                <table id="title_list"></table>
+                <table :id="table_id"></table>
             </div>
         </div>
     </div>
@@ -71,6 +71,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchCountLocalTitles } from "./../../fetch"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -81,11 +82,15 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "title_list"
+        useDataTable(table_id)
+
         return {
             vendors,
             av_title_publication_types,
             get_lib_from_av,
             erm_providers,
+            table_id,
         }
     },
     data: function () {
@@ -131,7 +136,7 @@ export default {
                 this.$router.push(new_route)
                 this.show_table = true
                 this.local_count_titles = null
-                $("#title_list").DataTable().draw()
+                $('#' + this.table_id).DataTable().draw()
                 if (this.erm_providers.includes('local')) {
                     this.local_count_titles = await fetchCountLocalTitles(this.filters)
                 }
@@ -146,7 +151,7 @@ export default {
                 this.show_table = this.build_url_params().length ? true : false
             }
             let filters = this.filters
-            let show_table = this.show_table
+            let table_id = this.table_id
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -174,7 +179,7 @@ export default {
                     return filters.selection_type || ""
                 },
             }
-            $('#title_list').kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/ebsco/titles",
                 },
@@ -257,13 +262,6 @@ export default {
                 this.filter_table()
             }
         },
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#title_list')) {
-            $('#title_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     name: "EHoldingsEBSCOTitlesList",
 }

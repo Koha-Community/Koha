@@ -1,6 +1,6 @@
 <template>
     <div id="title_list_result">
-        <table id="title_list"></table>
+        <table :id="table_id"></table>
     </div>
 </template>
 
@@ -8,7 +8,7 @@
 
 import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
-import { storeToRefs } from "pinia"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -16,9 +16,13 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "title_list"
+        useDataTable(table_id)
+
         return {
             av_title_publication_types,
             get_lib_from_av,
+            table_id,
         }
     },
     data() {
@@ -33,6 +37,7 @@ export default {
             let show_resource = this.show_resource
             let package_id = this.package_id
             let get_lib_from_av = this.get_lib_from_av
+            let table_id = this.table_id
 
             window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
                 e['_id'] = e['authorised_value']
@@ -40,7 +45,7 @@ export default {
                 return e
             })
 
-            $('#title_list').kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/local/packages/" + package_id + "/resources",
                 },
@@ -88,7 +93,6 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
                     $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'av_title_publication_types')
                 }
             }, null, 1)
@@ -96,13 +100,6 @@ export default {
     },
     mounted() {
         this.build_datatable()
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#title_list')) {
-            $('#title_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     props: {
         package_id: String,

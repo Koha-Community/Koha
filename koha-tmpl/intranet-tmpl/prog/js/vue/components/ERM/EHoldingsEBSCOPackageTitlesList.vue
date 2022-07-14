@@ -53,7 +53,7 @@
                 />
             </fieldset>
         </div>
-        <table id="title_list"></table>
+        <table :id="table_id"></table>
     </div>
 </template>
 
@@ -62,6 +62,7 @@
 import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -69,9 +70,13 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "title_list"
+        useDataTable(table_id)
+
         return {
             av_title_publication_types,
             get_lib_from_av,
+            table_id,
         }
     },
     data() {
@@ -89,7 +94,7 @@ export default {
             this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/resources/" + resource_id)
         },
         filter_table: function () {
-            $("#title_list").DataTable().draw()
+            $('#' + this.table_id).DataTable().draw()
         },
         toggle_filters: function (e) {
             this.display_filters = !this.display_filters
@@ -99,6 +104,7 @@ export default {
             let package_id = this.package_id
             let get_lib_from_av = this.get_lib_from_av
             let filters = this.filters
+            let table_id = this.table_id
 
             window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
                 e['_id'] = e['authorised_value']
@@ -118,7 +124,7 @@ export default {
                 },
             }
 
-            $('#title_list').kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/ebsco/packages/" + package_id + "/resources",
                 },
@@ -176,11 +182,6 @@ export default {
     },
     mounted() {
         this.build_datatable()
-    },
-    beforeUnmount() {
-        $('#title_list')
-            .DataTable()
-            .destroy(true)
     },
     props: {
         package_id: String,

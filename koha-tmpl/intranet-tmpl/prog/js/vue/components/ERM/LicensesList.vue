@@ -2,7 +2,7 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else-if="this.licenses" id="licenses_list">
         <Toolbar />
-        <table v-if="licenses.length" id="license_list"></table>
+        <table v-if="licenses.length" :id="table_id"></table>
         <div v-else-if="this.initialized" class="dialog message">
             {{ $t("There are no licenses defined") }}
         </div>
@@ -15,6 +15,7 @@ import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchLicenses } from "../../fetch"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -24,9 +25,13 @@ export default {
             av_license_statuses,
         } = storeToRefs(AVStore)
 
+        const table_id = "license_list"
+        useDataTable(table_id)
+
         return {
             av_license_types,
             av_license_statuses,
+            table_id,
         }
     },
     data: function () {
@@ -61,6 +66,7 @@ export default {
             let edit_license = this.edit_license
             let delete_license = this.delete_license
             let default_search = this.$route.query.q
+            let table_id = this.table_id
 
             window['av_license_types'] = this.av_license_types.map(e => {
                 e['_id'] = e['authorised_value']
@@ -81,82 +87,82 @@ export default {
                 return map
             }, {})
 
-            $('#license_list').kohaTable({
-                "ajax": {
+            $('#' + table_id).kohaTable({
+                ajax: {
                     "url": "/api/v1/erm/licenses",
                 },
-                "order": [[0, "asc"]],
-                "search": { search: default_search },
-                "columnDefs": [{
-                    "targets": [0, 1],
-                    "render": function (data, type, row, meta) {
+                order: [[0, "asc"]],
+                search: { search: default_search },
+                columnDefs: [{
+                    targets: [0, 1],
+                    render: function (data, type, row, meta) {
                         if (type == 'display') {
                             return escape_str(data)
                         }
                         return data
                     }
                 }],
-                "columns": [
+                columns: [
                     {
-                        "title": __("Name"),
-                        "data": "me.license_id:me.name",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Name"),
+                        data: "me.license_id:me.name",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             // Rendering done in drawCallback
                             return ""
                         }
                     },
                     {
-                        "title": __("Description"),
-                        "data": "description",
-                        "searchable": true,
-                        "orderable": true
+                        title: __("Description"),
+                        data: "description",
+                        searchable: true,
+                        orderable: true
                     },
                     {
-                        "title": __("Type"),
-                        "data": "type",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Type"),
+                        data: "type",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return escape_str(av_license_types_map[row.type].lib)
                         }
                     },
                     {
-                        "title": __("Status"),
-                        "data": "status",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Status"),
+                        data: "status",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return escape_str(av_license_statuses_map[row.status].lib)
                         }
                     },
                     {
-                        "title": __("Started on"),
-                        "data": "started_on",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Started on"),
+                        data: "started_on",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return $date(row.started_on)
                         }
                     },
                     {
-                        "title": __("Ended on"),
-                        "data": "ended_on",
-                        "searchable": true,
-                        "orderable": true,
-                        "render": function (data, type, row, meta) {
+                        title: __("Ended on"),
+                        data: "ended_on",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
                             return $date(row.ended_on)
                         }
                     },
                     {
-                        "title": __("Actions"),
-                        "data": function (row, type, val, meta) {
+                        title: __("Actions"),
+                        data: function (row, type, val, meta) {
                             return '<div class="actions"></div>'
                         },
-                        "className": "actions noExport",
-                        "searchable": false,
-                        "orderable": false
+                        className: "actions noExport",
+                        searchable: false,
+                        orderable: false
                     }
                 ],
                 drawCallback: function (settings) {
@@ -198,20 +204,12 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
                     $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_license_types')
                     $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_license_statuses')
                 }
 
             }, license_table_settings, 1)
         },
-    },
-    beforeUnmount() {
-        if (!$.fn.DataTable.isDataTable('#license_list')) {
-            $('#license_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     props: {
         av_license_types: Array,

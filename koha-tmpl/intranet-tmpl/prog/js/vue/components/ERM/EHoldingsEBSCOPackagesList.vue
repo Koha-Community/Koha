@@ -53,7 +53,7 @@
                 >
             </div>
             <div id="package_list_result">
-                <table id="package_list"></table>
+                <table :id="table_id"></table>
             </div>
         </div>
     </div>
@@ -65,6 +65,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchCountLocalPackages } from './../../fetch'
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -75,12 +76,16 @@ export default {
         const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "package_list"
+        useDataTable(table_id)
+
         return {
             vendors,
             av_package_types,
             av_package_content_types,
             get_lib_from_av,
             erm_providers,
+            table_id,
         }
     },
     data: function () {
@@ -123,7 +128,7 @@ export default {
             this.$router.push(new_route)
             this.show_table = true
             this.local_count_packages = null
-            $("#package_list").DataTable().draw()
+            $('#'+this.table_id).DataTable().draw()
             if (this.erm_providers.includes('local')) {
                 this.local_count_packages = await fetchCountLocalPackages(this.filters)
             }
@@ -136,6 +141,7 @@ export default {
             }
             let filters = this.filters
             let show_table = this.show_table
+            let table_id = this.table_id
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -165,7 +171,7 @@ export default {
                 },
             }
 
-            $('#package_list').kohaTable({
+            $('#'+table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/ebsco/packages",
                 },
@@ -241,13 +247,6 @@ export default {
                 this.filter_table()
             }
         },
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#package_list')) {
-            $('#package_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     name: "EHoldingsEBSCOPackagesList",
 }

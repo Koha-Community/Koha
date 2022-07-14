@@ -36,17 +36,22 @@
                 />
             </fieldset>
         </div>
-        <table id="package_list"></table>
+        <table :id="table_id"></table>
     </div>
 </template>
 
 <script>
 
 import { createVNode, render } from 'vue'
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
+        const table_id = "package_list"
+        useDataTable(table_id)
+
         return {
+            table_id,
         }
     },
     data() {
@@ -66,15 +71,16 @@ export default {
             this.display_filters = !this.display_filters
         },
         filter_table: function () {
-            $("#package_list").DataTable().draw()
+            $('#' + this.table_id).DataTable().draw()
         },
         build_datatable: function () {
             let show_resource = this.show_resource
             let resources = this.resources
             let filters = this.filters
+            let table_id = this.table_id
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter((search) => search.name != 'apply_filter')
-            $('#package_list').dataTable($.extend(true, {}, dataTablesDefaults, {
+            $('#' + table_id).dataTable($.extend(true, {}, dataTablesDefaults, {
                 data: resources,
                 embed: ['package.name'],
                 ordering: false,
@@ -134,13 +140,6 @@ export default {
     },
     mounted() {
         this.build_datatable()
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#package_list')) {
-            $('#package_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     props: {
         resources: Array,

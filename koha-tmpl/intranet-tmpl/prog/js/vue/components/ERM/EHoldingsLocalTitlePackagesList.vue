@@ -1,16 +1,21 @@
 <template>
     <div id="package_list_result">
-        <table id="package_list"></table>
+        <table :id="table_id"></table>
     </div>
 </template>
 
 <script>
 
 import { createVNode, render } from 'vue'
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
+        const table_id = "package_list"
+        useDataTable(table_id)
+
         return {
+            table_id,
         }
     },
     data() {
@@ -24,8 +29,9 @@ export default {
         build_datatable: function () {
             let show_resource = this.show_resource
             let resources = this.resources
+            let table_id = this.table_id
 
-            $('#package_list').dataTable($.extend(true, {}, dataTablesDefaults, {
+            $('#' + table_id).dataTable($.extend(true, {}, dataTablesDefaults, {
                 data: resources,
                 embed: ['package.name'],
                 order: [[0, "asc"]],
@@ -68,13 +74,6 @@ export default {
     },
     mounted() {
         this.build_datatable()
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#package_list')) {
-            $('#package_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     props: {
         resources: Array,

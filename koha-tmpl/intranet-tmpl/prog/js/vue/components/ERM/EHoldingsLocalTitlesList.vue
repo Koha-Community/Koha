@@ -4,7 +4,7 @@
         <div v-else-if="this.titles" id="titles_list">
             <Toolbar />
             <div v-if="this.titles.length" id="title_list_result">
-                <table v-if="this.titles.length" id="title_list"></table>
+                <table v-if="this.titles.length" :id="table_id"></table>
             </div>
             <div v-else-if="this.initialized" class="dialog message">
                 {{ $t("There are no titles defined") }}
@@ -19,6 +19,7 @@ import { createVNode, render } from 'vue'
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchLocalTitles } from "../../fetch"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -26,9 +27,13 @@ export default {
         const { av_title_publication_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "title_list"
+        useDataTable(table_id)
+
         return {
             av_title_publication_types,
             get_lib_from_av,
+            table_id,
         }
     },
     data: function () {
@@ -68,6 +73,7 @@ export default {
             let delete_title = this.delete_title
             let get_lib_from_av = this.get_lib_from_av
             let filters = this.filters
+            let table_id = this.table_id
 
             window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
                 e['_id'] = e['authorised_value']
@@ -75,7 +81,7 @@ export default {
                 return e
             })
 
-            $('#title_list').kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/local/titles",
                 },
@@ -180,18 +186,10 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
                     $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_title_publication_types')
                 }
             }, eholdings_titles_table_settings, 1)
         },
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#title_list')) {
-            $('#title_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     components: { Toolbar },
     name: "EHoldingsLocalTitlesList",

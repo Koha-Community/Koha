@@ -1,6 +1,6 @@
 <template>
     <div v-if="!initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="title" id="eholdings_title_show">
+    <div v-else-if=title id="eholdings_title_show">
         <h2>
             {{ $t("Title .id", { id: title.title_id }) }}
         </h2>

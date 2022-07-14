@@ -4,7 +4,7 @@
         <div v-else-if="this.packages" id="packages_list">
             <Toolbar />
             <div v-if="packages.length" id="package_list_result">
-                <table id="package_list"></table>
+                <table :id="table_id"></table>
             </div>
             <div v-else-if="this.initialized" class="dialog message">
                 {{ $t("There are no packages defined") }}
@@ -20,6 +20,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchLocalPackages } from "../../fetch"
+import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -30,11 +31,15 @@ export default {
         const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
         const { get_lib_from_av } = AVStore
 
+        const table_id = "package_list"
+        useDataTable(table_id)
+
         return {
             vendors,
             av_package_types,
             av_package_content_types,
             get_lib_from_av,
+            table_id,
         }
     },
     data: function () {
@@ -73,6 +78,7 @@ export default {
             let delete_package = this.delete_package
             let get_lib_from_av = this.get_lib_from_av
             let filters = this.filters
+            let table_id = this.table_id
 
             window['vendors'] = this.vendors.map(e => {
                 e['_id'] = e['id']
@@ -90,7 +96,7 @@ export default {
                 return e
             })
 
-            $('#package_list').kohaTable({
+            $('#'+table_id ).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/local/packages",
                 },
@@ -202,20 +208,12 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    var table_id = settings.nTable.id
                     $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
                     $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_package_types')
                     $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_package_content_types')
                 }
             }, eholdings_packages_table_settings, 1)
         },
-    },
-    beforeUnmount() {
-        if ($.fn.DataTable.isDataTable('#package_list')) {
-            $('#package_list')
-                .DataTable()
-                .destroy(true)
-        }
     },
     components: { Toolbar },
     name: "EHoldingsLocalPackagesList",
