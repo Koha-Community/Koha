@@ -215,7 +215,7 @@ import AgreementRelationships from './AgreementRelationships.vue'
 import AgreementDocuments from './AgreementDocuments.vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { setMessage, setError } from "../../messages"
+import { setMessage, setError, setWarning } from "../../messages"
 import { fetchAgreement } from '../../fetch'
 import { storeToRefs } from "pinia"
 
@@ -281,11 +281,34 @@ export default {
             this.agreement = agreement
             this.initialized = true
         },
+        checkForm(agreement) {
+            let errors = []
+
+            let agreement_licenses = agreement.agreement_licenses
+            // Do not use al.license.name here! Its name is not the one linked with al.license_id
+            // At this point al.license is meaningless, form/template only modified al.license_id
+            const license_ids = agreement_licenses.map(al => al.license_id)
+            const duplicate_license_ids = license_ids.filter((id, i) => license_ids.indexOf(id) !== i)
+
+            if (duplicate_license_ids.length) {
+                errors.push(this.$t("A license is used several times"))
+            }
+
+            errors.forEach(function (e) {
+                setWarning(e)
+            })
+            return !errors.length
+        },
         onSubmit(e) {
             e.preventDefault()
 
             //let agreement= Object.assign( {} ,this.agreement); // copy
             let agreement = JSON.parse(JSON.stringify(this.agreement)) // copy
+
+            if (!this.checkForm(agreement)) {
+                return false
+            }
+
             let apiUrl = '/api/v1/erm/agreements'
 
             let method = 'POST'
