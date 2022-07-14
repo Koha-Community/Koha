@@ -296,6 +296,10 @@ export default {
             delete agreement.agreement_id
             agreement.is_perpetual = agreement.is_perpetual ? true : false
 
+            if (agreement.vendor_id == "") {
+                agreement.vendor_id = null
+            }
+
             agreement.periods.forEach(p => {
                 p.started_on = $date_to_rfc3339(p.started_on)
                 p.ended_on = p.ended_on ? $date_to_rfc3339(p.ended_on) : null
