@@ -29,10 +29,15 @@
                     <li>
                         <label>{{ $t("Vendor") }}:</label>
                         <span v-if="agreement.vendor_id">
-                            {{
-                                vendors.find((e) => e.id == agreement.vendor_id)
-                                    .name
-                            }}
+                            <a
+                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${agreement.vendor_id}`"
+                            >
+                                {{
+                                    vendors.find(
+                                        (e) => e.id == agreement.vendor_id
+                                    ).name
+                                }}</a
+                            >
                         </span>
                     </li>
                     <li>
