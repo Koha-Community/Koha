@@ -74,7 +74,7 @@ export default {
 
         const AVStore = useAVStore()
         const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
-        const { get_lib_from_av } = AVStore
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "package_list"
         useDataTable(table_id)
@@ -84,6 +84,7 @@ export default {
             av_package_types,
             av_package_content_types,
             get_lib_from_av,
+            map_av_dt_filter,
             erm_providers,
             table_id,
         }
@@ -136,6 +137,8 @@ export default {
         build_datatable: function () {
             let show_package = this.show_package
             let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
+
             if (!this.show_table) {
                 this.show_table = this.build_url_params().length ? true : false
             }
@@ -148,15 +151,9 @@ export default {
                 e['_str'] = e['name']
                 return e
             })
-            window['av_package_types'] = this.av_package_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
-            window['av_package_content_types'] = this.av_package_content_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
+            let avs = ['av_package_types', 'av_package_content_types']
+            avs.forEach(function (av_cat) {
+                window[av_cat] = map_av_dt_filter(av_cat)
             })
 
             let additional_filters = {

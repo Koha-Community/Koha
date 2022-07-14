@@ -20,17 +20,14 @@ import { useDataTable } from "../../composables/datatables"
 export default {
     setup() {
         const AVStore = useAVStore()
-        const {
-            av_license_types,
-            av_license_statuses,
-        } = storeToRefs(AVStore)
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "license_list"
         useDataTable(table_id)
 
         return {
-            av_license_types,
-            av_license_statuses,
+            get_lib_from_av,
+            map_av_dt_filter,
             table_id,
         }
     },
@@ -65,27 +62,15 @@ export default {
             let show_license = this.show_license
             let edit_license = this.edit_license
             let delete_license = this.delete_license
+            let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
             let default_search = this.$route.query.q
             let table_id = this.table_id
 
-            window['av_license_types'] = this.av_license_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
+            let avs = ['av_license_types', 'av_license_statuses']
+            avs.forEach(function (av_cat) {
+                window[av_cat] = map_av_dt_filter(av_cat)
             })
-            let av_license_types_map = this.av_license_types.reduce((map, e) => {
-                map[e.authorised_value] = e
-                return map
-            }, {})
-            window['av_license_statuses'] = this.av_license_statuses.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
-            let av_license_statuses_map = this.av_license_statuses.reduce((map, e) => {
-                map[e.authorised_value] = e
-                return map
-            }, {})
 
             $('#' + table_id).kohaTable({
                 ajax: {
@@ -125,7 +110,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return escape_str(av_license_types_map[row.type].lib)
+                            return escape_str(get_lib_from_av("av_license_types", row.type))
                         }
                     },
                     {
@@ -134,7 +119,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return escape_str(av_license_statuses_map[row.status].lib)
+                            return escape_str(get_lib_from_av("av_license_statuses", row.status))
                         }
                     },
                     {

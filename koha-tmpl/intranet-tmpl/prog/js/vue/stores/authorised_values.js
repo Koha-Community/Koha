@@ -50,5 +50,12 @@ export const useAVStore = defineStore("authorised_values", {
             let o = this[arr_name].find((e) => e.authorised_value == av);
             return o ? o.lib : av;
         },
+        map_av_dt_filter(arr_name) {
+            return this[arr_name].map((e) => {
+                e["_id"] = e["authorised_value"];
+                e["_str"] = e["lib"];
+                return e;
+            });
+        },
     },
 });

@@ -28,17 +28,15 @@ export default {
         const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
-        const { av_package_types, av_package_content_types } = storeToRefs(AVStore)
-        const { get_lib_from_av } = AVStore
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "package_list"
         useDataTable(table_id)
 
         return {
             vendors,
-            av_package_types,
-            av_package_content_types,
             get_lib_from_av,
+            map_av_dt_filter,
             table_id,
         }
     },
@@ -77,6 +75,7 @@ export default {
             let edit_package = this.edit_package
             let delete_package = this.delete_package
             let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
             let filters = this.filters
             let table_id = this.table_id
 
@@ -85,18 +84,12 @@ export default {
                 e['_str'] = e['name']
                 return e
             })
-            window['av_package_types'] = this.av_package_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
-            window['av_package_content_types'] = this.av_package_content_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
+            let avs = ['av_package_types', 'av_package_content_types']
+            avs.forEach(function (av_cat) {
+                window[av_cat] = map_av_dt_filter(av_cat)
             })
 
-            $('#'+table_id ).kohaTable({
+            $('#' + table_id).kohaTable({
                 ajax: {
                     url: "/api/v1/erm/eholdings/local/packages",
                 },

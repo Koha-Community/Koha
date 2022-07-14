@@ -25,7 +25,7 @@ export default {
     setup() {
         const AVStore = useAVStore()
         const { av_title_publication_types } = storeToRefs(AVStore)
-        const { get_lib_from_av } = AVStore
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "title_list"
         useDataTable(table_id)
@@ -33,6 +33,7 @@ export default {
         return {
             av_title_publication_types,
             get_lib_from_av,
+            map_av_dt_filter,
             table_id,
         }
     },
@@ -72,14 +73,11 @@ export default {
             let edit_title = this.edit_title
             let delete_title = this.delete_title
             let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
             let filters = this.filters
             let table_id = this.table_id
 
-            window['av_title_publication_types'] = this.av_title_publication_types.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
+            window['av_title_publication_types'] = map_av_dt_filter('av_title_publication_types')
 
             $('#' + table_id).kohaTable({
                 ajax: {

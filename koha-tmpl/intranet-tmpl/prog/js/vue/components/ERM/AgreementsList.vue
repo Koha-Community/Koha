@@ -24,16 +24,15 @@ export default {
         const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
-        const { av_agreement_statuses, av_agreement_closure_reasons, av_agreement_renewal_priorities } = storeToRefs(AVStore)
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
 
         const table_id = "agreement_list"
         useDataTable(table_id)
 
         return {
             vendors,
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
+            get_lib_from_av,
+            map_av_dt_filter,
             table_id,
         }
     },
@@ -78,6 +77,8 @@ export default {
             let edit_agreement = this.edit_agreement
             let delete_agreement = this.delete_agreement
             let select_agreement = this.select_agreement
+            let get_lib_from_av = this.get_lib_from_av
+            let map_av_dt_filter = this.map_av_dt_filter
             let default_search = this.$route.query.q
             let actions = this.before_route_entered ? 'edit_delete' : 'select'
             let table_id = this.table_id
@@ -91,33 +92,11 @@ export default {
                 map[e.id] = e
                 return map
             }, {})
-            window['av_agreement_statuses'] = this.av_agreement_statuses.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
+            let avs = ['av_agreement_statuses', 'av_agreement_closure_reasons', 'av_agreement_renewal_priorities']
+            avs.forEach(function (av_cat) {
+                window[av_cat] = map_av_dt_filter(av_cat)
             })
-            let av_agreement_statuses_map = this.av_agreement_statuses.reduce((map, e) => {
-                map[e.authorised_value] = e
-                return map
-            }, {})
-            window['av_agreement_closure_reasons'] = this.av_agreement_closure_reasons.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
-            let av_agreement_closure_reasons_map = this.av_agreement_closure_reasons.reduce((map, e) => {
-                map[e.authorised_value] = e
-                return map
-            }, {})
-            window['av_agreement_renewal_priorities'] = this.av_agreement_renewal_priorities.map(e => {
-                e['_id'] = e['authorised_value']
-                e['_str'] = e['lib']
-                return e
-            })
-            let av_agreement_renewal_priorities_map = this.av_agreement_renewal_priorities.reduce((map, e) => {
-                map[e.authorised_value] = e
-                return map
-            }, {})
+
             window['av_agreement_is_perpetual'] = [{ _id: 0, _str: _('No') }, { _id: 1, _str: _("Yes") }]
 
             const table = $("#" + table_id).kohaTable({
@@ -168,7 +147,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return escape_str(av_agreement_statuses_map[row.status].lib)
+                            return escape_str(get_lib_from_av("av_agreement_statuses", row.status))
                         }
                     },
                     {
@@ -177,7 +156,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return row.closure_reason != undefined && row.closure_reason != "" ? escape_str(av_agreement_closure_reasons_map[row.closure_reason].lib) : ""
+                            return escape_str(get_lib_from_av("av_agreement_closure_reasons", row.closure_reason))
                         }
                     },
                     {
@@ -195,7 +174,7 @@ export default {
                         searchable: true,
                         orderable: true,
                         render: function (data, type, row, meta) {
-                            return row.renewal_priority != undefined && row.renewal_priority != "" ? escape_str(av_agreement_renewal_priorities_map[row.renewal_priority].lib) : ""
+                            return escape_str(get_lib_from_av("av_agreement_renewal_priorities", row.renewal_priority))
                         }
                     },
                     {
