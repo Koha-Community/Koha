@@ -134,6 +134,16 @@ already set their preferences.
 
 Will only update patrons in the category specified.
 
+=item B<--since>
+
+Will only update borrowers enrolled since the specified date.
+
+Examples:
+
+--since "2022-07-13"
+
+--since `date -d "1 day ago" '+%Y-%m-%d'
+
 =back
 
 =cut
