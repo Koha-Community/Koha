@@ -110,12 +110,12 @@ my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
         delay        => $delay,
         (
             $estimateddeliverydatefrom
-            ? ( estimated_from => $estimateddeliverydatefrom )
+            ? ( estimated_from => dt_from_string($estimateddeliverydatefrom, 'iso') )
             : ()
         ),
         (
             $estimateddeliverydateto
-            ? ( estimated_to => $estimateddeliverydateto )
+            ? ( estimated_to => dt_from_string($estimateddeliverydateto, 'iso') )
             : ()
         )
     },
