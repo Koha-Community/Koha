@@ -1,10 +1,15 @@
 import { useMainStore } from "./stores/main";
-import { storeToRefs } from "pinia";
 
 export const setError = function (new_error) {
     const mainStore = useMainStore();
     const { setError } = mainStore;
     setError("Something went wrong: " + new_error);
+};
+
+export const setWarning = function (new_warning) {
+    const mainStore = useMainStore();
+    const { setWarning } = mainStore;
+    setWarning(new_warning);
 };
 
 export const setMessage = function (message) {
