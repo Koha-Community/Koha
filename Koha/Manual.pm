@@ -122,6 +122,7 @@ our $mapping = {
     'catalogue/moredetail'                     => '/cataloging.html#item-records',
     'catalogue/search-history'                 => '/plugins.html#search-history',
     'catalogue/search'                         => '/searching.html',
+    'cataloguing/cataloging-home'              => '/cataloging.html',
     'cataloguing/addbiblio'                    => '/cataloging.html#bibliographic-records',
     'cataloguing/addbooks'                     => '/cataloging.html',
     'cataloguing/additem'                      => '/cataloging.html#item-records',

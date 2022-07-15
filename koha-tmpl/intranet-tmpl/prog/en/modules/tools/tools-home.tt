@@ -26,258 +26,180 @@
 </nav>
 [% END %]
 
-<div class="container-fluid">
-    <h1>Tools</h1>
+<div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-4">
-            [% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons  || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons  || CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || CAN_user_tools_moderate_tags || ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) ) %]
-                <h3>Patrons and circulation</h3>
-            [% END %]
-            <dl>
-                [% IF (CAN_user_tools_manage_patron_lists) %]
-                    <dt><a href="/cgi-bin/koha/patron_lists/lists.pl">Patron lists</a></dt>
-                    <dd>Manage lists of patrons</dd>
-                [% END %]
-
-                [% IF (CAN_user_clubs) %]
-                    <dt><a href="/cgi-bin/koha/clubs/clubs.pl">Patron clubs</a></dt>
-                    <dd>Manage patron clubs</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_moderate_comments ) %]
-                    <dt>
-                        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a>
-                        [% IF ( pendingcomments ) %]
-                            <span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments | html %]</a></span>
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <h1>Tools</h1>
+            <div class="row">
+                <div class="col-sm-6">
+                    [% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons  || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons  || CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || CAN_user_tools_moderate_tags || CAN_user_tools_rotating_collections || ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) ) %]
+                        <h3>Patrons and circulation</h3>
+                    [% END %]
+                    <dl>
+                        [% IF (CAN_user_tools_manage_patron_lists) %]
+                            <dt><a href="/cgi-bin/koha/patron_lists/lists.pl">Patron lists</a></dt>
+                            <dd>Manage lists of patrons</dd>
                         [% END %]
-                    </dt>
-                    <dd>Moderate patron comments</dd>
-                [% END %]
 
-                [% IF ( CAN_user_tools_import_patrons ) %]
-                    <dt><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></dt>
-                    <dd>Import patron data</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_edit_notices ) %]
-                    <dt><a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a></dt>
-                    <dd>Define notices (print and email notification messages for overdues, etc.)</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_edit_notice_status_triggers ) %]
-                    <dt><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue notice/status triggers</a></dt>
-                    <dd>Set notice/status triggers for overdue items</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_label_creator ) %]
-                    <dt><a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a></dt>
-                    <dd>Create printable patron cards</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_delete_anonymize_patrons ) %]
-                    <dt><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Batch patron deletion and anonymization</a></dt>
-                    <dd>Batch delete patrons and delete patron circulation history</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_edit_patrons ) %]
-                    <dt><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></dt>
-                    <dd>Modify patrons in batch</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
-                    <dt><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></dt>
-                    <dd>Modify the due date checkouts in batch</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_moderate_tags ) %]
-                    <dt>
-                        <a href="/cgi-bin/koha/tags/review.pl">Tags</a>
-                        [% IF ( pendingtags ) %]
-                            <span class="number_box"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags | html %]</a></span>
+                        [% IF (CAN_user_clubs) %]
+                            <dt><a href="/cgi-bin/koha/clubs/clubs.pl">Patron clubs</a></dt>
+                            <dd>Manage patron clubs</dd>
                         [% END %]
-                    </dt>
-                    <dd>Moderate patron tags</dd>
-                [% END %]
 
-                [% IF ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) %]
-                    <dt><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></dt>
-                    <dd>Upload patron images in a batch or one at a time</dd>
-                [% END %]
-            </dl>
-        </div> <!-- /.col-sm-4 -->
+                        [% IF ( CAN_user_tools_moderate_comments ) %]
+                            <dt>
+                                <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a>
+                                [% IF ( pendingcomments ) %]
+                                    <span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments | html %]</a></span>
+                                [% END %]
+                            </dt>
+                            <dd>Moderate patron comments</dd>
+                        [% END %]
 
-        <div class="col-sm-4 col-sm-push-4">
-            [% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( plugins_enabled && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
-                <h3>Additional tools</h3>
-            [% END %]
-            <dl>
-                [% IF ( CAN_user_tools_edit_calendar ) %]
-                    <dt><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></dt>
-                    <dd>Define days when the library is closed</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_import_patrons ) %]
+                            <dt><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></dt>
+                            <dd>Import patron data</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_manage_csv_profiles ) %]
-                    <dt><a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV profiles</a></dt>
-                    <dd>Manage CSV export profiles</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_edit_notices ) %]
+                            <dt><a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a></dt>
+                            <dd>Define notices (print and email notification messages for overdues, etc.)</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_view_system_logs ) %]
-                    <dt><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></dt>
-                    <dd>Browse the system logs</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_edit_notice_status_triggers ) %]
+                            <dt><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue notice/status triggers</a></dt>
+                            <dd>Set notice/status triggers for overdue items</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_edit_additional_contents ) %]
-                    <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a></dt>
-                    <dd>Write news for the OPAC and staff interfaces</dd>
+                        [% IF ( CAN_user_tools_label_creator ) %]
+                            <dt><a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a></dt>
+                            <dd>Create printable patron cards</dd>
+                        [% END %]
 
-                    <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a></dt>
-                    <dd>Write HTML customizations</dd>
+                        [% IF ( CAN_user_tools_delete_anonymize_patrons ) %]
+                            <dt><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Batch patron deletion and anonymization</a></dt>
+                            <dd>Batch delete patrons and delete patron circulation history</dd>
+                        [% END %]
 
-                    <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a></dt>
-                    <dd>Write custom pages</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_edit_patrons ) %]
+                            <dt><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></dt>
+                            <dd>Modify patrons in batch</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_schedule_tasks ) %]
-                    <dt><a href="/cgi-bin/koha/tools/scheduler.pl">Task scheduler</a></dt>
-                    <dd>Schedule tasks to run</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
+                            <dt><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></dt>
+                            <dd>Modify the due date checkouts in batch</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_edit_quotes ) %]
-                    <dt><a href="/cgi-bin/koha/tools/quotes.pl">Quote editor</a></dt>
-                    <dd>Manage 'Quote of the day' quotes</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_moderate_tags ) %]
+                            <dt>
+                                <a href="/cgi-bin/koha/tags/review.pl">Tags</a>
+                                [% IF ( pendingtags ) %]
+                                    <span class="number_box"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags | html %]</a></span>
+                                [% END %]
+                            </dt>
+                            <dd>Moderate patron tags</dd>
+                        [% END %]
 
-                [% IF ( plugins_enabled && CAN_user_plugins_tool && tool_plugins ) %]
-                    <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></dt>
-                    <dd>
-                        Use tool plugins
-                        <ul>
-                            [% FOREACH plugin IN tool_plugins %]
-                                <li class="plugin_link">
-                                    <a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool">
-                                        <span class="plugin_name">[% plugin.metadata.name | html %]</span>
-                                    </a>
-                                </li>
-                            [% END %]
-                        </ul>
-                    </dd>
-                [% END # /IF ( plugins_enabled... %]
+                        [% IF ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) %]
+                            <dt><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></dt>
+                            <dd>Upload patron images in a batch or one at a time</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_upload_general_files ) %]
-                    <dt><a href="/cgi-bin/koha/tools/upload.pl">Uploads</a></dt>
-                    <dd>Upload any type of file, manage uploads</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_rotating_collections ) %]
+                            <dt><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></dt>
+                            <dd>Manage rotating collections</dd>
+                        [% END %]
+                    </dl>
+                </div> <!-- /.col-sm-6 -->
 
-                [% IF CAN_user_tools_access_files %]
-                    <dt><a href="/cgi-bin/koha/tools/access_files.pl">Access files</a></dt>
-                    <dd>Access files stored on the server, like log files or reports</dd>
-                [% END %]
+                <div class="col-sm-6">
+                    [% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( plugins_enabled && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
+                        <h3>Additional tools</h3>
+                    [% END %]
+                    <dl>
+                        [% IF ( CAN_user_tools_edit_calendar ) %]
+                            <dt><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></dt>
+                            <dd>Define days when the library is closed</dd>
+                        [% END %]
 
-                [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
-                    <dt><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></dt>
-                    <dd>Manage OPAC problem reports submitted by patrons</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_manage_csv_profiles ) %]
+                            <dt><a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV profiles</a></dt>
+                            <dd>Manage CSV export profiles</dd>
+                        [% END %]
 
-            </dl>
+                        [% IF ( CAN_user_tools_view_system_logs ) %]
+                            <dt><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></dt>
+                            <dd>Browse the system logs</dd>
+                        [% END %]
 
-            [% IF ( Koha.Preference('UseCashRegisters') && ( CAN_user_cash_management_cashup || CAN_user_cash_management_anonymous_refund ) ) %]
-                <h3>Cash management</h3>
-                <dl>
-                    <dt><a href="/cgi-bin/koha/pos/registers.pl">Cash summary for [% Branches.GetLoggedInBranchname | html %]</a></dt>
-                    <dd>View cash takings for the current library</dd>
+                        [% IF ( CAN_user_tools_edit_additional_contents ) %]
+                            <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a></dt>
+                            <dd>Write news for the OPAC and staff interfaces</dd>
 
-                    <dt><a href="/cgi-bin/koha/pos/register.pl">Transaction history for [% Registers.session_register_name | html %]</a></dt>
-                    <dd>View transaction history for the current cash register</dd>
-                </dl>
-            [% END %]
-        </div> <!-- /.col-sm-4... -->
+                            <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a></dt>
+                            <dd>Write HTML customizations</dd>
 
-        <div class="col-sm-4 col-sm-pull-4">
-            [% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel  || CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || CAN_user_tools_inventory  || CAN_user_tools_label_creator || CAN_user_tools_rotating_collections  || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') )  || CAN_user_tools_marc_modification_templates || CAN_user_tools_stage_marc_import  || CAN_user_tools_manage_staged_marc || CAN_user_tools_upload_local_cover_images ) %]
-                <h3>Catalog</h3>
-            [% END %]
-            <dl>
-                [% IF ( CAN_user_tools_items_batchdel ) %]
-                    <dt><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch item deletion</a></dt>
-                    <dd>Delete a batch of items</dd>
-                [% END %]
+                            <dt><a href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a></dt>
+                            <dd>Write custom pages</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_items_batchmod ) %]
-                    <dt><a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a></dt>
-                    <dd>Modify items in a batch</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_schedule_tasks ) %]
+                            <dt><a href="/cgi-bin/koha/tools/scheduler.pl">Task scheduler</a></dt>
+                            <dd>Schedule tasks to run</dd>
+                        [% END %]
 
-                [% IF CAN_user_tools_records_batchdel %]
-                    <dt><a href="/cgi-bin/koha/tools/batch_delete_records.pl">Batch record deletion</a></dt>
-                    <dd>Delete a batch of bibliographic or authority records</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_edit_quotes ) %]
+                            <dt><a href="/cgi-bin/koha/tools/quotes.pl">Quote editor</a></dt>
+                            <dd>Manage 'Quote of the day' quotes</dd>
+                        [% END %]
 
-                [% IF CAN_user_tools_records_batchmod %]
-                    <dt><a href="/cgi-bin/koha/tools/batch_record_modification.pl">Batch record modification</a></dt>
-                    <dd>Modify a batch of bibliographic or authority records</dd>
-                [% END %]
+                        [% IF ( plugins_enabled && CAN_user_plugins_tool && tool_plugins ) %]
+                            <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></dt>
+                            <dd>
+                                Use tool plugins
+                                <ul>
+                                [% FOREACH plugin IN tool_plugins %]
+                                    <li class="plugin_link">
+                                        <a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool">
+                                            <span class="plugin_name">[% plugin.metadata.name | html %]</span>
+                                        </a>
+                                    </li>
+                                [% END %]
+                                </ul>
+                            </dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_items_batchmod ) %]
-                    <dt><a href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">Automatic item modifications by age</a></dt>
-                    <dd>Define rules to modify items by age</dd>
-                [% END %]
+                        [% IF ( CAN_user_tools_upload_general_files ) %]
+                            <dt><a href="/cgi-bin/koha/tools/upload.pl">Uploads</a></dt>
+                            <dd>Upload any type of file, manage uploads</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_export_catalog ) %]
-                    <dt><a href="/cgi-bin/koha/tools/export.pl">Export data</a></dt>
-                    <dd>Export bibliographic, holdings, and authority records</dd>
-                [% END %]
+                        [% IF CAN_user_tools_access_files %]
+                            <dt><a href="/cgi-bin/koha/tools/access_files.pl">Access files</a></dt>
+                            <dd>Access files stored on the server, like log files or reports</dd>
+                        [% END %]
 
-                [% IF ( CAN_user_tools_inventory ) %]
-                    <dt><a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a></dt>
-                    <dd>Perform inventory of your catalog</dd>
-                [% END %]
+                        [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
+                            <dt><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></dt>
+                            <dd>Manage OPAC problem reports submitted by patrons</dd>
+                        [% END %]
+                    </dl>
 
-                [% IF ( CAN_user_tools_label_creator ) %]
-                    <dt><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></dt>
-                    <dd>Create printable labels and barcodes from catalog data</dd>
-                [% END %]
+                    [% IF ( Koha.Preference('UseCashRegisters') && ( CAN_user_cash_management_cashup || CAN_user_cash_management_anonymous_refund ) ) %]
+                    <h3>Cash management</h3>
+                    <dl>
+                        <dt><a href="/cgi-bin/koha/pos/registers.pl">Cash summary for [% Branches.GetLoggedInBranchname | html %]</a></dt>
+                        <dd>View cash takings for the current library</dd>
 
-                [% IF ( CAN_user_tools_label_creator ) %]
-                    <dt><a href="/cgi-bin/koha/labels/barcode-print.pl">Barcode image generator</a></dt>
-                    <dd>Configure and create barcodes of various types to be output as an image</dd>
-                [% END %]
+                        <dt><a href="/cgi-bin/koha/pos/register.pl">Transaction history for [% Registers.session_register_name | html %]</a></dt>
+                        <dd>View transaction history for the current cash register</dd>
+                    </dl>
+                    [% END %]
 
-                [% IF ( CAN_user_tools_label_creator ) %]
-                    <dt><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></dt>
-                    <dd>Enter a barcode to generate a printable spine label. For use with dedicated label printers</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_rotating_collections ) %]
-                    <dt><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></dt>
-                    <dd>Manage rotating collections</dd>
-                [% END %]
-
-                [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
-                    <dt><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></dt>
-                    <dd>Manage Stock rotation rotas, rota stages and rota items</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_marc_modification_templates ) %]
-                    <dt><a href="/cgi-bin/koha/tools/marc_modification_templates.pl">MARC modification templates</a></dt>
-                    <dd>Manage templates for modifying MARC records during import</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_stage_marc_import ) %]
-                    <dt><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a></dt>
-                    <dd>Stage MARC records into the reservoir</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_manage_staged_marc ) %]
-                    <dt><a href="/cgi-bin/koha/tools/manage-marc-import.pl">Staged MARC record management</a></dt>
-                    <dd>Managed staged MARC records, including completing and reversing imports</dd>
-                [% END %]
-
-                [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-                    <dt><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a></dt>
-                    <dd>Utility to upload scanned cover images for display in OPAC</dd>
-                [% END %]
-            </dl>
-        </div> <!-- /.col-sm-4... -->
+                </div> <!-- /.col-sm-6 -->
+            </div> <!-- /.row -->
+        </div> <!-- /.col-md-10 -->
     </div> <!-- /.row -->
 
 [% INCLUDE 'intranet-bottom.inc' %]
