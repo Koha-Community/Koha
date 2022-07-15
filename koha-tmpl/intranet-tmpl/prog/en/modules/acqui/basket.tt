@@ -596,7 +596,14 @@
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <td>[% books_loo.suppliers_report | html %]</td>
                         [% END %]
-                        <td>[% books_loo.estimated_delivery_date | $KohaDates %]</td>
+                        <td class="actions">
+                            [% books_loo.estimated_delivery_date | $KohaDates %]
+                            [% IF CAN_user_acquisition_order_manage %]
+                            <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]">
+                                <i class="fa fa-pencil"></i> Edit
+                            </a>
+                        </td>
+                    [% END %]
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                             <td>
@@ -839,12 +846,37 @@
     </div>
 </div>
 
+<!-- Modal for editing estimated delivery date -->
+<div class="modal" id="dateEditor" tabindex="-1" role="dialog" aria-labelledby="dateEditorLabel">
+    <div class="modal-dialog" role="document">
+        <form id="modify_estimated_delivery_date" action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="dateEditorLabel">Estimated delivery date</h4>
+                </div>
+                <div class="modal-body">
+                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% books_loo.estimated_delivery_date | $KohaDates %]"/>
+                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
+                <input type="hidden" name="op" value="save" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
     <script>
         function updateColumnsVisibility(visible) {
             if ( visible ) {
@@ -936,7 +968,7 @@
                 $("#set_basket_group").show();
             });
 
-            $(".modal").on("shown.bs.modal", function(){
+            $("#addtoBasket").on("shown.bs.modal", function(){
                 var basket = $(this).data("basketno");
                 var legend = _("Add order to basket %s").format(basket);
                 $(this).find("h4").text( legend );
@@ -1018,6 +1050,24 @@
             });
             $("#select_managing_library").on("change", function(){
                 $(this).parent().submit();
+            });
+
+            $(".edit_delivery_date").on("click", function(e) {
+                e.preventDefault();
+                var ordernumber = $(this).data("ordernumber");
+                var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
+                var date_text = $( "#delivery_date_" + ordernumber ).html();
+                $("#dateEditor .modal-title").text(modalTitle);
+                $("#date_ordernumber").val(ordernumber);
+                $("#estimated_delivery_date").html( date_text );
+                $("#dateEditor").modal("show");
+            });
+
+             $("#dateEditor").on('hidden.bs.modal', function (e) {
+                $("#dateEditorLabel").html("");
+                $("#dateEditor .modal-title").text("");
+                $("#estimated_delivery_date").html( "" );
+                $("#date_ordernumber").val("");
             });
         });
 

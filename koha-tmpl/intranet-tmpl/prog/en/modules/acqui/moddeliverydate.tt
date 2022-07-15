@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Change estimated delivery date &rsaquo; Acquisitions &rsaquo; Koha</title>
@@ -35,7 +36,7 @@
       <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
         <fieldset class="brief">
           <label for="estimated_delivery_date">Estimated delivery date:</label>
-          <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr flatpickr-input noEnterSubmit" value="[% estimated_delivery_date | html %]"/>
+          <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | $KohaDates %]"/>
           <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </fieldset>
         <input type="hidden" name="referrer" value="[% referrer | html %]" />
@@ -51,11 +52,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script>
-        $(document).ready(function(){
-            $("#estimated_delivery_date").datepicker();
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

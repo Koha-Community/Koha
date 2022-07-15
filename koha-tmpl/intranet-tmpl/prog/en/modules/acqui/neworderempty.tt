@@ -483,7 +483,7 @@
             </li>
             <li>
                 <label for="estimated_delivery_date">Estimated delivery date: </label>
-                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr flatpickr-input noEnterSubmit" value="[% estimated_delivery_date | html %]"/>
+                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | $KohaDates %]"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
@@ -686,8 +686,6 @@
                 getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
             });
             $("#budget_id").change();
-
-            $("#estimated_delivery_date").datepicker();
         });
 
         function UserSearchPopup(f) {

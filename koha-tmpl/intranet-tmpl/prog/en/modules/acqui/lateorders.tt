@@ -305,7 +305,7 @@
                     <h4 class="modal-title" id="dateEditorLabel">Estimated delivery date</h4>
                 </div>
                 <div class="modal-body">
-                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="datepicker" value="[% estimated_delivery_date | html %]"/>
+                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | $KohaDates %]"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
                 <input type="hidden" name="op" value="save" />
@@ -387,7 +387,7 @@
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
                 var note_type = $(this).data("note_type");
-                var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
+                var modalTitle = _("%s (order number %s)").format($(this).attr("title"), ordernumber);
                 var note_text = $( "#" + note_type + "-note-" + ordernumber ).html();
                 $("#noteEditor .modal-title").text(modalTitle);
                 $("#notes_ordernumber").val( ordernumber );
@@ -404,8 +404,6 @@
                 $("#notes_ordernumber").val("");
                 $("#type").val("");
             });
-
-             $("#estimated_delivery_date").datepicker();
 
             $(".edit_delivery_date").on("click", function(e) {
                 e.preventDefault();

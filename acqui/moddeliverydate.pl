@@ -33,10 +33,10 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Acquisition qw( GetOrder GetBasket );
+use C4::Acquisition qw( GetOrder GetBasket ModOrder );
 
 use Koha::Acquisition::Booksellers;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
