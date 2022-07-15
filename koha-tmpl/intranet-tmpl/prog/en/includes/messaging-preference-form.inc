@@ -1,6 +1,10 @@
 [% USE Koha %]
 <!-- snippet for form to set borrower and patron category messaging preferences -->
 
+<script>
+    var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
+    var PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
+</script>
 <input type="hidden" name="modify" value="yes" />
 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
   <table>
@@ -105,12 +109,12 @@
                  <input type="checkbox"
                  id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="itiva" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="itiva" checked="checked" class="pmp_phone active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
                  <input type="checkbox"
                  id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="itiva" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="itiva" class="pmp_phone active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
           </td>
@@ -137,12 +141,12 @@
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="phone" checked="checked" class="pmp_phone active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="phone" class="pmp_phone active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
           </td>

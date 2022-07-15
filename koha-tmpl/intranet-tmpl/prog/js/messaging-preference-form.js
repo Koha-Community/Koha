@@ -55,7 +55,8 @@ $(document).ready(function(){
     }
 
     function toggle_digest(id){
-        if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+        let phone_checked = TalkingTechItivaPhoneNotification ? false : PhoneNotification ? $("#phone"+id).prop("checked") : false;
+        if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") || phone_checked ) {
             $("#digest"+id).attr("disabled", false).tooltip('disable');
         } else {
             $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
@@ -73,6 +74,9 @@ $(document).ready(function(){
     });
     $(".pmp_sms").click(function(){
         toggle_digest(Number($(this).attr("id").replace("sms", "")));
+    });
+    $(".pmp_phone").click(function(){
+        toggle_digest(Number($(this).attr("id").replace("phone", "")));
     });
 
 //    $('#memberentry_messaging_prefs [data-toggle="tooltip"][disabled]').tooltip();
