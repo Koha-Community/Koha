@@ -505,13 +505,13 @@
 
         [% IF elasticsearch_has_missing %]
             <table>
-                <caption>Records are missing in Elasticsearch search engine</caption>
+                <caption>Records are not indexed in Elasticsearch</caption>
                 [% FOREACH index IN elasticsearch_status.indexes %]
                     [% IF index.missing_count %]
                     <tr>
                         <th scope="row"><strong>Warning</strong></th>
                         <td>
-                            [% index.missing_count | html %] record(s) missing on a total of [% index.index_count | html %] in indice [% index.index_name | html %].
+                            [% index.missing_count | html %] record(s) missing on a total of [% index.index_count | html %] in index [% index.index_name | html %].
                         </td>
                     </tr>
                     [% END %]
