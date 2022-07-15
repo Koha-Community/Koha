@@ -110,13 +110,13 @@
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_phone ) %]
                                                             <input type="checkbox"
-                                                                   class="phone"
+                                                                   class="pmp_phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
                                                                    value="phone" checked="checked" />
                                                         [% ELSE %]
                                                             <input type="checkbox"
-                                                                   class="phone"
+                                                                   class="pmp_phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
                                                                    value="phone" />
@@ -259,7 +259,11 @@
             $("#info_digests").tooltip();
 
             function toggle_digest(id){
-                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+                let PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
+                let TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
+                let phone_checked = TalkingTechItivaPhoneNotification ? false : PhoneNotification ? $("#phone"+id).prop("checked") : false;
+
+                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") || phone_checked ) {
                     $("#digest"+id).attr("disabled", false).tooltip('disable');
                 } else {
                     $("#digest"+id).attr("disabled", true).prop("checked",false).tooltip('enable');
@@ -277,6 +281,9 @@
             });
             $(".pmp_sms").click(function(){
                 toggle_digest(Number($(this).attr("id").replace("sms", "")));
+            });
+            $(".pmp_phone").click(function(){
+                toggle_digest(Number($(this).attr("id").replace("phone", "")));
             });
 
         });
