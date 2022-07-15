@@ -48,7 +48,9 @@
                     <li class="transactions"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
                     <li class="makepayment"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
                     <li class="active manualinvoice"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
+                    [% IF CAN_user_updatecharges_manual_credit %]
                     <li class="manualcredit"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
+                    [% END %]
                 </ul>
                 <div class="tabs-container">
 
