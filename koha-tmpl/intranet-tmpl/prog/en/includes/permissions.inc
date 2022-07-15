@@ -378,6 +378,16 @@
             Write off fines and fees
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manual_invoice' -%]
+        <span class="sub_permission manual_invoice_subpermission">
+            Add manual invoices to a patron account
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manual_credit' -%]
+        <span class="sub_permission manual_credit_subpermission">
+            Add manual credits to a patron account
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_manage' -%]
         <span class="sub_permission suggestions_manage_subpermission">
             Manage purchase suggestions

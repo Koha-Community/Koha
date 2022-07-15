@@ -58,6 +58,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (10, 'refund', 'Perform account refund action'),
    (10, 'discount', 'Perform account discount action'),
    (10, 'writeoff', 'Write off fines and fees'),
+   (10, 'manual_credit', 'Add manual credits to a patron account'),
+   (10, 'manual_invoice', 'Add manual invoices to a patron account'),
    (10, 'remaining_permissions', 'Remaining permissions for managing fines and fees'),
    (11, 'currencies_manage', 'Manage currencies and exchange rates'),
    (11, 'vendors_manage', 'Manage vendors'),
