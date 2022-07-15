@@ -68,7 +68,7 @@ if ( $borrowernumber and not $patron ) {
 }
 
 if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
-    my @providers = Koha::SMS::Providers->search();
+    my @providers = Koha::SMS::Providers->search( {}, { order_by => 'name' } )->as_list;
     $template->param( sms_providers => \@providers );
 }
 

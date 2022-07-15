@@ -79,8 +79,10 @@ $template->param(
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
-    my @providers = Koha::SMS::Providers->search();
-    $template->param( sms_providers => \@providers, sms_provider_id => $patron->sms_provider_id );
+    my @providers = Koha::SMS::Providers->search( {}, { order_by => 'name' } )->as_list;
+    $template->param(
+            sms_providers => \@providers,
+            sms_provider_id => $patron->sms_provider_id );
 }
 
 my $new_session_id = $query->cookie('CGISESSID');
