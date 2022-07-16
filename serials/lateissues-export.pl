@@ -83,7 +83,7 @@ print $query->header(
     -attachment => "serials-claims.csv",
 );
 
-print join( $csv_profile->csv_separator, @headers ) . "\n";
+print join( $delimiter, @headers ) . "\n";
 
 for my $row ( @rows ) {
     $csv->combine(@$row);
