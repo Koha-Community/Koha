@@ -311,7 +311,7 @@ sub GetBasketAsCSV {
             }
             push @rows, \@row;
         }
-        my $content = join( $csv_profile->csv_separator, @headers ) . "\n";
+        my $content = join( $delimiter, @headers ) . "\n";
         for my $row ( @rows ) {
             $csv->combine(@$row);
             my $string = $csv->string;
