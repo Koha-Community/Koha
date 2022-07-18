@@ -4533,7 +4533,7 @@ CREATE TABLE `search_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
   `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'the human readable name of the field, for display',
-  `type` enum('','string','date','number','boolean','sum','isbn','stdno','year') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
+  `type` enum('','string','date','number','boolean','sum','isbn','stdno','year','callnumber') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
   `weight` decimal(5,2) DEFAULT NULL,
   `facet_order` tinyint(4) DEFAULT NULL COMMENT 'the order place of the field in facet list if faceted',
   `staff_client` tinyint(1) NOT NULL DEFAULT 1,
