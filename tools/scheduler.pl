@@ -52,8 +52,10 @@ my $id   = $input->param('id');
 
 if ( $mode eq 'job_add' ) {
 
-    my $startdate = dt_from_string( scalar $input->param('startdate') )->ymd;
+    my $startdate = dt_from_string( scalar $input->param('startdate'), 'iso' )->ymd;
 
+    # Formatting it for Schedule::At
+    $startdate = join('', (split /-/, $startdate));
     my $starttime = $input->param('starttime');
     $starttime =~ s/\://g;
     my $start  = $startdate . $starttime;
