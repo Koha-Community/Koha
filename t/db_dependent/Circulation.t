@@ -420,7 +420,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 104;
+    plan tests => 105;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -569,6 +569,25 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_2->itemnumber);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+
+
+    # Second biblio-level hold
+    my $reserve_id = AddReserve(
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            itemnumber       => $checkitem,
+            found            => $found,
+        }
+    );
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
+    is( $renewokay, 0, 'Renewal not possible when single patron\'s holds exceed the number of available items');
+    Koha::Holds->find($reserve_id)->delete;
 
     # Now let's add an item level hold, we should no longer be able to renew the item
     my $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
