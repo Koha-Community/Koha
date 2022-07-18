@@ -32,9 +32,10 @@ subjects to subject searches.
 =cut
 
 use Modern::Perl;
-use C4::Templates qw(gettemplate); # This is necessary for translatability
 
 use base qw(Koha::SuggestionEngine::Base);
+
+use Koha::I18N qw(__);
 
 =head2 NAME
     my $name = $plugin->NAME;
@@ -64,8 +65,7 @@ terms to the search.
 =cut
 
 sub get_suggestions {
-    my $self  = shift;
-    my $param = shift;
+    my ( $self, $param ) = @_;
 
     my $search = $param->{'search'};
 
@@ -73,29 +73,27 @@ sub get_suggestions {
     $search =~ s/(su|su-br|su-na|su-rl)[:=](\w*)/OP!$2/g;
     return if ( $search =~ m/\w+[:=]\w+/ );
 
-    my @indexes = (
-        'su-na',
-        'su-br',
-        'su-rl'
-    );
-    my $cgi = CGI->new;
-    my $template = C4::Templates::gettemplate('text/explodedterms.tt', 'opac', $cgi);
+    my $indexes_to_label = {
+        'su-na' => __('Search also for narrower subjects'),
+        'su-br' => __('Search also for broader subjects'),
+        'su-rl' => __('Search also for related subjects'),
+    };
+
     my @results;
-    foreach my $index (@indexes) {
+    foreach my $index ( keys %{$indexes_to_label} ) {
         my $thissearch = $search;
         $thissearch = "$index:$thissearch"
           unless ( $thissearch =~ s/OP!/$index:/g );
-        $template->{VARS}->{index} = $index;
-        my $label = $template->output;
-        push @results,
-        {
+        push @results, {
             'search'  => $thissearch,
             relevance => 100,
-                # FIXME: it'd be nice to have some empirical measure of
-                #        "relevance" in this case, but we don't.
-            label => $label
+
+            # FIXME: it'd be nice to have some empirical measure of
+            #        "relevance" in this case, but we don't.
+            label => $indexes_to_label->{$index}
         };
-    } return \@results;
+    }
+    return \@results;
 }
 
 1;
