@@ -120,12 +120,7 @@ sub get_items_that_can_fill {
     push @bibs_or_items, 'me.itemnumber' => { in => \@itemnumbers } if @itemnumbers;
     push @bibs_or_items, 'me.biblionumber' => { in => \@biblionumbers } if @biblionumbers;
 
-    my @branchtransfers = Koha::Item::Transfers->search(
-        {
-            datearrived => undef,
-            datecancelled => undef,
-        },
-        {
+    my @branchtransfers = Koha::Item::Transfers->filter_by_current->search({}, {
             columns  => ['itemnumber'],
             collapse => 1,
         }
