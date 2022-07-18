@@ -17,6 +17,8 @@
 [%- delimiter | $raw -%]
 "[% item.barcode | replace('"', '""') | $raw %]"
 [%- delimiter | $raw -%]
+"[% item.enumchron | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
 "[% item.itemcallnumber | replace('"', '""') | $raw %]"
 [%- delimiter | $raw -%]
 "[% Branches.GetName(item.homebranch) | replace('"', '""') | $raw %]"
