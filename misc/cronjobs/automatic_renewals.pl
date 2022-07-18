@@ -133,7 +133,15 @@ $verbose = 1 unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;
 
 print "getting auto renewals\n" if $verbose;
-my $auto_renews = Koha::Checkouts->search({ auto_renew => 1, 'patron.autorenew_checkouts' => 1 },{ join => 'patron'});
+my $auto_renews = Koha::Checkouts->search(
+    {
+        auto_renew                   => 1,
+        'patron.autorenew_checkouts' => 1,
+    },
+    {
+        join => ['patron','item']
+    }
+);
 print "found " . $auto_renews->count . " auto renewals\n" if $verbose;
 
 my $renew_digest = {};
@@ -141,7 +149,7 @@ my %report;
 while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
-    my ( $borrower_preferences, $wants_email, $wants_digest ) = ( undef, 0, 0 );
+    my ( $borrower_preferences, $wants_messages, $wants_digest ) = ( undef, 0, 0 );
     if ( $send_notices_pref eq 'preferences' ){
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences(
             {
@@ -149,15 +157,14 @@ while ( my $auto_renew = $auto_renews->next ) {
                 message_name   => 'auto_renewals'
             }
         );
-        $wants_email = 1
+        $wants_messages = 1
             if $borrower_preferences
-            && $borrower_preferences->{transports}
-            && $borrower_preferences->{transports}->{email};
+            && $borrower_preferences->{transports};
         $wants_digest = 1
-            if $wants_email
+            if $wants_messages
             && $borrower_preferences->{wants_digest};
     } else { # Preference is never or cron
-        $wants_email = $send_notices;
+        $wants_messages = $send_notices;
         $wants_digest = 0;
     }
 
@@ -175,7 +182,7 @@ while ( my $auto_renew = $auto_renews->next ) {
             $auto_renew->auto_renew_error(undef)->store;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-            if ( $wants_email ) && !$wants_digest;
+            if ( $wants_messages ) && !$wants_digest;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
         or $error eq 'restriction'
@@ -194,7 +201,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         if ( $updated ) {
             $auto_renew->auto_renew_error($error)->store if $confirm;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-              if $error ne 'auto_too_soon' && ( $wants_email  && !$wants_digest );    # Do not notify if it's too soon
+              if $error ne 'auto_too_soon' && ( $wants_messages  && !$wants_digest );    # Do not notify if it's too soon
         }
     }
 
@@ -218,30 +225,45 @@ while ( my $auto_renew = $auto_renews->next ) {
 if ( $send_notices && $confirm ) {
     for my $borrowernumber ( keys %report ) {
         my $patron = Koha::Patrons->find($borrowernumber);
-        for my $issue ( @{ $report{$borrowernumber} } ) {
-            my $item   = Koha::Items->find( $issue->itemnumber );
-            my $letter = C4::Letters::GetPreparedLetter(
-                module      => 'circulation',
-                letter_code => 'AUTO_RENEWALS',
-                tables      => {
-                    borrowers => $patron->borrowernumber,
-                    issues    => $issue->itemnumber,
-                    items     => $issue->itemnumber,
-                    biblio    => $item->biblionumber,
-                },
-                lang => $patron->lang,
-            );
-
-            my $library = Koha::Libraries->find( $patron->branchcode );
-            my $admin_email_address = $library->from_email_address;
-
-            C4::Letters::EnqueueLetter(
-                {   letter                 => $letter,
-                    borrowernumber         => $borrowernumber,
-                    message_transport_type => 'email',
-                    from_address           => $admin_email_address,
+        my $borrower_preferences =
+            C4::Members::Messaging::GetMessagingPreferences(
+                {
+                    borrowernumber => $borrowernumber,
+                    message_name   => 'auto_renewals'
                 }
             );
+        for my $issue ( @{ $report{$borrowernumber} } ) {
+            my $item = $issue->item;
+            # Force sending of email and only email if pref is set to "cron"
+            my @transports = $send_notices_pref eq 'preferences' ? keys %{ $borrower_preferences->{'transports'} } : 'sms';
+            foreach my $transport ( @transports ) {
+                my $letter = C4::Letters::GetPreparedLetter (
+                    module      => 'circulation',
+                    letter_code => 'AUTO_RENEWALS',
+                    tables      => {
+                        borrowers => $patron->borrowernumber,
+                        issues    => $issue->itemnumber,
+                        items     => $issue->itemnumber,
+                        biblio    => $item->biblionumber,
+                    },
+                    lang => $patron->lang,
+                    message_transport_type => $transport,
+                );
+
+                if ($letter) {
+                    my $library = $patron->library;
+                    my $admin_email_address = $library->from_email_address;
+
+                    C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $borrowernumber,
+                            from_address           => $admin_email_address,
+                            message_transport_type => $transport
+                        }
+                    );
+                }
+            }
         }
     }
 
