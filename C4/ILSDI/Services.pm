@@ -36,6 +36,7 @@ use C4::AuthoritiesMarc qw( GetAuthorityXML );
 
 use Koha::Biblios;
 use Koha::Checkouts;
+use Koha::I18N qw(__);
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -960,8 +961,6 @@ Returns, for an itemnumber, an array containing availability information.
 sub _availability {
     my ($itemnumber) = @_;
     my $item = Koha::Items->find($itemnumber);
-
-    use Koha::I18N;
 
     unless ( $item ) {
         return ( undef, __('unknown'), __('Error: could not retrieve availability for this ID'), undef );
