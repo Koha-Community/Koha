@@ -107,7 +107,7 @@ my %subscription = (
     innerloop3      => scalar $input->param('innerloop3') // '',
     irregularity    => '',
     countissuesperunit  => 1,
-    firstacquidate  => $firstacquidate->ymd,
+    firstacquidate  => $firstacquidate,
 );
 
 my $issuenumber;
