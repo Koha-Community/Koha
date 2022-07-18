@@ -11,7 +11,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% PROCESS 'modal-claims.inc' %]
-<title>Items overdue as of [% todaysdate | html %] &rsaquo; Circulation &rsaquo; Koha</title>
+<title>Items overdue as of [% todaysdate | $KohaDates %] &rsaquo; Circulation &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
@@ -44,7 +44,7 @@
         </li>
         <li>
             <a href="#" aria-current="page">
-                Overdues as of [% todaysdate | html %]
+                Overdues as of [% todaysdate | $KohaDates %]
             </a>
         </li>
     </ol>
@@ -62,7 +62,7 @@
 
 [% IF ( overdueloop ) %]
 
-  <h2>[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate | html %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
+  <h2>[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate | $KohaDates %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
 
   <p>
     [% IF ( isfiltered ) %]
