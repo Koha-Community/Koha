@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Item::Transfer;
 use Koha::Item::Transfers;
@@ -106,6 +106,28 @@ subtest 'daterequested tests' => sub {
 
     is( t::lib::Dates::compare( $transfer->daterequested, $now ),
         0, 'daterequested is not updated when other fields are updated' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_current() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $transfer_1 = $builder->build_object({ class => 'Koha::Item::Transfers', value => { datearrived => \'NOW()', datecancelled => undef } });
+    my $transfer_2 = $builder->build_object({ class => 'Koha::Item::Transfers', value => { datearrived => undef, datecancelled => \'NOW()' } });
+    my $transfer_3 = $builder->build_object({ class => 'Koha::Item::Transfers', value => { datearrived => undef, datecancelled => undef } });
+
+    my $rs = Koha::Item::Transfers->search({ branchtransfer_id => [ $transfer_1->id, $transfer_2->id, $transfer_3->id ] });
+
+    is( $rs->count, 3, 'Resultset has 3 transfers' );
+
+    $rs = $rs->filter_by_current;
+
+    is( $rs->count, 1, 'Filtered resultset has 1 transfer' );
+    is( $rs->next->id, $transfer_3->id, 'Only current transfer left on the resultset' );
 
     $schema->storage->txn_rollback;
 };
