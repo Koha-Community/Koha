@@ -112,7 +112,7 @@ SKIP: {
 
     is ( $count = $searcher->count_auth_use($searcher,1), 0, 'Testing count_auth_use');
 
-    is ($searcher->max_result_window, 10000, 'By default, max_result_window is 10000');
+    is ($searcher->max_result_window, 1000000, 'By default, max_result_window is 1000000');
 
     $searcher->get_elasticsearch()->indices->put_settings(
         index => $searcher->index_name,
