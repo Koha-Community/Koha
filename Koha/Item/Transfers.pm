@@ -30,9 +30,26 @@ Koha::Item::Transfers - Koha Item Transfer Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 filter_by_current
+
+    my $current_transfers = $transfers->filter_by_current;
+
+Filters out completed transfers from the resultset.
 
 =cut
+
+sub filter_by_current {
+    my ( $self ) = @_;
+
+    return $self->search(
+        {
+            datearrived   => undef,
+            datecancelled => undef,
+        }
+    );
+}
 
 =head3 type
 
