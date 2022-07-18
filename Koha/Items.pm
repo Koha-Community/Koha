@@ -398,6 +398,34 @@ sub apply_regex {
     return $value;
 }
 
+=head3 search_ordered
+
+ $items->search_ordered;
+
+Search and sort items in a specific order, depending if serials are present or not
+
+=cut
+
+sub search_ordered {
+    my ($self) = @_;
+
+    if ( $self->search({ select => ["enumchron IS NOT NULL"] }) ) {
+        return $self->search( {}, { order_by => 'enumchron' } );
+    } else {
+        return $self->search(
+            {},
+            {
+                order_by => [
+                    'homebranch.branchname',
+                    'me.enumchron',
+                    \"LPAD( me.copynumber, 8, '0' )",
+                    {-desc => 'me.dateaccessioned'}
+                ],
+                join => ['homebranch']
+            }
+        );
+    }
+}
 
 =head2 Internal methods
 
