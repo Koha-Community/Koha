@@ -521,6 +521,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacSuppressionRedirect','1','Redirect the opac detail page for suppressed records to an explanatory page (otherwise redirect to 404 error page)','','YesNo'),
 ('opacthemes','bootstrap','','Define the current theme for the OPAC interface.','Themes'),
 ('OpacTopissue','0',NULL,'If ON, enables the \'most popular items\' link on OPAC. Warning, this is an EXPERIMENTAL feature, turning ON may overload your server','YesNo'),
+('OpacTrustedCheckout', '0', NULL, 'Allow logged in OPAC users to check out to themselves', 'YesNo'),
 ('OPACURLOpenInNewWindow','0',NULL,'If ON, URLs in the OPAC open in a new window','YesNo'),
 ('OPACUserCSS','',NULL,'Add CSS to be included in the OPAC in an embedded <style> tag.','free'),
 ('OPACUserJS','','70|10','Define custom javascript for inclusion in OPAC','Textarea'),

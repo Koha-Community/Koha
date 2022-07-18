@@ -651,7 +651,13 @@ OPAC:
                 1: "Block"
                 0: "Don't block"
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
-
+        -
+            - pref: OpacTrustedCheckout
+              default: 0
+              choices:
+                  0: "Don't allow"
+                  1: Allow
+            - "OPAC users to checkout to themselves."
     Privacy:
         -
             - pref: opacreadinghistory
