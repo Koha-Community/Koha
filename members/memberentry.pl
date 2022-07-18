@@ -678,13 +678,14 @@ foreach my $category_type (qw(C A S P I X)) {
 
     my @categoryloop;
     while ( my $patron_category = $patron_categories->next ) {
+        $categorycode = $patron_category->categorycode unless defined($categorycode); #If none passed in, select the first
         push @categoryloop,
           { 'categorycode' => $patron_category->categorycode,
             'categoryname' => $patron_category->description,
             'effective_min_password_length' => $patron_category->effective_min_password_length,
             'effective_require_strong_password' => $patron_category->effective_require_strong_password,
             'categorycodeselected' =>
-              ( defined($categorycode) && $patron_category->categorycode eq $categorycode ),
+              ( $patron_category->categorycode eq $categorycode ),
           };
     }
     my %typehash;
