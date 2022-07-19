@@ -317,7 +317,7 @@
 
                                     [% IF ( INVALID_DATE ) %]
                                         <p>
-                                          <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" />
+                                          <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
                                             <label for="duedatespec">Due date</label>
                                         </p>
                                     [% ELSE %]
@@ -680,9 +680,9 @@
                                                         <div id="specify-due-date" class="circ-setting">
                                                             <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
                                                             [% IF ( duedatespec ) %]
-                                                                <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" />
+                                                                <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
                                                             [% ELSE %]
-                                                                <input type="text" size="20" id="duedatespec" name="duedatespec" value="" />
+                                                                <input type="text" size="20" id="duedatespec" name="duedatespec" value="" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
                                                             [% END %]
                                                             <label for="stickyduedate"> Remember for session:</label>
                                                             [% IF ( stickyduedate ) %]
@@ -747,7 +747,7 @@
                                                         [% IF noissues %]
                                                             <div class="onsite-checkout-only">
                                                                 <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
-                                                                <input type="text" name="duedatespec" id="duedatespec" />
+                                                                <input type="text" name="duedatespec" id="duedatespec" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
                                                                 <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
                                                             </div>
                                                         [% ELSE %]

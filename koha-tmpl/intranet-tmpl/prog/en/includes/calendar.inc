@@ -157,7 +157,8 @@
             }
             if ( $(this).data('flatpickr-enable-time') === true ) {
                 options['enableTime'] = true;
-                options['dateFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
+                options['dateFormat'] = "Y-m-d H:i";
+                options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
             }
 
             let fp = $(this).flatpickr(options);

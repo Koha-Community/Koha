@@ -1,4 +1,3 @@
-/* global flatpickr_dateformat_string flatpickr_timeformat_string */
 $(document).ready(function() {
     $("#CheckAllExports").on("click",function(){
         $(".export:visible").prop("checked", true);
@@ -27,19 +26,6 @@ $(document).ready(function() {
 
     $("input.radio").on("click",function(){
         radioCheckBox($(this));
-    });
-
-    $("#duedatespec").flatpickr({
-        enableTime: true,
-        dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
-        onClose: function() {
-            $("#barcode").focus();
-        }
-    });
-
-    $("#newduedate, #newonholdduedate input").flatpickr({
-        enableTime: true,
-        dateFormat: flatpickr_dateformat_string + " " + flatpickr_timeformat_string,
     });
 
     $(".clear_date").on("click", function(){

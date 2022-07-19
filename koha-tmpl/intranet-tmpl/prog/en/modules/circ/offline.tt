@@ -140,7 +140,7 @@
 
                         <div class="date-select">
                             <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" />
+                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#checkout-barcode" />
                             <label for="stickyduedate"> Remember for session:</label>
                             <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
                             <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
@@ -770,14 +770,6 @@
             $('#pay-fine').click(function (event) {
                 event.preventDefault();
                 recordFine($('#pay-fine-amount').val());
-            });
-
-            $("#duedatespec").flatpickr({
-                enableTime: true,
-                dateFormat: flatpickr_datetime_string,
-                onClose: function() {
-                    $("#checkout-barcode").focus();
-                }
             });
 
             $('#mainform').submit(function (event) {

@@ -72,7 +72,7 @@
                                         </li>
                                         <li class="dateinsert">
                                             <strong>To date: </strong>
-                                            <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange | html %]" />
+                                            <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange | html %]" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" />
@@ -170,7 +170,7 @@
                                         </li>
                                         <li class="dateinsert">
                                             <strong>To date: </strong>
-                                            <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" />
+                                            <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" class="flatpickr" />
                                         </li>
                                         <li>
                                             <label for="title">Title: </label>
@@ -602,17 +602,17 @@
                 $(this).parent().find(".hint").toggle(); return false;
             });
 
-            var dateofrange = $("#dateofrange").flatpickr();
-
-            var datecancelrange = $("#datecancelrange").flatpickr();
+            const dateofrange = document.querySelector("#dateofrange")._flatpickr;
+            const datecancelrange = document.querySelector("#datecancelrange")._flatpickr;
 
             $("#dateofrange").each(function () { this.value = "" });
             $("#datecancelrange").each(function () { this.value = "" });
 
             var maincalendar = $("#calendar-anchor").flatpickr({
                 inline: true,
-                onReady: function(){
-                    return;
+                onReady: function( selectedDates, dateStr, instance ){
+                    // We do not want to display the 'close' icon in this case
+                    $(instance.input).siblings('.flatpickr-input').hide();
                 },
                 onDayCreate: function( dObj, dStr, fp, dayElem ){
                     /* for each day on the calendar, get the

@@ -418,7 +418,12 @@ you can supply dates in ISO format (e.g., '2010-10-28').
     <script>
         $(document).ready(function() {
             [%# Make date fields have the datepicker %]
-            $("#dateenrolled, #dateexpiry, #dateofbirth").flatpickr();
+            $("#dateenrolled, #dateexpiry, #dateofbirth").flatpickr({
+                altInput: true,
+                altFormat: flatpickr_dateformat_string,
+                altInputClass: 'flatpickr-input',
+                dateFormat: "Y-m-d",
+            });
 
             $(".expand_defaults").click(function(e){
                 e.preventDefault();
