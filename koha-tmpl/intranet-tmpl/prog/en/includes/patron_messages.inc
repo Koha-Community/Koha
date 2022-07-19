@@ -1,5 +1,6 @@
 [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
 [% SET return_claims = patron.return_claims %]
+[% SET logged_in_branchcode = Branches.GetLoggedInBranchcode() %]
 
 [% IF ( has_modifications || warndeparture || returnbeforeexpiry || expired || patron.gonenoaddress || patron.lost || userdebarred || odues || ( return_claims.count > ClaimReturnedWarningThreshold ) || age_limitations || charges || charges_guarantors_guarantees || charges_guarantees || credits ) %]
     <h3>Attention</h3>
@@ -134,7 +135,7 @@
         [% SET waiting_here = 0 %]
         [% SET waiting_elsewhere = 0 %]
         [% FOREACH w IN waiting_recalls %]
-            [% IF ( w.pickup_library_id == Branches.GetLoggedInBranchcode()  ) %]
+            [% IF ( w.pickup_library_id == logged_in_branchcode  ) %]
                 [% waiting_here = waiting_here + 1 %]
             [% ELSE %]
                 [% waiting_elsewhere = waiting_elsewhere + 1 %]
@@ -145,7 +146,7 @@
             <h4>Recalls waiting here ([% waiting_here | html %])</h4>
             <ul>
                 [% FOREACH w IN waiting_recalls %]
-                    [% IF ( w.pickup_library_id == Branches.GetLoggedInBranchcode()  ) %]
+                    [% IF ( w.pickup_library_id == logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
@@ -167,7 +168,7 @@
             <h4>Recalls waiting at other libraries ([% waiting_elsewhere | html %])</h4>
             <ul>
                 [% FOREACH w IN waiting_recalls %]
-                    [% IF ( w.pickup_library_id != Branches.GetLoggedInBranchcode()  ) %]
+                    [% IF ( w.pickup_library_id != logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% w.biblio_id | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
@@ -192,7 +193,7 @@
         [% SET waiting_here = 0 %]
         [% SET waiting_elsewhere = 0 %]
         [% FOREACH w IN WaitingHolds %]
-            [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]
+            [% IF ( w.branch.branchcode == logged_in_branchcode  ) %]
                 [% waiting_here = waiting_here + 1 %]
             [% ELSE %]
                 [% waiting_elsewhere = waiting_elsewhere + 1 %]
@@ -203,7 +204,7 @@
             <h4>Holds waiting here ([% waiting_here | html %])</h4>
             <ul>
                 [% FOREACH w IN WaitingHolds %]
-                    [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]
+                    [% IF ( w.branch.branchcode == logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
@@ -225,7 +226,7 @@
             <h4>Holds waiting at other libraries ([% waiting_elsewhere | html %])</h4>
             <ul>
                 [% FOREACH w IN WaitingHolds %]
-                    [% IF ( w.branch.branchcode != Branches.GetLoggedInBranchcode()  ) %]
+                    [% IF ( w.branch.branchcode != logged_in_branchcode  ) %]
                         <li>
                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
