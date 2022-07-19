@@ -759,7 +759,7 @@ for (my $i=0;$i<@servers;$i++) {
                 $template->param(searchdesc => 1);
             }
             $template->param(results_per_page =>  $results_per_page);
-            my $hide = ($hidingrules) ? 1 : 0;
+            my $hide = keys %$hidingrules ? 1 : 0;
 
             $template->param(
                 SEARCH_RESULTS => \@newresults,
