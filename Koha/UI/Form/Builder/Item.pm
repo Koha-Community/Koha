@@ -455,6 +455,14 @@ Flag to add an empty option to the library list.
 
 =back
 
+=item ignore_invisible_subfields
+
+Skip the subfields that are not visible on the editor.
+
+When duplicating an item we do not want to retrieve the subfields that are hidden.
+
+=back
+
 =cut
 
 sub edit_form {
@@ -469,6 +477,7 @@ sub edit_form {
     my $prefill_with_default_values = $params->{prefill_with_default_values};
     my $branch_limit = $params->{branch_limit};
     my $default_branches_empty = $params->{default_branches_empty};
+    my $ignore_invisible_subfields = $params->{ignore_invisible_subfields} || 0;
 
     my $libraries =
       Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
@@ -500,6 +509,10 @@ sub edit_form {
               if grep { $subfield->{kohafield} && $subfield->{kohafield} eq $_ }
               @$kohafields_to_ignore;
 
+            next
+              if $ignore_invisible_subfields
+              && ( $subfield->{hidden} > 4 || $subfield->{hidden} <= -4 );
+
             my $readonly;
             if (
                 @$subfields_to_allow && !grep {
@@ -507,7 +520,6 @@ sub edit_form {
                 } @$subfields_to_allow
               )
             {
-
                 next if $ignore_not_allowed_subfields;
                 $readonly = 1 if $restricted_edition;
             }

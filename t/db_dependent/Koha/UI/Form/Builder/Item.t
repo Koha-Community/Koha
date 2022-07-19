@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Data::Dumper qw( Dumper );
 use utf8;
 
@@ -298,6 +298,41 @@ subtest 'subfields_to_allow & ignore_not_allowed_subfields' => sub {
     is( $subfield, undef, "subfield that is not in the allow list is not returned" );
 };
 
+subtest 'ignore_invisible_subfields' => sub {
+    plan tests => 2;
+
+    my $biblio =
+      $builder->build_sample_biblio( { value => { frameworkcode => '' } } );
+    my $item = $builder->build_sample_item(
+        {
+            issues => 42,
+        }
+    );
+
+    # items.issues is mapped with 952$l
+    my $subfields = Koha::UI::Form::Builder::Item->new(
+        {
+            biblionumber => $biblio->biblionumber,
+            item         => $item->unblessed,
+        }
+    )->edit_form;
+    ( my $subfield ) = grep { $_->{subfield} eq 'l' } @$subfields;
+    is( $subfield->{marc_value}->{value}, 42, 'items.issues copied' );
+
+    $subfields = Koha::UI::Form::Builder::Item->new(
+        {
+            biblionumber => $biblio->biblionumber,
+            item         => $item->unblessed,
+        }
+    )->edit_form(
+        {
+            ignore_invisible_subfields => 1
+        }
+    );
+    ($subfield) = grep { $_->{subfield} eq 'l' } @$subfields;
+    is( $subfield->{marc_value}->{value},
+        undef, 'items.issues not copied if ignore_invisible_subfields is passed' );
+};
 
 $cache->clear_from_cache("MarcStructure-0-");
 $cache->clear_from_cache("MarcStructure-1-");
