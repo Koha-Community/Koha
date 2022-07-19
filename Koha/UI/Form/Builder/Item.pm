@@ -453,8 +453,6 @@ Limit info depending on the library (so far only item types).
 
 Flag to add an empty option to the library list.
 
-=back
-
 =item ignore_invisible_subfields
 
 Skip the subfields that are not visible on the editor.
