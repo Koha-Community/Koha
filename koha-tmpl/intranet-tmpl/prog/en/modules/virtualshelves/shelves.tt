@@ -892,21 +892,12 @@
 
         [% IF op == 'transfer' %]
             $(document).ready(function() {
-                $('#find_patron').autocomplete({
-                    source: "/cgi-bin/koha/circ/ysearch.pl",
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        $('#new_owner_name').html( ui.item.firstname + " " + ui.item.surname );
-                        $('#new_owner').val( ui.item.borrowernumber );
-                        $('#find_patron').val('').focus();
-                        return false;
-                    },
-                }).data('ui-autocomplete')._renderItem = function( ul, item ) {
-                    return $('<li></li>')
-                        .data( 'ui-autocomplete-item', item )
-                        .append( '<a>' + item.surname + ', ' + item.firstname + '</a>' )
-                        .appendTo(ul);
-                };
+                patron_autocomplete( $("#find_patron"), { 'on-select-callback': function( event, ui ) {
+                    $('#new_owner_name').html( ui.item.firstname + " " + ui.item.surname );
+                    $('#new_owner').val( ui.item.patron_id );
+                    $('#find_patron').val('').focus();
+                    return false;
+                }});
 
                 $('#transferform').submit(function() {
                     if( $('#new_owner').val() == '' ) {
