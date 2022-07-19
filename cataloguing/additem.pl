@@ -593,6 +593,11 @@ my $subfields =
         ),
         prefill_with_default_values => 1,
         branch_limit => C4::Context->userenv->{"branch"},
+        (
+            $op eq 'dupeitem'
+            ? ( ignore_invisible_subfields => 1 )
+            : ()
+        ),
     }
 );
 
