@@ -49,7 +49,7 @@
         },
         onReady: function( selectedDates, dateStr, instance ){
             /* When flatpickr instance is created, automatically append a "clear date" link */
-            $(instance.input).siblings('input.flatpickr')
+            $(instance.input).find('~input.flatpickr:first')
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
                 .attr("autocomplete", "off")
