@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Encode qw( encode_utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use CGI qw ( -utf8 );
@@ -211,42 +212,31 @@ if ( $op eq 'add_form' ) {
 elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
-    my @tagsubfield       = $input->multi_param('tagsubfield');
-    my @liblibrarian      = $input->multi_param('liblibrarian');
-    my @libopac           = $input->multi_param('libopac');
-    my @kohafield         = $input->multi_param('kohafield');
-    my @tab               = $input->multi_param('tab');
-    my @seealso           = $input->multi_param('seealso');
-    my @hidden            = $input->multi_param('hidden');
-    my @authorised_values = $input->multi_param('authorised_value');
-    my @authtypecodes     = $input->multi_param('authtypecode');
-    my @value_builder     = $input->multi_param('value_builder');
-    my @link              = $input->multi_param('link');
-    my @defaultvalue      = $input->multi_param('defaultvalue');
-    my @maxlength         = $input->multi_param('maxlength');
+    my $tagfield    = $input->param('tagfield');
+    my @tagsubfield = $input->multi_param('tagsubfield');
+    my @tab_ids     = $input->multi_param('tab_id');
 
     my $display_order;
-    for ( my $i = 0 ; $i <= $#tagsubfield ; $i++ ) {
-        my $tagfield    = $input->param('tagfield');
-        my $tagsubfield = $tagsubfield[$i];
+    for my $tagsubfield ( @tagsubfield ) {
         $tagsubfield = "@" unless $tagsubfield ne '';
-        my $liblibrarian     = $liblibrarian[$i];
-        my $libopac          = $libopac[$i];
-        my $repeatable       = $input->param("repeatable$i") ? 1 : 0;
-        my $mandatory        = $input->param("mandatory$i") ? 1 : 0;
-        my $important        = $input->param("important$i") ? 1 : 0;
-        my $kohafield        = $kohafield[$i];
-        my $tab              = $tab[$i];
-        my $seealso          = $seealso[$i];
-        my $authorised_value = $authorised_values[$i];
-        my $authtypecode     = $authtypecodes[$i];
-        my $value_builder    = $value_builder[$i];
-        my $hidden = $hidden[$i];                     #input->param("hidden$i");
-        my $isurl  = $input->param("isurl$i") ? 1 : 0;
-        my $link   = $link[$i];
-        my $defaultvalue = $defaultvalue[$i];
-        my $maxlength = $maxlength[$i] ? $maxlength[$i] : 9999;
-        
+        my $id = shift @tab_ids;
+        my $liblibrarian     = $input->param("liblibrarian_$id");
+        my $libopac          = $input->param("libopac_$id");
+        my $repeatable       = $input->param("repeatable_$id") ? 1 : 0;
+        my $mandatory        = $input->param("mandatory_$id") ? 1 : 0;
+        my $important        = $input->param("important_$id") ? 1 : 0;
+        my $kohafield        = $input->param("kohafield_$id");
+        my $tab              = $input->param("tab_$id");
+        my $seealso          = $input->param("seealso_$id");
+        my $authorised_value = $input->param("authorised_values_$id");
+        my $authtypecode     = $input->param("authtypecodes_$id");
+        my $value_builder    = $input->param("value_builder_$id");
+        my $hidden = $input->param("hidden_$id");
+        my $isurl  = $input->param("isurl_$id") ? 1 : 0;
+        my $link   = $input->param("link_$id");
+        my $defaultvalue = $input->param("defaultvalue_$id");
+        my $maxlength = $input->param("maxlength_$id") || 9999;
+
         if (defined($liblibrarian) && $liblibrarian ne "") {
             my $mss = Koha::MarcSubfieldStructures->find({tagfield => $tagfield, tagsubfield => $tagsubfield, frameworkcode => $frameworkcode });
             if ($mss) {
