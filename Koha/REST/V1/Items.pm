@@ -58,6 +58,32 @@ sub list {
     };
 }
 
+=head3 list_public
+
+Controller function that handles listing Koha::Item objects available to the opac
+
+=cut
+
+sub list_public {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $patron = $c->stash('koha.user');
+
+        my $items_set =
+          Koha::Items->filter_by_visible_in_opac( { patron => $patron } );
+        my $items = $c->objects->search($items_set);
+
+        return $c->render(
+            status  => 200,
+            openapi => $items
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 get
 
 Controller function that handles retrieving a single Koha::Item

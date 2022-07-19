@@ -27,6 +27,8 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Mojo::JSON qw(encode_json);
+
 use C4::Auth;
 use Koha::Items;
 use Koha::Database;
@@ -105,15 +107,17 @@ subtest 'list_public() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    # Clean out all demo items
-    Koha::Items->delete();
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
     my $exception = 1;
-    $mocked_category->mock( 'override_hidden_items', sub {
-        return $exception;
-    });
+
+    my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
+    $mocked_category->mock(
+        'override_hidden_items',
+        sub {
+            return $exception;
+        }
+    );
 
     my $password = 'thePassword123';
     $patron->set_password( { password => $password, skip_validation => 1 } );
@@ -186,28 +190,33 @@ subtest 'list_public() tests' => sub {
         return $rules;
     });
 
+    my $query = encode_json({ item_id => [ $item_1->id, $item_2->id, $item_3->id, $item_4->id, $item_5->id, $item_6->id ] });
+
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     subtest 'anonymous access' => sub {
         plan tests => 21;
 
+        t::lib::Mocks::mock_preference( 'RESTPublicAnonymousRequests', 1 );
+
         t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
-        my $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        my $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is( scalar @{ $res }, 6, 'No rules set, hidelostitems unset, all items returned');
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
-        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is( scalar @{ $res }, 3, 'No rules set, hidelostitems set, 3 items hidden');
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
         $rules = { biblionumber => [ $biblio->biblionumber ] };
-        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is( scalar @{ $res }, 0, 'Biblionumber rule set, hidelostitems unset, all items hidden');
 
         $rules = { withdrawn => [ 1, 2 ] };
-        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is( scalar @{ $res }, 4, 'Withdrawn rule set, hidelostitems unset, 2 items hidden');
 
         $rules = { itype => [ $itype_1->itemtype ] };
-        $res = $t->get_ok( "/api/v1/public/items" )->status_is(200)->tx->res->json;
+        $res = $t->get_ok( "/api/v1/public/items?q=" . $query )->status_is(200)->tx->res->json;
         is( scalar @{ $res }, 2, 'Itype rule set, hidelostitems unset, 4 items hidden');
 
         $rules = { withdrawn => [ 1 ] };
@@ -228,7 +237,7 @@ subtest 'list_public() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
         $rules = { withdrawn => [ 1, 2 ] };
-        my $res = $t->get_ok("//$userid:$password@/api/v1/public/items")
+        my $res = $t->get_ok("//$userid:$password@/api/v1/public/items?q=" . $query)
           ->status_is(200)->tx->res->json;
         is(
             scalar @{$res},
