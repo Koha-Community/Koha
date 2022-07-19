@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use Koha::Database;
 
+use Koha::Patrons;
 use Koha::Virtualshelf;
 
 
@@ -31,9 +32,48 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 disown_or_delete
+
+    $lists->disown_or_delete;
+
+This method will transfer public/shared lists to the appropriate patron or
+just delete them if not possible.
 
 =cut
+
+sub disown_or_delete {
+    my ($self) = @_;
+
+    $self->_resultset->result_source->schema->txn_do(
+        sub {
+            if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
+                my $new_owner;
+
+                $new_owner = C4::Context->preference('ListOwnerDesignated')
+                  if C4::Context->preference('ListOwnerDesignated')
+                  and Koha::Patrons->find( C4::Context->preference('ListOwnerDesignated') );
+
+                unless ($new_owner) {
+                    $new_owner = C4::Context->userenv->{number};
+                }
+
+                while ( my $list = $self->next ) {
+                    if ( $list->is_public or $list->is_shared ) {
+                        $list->transfer_ownership($new_owner);
+                    } else {
+                        $list->delete;
+                    }
+                }
+            } else {    # 'delete'
+                $_->delete for $self->as_list;
+            }
+        }
+    );
+
+    return $self;
+}
 
 =head3 get_private_shelves
 

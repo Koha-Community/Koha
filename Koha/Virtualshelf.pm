@@ -23,6 +23,7 @@ use C4::Auth qw( haspermission );
 use Koha::Patrons;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Exceptions;
 use Koha::Exceptions::Virtualshelf;
 use Koha::Virtualshelfshare;
 use Koha::Virtualshelfshares;
@@ -329,6 +330,24 @@ sub cannot_be_transferred {
         return 'missing_to_parameter';
     }
     return 0; # serving as green light
+}
+
+=head3 transfer_ownership
+
+    $list->transfer_ownership( $patron_id );
+
+This method transfers the list ownership to the passed I<$patron_id>.
+
+=cut
+
+sub transfer_ownership {
+    my ( $self, $patron_id ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( "Mandatory parameter 'patron' missing" )
+      unless $patron_id;
+
+    $self->remove_share( $patron_id ) if $self->is_private;
+    return $self->set({ owner => $patron_id })->store;
 }
 
 =head2 Internal methods
