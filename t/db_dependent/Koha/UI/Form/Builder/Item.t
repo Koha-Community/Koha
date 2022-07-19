@@ -391,6 +391,14 @@ sub setup_mss {
         {
             frameworkcode => '',
             tagfield => $itemtag,
+            tagsubfield => ['l'],
+        }
+    )->update( { hidden => -4 } );
+
+    Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode => '',
+            tagfield => $itemtag,
             tagsubfield => ['z'],
         }
     )->update( { kohafield => 'items.itemnotes', repeatable => 1 } );
