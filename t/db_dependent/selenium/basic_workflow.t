@@ -130,6 +130,8 @@ SKIP: {
 
     $borrowernumber = $dbh->selectcol_arrayref(q|SELECT borrowernumber FROM borrowers WHERE userid=?|, {}, $sample_data->{patron}{userid} )->[0];
 
+    my $itemtype = $sample_data->{itemtype};
+
     my @biblionumbers;
     for my $i ( 1 .. $number_of_biblios_to_insert ) {
         my $biblio = MARC::Record->new();
@@ -138,11 +140,13 @@ SKIP: {
             $biblio->append_fields(
                 MARC::Field->new('200', ' ', ' ', a => 'test biblio '.$i),
                 MARC::Field->new('200', ' ', ' ', f => 'test author '.$i),
+                MARC::Field->new('200', ' ', ' ', b => $itemtype->{itemtype}),
             );
         } else {
             $biblio->append_fields(
                 MARC::Field->new('245', ' ', ' ', a => 'test biblio '.$i),
                 MARC::Field->new('100', ' ', ' ', a => 'test author '.$i),
+                MARC::Field->new('942', ' ', ' ', c => $itemtype->{itemtype}),
             );
         }
         my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
@@ -150,8 +154,6 @@ SKIP: {
     }
 
     time_diff("add biblio");
-
-    my $itemtype = $sample_data->{itemtype};
 
     my $issuing_rules = $sample_data->{issuingrule};
     Koha::CirculationRules->set_rules(
@@ -203,6 +205,11 @@ SKIP: {
             ) {
                 $v = strftime("%Y-%m-%d", localtime);
                 $effective_input = $driver->find_element('//div[@id="subfield952w"]/input[@class="input_marceditor flatpickr-input"]');
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_y| # itemtype
+            ) {
+                next; # auto-filled
             }
             elsif (
                 $id =~ m|^tag_952_subfield_d| # dateaccessioned
