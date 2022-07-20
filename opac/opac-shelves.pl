@@ -272,10 +272,15 @@ if ( $op eq 'add_form' ) {
         my $patrons = [];
         my $shares = $shelf->get_shares->search({ borrowernumber => { '!=' => undef } });
         while( my $share = $shares->next ) {
-            push @$patrons, { email => $share->sharee->notice_email_address, borrowernumber => $share->get_column('borrowernumber') };
+            my $email = $share->sharee->notice_email_address;
+            push @$patrons, { email => $email, borrowernumber => $share->get_column('borrowernumber') } if $email;
         }
-        $template->param( shared_users => $patrons );
-        $op = 'transfer';
+        if( @$patrons ) {
+            $template->param( shared_users => $patrons );
+            $op = 'transfer';
+        } else {
+            push @messages, { type => 'error', code => 'no_email_found' };
+        }
     } elsif( !Koha::Patrons->find($new_owner) ) {
         push @messages, { type => 'error', code => 'new_owner_not_found' };
     } elsif( !$shelf->get_shares->search({ borrowernumber => $new_owner })->count ) {
