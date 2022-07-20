@@ -119,7 +119,8 @@ return {
                     `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the license',
                     CONSTRAINT `erm_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT `erm_licenses_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    PRIMARY KEY(`agreement_license_id`)
+                    PRIMARY KEY(`agreement_license_id`),
+                    UNIQUE KEY `erm_agreement_licenses_uniq` (`agreement_id`, `license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
         }
@@ -206,6 +207,7 @@ return {
                 CREATE TABLE `erm_eholdings_packages_agreements` (
                     `package_id` INT(11) NOT NULL COMMENT 'link to the package',
                     `agreement_id` INT(11) NOT NULL COMMENT 'link to the agreement',
+                    UNIQUE KEY `erm_eholdings_packages_agreements_uniq` (`package_id`, `agreement_id`),
                     CONSTRAINT `erm_eholdings_packages_agreements_ibfk_1` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT `erm_eholdings_packages_agreements_ibfk_2` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -257,6 +259,7 @@ return {
                     `started_on` DATE,
                     `ended_on` DATE,
                     `proxy` VARCHAR(80) DEFAULT NULL,
+                    UNIQUE KEY `erm_eholdings_resources_uniq` (`title_id`, `package_id`),
                     CONSTRAINT `erm_eholdings_resources_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_eholdings_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT `erm_eholdings_resources_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `erm_eholdings_packages` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     CONSTRAINT `erm_eholdings_resources_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
