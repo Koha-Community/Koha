@@ -541,7 +541,6 @@ subtest 'SearchItems test' => sub {
     my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     my $item3_record = MARC::Record->new;
@@ -572,7 +571,6 @@ subtest 'SearchItems test' => sub {
     # Clear cache
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     ModItemFromMarc($item3_record, $biblio->biblionumber, $item3_itemnumber);
