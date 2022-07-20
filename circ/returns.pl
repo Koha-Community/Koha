@@ -410,7 +410,7 @@ if ($barcode) {
     }
 
     # Mark missing bundle items as lost and report unexpected items
-    if ( $item->is_bundle && $query->param('confirm_items_bundle_return') ) {
+    if ( $item && $item->is_bundle && $query->param('confirm_items_bundle_return') ) {
         my $BundleLostValue = C4::Context->preference('BundleLostValue');
         my $barcodes = $query->param('verify-items-bundle-contents-barcodes');
         my @barcodes = map { s/^\s+|\s+$//gr } ( split /\n/, $barcodes );
