@@ -37,6 +37,7 @@
 <script>
 import AgreementsList from "./AgreementsList.vue"
 import { createPackage, editPackage } from "../../fetch"
+import { setWarning, removeMessages } from "../../messages"
 
 export default {
     data() {
@@ -61,10 +62,10 @@ export default {
             return erm_package
         },
         addAgreement(agreement_id) {
+            removeMessages()
             this.showModal = false
             let erm_package = this.serializeAgreement()
             // Only add if it does not exist
-            // TODO Add a warning?
             if (!erm_package.package_agreements.find((a) => a.agreement_id == agreement_id)) {
                 erm_package.package_agreements.push({ agreement_id })
                 if (this.erm_package.koha_internal_id) {
@@ -76,6 +77,8 @@ export default {
                         this.$emit('refresh-agreements')
                     })
                 }
+            } else {
+                setWarning(this.$t("This agreement is already linked with this package"))
             }
         },
         deleteAgreement(counter) {
