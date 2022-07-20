@@ -179,8 +179,12 @@
                                         <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="results_batch_op" data-op="edit" href="#">Batch edit</a></li>
-                                        <li><a class="results_batch_op" data-op="delete" href="#">Batch delete</a></li>
+                                        [% IF ( CAN_user_tools_records_batchmod ) %]
+                                        <li><a class="results_batch_op" data-op="edit" href="#">Batch edit records</a></li>
+                                        [% END %]
+                                        [% IF ( CAN_user_tools_records_batchdel ) %]
+                                        <li><a class="results_batch_op" data-op="delete" href="#">Batch delete records</a></li>
+                                        [% END %]
                                         <li><a class="results_batch_op" data-op="merge" href="#">Merge records</a></li>
                                     </ul>
                                 </div>
