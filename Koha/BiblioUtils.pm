@@ -145,12 +145,12 @@ sub get_all_biblios_iterator {
         while (1) {
             my $row = $rs->next();
             return if !$row;
-            my $marc = $row->metadata->record({ embed_items => 1 });
             my $next = eval {
+                my $marc = $row->metadata->record({ embed_items => 1 });
                 $class->new($marc, $row->biblionumber);
             };
             if ($@) {
-                warn "Something went wrong reading record for biblio $row->biblionumber: $@\n";
+                warn sprintf "Something went wrong reading record for biblio %s: %s\n", $row->biblionumber, $@;
                 next;
             }
             return $next;
