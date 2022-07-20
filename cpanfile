@@ -80,6 +80,7 @@ requires 'Module::CPANfile', '1.1000';
 requires 'Mojo::JWT', '0.08';
 requires 'Mojolicious', '8.12';
 requires 'Mojolicious::Plugin::OpenAPI', '5.05';
+requires 'Mojolicious::Plugin::RenderFile', '0.12';
 requires 'Net::CIDR', '0.17';
 requires 'Net::Netmask', '1.9022';
 requires 'Net::Stomp', '0.57';

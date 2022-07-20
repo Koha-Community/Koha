@@ -251,6 +251,43 @@
                             </div>
                         </div>
                     </li>
+
+                    <li v-if="agreement.documents.length">
+                        <label>{{ $t("Documents") }}</label>
+                        <div id="agreement_documents">
+                            <ul>
+                                <li
+                                    v-for="document in agreement.documents"
+                                    v-bind:key="document.document_id"
+                                >
+                                    <div v-if="document.file_name">
+                                        <span v-if="document.file_description"
+                                            >{{ document.file_description }} -
+                                        </span>
+                                        <a
+                                            download
+                                            :href="`/api/v1/erm/agreements/${agreement.agreement_id}/documents/${document.document_id}/file/content`"
+                                        >
+                                            {{ document.file_name }}
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                        ({{ document.file_type }}) Uploaded on:
+                                        {{ format_date(document.uploaded_on) }}
+                                    </div>
+                                    <div v-if="document.physical_location">
+                                        {{ $t("Physical location") }}:
+                                        {{ document.physical_location }}
+                                    </div>
+                                    <div v-if="document.uri">
+                                        {{ $t("URI") }}: {{ document.uri }}
+                                    </div>
+                                    <div v-if="document.notes">
+                                        {{ $t("Notes") }}: {{ document.notes }}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 </ol>
             </fieldset>
             <fieldset class="action">
@@ -333,7 +370,11 @@ export default {
     font-size: 11px;
 }
 #agreement_relationships,
-#agreement_packages {
+#agreement_packages,
+#agreement_documents {
     padding-left: 10rem;
+}
+#agreement_documents ul {
+    padding-left: 0;
 }
 </style>

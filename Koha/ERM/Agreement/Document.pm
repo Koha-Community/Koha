@@ -31,6 +31,17 @@ Koha::ERM::Agreement::Document - Koha Agreement Document Object class
 
 =cut
 
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        # Do not expose file_content to prevent the content to be fetch from the DB and sent over the network when embeded
+        file_content => undef,
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type

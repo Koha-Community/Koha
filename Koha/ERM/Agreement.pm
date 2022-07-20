@@ -17,6 +17,9 @@ package Koha::ERM::Agreement;
 
 use Modern::Perl;
 
+use MIME::Base64 qw( decode_base64 );
+use MIME::Types;
+
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -186,13 +189,47 @@ sub documents {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
-                $self->documents->delete;
-                for my $document (@$documents) {
-                    if ( $document->{file_content} ) {
-                        $document->{file_type}    = 'unknown'; # FIXME How to detect file type from base64?
-                        $document->{uploaded_on}  //= dt_from_string;
+                my $existing_documents = $self->documents;
+
+                # FIXME Here we are not deleting all the documents before recreating them, like we do for other related resources.
+                # As we do not want the content of the documents to transit over the network we need to use the document_id (and allow it in the API spec)
+                # to distinguish from each other
+                # Delete all the documents that are not part of the PUT request
+                my $modified_document_ids = [ map { $_->{document_id} || () } @$documents ];
+                $self->documents->search(
+                    {
+                        @$modified_document_ids
+                        ? (
+                            document_id => {
+                                '-not_in' => $modified_document_ids
+                            }
+                          )
+                        : ()
                     }
-                    $self->_result->add_to_erm_agreement_documents($document);
+                )->delete;
+
+                for my $document (@$documents) {
+                    if ( $document->{document_id} ) {
+                        # The document already exists in DB
+                        $existing_documents->find( $document->{document_id} )
+                          ->set(
+                            {
+                                file_description  => $document->{file_description},
+                                physical_location => $document->{physical_location},
+                                uri               => $document->{uri},
+                                notes             => $document->{notes},
+                            }
+                        )->store;
+                    }
+                    else {
+                        # Creating a whole new document
+                        my $file_content = decode_base64( $document->{file_content} );
+                        my $mt = MIME::Types->new();
+                        $document->{file_type} = $mt->mimeTypeOf( $document->{file_name} );
+                        $document->{uploaded_on} //= dt_from_string;
+                        $document->{file_content} = $file_content;
+                        $self->_result->add_to_erm_agreement_documents( $document);
+                    }
                 }
             }
         );

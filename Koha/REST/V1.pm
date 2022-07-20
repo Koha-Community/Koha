@@ -98,6 +98,8 @@ sub startup {
                 route => $self->routes->under('/api/v1')->to('Auth#under'),
             }
         );
+
+        $self->plugin('RenderFile');
     }
     catch {
         # Validation of the complete spec failed. Resort to validation one-by-one

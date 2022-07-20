@@ -1,0 +1,51 @@
+---
+"/erm/agreements/{agreement_id}/documents/{document_id}/file/content":
+  get:
+    x-mojo-to: ERM::Documents#get
+    operationId: downloadErmAgreementDocument
+    tags:
+      - document
+    summary: Download agreement document
+    produces:
+      - application/octet-stream
+    parameters:
+      - description: Case insensitive search on agreement agreement_id
+        in: path
+        name: agreement_id
+        required: true
+        type: integer
+      - description: Case insensitive search on agreement document_id
+        in: path
+        name: document_id
+        required: true
+        type: integer
+    responses:
+      200:
+        description: Anagreement
+        schema:
+          type: file
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

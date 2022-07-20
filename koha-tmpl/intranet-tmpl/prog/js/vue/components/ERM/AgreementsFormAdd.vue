@@ -348,7 +348,7 @@ export default {
 
             agreement.agreement_relationships = agreement.agreement_relationships.map(({ related_agreement, ...keepAttrs }) => keepAttrs)
 
-            agreement.documents = agreement.documents.map(({ document_id, ...keepAttrs }) => keepAttrs)
+            agreement.documents = agreement.documents.map(({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs)
 
             delete agreement.agreement_packages
 

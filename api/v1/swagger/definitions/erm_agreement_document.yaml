@@ -4,7 +4,6 @@ properties:
   document_id:
     type: integer
     description: internally assigned identifier
-    readOnly: true
   agreement_id:
     type: integer
     description: Internal agreement identifier
@@ -17,7 +16,8 @@ properties:
     type:
       - string
       - "null"
-    description: Name of the file
+    readOnly: true
+    description: Type of the file
   file_description:
     type:
       - string
@@ -32,13 +32,9 @@ properties:
     type:
       - string
       - "null"
+    readOnly: true
     format: date-time
     description: Datetime of the upload
-  file_type:
-    type:
-      - string
-      - "null"
-    description: Name of the file
   physical_location:
     type:
       - string
