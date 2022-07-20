@@ -394,7 +394,7 @@
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import EHoldingsTitlesFormAddResources from "./EHoldingsLocalTitlesFormAddResources.vue"
-import { setMessage, setError } from "../../messages"
+import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLocalTitle } from '../../fetch'
 import { storeToRefs } from "pinia"
 
@@ -462,10 +462,30 @@ export default {
             this.title = title
             this.initialized = true
         },
+        checkForm(title) {
+            let errors = []
+
+            let resources = title.resources
+            const package_ids = resources.map(al => al.package_id)
+            const duplicate_package_ids = package_ids.filter((id, i) => package_ids.indexOf(id) !== i)
+
+            if (duplicate_package_ids.length) {
+                errors.push(this.$t("A package is used several times"))
+            }
+
+            errors.forEach(function (e) {
+                setWarning(e)
+            })
+            return !errors.length
+        },
         onSubmit(e) {
             e.preventDefault()
 
             let title = JSON.parse(JSON.stringify(this.title)) // copy
+
+            if (!this.checkForm(title)) {
+                return false
+            }
             let apiUrl = '/api/v1/erm/eholdings/local/titles'
 
             let method = 'POST'
