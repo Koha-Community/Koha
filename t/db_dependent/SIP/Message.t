@@ -115,7 +115,7 @@ subtest 'Test hold_patron_bcode' => sub {
 
 subtest 'hold_patron_name() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -144,6 +144,9 @@ subtest 'hold_patron_name() tests' => sub {
 
     my $resp = C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_name, $server );
     is( $resp, q{}, "maybe_add returns empty string for SIP item with no hold returns empty string" );
+
+    $resp = C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, "0", $server );
+    is( $resp, q{CS0|}, "maybe_add will create the field of the string '0'" );
 
     $schema->storage->txn_rollback;
 };
