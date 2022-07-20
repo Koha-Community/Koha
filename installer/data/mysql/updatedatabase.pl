@@ -15156,7 +15156,6 @@ if( CheckVersion( $DBversion ) ) {
         for my $frameworkcode (@frameworkcodes) {
             Koha::Caches->get_instance->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
         }
-        Koha::Caches->get_instance->clear_from_cache("default_value_for_mod_marc-");
     }
 
     SetVersion( $DBversion );

@@ -42,7 +42,6 @@ $dbh->do(qq|
 my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 my $record = MARC::Record->new();
@@ -341,6 +340,5 @@ is( $schema->resultset('ActionLog')->count(), $actions_nb, q|ToggleNewStatus: no
 $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 $schema->storage->txn_rollback;

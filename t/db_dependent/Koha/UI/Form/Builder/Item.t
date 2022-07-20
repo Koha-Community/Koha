@@ -36,7 +36,6 @@ my $builder = t::lib::TestBuilder->new;
 my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-");
 $cache->clear_from_cache("MarcStructure-1-");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-");
 
 # 952 $x $é are not linked with a kohafield
@@ -350,7 +349,6 @@ subtest 'Fix subfill_with_default_values - no biblionumber passed' => sub {
 
 $cache->clear_from_cache("MarcStructure-0-");
 $cache->clear_from_cache("MarcStructure-1-");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-");
 
 sub setup_mss {
