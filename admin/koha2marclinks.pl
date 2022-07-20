@@ -66,9 +66,7 @@ if( $input->param('add_field') && $input->request_method eq 'POST' ) {
 
 # Clear the cache when needed
 unless( $no_upd ) {
-    for( qw| default_value_for_mod_marc- MarcSubfieldStructure- | ) {
-        $cache->clear_from_cache($_);
-    }
+    $cache->clear_from_cache("MarcSubfieldStructure-");
 }
 
 # Build/Show the form

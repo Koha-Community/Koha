@@ -1084,7 +1084,6 @@ subtest 'columns_to_str' => sub {
     my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
-    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
 
     # Creating subfields 'é', 'è' that are not linked with a kohafield
@@ -1163,7 +1162,6 @@ subtest 'columns_to_str' => sub {
 
     $cache->clear_from_cache("MarcStructure-0-");
     $cache->clear_from_cache("MarcStructure-1-");
-    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-");
 
     $schema->storage->txn_rollback;

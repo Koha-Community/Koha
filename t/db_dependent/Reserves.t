@@ -66,7 +66,6 @@ $dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestricti
 my $cache = Koha::Caches->get_instance;
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 ## Setup Test
@@ -788,7 +787,6 @@ $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 subtest '_koha_notify_reserve() tests' => sub {
