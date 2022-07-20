@@ -114,7 +114,7 @@
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
-import { setMessage, setError } from "../../messages"
+import { setMessage, setError, setWarning } from "../../messages"
 import { fetchLocalPackage, createPackage, editPackage } from '../../fetch'
 import { storeToRefs } from "pinia"
 
@@ -165,10 +165,29 @@ export default {
             this.erm_package = erm_package
             this.initialized = true
         },
+        checkForm(erm_package) {
+            let errors = []
+            let package_agreements = erm_package.package_agreements
+            const agreement_ids = package_agreements.map(pa => pa.agreement_id)
+            const duplicate_agreement_ids = agreement_ids.filter((id, i) => agreement_ids.indexOf(id) !== i)
+
+            if (duplicate_agreement_ids.length) {
+                errors.push(this.$t("An agreement is used several times"))
+            }
+
+            errors.forEach(function (e) {
+                setWarning(e)
+            })
+            return !errors.length
+        },
         onSubmit(e) {
             e.preventDefault()
 
             let erm_package = JSON.parse(JSON.stringify(this.erm_package)) // copy
+
+            if (!this.checkForm(erm_package)) {
+                return false
+            }
 
             if (erm_package.package_id) {
                 editPackage(erm_package).then(response => {
