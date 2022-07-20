@@ -108,7 +108,10 @@ sub maybe_add {
             $value =~ s/$regex->{find}/$regex->{replace}/g;
         }
     }
-    return (defined($value) && $value) ? add_field($fid, $value) : '';
+
+    return ( defined($value) && length($value) )
+      ? add_field( $fid, $value )
+      : '';
 }
 
 #
