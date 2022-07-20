@@ -1,0 +1,164 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="cat_unimarc_field_325j" class="cat" style="padding:1em;">
+
+<h3>UNIMARC field 325j builder</h3>
+
+<form name="f_pop" action="" id="form">
+<table>
+    <tr>
+        <td><label for="f0">Terms of access to the reproduction :</label></td>
+        <td>
+            <select name="f0" id="f0">
+                [% IF ( f0 == "1" ) %]
+                    <option value="1" selected="selected">1 - free-to-read</option>
+                [% ELSE %]
+                    <option value="1">1 - free-to-read</option>
+                [% END %]
+
+                [% IF ( f0 == "2" ) %]
+                    <option value="2" selected="selected">2 - free-to-read, partly</option>
+                [% ELSE %]
+                    <option value="2">2 - free-to-read, partly</option>
+                [% END %]
+
+                [% IF ( f0 == "3" ) %]
+                    <option value="3" selected="selected">3 - free-to-read, after embargo</option>
+                [% ELSE %]
+                    <option value="3">3 - free-to-read, after embargo</option>
+                [% END %]
+
+                [% IF ( f0 == "4" ) %]
+                    <option value="4" selected="selected">4 - fully</option>
+                [% ELSE %]
+                    <option value="4">4 - fully</option>
+                [% END %]
+
+                [% IF ( f0 == "5" ) %]
+                    <option value="5" selected="selected">5 - free-to-read upon subscription (requires signing up)</option>
+                [% ELSE %]
+                    <option value="5">5 - free-to-read upon subscription (requires signing up)</option>
+                [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f1">Qualifier type :</label></td>
+        <td>
+            <select name="f1" id="f1">
+                [% IF ( f1 == "l" ) %]
+                    <option value="l" selected="selected">l - latest</option>
+                [% ELSE %]
+                    <option value="l" >l - latest</option>
+                [% END %]
+
+                [% IF ( f1 == "p" ) %]
+                    <option value="p" selected="selected">p - previous</option>
+                [% ELSE %]
+                    <option value="p">p - previous</option>
+                [% END %]
+
+                [% IF ( f1 == "x" ) %]
+                    <option value="" selected="selected">x - not applicable</option>
+                [% ELSE %]
+                    <option value="">x - not applicable</option>
+                [% END %]
+
+                [% IF ( f1 == "#" ) %]
+                    <option value="#" selected="selected"># - no attempt to code</option>
+                [% ELSE %]
+                    <option value="#"># - no attempt to code</option>
+                [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f2">Unit under embargo :</label></td>
+        <td>
+            <select name="f2" id="f2">
+                [% IF ( f2 == "m" ) %]
+                    <option value="m" selected="selected">m - month(s) time</option>
+                [% ELSE %]
+                    <option value="m">m - month(s) time</option>
+                [% END %]
+
+                [% IF ( f2 == "w" ) %]
+                    <option value="w" selected="selected">w - week(s) time</option>
+                [% ELSE %]
+                    <option value="w">w - week(s) time</option>
+                [% END %]
+
+                [% IF ( f2 == "y" ) %]
+                    <option value="y" selected="selected">y - year(s) time</option>
+                [% ELSE %]
+                    <option value="y">y - year(s) time</option>
+                [% END %]
+
+                [% IF ( f2 == "i" ) %]
+                    <option value="i" selected="selected">i - issue(s) part</option>
+                [% ELSE %]
+                    <option value="i">i - issue(s) part</option>
+                [% END %]
+
+                [% IF ( f2 == "x" ) %]
+                    <option value="" selected="selected">x - not applicable</option>
+                [% ELSE %]
+                    <option value="">x - not applicable</option>
+                [% END %]
+
+                [% IF ( f2 == "#" ) %]
+                    <option value="#" selected="selected"># - no attempt to code</option>
+                [% ELSE %]
+                    <option value="#"># - no attempt to code</option>
+                [% END %]
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f3">Number of units under embargo :</label></td>
+        <td>
+            <input name="f3" id="f3" inputmode="numeric" pattern="\d{1,2}" value="[% f3 | html %]"></input>
+        </td>
+    </tr>
+</table>
+<p><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a> </p>
+</form>
+
+<script>
+    $("#form").on('submit', submitMyForm);
+    $("#f0").on('change', function() {
+        document.f_pop.f1.disabled = false;
+        document.f_pop.f2.disabled = false;
+        document.f_pop.f3.disabled = false;
+
+        if ( document.f_pop.f0.value != "3" ) {
+            document.f_pop.f1.value = "x";
+            document.f_pop.f2.value = "x";
+            document.f_pop.f1.disabled = true;
+            document.f_pop.f2.disabled = true;
+            document.f_pop.f3.disabled = true;
+        }
+    });
+    $("#f0").trigger('change');
+
+    function submitMyForm(event) {
+        event.preventDefault();
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
+        if ( document.f_pop.f0.value == "3" ) {
+            var f3v = document.f_pop.f3.value.padStart(2, '0');
+            document.f_pop.f3.value = f3v;
+        }
+
+        field.value = document.f_pop.f0.value+
+                      document.f_pop.f1.value+
+                      document.f_pop.f2.value+
+                      document.f_pop.f3.value;
+        window.close();
+    }
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

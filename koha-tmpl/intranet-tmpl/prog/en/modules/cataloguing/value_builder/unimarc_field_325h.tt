@@ -1,0 +1,53 @@
+[%# ATTENTION c'est le contenu du fichier unimarc_field_181-2.tt %]
+
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="cat_unimarc_field_325h" class="cat" style="padding:1em;">
+
+<h3>UNIMARC field 325h builder</h3>
+
+<form name="f_pop" action="">
+<table>
+    <tr>
+        <td><label for="f0">Completeness of the reproduction code :</label></td>
+        <td>
+            <select name="f0" id="f0">
+                [% IF ( f0 == "" ) %]
+                    <option value=" " selected="selected"># - undetermined</option>
+                [% ELSE %]
+                    <option value=" "># - undetermined</option>
+                [% END %]
+
+                [% IF ( f0 == "0" ) %]
+                    <option value="0" selected="selected">0 - reproduction is not complete</option>
+                [% ELSE %]
+                    <option value="0">0 - reproduction is not complete</option>
+                [% END %]
+
+                [% IF ( f0 == "1" ) %]
+                    <option value="1" selected="selected">1 - reproduction is complete</option>
+                [% ELSE %]
+                    <option value="1">1 - reproduction is complete</option>
+                [% END %]
+            </select>
+        </td>
+    </tr>
+</table>
+<p><input type="button" value="OK"  onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
+</form>
+
+<script>
+
+    function submitMyForm() {
+        var doc   = opener.document;
+        var field = doc.getElementById("[% index | html %]");
+
+        field.value = document.f_pop.f0.value;
+        window.close();
+        return false;
+    }
+</script>
