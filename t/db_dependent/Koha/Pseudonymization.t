@@ -132,28 +132,31 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
     delete $patron_info->{borrowernumber};
     $patron->delete;
 
-    my $attribute_type1 = Koha::Patron::Attribute::Type->new(
+    my $attribute_type1 = $builder->build_object(
         {
-            code                => 'my code1',
-            description         => 'my description1',
-            repeatable          => 1,
-            keep_for_pseudonymization => 1,
+            class => 'Koha::Patron::Attribute::Types',
+            value => {
+                repeatable                => 1,
+                keep_for_pseudonymization => 1,
+            }
         }
-    )->store;
-    my $attribute_type2 = Koha::Patron::Attribute::Type->new(
+    );
+    my $attribute_type2 = $builder->build_object(
         {
-            code                => 'my code2',
-            description         => 'my description2',
-            keep_for_pseudonymization => 0,
+            class => 'Koha::Patron::Attribute::Types',
+            value => {
+                keep_for_pseudonymization => 0,
+            }
         }
-    )->store;
-    my $attribute_type3 = Koha::Patron::Attribute::Type->new(
+    );
+    my $attribute_type3 = $builder->build_object(
         {
-            code                => 'my code3',
-            description         => 'my description3',
-            keep_for_pseudonymization => 1,
+            class => 'Koha::Patron::Attribute::Types',
+            value => {
+                keep_for_pseudonymization => 1,
+            }
         }
-    )->store;
+    );
 
     $patron = Koha::Patron->new($patron_info)->store->get_from_storage;
     my $attribute_values = [
@@ -190,7 +193,9 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
     );
 
     my $p = Koha::PseudonymizedTransactions->search({itemnumber => $item->itemnumber})->next;
-    my $attributes = Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')->search({transaction_id => $p->id });
+    my $attributes =
+      Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')
+      ->search( { transaction_id => $p->id }, { order_by => 'attribute' } );
     is( $attributes->count, 2,
         'Only the 2 attributes that have a type with keep_for_pseudonymization set should be kept'
     );
