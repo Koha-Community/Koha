@@ -154,6 +154,7 @@
 
                                     [% FOREACH loo IN loop %]
                                         <div class="constraints tab-pane" role="tabpanel" id="sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field">
+                                            <input type="hidden" name="tab_id" value="[% loo.row | html %]" />
                                             <div id="basic[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]" class="contraints">
                                                 <fieldset class="rows">
                                                     <legend>Basic constraints</legend>
@@ -163,13 +164,11 @@
                                                                 <span class="label">Subfield code:</span>
                                                                 [% loo.subfieldcode | html %]
                                                                 <input type="hidden" name="tagsubfield" value="[% loo.subfieldcode | html %]" />
-                                                                <input type="hidden" name="tab_id" value="[% loo.row | html %]" />
                                                             </li>
                                                         [% ELSE %]
                                                             <li>
                                                                 <label for="tagsubfield[% loo.row | html %]">Subfield code:</label>
                                                                     <input type="text" id="tagsubfield[% loo.row | html %]" name="tagsubfield" value="[% loo.subfieldcode | html %]" />
-                                                                    <input type="hidden" name="tab_id" value="[% loo.row | html %]" />
                                                                 </li>
                                                         [% END %]
                                                         <li>
