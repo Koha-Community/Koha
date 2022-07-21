@@ -496,6 +496,12 @@
                                                 <fieldset class="rows mtt">
                                             [% END %]
                                                 <ol>
+                                                    [% IF ( letter.tt_error ) %]
+                                                        <li>
+                                                            <span class="label error">Template Toolkit error:</span>
+                                                            [% letter.tt_error | html %]
+                                                        </li>
+                                                    [% END %]
                                                     [% IF ( letter.updated_on ) %]
                                                         <li>
                                                             <span class="label">Last updated:</span>

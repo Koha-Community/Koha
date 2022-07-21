@@ -42,6 +42,8 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use Template;
+
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -90,12 +92,12 @@ our $my_branch = C4::Context->preference("IndependentBranches") && !$staffflags-
 
 $template->param(
     independant_branch => $my_branch,
-	script_name => $script_name,
-  searchfield => $searchfield,
-    branchcode => $branchcode,
-    section => $section,
-    langtab => $langtab,
-	action => $script_name
+    script_name        => $script_name,
+    searchfield        => $searchfield,
+    branchcode         => $branchcode,
+    section            => $section,
+    langtab            => $langtab,
+    action             => $script_name
 );
 
 if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
@@ -196,6 +198,16 @@ sub add_form {
         my $lang;
         # The letter name is contained into each mtt row.
         # So we can only sent the first one to the template.
+        my $tt = Template->new(
+            {
+                EVAL_PERL   => 1,
+                ABSOLUTE    => 1,
+                PLUGIN_BASE => 'Koha::Template::Plugin',
+                FILTERS     => {},
+                ENCODING    => 'UTF-8',
+            }
+        );
+
         for my $letter ( @$letters ) {
             # The letter_name
             if ( $first_flag_name and $letter->{name} ) {
@@ -203,6 +215,12 @@ sub add_form {
                     letter_name=> $letter->{name},
                 );
                 $first_flag_name = 0;
+            }
+
+            my $output;
+            my $template = $letter->{content};
+            unless ( $tt->process( \$template, {}, \$output ) ) {
+                $letter->{tt_error} = $tt->error();
             }
 
             my $lang = $letter->{lang};
@@ -213,6 +231,7 @@ sub add_form {
                 updated_on => $letter->{updated_on},
                 title      => $letter->{title},
                 content    => $letter->{content} // '',
+                tt_error   => $letter->{tt_error},
             };
         }
     }
@@ -445,6 +464,7 @@ sub default_display {
 
     my $loop_data = [];
     my $protected_letters = protected_letters();
+
     foreach my $row (@{$results}) {
         $row->{protected} = !$row->{branchcode} && $protected_letters->{ $row->{code} };
         push @{$loop_data}, $row;
