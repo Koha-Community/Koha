@@ -182,6 +182,8 @@ sub prep_report {
         }
         $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
     }
+
+    $sql = "$sql /* saved_sql.id: ${\( $self->id )} */";
     return $sql, $headers;
 }
 
