@@ -419,10 +419,12 @@ my @operands = $cgi->multi_param('q');
 $template->{VARS}->{querystring} = join(' ', @operands);
 
 # if a simple search, display the value in the search box
+my $basic_search = 0;
 if ($operands[0] && !$operands[1]) {
     my $ms_query = $operands[0];
     $ms_query =~ s/ #\S+//;
     $template->param(ms_value => $ms_query);
+    $basic_search=1;
 }
 
 # limits are use to limit to results to a pre-defined category such as branch or language
@@ -609,6 +611,35 @@ for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
+        if ( $hits == 0 && $basic_search ){
+            $operands[0] = '"'.$operands[0].'"'; #quote it
+            ## I. BUILD THE QUERY
+            ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
+              = $builder->build_query_compat(
+                \@operators,
+                \@operands,
+                \@indexes,
+                \@limits,
+                \@sort_by,
+                0,
+                $lang,
+                {
+                    suppress => $suppress,
+                    is_opac => 1,
+                    weighted_fields => $weight_search
+                }
+            );
+            my $quoted_results_hashref;
+            my $itemtypes_nocategory = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+            eval {
+                ($error, $quoted_results_hashref, $facets) = $searcher->search_compat($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes_nocategory,$query_type,$scan,1);
+            };
+            my $quoted_hits = $quoted_results_hashref->{$server}->{"hits"} // 0;
+            if ( $quoted_hits ){
+                $results_hashref->{'biblioserver'} = $quoted_results_hashref->{'biblioserver'};
+                $hits = $quoted_hits;
+            }
+        }
         my $page = $cgi->param('page') || 0;
         my @newresults = searchResults( $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"}, $variables);
