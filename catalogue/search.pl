@@ -373,10 +373,12 @@ if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
 my @operands = map uri_unescape($_), $cgi->multi_param('q');
 
 # if a simple search, display the value in the search box
+my $basic_search = 0;
 if ($operands[0] && !$operands[1]) {
     my $ms_query = $operands[0];
     $ms_query =~ s/ #\S+//;
     $template->param(ms_value => $ms_query);
+    $basic_search=1;
 }
 
 my $available;
@@ -523,6 +525,31 @@ for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         my $hits = $results_hashref->{$server}->{"hits"} // 0;
+        if ( $hits == 0 && $basic_search ){
+            $operands[0] = '"'.$operands[0].'"'; #quote it
+            ## I. BUILD THE QUERY
+            (
+                $error,             $query, $simple_query, $query_cgi,
+                $query_desc,        $limit, $limit_cgi,    $limit_desc,
+                $query_type
+              )
+              = $builder->build_query_compat( \@operators, \@operands, \@indexes, \@limits,
+                \@sort_by, $scan, $lang, { weighted_fields => $weight_search, whole_record => $whole_record });
+            my $quoted_results_hashref;
+            eval {
+                my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+                ( $error, $quoted_results_hashref, $facets ) = $searcher->search_compat(
+                    $query,            $simple_query, \@sort_by,       ['biblioserver'],
+                    $results_per_page, $offset,       undef,           $itemtypes,
+                    $query_type,       $scan
+                );
+            };
+            my $quoted_hits = $quoted_results_hashref->{$server}->{"hits"} // 0;
+            if ( $quoted_hits ){
+                $results_hashref->{'biblioserver'} = $quoted_results_hashref->{'biblioserver'};
+                $hits = $quoted_hits;
+            }
+        }
         my $page = $cgi->param('page') || 0;
         my @newresults = searchResults({ 'interface' => 'intranet' }, $query_desc, $hits, $results_per_page, $offset, $scan,
                                        $results_hashref->{$server}->{"RECORDS"});
