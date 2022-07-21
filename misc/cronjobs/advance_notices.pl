@@ -185,6 +185,8 @@ my $itemscontent = join(',',qw( date_due title author barcode ));
 my $help    = 0;
 my $man     = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
             'help|?'         => \$help,
             'man'            => \$man,
@@ -215,7 +217,7 @@ END_WARN
 unless ($confirm) {
      pod2usage(1);
 }
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my %branches = ();
 if (@branchcodes) {
@@ -638,6 +640,7 @@ sub send_digests {
     }
 }
 
+cronlogaction({ info => "COMPLETED" });
 
 1;
 
