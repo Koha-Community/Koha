@@ -22,6 +22,7 @@ use MIME::Types;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Exceptions;
 
 use base qw(Koha::Object);
 
@@ -103,6 +104,12 @@ sub agreement_licenses {
     my ( $self, $agreement_licenses ) = @_;
 
     if ( $agreement_licenses ) {
+        my $controlling = grep { $_->{status} eq 'controlling' } @$agreement_licenses;
+        if ( $controlling > 1 ) {
+            Koha::Exceptions::DuplicateObject->throw(
+                "Only one controlling license can exist for a given agreement");
+        }
+
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {

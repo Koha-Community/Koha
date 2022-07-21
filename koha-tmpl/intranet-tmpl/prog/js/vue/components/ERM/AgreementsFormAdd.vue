@@ -305,6 +305,10 @@ export default {
                 errors.push(this.$t("Only one controlling license is allowed"))
             }
 
+            if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
+                errors.push(this.$t("Only one controlling license is allowed"))
+            }
+
             errors.forEach(function (e) {
                 setWarning(e)
             })
