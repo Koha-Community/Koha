@@ -227,6 +227,13 @@ SKIP: {
             $effective_input->send_keys( $v );
         }
 
+        # Find itemtype select2 and open it
+        my $itype_select = $driver->find_element('//*[@id="subfield952y"]/span[1]');
+        $itype_select->click;
+        # Select an itemtype
+        my $options = $driver->find_elements('.select2-results__option', 'css');
+        @$options[0]->click;
+
         $driver->find_element('//input[@name="add_submit"]')->click;
         like( $driver->get_title(), qr(Items.*Record #$biblionumber) );
 
