@@ -34,7 +34,7 @@ Options:
    --man                    full documentation
    --where <conditions>     where clause to add to the query
    -v -verbose              verbose mode
-   -n --nomail              if supplied messages will be output to STDOUT and not sent
+   -n --nomail              if supplied, messages will be output to STDOUT and no email or sms will be sent
    -c --confirm             commit changes to db, no action will be taken unless this switch is included
    -b --branch <branchname> only deal with patrons from this library/branch
    --before=X               include patrons expiring a number of days BEFORE the date set by the preference
@@ -43,7 +43,7 @@ Options:
 
 =head1 DESCRIPTION
 
-This script sends membership expiry reminder notices to patrons.
+This script sends membership expiry reminder notices to patrons, by email and sms.
 It queues them in the message queue, which is processed by
 the process_message_queue.pl cronjob.
 
@@ -218,13 +218,35 @@ while ( my $recent = $upcoming_mem_expires->next ) {
     last if !$letter; # Letters.pm already warned, just exit
     if( $nomail ) {
         print $letter->{'content'}."\n";
-    } else {
-        C4::Letters::EnqueueLetter({
-            letter                 => $letter,
-            borrowernumber         =>  $recent->borrowernumber,
-            from_address           => $from_address,
-            message_transport_type => 'email',
-        });
+        next;
+    }
+
+    C4::Letters::EnqueueLetter({
+        letter                 => $letter,
+        borrowernumber         =>  $recent->borrowernumber,
+        from_address           => $from_address,
+        message_transport_type => 'email',
+    });
+
+    if ($recent->smsalertnumber) {
+        my $smsletter = C4::Letters::GetPreparedLetter(
+            module      => 'members',
+            letter_code => $letter_type,
+            branchcode  => $recent->branchcode,
+            lang        => $recent->lang,
+            tables      => {
+                borrowers => $recent->borrowernumber,
+                branches  => $recent->branchcode,
+            },
+            message_transport_type => 'sms',
+        );
+        if ($smsletter) {
+            C4::Letters::EnqueueLetter({
+                letter                 => $smsletter,
+                borrowernumber         => $recent->borrowernumber,
+                message_transport_type => 'sms',
+            });
+        }
     }
 }
 
