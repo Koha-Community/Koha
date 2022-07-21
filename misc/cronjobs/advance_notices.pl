@@ -640,7 +640,7 @@ sub send_digests {
     }
 }
 
-cronlogaction({ info => "COMPLETED" });
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 1;
 
