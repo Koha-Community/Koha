@@ -131,10 +131,11 @@ Logs the path and name of the calling script plus the information privided by pa
 
 #'
 sub cronlogaction {
-    my ($infos)=@_;
+    my $params = shift;
+    my $info = $params->{info};
     my $loginfo = (caller(0))[1];
-    $loginfo .= ' ' . $infos if $infos;
-    logaction( 'CRONJOBS', 'Run', undef, $loginfo ) if C4::Context->preference('CronjobLog');
+    $loginfo .= ' ' . $info if $info;
+    logaction( 'CRONJOBS', 'Run', $$, $loginfo ) if C4::Context->preference('CronjobLog');
 }
 
 1;
