@@ -336,9 +336,18 @@ sub index_records {
 
 sub _get_record {
     my ( $self, $record_id ) = @_;
-    return $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX
-        ? Koha::Biblios->find($record_id)->metadata->record({ embed_items => 1 })
-        : C4::AuthoritiesMarc::GetAuthority($record_id);
+
+    my $record;
+
+    if ( $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX ) {
+        my $biblio = Koha::Biblios->find($record_id);
+        $record = $biblio->metadata->record( { embed_items => 1 } )
+          if $biblio;
+    } else {
+        $record = C4::AuthoritiesMarc::GetAuthority($record_id);
+    }
+
+    return $record;
 }
 
 =head2 delete_index($biblionums)
