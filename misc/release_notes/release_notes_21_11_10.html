@@ -1,0 +1,396 @@
+<h1 id="releasenotesforkoha21.11.10">RELEASE NOTES FOR KOHA 21.11.10</h1>
+
+<p>22 Jul 2022</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 21.11.10 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-21.11.10.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 21.11.10 is a bugfix/maintenance release.</p>
+
+<p>It includes 2 enhancements, 13 bugfixes.</p>
+
+<h3 id="systemrequirements">System requirements</h3>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha here: https://wiki.koha-community.org/wiki/System_requirements_and_recommendations</p>
+
+<h2 id="enhancements">Enhancements</h2>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30997">[30997]</a> "CGI::param called in list context" warning in detail.pl flooding error log</p>
+
+<blockquote>
+  <p>This fixes the cause of "CGI::param called in list context from" warning messages that appear in the log files when viewing record detail pages in the staff interface.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30786">[30786]</a> Capitalization in (Opac)AdvancedSearchTypes</p>
+
+<blockquote>
+  <p>This fixes the descriptions for the AdvancedSearchTypes and OpacAdvancedSearchTypes system preferences - sentence case is now used for "..Shelving location..".</p>
+</blockquote></li>
+</ul>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30234">[30234]</a> Serial local covers don't appear in the staff interface for other libraries with SeparateHoldings</p>
+
+<blockquote>
+  <p>This fixes the display of item-specific local cover images in the staff interface. Before this, item images were not shown for holdings on the record's details view page.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29504">[29504]</a> Confirm item parts requires force_checkout permission (checkouts tab)</li>
+</ul>
+
+<h3 id="lists">Lists</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30925">[30925]</a> Creating public list by adding items to new list creates a private list</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=31005">[31005]</a> Cannot edit patrons in other categories if an extended attribute is mandatory and limited to a category</p>
+
+<blockquote>
+  <p>This fixes an error when a mandatory patron attribute limited to a specific patron category was causing a '500 error' when editing a patron not in that category.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="restapi">REST API</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30677">[30677]</a> Unknown column 'biblioitem.title' in 'where clause' 500 error in API /api/v1/acquisitions/orders</li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30883">[30883]</a> Authorities merge is limited to 100 biblio with Elasticsearch</p>
+
+<blockquote>
+  <p>This fixes the hard-coded limit of 100 when merging authorities (when Elasticsearch is the search engine). When merging authorities where the term is used over 100 times, only the first 100 authorities would be merged and the old term deleted, irrespective of the value set in the AuthorityMergeLimit system preference.</p>
+</blockquote></li>
+</ul>
+
+<h2 id="otherbugsfixed">Other bugs fixed</h2>
+
+<h3 id="holdrequests">Hold requests</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12630">[12630]</a> Prioritizing "Hold starts on date" -holds causes all other holds to be prioritized as well!</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28529">[28529]</a> Item type-constrained biblio-level holds should honour max_holds as item-level do</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30207">[30207]</a> Librarians with only "place_holds" permission can no longer update hold pickup locations</li>
+</ul>
+
+<h3 id="i18nl10n">I18N/L10N</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30958">[30958]</a> OPAC Overdrive search result page broken for translations</p>
+
+<p><strong>Sponsored by</strong> <em>Melbourne Athenaeum Library, Australia</em></p></li>
+</ul>
+
+<h3 id="notices">Notices</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28355">[28355]</a> Add warning note about Email SMS driver option for SMSSendDriver</p>
+
+<blockquote>
+  <p>This updates the text for the SMSSendDriver system preference. The Email SMS driver option is no longer recommended unless you use a dedicated SMS to Email gateway. Many mobile providers offer inconsistent support for the email to SMS gateway (sometimes it works, and sometimes it doesn't), which can cause frustration for patrons.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30989">[30989]</a> Tags with some special characters are not encoded right</p>
+
+<blockquote>
+  <p>This fixes tags with special characters (such as +) so that the searching returns results when the tag is selected (from the record detail view in the OPAC and staff interface, and from the search results, tag cloud, and list pages in the OPAC).</p>
+</blockquote></li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30970">[30970]</a> holdst columns don't match actual columns in 'Holds waiting'</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><a href="http://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>Arabic (87.4%)</li>
+<li>Armenian (100%)</li>
+<li>Armenian (Classical) (89%)</li>
+<li>Bulgarian (92.3%)</li>
+<li>Chinese (Taiwan) (79.5%)</li>
+<li>Czech (76.4%)</li>
+<li>English (New Zealand) (59.1%)</li>
+<li>English (USA)</li>
+<li>Finnish (92.3%)</li>
+<li>French (95.1%)</li>
+<li>French (Canada) (92.9%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (58.8%)</li>
+<li>Greek (60.3%)</li>
+<li>Hindi (99.9%)</li>
+<li>Italian (100%)</li>
+<li>Nederlands-Nederland (Dutch-The Netherlands) (86.9%)</li>
+<li>Norwegian Bokmål (63.3%)</li>
+<li>Polish (99.2%)</li>
+<li>Portuguese (91.1%)</li>
+<li>Portuguese (Brazil) (83.8%)</li>
+<li>Russian (84.9%)</li>
+<li>Slovak (73.2%)</li>
+<li>Spanish (100%)</li>
+<li>Swedish (82.3%)</li>
+<li>Telugu (95.3%)</li>
+<li>Turkish (99.6%)</li>
+<li>Ukrainian (75.9%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 21.11.10 is</p>
+
+<ul>
+<li><p>Release Manager: Jonathan Druart</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Martin Renvoize</li>
+<li>Tomás Cohen Arazi</li>
+</ul></li>
+<li><p>QA Manager: Katrin Fischer</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Agustín Moyano</li>
+<li>Andrew Nugged</li>
+<li>David Cook</li>
+<li>Joonas Kylmälä</li>
+<li>Julian Maurice</li>
+<li>Kyle M Hall</li>
+<li>Marcel de Rooy</li>
+<li>Martin Renvoize</li>
+<li>Nick Clemens</li>
+<li>Petro Vashchuk</li>
+<li>Tomás Cohen Arazi</li>
+<li>Victor Grousset</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>REST API -- Tomás Cohen Arazi</li>
+<li>Elasticsearch -- Fridolin Somers</li>
+<li>Zebra -- Fridolin Somers</li>
+<li>Accounts -- Martin Renvoize</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Sally Healey</li>
+</ul></li>
+<li><p>Documentation Manager: David Nind</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>David Nind</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Managers: </p>
+
+<ul>
+<li>Bernardo González Kriegel</li>
+</ul></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>21.05 -- Kyle M Hall</li>
+<li>20.11 -- Fridolin Somers</li>
+<li>20.05 -- Victor Grousset</li>
+<li>19.11 -- Wainui Witika-Park</li>
+</ul></li>
+<li><p>Release Maintainer assistants:</p>
+
+<ul>
+<li>21.05 -- Nick Clemens</li>
+</ul></li>
+<li><p>Release Maintainer mentors:</p>
+
+<ul>
+<li>19.11 -- Aleisha Amohia</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 21.11.10</p>
+
+<ul>
+<li>Melbourne Athenaeum Library, Australia</li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 21.11.10</p>
+
+<ul>
+<li>Tomás Cohen Arazi (2)</li>
+<li>Alex Buckley (1)</li>
+<li>Nick Clemens (4)</li>
+<li>Jonathan Druart (3)</li>
+<li>Katrin Fischer (3)</li>
+<li>Lucas Gass (1)</li>
+<li>Kyle M Hall (3)</li>
+<li>Olli-Antti Kivilahti (1)</li>
+<li>David Nind (1)</li>
+<li>Martin Renvoize (5)</li>
+<li>Marcel de Rooy (1)</li>
+<li>Fridolin Somers (1)</li>
+<li>Arthur Suzuki (3)</li>
+<li>Koha translators (1)</li>
+<li>Petro Vashchuk (1)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 21.11.10</p>
+
+<ul>
+<li>BibLibre (5)</li>
+<li>Bibliotheksservice-Zentrum Baden-Württemberg (BSZ) (3)</li>
+<li>ByWater-Solutions (8)</li>
+<li>Catalyst (1)</li>
+<li>David Nind (1)</li>
+<li>Independant Individuals (1)</li>
+<li>Koha Community Developers (3)</li>
+<li>PTFS-Europe (5)</li>
+<li>Rijksmuseum (1)</li>
+<li>Theke Solutions (2)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<ul>
+<li>Tomás Cohen Arazi (22)</li>
+<li>Christopher Brannon (1)</li>
+<li>Jonathan Druart (3)</li>
+<li>Katrin Fischer (8)</li>
+<li>Lucas Gass (21)</li>
+<li>Victor Grousset (2)</li>
+<li>Kyle M Hall (1)</li>
+<li>Lucy Harrison (1)</li>
+<li>Sally Healey (1)</li>
+<li>Owen Leonard (1)</li>
+<li>David Nind (12)</li>
+<li>Martin Renvoize (6)</li>
+<li>Marcel de Rooy (3)</li>
+<li>Fridolin Somers (2)</li>
+<li>Arthur Suzuki (25)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 21.11.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 22 Jul 2022 11:46:22.</p>
