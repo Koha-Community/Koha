@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 01:42-0300\n"
+"POT-Creation-Date: 2022-07-17 11:24-0300\n"
 "PO-Revision-Date: 2022-04-16 18:46+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
@@ -19,8 +19,8 @@ msgstr ""
 "X-POOTLE-MTIME: 1650134804.350532\n"
 
 #. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
+#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
+#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
 #. %4$s:  INCLUDE 'doc-head-open.inc' 
 #. %5$s:  IF ( LibraryNameTitle ) 
 #. %6$s:  LibraryNameTitle | html 
@@ -2833,8 +2833,8 @@ msgid "Accept"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #, c-format
 msgid "Access denied"
 msgstr "В доступе отказано"
@@ -3916,9 +3916,9 @@ msgstr "Расстановочный шифр: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:162
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:166
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
@@ -5671,9 +5671,9 @@ msgstr "Пеня и сплаты"
 msgid "Fines:"
 msgstr "Пени:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "Finish"
 msgstr "Завершение"
@@ -6928,9 +6928,9 @@ msgstr "Ключевое слово"
 msgid "Koha"
 msgstr "Коха"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr "Koha %s"
@@ -10587,8 +10587,8 @@ msgstr "Информация о серии:"
 msgid "Series title"
 msgstr "Серийное заглавие"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:184
 #, c-format
 msgid "Session lost"
 msgstr "Сессию потеряно"
@@ -14306,10 +14306,10 @@ msgstr "tagsel_button"
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"

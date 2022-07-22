@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-15 16:43+0000\n"
-"PO-Revision-Date: 2022-06-20 18:51+0000\n"
+"PO-Revision-Date: 2022-07-22 07:16+0000\n"
 "Last-Translator: SK-KOHA <dada.kapustova@gmail.com>\n"
 "Language-Team: SVK\n"
 "Language: sk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1655751098.911376\n"
+"X-POOTLE-MTIME: 1658474197.150048\n"
 "X-Pootle-Path: /sk/21.05/sk-SK-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -51,6 +51,9 @@ msgid ""
 "enabled for each credit type (<a href=\"/cgi-bin/koha/admin/credit_types.pl"
 "\">Configure credit types</a>)"
 msgstr ""
+"accounting.pref#AutoCreditNumber# Automatické generovanie musí byť taktiež "
+"povolené pre všetky typy kreditov <a href=\"/cgi-bin/koha/admin/credit_types."
+"pl\">Konfingurovať typy kreditov</a>)"
 
 # Accounting > Features
 msgid ""
@@ -501,7 +504,7 @@ msgstr "Nepoužiť"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UseACQFrameworkForBiblioRecords# Use"
-msgstr "Použiť"
+msgstr "acquisitions.pref#UseACQFrameworkForBiblioRecords# Použiť"
 
 # Administration
 msgid "admin.pref"
@@ -540,6 +543,8 @@ msgid ""
 "admin.pref#AddressForFailedOverdueNotices# Email address failed overdue "
 "notices are sent to: "
 msgstr ""
+"admin.pref#AddressForFailedOverdueNotices# Neplatná emailová adresa, "
+"pripomienky sú odoslané na: "
 
 # Administration > Interface options > AddressForFailedOverdueNotices
 msgid ""
@@ -723,14 +728,12 @@ msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
 msgstr "Vyhľadávateľné pole"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "admin.pref#EmailOverduesNoEmail# Don't send"
-msgstr "Neposielať"
+msgstr "admin.pref#EmailOverduesNoEmail# Neposlať"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "admin.pref#EmailOverduesNoEmail# Send"
-msgstr "Posielať"
+msgstr "admin.pref#EmailOverduesNoEmail# Poslať"
 
 # Administration > Interface options > EmailOverduesNoEmail
 msgid ""
@@ -3803,15 +3806,15 @@ msgstr "Ročník"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Author"
-msgstr "Autor"
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Autor"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Chapters"
-msgstr "Kapitoly"
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Kapitoly"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Date"
-msgstr "Dátum"
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Dátum"
 
 # Circulation > Article requests
 msgid ""
@@ -3845,7 +3848,7 @@ msgstr "Kapitoly"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Date"
-msgstr "Dátum"
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Dátum"
 
 # Circulation > Article requests
 msgid ""
@@ -3859,7 +3862,7 @@ msgstr "Vydanie"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Pages"
-msgstr "Strany"
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Strany"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Title"
@@ -3907,7 +3910,7 @@ msgstr "Povoliť"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Don't"
-msgstr ""
+msgstr "circulation.pref#AutoRemoveOverduesRestrictions# Nepovoliť"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4448,7 +4451,7 @@ msgstr "Predvolene nastavte hodnotu exemplára LOST na"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# days."
-msgstr "dní."
+msgstr "circulation.pref#DefaultLongOverdueLostValue# dní."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5868,7 +5871,9 @@ msgstr ""
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# the library the item is "
 "held by."
-msgstr "knižnice, v ktorej sa exemplár zdržiava."
+msgstr ""
+"circulation.pref#StaffSearchResultsDisplayBranch# knižnica, v ktorej sa "
+"exemplár nachádza."
 
 # Circulation > Holds policy
 msgid ""
@@ -6470,6 +6475,8 @@ msgid ""
 "circulation.pref#finesMode# on close days. If set the fines.pl cronjob will "
 "not generate fines when run on days marked as closed in the calendar."
 msgstr ""
+"circulation.pref#finesMode# v blízkych dňoch. Ak sa nastaví fines.pl cronjob "
+"nebude generovať pokuty, počas dní označených v kalendári, ako zatvorené."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -6485,9 +6492,10 @@ msgid ""
 "catalog search if the phrase entered as a barcode on the checkout page does "
 "not turn up any results during an item barcode search."
 msgstr ""
-"automatické použitie hľadania pomocou katalógu kľúčových slov, ak zadaná "
-"fráza v podobe čiarového kódu na stránke výpožičky neprinesie výsledky počas "
-"hľadania čiarového kódu exemplára."
+"circulation.pref#itemBarcodeFallbackSearch# automatické použitie "
+"vyhľadávania pomocou katalógu kľúčových slov, ak zadaná fráza v podobe "
+"čiarového kódu na stránke výpožičky saa počas vyhľadávania čiarovým kódom "
+"nezobrazia žiadne výsledky."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
@@ -6582,11 +6590,13 @@ msgstr "najnejskoršej po najskoršiu"
 msgid ""
 "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on the "
 "circulation page from"
-msgstr "Triediť dnešné výpožičky na stránke výpožičného procesu od"
+msgstr ""
+"circulation.pref#todaysIssuesDefaultSortOrder# Triediť dnešné výpožičky na "
+"stránke výpožičného procesu od"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
-msgstr ""
+msgstr "circulation.pref#todaysIssuesDefaultSortOrder# termín vrátenia."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -6598,14 +6608,15 @@ msgstr "najnejskoršej po najskoršiu"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#useDaysMode# Ignore the calendar"
-msgstr "Ignorovať kalendár"
+msgstr "circulation.pref#useDaysMode# Ignorovať kalendár"
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#useDaysMode# Use the calendar to push the due date to the "
 "next open day"
 msgstr ""
-"Pomocou kalendára posuňte termín vrátenia na nasledujúci deň, keď je otvorené"
+"circulation.pref#useDaysMode# Pomocou kalendára posuňte termín vrátenia na "
+"nasledujúci deň, keď je otvorené"
 
 # Circulation > Checkout policy
 msgid ""
@@ -6755,8 +6766,9 @@ msgid ""
 "enhanced_content.pref#AmazonCoverImages# cover images from Amazon on search "
 "results and item detail pages on the staff interface."
 msgstr ""
-"obrázky obálok z Amazonu vo výsledkoch hľadania a na stránky podrobností o "
-"exemplári v knihovníckom rozhraní."
+"enhanced_content.pref#AmazonCoverImages# náhľady obálok z Amazonu vo "
+"výsledkoch hľadania a na stránkach podrobností o exemplári v knihovníckom "
+"rozhraní."
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# American"
@@ -6977,8 +6989,8 @@ msgid ""
 "enhanced_content.pref#GoogleJackets# cover images from Google Books to "
 "search results and item detail pages on the OPAC."
 msgstr ""
-"obrázky obálok z Google Books do výsledkov hľadania a na stránky podrobností "
-"o exemplári v OPACu."
+"enhanced_content.pref#GoogleJackets# náhľady obálok z Google Books do "
+"výsledkov hľadania a na stránkach podrobností o exemplári v OPACu."
 
 # Enhanced content > HTML5 media
 msgid ""
@@ -7721,11 +7733,11 @@ msgstr "aby boli schválené na serveri bez moderovania."
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsInputOnDetail# Allow"
-msgstr "Povoliť"
+msgstr "enhanced_content.pref#TagsInputOnDetail# Povoliť"
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsInputOnDetail# Don't allow"
-msgstr "Nepovoliť"
+msgstr "enhanced_content.pref#TagsInputOnDetail# Nepovoliť"
 
 # Enhanced content > Tagging
 msgid ""
@@ -7765,7 +7777,7 @@ msgstr ""
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsShowOnDetail# Show"
-msgstr "Zobraziť"
+msgstr "enhanced_content.pref#TagsShowOnDetail# Zobraziť"
 
 # Enhanced content > Tagging
 msgid ""
@@ -7780,7 +7792,8 @@ msgstr "Zobraziť"
 # Enhanced content > Tagging
 msgid ""
 "enhanced_content.pref#TagsShowOnList# tags on search results on the OPAC."
-msgstr "menovky vo výsledkoch hľadania v OPACu."
+msgstr ""
+"enhanced_content.pref#TagsShowOnList# menovky vo výsledkoch hľadania v OPACu."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#ThingISBN# Don't use"
@@ -7879,11 +7892,12 @@ msgid ""
 msgstr "Zapnúť nasledovné jazyky v OPACu:"
 
 # I18N/L10N
-#, fuzzy
 msgid ""
 "i18n_l10n.pref#OPACLanguages# This list can be sorted to modify the order of "
 "the languages on the interface."
-msgstr "Tento zoznam možno usporiadať pre úpravu poradia jazykov v rozhraní."
+msgstr ""
+"i18n_l10n.pref#OPACLanguages# Tento zoznam možno usporiadať pre úpravu "
+"poradia jazykov v rozhraní."
 
 # I18N/L10N
 #, fuzzy
@@ -8335,7 +8349,7 @@ msgstr "Vlastná registrácia a úprava"
 
 # OPAC > Shelf browser
 msgid "opac.pref Shelf browser"
-msgstr "Prehliadač políc"
+msgstr "opac.pref Prehliadač políc"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -8456,11 +8470,11 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# Don't include"
-msgstr "Nezahŕňať"
+msgstr "opac.pref#COinSinOPACResults# Nezahrnúť"
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# Include"
-msgstr "Zahrnúť"
+msgstr "opac.pref#COinSinOPACResults# Zahrnúť"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# Don't show"
@@ -8598,7 +8612,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "opac.pref#OPACDisplay856uAsImage# len stránka podrobností"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
@@ -8606,7 +8620,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "opac.pref#OPACDisplay856uAsImage# len stránka výsledkov"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -8679,14 +8693,13 @@ msgid "opac.pref#OPACHoldRequests# Don't allow"
 msgstr "Nepovoliť"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
-msgstr "čitateľom zarezervovať exempláre zo stránky OPACu."
+msgstr "opac.pref#OPACHoldRequests# čitateľom zarezervovať exempláre z OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
-msgstr "Prvý stĺpec tabuľky"
+msgstr "opac.pref#OPACHoldingsDefaultSortField# Prvý stĺpec tabuľky"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# Holding library"
@@ -8882,7 +8895,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
-msgstr "domovskú knižnicu"
+msgstr "opac.pref#OPACResultsLibrary# domovská knižnica"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
@@ -8907,19 +8920,16 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
-msgstr "domovskú knižnicu"
+msgstr "opac.pref#OPACResultsMaxItems# Zoradiť nedostupné položky podľa"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
-msgstr "domovskú knižnicu"
+msgstr "opac.pref#OPACResultsMaxItems# Nezobrazovať viac ako"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch"
-msgstr "domovskú knižnicu"
+msgstr "opac.pref#OPACResultsMaxItems# pobočka"
 
 # OPAC > Appearance
 #, fuzzy
@@ -8953,11 +8963,11 @@ msgstr ""
 
 # OPAC > Shelf browser
 msgid "opac.pref#OPACShelfBrowser# Don't show"
-msgstr "Nezobraziť"
+msgstr "opac.pref#OPACShelfBrowser# Nezobraziť"
 
 # OPAC > Shelf browser
 msgid "opac.pref#OPACShelfBrowser# Show"
-msgstr "Zobraziť"
+msgstr "opac.pref#OPACShelfBrowser# Zobraziť"
 
 # OPAC > Shelf browser
 msgid ""
@@ -8966,20 +8976,19 @@ msgid ""
 "fairly large amount of resources on your server, and should be avoided if "
 "your collection has a large number of items."
 msgstr ""
-"prehliadač políc na stránke podrobností o exemplári, ktorý dovoľuje "
-"čitateľom vidieť, čo je blízko daného exemplára na polici. Berte na vedomie, "
-"že toto zaberá dosť veľké množstvo prostriedkov na vašom serveri, a nemal by "
-"sa využívať, ak vaša zbierka má obrovské množstvo exemplárov."
+"opac.pref#OPACShelfBrowser# prehliadač políc na stránke podrobností o "
+"exemplári, ktorý umožňuje čitateľom vidieť, čo sa nachádza blízko daného "
+"exemplára na polici. Berte na vedomie, že toto zaberá dosť veľké miesto na "
+"vašom serveri a nemal by sa využívať, ak má vaša zbierka veľké množstvo "
+"exemplárov."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
-msgstr "Povoliť"
+msgstr "opac.pref#OPACShibOnly# Povoliť"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
-msgstr "Nepovoliť"
+msgstr "opac.pref#OPACShibOnly# Nepovoliť"
 
 # OPAC > Privacy
 #, fuzzy
@@ -9229,11 +9238,11 @@ msgstr "Zahrnúť nasledovný JavaScript na všetky stránky v OPACu:"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserSummary# Don't show"
-msgstr "Nezobraziť"
+msgstr "opac.pref#OPACUserSummary# Nezobraziť"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserSummary# Show"
-msgstr "Zobraziť"
+msgstr "opac.pref#OPACUserSummary# Zobraziť"
 
 # OPAC > Appearance
 msgid ""
@@ -9380,7 +9389,7 @@ msgstr ""
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
-msgstr "Triedenie"
+msgstr "opac.pref#OpacAdvSearchMoreOptions# Triedenie"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Subtypes"
@@ -9408,7 +9417,7 @@ msgstr ""
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
-msgstr "Triedenie"
+msgstr "opac.pref#OpacAdvSearchOptions# Triedenie"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
@@ -9455,7 +9464,7 @@ msgstr "čitateľom hľadať vo vašich záznamoch autorít."
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseResults# Disable"
-msgstr "Deaktivovať"
+msgstr "opac.pref#OpacBrowseResults# Deaktivovať"
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseResults# Enable"
@@ -9645,15 +9654,16 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
-msgstr "Povoliť"
+msgstr "opac.pref#OpacHoldNotes# Povoliť"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "opac.pref#OpacHoldNotes# Nepovoliť"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
 msgstr ""
+"opac.pref#OpacHoldNotes# pridať čitateľovi poznámku pri zadávaní rezervácie."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9677,7 +9687,7 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# only library"
-msgstr ""
+msgstr "opac.pref#OpacItemLocation# iba knižnica"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
@@ -10009,7 +10019,7 @@ msgstr "strán."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "opac.pref#OpacStarRatings# výsledky, podrobnosti a čitateľ"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -10373,46 +10383,51 @@ msgstr "čitateľom hľadania na knižnicu, v ktorej sú zaregistrovaní."
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesCcode# Don't use"
-msgstr "Nepoužívať"
+msgstr "opac.pref#ShelfBrowserUsesCcode# Nepoužívať"
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesCcode# Use"
-msgstr "Použiť"
+msgstr "opac.pref#ShelfBrowserUsesCcode# Použiť"
 
 # OPAC > Shelf browser
 msgid ""
 "opac.pref#ShelfBrowserUsesCcode# the item collection code when finding items "
 "for the shelf browser."
-msgstr "kód zbierky exemplára, keď sa hľadajú exempláre pre prehliadač políc."
+msgstr ""
+"opac.pref#ShelfBrowserUsesCcode# kód zbierky exemplára, keď sa hľadajú "
+"exempláre pri prehľadávaní políc."
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesHomeBranch# Don't use"
-msgstr "Nepoužívať"
+msgstr "opac.pref#ShelfBrowserUsesHomeBranch# Nepoužívať"
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesHomeBranch# Use"
-msgstr "Použiť"
+msgstr "opac.pref#ShelfBrowserUsesHomeBranch# Použiť"
 
 # OPAC > Shelf browser
 msgid ""
 "opac.pref#ShelfBrowserUsesHomeBranch# the item home library when finding "
 "items for the shelf browser."
 msgstr ""
-"domovskú knižnicu exemplára, keď sa hľadajú exempláre pre prehliadač políc."
+"opac.pref#ShelfBrowserUsesHomeBranch# exemplár domovskej knižnice, pri "
+"prehľadávaní políc."
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesLocation# Don't use"
-msgstr "Nepoužívať"
+msgstr "opac.pref#ShelfBrowserUsesLocation# Nepoužívať"
 
 # OPAC > Shelf browser
 msgid "opac.pref#ShelfBrowserUsesLocation# Use"
-msgstr "Použiť"
+msgstr "opac.pref#ShelfBrowserUsesLocation# Použiť"
 
 # OPAC > Shelf browser
 msgid ""
 "opac.pref#ShelfBrowserUsesLocation# the item location when finding items for "
 "the shelf browser."
-msgstr "lokáciu exemplára, keď sa hľadajú exempláre pre prehliadač políc."
+msgstr ""
+"opac.pref#ShelfBrowserUsesLocation# lokácia exemplára, keď sa hľadajú "
+"exempláre pri prehľadávaní políc."
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewer# Show"
@@ -10721,33 +10736,35 @@ msgstr "email novovytvoreným čitateľom s ich podrobnosťami o účte."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
-msgstr "Použiť"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# Použiť"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
-msgstr "striedať"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# alternatívny"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
-msgstr "preukaz čitateľa ako"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# číslo čitateľského preukazu ako"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
-msgstr "prvú platnú"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# prvá platná"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# home"
-msgstr "domovskú"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# domov"
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out "
 "emails."
-msgstr "adresu čitateľa pre odosielanie emailov."
+msgstr ""
+"patrons.pref#AutoEmailPrimaryAddress# čitateľov email pre odosielanie "
+"emailov."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailPrimaryAddress# work"
-msgstr "práca"
+msgstr "patrons.pref#AutoEmailPrimaryAddress# práca"
 
 # Patrons > Notices and notifications > AutoRenewalNotices
 msgid ""
@@ -11383,11 +11400,11 @@ msgstr "Kontakt - iný telefón"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Primary email"
-msgstr "Kontakt - primárny email"
+msgstr "patrons.pref#PrefillGuaranteeField# Kontakt - Primárny email"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Primary phone"
-msgstr "Kontakt - primárny telefón"
+msgstr "patrons.pref#PrefillGuaranteeField# Kontakt - Primárny telefón"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Secondary email"
@@ -11576,6 +11593,8 @@ msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistics purpose."
 msgstr ""
+"patrons.pref#Pseudonymization# Čitatelia a a transakcie budú skopírované do "
+"samostatnej tabuľky na štatistické účely."
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Sort1"
@@ -11965,6 +11984,8 @@ msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
+"searching.pref#BrowseResultSelection# prehliadanie výsledkov vyhľadávania "
+"detailov bibliografických záznamov v používateľskom rozhraní."
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -12018,6 +12039,8 @@ msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
 msgstr ""
+"searching.pref#EnableSearchHistory# históriu vyhľadávania čitateľov v "
+"používateľskom rozhraní."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -12038,9 +12061,8 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "faziet pre každú kategóriu."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# Sort facets"
-msgstr "Zobraziť fazety pre"
+msgstr "searching.pref#FacetOrder# Zobraziť fazety"
 
 # Searching > Features
 #, fuzzy
@@ -12174,13 +12196,15 @@ msgstr "používať"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# ,"
-msgstr ","
+msgstr "searching.pref#OPACdefaultSortField# ,"
 
 # Searching > Results display
 msgid ""
 "searching.pref#OPACdefaultSortField# By default, sort search results in the "
 "OPAC by"
-msgstr "Predvolene triediť výsledky hľadania v OPACu podľa"
+msgstr ""
+"searching.pref#OPACdefaultSortField# Predvolene triediť výsledky hľadania v "
+"OPACu podľa"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# ascending."
@@ -12192,7 +12216,7 @@ msgstr "autora"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# call number"
-msgstr "signatúry"
+msgstr "searching.pref#OPACdefaultSortField# signatúry"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# date added"
@@ -12212,7 +12236,7 @@ msgstr "od A po Z."
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# from Z to A."
-msgstr "od Z po A."
+msgstr "searching.pref#OPACdefaultSortField# od Z po A."
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# relevance"
@@ -12362,7 +12386,9 @@ msgstr "Aktivovať"
 msgid ""
 "searching.pref#QueryWeightFields# ranking of search results by relevance "
 "(REQUIRES ZEBRA)."
-msgstr "usporadúvania výsledkov hľadania podľa dôležitosti (VYŽADUJE ZEBRU)."
+msgstr ""
+"searching.pref#QueryWeightFields# radenie výsledkov hľadania podľa "
+"dôležitosti (VYŽADUJE ZEBRU)."
 
 # Searching > Results display > SearchLimitLibrary
 msgid ""
@@ -12454,49 +12480,51 @@ msgstr "Používa sa"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ,"
-msgstr ","
+msgstr "searching.pref#defaultSortField# ,"
 
 # Searching > Results display
 msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
+"searching.pref#defaultSortField# Predvolene triediť výsledky hľadania v "
+"knihovníckom rozhraní podľa"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
-msgstr "vzostupne."
+msgstr "searching.pref#defaultSortField# vzostupne."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# author"
-msgstr "autora"
+msgstr "searching.pref#defaultSortField# autora"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# call number"
-msgstr "signatúry"
+msgstr "searching.pref#defaultSortField# signatúry"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# date added"
-msgstr "dátumu zápisu"
+msgstr "searching.pref#defaultSortField# dátumu zápisu"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# date of publication"
-msgstr "roku vydania"
+msgstr "searching.pref#defaultSortField# roku vydania"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# descending."
-msgstr "zostupne."
+msgstr "searching.pref#defaultSortField# zostupne."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# from A to Z."
-msgstr "od A po Z."
+msgstr "searching.pref#defaultSortField# od A po Z."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# from Z to A."
-msgstr "od Z po A."
+msgstr "searching.pref#defaultSortField# od Z po A."
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# relevance"
-msgstr "dôležitosti"
+msgstr "searching.pref#defaultSortField# dôležitosti"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# title"
@@ -13106,12 +13134,11 @@ msgstr ""
 
 # Staff interface > Authentication > staffShibOnly
 msgid "staff_interface.pref#staffShibOnly# Allow"
-msgstr ""
+msgstr "staff_interface.pref#staffShibOnly# Povoliť"
 
 # OPAC > Features
-#, fuzzy
 msgid "staff_interface.pref#staffShibOnly# Don't allow"
-msgstr "Nepovoliť"
+msgstr "staff_interface.pref#staffShibOnly# Nepovoliť"
 
 # Staff interface > Authentication > staffShibOnly
 msgid ""

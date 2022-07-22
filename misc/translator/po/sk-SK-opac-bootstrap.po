@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 19:49-0300\n"
-"PO-Revision-Date: 2022-06-20 17:43+0000\n"
+"POT-Creation-Date: 2022-07-17 11:26-0300\n"
+"PO-Revision-Date: 2022-07-22 05:20+0000\n"
 "Last-Translator: SK-KOHA <dada.kapustova@gmail.com>\n"
 "Language-Team: SVK\n"
 "Language: sk\n"
@@ -20,13 +20,13 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1655747036.418914\n"
+"X-POOTLE-MTIME: 1658467242.076137\n"
 "X-Pootle-Path: /sk/21.05/sk-SK-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
+#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
+#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
 #. %4$s:  INCLUDE 'doc-head-open.inc' 
 #. %5$s:  IF ( LibraryNameTitle ) 
 #. %6$s:  LibraryNameTitle | html 
@@ -141,12 +141,12 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %s %sRegistračný poplatok %sPoplatok za preregistrovanie%sStrata %"
-"sSankčný poplatok %sStrata preukazu %sPokuta %sNáhrada dokumentu %sPrenájom "
+"%s %s %s %sRegistračný poplatok %sPoplatok za preregistrovanie%sStrata "
+"%sSankčný poplatok %sStrata preukazu %sPokuta %sNáhrada dokumentu %sPrenájom "
 "%sPrenájom/deň %sPredĺženie prenájmu položky %sPredĺženie prenájmu/deň/"
-"položka %sRezervácia %sOdložená rezervácia %sVyplatiť %s%s %s %s %s %s %"
-"sPlatba %sOdstrániť %sOdpustiť %sSuma %sVrátenie poplatku za náhradu %"
-"sVrátenie preplatku %sPreplatok %sZrušenie sadzby %s%s %s %s %s %s %s"
+"položka %sRezervácia %sOdložená rezervácia %sVyplatiť %s%s %s %s %s %s "
+"%sPlatba %sOdstrániť %sOdpustiť %sSuma %sVrátenie poplatku za náhradu "
+"%sVrátenie preplatku %sPreplatok %sZrušenie sadzby %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -350,13 +350,13 @@ msgstr ""
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s Results of search for '%s' %s Search results %s %s You did not specify "
 "any search criteria. %s &rsaquo; %s%s%sKoha online%s catalog "
 msgstr ""
-"%s%s%sKoha online%s katalóg &rsaquo; %s %s Výsledky vyhľadávania '%s' %s "
-"Výsledky vyhľadávania %s %s Neurčili ste podmienky vyhľadávania. %s"
+"%s %s Výsledky hľadania pre '%s' %s Výsledky hľadania %s %s Nezadali ste "
+"žiadne kritériá vyhľadávania. %s &rsaquo; %s%s%sKoha online%s katalóg "
 
 #. %1$s: - SWITCH index -
 #. %2$s: - CASE 'su-na' -
@@ -1445,6 +1445,8 @@ msgid ""
 "%sAuthority search result%sNo results found%s &rsaquo; %s%s%sKoha online%s "
 "catalog"
 msgstr ""
+"%sVýsledky hľadania autorít%sNenašli sa žiadne výsledky%s &rsaquo; %s%s"
+"%sKoha online%s katalóg"
 
 #. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
@@ -1571,9 +1573,9 @@ msgid ""
 "%sInterlibrary loan unavailable %sAuto renewal %sUnknown %s"
 msgstr ""
 "%sDátum vrátenia %sPripomienka %sSplnená rezervácia %sPripomienka na "
-"rezerváciu %sVrátené %s %s Vypožičané a predĺžené %s Vypožičané %s %"
-"sMedziknižničná výpožička pripravená %sMedziknižničná výpožička nedostupná %"
-"sAutomatické predĺženie %sNeznáme %s"
+"rezerváciu %sVrátené %s %s Vypožičané a predĺžené %s Vypožičané %s "
+"%sMedziknižničná výpožička pripravená %sMedziknižničná výpožička nedostupná "
+"%sAutomatické predĺženie %sNeznáme %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2401,9 +2403,9 @@ msgid "(Forgiven)"
 msgstr "(Odpustené)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "(Hides shelf browser)"
-msgstr "Zatvoriť prehliadač políc"
+msgstr "(Skryť prehliadač políc)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:14
 #, c-format
@@ -3778,9 +3780,9 @@ msgstr "Prezerať vyhľadávanie"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1255
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Browse shelf"
-msgstr "Náhľad do police"
+msgstr "Prehliadať policu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
@@ -3971,13 +3973,13 @@ msgstr "Číslo preukazu musí obsahovať najviac %s znakov."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:225
 #, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "Číslo preukazu musí mať %s až %s znakov."
+msgstr "Číslo preukazu musí obsahovať %s až %s znakov."
 
 #. %1$s:  minlength_cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:221
 #, c-format
 msgid "Card number must be exactly %s characters."
-msgstr "Číslo preukazu musí mať presne %s znakov."
+msgstr "Číslo preukazu musí obsahovať presne %s znakov."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:63
 #, c-format
@@ -4288,9 +4290,9 @@ msgid "Close"
 msgstr "Zatvoriť"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "Close shelf browser "
-msgstr "Zatvoriť prehliadač políc"
+msgstr "Zatvoriť prehliadač políc "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:30
 #, c-format
@@ -4529,12 +4531,12 @@ msgstr "Obsah "
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied %d rows to clipboard"
-msgstr ""
+msgstr "Skopírované %d riadky do schránky"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied one row to clipboard"
-msgstr ""
+msgstr "Skopírovaný jeden riadok do schránky"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
@@ -4689,9 +4691,9 @@ msgstr "Vytvoriť nový zoznam"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:9
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:95
-#, fuzzy, c-format
+#, c-format
 msgid "Created"
-msgstr "Zmluvy "
+msgstr "Vytvorený"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
 #, c-format
@@ -4723,7 +4725,7 @@ msgid "Credits (%s)"
 msgstr "Kredity (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Current library"
 msgstr "Domovská knižnica"
 
@@ -7985,9 +7987,9 @@ msgid "None of the libraries are available for pickup location. "
 msgstr "V žiadnej z knižníc nie je možné vyzdvihnutie. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
-#, fuzzy, c-format
+#, c-format
 msgid "None specified:"
-msgstr "Neurčená: "
+msgstr "Nešpecifikované:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:30
@@ -8280,7 +8282,7 @@ msgstr "Zdroje z internetu:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
 #, c-format
 msgid "Only %s results are shown: "
-msgstr ""
+msgstr "Zobrazia sa iba %s výsledky: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
 #, c-format
@@ -8351,9 +8353,9 @@ msgstr "Ďalšie mená:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:617
-#, fuzzy, c-format
+#, c-format
 msgid "Other phone"
-msgstr "Ďalší telefón:"
+msgstr "Ďalší telefón"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:546
 #, c-format
@@ -8361,9 +8363,9 @@ msgid "Other phone:"
 msgstr "Ďalší telefón:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
-#, fuzzy, c-format
+#, c-format
 msgid "Other:"
-msgstr "Ďalšie formy:"
+msgstr "Iné:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:843
 #, c-format
@@ -8645,9 +8647,9 @@ msgid "Place hold"
 msgstr "Zarezervovať"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:277
-#, fuzzy, c-format
+#, c-format
 msgid "Place hold "
-msgstr "Zarezervovať"
+msgstr "Zarezervovať "
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:229
@@ -8861,9 +8863,8 @@ msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
-#, fuzzy
 msgid "Please enter only digits."
-msgstr "Skúste, prosím, znova neskôr."
+msgstr "Zadajte prosím iba číslice."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/password_check.inc:2
@@ -8894,7 +8895,7 @@ msgid ""
 "email when the library processes your suggestion."
 msgstr ""
 "Vyplnením tohto formulára navrhnite prosím nákup. Len čo ho knižnica "
-"spracuje, upovedomí vás o tom E-mailom."
+"spracuje, upovedomí Vás o tom emailom."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
@@ -9115,20 +9116,20 @@ msgstr "Primárny"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:622
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:624
-#, fuzzy, c-format
+#, c-format
 msgid "Primary email"
-msgstr "Primárny E-mail:"
+msgstr "Primárny email:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:555
 #, c-format
 msgid "Primary email:"
-msgstr "Primárny E-mail:"
+msgstr "Primárny email:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:603
-#, fuzzy, c-format
+#, c-format
 msgid "Primary phone"
-msgstr "Primárny telefón:"
+msgstr "Primárny telefón"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
 #, c-format
@@ -10226,9 +10227,9 @@ msgstr "Sekundárny email:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:608
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:610
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary phone"
-msgstr "Sekundárny telefón:"
+msgstr "Sekundárny telefón"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:537
 #, c-format
@@ -10527,7 +10528,7 @@ msgstr "Zdieľať zoznam s iným čitateľom"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
 msgid "Share by email"
-msgstr "Zdieľať E-mailom"
+msgstr "Zdieľať emailom"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:243
@@ -10796,14 +10797,14 @@ msgstr ""
 "stránke. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, there are no results. Try a different search term."
-msgstr "Nenašli sa žiadne výsledky, skúste hľadať inak."
+msgstr "Ľutujeme, nenašli sa žiadne výsledky. Skúste hľadať pod iným výrazom."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
 #, c-format
 msgid "Sorry, this item cannot be checked out at this station."
-msgstr "Prepáčte, tento exemplár si nemôžete vypožičať z tohto miesta."
+msgstr "Prepáčte, tento exemplár si nemôžete z tohto miesta vypožičať."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:66
 #, c-format
@@ -11360,9 +11361,9 @@ msgstr "Menovky"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Tags &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%sKoha online%s katalóg"
+msgstr "Menovky &rsaquo; %s%s%sKoha online%s katalóg"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11702,7 +11703,7 @@ msgstr "Číslo transakcie číslo '%s' pre túto platbu je neplatné."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:240
 #, c-format
 msgid "The userid "
-msgstr "Užívateľské meno "
+msgstr "ID používateľa"
 
 #. %1$s:  subscriptionsnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:675
@@ -12263,9 +12264,9 @@ msgstr "Aktualizovať predvoľbu automatického predlžovania"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:96
-#, fuzzy, c-format
+#, c-format
 msgid "Updated"
-msgstr "Aktualizovať"
+msgstr "Aktualizovaný"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -12304,9 +12305,9 @@ msgid "Used for/see from:"
 msgstr "Použitý na/viď od:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "User summary"
-msgstr "Súhrn čísiel časopisov"
+msgstr "Zhrnutie"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:53
 #, c-format
@@ -13566,7 +13567,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:194
 #, c-format
 msgid "Your userid was not found in the database. Please try again."
-msgstr "Vaše používateľské meno sa nenašlo v databáze. Prosím, skúste znova."
+msgstr "Vaše používateľské ID sa nenašlo v databáze. Prosím, skúste znova."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:496
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
@@ -13959,7 +13960,7 @@ msgstr "miesto_prevzatia"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:92
 #, c-format
 msgid "primary email address"
-msgstr "primárna E-mailová adresa"
+msgstr "primárna emailová adresa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:971
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:55
@@ -14235,7 +14236,7 @@ msgstr "heslo užívateľa"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:476
 #, c-format
 msgid "userid"
-msgstr "číslo užívateľa"
+msgstr "ID používateľa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:503
 #, c-format

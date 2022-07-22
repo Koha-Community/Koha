@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
-"POT-Creation-Date: 2022-06-18 01:47-0300\n"
+"POT-Creation-Date: 2022-07-17 11:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,8 @@ msgstr ""
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  USE AdditionalContents 
-#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
-#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) 
+#. %2$s:  SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
+#. %3$s:  SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) 
 #. %4$s:  INCLUDE 'doc-head-open.inc' 
 #. %5$s:  IF ( LibraryNameTitle ) 
 #. %6$s:  LibraryNameTitle | html 
@@ -2460,8 +2460,8 @@ msgid "Accept"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #, c-format
 msgid "Access denied"
 msgstr ""
@@ -3519,9 +3519,9 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:162
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:166
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
@@ -5238,9 +5238,9 @@ msgstr ""
 msgid "Fines:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "Finish"
 msgstr ""
@@ -6423,9 +6423,9 @@ msgstr ""
 msgid "Koha"
 msgstr ""
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr ""
@@ -9972,8 +9972,8 @@ msgstr ""
 msgid "Series title"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:184
 #, c-format
 msgid "Session lost"
 msgstr ""
@@ -13484,10 +13484,10 @@ msgstr ""
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr ""
