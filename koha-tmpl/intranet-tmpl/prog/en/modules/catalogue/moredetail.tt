@@ -131,7 +131,12 @@
                 [% END %]
             [% END %]
             &nbsp;</li>
-            <li><span class="label">Current renewals:</span> [% ITEM_DAT.renewals | html %]&nbsp;</li>
+            <li><span class="label">Current renewals:</span>
+                [% ITEM_DAT.renewals | html %]
+                [% IF ITEM_DAT.renewals %]
+                    [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.renewals | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
+                [% END %]
+            </li>
             [% IF itemlostloop %]
                 <li><span class="label">Lost status:</span>
                     [% IF ( CAN_user_circulate ) %]
@@ -371,8 +376,13 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
+    [% INCLUDE 'checkout-renewal-modal.inc' %]
+    [% INCLUDE 'checkout-renewal-modal-strings.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
+    [% Asset.js("js/checkout-renewal-modal.js") | $raw %]
     <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
