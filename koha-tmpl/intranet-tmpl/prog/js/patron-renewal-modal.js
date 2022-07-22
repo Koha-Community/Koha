@@ -20,6 +20,6 @@ $(document).ready(function(){
         });
     });
     function createLi(renewal) {
-        return '<li><span style="font-weight:bold">' + $datetime(renewal.timestamp) + '</span> ' + renewed + ' <span style="font-weight:bold">' + renewal.renewer.firstname + ' ' + renewal.renewer.surname + '</li>';
+        return '<li><span style="font-weight:bold">' + $datetime(renewal.timestamp) + '</span> ' + renewed + ' <span style="font-weight:bold">' + $patron_to_html(renewal.renewer) + '</span></li>';
     }
 });
