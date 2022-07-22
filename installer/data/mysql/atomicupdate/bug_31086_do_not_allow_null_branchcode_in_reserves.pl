@@ -1,5 +1,4 @@
 use Modern::Perl;
-use Koha::Holds;
 
 return {
     bug_number => "31086",
@@ -8,11 +7,22 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
-        my $holds_no_branch = Koha::Holds->search({ branchcode => undef });
-        if( $holds_no_branch->count > 0 ){
+        my $sth = $dbh->prepare(q{
+            SELECT borrowernumber, biblionumber
+            FROM reserves
+	        WHERE branchcode IS NULL;
+        });
+        $sth->execute;
+        my $holds_no_branch = $sth->fetchall_arrayref( {} );
+
+        if ( scalar @{$holds_no_branch} > 0 ) {
             say $out "Holds with no branchcode were found and will be updated to the first branch in the system";
-            while ( my $hnb = $holds_no_branch->next ){
-                say $out "Please review hold for borrowernumber " . $hnb->borrowernumber . " on biblionumber " . $hnb->biblionumber . " to correct pickup branch if necessary";
+            foreach my $hnb ( @{$holds_no_branch} ) {
+                say $out "Please review hold for borrowernumber "
+                  . $hnb->{borrowernumber}
+                  . " on biblionumber "
+                  . $hnb->{biblionumber}
+                  . " to correct pickup branch if necessary";
             }
         }
 
