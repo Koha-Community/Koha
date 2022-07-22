@@ -159,11 +159,11 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% INCLUDE 'checkout-renewal-modal.inc' %]
-    [% INCLUDE 'checkout-renewal-modal-strings.inc' %]
+    [% INCLUDE 'modals/checkout_renewals.inc' %]
+    [% INCLUDE 'str/checkout_renewals.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
-    [% Asset.js("js/checkout-renewal-modal.js") | $raw %]
+    [% Asset.js("js/checkout_renewals_modal.js") | $raw %]
     <script id="js">
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];

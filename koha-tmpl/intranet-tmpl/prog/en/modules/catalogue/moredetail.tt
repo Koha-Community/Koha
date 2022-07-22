@@ -376,13 +376,13 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% INCLUDE 'checkout-renewal-modal.inc' %]
-    [% INCLUDE 'checkout-renewal-modal-strings.inc' %]
+    [% INCLUDE 'modals/checkout_renewals.inc' %]
+    [% INCLUDE 'str/checkout_renewals.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
-    [% Asset.js("js/checkout-renewal-modal.js") | $raw %]
+    [% Asset.js("js/checkout_renewals_modal.js") | $raw %]
     <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
