@@ -130,6 +130,75 @@ sub record_schema {
     return $self->metadata->schema // C4::Context->preference("marcflavour");
 }
 
+=head3 metadata_record
+
+    my $record = $biblio->metadata_record(
+        {
+            [ embed_items => 1|0,
+              opac        => 1|0,
+              patron      => $patron,
+              expand_coded_fields => 1|0 ]
+        }
+    );
+
+Returns the metadata serialized as appropriate for the metadata object
+type. Currently only I<MARC::Record> objects are returned.
+
+=cut
+
+sub metadata_record {
+    my ( $self, $params ) = @_;
+
+    my $patron = $params->{patron};
+
+    my $record = $self->metadata->record;
+
+    if ( $params->{embed_items} or $params->{opac} ) {
+
+        # There's need for a RecordProcessor, let's do it!
+        my @filters;
+        my $options = {
+            interface     => 'opac',
+            frameworkcode => $self->frameworkcode,
+        };
+
+        if ( $params->{embed_items} ) {
+            push @filters, 'EmbedItems';
+            if ( $params->{opac} ) {
+                $options->{items} = $self->items->filter_by_visible_in_opac(
+                    {
+                        (
+                            $params->{patron} ? ( patron => $params->{patron} ) : ()
+                        )
+                    }
+                );
+            }
+            else {
+                $options->{items} = $self->items;
+            }
+        }
+
+        if ( $params->{opac} ) {
+            push @filters, 'ViewPolicy';
+        }
+
+        if ( $params->{expand_coded_fields} ) {
+            push @filters, 'ExpandCodedFields';
+        }
+
+        my $rp = Koha::RecordProcessor->new(
+            {
+                filters => \@filters,
+                options => $options
+            }
+        );
+
+        $rp->process($record);
+    }
+
+    return $record;
+}
+
 =head3 orders
 
 my $orders = $biblio->orders();
