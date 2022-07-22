@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Holds;
 
 return {
     bug_number => "31086",
@@ -7,9 +8,17 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
+        my $holds_no_branch = Koha::Holds->search({ branchcode => undef });
+        if( $holds_no_branch->count > 0 ){
+            say $out "Holds with no branchcode were found and will be updated to the first branch in the system";
+            while ( my $hnb = $holds_no_branch->next ){
+                say $out "Please review hold for borrowernumber " . $hnb->borrowernumber . " on biblionumber " . $hnb->biblionumber . " to correct pickup branch if necessary";
+            }
+        }
+
         # Ensure we have no NULL's in the branchcode field
         $dbh->do(q{
-            UPDATE reserves SET branchcode = ( SELECT branchcode FROM branches LIMIT 1) WHERE branchode IS NULL;
+            UPDATE reserves SET branchcode = ( SELECT branchcode FROM branches LIMIT 1) WHERE branchcode IS NULL;
         });
 
         # Set the NOT NULL configuration
