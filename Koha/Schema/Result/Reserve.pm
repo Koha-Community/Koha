@@ -61,7 +61,7 @@ foreign key from the biblio table defining which bib record this hold is on
 
   data_type: 'varchar'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
   size: 10
 
 foreign key from the branches table defining which branch the patron wishes to pick this hold up at
@@ -236,7 +236,7 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
   "branchcode",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "desk_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "notificationdate",
@@ -347,12 +347,7 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 club_holds_to_patron_holds
@@ -431,8 +426,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:08:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Q8/GFCOkXdn+jg69HZ0GQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-22 17:37:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kYRPPeoVo0WMk1gH+qmi/w
 
 __PACKAGE__->belongs_to(
   "item",
