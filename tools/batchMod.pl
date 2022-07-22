@@ -218,13 +218,13 @@ if ($op eq "show"){
             @contentlist = grep /\S/, ( map { split /[$split_chars]/ } @contentlist );
             @contentlist = uniq @contentlist;
             # Note: adding lc for case insensitivity
-            my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => \@contentlist }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
+            my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => { -in => \@contentlist } }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
             @itemnumbers = map { exists $itemdata{lc $_} ? $itemdata{lc $_} : () } @contentlist;
             @notfoundbarcodes = grep { !exists $itemdata{lc $_} } @contentlist;
         }
         elsif ( $filecontent eq 'itemid_file') {
             @contentlist = uniq @contentlist;
-            my %itemdata = map { $_->{itemnumber} => 1 } @{ Koha::Items->search({ itemnumber => \@contentlist }, { columns => [ 'itemnumber' ] } )->unblessed };
+            my %itemdata = map { $_->{itemnumber} => 1 } @{ Koha::Items->search({ itemnumber => { -in => \@contentlist } }, { columns => [ 'itemnumber' ] } )->unblessed };
             @itemnumbers = grep { exists $itemdata{$_} } @contentlist;
             @notfounditemnumbers = grep { !exists $itemdata{$_} } @contentlist;
         }
@@ -240,7 +240,7 @@ if ($op eq "show"){
             @barcodelist = map { barcodedecode( $_ ) } @barcodelist;
 
             # Note: adding lc for case insensitivity
-            my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => \@barcodelist }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
+            my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => { -in => \@barcodelist } }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
             @itemnumbers = map { exists $itemdata{lc $_} ? $itemdata{lc $_} : () } @barcodelist;
             @notfoundbarcodes = grep { !exists $itemdata{lc $_} } @barcodelist;
         }
