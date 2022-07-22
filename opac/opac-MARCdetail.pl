@@ -92,13 +92,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find($loggedinuser);
 my $biblio = Koha::Biblios->find($biblionumber);
-my $record = $biblio->metadata->record(
-    {
-        embed_items => 1,
-        opac        => 1,
-        patron      => $patron,
-    }
-);
+my $record = $biblio->metadata->record;
+
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
@@ -113,14 +108,16 @@ unless ( $patron and $patron->category->override_hidden_items ) {
     }
 }
 
+my $items = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
 my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $tagslib   = &GetMarcStructure( 0, $framework );
 
 my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
+    filters => [ 'EmbedItems', 'ViewPolicy' ],
     options => {
-        interface => 'opac',
-        frameworkcode => $framework
+        interface     => 'opac',
+        frameworkcode => $framework,
+        items         => [ $items->as_list ],
     }
 });
 $record_processor->process($record);
@@ -140,7 +137,7 @@ $template->param(
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 
 my $allow_onshelf_holds;
-my $items = $biblio->items;
+$items->reset;
 
 while ( my $item = $items->next ) {
     $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
