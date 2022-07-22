@@ -21,7 +21,7 @@
                         <fieldset>
                             [% IF ( batche.label_ids ) %]
                                 <legend>[% IF ( batche.label_count == 1 ) %][% batche.label_count | html %] single label[% ELSE %][% batche.label_count | html %] single labels[% END %]</legend>
-                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=0&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %]&amp;start_label=[% batche.start_label | html %]&amp;from=[% batche.from | html %]&amp;to=[% batche.to | html %]&amp;barcode_length=[% batche.barcode_length| html %]">Download as PDF</a>
+                                <a class="document pdf" href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]">Download as PDF</a>
 
                                     <p><a class="document csv" href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=[% batche.batch_id | html %]&amp;template_id=[% batche.template_id | html %]&amp;layout_id=[% batche.layout_id | html %][% batche.label_ids | html %]">Download as CSV</a></p>
 
