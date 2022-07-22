@@ -69,7 +69,9 @@ overdue_notices.pl
    --date         <yyyy-mm-dd>     Emulate overdues run for this date.
    --email        <email_type>     Type of email that will be used.
                                    Can be 'email', 'emailpro' or 'B_email'. Repeatable.
-   --frombranch                    Set the from address for the notice to one of 'item-homebranch' or 'item-issuebranch'.
+   --frombranch                    Organize and send overdue notices by home library (item-homebranch) or checkout library (item-issuebranch).
+                                   This option is only used, if the OverdueNoticeFrom system preference is set to 'command-line option'.
+                                   Defaults to item-issuebranch.
 
 =head1 OPTIONS
 
@@ -180,9 +182,9 @@ Allows to specify which type of email will be used. Can be email, emailpro or B_
 
 =item B<--frombranch>
 
-Use the address information from the item homebranch library instead of the issuing library.
-
-Defaults to 'item-issuebranch'
+Organize overdue notices either by checkout library (item-issuebranch) or item home library (item-homebranch).
+This option is only used, if the OverdueNoticeFrom system preference is set to use 'command-line option'.
+Defaults to checkout library (item-issuebranch).
 
 =back
 
