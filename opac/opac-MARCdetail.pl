@@ -91,9 +91,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find($loggedinuser);
 my $biblio = Koha::Biblios->find($biblionumber);
-
-my $record = $biblio ? $biblio->metadata->record : undef;
-if ( ! $record ) {
+if ( !$biblio ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -113,15 +111,19 @@ my $items = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
 my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $tagslib   = &GetMarcStructure( 0, $framework );
 
-my $record_processor = Koha::RecordProcessor->new({
-    filters => [ 'EmbedItems', 'ViewPolicy' ],
-    options => {
-        interface     => 'opac',
-        frameworkcode => $framework,
-        items         => [ $items->as_list ],
+my $record = $biblio
+    ? $biblio->metadata_record(
+    {
+        embed_items => 1,
+        opac        => 1,
+        patron      => $patron,
     }
-});
-$record_processor->process($record);
+    )
+    : undef;
+if ( !$record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
