@@ -3,20 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 23:44-0300\n"
-"PO-Revision-Date: 2022-06-27 02:04+0000\n"
+"POT-Creation-Date: 2022-07-17 10:26-0300\n"
+"PO-Revision-Date: 2022-07-08 02:19+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.05/ru-RU-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1656295485.957961\n"
+"X-POOTLE-MTIME: 1657246767.118780\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -578,6 +578,22 @@ msgstr "%s Эта запись не имеет ни одного экземпл�
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Выдержки из видео"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Ожидается читателем в %s с %s. %s Отозвано читателем, ожидающим в %s с "
+"%s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -1921,9 +1937,9 @@ msgstr " -- нет -- "
 #. %1$s:  CASE 'account_locked' 
 #. %2$s:  IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ". %s This account has been locked! %s "
-msgstr "%s Эта запись не имеет ни одного экземпляра. %s "
+msgstr ". %s Эта учетная запись заблокирована! %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:68
 #, c-format
@@ -2096,7 +2112,7 @@ msgstr "Принято"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:442
 #, c-format
 msgid "Accepted by the library"
-msgstr ""
+msgstr "Принято библиотекой"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
@@ -2245,7 +2261,7 @@ msgstr "Добавить в..."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
 #, c-format
 msgid "Added %s by"
-msgstr ""
+msgstr "Добавлено %s"
 
 #. %1$s:  review.datereviewed | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
@@ -4898,7 +4914,7 @@ msgid ""
 "the enter key)."
 msgstr ""
 "Введите свой пользовательский идентификатор%s и пароль%s, далее нажмите "
-"кнопку «Утвердить» (или нажмите клавишу «Enter»)."
+"кнопку «Подтвердить» (или нажмите клавишу «Enter»)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext | html 
@@ -9418,12 +9434,6 @@ msgstr "Резервирование не потребуется после:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 # название функции ILS-DI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
@@ -10165,7 +10175,7 @@ msgid "Scan a new item or enter its barcode:"
 msgstr "Просканируйте новую единицу или введите ее штрих-код:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
 "item. The checked-out item should appear in your checkouts list. The submit "
@@ -10173,7 +10183,7 @@ msgid ""
 msgstr ""
 "Сканируйте каждый экземпляр и дождитесь перезагрузки страницы перед "
 "сканированием следующего экземпляра. Выданный экземпляр должен появиться в "
-"списке ваших книговыдач. На кнопку Утвердить необходимо нажимать только в "
+"списке ваших книговыдач. На кнопку Подтвердить необходимо нажимать только в "
 "случае, если вы вводите штрих-код вручную."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:175
@@ -11211,12 +11221,12 @@ msgstr "Предмет: %s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:90
 #, c-format
 msgid "Submit"
-msgstr "Утвердить"
+msgstr "Подтвердить"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:123
 #, c-format
 msgid "Submit "
-msgstr "Утвердить"
+msgstr "Подтвердить"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:51
@@ -11232,7 +11242,7 @@ msgstr "Принять изменения"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:242
 msgid "Submit modifications"
-msgstr "Утвердить изменения"
+msgstr "Подтвердить изменения"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
@@ -12601,12 +12611,6 @@ msgstr "Дата ожидания"
 #, c-format
 msgid "Waiting date"
 msgstr "Дата ожидания"
-
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "Ожидание читателя в %s"
 
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
@@ -14603,8 +14607,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -15075,13 +15077,6 @@ msgstr "×"
 #~ "%s Ожидает на %s Зарезервировано %s для посетителя %s с %s ожидается с %s "
 #~ "%s после %s %s %s %s %s %s %s. "
 
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Ожидается читателем в %s с %s. %s Отозвано читателем, ожидающим в %s с "
-#~ "%s. %s "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %s единица %s единиц(ы) %s%s Пусто %s"
 
@@ -15196,6 +15191,9 @@ msgstr "×"
 #~ "Проблема с этой операцией: %s ОШИБКА: неверный параметр. %s %s ОШИБКА: Вы "
 #~ "должны авторизоваться для завершения этого действия. %s ОШИБКА: Вы не "
 #~ "можете удалить тег %s."
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Ожидание читателя в %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

@@ -2088,18 +2088,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "Разрешить"
 
-# Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Разрешить"
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
+# OPAC > Appearance
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "для ЭК."
 
 # Administration > Login options
 msgid ""
@@ -2143,13 +2145,13 @@ msgstr "Соединитель"
 
 # Authorities > General
 #, fuzzy
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Использовать"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Не использовать"
 
 # Authorities > General
 #, fuzzy
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Не использовать"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Использовать"
 
 # Authorities > General
 msgid ""
@@ -2459,13 +2461,13 @@ msgstr "Наклейки на корешке"
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Показывать "
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Не показывать "
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Не показывать "
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Показывать "
 
 # Cataloging > Display
 msgid ""
@@ -2675,12 +2677,13 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr " формируются последовательно — 1, 2, 3, …."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Показывать "
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
 msgstr "Показывать "
 
 # Cataloging > Interface
@@ -3146,15 +3149,15 @@ msgid ""
 "printed spine label:"
 msgstr ""
 
-# Cataloging > Interface
-#, fuzzy
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Показывать "
-
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
 msgstr "Не показывать "
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Показывать "
 
 # Cataloging > Spine labels
 msgid ""
@@ -3278,12 +3281,14 @@ msgstr ""
 "библиографических записей."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Показывать"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr "Не показывать"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr "Не показывать"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Показывать"
 
 # Cataloging > Interface
 msgid ""
@@ -3321,11 +3326,8 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr " не создаются автоматически. "
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Показывать "
-
-# Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Не показывать "
 
 # Cataloging > Display
@@ -3335,6 +3337,11 @@ msgid ""
 msgstr ""
 " не показывать номера МАРК-признаков, коды подполей и индикаторов в "
 "«Просмотре в МАРК»."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Показывать "
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -7049,10 +7056,12 @@ msgid ""
 "prefix style"
 msgstr ""
 
-# Circulation > Holds policy
-#, fuzzy
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "в случайном порядке."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7491,12 +7500,7 @@ msgstr "Использовать код клиента "
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Отображать"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Не отображать"
 
 # Enhanced Content > Local or remote cover images
@@ -7513,6 +7517,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Отображать"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
@@ -7791,12 +7800,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Отображать"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
+msgstr "Не отображать"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
-msgstr "Не отображать"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Отображать"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -7974,12 +7985,14 @@ msgid ""
 msgstr " другие издания единицы в электронном каталоге."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Отображать"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
+msgstr "Не отображать"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
-msgstr "Не отображать"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Отображать"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -9295,13 +9308,13 @@ msgstr "Разрешить"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Разрешить"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Запретить"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Запретить"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Разрешить"
 
 # OPAC > Features
 msgid ""
@@ -9576,15 +9589,15 @@ msgstr ""
 msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Разрешать"
 
-# OPAC > Features
-#, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Выводить до "
-
 # OPAC > Privacy
 #, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
 msgstr "Запретить"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Выводить до "
 
 # OPAC > Features
 msgid ""
@@ -10560,13 +10573,13 @@ msgstr ""
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Запретить"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Не показывать"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Не показывать"
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Запретить"
 
 # OPAC > Features
 msgid ""
@@ -10576,18 +10589,18 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "Разрешить"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr "Разрешить"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr "для ЭК."
-
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Использовать тему "
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11004,12 +11017,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr ""
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Запретить"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Запретить"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11197,7 +11212,7 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#ShowReviewerPhoto# Hide"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
 msgstr "Разрешить"
 
 # OPAC > Features
@@ -12390,6 +12405,13 @@ msgid ""
 msgstr ""
 "Пароли входа в Коха для персонала и посетителей должны состоять из не менее "
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -12714,15 +12736,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Отображение результатов"
-
 # Searching > Results display
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr "Не показывать"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Отображение результатов"
 
 # Searching > Results Display
 #, fuzzy
@@ -14520,11 +14542,10 @@ msgstr "Выключить"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Включить"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > IdRef
@@ -14578,3 +14599,31 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr ""
+
+# Circulation > Holds policy
+#, fuzzy
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "в случайном порядке."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Отображать"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Отображать"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Отображать"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Использовать тему "
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Разрешить"

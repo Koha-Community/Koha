@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 22:33-0300\n"
+"POT-Creation-Date: 2022-07-17 10:08-0300\n"
 "PO-Revision-Date: 2022-05-01 10:33-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ko\n"
@@ -562,6 +562,22 @@ msgstr "%s 레코드에 항목이 없습니다. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s 비디오 추출"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s 대기중 %s 예약중 %s 이용자에게 %s 에서 %s 예상되는 %s %s 대기일 %s %s %s "
+"%s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9293,12 +9309,6 @@ msgstr "이날 이후에는 예약이 필요하지 않습니다: "
 msgid "RecallItem "
 msgstr "항목"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12440,12 +12450,6 @@ msgstr "대기 중"
 msgid "Waiting date"
 msgstr "대기 중"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "%s 이후 %s에서 %s까지 수송"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14379,8 +14383,6 @@ msgstr "예약자료 보기"
 msgid "show_loans"
 msgstr "대출자료 보기"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14843,14 +14845,6 @@ msgstr "×"
 #~ "%s 대기중 %s 예약중 %s 이용자에게 %s 에서 %s 예상되는 %s %s 대기일 %s %s "
 #~ "%s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s 대기중 %s 예약중 %s 이용자에게 %s 에서 %s 예상되는 %s %s 대기일 %s %s "
-#~ "%s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %s자료%s자료들%s%s비어있음%s"
 
@@ -14951,6 +14945,10 @@ msgstr "×"
 #~ "이 작업에 오류가 있었습니다: %s 죄송합니다, 이 시스템에 사용 가능한 태그들"
 #~ "이 아닙니다. %s 오류: 잘못된 매개변수입니다 %s %s 오류: 작업을 완료하기 위"
 #~ "해서는 로그인하셔야 합니다. %s 오류: 이 태그를 지울 수 없습니다 %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "%s 이후 %s에서 %s까지 수송"
 
 #, fuzzy
 #~ msgid ""

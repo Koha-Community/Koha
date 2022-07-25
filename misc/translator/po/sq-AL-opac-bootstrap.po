@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-18 00:01-0300\n"
+"POT-Creation-Date: 2022-07-17 10:31-0300\n"
 "PO-Revision-Date: 2022-05-01 12:03-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: sq\n"
@@ -566,6 +566,22 @@ msgstr "%s Ky rekord nuk ka tituj në përmbajtje. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Ekstrakte video"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Në pritje %s Në inventar %s për përdoruesin %s tek %s pritet në %s %s nga "
+"%s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9355,12 +9371,6 @@ msgstr "Kopja nuk nevojitet pas:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12509,12 +12519,6 @@ msgstr "Data e skadencës:"
 msgid "Waiting date"
 msgstr "Data e skadencës:"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Në tranzit nga %s tek %s që më %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14468,8 +14472,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14925,14 +14927,6 @@ msgstr "×"
 #~ "%s Në pritje %s Në inventar %s për përdoruesin %s tek %s pritet në %s %s "
 #~ "nga %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Në pritje %s Në inventar %s për përdoruesin %s tek %s pritet në %s %s "
-#~ "nga %s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %stitulli%stitujt%s%sBosh%s"
 
@@ -15047,6 +15041,10 @@ msgstr "×"
 #~ "Kishte një problem me këtë operacion: %s ERROR: parametër i paligjshëm %s "
 #~ "%s ERROR: Ju duhet të regjistroheni për të përfunduar atë veprim. %s "
 #~ "ERROR: Ju nuk mund ta fshini etiketën %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Në tranzit nga %s tek %s që më %s"
 
 #, fuzzy
 #~ msgid ""

@@ -2046,19 +2046,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Appearance
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "Verwende die Grafik unter"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Verwende die Grafik unter"
 
 # Staff Client > Appearance
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
 msgstr "für die Dienstoberfläche."
-
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
 
 # Administration > Login options
 msgid ""
@@ -2102,13 +2103,13 @@ msgstr "Normdaten"
 
 # Authorities > General
 #, fuzzy
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Verwende"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Verwende keine"
 
 # Authorities > General
 #, fuzzy
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Verwende keine"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Verwende"
 
 # Authorities > General
 msgid ""
@@ -2397,13 +2398,13 @@ msgstr "Katalogisierung"
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Verwende"
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Verwende keine"
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Verwende keine"
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Verwende"
 
 # Cataloging > Display
 msgid ""
@@ -2610,15 +2611,15 @@ msgstr "Verwende"
 msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr ""
 
-# Cataloging > Record structure
-#, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Zeige das MARC-Unterfeld"
-
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Verwende keine"
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Zeige das MARC-Unterfeld"
 
 # Cataloging > Interface
 msgid ""
@@ -3076,13 +3077,15 @@ msgid ""
 "printed spine label:"
 msgstr ""
 
-# Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr ""
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Verwende keine"
 
-# Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr ""
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr " ."
 
 # Cataloging > Spine labels
 msgid ""
@@ -3205,13 +3208,13 @@ msgstr ""
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Verwende"
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr "Verwende keine"
 
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr "Verwende keine"
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Verwende"
 
 # Cataloging > Interface
 msgid ""
@@ -3246,14 +3249,9 @@ msgstr ""
 msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr ""
 
-# Cataloging > Record structure
-#, fuzzy
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "NORMARC"
-
 # Cataloging > Display
 #, fuzzy
-msgid "cataloguing.pref#hide_marc# Don't display"
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Verwende keine"
 
 # Cataloging > Display
@@ -3261,6 +3259,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr ""
+
+# Cataloging > Record structure
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "NORMARC"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -6932,9 +6935,12 @@ msgid ""
 "prefix style"
 msgstr "Konvertiere aus Libsuite8-Form"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "beim Einlesen von Exemplarbarcodes."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7352,14 +7358,9 @@ msgid ""
 "the covers"
 msgstr "Verwende die Kundennummer"
 
-# Enhanced content > Syndetics
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "großer"
-
 # Enhanced content > Amazon
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Zeige keine"
 
 # Enhanced content > Local or remote cover images > CustomCoverImages
@@ -7373,6 +7374,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Zeige"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7641,15 +7647,15 @@ msgstr "gemeinsam mit den bilbiographischen Informationen."
 msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "in separaten Reitern."
 
-# Enhanced content > Syndetics
+# Enhanced content > Amazon
 #, fuzzy
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "großer"
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
+msgstr "Zeige keine"
 
 # Enhanced content > Amazon
 #, fuzzy
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
-msgstr "Zeige keine"
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Zeige"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7824,13 +7830,13 @@ msgstr "andere Auflagen in den Detailansichten im OPAC."
 
 # Enhanced content > Amazon
 #, fuzzy
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Zeige"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
+msgstr "Zeige keine"
 
 # Enhanced content > Amazon
 #, fuzzy
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
-msgstr "Zeige keine"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Zeige"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -9106,13 +9112,14 @@ msgstr ""
 msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr ""
 
-# OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr ""
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Erlaube nicht,"
 
 # OPAC > Privacy
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
 msgstr "Erlaube nicht,"
 
 # OPAC > Features
@@ -9390,13 +9397,13 @@ msgstr "Erlaube,"
 
 # OPAC > Privacy
 #, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Erlaube,"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Erlaube nicht,"
 
 # OPAC > Privacy
 #, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Erlaube nicht,"
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Erlaube,"
 
 # OPAC > Features
 msgid ""
@@ -10343,12 +10350,12 @@ msgstr ""
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr "Deaktiviere"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
 msgstr "Deaktiviere"
 
 # OPAC > Features
@@ -10359,16 +10366,18 @@ msgstr ""
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
 msgstr "Verwende die Grafik unter"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr ""
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Verwende die Grafik unter"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr ""
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "Verwende die Grafik unter"
 
 # OPAC > Privacy
 #, fuzzy
@@ -10777,13 +10786,15 @@ msgid ""
 "listed."
 msgstr ""
 
-# OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr ""
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Erlaube nicht,"
 
-# OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+# OPAC > Privacy
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Erlaube nicht,"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10962,7 +10973,7 @@ msgstr "Zeige"
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#ShowReviewerPhoto# Hide"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
 msgstr "Zeige"
 
 # OPAC > Features
@@ -12126,6 +12137,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr ""
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12436,12 +12454,13 @@ msgid ""
 msgstr ""
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr ""
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Zeige keine"
 
 # Searching > Results display
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Show"
 msgstr "Zeige keine"
 
 # Searching > Features
@@ -14270,11 +14289,10 @@ msgstr "Deaktiviere"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Aktiviere"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14329,6 +14347,25 @@ msgid ""
 "reports web service."
 msgstr ""
 
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "beim Einlesen von Exemplarbarcodes."
+
+# Enhanced content > Syndetics
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "großer"
+
+# Enhanced content > Syndetics
+#, fuzzy
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "großer"
+
+# Enhanced content > Amazon
+#, fuzzy
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Zeige"
+
 # OPAC > Appearance
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
@@ -14338,3 +14375,8 @@ msgstr ""
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr "Aktiviere"
+
+# OPAC > Features
+#, fuzzy
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Zeige"

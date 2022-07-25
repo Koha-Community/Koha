@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 20:34-0300\n"
+"POT-Creation-Date: 2022-07-17 09:40-0300\n"
 "PO-Revision-Date: 2022-05-01 08:28-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: bn\n"
@@ -568,6 +568,22 @@ msgstr "%s এই রেকর্ডে কোন আইটেম নেই। %
 #, fuzzy, c-format
 msgid "%s Video extracts"
 msgstr "%s ভিডিও সারসংক্ষেপ"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s প্রতিক্ষা %s হোল্ড করা হয়েচ্ছে %s সদস্যদের জন্য%s%s প্রত্যাশিত %s %s এর পর থেকে "
+"%s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9330,12 +9346,6 @@ msgstr "বছর"
 msgid "RecallItem "
 msgstr "পদ"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12440,12 +12450,6 @@ msgstr "অপেক্ষমাণ"
 msgid "Waiting date"
 msgstr "অপেক্ষমাণ"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "ট্রানজিট থেকে %s প্রতি %s হতে %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14353,8 +14357,6 @@ msgstr ""
 msgid "show_loans"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14829,14 +14831,6 @@ msgstr "×"
 #~ "%s প্রতিক্ষা %s হোল্ড করা হয়েচ্ছে %s সদস্যদের জন্য%s%s প্রত্যাশিত %s %s এর পর "
 #~ "থেকে %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s প্রতিক্ষা %s হোল্ড করা হয়েচ্ছে %s সদস্যদের জন্য%s%s প্রত্যাশিত %s %s এর পর "
-#~ "থেকে %s %s %s %s %s %s %s. "
-
 # Acronym এর বাংলা হয় - শব্দের অদ্যাক্ষর/সংক্ষিপ্ত শব্দ। 
 # Musical composition এর বাংলা সংগীত সংগঠন/ সুর সংগঠন দেয়া যায়। 
 #, fuzzy
@@ -15003,6 +14997,10 @@ msgstr "×"
 #, fuzzy
 #~ msgid "View interlibrary loan request "
 #~ msgstr "নতুন ইন্টার-লাইব্রেরী লোনের অনুরোধ"
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "ট্রানজিট থেকে %s প্রতি %s হতে %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

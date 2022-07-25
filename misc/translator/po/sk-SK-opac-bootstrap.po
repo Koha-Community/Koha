@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 23:54-0300\n"
+"POT-Creation-Date: 2022-07-17 10:30-0300\n"
 "PO-Revision-Date: 2022-06-15 06:43+0000\n"
 "Last-Translator: SK-KOHA <dada.kapustova@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -574,6 +574,22 @@ msgstr "%s Tento záznam nemá žiadne exempláre. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Video ukážky"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Čakajúci %s Rezervovaný %s čitateľovi %s v %s očakávaný v %s %s od %s %s "
+"%s %s %s%s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9322,12 +9338,6 @@ msgstr "Rezervácia nie je potrebná po:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12470,12 +12480,6 @@ msgstr "Dátum čakania"
 msgid "Waiting date"
 msgstr "Dátum čakania"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Čaká sa na %s od %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14429,8 +14433,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14894,14 +14896,6 @@ msgstr "×"
 #~ "%s Čakajúci %s Rezervovaný %s čitateľovi %s v %s očakávaný v %s %s od %s "
 #~ "%s %s %s %s%s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Čakajúci %s Rezervovaný %s čitateľovi %s v %s očakávaný v %s %s od %s "
-#~ "%s %s %s %s%s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sexemplár%sexemplárov%s%sPrázdny%s"
 
@@ -15011,6 +15005,10 @@ msgstr "×"
 #~ "Pri tejto operácii sa vyskytol problém:%s CHYBA: nepovolený parameter %s "
 #~ "%s CHYBA: Na dokončenie tejto akcie sa musíte prihlásiť. %s CHYBA: "
 #~ "Nemôžete odstrániť značku %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Čaká sa na %s od %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

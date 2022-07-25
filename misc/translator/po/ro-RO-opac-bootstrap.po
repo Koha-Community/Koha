@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 23:40-0300\n"
+"POT-Creation-Date: 2022-07-17 10:25-0300\n"
 "PO-Revision-Date: 2022-05-01 11:43-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ro\n"
@@ -577,6 +577,22 @@ msgstr "%s Această înregistrare nu are articole. %s "
 #, fuzzy, c-format
 msgid "%s Video extracts"
 msgstr "%s extrage video"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Așteptare %s În așteptare %s pentru client %s la %s așteptat la %s %s de "
+"la %s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9341,12 +9357,6 @@ msgstr "Reține ce nu este necesar după"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12515,12 +12525,6 @@ msgstr "În aşteptare"
 msgid "Waiting date"
 msgstr "În aşteptare"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "%s începând cu"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14479,8 +14483,6 @@ msgstr "arată_dețineri"
 msgid "show_loans"
 msgstr "arată_împrumuturile"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14970,14 +14972,6 @@ msgstr ""
 #~ "%s Așteptare %s În așteptare %s pentru client %s la %s așteptat la %s %s "
 #~ "de la %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Așteptare %s În așteptare %s pentru client %s la %s așteptat la %s %s "
-#~ "de la %s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sitem%sitems%s%sGol%s"
 
@@ -15050,6 +15044,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Void payment"
 #~ msgstr "Comentariul tău"
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "%s începând cu"
 
 #, fuzzy
 #~ msgid "You must be logged in to create or add to Lists"

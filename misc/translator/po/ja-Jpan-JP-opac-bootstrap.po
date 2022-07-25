@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 22:20-0300\n"
+"POT-Creation-Date: 2022-07-17 10:05-0300\n"
 "PO-Revision-Date: 2022-05-01 10:25-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ja\n"
@@ -583,6 +583,36 @@ msgstr "%s (レコード番号 %s)"
 #, c-format
 msgid "%s Video extracts"
 msgstr ""
+
+# %1$s: IF ( itemLoo.waitingdate )
+# %2$s: ELSE
+# %3$s: END
+# %4$s: IF ( itemLoo.waitingdate )
+# %5$s: ELSE
+# %6$s: END
+# %7$s: itemLoo.ExpectedAtLibrary
+# %8$s: IF ( itemLoo.waitingdate )
+# %9$s: itemLoo.waitingdate
+# %10$s: ELSE
+# %11$s: IF ( itemLoo.reservedate )
+# %12$s: itemLoo.reservedate
+# %13$s: END
+# %14$s: END
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s待機中%s取り置き中%s for patron %sat%sexpected at%s %s since %s%s%s%s%s%s"
+"%s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9391,12 +9421,6 @@ msgstr "館所蔵"
 msgid "RecallItem "
 msgstr "続けて借りる "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12541,12 +12565,6 @@ msgstr "待つことの中"
 msgid "Waiting date"
 msgstr "待つことの中"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "従 %1$s 郵送する %2$s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14456,8 +14474,6 @@ msgstr ""
 msgid "show_loans"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14990,28 +15006,6 @@ msgstr ""
 #~ msgid ""
 #~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
 #~ "%s %s %s %s %s %s. "
-#~ msgstr ""
-#~ "%s待機中%s取り置き中%s for patron %sat%sexpected at%s %s since %s%s%s%s%s"
-#~ "%s%s. "
-
-# %1$s: IF ( itemLoo.waitingdate )
-# %2$s: ELSE
-# %3$s: END
-# %4$s: IF ( itemLoo.waitingdate )
-# %5$s: ELSE
-# %6$s: END
-# %7$s: itemLoo.ExpectedAtLibrary
-# %8$s: IF ( itemLoo.waitingdate )
-# %9$s: itemLoo.waitingdate
-# %10$s: ELSE
-# %11$s: IF ( itemLoo.reservedate )
-# %12$s: itemLoo.reservedate
-# %13$s: END
-# %14$s: END
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
 #~ msgstr ""
 #~ "%s待機中%s取り置き中%s for patron %sat%sexpected at%s %s since %s%s%s%s%s"
 #~ "%s%s. "
@@ -15678,6 +15672,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Void payment"
 #~ msgstr "図書目録の記録"
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "従 %1$s 郵送する %2$s"
 
 #, fuzzy
 #~ msgid "Year: "

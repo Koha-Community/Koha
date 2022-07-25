@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 22:46-0300\n"
+"POT-Creation-Date: 2022-07-17 10:11-0300\n"
 "PO-Revision-Date: 2022-05-01 10:43-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: mi\n"
@@ -574,6 +574,22 @@ msgstr "%s Kāore he tuemi i tēnei pūkete. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Ngā tangohanga ataata"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Tatari ana %s Puritia ana %s mā te kiritaki %s i te %s  e tūmanakohia ana "
+"i te %s %s mai anō i %s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9362,12 +9378,6 @@ msgstr "Kāore te puringa e hiahiatia ā muri i te:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12517,12 +12527,6 @@ msgstr "E tatari ana"
 msgid "Waiting date"
 msgstr "E tatari ana"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "E kawea ana i %s ki te %s mai anō i te %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14471,8 +14475,6 @@ msgstr "whakaatu_puringa"
 msgid "show_loans"
 msgstr "whakaatu_hoatu taurewa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14934,14 +14936,6 @@ msgstr "×"
 #~ "%s Tatari ana %s Puritia ana %s mā te kiritaki %s i te %s  e tūmanakohia "
 #~ "ana i te %s %s mai anō i %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Tatari ana %s Puritia ana %s mā te kiritaki %s i te %s  e tūmanakohia "
-#~ "ana i te %s %s mai anō i %s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %stuemi%stuemi%s%sHema%s"
 
@@ -15049,6 +15043,10 @@ msgstr "×"
 #~ "Kua pā he raru ki tēnei mahi: %s Ka aroha, kāore e whakaaetia ngā tūtohu "
 #~ "i tēnei pūnaha. %s HAPA: tawhā turekore %s %s HAPA: me takiuru rawa kia "
 #~ "oti ai tau taumahi. %s HAPA: Tē taea te tūtohu te muku %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "E kawea ana i %s ki te %s mai anō i te %s"
 
 #, fuzzy
 #~ msgid ""

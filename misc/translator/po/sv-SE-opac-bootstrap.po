@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 00:08-0300\n"
+"POT-Creation-Date: 2022-07-17 10:32-0300\n"
 "PO-Revision-Date: 2022-05-24 13:12+0000\n"
 "Last-Translator: Anders <anders.klevbacke@ub.gu.se>\n"
 "Language-Team: Koha Translation Team\n"
@@ -577,6 +577,22 @@ msgstr "%s Den här posten har inga artiklar. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Videoutdrag"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Väntar på låntagare %s sedan %s. %s Återkrävd av låntagare förväntas den "
+"%s sedan %s. %s"
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9329,12 +9345,6 @@ msgstr "Återkravet behövs inte efter:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Recalls "
@@ -12480,12 +12490,6 @@ msgstr "Väntar sedan"
 msgid "Waiting date"
 msgstr "Väntar sedan"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Väntar på %s sedan %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14447,8 +14451,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14927,13 +14929,6 @@ msgstr "×"
 #~ "sedan %s %s %s %s %s %s %s. "
 
 #~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Väntar på låntagare %s sedan %s. %s Återkrävd av låntagare förväntas "
-#~ "den %s sedan %s. %s"
-
-#~ msgid ""
 #~ "%s You have reached the maximum number of recalls on this record. %s "
 #~ "There are no items available for recall. %s You cannot place a recall on "
 #~ "this item. %s An error has occurred while attempting to place a recall. "
@@ -15054,6 +15049,10 @@ msgstr "×"
 #~ "Ett problem inträffade med den här operationen: %s ERROR: ogiltig "
 #~ "parameter %s %s ERROR: Du måste logga in för att slutföra den här "
 #~ "åtgärden. %s ERROR: Du kan inte ta bort taggen %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Väntar på %s sedan %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

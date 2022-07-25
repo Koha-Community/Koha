@@ -2046,18 +2046,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "opac.pref#OPACpatronimages# Afficher"
 
-# Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "opac.pref#OPACpatronimages# Afficher"
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
+# OPAC > Appearance
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "从在线公用目录的刊头，链接至最近的书评。"
 
 # Administration > Login options
 msgid ""
@@ -2099,12 +2101,14 @@ msgid "authorities.pref Linker"
 msgstr "连结者"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "显示"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "不显示"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "不显示"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "显示"
 
 # Authorities > General
 msgid ""
@@ -2411,12 +2415,12 @@ msgstr ""
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Display"
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
 msgstr "Показывать"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
+msgid "cataloguing.pref#AcquisitionDetails# Show"
 msgstr "Показывать"
 
 # Cataloging > Display
@@ -2621,12 +2625,13 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "清空预设为英文"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
 msgstr "Показывать"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
 msgstr "Показывать"
 
 # Cataloging > Interface
@@ -3076,12 +3081,12 @@ msgstr ""
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
 msgstr "Показывать"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
 msgstr "Показывать"
 
 # Cataloging > Spine labels
@@ -3205,12 +3210,12 @@ msgstr ""
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#advancedMARCeditor# Display"
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
 msgstr "Показывать"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
+msgid "cataloguing.pref#advancedMARCeditor# Show"
 msgstr "Показывать"
 
 # Cataloging > Interface
@@ -3251,14 +3256,9 @@ msgstr "续增 EAN-13 条形码"
 msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "续增 EAN-13 条形码"
 
-# Cataloging > Interface
-#, fuzzy
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Показывать"
-
 # Authorities > General
 #, fuzzy
-msgid "cataloguing.pref#hide_marc# Don't display"
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "不显示"
 
 # Cataloging > Display
@@ -3266,6 +3266,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr ""
+
+# Cataloging > Interface
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Показывать"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -6953,10 +6958,12 @@ msgid ""
 "prefix style"
 msgstr "EAN-13码或塞零的UPC-A码"
 
-# Circulation > Interface
-#, fuzzy
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "EAN-13码或塞零的UPC-A码"
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7392,12 +7399,7 @@ msgstr ""
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "enhanced_content.pref#LocalCoverImages# Ne pas afficher"
 
 # Enhanced Content > Local or remote cover images
@@ -7414,6 +7416,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
@@ -7681,12 +7688,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "不加入"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
+msgstr "enhanced_content.pref#LocalCoverImages# Ne pas afficher"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
-msgstr "enhanced_content.pref#LocalCoverImages# Ne pas afficher"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -7854,12 +7863,14 @@ msgid ""
 msgstr ""
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "enhanced_content.pref#OPACLocalCoverImages# Afficher"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
+msgstr "enhanced_content.pref#OPACLocalCoverImages# Ne pas afficher"
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
-msgstr "enhanced_content.pref#OPACLocalCoverImages# Ne pas afficher"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "enhanced_content.pref#OPACLocalCoverImages# Afficher"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -9140,13 +9151,13 @@ msgstr "无"
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "显示"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "opac.pref#OPACpatronimages# Ne pas afficher"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "显示"
 
 # OPAC > Features
 msgid ""
@@ -9426,15 +9437,15 @@ msgstr ""
 msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr ""
 
-# OPAC > Features
-#, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "显示"
-
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
 msgstr "不显示"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "显示"
 
 # OPAC > Features
 msgid ""
@@ -10432,15 +10443,15 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Features
-#, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "显示"
-
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr "不显示"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "显示"
 
 # OPAC > Features
 msgid ""
@@ -10450,18 +10461,18 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr "opac.pref#OPACpatronimages# Afficher"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr "从在线公用目录的刊头，链接至最近的书评。"
-
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "页。"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10877,13 +10888,15 @@ msgid ""
 "listed."
 msgstr ""
 
-# OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr ""
+# OPAC > Policy
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "不允许"
 
-# OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+# OPAC > Policy
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "不允许"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11068,8 +11081,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "opac.pref#ShowReviewer# identifiant"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "隐藏"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "显示"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -12271,6 +12285,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr ""
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12600,13 +12621,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr ""
+# Circulation > Interface
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Zeige keinen"
 
-# Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr ""
+# Circulation > Interface
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Zeige"
 
 # OPAC > Features
 #, fuzzy
@@ -14360,11 +14383,10 @@ msgstr "停用"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "启用"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > IdRef
@@ -14418,6 +14440,24 @@ msgid ""
 "reports web service."
 msgstr "经由报表页面服务指定报表的列数。"
 
+# Circulation > Interface
+#, fuzzy
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "EAN-13码或塞零的UPC-A码"
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "enhanced_content.pref#LocalCoverImages# Afficher"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "enhanced_content.pref#OPACLocalCoverImages# Afficher"
+
 # OPAC > Features
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
@@ -14427,3 +14467,12 @@ msgstr "经由报表页面服务指定报表的列数。"
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr "opac.pref#OPACpatronimages# Afficher"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "页。"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "隐藏"

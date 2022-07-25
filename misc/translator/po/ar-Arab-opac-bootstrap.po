@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 20:17-0300\n"
+"POT-Creation-Date: 2022-07-17 09:34-0300\n"
 "PO-Revision-Date: 2022-05-01 08:09-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ar\n"
@@ -567,6 +567,22 @@ msgstr "%s لا توجد أي مواد في هذه التسجيلة. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s مقتطفات فيديو"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s منتظر%s في الحجز %sللمستفيد %s في %s متوقع في%s %s منذ %s %s %s %s %s %s "
+"%s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -2070,8 +2086,8 @@ msgid "Accepted by the library"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:174
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:174
 #, c-format
 msgid "Access denied"
 msgstr "غير مسموح بالدخول"
@@ -3247,9 +3263,9 @@ msgstr "رقم الطلب: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:165
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
@@ -5158,9 +5174,9 @@ msgstr "الغرامات والرسوم"
 msgid "Fines:"
 msgstr "الغرامات:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
 #, c-format
 msgid "Finish"
 msgstr "إنتهى"
@@ -6500,9 +6516,9 @@ msgstr "الكلمة المفتاحية"
 msgid "Koha"
 msgstr "كوها"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr "كوها %s"
@@ -9278,12 +9294,6 @@ msgstr "لا توجد حاجة للحجز بعد:"
 msgid "RecallItem "
 msgstr "التذكير بالمادة المعارة "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -10455,8 +10465,8 @@ msgstr "معلومات السلسلة:"
 msgid "Series title"
 msgstr "عنوان السلاسل"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:70
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:183
 #, c-format
 msgid "Session lost"
 msgstr "فُقدت الجلسة"
@@ -12402,12 +12412,6 @@ msgstr "تاريخ الإنتظار"
 msgid "Waiting date"
 msgstr "تاريخ الإنتظار"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "في الانتظار في %s منذ %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14345,8 +14349,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14413,10 +14415,10 @@ msgstr "tagsel_button"
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
@@ -14802,14 +14804,6 @@ msgstr "×"
 #~ "%s منتظر%s في الحجز %sللمستفيد %s في %s متوقع في%s %s منذ %s %s %s %s %s "
 #~ "%s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s منتظر%s في الحجز %sللمستفيد %s في %s متوقع في%s %s منذ %s %s %s %s %s "
-#~ "%s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sمادة%sمواد%s%sفارغ%s"
 
@@ -14915,6 +14909,10 @@ msgstr "×"
 #~ msgstr ""
 #~ "لقد حدثت مشكلة في هذه العملية: %s الخطأ: معامل غير مسموح %s %s خطأ: يجب "
 #~ "عليك تسجيل الدخول لاستكمال الإجراء. %s خطأ: لا يمكنك حذف الوسم %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "في الانتظار في %s منذ %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

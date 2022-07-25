@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 22:23-0300\n"
+"POT-Creation-Date: 2022-07-17 10:06-0300\n"
 "PO-Revision-Date: 2022-05-01 10:27-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: ka\n"
@@ -571,6 +571,22 @@ msgstr "%s ამ ჩანაწერზე არ არსებობს �
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s ვიდეოჩანაწერის ნაწყვეტები"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s მოლოდინი %s დაჯავშნულია %s წევრზე %s თარიღი %s expected at %s %s since %s "
+"%s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9114,12 +9130,6 @@ msgstr "ჯავშნის მოხსნის თარიღი:"
 msgid "RecallItem "
 msgstr ""
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Recalls "
@@ -12263,12 +12273,6 @@ msgstr "ინვოისის თარიღი:"
 msgid "Waiting date"
 msgstr "ინვოისის თარიღი:"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "გზაშია %s-დან – %s-სკენ %s-ის შემდეგ"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14221,8 +14225,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14641,14 +14643,6 @@ msgstr ""
 #~ "%s მოლოდინი %s დაჯავშნულია %s წევრზე %s თარიღი %s expected at %s %s since "
 #~ "%s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s მოლოდინი %s დაჯავშნულია %s წევრზე %s თარიღი %s expected at %s %s since "
-#~ "%s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sეგზემპლარი%sეგზემპლარი%s%sცარიელი%s"
 
@@ -14734,3 +14728,7 @@ msgstr ""
 #~ msgstr ""
 #~ "თეგი დაემატა როგორც &quot;%s&quot;. %s შენიშვნა: თქვენი თეგი მთლიანად "
 #~ "კოდებისაგან შედგებოდა. იგი არ დაემატა. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "გზაშია %s-დან – %s-სკენ %s-ის შემდეგ"

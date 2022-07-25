@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2022-06-23 11:07+0000\n"
+"PO-Revision-Date: 2022-07-18 13:54+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /es/22.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1655982427.887456\n"
+"X-POOTLE-MTIME: 1658152481.176166\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2213,17 +2213,16 @@ msgid ""
 msgstr "Versión del servidor CAS al que se conectará Koha: "
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr "No"
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr "No mostrar"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Mostrar los íconos de itemtype en la interfaz administrativa:"
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Mostrar"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Sí"
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "iconos de de tipo de ítem en la interfaz administrativa."
 
 # Administration > Login options
 msgid ""
@@ -2270,12 +2269,12 @@ msgid "authorities.pref Linker"
 msgstr "Enlazador"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Mostrar"
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "No mostrar"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "No mostrar"
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Mostrar"
 
 # Authorities > General
 msgid ""
@@ -2597,12 +2596,12 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Marbetes/Tejuelos"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Mostrar"
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "No mostrar"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "No mostrar"
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Mostrar"
 
 # Cataloging > Display
 msgid ""
@@ -2836,12 +2835,12 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "para el nombre del archivo."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Mostrar"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "No mostrar"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "No mostrar"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Mostrar"
 
 # Cataloging > Interface
 msgid ""
@@ -3325,12 +3324,12 @@ msgid ""
 msgstr "Incluya los siguientes campos en un marbete/tejuelo rápido:"
 
 # Cataloging > Spine Labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Mostrar"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "No mostrar"
 
 # Cataloging > Spine Labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "No mostrar"
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Mostrar"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3465,12 +3464,12 @@ msgstr ""
 "para el enlazado de registros bibliográficos."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Mostrar"
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr "No mostrar"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr "No mostrar"
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Mostrar"
 
 # Cataloging > Interface
 msgid ""
@@ -3505,11 +3504,7 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "no son generados automáticamente."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Mostrar"
-
-# Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "No mostrar"
 
 # Cataloging > Display
@@ -3518,6 +3513,10 @@ msgid ""
 "in MARC views."
 msgstr ""
 "números de campos MARC, códigos de subcampos e indicadores en vista MARC."
+
+# Cataloging > Display
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Mostrar"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -7229,9 +7228,12 @@ msgid ""
 "prefix style"
 msgstr "Quitar el primer número del estilo prefijo T"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "los códigos de barra de ítems escaneados."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid ""
@@ -7633,12 +7635,7 @@ msgstr "Utilice los siguientes proveedores para ir a buscar las cubiertas"
 
 # Enhanced Content > Local or remote cover images
 # Enhanced Content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Mostrar"
-
-# Enhanced Content > Local or remote cover images
-# Enhanced Content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "No mostrar"
 
 # Enhanced content > Local or remote cover images
@@ -7654,6 +7651,10 @@ msgid ""
 msgstr ""
 "O puede utilizar la siguiente sintaxis para especificar el valor campo"
 "$subcampo: {field$subfield}. Por ejemplo {024$a}."
+
+# Enhanced Content > Amazon
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Mostrar"
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7907,12 +7908,12 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "en pestañas."
 
 # Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Mostrar"
-
-# Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "No mostrar"
+
+# Enhanced Content > Amazon
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Mostrar"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8068,12 +8069,12 @@ msgid ""
 msgstr "otras ediciones de un ítem en el OPAC."
 
 # Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Mostrar"
-
-# Enhanced Content > Local Cover Images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "No mostrar"
+
+# Enhanced Content > Amazon
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Mostrar"
 
 # Enhanced Content > Local Cover Images
 msgid ""
@@ -9320,12 +9321,12 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "en"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Presentar en pantalla"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "No mostrar"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "No presentar en pantalla"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Mostrar"
 
 # OPAC > Features
 msgid ""
@@ -9602,12 +9603,12 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Reproducir"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Mostrar"
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "No mostrar"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "No mostrar"
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Mostrar"
 
 # OPAC > Features
 msgid ""
@@ -10061,13 +10062,13 @@ msgstr ""
 "<br />Opciones:<ul><li>Ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" para "
 "el valor predeterminado</li><li>Ingrese una ruta para definir un archivo "
-"xslt</li><li>Ingrese una URL para una hoja de estilo externa "
-"específica</li><li>NOTA: La preferencia de sistema <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos utiliza "
-"datos en los campos de ítems</li></ul>Si tiene múltiples hojas de estilos "
-"para diferentes idiomas, {langcode} será reemplazado con el lenguaje actual "
-"de la interfaz."
+"xslt</li><li>Ingrese una URL para una hoja de estilo externa específica</"
+"li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
+"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
+"estilos para diferentes idiomas, {langcode} será reemplazado con el lenguaje "
+"actual de la interfaz."
 
 # OPAC > Appearance
 msgid ""
@@ -10622,12 +10623,12 @@ msgstr ""
 "caracteres)."
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Mostrar"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "No mostrar"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "No mostrar"
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Mostrar"
 
 # OPAC > Features
 msgid ""
@@ -10637,16 +10638,16 @@ msgstr ""
 "una lista de selección de la biblioteca para ítems de noticias en el OPAC."
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# No"
-msgstr "No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr "No mostrar"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "Mostrar iconos de tipo de ítem en el OPAC:"
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Mostrar"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Sí"
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "iconos de tipo de ítem en el OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11100,12 +11101,12 @@ msgid ""
 msgstr "Si deja en blanco, todas las bibliotecas serán listadas"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "Mostrar y prellenar"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "No mostrar y pre-llenar"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "No mostrar y pre-llenar"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Mostrar y prellenar"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11296,8 +11297,8 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "nombre de usuario"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "Ocultar"
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "No mostrar"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -12552,6 +12553,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "una contraseña segura para staff y usuarios"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > General
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12905,12 +12913,12 @@ msgstr ""
 "level_itypes</a> se configura a un registro bibliográfico."
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Mostrar"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "No mostrar"
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "No mostrar"
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Mostrar"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -14112,12 +14120,12 @@ msgstr ""
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para la "
 "hoja de estilo predeterminado</li><li>Ingrese una ruta para definir un "
 "archivo xslt</li><li>Ingrese un URL para una hoja de estilo externa "
-"específica.</li><li>NOTA: La preferencia de sistema <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos utiliza "
-"datos en los campos de ítems</li></ul>Si tiene múltiples hojas de estilos "
-"para diferentes lenguajes el comodín {langcode} será reemplazado con el "
-"idioma actual de la interfaz."
+"específica.</li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
+"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
+"estilos para diferentes lenguajes el comodín {langcode} será reemplazado con "
+"el idioma actual de la interfaz."
 
 # Staff Client > Appearance
 msgid ""
@@ -14793,11 +14801,10 @@ msgstr "Habilite"
 # Web services > REST API
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
-"las credenciales de cliente OAuth2 para la API REST. Requiere tener "
-"instalado Net::OAuth2::AuthorizationServer . [EXPERIMENTAL]"
+"el client credentials grant de OAuth2 para la API REST. Requiere tener "
+"Net::OAuth2::AuthorizationServer instalado."
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"
@@ -14846,3 +14853,32 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "filas del reporte solicitado a través del web service de reportes."
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Sí"
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "los códigos de barra de ítems escaneados."
+
+# Enhanced Content > Local or remote cover images
+# Enhanced Content > Local or remote cover images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Mostrar"
+
+# Enhanced Content > Local Cover Images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Mostrar"
+
+# Enhanced Content > Local Cover Images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Mostrar"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Sí"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Ocultar"

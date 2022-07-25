@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 20:24-0300\n"
+"POT-Creation-Date: 2022-07-17 09:36-0300\n"
 "PO-Revision-Date: 2022-05-01 08:16-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: az\n"
@@ -556,6 +556,20 @@ msgstr "Bu kayıt %s kere kullanıldı"
 #, c-format
 msgid "%s Video extracts"
 msgstr ""
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9046,12 +9060,6 @@ msgstr "Saxlama tarixi"
 msgid "RecallItem "
 msgstr "Materiyalı yenilə (vaxtını uzat) "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12183,12 +12191,6 @@ msgstr "Beklemede"
 msgid "Waiting date"
 msgstr "Beklemede"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Sonuçlar %s - %s arası (Toplamı %s)"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14100,8 +14102,6 @@ msgstr ""
 msgid "show_loans"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14560,12 +14560,6 @@ msgstr ""
 #~ msgstr "%s %s %s %s (%s) "
 
 #, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr "%s %s %s %s (%s) "
-
-#, fuzzy
 #~ msgid "%s You have never placed a hold from this library. %s %s "
 #~ msgstr "BU kitabxanadan indiyə kimi heçnə almadınız. "
 
@@ -14889,6 +14883,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Void payment"
 #~ msgstr "Şərhiniz:"
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Sonuçlar %s - %s arası (Toplamı %s)"
 
 #, fuzzy
 #~ msgid "Wed"

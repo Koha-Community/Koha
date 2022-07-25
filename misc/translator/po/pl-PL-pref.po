@@ -2201,17 +2201,19 @@ msgid ""
 msgstr "Serwer autoryzacji CAS w Koha połączy się z: "
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
 msgstr "Nie"
 
 # Administration > Interface options
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Wyświetlaj ikony typów dokumentów w interfejsie bibliotekarza: "
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Nie"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Tak"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "Wyświetlaj ikony typów dokumentów w interfejsie bibliotekarza: "
 
 # Administration > Login options
 msgid ""
@@ -2256,12 +2258,14 @@ msgid "authorities.pref Linker"
 msgstr "Linker"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Wyświetlaj terminy szersze/węższe"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Nie wyświetlaj terminów szerszych/węższych"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Nie wyświetlaj terminów szerszych/węższych"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Wyświetlaj terminy szersze/węższe"
 
 # Authorities > General
 msgid ""
@@ -2579,12 +2583,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Etykiety grzbietowe"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Wyświetlaj szczegóły"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Nie wyświetlaj szczegółów"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Nie wyświetlaj szczegółów"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Wyświetlaj szczegóły"
 
 # Cataloging > Display
 msgid ""
@@ -2811,12 +2817,14 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "w nazwie pliku."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Wyświetlaj prostszy sposób"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "Nie wyświetlaj prostszego sposobu"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "Nie wyświetlaj prostszego sposobu"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Wyświetlaj prostszy sposób"
 
 # Cataloging > Interface
 msgid ""
@@ -3297,12 +3305,14 @@ msgid ""
 msgstr "Uwzględnij następujące pola przy szybkim wydruku etykiet grzbietowych:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Wyświetlaj przyciski"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Nie wyświetlaj przycisków"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Nie wyświetlaj przycisków"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Wyświetlaj przyciski"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3435,12 +3445,14 @@ msgstr ""
 "rekordów bibliograficznych."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Wyświetlaj etykiety"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr "Nie wyświetlaj etykiet"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr "Nie wyświetlaj etykiet"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Wyświetlaj etykiety"
 
 # Cataloging > Interface
 msgid ""
@@ -3475,11 +3487,8 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "nie są generowane automatycznie."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Wyświetlaj etykiety i wskaźniki"
-
-# Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Nie wyświetlaj etykiet i wskaźników"
 
 # Cataloging > Display
@@ -3487,6 +3496,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr "pól i podpól MARC w widoku MARC."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Wyświetlaj etykiety i wskaźniki"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -7174,9 +7188,12 @@ msgid ""
 "prefix style"
 msgstr "Bez pierwszej cyfry ze stylu T-prefix"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "kody kreskowe egzemplarzy przy wczytywaniu."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7573,12 +7590,8 @@ msgstr "Użyj następujących dostawców, by pobrać okładki"
 
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Wyświetlaj"
-
-# Enhanced content > Local or remote cover images
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Nie wyświetlaj"
 
 # Enhanced content > Local or remote cover images
@@ -7592,6 +7605,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr "Możesz także użyć składni: {field$subfield}. Na przykład {024$a}."
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Pokaż zdjęcia"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref#CustomCoverImages# Using the following URL:"
@@ -7842,12 +7860,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "w zakładkach."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Wyświetlaj"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Nie wyświetlaj"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Pokaż zdjęcia"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8001,12 +8021,14 @@ msgid ""
 msgstr "informacje o innych wydaniach pozycji w OPAC."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Włącz"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Wyłącz"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Pokazuj"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -9239,12 +9261,14 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "w przeciągu"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Wyświetlaj"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Nie wyświetlaj"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Nie wyświetlaj"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Wyświetlaj"
 
 # OPAC > Features
 msgid ""
@@ -9517,12 +9541,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Odtwarzaj"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Włącz"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Wyłącz"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Wyłącz"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Włącz"
 
 # OPAC > Features
 msgid ""
@@ -10523,12 +10549,14 @@ msgid ""
 msgstr "Opis, który pojawi się w wynikach wyszukiwania (160 znaków)."
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Wyświetlaj"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Nie wyświetlaj"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Nie wyświetlaj"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Wyświetlaj"
 
 # OPAC > Features
 msgid ""
@@ -10537,16 +10565,19 @@ msgid ""
 msgstr "listy bibliotek/filii i ich aktualności w OPAC."
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# No"
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
 msgstr "Nie"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "Wyświetlaj ikony typów dokumentów w OPAC: "
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Nie"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Tak"
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "Wyświetlaj ikony typów dokumentów w OPAC: "
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10998,12 +11029,14 @@ msgid ""
 msgstr "Jeśli puste, wszystkie biblioteki będą brane pod uwagę."
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
-msgstr "Wyświetl i wstępnie wypełniaj"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
+msgstr "Nie wyświetlaj i nie wypełniaj wstępnie"
 
 # OPAC > Self registration and modification
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr "Nie wyświetlaj i nie wypełniaj wstępnie"
+#, fuzzy
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
+msgstr "Wyświetl i wstępnie wypełniaj"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11188,8 +11221,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "login"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "Nie wyświetlaj"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "Wyświetlaj"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -12443,6 +12477,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "silnego hasła dla bibliotekarzy i użytkowników"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12793,12 +12834,14 @@ msgstr ""
 "ustawiona na rekord bibliograficzny."
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Wyświetlaj"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
+msgstr "Nie wyświetlaj"
 
 # Searching > Results display
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr "Nie wyświetlaj"
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Wyświetlaj"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -14666,10 +14709,10 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Włącz"
 
 # Web services > REST API
+#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 "udzielenie poświadczeń klienta OAuth2 dla REST API. Wymaga zainstalowania "
 "Net::OAuth2::AuthorizationServer. [EKSPERYMENTALNA]"
@@ -14723,3 +14766,32 @@ msgid ""
 "web_services.pref#SvcMaxReportRows# rows of a report requested via the "
 "reports web service."
 msgstr "."
+
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Tak"
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "kody kreskowe egzemplarzy przy wczytywaniu."
+
+# Enhanced content > Local or remote cover images
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Wyświetlaj"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Wyświetlaj"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Włącz"
+
+# OPAC > Appearance
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Tak"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Nie wyświetlaj"

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 23:05-0300\n"
+"POT-Creation-Date: 2022-07-17 10:16-0300\n"
 "PO-Revision-Date: 2022-05-01 10:55-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: nb\n"
@@ -569,6 +569,22 @@ msgstr "%s Denne posten har ingen eksemplarer. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Videoutdrag"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Venter %s Reservert %s for låner %s ved %s forventet %s %s siden %s %s %s "
+"%s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9331,12 +9347,6 @@ msgstr "Reservasjonen trengs ikke etter:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12477,12 +12487,6 @@ msgstr "Ventedato"
 msgid "Waiting date"
 msgstr "Ventedato"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Venter ved %s%s, %s%s siden %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14437,8 +14441,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14898,14 +14900,6 @@ msgstr "×"
 #~ "%s Venter %s Reservert %s for låner %s ved %s forventet %s %s siden %s %s "
 #~ "%s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Venter %s Reservert %s for låner %s ved %s forventet %s %s siden %s %s "
-#~ "%s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %seksemplar%seksemplarer%s%sTom%s"
 
@@ -15013,6 +15007,10 @@ msgstr "×"
 #~ "Det oppsto et problem med denne operasjonen: %s FEIL: ugyldig parameter "
 #~ "%s %s FEIL: Du må logge inn for å fullføre den handlingen. %s FEIL: Du "
 #~ "kan ikke slette taggen %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Venter ved %s%s, %s%s siden %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

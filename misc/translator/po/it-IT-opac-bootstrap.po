@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 22:13-0300\n"
-"PO-Revision-Date: 2022-06-19 09:41+0000\n"
+"POT-Creation-Date: 2022-07-17 10:04-0300\n"
+"PO-Revision-Date: 2022-07-18 13:39+0000\n"
 "Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /it/22.05/it-IT-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1655631718.488638\n"
+"X-POOTLE-MTIME: 1658151597.606252\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -580,6 +580,22 @@ msgstr "%s Questo record non ha copie. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Estratti video"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s In attesa dell'utente presso %s dal %s. %s Richiamato dall'utente atteso "
+"al %s dal %s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9349,12 +9365,6 @@ msgstr "La prenotazione non + necessaria dopo il:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12510,12 +12520,6 @@ msgstr "Data attesa"
 msgid "Waiting date"
 msgstr "Data attesa"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "In attesa dell'utente a %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -12786,7 +12790,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
 #, c-format
 msgid "You can add to your lists from the results of any "
-msgstr "Puoi aggiungere records alle tue liste prendendo dai risultati di ogni "
+msgstr ""
+"Puoi aggiungere records alle tue liste prendendo dai risultati di ogni "
 
 #. I
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:57
@@ -14485,8 +14490,6 @@ msgstr "mostra_posseduto"
 msgid "show_loans"
 msgstr "mostra_i_prestiti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14949,13 +14952,6 @@ msgstr "×"
 #~ "%sIscrivimi agli avvisi su uno specifico periodico %s Togli dagli avvisi "
 #~ "su uno specifico periodico %s "
 
-#~ msgid ""
-#~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
-#~ "%s %s %s %s %s %s. "
-#~ msgstr ""
-#~ "%sIn attesa%sPrenotato%s dall'utente %s il %s atteso il %s %s dal %s%s%s%s"
-#~ "%s%s%s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %scopia%scopie%s%sVuoto%s"
 
@@ -15069,6 +15065,9 @@ msgstr "×"
 #~ "C'è un problema con questa operazione: %s ERRORE: parametro illegale %s "
 #~ "%s ERRORE: ti devi collegare per completare questa azione %s ERRORE: non "
 #~ "puoi cancellare questo tag %s. "
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "In attesa dell'utente a %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

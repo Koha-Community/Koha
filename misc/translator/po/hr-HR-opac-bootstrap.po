@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:51-0300\n"
+"POT-Creation-Date: 2022-07-17 09:58-0300\n"
 "PO-Revision-Date: 2022-05-01 09:56-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: hr\n"
@@ -575,6 +575,22 @@ msgstr "%s Ovaj zapis nema primjeraka. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Video isječci"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Na čekanju %s Rezervirano %s za korisnika %s u %s očekuje se u %s %s od "
+"%s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9335,12 +9351,6 @@ msgstr "Ne trebam rezervaciju poslije:"
 msgid "RecallItem "
 msgstr "Primjerak "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12482,12 +12492,6 @@ msgstr "Na čekanju "
 msgid "Waiting date"
 msgstr "Na čekanju "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "U tranzitu iz %s u %s od %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14431,8 +14435,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14886,14 +14888,6 @@ msgstr "×"
 #~ "%s Na čekanju %s Rezervirano %s za korisnika %s u %s očekuje se u %s %s "
 #~ "od %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Na čekanju %s Rezervirano %s za korisnika %s u %s očekuje se u %s %s "
-#~ "od %s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sprimjerak%sprimjeraka%s%sPrazno%s"
 
@@ -14989,6 +14983,10 @@ msgstr "×"
 #~ "ovom sustavu. %s GREŠKA: nedozvoljeni parametar %s %s GREŠKA: Morate biti "
 #~ "prijavljeni da biste dovršili ovu radnju. %s GREŠKA: Ne možete obrisati "
 #~ "ovaj tag %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "U tranzitu iz %s u %s od %s"
 
 #, fuzzy
 #~ msgid ""

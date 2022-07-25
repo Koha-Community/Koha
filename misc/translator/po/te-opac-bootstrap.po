@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-18 00:20-0300\n"
+"POT-Creation-Date: 2022-07-17 10:35-0300\n"
 "PO-Revision-Date: 2022-05-01 12:17-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: te\n"
@@ -565,6 +565,22 @@ msgstr "%s ఈ రికార్డుకు అంశాలు లేవు. %
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s వీడియో సారం"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s వేచి %s హోల్డ్‌లో ఉంది %s పోషకుడి కోసం %s వద్ద %s వద్ద అంచనా %s %s నుండి %s %s %s %s %s "
+"%s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9232,12 +9248,6 @@ msgstr "తర్వాత అవసరం లేదు:"
 msgid "RecallItem "
 msgstr "అంశాన్ని గుర్తుచేసుకోండి "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12349,12 +12359,6 @@ msgstr "వేచి ఉన్న తేదీ"
 msgid "Waiting date"
 msgstr "వేచి ఉన్న తేదీ"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "వద్ద వేచి ఉంది %s నుండి %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14267,8 +14271,6 @@ msgstr "చూపించు_కలిగి"
 msgid "show_loans"
 msgstr "చూపించు_రుణాలు"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14723,14 +14725,6 @@ msgstr "×"
 #~ "%s వేచి %s హోల్డ్‌లో ఉంది %s పోషకుడి కోసం %s వద్ద %s వద్ద అంచనా %s %s నుండి %s %s %s %s "
 #~ "%s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s వేచి %s హోల్డ్‌లో ఉంది %s పోషకుడి కోసం %s వద్ద %s వద్ద అంచనా %s %s నుండి %s %s %s %s "
-#~ "%s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sఅంశం%sఅంశాలను%s%sఖాళీ%s"
 
@@ -14834,6 +14828,10 @@ msgstr "×"
 #~ msgstr ""
 #~ "ఈ ఆపరేషన్‌లో సమస్య ఉంది: %s ERROR: అక్రమ పరామితి %s %s ERROR: ఆ చర్యను పూర్తి చేయడానికి "
 #~ "మీరు తప్పక లాగిన్ అవ్వాలి. %s ERROR: మీరు ట్యాగ్‌ను తొలగించలేరు %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "వద్ద వేచి ఉంది %s నుండి %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

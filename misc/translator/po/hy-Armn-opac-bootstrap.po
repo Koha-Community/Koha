@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:57-0300\n"
+"POT-Creation-Date: 2022-07-17 10:00-0300\n"
 "PO-Revision-Date: 2022-06-21 05:28+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team\n"
@@ -574,6 +574,22 @@ msgstr "%s Այս գրառումը չունի նյութեր։ %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Տեսա դուրս բերումներ"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Սպասում է ընթերցողին %s -ում սկսած %s -ից: %s Հետ կանչված է ընթերցողի "
+"կողմից, սպասվում է %s -ում սկսած %s -ից: %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9321,12 +9337,6 @@ msgstr "Հետ կանչը հետո պետք չէ։"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr "Հետ կանչված է ընթերցողի կողմից սպասվում է %s -ին"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Recalls "
@@ -12465,12 +12475,6 @@ msgstr "Սպասում"
 msgid "Waiting date"
 msgstr "Սպասող ամսաթիվ"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "Սպասում է ընթերցողին %s -ում"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -12967,7 +12971,8 @@ msgstr "Դու ոչինչ չունես դուրս տրված"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
 #, c-format
 msgid "You have reached the maximum number of recalls on this record."
-msgstr "Դուք հասել եք թույլատրելի հետ կանչերի առավելագույնին այս գրառման համար։"
+msgstr ""
+"Դուք հասել եք թույլատրելի հետ կանչերի առավելագույնին այս գրառման համար։"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
@@ -14415,8 +14420,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14906,13 +14909,6 @@ msgstr "×"
 #~ "%s %s %s %s %s %s %s. "
 
 #~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Սպասում է ընթերցողին %s -ում սկսած %s -ից: %s Հետ կանչված է ընթերցողի "
-#~ "կողմից, սպասվում է %s -ում սկսած %s -ից: %s "
-
-#~ msgid ""
 #~ "%s You have reached the maximum number of recalls on this record. %s "
 #~ "There are no items available for recall. %s You cannot place a recall on "
 #~ "this item. %s An error has occurred while attempting to place a recall. "
@@ -15002,6 +14998,9 @@ msgstr "×"
 #~ "որին կարող ենք նամակ ուղարկել։ %s Գաղտնաբառի վերականգնման գործընթացը այս "
 #~ "հաշվի համար արդեն սկսվել է %s (\""
 
+#~ msgid "Recalled by patron expected at %s"
+#~ msgstr "Հետ կանչված է ընթերցողի կողմից սպասվում է %s -ին"
+
 #~ msgid ""
 #~ "The current subscription began on %s and is issued %s twice per day %s %s "
 #~ "every day %s %s three times per week %s %s every week %s %s every 2 weeks "
@@ -15034,6 +15033,9 @@ msgstr "×"
 #~ "Այս գործողության հետ կապված խնդիր կա։ %s ՍԽԱԼ․ չթույլատրված պարամետր %s "
 #~ "%s ՍԽԱԼ: Պետք է մուտք գործես այդ գործողությունն ավարտելու համար։ %s ՍԽԱԼ: "
 #~ "Դու չես կարող ջնջել %s ցուցիչը։ ."
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Սպասում է ընթերցողին %s -ում"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

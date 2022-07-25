@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:12-0300\n"
+"POT-Creation-Date: 2022-07-17 09:49-0300\n"
 "PO-Revision-Date: 2022-06-23 11:05+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -581,6 +581,22 @@ msgstr "%s Este registro no posee ejemplares. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Extractos de vídeo"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s En espera para un usuario en %s desde %s. %s Reclamo por un usuario "
+"esperado en %s desde %s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9388,12 +9404,6 @@ msgstr "Reclamo no necesario después de:"
 msgid "RecallItem "
 msgstr "RetirarEjemplar"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr "Reclamado por el usuario, esperado el %s"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Recalls "
@@ -12561,12 +12571,6 @@ msgstr "En espera"
 msgid "Waiting date"
 msgstr "Fecha de espera"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "Esperando al usuario en %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -13074,7 +13078,8 @@ msgstr "No tiene nada prestado"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:49
 #, c-format
 msgid "You have reached the maximum number of recalls on this record."
-msgstr "Usted ha alcanzado el número máximo de reclamos de devolución posibles."
+msgstr ""
+"Usted ha alcanzado el número máximo de reclamos de devolución posibles."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:348
@@ -14553,8 +14558,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -15046,13 +15049,6 @@ msgstr "×"
 #~ "desde %s %s %s %s %s %s %s. "
 
 #~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s En espera para un usuario en %s desde %s. %s Reclamo por un usuario "
-#~ "esperado en %s desde %s. %s "
-
-#~ msgid ""
 #~ "%s You have reached the maximum number of recalls on this record. %s "
 #~ "There are no items available for recall. %s You cannot place a recall on "
 #~ "this item. %s An error has occurred while attempting to place a recall. "
@@ -15145,6 +15141,9 @@ msgstr "×"
 #~ "correo electrónico a donde podamos mandar el correo. %s El proceso de "
 #~ "recuperación de contraseñas ya se ha iniciado para esta cuenta %s (\""
 
+#~ msgid "Recalled by patron expected at %s"
+#~ msgstr "Reclamado por el usuario, esperado el %s"
+
 #~ msgid ""
 #~ "The current subscription began on %s and is issued %s twice per day %s %s "
 #~ "every day %s %s three times per week %s %s every week %s %s every 2 weeks "
@@ -15177,6 +15176,9 @@ msgstr "×"
 #~ "Se produjo un problema con esta operación: %s ERROR: parámetro ilegal %s "
 #~ "%s ERROR: Debe ingresar para completar esta acción. %s ERROR: No puede "
 #~ "eliminar la etiqueta %s. "
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Esperando al usuario en %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

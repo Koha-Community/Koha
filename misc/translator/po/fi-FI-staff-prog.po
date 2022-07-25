@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:22-0300\n"
+"POT-Creation-Date: 2022-07-18 00:04-0300\n"
 "PO-Revision-Date: 2022-06-22 07:44+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
@@ -341,7 +341,7 @@ msgstr "%s %s %s %s %s %s Yhteensä%s %s "
 #. %2$s:  loopro.object | html 
 #. %3$s:  END 
 #. %4$s:  ELSIF ( loopro.module == 'RECALLS' ) 
-#. %5$s:  IF loopro.recall.item_level_recall 
+#. %5$s:  IF loopro.recall.item_level 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:370
 #, c-format
 msgid "%s %s %s %s %s Item-level recall on "
@@ -705,8 +705,8 @@ msgstr "%s %s (%s peruutettu) %s "
 #. %3$s:  limit | html 
 #. %4$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:912
-#, c-format
-msgid "%s %s (%s shown) %s. "
+#, fuzzy, c-format
+msgid "%s %s (%s shown) %s "
 msgstr "%s %s (%s näytetään) %s. "
 
 #. For the first occurrence,
@@ -1252,13 +1252,6 @@ msgstr "%s %s / %s%s (Tietue nro %s)"
 msgid "%s %s for "
 msgstr "%s %s asiakkaalle "
 
-#. %1$s:  patron.firstname | html 
-#. %2$s:  patron.surname | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:174
-#, c-format
-msgid "%s %s has no outstanding fines."
-msgstr "Asiakkaalla %s %s ei ole maksamattomia maksuja."
-
 #. For the first occurrence,
 #. %1$s:  END 
 #. %2$s:  IF ( suggestions_loo.place ) 
@@ -1723,7 +1716,7 @@ msgstr "%s (%s)%s %s luokka: %s%s"
 #. %1$s:  issue.item.biblio.title | html 
 #. %2$s:  issue.item.barcode | html 
 #. %3$s:  issue.date_due | $KohaDates as_due_date => 1 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:772
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Erääntyy %s"
@@ -1838,19 +1831,6 @@ msgstr "%s / %s tietueen muokkaus onnistui. Joitain virheitä esiintyi."
 msgid ""
 "%s / %s records have successfully been reindexed. Some errors occurred. %s"
 msgstr "%s / %s tietueen muokkaus onnistui. Joitain virheitä esiintyi. %s"
-
-#. %1$s:  report.total_success | html 
-#. %2$s:  report.total_records | html 
-#. %3$s:  IF job.status == 'cancelled' 
-#. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs_update_elastic_index.inc:11
-#, c-format
-msgid ""
-"%s / %s records have successfully been reindexed. Some errors occurred. "
-"%sThe job has been cancelled before it finished.%s "
-msgstr ""
-"%s / %s tietueen uudelleenindeksointi onnistui. Joitakin virheitä esiintyi. "
-"%sAjo keskeytettiin.%s "
 
 #. %1$s:  booksellerphone | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
@@ -2047,7 +2027,7 @@ msgstr "%s Osoite: "
 #. %2$s:  ELSE 
 #. %3$s:  c.library.branchname | html 
 #. %4$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:348
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:349
 #, c-format
 msgid "%s All libraries %s%s %s "
 msgstr "%s Kaikki kirjastot %s%s %s "
@@ -2158,7 +2138,7 @@ msgid "%s Card number: "
 msgstr "%s Kirjastokortin numero: "
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:193
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:192
 #, c-format
 msgid "%s Cash register: "
 msgstr "%s Kassa: "
@@ -2637,7 +2617,7 @@ msgstr "%s Nide palaa lainaavaan kirjastoon "
 #. %5$s:  item_notforloan_lib | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:447
 #, c-format
 msgid "%s Item type not for loan. %s %s Item not for loan%s (%s)%s. %s "
 msgstr ""
@@ -3396,8 +3376,8 @@ msgstr "%s Toissijainen puhelin: "
 
 #. For the first occurrence,
 #. %1$s:  IF category == 'news' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:302
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:305
 #, c-format
 msgid "%s See "
 msgstr "%s Katso "
@@ -3818,17 +3798,15 @@ msgid "%s Waiting here %s until %s %s "
 msgstr "%s Odottaa tässä kirjastossa %s saakka %s %s "
 
 #. %1$s:  IF type == 'WRITEOFF' 
-#. %2$s:  patron.firstname | html 
-#. %3$s:  patron.surname | html 
-#. %4$s:  ELSE 
-#. %5$s:  patron.firstname | html 
-#. %6$s:  patron.surname | html 
-#. %7$s:  END 
+#. %2$s:  INCLUDE 'patron-title.inc' no_html = 1 
+#. %3$s:  ELSE 
+#. %4$s:  INCLUDE 'patron-title.inc' no_html = 1 
+#. %5$s:  END 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:24
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s Write off an amount for %s %s %s Collect fine payment for %s %s %s "
-"&rsaquo; Patrons &rsaquo; Koha "
+"%s Write off an amount for %s %s Collect fine payment for %s %s &rsaquo; "
+"Patrons &rsaquo; Koha "
 msgstr ""
 "%s Poista maksu asiakkaalta %s %s %s Ota vastaan maksu asiakkaalta %s %s %s "
 "&rsaquo; Asiakkaat &rsaquo; Koha "
@@ -4104,6 +4082,12 @@ msgstr "Asiakkaalla %s on %s kpl varauksia odottamassa noutoa."
 #, c-format
 msgid "%s has been removed from group."
 msgstr "%s on poistettu ryhmästä."
+
+#. %1$s:  INCLUDE 'patron-title.inc' 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:174
+#, fuzzy, c-format
+msgid "%s has no outstanding fines."
+msgstr "Asiakkaalla %s %s ei ole maksamattomia maksuja."
 
 #. For the first occurrence,
 #. %1$s:  books_loo.holds | html 
@@ -7339,8 +7323,8 @@ msgstr "- Ei mitään -"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:266
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:338
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:202
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:336
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:145
 #, c-format
 msgid "-- Select an option--"
@@ -7472,9 +7456,9 @@ msgstr "0 tilattavana"
 msgid "0%%"
 msgstr "0%%"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:329
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:379
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:182
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:377
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -8025,8 +8009,8 @@ msgstr "Tilin yhteenveto: %s %s (%s)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:153
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:246
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:152
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:244
 #, c-format
 msgid "Account type"
 msgstr "Tilin tyyppi"
@@ -8306,14 +8290,14 @@ msgstr "Toiminto, jos ei osumaa: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:218
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:429
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transfers_to_send.tt:61
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:77
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:111
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:87
@@ -8334,7 +8318,7 @@ msgstr "Toiminto, jos ei osumaa: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:410
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:327
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:206
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
@@ -8350,6 +8334,7 @@ msgid "Actions"
 msgstr "Toiminnot"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:215
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:319
@@ -8360,7 +8345,6 @@ msgstr "Toiminnot"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:293
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/oai_sets.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:234
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:229
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
@@ -8482,8 +8466,8 @@ msgstr "QR-koodin koko riippuu koodattujen merkkien määrästä."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/result.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:288
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:324
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:537
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:610
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:539
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:612
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:577
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:276
@@ -9183,7 +9167,7 @@ msgstr "Lisää vastaanottajia"
 msgid "Add record matching rule"
 msgstr "Lisää tietueiden yhdistämissääntö"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:415
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:439
 #, c-format
 msgid "Add record using fast cataloging"
 msgstr "Lisää tietue käyttäen pikakuvailua"
@@ -9493,7 +9477,7 @@ msgstr "Lisäsisällöt &rsaquo; Työkalut &rsaquo; Koha"
 #. %1$s:  IF category == 'news' 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:302
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:303
 #, c-format
 msgid "Additional contents (%sNews%sHTML customizations%s)"
 msgstr "Lisäsisällöt (%sUutiset%sHTML muokkaukset%s)"
@@ -9565,7 +9549,7 @@ msgstr "Osoite 2"
 msgid "Address 2:"
 msgstr "Vaihtoehtoinen osoite:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:570
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:572
 #, c-format
 msgid "Address 2: "
 msgstr "Osoite 2: "
@@ -9608,7 +9592,7 @@ msgid "Address:"
 msgstr "Osoite:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:564
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:566
 #, c-format
 msgid "Address: "
 msgstr "Osoite: "
@@ -9907,7 +9891,7 @@ msgstr "Ikärajoitus"
 
 #. For the first occurrence,
 #. %1$s:  AGE_RESTRICTION | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:466
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:490
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:165
 #, c-format
 msgid "Age restriction %s."
@@ -10007,10 +9991,10 @@ msgstr "Alingsås Public Library, Ruotsi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:254
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:203
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:263
@@ -10031,7 +10015,7 @@ msgstr "Alingsås Public Library, Ruotsi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:135
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:338
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:339
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:217
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:219
@@ -10158,8 +10142,8 @@ msgstr "Kaikki nidetyypit"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:198
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:200
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:199
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:102
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:155
@@ -10360,8 +10344,8 @@ msgid "Alt key is \"Alt\""
 msgstr "Alt-näppäin on \"Alt\""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:208
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:502
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:536
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:504
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:538
 #: koha-tmpl/intranet-tmpl/prog/en/includes/member-alt-address-style.inc:5
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patronfields.inc:27
 #, c-format
@@ -10559,8 +10543,8 @@ msgstr "Vaihtoehtoinen osoite: Katutyyppi"
 msgid "Alternate zip code"
 msgstr "Vaihtoehtoinen postinumero"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:545
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:609
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:547
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:611
 #, c-format
 msgid "Alternative contact"
 msgstr "Vaihtoehtoinen yhteys"
@@ -10628,16 +10612,16 @@ msgstr "American Numismatic Society, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:167
 #, c-format
 msgid "Amount"
 msgstr "Summa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:174
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:318
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:173
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:126
 #, c-format
 msgid "Amount being paid: "
@@ -10649,8 +10633,8 @@ msgid "Amount charged: "
 msgstr "Veloitettu summa: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:75
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:155
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:248
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:154
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:246
 #, c-format
 msgid "Amount outstanding"
 msgstr "Maksettava"
@@ -10661,8 +10645,8 @@ msgstr "Maksettava"
 msgid "Amount paid: "
 msgstr "Maksettu summa: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:178
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:324
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:130
 #, c-format
 msgid "Amount tendered: "
@@ -11524,7 +11508,7 @@ msgstr "Apache-lisenssi, versio 2.0"
 msgid "Apache version: "
 msgstr "Apache-versio: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:232
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:233
 #, c-format
 msgid "Appear in position: "
 msgstr "Näyttöjärjestys: "
@@ -11822,7 +11806,7 @@ msgid "Are you sure you want to delete the patron %s %s?"
 msgstr "Haluatko varmasti poistaa asiakkaan %s %s?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:457
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:458
 msgid "Are you sure you want to delete the selected content?"
 msgstr "Haluatko varmasti poistaa valitun sisällön?"
 
@@ -11873,7 +11857,7 @@ msgid "Are you sure you want to delete this class source?"
 msgstr "Haluatko varmasti poistaa tämän luokitusjärjestelmän?"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:457
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:458
 msgid "Are you sure you want to delete this content? This cannot be undone."
 msgstr "Haluatko varmasti poistaa tämän sisällön? Poistoa ei voi peruuttaa."
 
@@ -12288,8 +12272,8 @@ msgstr "Artikkelipyynnöt &rsaquo; Lainaus ja palautus &rsaquo; Koha"
 
 #. For the first occurrence,
 #. %1$s:  current_article_requests.count || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:814
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:673
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:838
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:675
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:34
 #, c-format
 msgid "Article requests (%s)"
@@ -12547,7 +12531,7 @@ msgstr "Auktorisoitu nimi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:238
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:325
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/stockrotation.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
@@ -12694,8 +12678,8 @@ msgstr "Auktorisoidun arvon luokka: "
 msgid "Authorities"
 msgstr "Auktoriteetit"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:240
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/columns_settings.tt:240
 #, c-format
 msgid "Authorities "
 msgstr "Auktoriteetit "
@@ -13034,7 +13018,7 @@ msgstr "Täytä rivi"
 msgid "Auto-renewal"
 msgstr "Automaattinen uusinta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:435
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:437
 #, c-format
 msgid "Auto-renewal:"
 msgstr "Automaattinen uusinta:"
@@ -13109,7 +13093,7 @@ msgstr "Automaattinen tilaaminen: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:553
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:695
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:719
 #, c-format
 msgid "Automatic renewal"
 msgstr "Automaattinen uusinta"
@@ -13351,8 +13335,8 @@ msgstr "Palkki"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:424
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:202
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:523
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:884
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:547
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:908
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:142
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:164
@@ -13373,7 +13357,7 @@ msgstr "Palkki"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:59
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:752
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:754
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:74
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:302
@@ -13459,12 +13443,12 @@ msgstr "Viivakoodikuvan luonti &rsaquo; Työkalut &rsaquo; Koha"
 msgid "Barcode list (one barcode per line): "
 msgstr "Lista viivakoodeista (koodi per rivi): "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:385
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:409
 #, c-format
 msgid "Barcode not found"
 msgstr "Viivakoodeja ei löytynyt"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:540
 #, c-format
 msgid "Barcode not found. The following items were found by searching:"
 msgstr "Viivakoodia ei löytynyt. Seuraavat niteet löytyivät haulla: "
@@ -13479,7 +13463,7 @@ msgstr "Viivakoodi tulostuu luettelointitietojen jälkeen"
 msgid "Barcode range"
 msgstr "Viivakoodiväli"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:991
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
 #, c-format
 msgid "Barcode submitted"
 msgstr "Viivakoodi syötetty"
@@ -14642,7 +14626,7 @@ msgid "Borrowernumber list (one number per line): "
 msgstr "Lista asiakastunnuksista (yksi numero per rivi): "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:370
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:372
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:254
 #, c-format
 msgid "Borrowernumber: "
@@ -14718,6 +14702,11 @@ msgstr "Kirjasto"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:46
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:254
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:23
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:14
@@ -14772,11 +14761,6 @@ msgstr "Kirjasto"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:30
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:254
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:23
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:791
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:15
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:32
@@ -14796,10 +14780,6 @@ msgstr "Kirjasto"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
@@ -14820,6 +14800,10 @@ msgstr "Kirjasto"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:17
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:16
@@ -15470,8 +15454,8 @@ msgstr "California College of the Arts, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:314
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:420
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:204
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:524
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:882
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:548
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:906
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:168
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:186
@@ -15490,7 +15474,7 @@ msgstr "California College of the Arts, USA"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:750
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:752
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:73
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/itemslost.tt:98
@@ -15755,6 +15739,8 @@ msgstr "Koodia ei voi lukea?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:326
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:202
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:312
@@ -15815,8 +15801,6 @@ msgstr "Koodia ei voi lukea?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:249
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:326
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:328
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:942
@@ -15825,17 +15809,17 @@ msgstr "Koodia ei voi lukea?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:188
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:576
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:600
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:129
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:172
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:141
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:247
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:150
@@ -15862,9 +15846,9 @@ msgstr "Koodia ei voi lukea?"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1390
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:170
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:217
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:270
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:353
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:216
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:268
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:351
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/two_factor_auth.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:90
@@ -15997,7 +15981,7 @@ msgid "Cancel charge "
 msgstr "Peruuta veloitus "
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:376
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:400
 #, c-format
 msgid "Cancel checkout and place a hold for %s"
 msgstr "Peruuta lainaus ja tee varaus %s"
@@ -16050,8 +16034,8 @@ msgid "Cancel import"
 msgstr "Peru tuonti"
 
 #. INPUT type=submit name=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:896
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:764
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:920
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:766
 msgid "Cancel marked holds"
 msgstr "Poista valitut varaukset"
 
@@ -16146,7 +16130,7 @@ msgstr "Peruuta kuljetus (X)"
 msgid "Cancel upload"
 msgstr "Peru lataus"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:888
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:912
 #, c-format
 msgid "Cancel?"
 msgstr "Poista?"
@@ -16164,7 +16148,7 @@ msgid "Cancellation date"
 msgstr "Peruutuspvm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:194
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:768
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:770
 #, c-format
 msgid "Cancellation reason:"
 msgstr "Peruutuksen syy:"
@@ -16313,7 +16297,7 @@ msgid "Cannot check out"
 msgstr "Ei voi lainata"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:797
 #, c-format
 msgid "Cannot check out! %s "
 msgstr "Ei voi lainata! %s "
@@ -16599,9 +16583,9 @@ msgstr "Korttinumero ei voi olla kuin %s merkkiä pitkä."
 msgid "Card number:"
 msgstr "Kirjastokortin numero:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:56
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:70
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:366
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:368
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:56
 #, c-format
 msgid "Card number: "
 msgstr "Korttinumero: "
@@ -16744,7 +16728,7 @@ msgstr "Kassa:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:207
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:264
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:336
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:334
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/includes/modals/cashup_summary.inc:11
@@ -17058,7 +17042,7 @@ msgstr "Luokka:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:223
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:374
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:376
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/upload.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:65
@@ -17234,8 +17218,8 @@ msgstr "Vaihda salasana"
 msgid "Change selected suggestions"
 msgstr "Muuta valittujen hankintaehdotusten tila"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:182
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:328
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:181
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:326
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:135
 #, c-format
 msgid "Change to give: "
@@ -17350,7 +17334,7 @@ msgid "Charge when?"
 msgstr "Veloitusajankohta?"
 
 #. %1$s:  fines | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:655
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:657
 #, c-format
 msgid "Charges (%s)"
 msgstr "Maksut (%s)"
@@ -17510,8 +17494,8 @@ msgstr "Poista valinnat"
 
 # painike
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:36
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:567
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:643
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:591
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:667
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:139
@@ -17581,7 +17565,7 @@ msgid "Check previous checkout?"
 msgstr "Tarkasta edelliset lainat?"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:468
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:478
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:480
 #, c-format
 msgid "Check previous checkouts: "
 msgstr "Tarkasta edelliset lainat: "
@@ -17839,7 +17823,7 @@ msgstr "Lainattu asiakkaalle %s"
 msgid "Checked out to:"
 msgstr "Lainattu asiakkaalle:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:772
 #, c-format
 msgid "Checked out: "
 msgstr "Lainattu: "
@@ -17898,8 +17882,8 @@ msgstr "Lainataan asiakkaalle "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:629
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:770
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:794
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #, c-format
 msgid "Checking out to %s"
@@ -18040,7 +18024,7 @@ msgstr "Lainaus"
 msgid "Checkout or renew"
 msgstr "Lainaa tai uusi laina"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #, c-format
 msgid "Checkout settings"
 msgstr "Lainausasetukset"
@@ -18069,8 +18053,8 @@ msgstr "Lainat "
 
 #. For the first occurrence,
 #. %1$s:  issuecount || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:792
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:646
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:816
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:648
 #, c-format
 msgid "Checkouts (%s)"
 msgstr "Lainat (%s)"
@@ -18084,7 +18068,7 @@ msgstr "Lainat (%s)"
 msgid "Checkouts are BLOCKED because fine balance is OVER THE LIMIT."
 msgstr "Lainaus on estetty, koska asiakkaalla on liikaa maksuja."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:494
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:518
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:289
 #, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
@@ -18486,7 +18470,7 @@ msgstr "Huomautus"
 msgid "Circulation note:"
 msgstr "Huomautus:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:464
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #, c-format
 msgid "Circulation note: "
 msgstr "Huomautus:"
@@ -18639,7 +18623,7 @@ msgstr "Kunta:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:179
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:113
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:576
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:578
 #, c-format
 msgid "City: "
 msgstr "Kunta: "
@@ -18728,8 +18712,8 @@ msgstr "Reklamaatiot "
 msgid "Claims %s for %s %s"
 msgstr "Reklamaatiot %s toimittajalle %s %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:835
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:694
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:859
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:696
 #, c-format
 msgid "Claims ("
 msgstr "Palautusilmoitukset ("
@@ -18737,8 +18721,8 @@ msgstr "Palautusilmoitukset ("
 # Liittyykö tähän toiminnallisuuteen, jossa asiakas ilmoittaa palauttaneensa lainansa: https://www.youtube.com/watch?v=tcES31WGnyE
 #. For the first occurrence,
 #. %1$s:  IF patron.return_claims.resolved.count == 0 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:821
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:680
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:845
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:682
 #, c-format
 msgid "Claims (%s "
 msgstr "Palautusilmoitukset (%s "
@@ -18964,7 +18948,7 @@ msgid "Clear on loan"
 msgstr "Poista lainassa-tila"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:623
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:647
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:135
 msgid "Clear screen"
 msgstr "Tyhjennä näyttö"
@@ -19117,9 +19101,9 @@ msgstr "Asiakkaan tunnus: "
 msgid "Clipboard"
 msgstr "Leikepöytä"
 
-#. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
+#. IMG
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:565
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:269
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-edit.tt:421
@@ -19192,7 +19176,7 @@ msgstr "Sääntöjen kopiointi epäonnistui."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:1040
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:515
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:708
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:732
@@ -19220,7 +19204,7 @@ msgstr "Sääntöjen kopiointi epäonnistui."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-add.tt:553
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:454
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:373
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:374
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:130
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:441
@@ -19407,8 +19391,8 @@ msgstr "Kerhot"
 #. For the first occurrence,
 #. %1$s:  enrollments.count | html 
 #. %2$s:  enrollable.count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:852
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:711
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:876
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:713
 #, c-format
 msgid "Clubs (%s/%s) "
 msgstr "Kerhot (%s/%s) "
@@ -19529,7 +19513,7 @@ msgstr "Maksusuoritus"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:312
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:206
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:528
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:552
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:1068
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:100
@@ -19990,8 +19974,8 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:220
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:277
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:316
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:216
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:352
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:215
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:350
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:284
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:322
@@ -20236,7 +20220,7 @@ msgstr "Vahvista palautuspyyntö ja kuljetus "
 msgid "Confirm recalls &rsaquo; Recalls &rsaquo; Koha"
 msgstr "Vahvista palautuspyyntöjä &rsaquo; Palautuspyynnöt &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:378
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:181
 #, c-format
 msgid "Confirm this payment?"
@@ -20335,7 +20319,7 @@ msgstr "Yhteystiedot: "
 msgid "Contact note"
 msgstr "Huomautus"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:528
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:530
 #, c-format
 msgid "Contact note: "
 msgstr "Yhteystieto: "
@@ -20410,7 +20394,7 @@ msgstr "Sisältö poistettu onnistuneesti"
 msgid "Content updated successfully"
 msgstr "Sisällön päivitys onnistui"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:263
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:264
 #, c-format
 msgid "Content: "
 msgstr "Sisältö: "
@@ -20426,7 +20410,7 @@ msgstr "Sisältää"
 msgid "Contents of "
 msgstr "Sisältö "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:370
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:394
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/set-library.tt:78
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batchMod.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:131
@@ -20717,7 +20701,7 @@ msgstr "Kopiointi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:209
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:422
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:525
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:549
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:83
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:617
@@ -20983,7 +20967,7 @@ msgstr "Maa:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:125
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:595
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:597
 #, c-format
 msgid "Country: "
 msgstr "Maa: "
@@ -22579,12 +22563,12 @@ msgstr "Lyhennetty laina-aika paljon varatuille (päivä)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/merge.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:63
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:98
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:416
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:247
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:445
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/overduerules.tt:45
@@ -22998,6 +22982,8 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:21
@@ -23047,8 +23033,6 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:240
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:568
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:757
@@ -23088,7 +23072,7 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:114
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:844
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:959
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:394
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:402
@@ -23472,7 +23456,7 @@ msgstr "Poista rivi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:413
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:955
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:403
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:404
 #, c-format
 msgid "Delete selected"
 msgstr "Poista valitut"
@@ -23602,7 +23586,7 @@ msgstr "Poista käyttäjä"
 msgid "Delete vendor"
 msgstr "Poista toimittaja"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:756
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:758
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:11
 #, c-format
 msgid "Delete?"
@@ -23817,8 +23801,8 @@ msgstr "Laskeva"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:66
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:152
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:245
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:151
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:243
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:81
 #: koha-tmpl/intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:78
@@ -23923,12 +23907,12 @@ msgstr "Kuvaus:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/library_groups.tt:182
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:106
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:55
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:44
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/apikeys.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:69
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:83
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:55
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:221
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:141
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:55
@@ -24443,7 +24427,7 @@ msgid "Display in patron's brief information: "
 msgstr "Näytä asiakkaan suppeissa tiedoissa: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:133
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:189
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:190
 #, c-format
 msgid "Display location:"
 msgstr "Näyttöpaikka:"
@@ -24668,13 +24652,13 @@ msgstr "Älä salli"
 msgid "Don't block "
 msgstr "Älä estä "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:347
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:353
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:371
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:377
 #, c-format
 msgid "Don't check out and print slip (P)"
 msgstr "Älä lainaa ja tulosta kuittia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:713
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:737
 #, c-format
 msgid "Don't decrease checkout length based on holds"
 msgstr "Älä lyhennä laina-aikaa varausten määrän pohjalta"
@@ -25266,6 +25250,7 @@ msgstr "Varhaisin palautuspyynnön päivämäärä"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:364
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:248
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:409
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:219
@@ -25301,7 +25286,6 @@ msgstr "Varhaisin palautuspyynnön päivämäärä"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:297
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:453
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:238
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:110
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:608
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:614
@@ -25316,9 +25300,9 @@ msgstr "Varhaisin palautuspyynnön päivämäärä"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:263
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:300
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:335
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:361
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:503
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:546
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:363
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:505
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:392
@@ -25331,7 +25315,7 @@ msgstr "Varhaisin palautuspyynnön päivämäärä"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:308
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:113
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:842
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:380
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:381
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:318
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:258
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:462
@@ -25525,8 +25509,8 @@ msgstr "Muokkaa kokoelmia "
 msgid "Edit course"
 msgstr "Muokkaa kurssia"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:397
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:40
 #, c-format
@@ -25867,12 +25851,12 @@ msgstr "Muokkaa toimittajan huomautusta"
 msgid "Edit vendor note "
 msgstr "Muokkaa toimittajan huomautusta "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:388
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:389
 #, c-format
 msgid "Edit with WYSIWYG editor"
 msgstr "Muokkaa WYSIWYG-editorilla"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:386
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:387
 #, c-format
 msgid "Edit with text editor"
 msgstr "Muokkaa tekstieditorilla"
@@ -25998,7 +25982,7 @@ msgstr "Sähköpostiosoite:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/share_content.tt:143
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:521
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:523
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:247
 #, c-format
 msgid "Email: "
@@ -26133,8 +26117,8 @@ msgid "End date is not consistent with subscription length."
 msgstr "Loppumispäivä ei vastaa kausijulkaisutilauksen pituutta."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:139
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:171
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:388
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
@@ -26363,13 +26347,13 @@ msgstr "Syötä kerhon ID tai osa nimestä:"
 msgid "Enter default values"
 msgstr "Syötä oletusarvot"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:632
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:656
 #, c-format
 msgid "Enter item barcode or keyword:"
 msgstr "Syötä niteen viivakoodi tai hakusana:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:69
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:634
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:658
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:945
 #, c-format
@@ -26626,7 +26610,7 @@ msgstr "Virhe muunnettaessa syötettä."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/auth.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:341
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:631
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:145
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:150
 #, c-format
@@ -26933,9 +26917,9 @@ msgstr "Odotetaan"
 msgid "Expected on"
 msgstr "Odotetaan saapuvaksi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:886
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:910
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1334
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:754
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:756
 #: koha-tmpl/intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:16
 #, c-format
@@ -26947,7 +26931,7 @@ msgstr "Vanhenee"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:52
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:323
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:324
 #: koha-tmpl/intranet-tmpl/prog/en/includes/waiting_holds.inc:11
 #, c-format
 msgid "Expiration date"
@@ -26959,9 +26943,9 @@ msgid "Expiration date:"
 msgstr "Vanhenee:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:74
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:390
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:392
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:144
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:223
 #, c-format
 msgid "Expiration date: "
 msgstr "Vanhentumispvm: "
@@ -26996,7 +26980,7 @@ msgstr "Umpeutuu"
 msgid "Expire recall"
 msgstr "Umpeutuva palautuspyyntö"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:396
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:398
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:68
 #, c-format
 msgid "Expired"
@@ -27890,7 +27874,7 @@ msgstr "Tiedostonimi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/files.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:618
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:620
 #: koha-tmpl/intranet-tmpl/prog/en/includes/circ-menu.inc:162
 #, c-format
 msgid "Files"
@@ -28261,8 +28245,8 @@ msgstr "Etunimi"
 msgid "First name:"
 msgstr "Etunimet:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:560
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:558
 #, c-format
 msgid "First name: "
 msgstr "Etunimi: "
@@ -28522,10 +28506,10 @@ msgstr "Pakota lainaus jos on rajoitus "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:394
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:490
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:665
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:92
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:96
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:100
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:415
 #, c-format
 msgid "Forever"
 msgstr "Aina"
@@ -29563,7 +29547,7 @@ msgstr "HTML kopioitu leikepöydälle"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:48
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:304
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:305
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:122
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:112
 #, c-format
@@ -30017,9 +30001,9 @@ msgstr "Varaus"
 msgid "Hold cancelled"
 msgstr "Varaus peruutettu"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:880
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:904
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:61
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:748
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:750
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:123
 #, c-format
 msgid "Hold date"
@@ -30270,8 +30254,8 @@ msgstr "Varaukset"
 #. %1$s:  Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:521
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:525
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:802
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:826
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:662
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:28
 #, c-format
 msgid "Holds (%s)"
@@ -30557,6 +30541,11 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:103
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:14
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:257
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:26
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:22
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:23
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/admin-home.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:17
@@ -30611,11 +30600,6 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:20
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:33
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:14
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:257
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/detail.tt:26
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/merge.tt:22
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:794
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:18
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:35
@@ -30635,10 +30619,6 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/search-history.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:18
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:14
@@ -30660,6 +30640,10 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:19
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:24
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:21
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:24
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:20
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:16
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:19
@@ -32597,7 +32581,7 @@ msgstr "Peri asetuksista"
 msgid "Inherit from system preferences"
 msgstr "Peri järjestelmäasetuksista"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:484
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:486
 #, fuzzy, c-format
 msgid "Inherited"
 msgstr "Peri"
@@ -33049,6 +33033,11 @@ msgstr "Virkailijaliittymä"
 msgid "Invalid %s email address found %s"
 msgstr "Epäkelpo %s sähköpostiosoite löydetty %s"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/two_factor_auth.tt:57
+#, fuzzy, c-format
+msgid "Invalid PIN code"
+msgstr "Virheellinen PIN-koodi"
+
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/checkmarc.tt:221
 #, c-format
 msgid "Invalid authority type"
@@ -33107,11 +33096,6 @@ msgstr "Vääränlainen syöte. Syötä esim. näin: 245,a"
 msgid "Invalid number of copies"
 msgstr "Virheellinen määrä kopioita"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/two_factor_auth.tt:57
-#, c-format
-msgid "Invalid pin code"
-msgstr "Virheellinen PIN-koodi"
-
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 msgid "Invalid record"
@@ -33169,7 +33153,7 @@ msgstr "Inventaario &rsaquo; Työkalut &rsaquo; Koha"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:349
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:279
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:526
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:550
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
 #, c-format
 msgid "Inventory number"
@@ -33609,7 +33593,7 @@ msgstr "Tätä nidettä ei voi uusia, koska se on on-site-laina"
 msgid "Item check-in"
 msgstr "Palautuskuitti"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:593
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:617
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:273
 #, c-format
 msgid "Item checked out"
@@ -33716,7 +33700,7 @@ msgid "Item has been lost (transaction recorded anyway)"
 msgstr "Nide on kadonnut (tapahtuma tallennettiin kuitenkin)"
 
 #. %1$s:  Branches.GetName( RECALLED_INTRANSIT ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:498
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:522
 #, c-format
 msgid "Item has been recalled and is in transit for pickup at %s."
 msgstr "Niteestä on tehty palautuspyyntö ja on kuljetettavana kirjastoon %s."
@@ -33727,7 +33711,7 @@ msgstr "Niteestä on tehty palautuspyyntö ja on kuljetettavana kirjastoon %s."
 msgid "Item has been trapped to fill a hold and is in transit for %s"
 msgstr "Nide on jäänyt kiinni varaukseen ja on kuljetettavana kirjastoon %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:435
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:459
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:320
 #, c-format
 msgid "Item has been withdrawn"
@@ -33853,7 +33837,7 @@ msgstr "Ei niteitä tässä kokoelmassa."
 msgid "Item is now in transit to %s"
 msgstr "Nide on kuljetettavana kirjastoon %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:442
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:466
 #, c-format
 msgid "Item is restricted"
 msgstr "Niteellä on rajoituksia"
@@ -34081,8 +34065,8 @@ msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:313
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:205
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:529
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:883
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:553
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:907
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:183
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/overdue.tt:92
@@ -34093,7 +34077,7 @@ msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:149
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:42
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:751
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:753
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/statistics.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:214
@@ -35513,8 +35497,8 @@ msgstr "LibLime, USA"
 msgid "Librarian"
 msgstr "Virkailija"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:418
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:420
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:419
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:421
 #, c-format
 msgid "Librarian and OPAC interfaces"
 msgstr "Virkailijatyökalun ja verkkokirjaston käyttöliittymät"
@@ -35524,9 +35508,9 @@ msgstr "Virkailijatyökalun ja verkkokirjaston käyttöliittymät"
 msgid "Librarian identity:"
 msgstr "Virkailijatunnus:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:339
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:424
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:426
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:340
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:425
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:427
 #, c-format
 msgid "Librarian interface"
 msgstr "Virkailijatyökalu"
@@ -35587,9 +35571,9 @@ msgstr "Kirjastot: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:165
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/overdrive.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:875
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:61
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:76
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/discharges.tt:41
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/merge-patrons.tt:124
@@ -35611,7 +35595,7 @@ msgstr "Kirjastot: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:740
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1006
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1008
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:320
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:321
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:261
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/letter.tt:580
@@ -35838,7 +35822,7 @@ msgid "Library updated successfully."
 msgstr "Kirjaston päivitys onnistui."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:67
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:360
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:362
 #, c-format
 msgid "Library use"
 msgstr "Kirjastotiedot"
@@ -35880,9 +35864,9 @@ msgstr "Kirjasto:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/desks.tt:117
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:100
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:245
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:81
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:408
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:410
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:106
@@ -35890,7 +35874,7 @@ msgstr "Kirjasto:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/serials_stats.tt:94
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:140
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:195
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/inventory.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/includes/budgets-admin-search.inc:11
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search-header.inc:54
@@ -36349,16 +36333,16 @@ msgstr "Ladataan, ole hyvä ja odota..."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transfer_limits.tt:66
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:258
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1035
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:877
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1059
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:879
 #: koha-tmpl/intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:142
 #, c-format
 msgid "Loading..."
 msgstr "Ladataan..."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:866
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:733
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:735
 #, c-format
 msgid "Loading... "
 msgstr "Ladataan... "
@@ -36424,7 +36408,7 @@ msgstr "Paikalliset tiedot"
 msgid "Local use preferences"
 msgstr "Paikallisten tietojen oletusarvot"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:395
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:419
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:290
 #, c-format
 msgid "Local use recorded"
@@ -36479,7 +36463,7 @@ msgstr "Lokalisointidata lisättiin"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-search.tt:79
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tags/list.tt:47
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:319
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:320
 #: koha-tmpl/intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: koha-tmpl/intranet-tmpl/prog/en/includes/relatives-issues-table.inc:13
 #, c-format
@@ -37223,18 +37207,16 @@ msgstr "Tee uusi tulostinprofiili."
 msgid "Make a payment"
 msgstr "Maksa maksuja"
 
-#. %1$s:  patron.firstname | html 
-#. %2$s:  patron.surname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:29
-#, c-format
-msgid "Make a payment for %s %s "
+#, fuzzy, c-format
+msgid "Make a payment for %s "
 msgstr "Maksa maksuja käyttäjältä %s %s "
 
-#. %1$s:  patron.firstname | html 
-#. %2$s:  patron.surname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:12
-#, c-format
-msgid "Make a payment for %s %s &rsaquo; Patrons &rsaquo; Koha"
+#, fuzzy, c-format
+msgid "Make a payment for %s &rsaquo; Patrons &rsaquo; Koha"
 msgstr "Tee maksusuoritus asiakkaalle %s %s &rsaquo; Asiakkaat &rsaquo; Koha"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:209
@@ -37396,7 +37378,7 @@ msgstr "Mana kausijulkaisutilausten haku"
 msgid "Mana token: "
 msgstr "Mana valtuutus: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:619
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:621
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:144
 #, c-format
 msgid "Manage"
@@ -39806,8 +39788,8 @@ msgstr "Nimi:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/sms_providers.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:154
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:305
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:332
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:319
 #: koha-tmpl/intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
@@ -39897,11 +39879,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:488
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/categories.tt:663
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/bookcount.tt:76
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:419
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:459
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:95
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:417
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:457
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:277
 #, c-format
 msgid "Never"
@@ -40270,17 +40252,17 @@ msgstr "Uusi eräpäivä:"
 msgid "New enrollment field"
 msgstr "Uusi ilmoittautumiskenttä"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:287
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:288
 #, c-format
 msgid "New entry"
 msgstr "Luo uusi"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:295
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:296
 #, c-format
 msgid "New entry using WYSIWYG editor"
 msgstr "Luo uusi käyttäen WYSIWYG-editoria"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:293
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:294
 #, c-format
 msgid "New entry using text editor"
 msgstr "Luo uusi käyttäen tekstieditoria"
@@ -40633,8 +40615,8 @@ msgstr "Uudempi versio"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/intranet-main.tt:30
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:58
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:306
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:326
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:307
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:327
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
 #: koha-tmpl/intranet-tmpl/prog/en/includes/tools-menu.inc:111
@@ -40643,7 +40625,7 @@ msgid "News"
 msgstr "Uutiset"
 
 #. %1$s:  END 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:227
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:228
 #, c-format
 msgid "News will still be accessible by direct URL if expired. %s "
 msgstr ""
@@ -40772,18 +40754,18 @@ msgstr "Nicholas Rosasco (Documentation Compiler)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:267
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:84
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:169
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:586
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:482
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:384
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:484
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:382
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:64
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:67
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:185
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:138
@@ -41346,7 +41328,7 @@ msgstr "Ei niteitä."
 msgid "No items modified."
 msgstr "Ei muokattuja niteitä."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:409
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:433
 #, c-format
 msgid "No items were found by searching."
 msgstr "Haulla ei löytynyt niteitä."
@@ -41469,7 +41451,7 @@ msgstr "Ei puuttuvia lehtiä."
 msgid "No misspellings found."
 msgstr "Kirjoitusvirheitä ei löytynyt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:458
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:482
 #, c-format
 msgid "No more renewals possible"
 msgstr "Lainaa ei voi uusia"
@@ -41523,7 +41505,7 @@ msgstr "Ei tilauksia"
 msgid "No other items."
 msgstr "Ei muita niteitä."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:727
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:729
 #, c-format
 msgid "No outstanding charges"
 msgstr "Ei maksuja"
@@ -41549,7 +41531,7 @@ msgstr ""
 msgid "No patron card numbers or borrowernumbers given."
 msgstr "Ei asiakkaan kirjastokortin numeroa tai asiakkaan ID:tä."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:598
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:622
 #, c-format
 msgid "No patron matched "
 msgstr "Asiakasta ei löytynyt "
@@ -41658,10 +41640,10 @@ msgstr "Kuittipohjaa ei löytynyt"
 msgid "No reason"
 msgstr "Ei syytä"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:901
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:925
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:196
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:161
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:770
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:772
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:959
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:1145
 #, c-format
@@ -41899,7 +41881,7 @@ msgstr "Ei, älä nollaa määrityksiä"
 msgid "No, don't cancel (N)"
 msgstr "Ei, älä peruuta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:367
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:391
 #, c-format
 msgid "No, don't check out (N)"
 msgstr "Ei, älä lainaa"
@@ -41920,7 +41902,7 @@ msgstr "Ei, älä sulje"
 msgid "No, don't delete (N)"
 msgstr "Ei, älä poista"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:365
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:389
 #, c-format
 msgid "No, don't renew (N)"
 msgstr "Ei, älä uusi lainaa"
@@ -42454,7 +42436,7 @@ msgstr "Huomautus:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:1074
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/mancredit.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/maninvoice.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:346
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:344
 #, c-format
 msgid "Note: "
 msgstr "Huomaa: "
@@ -42725,7 +42707,7 @@ msgstr "Kpl/Asiakas"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:380
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:530
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:321
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:112
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:198
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:200
@@ -43112,9 +43094,9 @@ msgstr "PÄÄLLÄ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/didyoumean.tt:70
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:250
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:340
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:430
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:432
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:341
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:431
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:433
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:158
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/includes/prefs-menu.inc:104
@@ -43153,7 +43135,7 @@ msgstr "Verkkokirjaston nidevaraukset"
 msgid "OPAC note"
 msgstr "Huomautus verkkokirjastossa"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:471
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:473
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/modborrowers.tt:332
 #, c-format
 msgid "OPAC note:"
@@ -43218,12 +43200,12 @@ msgstr "Verkkokirjastonäkymä:"
 msgid "OPAC/Staff interface login"
 msgstr "Kirjautumistunnus"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:310
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:311
 #, c-format
 msgid "OPACUserCSS"
 msgstr "OPACUserCSS"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:309
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:310
 #, c-format
 msgid "OPACUserJS"
 msgstr "OPACUserJS"
@@ -43475,8 +43457,8 @@ msgstr "Hyllykohtaiset palautuspyynnöt sallittu"
 msgid "On title "
 msgstr "Nimeke "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:728
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:730
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:752
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:754
 #, c-format
 msgid "On-site checkout"
 msgstr "On-site -lainat"
@@ -43486,7 +43468,7 @@ msgstr "On-site -lainat"
 msgid "On-site checkouts"
 msgstr "On-site-lainat"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:722
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:746
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "Vain on-site -lainat. Automaattinen eräpäivä: "
@@ -43622,7 +43604,7 @@ msgstr "Vain nide:"
 msgid "Only items currently available:"
 msgstr "Vain saatavilla olevat niteet:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:776
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:800
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Vain on-site -lainaus sallittu"
@@ -44582,6 +44564,11 @@ msgstr "Omistaja: "
 msgid "PICAMARC"
 msgstr "PICAMARC"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/two_factor_auth.tt:70
+#, fuzzy, c-format
+msgid "PIN code: "
+msgstr "ISO-koodi: "
+
 #. SCRIPT
 #: koha-tmpl/intranet-tmpl/prog/en/includes/timepicker.inc:2
 msgid "PM"
@@ -44795,7 +44782,7 @@ msgstr "Salasana vanhenee:"
 msgid "Password expiration: "
 msgstr "Salasana vanhenee: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:453
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:455
 #, c-format
 msgid "Password expires:"
 msgstr "Salasana vanhenee:"
@@ -44895,8 +44882,8 @@ msgstr "Salasana:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:126
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smtp_servers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:112
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:446
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:104
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:444
 #, c-format
 msgid "Password: "
 msgstr "Salasana: "
@@ -45308,7 +45295,7 @@ msgstr "Tiedot asiakkaasta %s "
 msgid "Patron does not belong to any subscription routing lists."
 msgstr "Asiakas ei kuulu yhteenkään lehtikiertolistaan."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:401
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:403
 #, c-format
 msgid "Patron expires soon"
 msgstr "Asiakkaan kortti vanhenee pian"
@@ -45391,7 +45378,7 @@ msgid "Patron has a credit%s of "
 msgstr "Asiakkaan tilillä on hyvitys%s suuruudeltaan "
 
 #. %1$s:  USERBLOCKEDWITHENDDATE | $KohaDates 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:486
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:510
 #, c-format
 msgid "Patron has a restriction until %s."
 msgstr "Asiakas on lainauskiellossa %s asti."
@@ -45407,7 +45394,7 @@ msgstr ""
 "Asiakkaalla on jo lainassa yksi nide tästä tietueesta. %s Lainataanko silti? "
 "%s "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:490
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:332
 #, c-format
 msgid "Patron has an indefinite restriction."
@@ -45448,20 +45435,20 @@ msgstr "Asiakkaalla ei ole palautuspyyntöjä"
 msgid "Patron has nothing checked out."
 msgstr "Asiakkaalla ei ole lainoja."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:936
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:805
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:960
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:807
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "Asiakkaalla ei ole varauksia."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:435
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:437
 #, c-format
 msgid "Patron has opted out "
 msgstr "Ei käytössä asiakkaalla "
 
 #. INPUT type=checkbox name=auto_renew
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:676
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:690
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:700
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:714
 msgid "Patron has opted out of auto-renewal"
 msgstr "Automaattinen uusinta ei käytössä asiakkaalla"
 
@@ -45573,7 +45560,7 @@ msgstr "Tämä asiakas on toisesta kirjastosta"
 msgid "Patron is not notified."
 msgstr "Asiakasta ei ole huomautettu."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:454
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:478
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:239
 #, c-format
 msgid "Patron is restricted"
@@ -45652,7 +45639,7 @@ msgstr "Asiakasta ei löytynyt"
 msgid "Patron not found."
 msgstr "Asiakasta ei löytynyt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:980
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocking_errors.inc:4
 #, c-format
 msgid "Patron not found. "
@@ -45842,7 +45829,7 @@ msgstr "Tarkista osoite"
 msgid "Patron's address in doubt "
 msgstr "Tarkista osoite "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:446
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:470
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:107
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:514
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:686
@@ -45891,7 +45878,7 @@ msgstr "Asiakkaan kortti vanhenee %s"
 msgid "Patron's card has expired."
 msgstr "Asiakkaan kortti on vanhentunut."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:470
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:494
 #, c-format
 msgid "Patron's card is expired"
 msgstr "Asiakkaan kortti on vanhentunut"
@@ -45906,7 +45893,7 @@ msgstr "Asiakkaan kortti on vanhentunut (%s)"
 msgid "Patron's card is expired."
 msgstr "Asiakkaan kortti on vanhentunut."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:450
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:474
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:239
 #, c-format
 msgid "Patron's card is lost"
@@ -46181,9 +46168,9 @@ msgstr "Ilmestymiskaavan nimi:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:115
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:89
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:130
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:223
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:281
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:284
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:222
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:279
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:282
 #, c-format
 msgid "Pay"
 msgstr "Maksa"
@@ -46200,30 +46187,29 @@ msgstr "Maksa kaikki"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:63
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:89
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:306
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:304
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "Maksa tietty summa maksuista"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:60
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:86
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:303
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:301
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "Maksa valitut maksut"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:52
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:78
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:148
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:147
 #, c-format
 msgid "Pay an individual fine"
 msgstr "Maksu maksuja"
 
-#. %1$s:  patron.firstname | html 
-#. %2$s:  patron.surname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:47
-#, c-format
-msgid "Pay charges for %s %s"
+#, fuzzy, c-format
+msgid "Pay charges for %s"
 msgstr "Maksa käyttäjän %s %s maksut"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:199
@@ -46554,8 +46540,8 @@ msgstr "Puhelin:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:322
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:62
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:183
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:514
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:601
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:516
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:603
 #, c-format
 msgid "Phone: "
 msgstr "Puh: "
@@ -46597,8 +46583,8 @@ msgstr "Nouto %s mennessä"
 msgid "Pick up location"
 msgstr "Noutopaikka"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:885
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:753
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:755
 #, c-format
 msgid "Pickup at"
 msgstr "Noutopaikka:"
@@ -46656,11 +46642,6 @@ msgstr "Noutopaikka: "
 #, c-format
 msgid "Pie"
 msgstr "Ympyräkaavio"
-
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/two_factor_auth.tt:70
-#, c-format
-msgid "Pin code: "
-msgstr "PIN-koodi: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:90
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:92
@@ -47198,10 +47179,10 @@ msgid "Please enter no more than {0} characters."
 msgstr "Syötä enintään {0} merkkiä."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1512
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Please enter numbers only. Prefix the number with + if including the country "
-"code."
+"Please enter numbers only. Prefix the number with + or 00 if including the "
+"country code."
 msgstr "Syötä vain numeroita. Laita numeron eteen + jos se sisältää maakoodin."
 
 #. SCRIPT
@@ -47454,7 +47435,7 @@ msgid "Please select at least one suggestion"
 msgstr "Valitse ainakin yksi hankintaehdotus"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:457
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:458
 msgid "Please select content to delete."
 msgstr "Valitse poistettava sisältö."
 
@@ -47484,7 +47465,7 @@ msgid "Please select only one %s to %s."
 msgstr "Valitse vain yksi %s %s."
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:568
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:569
 msgid "Please specify a title for 'Default'"
 msgstr "Määrittele 'Oletukselle' nimeke"
 
@@ -47780,7 +47761,7 @@ msgid "Preferences and parameters"
 msgstr "Asetukset ja parametrit"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1023
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:491
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:493
 #, c-format
 msgid "Preferred language for notices: "
 msgstr "Ilmoitusten kieli:"
@@ -47850,7 +47831,7 @@ msgstr "MARCin esikatselu"
 msgid "Preview SQL "
 msgstr "Esikatsele SQL "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:361
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:362
 #, c-format
 msgid "Preview content"
 msgstr "Esikatsele sisältö"
@@ -47873,7 +47854,7 @@ msgid "Preview notice template &rsaquo; Tools &rsaquo; Koha"
 msgstr "Esikatsele ilmoituspohja &rsaquo; Työkalut &rsaquo; Koha"
 
 #. %1$s:  c.title | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:367
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:368
 #, c-format
 msgid "Preview of: \"%s\""
 msgstr "Uutisen \"%s\" esikatselu"
@@ -48178,7 +48159,7 @@ msgid "Print slip (P)"
 msgstr "Tulosta kuitti"
 
 #. A
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:624
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:648
 msgid "Print slip and clear screen"
 msgstr "Tulosta kuitti ja tyhjennä näyttö"
 
@@ -48256,8 +48237,8 @@ msgid "Printer profiles"
 msgstr "Tulostinprofiilit"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:252
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:887
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:755
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:757
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:285
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:808
 #: koha-tmpl/intranet-tmpl/prog/en/includes/holds_table.inc:8
@@ -48270,7 +48251,7 @@ msgstr "Sija jonossa"
 msgid "Privacy (code)"
 msgstr "Yksityisyysasetus"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:414
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:416
 #, c-format
 msgid "Privacy pref:"
 msgstr "Yksityisyysasetus:"
@@ -48621,7 +48602,7 @@ msgstr "Julkinen: "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:31
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/search.tt:32
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:34
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:322
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:323
 #, c-format
 msgid "Publication date"
 msgstr "Julkaisuvuosi"
@@ -48637,7 +48618,7 @@ msgstr "Julkaisuvuosi (vvvv-vvvv)"
 msgid "Publication date:"
 msgstr "Julkaisuaika:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:217
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:218
 #, c-format
 msgid "Publication date: "
 msgstr "Julkaisupvm: "
@@ -49275,8 +49256,8 @@ msgstr "Palautuspyynnöt"
 #. For the first occurrence,
 #. %1$s:  Biblio.RecallsCount( SEARCH_RESULT.biblionumber ) | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:529
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:807
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:666
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:668
 #: koha-tmpl/intranet-tmpl/prog/en/includes/biblio-view-menu.inc:45
 #, c-format
 msgid "Recalls (%s)"
@@ -49868,7 +49849,7 @@ msgid "Registration date:"
 msgstr "Rekisteröintipvm:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:378
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #, c-format
 msgid "Registration date: "
 msgstr "Rekisteröintipvm: "
@@ -49957,8 +49938,8 @@ msgstr "Suhde: "
 
 #. For the first occurrence,
 #. %1$s:  relatives_issues_count | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:797
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:650
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:821
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:652
 #, c-format
 msgid "Relatives' checkouts (%s)"
 msgstr "Perheenjäsenen lainat (%s)"
@@ -50059,7 +50040,7 @@ msgstr "Järjestelmäasetusten jäljelle jäävät oikeudet"
 msgid "Remaining with child funds included"
 msgstr "Jäljellä alitilit mukaan lukien"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:660
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:684
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:144
 #, c-format
 msgid "Remember for session:"
@@ -50350,8 +50331,8 @@ msgstr "Poistettu "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation-home.tt:42
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/renew.tt:200
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:397
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/serials-collection.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tt:117
@@ -50436,7 +50417,7 @@ msgstr "Uusinta"
 msgid "Renewal date:"
 msgstr "Uusintapäivämäärä:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:384
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:386
 #, c-format
 msgid "Renewal date: "
 msgstr "Uusintapvm:"
@@ -51003,6 +50984,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:395
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:760
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:163
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:170
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:193
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:200
@@ -51071,7 +51053,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:548
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:1154
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:69
@@ -51082,28 +51063,6 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/installer/step1.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:57
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:45
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:62
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:73
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:101
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:106
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:111
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:44
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:50
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:91
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:127
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/boraccount.tt:309
@@ -51147,7 +51106,29 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1216
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1273
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1488
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:208
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:39
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:51
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:57
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:45
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:62
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:73
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:82
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:101
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:106
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:111
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:44
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:50
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:91
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:127
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:133
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:132
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:148
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:313
@@ -51169,7 +51150,7 @@ msgstr "Require.js JS module system"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: koha-tmpl/intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:363
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:333
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:210
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:156
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:243
@@ -51362,12 +51343,12 @@ msgid "Resolve return claim"
 msgstr "Ratkaise palautusilmoitus"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:824
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:826
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:837
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:683
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:848
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:861
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:685
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:696
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:687
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:698
 msgid "Resolved claims"
 msgstr "Ratkaistut ilmoitukset"
 
@@ -51455,12 +51436,12 @@ msgstr "Rajoite vanhenee"
 msgid "Restriction expiration:"
 msgstr "Rajoitus vanhenee:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:586
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:610
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr "Rajoitus ohitetaan väliaikaisesti"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:503
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:527
 #, c-format
 msgid "Restriction overridden temporarily."
 msgstr "Rajoitus ohitetaan väliaikaisesti."
@@ -51472,8 +51453,8 @@ msgstr "Rajoituksen syy"
 
 #. For the first occurrence,
 #. %1$s:  debarments.count || 0 | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:845
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:704
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:869
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:706
 #, c-format
 msgid "Restrictions (%s)"
 msgstr "Rajoitukset (%s)"
@@ -51580,8 +51561,8 @@ msgid "Resume"
 msgstr "Jatka"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:930
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:799
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:801
 msgid "Resume all suspended holds"
 msgstr "Jatka kaikki keskeytetyt varaukset"
 
@@ -51706,7 +51687,7 @@ msgstr "Palaa kiertokokoelmiin"
 msgid "Return to rotating collections home"
 msgstr "Palaa siirtokokoelmiin"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:980
 #: koha-tmpl/intranet-tmpl/prog/en/includes/blocking_errors.inc:4
 #, c-format
 msgid "Return to search"
@@ -52245,7 +52226,7 @@ msgid "SMS provider"
 msgstr "SMS-operaattori"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1516
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:346
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:347
 #, c-format
 msgid "SMS provider:"
 msgstr "Puhelinoperaattori:"
@@ -52404,6 +52385,7 @@ msgstr "Lauantai"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:153
+#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/additional-fields.tt:201
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:236
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:310
@@ -52438,15 +52420,14 @@ msgstr "Lauantai"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/systempreferences.tt:449
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:99
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/z3950servers.tt:201
-#: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities.tt:316
 #: koha-tmpl/intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:874
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:887
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:140
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:197
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:85
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:245
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course.tt:146
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:205
@@ -54458,7 +54439,7 @@ msgstr "Kausijulkaisutilaus "
 msgid "Serial edition %s &rsaquo; Serials &rsaquo; Koha"
 msgstr "Kausijulkaisutilaus %s &rsaquo; Kausijulkaisut &rsaquo; Koha"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:527
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:551
 #, c-format
 msgid "Serial enumeration"
 msgstr "Kausijulkaisun numerointi"
@@ -54828,25 +54809,22 @@ msgstr "Määrittele myöhästymisilmoituksia myöhässä oleville niteille"
 msgid "Set permissions"
 msgstr "Aseta virkailijaoikeuksia"
 
-#. %1$s:  patron.surname | html 
-#. %2$s:  patron.firstname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:44
-#, c-format
-msgid "Set permissions for %s, %s"
+#, fuzzy, c-format
+msgid "Set permissions for %s"
 msgstr "Aseta käyttöoikeuksia käyttäjälle %s, %s"
 
-#. %1$s:  patron.surname | html 
-#. %2$s:  patron.firstname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:26
-#, c-format
-msgid "Set permissions for %s, %s "
-msgstr "Aseta käyttöoikeuksia käyttäjälle %s, %s "
+#, fuzzy, c-format
+msgid "Set permissions for %s "
+msgstr "Aseta käyttöoikeuksia käyttäjälle %s, %s"
 
-#. %1$s:  patron.surname | html 
-#. %2$s:  patron.firstname | html 
+#. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/member-flags.tt:7
-#, c-format
-msgid "Set permissions for %s, %s &rsaquo; Patrons &rsaquo; Koha "
+#, fuzzy, c-format
+msgid "Set permissions for %s &rsaquo; Patrons &rsaquo; Koha "
 msgstr ""
 "Aseta käyttöoikeuksia käyttäjälle %s, %s &rsaquo; Asiakkaat &rsaquo; Koha "
 
@@ -55463,7 +55441,7 @@ msgstr "Näytä näkymättömät merkit"
 msgid "Show less"
 msgstr "Näytä vähemmän"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:407
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:431
 #, c-format
 msgid "Show matching titles"
 msgstr "Näytä täsmäävät nimekkeet"
@@ -55632,9 +55610,9 @@ msgstr "Ohita lainassa olevat: "
 msgid "Slash separated text (.csv)"
 msgstr "Kauttaviivoin eroteltu teksti (.csv)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:341
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:436
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:438
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:437
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:439
 #, c-format
 msgid "Slip"
 msgstr "Kuitti"
@@ -55824,13 +55802,13 @@ msgid "Sort by: "
 msgstr "Järjestä "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:82
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:423
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:425
 #, c-format
 msgid "Sort field 1:"
 msgstr "Lajittelukenttä 1:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-brief.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:429
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:431
 #, c-format
 msgid "Sort field 2:"
 msgstr "Lajittelukenttä 2:"
@@ -56000,15 +55978,15 @@ msgstr "Erityisryhmä"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:920
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:789
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:944
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:791
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr "Määritä päivämäärä, jolloin varauksia jatketaan %s: "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:654
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:678
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:142
 #, c-format
 msgid "Specify due date %s: "
@@ -56414,8 +56392,8 @@ msgid "Start date"
 msgstr "Alkupvm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/aqcontract.tt:134
-#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/reserveratios.tt:166
+#: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:387
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/export.tt:123
 #, c-format
@@ -56524,7 +56502,7 @@ msgstr "Osavaltio:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:180
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:117
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:583
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:585
 #, c-format
 msgid "State: "
 msgstr "Osavaltio: "
@@ -56609,13 +56587,13 @@ msgstr "Tilastovelho"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:315
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:421
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:83
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:890
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:914
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/request-article.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:88
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:109
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/holdshistory.tt:68
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:48
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:758
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:760
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/notices.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/serials/claims.tt:118
@@ -57102,14 +57080,14 @@ msgstr "Asiasanat:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:264
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:771
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:50
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:137
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:124
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:57
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:168
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/member.tt:136
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:203
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/update-child.tt:43
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patron_lists/list.tt:138
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:323
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:213
@@ -57600,9 +57578,9 @@ msgstr "Summa"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:157
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:71
-#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:55
 #: koha-tmpl/intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:59
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/authtypes.tt:176
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:147
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:49
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/register.tt:73
@@ -57695,8 +57673,8 @@ msgstr "Sukunimi"
 msgid "Surname:"
 msgstr "Sukunimi:"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:554
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:43
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:552
 #, c-format
 msgid "Surname: "
 msgstr "Sukunimi: "
@@ -57719,13 +57697,13 @@ msgid "Suspend %s "
 msgstr "Keskeytä %s "
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:915
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:784
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:939
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:786
 msgid "Suspend all holds"
 msgstr "Keskeytä kaikki varaukset"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:889
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:757
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:913
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:759
 #, c-format
 msgid "Suspend?"
 msgstr "Keskeytä?"
@@ -58792,14 +58770,14 @@ msgstr "Aktiivisen rahayksikön kurssin pitää olla 1.0"
 msgid "The alternative email is invalid."
 msgstr "Vaihtoehtoinen sähköpostiosoite on virheellinen."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:378
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:376
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:179
 #, c-format
 msgid ""
 "The amount collected from the patron is higher than the amount to be paid."
 msgstr "Vastaanotettu summa on enemmän kuin maksettava summa."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:375
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:373
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:176
 #, c-format
 msgid "The amount collected is more than the outstanding charge"
@@ -58865,7 +58843,7 @@ msgstr "Viivakoodia %s ei löytynyt."
 msgid "The barcode was not found %s."
 msgstr "Viivakoodia %s ei löytynyt."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:403
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:427
 #, c-format
 msgid "The barcode was not found: "
 msgstr "Viivakoodia ei löytynyt: "
@@ -58944,7 +58922,7 @@ msgstr "Budjetti on lukittu, tilin lisääminen ei ole mahdollista."
 msgid "The cart was sent to: %s"
 msgstr "Kori lähetettiin sähköpostiosoitteeseen %s"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:379
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:377
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:180
 #, c-format
 msgid "The change to give is "
@@ -59051,7 +59029,7 @@ msgstr ""
 "laskut ladataan."
 
 #. %1$s:  INVALID_DATE | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:423
 #, c-format
 msgid "The due date &quot;%s&quot; is invalid"
 msgstr "Virheellinen eräpäivä &quot;%s&quot;"
@@ -59657,7 +59635,7 @@ msgstr "Asiakkaan takaajilla on maksuja %s."
 #. For the first occurrence,
 #. %1$s:  DEBT_GUARANTORS | $Price 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:391
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:415
 #, c-format
 msgid ""
 "The patron's guarantors and their other guarantees collectively have a debt "
@@ -59744,7 +59722,6 @@ msgstr "Tietuetta, jota yrität muokata ei ole olemassa."
 msgid "The record you requested does not exist (%s)."
 msgstr "Tietuetta %s ei ole tietokannassa."
 
-#: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs_update_elastic_index.inc:8
 #: koha-tmpl/intranet-tmpl/prog/en/includes/background_jobs/update_elastic_index.inc:8
 #, c-format
 msgid "The records have successfully been reindexed!"
@@ -59991,7 +59968,7 @@ msgstr "Credit-tyyppejä ei ole määritetty. "
 msgid "There are no account debit types defined. "
 msgstr "Tilin debit-tyyppejä ei ole määritelty. "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:411
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:412
 #, c-format
 msgid "There are no additional contents."
 msgstr "Ei lisäsisältöjä."
@@ -60777,14 +60754,14 @@ msgstr "Tämä tiimi oli vastuussa nyt käyttämäsi Koha-version ensijulkaisust
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:478
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:502
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:283
 #, c-format
 msgid "This item belongs to %s and cannot be checked out from this location."
 msgstr ""
 "Tämä nide kuuluu kirjastoon %s, eikä sitä voida lainata tästä kirjastosta."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:462
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:486
 #, c-format
 msgid "This item can not be renewed, it's an on-site checkout"
 msgstr "Tätä nidettä ei voi uusia, koska se on on-site -lainassa"
@@ -60912,7 +60889,7 @@ msgid "This item must be checked in at following library: "
 msgstr "Tämä nide pitää palauttaa seuraavaan kirjastoon: "
 
 #. %1$s:  Branches.GetName( branch_to_return ) | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:482
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:506
 #, c-format
 msgid "This item must be returned to %s."
 msgstr "Tämä nide pitää palauttaa kirjastoon %s."
@@ -61039,7 +61016,7 @@ msgstr "Asiakkaalla ei ole varaushistoriaa."
 msgid "This patron has not submitted any purchase suggestions"
 msgstr "Tämä asiakas ei ole tehnyt yhtään hankintaehdotusta"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:607
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:631
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/returns.tt:145
 #, c-format
 msgid ""
@@ -61432,8 +61409,8 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:200
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:79
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:522
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:546
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:905
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:143
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:120
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/offline.tt:163
@@ -61456,7 +61433,7 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/members-update.tt:22
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:39
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember-print.tt:115
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:749
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:751
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/readingrec.tt:71
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_to_pull.tt:45
 #: koha-tmpl/intranet-tmpl/prog/en/modules/recalls/recalls_waiting.tt:44
@@ -61483,7 +61460,7 @@ msgstr "TinyMCE WYSIWYG editor v5.9.2 "
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:231
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:349
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:421
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:324
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:325
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:151
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:136
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:184
@@ -61603,9 +61580,9 @@ msgstr "Nimeke:"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:53
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
 #: koha-tmpl/intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:208
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:211
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:259
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:209
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:212
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:260
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:77
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/holidays.tt:175
 #: koha-tmpl/intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
@@ -61925,7 +61902,7 @@ msgstr "Liikaa lainoja."
 #. %1$s:  current_loan_count | html 
 #. %2$s:  max_loans_allowed | html 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:167
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:474
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:498
 #, c-format
 msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr "Liian monta nidettä lainassa. %s lainassa, %s sallittu."
@@ -62202,17 +62179,17 @@ msgstr "Yht + oikaisut + toimituskulut (%s)"
 msgid "Total RRP"
 msgstr "Yhteensä OVH"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:250
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:248
 #, c-format
 msgid "Total amount outstanding:"
 msgstr "Maksuja yhteensä:"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:311
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:309
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "Saatavia yhteensä: "
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:158
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:157
 #, c-format
 msgid "Total amount payable:"
 msgstr "Maksettavia yhteensä:"
@@ -62293,7 +62270,7 @@ msgid "Total due:"
 msgstr "Yhteensä:"
 
 #. %1$s:  fines | $Price 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:725
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:727
 #, c-format
 msgid "Total due: %s"
 msgstr "Yhteensä: %s"
@@ -63092,7 +63069,7 @@ msgstr "Määrittelemätön"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:164
 #: koha-tmpl/intranet-tmpl/prog/en/modules/about.tt:169
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/smart-rules.tt:260
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:448
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:450
 #, c-format
 msgid "Undefined"
 msgstr "Määrittelemätön"
@@ -63285,7 +63262,7 @@ msgid "Unknown"
 msgstr "Tuntematon"
 
 #. %1$s:  location | html 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:342
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:343
 #, fuzzy, c-format
 msgid "Unknown ('%s')"
 msgstr "Tuntematon virhe '%s'."
@@ -63454,12 +63431,12 @@ msgid "Unrecognized patron (%s)"
 msgstr "Tuntematon asiakas (%s)"
 
 #. SPAN
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:829
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:831
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:838
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:688
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:853
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:855
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:690
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:697
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:692
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:699
 msgid "Unresolved claims"
 msgstr "Ratkaisemattomat ilmoitukset"
 
@@ -64403,8 +64380,8 @@ msgid "Username:"
 msgstr "Kirjastokortin numero:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:161
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:442
 #: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:99
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:440
 #, c-format
 msgid "Username: "
 msgstr "Käyttäjätunnus: "
@@ -65773,9 +65750,9 @@ msgstr "Kirjoita uutisia verkkokirjastoon ja virkailijatyökaluun"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/pay.tt:91
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:131
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:224
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:282
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:285
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:223
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:280
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:283
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:86
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:88
 #, c-format
@@ -65789,14 +65766,14 @@ msgstr "Poista kaikki"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:58
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:84
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:301
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:299
 #, c-format
 msgid "Write off an amount toward selected fines"
 msgstr "Poista valitut myöhästymismaksut"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:54
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:80
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:230
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:229
 #, c-format
 msgid "Write off an individual fine"
 msgstr "Poista yksittäinen maksu"
@@ -65812,7 +65789,7 @@ msgid "Write off selected"
 msgstr "Poista valitut"
 
 #. INPUT type=submit
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:269
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:267
 msgid "Write off this charge"
 msgstr "Poista tämä maksu"
 
@@ -65821,8 +65798,8 @@ msgstr "Poista tämä maksu"
 msgid "Writeoff"
 msgstr "Poista"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:262
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:316
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:260
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:314
 #, c-format
 msgid "Writeoff amount: "
 msgstr "Poista summa: "
@@ -65951,19 +65928,19 @@ msgstr "Keltainen"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:266
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:82
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:168
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:87
 #: koha-tmpl/intranet-tmpl/prog/en/modules/clubs/clubs.tt:94
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/article-requests.tt:520
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:68
-#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:569
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:572
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:584
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:587
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:480
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:383
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:482
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:381
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:65
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:68
+#: koha-tmpl/intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:155
 #: koha-tmpl/intranet-tmpl/prog/en/modules/pos/pay.tt:184
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:479
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:487
@@ -66055,6 +66032,7 @@ msgid "Yes, cancel (Y)"
 msgstr "Kyllä, peruuta"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:333
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:357
 #, c-format
 msgid "Yes, check out (Y)"
 msgstr "Kyllä, lainaa"
@@ -66158,6 +66136,7 @@ msgid "Yes, remove"
 msgstr "Kyllä, poista"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:331
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:355
 #, c-format
 msgid "Yes, renew (Y)"
 msgstr "Kyllä, uusi"
@@ -66225,7 +66204,7 @@ msgid "You are about to edit the following subscriptions:"
 msgstr "Olet muokkaamassa seuraavia kausijulkaisutilauksia:"
 
 #. SCRIPT
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:393
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/paycollect.tt:391
 msgid "You are attemping to writeoff more than the value of the fee."
 msgstr "Olet poistamassa enemmän kuin maksujen kokonaismäärä."
 
@@ -66622,7 +66601,7 @@ msgid ""
 "using Koha"
 msgstr "MARC-asetuksissa on %s virhettä. Korjaa ne ennen Kohan käyttämistä."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:994
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:1018
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -67338,7 +67317,7 @@ msgstr "Postinumero:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/branches.tt:181
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:121
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:589
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:591
 #, c-format
 msgid "ZIP/Postal code: "
 msgstr "Postinumero: "
@@ -68414,7 +68393,7 @@ msgstr "esimerkki"
 msgid "exists"
 msgstr "on jo olemassa."
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:356
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tools/additional-contents.tt:357
 #, c-format
 msgid "expired"
 msgstr "vanhentunut"
@@ -69501,8 +69480,8 @@ msgstr "tai"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:983
 #: koha-tmpl/intranet-tmpl/prog/en/modules/ill/ill-requests.tt:812
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:397
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:402
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:399
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #: koha-tmpl/intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:384
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:23
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron_messages.inc:40
@@ -70317,8 +70296,8 @@ msgstr "paitsi"
 msgid "unrecognized command"
 msgstr "tuntematon komento"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:918
-#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:787
+#: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:942
+#: koha-tmpl/intranet-tmpl/prog/en/modules/members/moremember.tt:789
 #, c-format
 msgid "until"
 msgstr "tähän päivämäärään asti"
@@ -70870,6 +70849,13 @@ msgstr ""
 #~ msgstr "%s (ei käytössä) %s %s %s "
 
 #~ msgid ""
+#~ "%s / %s records have successfully been reindexed. Some errors occurred. "
+#~ "%sThe job has been cancelled before it finished.%s "
+#~ msgstr ""
+#~ "%s / %s tietueen uudelleenindeksointi onnistui. Joitakin virheitä "
+#~ "esiintyi. %sAjo keskeytettiin.%s "
+
+#~ msgid ""
 #~ "%s 0 subscription routing lists %s %s subscription routing list %s %s "
 #~ "subscription routing lists %s "
 #~ msgstr ""
@@ -71276,11 +71262,17 @@ msgstr ""
 #~ msgid "Patron notification: %s %s Email%s %s Phone%s %s SMS%s %s, %s.%s %s "
 #~ msgstr "Ilmoitus: %s %s Sähköposti%s %s Puhelin%s %s SMS%s %s, %s.%s %s "
 
+#~ msgid "Pin code: "
+#~ msgstr "PIN-koodi: "
+
 #~ msgid "Publisher: %s %s, %s %s %s %s %s "
 #~ msgstr "Julkaisija: %s %s, %s %s %s %s %s "
 
 #~ msgid "Receive shipment"
 #~ msgstr "Vastaanota tilauksia"
+
+#~ msgid "Set permissions for %s, %s "
+#~ msgstr "Aseta käyttöoikeuksia käyttäjälle %s, %s "
 
 #~ msgid "Shipment date: %s From %s To %s %s All since %s %s "
 #~ msgstr "Lähetyspvm: %s alkaen: %s päättyen: %s %s Kaikki alkaen: %s %s "

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:22-0300\n"
+"POT-Creation-Date: 2022-07-17 09:51-0300\n"
 "PO-Revision-Date: 2022-06-22 07:43+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
@@ -576,6 +576,22 @@ msgstr "%s Tällä teoksella ei ole niteitä. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Videonäytteet"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Odottaa asiakasta kirjastossa %s lähtien %s. %s Asiakas teki "
+"palautuspyynnön kirjastoon %s lähtien %s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9294,12 +9310,6 @@ msgstr "Palautuspyynnön raukeamispäivä:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Recalls "
@@ -12419,12 +12429,6 @@ msgstr "Odotuspvm"
 msgid "Waiting date"
 msgstr "Odotuspvm"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "Odottaa kirjastossa %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14353,8 +14357,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14833,13 +14835,6 @@ msgstr "×"
 #~ "%s %s %s %s %s %s %s lähtien. "
 
 #~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Odottaa asiakasta kirjastossa %s lähtien %s. %s Asiakas teki "
-#~ "palautuspyynnön kirjastoon %s lähtien %s. %s "
-
-#~ msgid ""
 #~ "%s You have reached the maximum number of recalls on this record. %s "
 #~ "There are no items available for recall. %s You cannot place a recall on "
 #~ "this item. %s An error has occurred while attempting to place a recall. "
@@ -14960,6 +14955,9 @@ msgstr "×"
 #~ msgstr ""
 #~ "Toimintavirhe: %s Virhe: Väärä muuttuja %s %s Virhe: Sinun on ensin "
 #~ "kirjauduttava %s Virhe: Et voi poistaa tätä tagia %s. "
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Odottaa kirjastossa %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

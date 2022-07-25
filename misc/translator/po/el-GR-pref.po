@@ -2234,18 +2234,19 @@ msgid ""
 msgstr "URL του Εξυπηρετητή Πιστοποίησης CAS: "
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
 msgstr "Όχι"
 
 # Administration > Interface options
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr "Προβολή των εικονιδίων του τύπου του αντιτύπου στον κατάλογο: "
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr "Όχι"
 
 # Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr "Ναι"
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
+msgstr "Προβολή των εικονιδίων του τύπου του αντιτύπου στον κατάλογο: "
 
 # Administration > Login options
 msgid ""
@@ -2291,12 +2292,14 @@ msgid "authorities.pref Linker"
 msgstr "Δημιουργός link"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr "Απόκρυψη"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr "Εμφάνιση"
 
 # Authorities > General
 msgid ""
@@ -2613,12 +2616,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr "Ετικέτες Ράχης"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr "Απόκρυψη"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr "Εμφάνιση"
 
 # Cataloging > Display
 msgid ""
@@ -2858,12 +2863,14 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "αριθμός βιβλιογραφικής εγγραφής"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr "να μην εμφανίζεται"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr "να μην εμφανίζεται"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr "Εμφάνιση"
 
 # Cataloging > Interface
 #, fuzzy
@@ -3380,12 +3387,14 @@ msgstr ""
 "ράχης:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr "Απόκρυψη"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr "Εμφάνιση"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3524,12 +3533,14 @@ msgstr ""
 "σύνδεση των βιβλιογραφικών εγγραφών."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr "Απόκρυψη"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr "Εμφάνιση"
 
 # Cataloging > Interface
 msgid ""
@@ -3567,11 +3578,8 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "δε δημιουργούνται αυτόματα."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr "Εμφάνιση"
-
-# Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr "Απόκρυψη"
 
 # Cataloging > Display
@@ -3581,6 +3589,11 @@ msgid ""
 msgstr ""
 "οι MARC αριθμοί των πεδίων, οι κωδικοί υποπεδίων και οι δείκτες στις "
 "προβολές MARC."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr "Εμφάνιση"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -7410,9 +7423,12 @@ msgid ""
 "prefix style"
 msgstr "Να αφαιρείται ο πρώτος αριθμός από το το στυλ T-prefix από"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr "τα σαρωμένα barcodes των τεκμηρίων."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7842,12 +7858,7 @@ msgstr "Να χρησιμοποιηθεί ο κωδικός πελάτη"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr "Εμφάνιση"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr "Απόκρυψη"
 
 # Enhanced content > Local or remote cover images
@@ -7862,6 +7873,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr "ως πεδία ελέγχου μπορείτε να χρησιμοποιήσετε μόνο {field}, όπως {001}."
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr "Να εμφανίζονται"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -8134,12 +8150,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "σε καρτέλες."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr "Εμφάνιση"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr "Απόκρυψη"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr "Να εμφανίζονται"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -8309,12 +8327,14 @@ msgid ""
 msgstr "άλλες εκδόσεις ενός τεκμηρίου στον OPAC."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr "Εμφάνιση"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr "Απόκρυψη"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr "Να εμφανίζονται"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -9608,12 +9628,14 @@ msgid "opac.pref#MaxTotalSuggestions# in"
 msgstr "Να επιτρέπεται"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr "Απόκρυψη"
 
 # OPAC > Features
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr "Εμφάνιση"
 
 # OPAC > Features
 msgid ""
@@ -9912,12 +9934,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr "Να επιτρέπεται"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr "Εμφάνιση"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr "Απόκρυψη"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr "Εμφάνιση"
 
 # OPAC > Features
 msgid ""
@@ -10929,12 +10953,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr "Προβολή"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
+msgstr "Απόκρυψη"
 
 # OPAC > Features
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr "Απόκρυψη"
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr "Προβολή"
 
 # OPAC > Features
 #, fuzzy
@@ -10945,18 +10971,18 @@ msgstr "της λίστας επιλογής παραρτήματος για τ�
 
 # Administration > Interface options
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
 msgstr "Όχι"
 
 # Administration > Interface options
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr "Προβολή των εικονιδίων του τύπου του αντιτύπου στον κατάλογο: "
+msgid "opac.pref#OpacNoItemTypeImages# Show"
+msgstr "Όχι"
 
 # Administration > Interface options
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr "Ναι"
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
+msgstr "Προβολή των εικονιδίων του τύπου του αντιτύπου στον κατάλογο: "
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11410,12 +11436,12 @@ msgstr "Ενεργοποίηση της εγγραφής για τις ακόλ�
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr "Να μην επιτρέπεται"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr "Να μην επιτρέπεται"
 
 # OPAC > Self registration and modification
@@ -11603,8 +11629,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr "opac.pref#ShowReviewer# identifiant"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr "Να είναι κρυμμένη"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr "Να φαίνεται"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -12868,6 +12895,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "ένας ισχυρός κωδικός για το προσωπικό και τα μέλη"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -13217,15 +13251,15 @@ msgstr ""
 "href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=item-"
 "level_itypes\">item-level_itypes</a> πρέπει να οριστεί για το αντίτυπο."
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr "Εμφάνιση Αποτελεσμάτων"
-
 # Searching > Features
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr "Να μη γίνεται προσπάθεια"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr "Εμφάνιση Αποτελεσμάτων"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -15114,11 +15148,10 @@ msgstr "Απενεργοποίηση"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Απενεργοποίηση"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -15173,7 +15206,37 @@ msgid ""
 msgstr ""
 "σειρές από μια αιτούμενη αναφορά μέσω της δικτυακής υπηρεσίας αναφορών."
 
+# Administration > Interface options
+#~ msgid "admin.pref#noItemTypeImages# Yes"
+#~ msgstr "Ναι"
+
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr "τα σαρωμένα barcodes των τεκμηρίων."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr "Εμφάνιση"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr "Εμφάνιση"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr "Εμφάνιση"
+
 # OPAC > Appearance
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr "Να συμπεριλαμβάνονται"
+
+# Administration > Interface options
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr "Ναι"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr "Να είναι κρυμμένη"

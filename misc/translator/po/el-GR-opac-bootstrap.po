@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 20:59-0300\n"
+"POT-Creation-Date: 2022-07-18 00:01-0300\n"
 "PO-Revision-Date: 2022-05-01 08:55-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: el\n"
@@ -577,6 +577,22 @@ msgstr "%s Αυτή η εγγραφή δεν έχει αντίτυπα. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Αποσπάσματα βίντεο"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Σε αναμονή %s Σε κράτηση %s για το χρήστη %s σε %s αναμένεται σε %s %s "
+"από %s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -2103,8 +2119,8 @@ msgid "Accepted by the library"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:174
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:64
 #, c-format
 msgid "Access denied"
 msgstr "Δεν επιτρέπεται η πρόσβαση"
@@ -3303,9 +3319,9 @@ msgstr "Ταξινομικός αριθμός %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:165
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
@@ -5219,9 +5235,9 @@ msgstr "Πρόστιμα και χρεώσεις"
 msgid "Fines:"
 msgstr "Πρόστιμα:"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
 #, c-format
 msgid "Finish"
 msgstr "Τέλος"
@@ -6589,9 +6605,9 @@ msgstr "Λέξη κλειδί"
 msgid "Koha"
 msgstr "Koha"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr "Koha %s"
@@ -9408,12 +9424,6 @@ msgstr "Η κράτηση δε χρειάζεται μετά τις:"
 msgid "RecallItem "
 msgstr "ΑνάκλησηΤεκμηρίου "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -10589,8 +10599,8 @@ msgstr "Πληροφορίες σειράς:"
 msgid "Series title"
 msgstr "Τίτλος σειράς"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:70
 #, c-format
 msgid "Session lost"
 msgstr "Η σύνδεση διακόπηκε"
@@ -12592,12 +12602,6 @@ msgstr "Ημερομηνία αναμονής"
 msgid "Waiting date"
 msgstr "Ημερομηνία αναμονής"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "Σε αναμονή στο %s από %s."
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14592,8 +14596,6 @@ msgstr "εμφάνιση_κρατήσεων"
 msgid "show_loans"
 msgstr "εμφάνιση_δανεισμών"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14662,10 +14664,10 @@ msgstr "tagsel_button"
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
@@ -15072,14 +15074,6 @@ msgstr "×"
 #~ "%s Σε αναμονή %s Σε κράτηση %s για το χρήστη %s σε %s αναμένεται σε %s %s "
 #~ "από %s %s %s %s %s %s %s. "
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Σε αναμονή %s Σε κράτηση %s για το χρήστη %s σε %s αναμένεται σε %s %s "
-#~ "από %s %s %s %s %s %s %s. "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sτεκμήριο%sτεκμήρια%s%sΚενό%s"
 
@@ -15195,6 +15189,10 @@ msgstr "×"
 #~ "Παρουσιάστηκε πρόβλημα σε αυτή τη λειτουργία: %s ΣΦΑΛΜΑ: μη επιτρεπόμενη "
 #~ "παράμετρος %s %sΣΦΑΛΜΑ: Πρέπει να συνδεθείτε για να ολοκληρώσετε αυτή την "
 #~ "ενέργεια. %s ΣΦΑΛΜΑ: Δεν μπορείτε να διαγράψετε την επισημείωση %s. "
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Σε αναμονή στο %s από %s."
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

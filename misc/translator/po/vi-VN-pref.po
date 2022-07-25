@@ -2111,19 +2111,20 @@ msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
 msgstr ""
 
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# No"
-msgstr ""
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Don't show"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "admin.pref#noItemTypeImages# Show"
+msgstr " Cho phép"
 
 # Staff Client > Appearance
 #, fuzzy
-msgid ""
-"admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
+msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
 msgstr " cho giao diện nhân viên của Koha."
-
-# Administration > Interface options
-msgid "admin.pref#noItemTypeImages# Yes"
-msgstr ""
 
 # Administration > Login options
 msgid ""
@@ -2166,12 +2167,14 @@ msgid "authorities.pref Linker"
 msgstr " Liên kết"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Don't show"
+msgstr " Không hiển thị"
 
 # Authorities > General
-msgid "authorities.pref#AuthDisplayHierarchy# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "authorities.pref#AuthDisplayHierarchy# Show"
+msgstr " Hiển thị"
 
 # Authorities > General
 msgid ""
@@ -2475,12 +2478,14 @@ msgid "cataloguing.pref Spine labels"
 msgstr " Nhãn gáy"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AcquisitionDetails# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#AcquisitionDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Display
 #, fuzzy
@@ -2714,13 +2719,14 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
 msgstr "  (Nếu để trống giá trị mặc định sẽ là eng)"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Interface
 #, fuzzy
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
-msgstr " Không hiển thị"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Interface
 #, fuzzy
@@ -3195,12 +3201,14 @@ msgid ""
 msgstr " Bao gồm các trường thông tin sau đây trên một nhãn gáy được in nhanh:"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Spine labels
-msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Spine Labels
 #, fuzzy
@@ -3329,12 +3337,14 @@ msgstr ""
 "việc liên kết các biểu ghi thư mục."
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "cataloguing.pref#advancedMARCeditor# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Interface
 msgid ""
@@ -3372,11 +3382,8 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr " không tự động sinh ra."
 
 # Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Display"
-msgstr " Hiển thị"
-
-# Cataloging > Display
-msgid "cataloguing.pref#hide_marc# Don't display"
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Don't show"
 msgstr " Không hiển thị"
 
 # Cataloging > Display
@@ -3384,6 +3391,11 @@ msgid ""
 "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators "
 "in MARC views."
 msgstr " số trường MARC, mã trường con và các chỉ số trong hiển thị MARC."
+
+# Cataloging > Display
+#, fuzzy
+msgid "cataloguing.pref#hide_marc# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -7170,9 +7182,12 @@ msgid ""
 "prefix style"
 msgstr " Loại bỏ số đầu tiên từ kiểu Tprefix"
 
-# Circulation > Interface
-msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
-msgstr " mã đăng ký cá biệt tài liệu được quét lại."
+# Circulation > Interface > itemBarcodeInputFilter
+msgid ""
+"circulation.pref#itemBarcodeInputFilter# scanned item barcodes. Mind that "
+"any leading or trailing whitespace in a barcode gets removed before this "
+"filter."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid ""
@@ -7602,12 +7617,7 @@ msgstr " Sử dụng mã khách hàng"
 
 # Enhanced content > Local or remote cover images
 #, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-#, fuzzy
-msgid "enhanced_content.pref#CustomCoverImages# Don't display"
+msgid "enhanced_content.pref#CustomCoverImages# Don't show"
 msgstr " Không hiển thị"
 
 # Enhanced Content > Local or remote cover images
@@ -7624,6 +7634,11 @@ msgid ""
 "enhanced_content.pref#CustomCoverImages# Or you can use the following syntax "
 "to specify a field$subfield value: {field$subfield}. For instance {024$a}."
 msgstr ""
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#CustomCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced content > Amazon
 #, fuzzy
@@ -7895,12 +7910,14 @@ msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr " trong các thẻ."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Don't show"
 msgstr " Không hiển thị"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#LocalCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced Content > Local or remote cover images
 #, fuzzy
@@ -8069,12 +8086,14 @@ msgid ""
 msgstr " các bản sao khác của một tài liệu trên giao diện OPAC."
 
 # Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
-msgstr " Hiển thị"
-
-# Enhanced content > Local or remote cover images
-msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't show"
 msgstr " Không hiển thị"
+
+# Enhanced content > Amazon
+#, fuzzy
+msgid "enhanced_content.pref#OPACLocalCoverImages# Show"
+msgstr " Hiển thị"
 
 # Enhanced content > Local or remote cover images
 msgid ""
@@ -9375,13 +9394,13 @@ msgstr " Cho phép"
 
 # Cataloging > Display
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Display"
-msgstr " Hiển thị"
+msgid "opac.pref#OPACAcquisitionDetails# Don't show"
+msgstr " Không hiển thị"
 
 # Cataloging > Display
 #, fuzzy
-msgid "opac.pref#OPACAcquisitionDetails# Don't display"
-msgstr " Không hiển thị"
+msgid "opac.pref#OPACAcquisitionDetails# Show"
+msgstr " Hiển thị"
 
 # Cataloging > Display
 #, fuzzy
@@ -9673,12 +9692,14 @@ msgid "opac.pref#OPACPlayMusicalInscripts# Play"
 msgstr " Cho phép"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Display"
-msgstr " Hiển thị"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Don't show"
+msgstr " Không hiển thị"
 
 # OPAC > Features
-msgid "opac.pref#OPACPopupAuthorsSearch# Don't display"
-msgstr " Không hiển thị"
+#, fuzzy
+msgid "opac.pref#OPACPopupAuthorsSearch# Show"
+msgstr " Hiển thị"
 
 # OPAC > Features
 msgid ""
@@ -10702,15 +10723,15 @@ msgid ""
 "results (160 characters)."
 msgstr ""
 
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr " Không kích hoạt"
-
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
+msgid "opac.pref#OpacNewsLibrarySelect# Don't show"
 msgstr " Không hiển thị"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "opac.pref#OpacNewsLibrarySelect# Show"
+msgstr " Không kích hoạt"
 
 # OPAC > Appearance
 #, fuzzy
@@ -10723,18 +10744,18 @@ msgstr ""
 
 # OPAC > Features
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# No"
+msgid "opac.pref#OpacNoItemTypeImages# Don't show"
+msgstr " Cho phép"
+
+# OPAC > Features
+#, fuzzy
+msgid "opac.pref#OpacNoItemTypeImages# Show"
 msgstr " Cho phép"
 
 # OPAC > Appearance
 #, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
+msgid "opac.pref#OpacNoItemTypeImages# itemtype icons in the OPAC."
 msgstr " trên OPAC."
-
-# OPAC > Appearance
-#, fuzzy
-msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr " Sử dụng kiểu dao diện"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -11153,12 +11174,12 @@ msgstr " Bắt buộc"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr " Không cho phép"
 
 # OPAC > Self registration and modification
 #, fuzzy
-msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
+msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr " Không cho phép"
 
 # OPAC > Self registration and modification
@@ -11340,8 +11361,9 @@ msgid "opac.pref#ShowReviewer# username"
 msgstr " tên đăng nhập"
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewerPhoto# Hide"
-msgstr " Ẩn"
+#, fuzzy
+msgid "opac.pref#ShowReviewerPhoto# Don't show"
+msgstr " Hiển thị"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# Show"
@@ -12559,6 +12581,13 @@ msgstr ""
 " Mật khẩu đăng nhập cho cán bộ thư viện và bạn đọc phải có chiều dài tối "
 "thiểu là"
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 #, fuzzy
 msgid ""
@@ -12896,15 +12925,15 @@ msgid ""
 "preference is set to bibliographic record."
 msgstr ""
 
-# Searching > Results Display
-#, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr " Hiển thị kết quả tìm kiếm"
-
 # Searching > Features
 #, fuzzy
-msgid "searching.pref#BiblioItemtypeInfo# Don't display"
+msgid "searching.pref#BiblioItemtypeInfo# Don't show"
 msgstr " Không tìm kiếm"
+
+# Searching > Results Display
+#, fuzzy
+msgid "searching.pref#BiblioItemtypeInfo# Show"
+msgstr " Hiển thị kết quả tìm kiếm"
 
 # OPAC > Features
 #, fuzzy
@@ -14831,11 +14860,10 @@ msgstr " Không kích hoạt"
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr " Kích hoạt"
 
-# Web services > REST API
+# Web services > REST API > RESTOAuth2ClientCredentials
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
-"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
-"[EXPERIMENTAL]"
+"grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 
 # Web services > ILS-DI
@@ -14890,7 +14918,33 @@ msgid ""
 msgstr ""
 " hàng của một báo cáo được yêu cầu thông qua các báo cáo của dịch vụ Web."
 
+# Circulation > Interface
+#~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
+#~ msgstr " mã đăng ký cá biệt tài liệu được quét lại."
+
+# Enhanced content > Local or remote cover images
+#, fuzzy
+#~ msgid "enhanced_content.pref#CustomCoverImages# Display"
+#~ msgstr " Hiển thị"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#LocalCoverImages# Display"
+#~ msgstr " Hiển thị"
+
+# Enhanced content > Local or remote cover images
+#~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+#~ msgstr " Hiển thị"
+
 # OPAC > Appearance
 #, fuzzy
 #~ msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
 #~ msgstr " Bao gồm"
+
+# OPAC > Appearance
+#, fuzzy
+#~ msgid "opac.pref#OpacNoItemTypeImages# Yes"
+#~ msgstr " Sử dụng kiểu dao diện"
+
+# OPAC > Features
+#~ msgid "opac.pref#ShowReviewerPhoto# Hide"
+#~ msgstr " Ẩn"

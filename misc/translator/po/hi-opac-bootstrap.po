@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 21:48-0300\n"
+"POT-Creation-Date: 2022-07-17 09:57-0300\n"
 "PO-Revision-Date: 2022-06-20 14:32+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -570,6 +570,22 @@ msgstr "%s यह रिकार्ड में कोई आइटम नह�
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s वीडियो उद्धरण"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s संरक्षक के लिए प्रतीक्षा कर रहा है %s जबसे %s. %s अपेक्षित संरक्षक द्वारा वापस बुला "
+"लिया गया %s जबसे %s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -2422,9 +2438,7 @@ msgstr "एक त्रुटि हुई है &rsaquo; %s%s%sकोहा �
 msgid ""
 "An error has occurred while attempting to place a recall. Please contact "
 "your library."
-msgstr ""
-"वापस बुलाने का प्रयास करते समय एक त्रुटि हुई है। कृपया अपने पुस्तकालय से "
-"संपर्क करें।"
+msgstr "वापस बुलाने का प्रयास करते समय एक त्रुटि हुई है। कृपया अपने पुस्तकालय से संपर्क करें।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
 #, c-format
@@ -9275,12 +9289,6 @@ msgstr "होल्ड की आवश्यकता नही के बा�
 msgid "RecallItem "
 msgstr "RecallItem"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -11459,8 +11467,8 @@ msgid ""
 "The %s%s%sKoha online%s catalog is offline for system maintenance. We'll be "
 "back soon!"
 msgstr ""
-"यह %s%s%sकोहा ऑनलाइन%s सूची प्रणाली के रखरखाव के लिए ऑफ़लाइन है। हम जल्द ही "
-"वापस आएंगे! "
+"यह %s%s%sकोहा ऑनलाइन%s सूची प्रणाली के रखरखाव के लिए ऑफ़लाइन है। हम जल्द ही वापस "
+"आएंगे! "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:178
 #, c-format
@@ -12394,12 +12402,6 @@ msgstr "प्रतीक्षा की तिथि"
 msgid "Waiting date"
 msgstr "प्रतीक्षा की तिथि"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "संरक्षक के लिए प्रतीक्षा कर रहा है %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -12587,8 +12589,8 @@ msgid ""
 "You already have at least one item level hold on this title. All further "
 "holds must be item level."
 msgstr ""
-"इस शीर्षक पर आपके पास पहले से ही कम से कम एक आइटम लेवल होल्ड है। आगे के सभी "
-"होल्ड आइटम स्तर के होने चाहिए।"
+"इस शीर्षक पर आपके पास पहले से ही कम से कम एक आइटम लेवल होल्ड है। आगे के सभी होल्ड आइटम "
+"स्तर के होने चाहिए।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
 #, c-format
@@ -12596,8 +12598,8 @@ msgid ""
 "You already have at least one record level hold on this title. All further "
 "holds must be record level."
 msgstr ""
-"इस शीर्षक पर आपके पास पहले से ही कम से कम एक रिकॉर्ड स्तर का होल्ड है। आगे के"
-" सभी होल्ड रिकॉर्ड स्तर के होने चाहिए।"
+"इस शीर्षक पर आपके पास पहले से ही कम से कम एक रिकॉर्ड स्तर का होल्ड है। आगे के सभी होल्ड "
+"रिकॉर्ड स्तर के होने चाहिए।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
 #, c-format
@@ -14322,8 +14324,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14779,13 +14779,6 @@ msgstr "×"
 #~ "%s प्रतिक्षा %s होल्ड किया %s सदस्यों के लिए %s पर %se पर उम्मीद %s %s के बाद से  "
 #~ "%s %s %s %s %s %s %s. "
 
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s संरक्षक के लिए प्रतीक्षा कर रहा है %s जबसे %s. %s अपेक्षित संरक्षक द्वारा वापस बुला "
-#~ "लिया गया %s जबसे %s. %s "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sमद%sमदें%s%sखाली%s"
 
@@ -14892,6 +14885,9 @@ msgstr "×"
 #~ msgstr ""
 #~ "इस आपरेशन के साथ एक समस्या थी: %s त्रुटि: अवैध पैरामीटर %s %s त्रुटि: आप उस क्रिया "
 #~ "को पूरा करने के लिए लॉग इन करना होगा. %s त्रुटि: आप टैग हटा नहीं सकते। %s."
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "संरक्षक के लिए प्रतीक्षा कर रहा है %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "

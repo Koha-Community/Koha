@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 00:47-0300\n"
+"POT-Creation-Date: 2022-07-17 10:42-0300\n"
 "PO-Revision-Date: 2022-05-01 12:52-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: zh\n"
@@ -560,6 +560,20 @@ msgstr "%s 此书目记录没有馆藏纪录。%s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s 片断影片"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, fuzzy, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr "%s 待取%s 预约%s 给读者%s 在%s 预期%s %s 自从%s %s %s %s %s %s %s。"
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -9207,12 +9221,6 @@ msgstr "此日期后不需预约："
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12316,12 +12324,6 @@ msgstr "等待 "
 msgid "Waiting date"
 msgstr "等待 "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, fuzzy, c-format
-msgid "Waiting for patron at %s"
-msgstr "转移从 %s 至 %s 自从 %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14214,8 +14216,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14647,12 +14647,6 @@ msgstr "×"
 #~ "%s %s %s %s %s %s. "
 #~ msgstr "%s 待取%s 预约%s 给读者%s 在%s 预期%s %s 自从%s %s %s %s %s %s %s。"
 
-#, fuzzy
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr "%s 待取%s 预约%s 给读者%s 在%s 预期%s %s 自从%s %s %s %s %s %s %s。"
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %s馆藏%s馆藏%s%s空白%s"
 
@@ -14739,6 +14733,10 @@ msgstr "×"
 #~ msgstr ""
 #~ "此作业有问题：%s 抱歉，此系统不能使用标签。%s 错误：不合法参数%s %s 错误："
 #~ "必须登入才能完成此作业。%s 错误：您必须删除此标签%s。"
+
+#, fuzzy
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "转移从 %s 至 %s 自从 %s"
 
 #, fuzzy
 #~ msgid ""

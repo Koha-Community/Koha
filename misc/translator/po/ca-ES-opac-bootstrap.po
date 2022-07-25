@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-06-17 20:37-0300\n"
-"PO-Revision-Date: 2022-06-21 11:29+0000\n"
+"POT-Creation-Date: 2022-07-17 09:41-0300\n"
+"PO-Revision-Date: 2022-07-05 09:29+0000\n"
 "Last-Translator: Rbellido <rbellido@orex.es>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ca\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ca/22.05/ca-ES-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1655810977.734971\n"
+"X-POOTLE-MTIME: 1657013376.412277\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -580,6 +580,22 @@ msgstr "%s Aquest registre no té exemplars. %s "
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Extractes de vídeo"
+
+#. %1$s:  IF ( item.recall.waiting_date ) 
+#. %2$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %3$s:  item.recall.waiting_date | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  Branches.GetName( item.recall.pickup_library_id ) | html 
+#. %6$s:  item.recall.created_date | $KohaDates 
+#. %7$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:143
+#, c-format
+msgid ""
+"%s Waiting for patron at %s since %s. %s Recalled by patron expected at %s "
+"since %s. %s "
+msgstr ""
+"%s Esperant per l'usuari %s des de %s. %s Reclamat per l'usuari esperat en "
+"%s des de %s. %s "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -3168,9 +3184,9 @@ msgstr "Explora per prestatgeria"
 
 #. %1$s:  starting_homebranch | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:5
-#, fuzzy, c-format
+#, c-format
 msgid "Browsing %s shelves"
-msgstr "Explora per prestatgeria"
+msgstr "Navegant per %s prestatges"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
@@ -9356,12 +9372,6 @@ msgstr "Reserva no necessària després del:"
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
-#, c-format
-msgid "Recalled by patron expected at %s"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, fuzzy, c-format
 msgid "Recalls "
@@ -12511,12 +12521,6 @@ msgstr "Data d'espera"
 msgid "Waiting date"
 msgstr "Data d'espera"
 
-#. %1$s:  Branches.GetName( item.recall.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#, c-format
-msgid "Waiting for patron at %s"
-msgstr "Esperant per l'usuari a %s"
-
 #. %1$s:  Branches.GetName( hold.branchcode ) | html 
 #. %2$s:  hold.waitingdate | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:151
@@ -14485,8 +14489,6 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
 #, c-format
 msgid "since"
@@ -14974,13 +14976,6 @@ msgstr "×"
 #~ "%s Esperant %s Reservat%s per a usuari %s en %s esperat el %s %s des de "
 #~ "%s %s %s %s %s %s %s. "
 
-#~ msgid ""
-#~ "%s Waiting for patron at %s since %s. %s Recalled by patron expected at "
-#~ "%s since %s. %s "
-#~ msgstr ""
-#~ "%s Esperant per l'usuari %s des de %s. %s Reclamat per l'usuari esperat "
-#~ "en %s des de %s. %s "
-
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sítem%sítems%s%sBuit%s"
 
@@ -15092,6 +15087,9 @@ msgstr "×"
 #~ "Hi ha hagut un problema amb aquesta operació: %sERROR: paràmetre il·legal "
 #~ "%s %sERROR: Has d'iniciar sessió per completar aquesta acció. %sERROR: No "
 #~ "es pot eliminar l'etiqueta %s. "
+
+#~ msgid "Waiting for patron at %s"
+#~ msgstr "Esperant per l'usuari a %s"
 
 #~ msgid ""
 #~ "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending "
