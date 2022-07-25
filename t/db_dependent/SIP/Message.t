@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -261,6 +261,36 @@ subtest "Test build_additional_item_fields_string" => sub {
     $server->{account}->{item_field}->[1]->{field} = 'YZ';
     $attribute_string = $ils_item->build_additional_item_fields_string( $server );
     is( $attribute_string, sprintf("XY%s|YZ%s|", $item->itemnumber, $item->biblionumber), 'Attribute field generated correctly with multiple params' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "Test build_custom_field_string" => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $item = $builder->build_sample_item;
+    my $item_id = $item->id;
+    my $item_barcode = $item->barcode;
+    my $ils_item = C4::SIP::ILS::Item->new( $item->barcode );
+
+    my $server = {};
+    $server->{account}->{custom_item_field}->{field} = "XY";
+    $server->{account}->{custom_item_field}->{template} = "[% item.id %] [% item.barcode %], woo!";
+    my $attribute_string = $ils_item->build_additional_item_fields_string( $server );
+    is( $attribute_string, "XY$item_id $item_barcode, woo!|", 'Attribute field generated correctly with single param' );
+
+    $server = {};
+    $server->{account}->{custom_item_field}->[0]->{field} = "ZY";
+    $server->{account}->{custom_item_field}->[0]->{template} = "[% item.id %]!";
+    $server->{account}->{custom_item_field}->[1]->{field} = "ZX";
+    $server->{account}->{custom_item_field}->[1]->{template} = "[% item.barcode %]*";
+    $attribute_string = $ils_item->build_additional_item_fields_string( $server );
+    is( $attribute_string, sprintf("ZY%s!|ZX%s*|", $item_id, $item_barcode), 'Attribute field generated correctly with multiple params' );
 
     $schema->storage->txn_rollback;
 };

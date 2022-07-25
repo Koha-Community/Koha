@@ -14,7 +14,7 @@ use Carp;
 use Template;
 
 use C4::SIP::ILS::Transaction;
-use C4::SIP::Sip qw(add_field);
+use C4::SIP::Sip qw(add_field maybe_add);
 
 use C4::Biblio;
 use C4::Circulation qw( barcodedecode );
@@ -435,7 +435,67 @@ sub build_additional_item_fields_string {
         }
     }
 
+    if ( $server->{account}->{custom_item_field} ) {
+        my @custom_fields =
+            ref $server->{account}->{custom_item_field} eq "ARRAY"
+            ? @{ $server->{account}->{custom_item_field} }
+            : $server->{account}->{custom_item_field};
+
+        foreach my $custom_field ( @custom_fields ) {
+            my $field = $custom_field->{field};
+            return q{} unless defined $field;
+            my $template = $custom_field->{template};
+            my $formatted = $self->format( $template );
+            my $substring = maybe_add( $field, $formatted, $server );
+            $string .= $substring;
+        }
+    }
+
     return $string;
+}
+
+=head2 build_custom_field_string
+
+This method builds the part of the sip message for custom item fields as defined in the sip config
+
+=cut
+
+sub build_custom_field_string {
+    my ( $self, $server ) = @_;
+
+    my $string = q{};
+
+
+    return $string;
+}
+
+=head2 format
+
+This method uses a template to build a string from a Koha::Item object
+If errors are encountered in processing template we log them and return nothing
+
+=cut
+
+sub format {
+    my ( $self, $template ) = @_;
+
+    if ($template) {
+        require Template;
+
+        my $tt = Template->new();
+
+        my $item = $self->{_object};
+
+        my $output;
+        eval {
+            $tt->process( \$template, { item => $item }, \$output );
+        };
+        if ( $@ ){
+            siplog("LOG_DEBUG", "Error processing template: $template");
+            return "";
+        }
+        return $output;
+    }
 }
 
 1;
