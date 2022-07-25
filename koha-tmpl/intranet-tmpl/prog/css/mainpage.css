@@ -11,14 +11,6 @@
  *
  */
 
-#container-main {
-    /* Contains the news + both columns of links + pending box + userblock box */
-    background-image:url('../img/background_koha_logo.png');
-    background-repeat:no-repeat;
-    background-position:left top;
-    padding: 1em 0;
-}
-
 
 /* ==== NEWS - Start ==== */
 
@@ -68,31 +60,29 @@ ul.biglinks-list {
 ul.biglinks-list li {
     /* Standard attributes for the list elements */
     list-style-type:none;
+
+    margin-bottom: 1em;
 }
 
 ul.biglinks-list li a.icon_general {
     /* Class used for each module link */
-    display: block;
-    box-sizing: content-box;
-    max-width : 320px;
-    min-height: 2em;
-    margin: 0 1em 14px 0;
+    display: flex;
+    align-items: center;
     padding: 5px;
-    border: solid 2px #b9d8d9;
+    border: 2px solid #71B443;
     border-radius: 6px;
+    height: 50px;
 
     text-decoration: none;
-    font-weight: bold;
     font-size: large;
-    color: #000000;
 
-    background-color:#f4f8f9;
+    color: #fff;
+    background-color: #71B443;
 }
 
 ul.biglinks-list li a:hover.icon_general {
     /* Class used for each module link hover state */
-    color: #538200;
-    border-color: #538200;
+    border-color: #418940;
 }
 
 ul.biglinks-list li a.icon_general .fa-fw {
@@ -105,7 +95,7 @@ ul.biglinks-list li a.icon_general .fa-stack-2x {
 }
 
 ul.biglinks-list li a.icon_general .fa-stack-1x {
-    color: #999;
+    color: #ccc;
     font-size: .9em;
     left: -5px;
     top: -1px;
@@ -113,7 +103,7 @@ ul.biglinks-list li a.icon_general .fa-stack-1x {
 
 /* CSS Font Awesome */
 ul.biglinks-list img {
-    width: 35px;
+    max-height: 100%;
 }
 
 /* ==== MODULE LINKS - End ==== */
