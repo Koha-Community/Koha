@@ -290,7 +290,7 @@
 
     <script>
         // Apply DataTables on the results table
-        var table_settings = [% TablesSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
+        var table_settings = [% TablesSettings.GetTableSettings( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
         [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
             [%# Remove the first column if we do not display the checkbox %]
             table_settings['columns'].splice(0, 1);
