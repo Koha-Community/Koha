@@ -111,6 +111,7 @@ sub record {
         my $marcxml_error = $@;
         chomp $marcxml_error;
         unless ($record) {
+            warn $marcxml_error;
             Koha::Exceptions::Metadata::Invalid->throw(
                 id             => $self->id,
                 biblionumber   => $self->biblionumber,

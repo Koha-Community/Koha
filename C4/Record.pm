@@ -460,7 +460,10 @@ sub marcrecord2csv {
     # Getting the record
     my $biblio = Koha::Biblios->find($biblionumber);
     return unless $biblio;
-    my $record = $biblio->metadata->record({ embed_items => 1, itemnumbers => $itemnumbers });
+    my $record = eval {
+        $biblio->metadata->record(
+            { embed_items => 1, itemnumbers => $itemnumbers } );
+    };
     return unless $record;
     # Getting the framework
     my $frameworkcode = $biblio->frameworkcode;

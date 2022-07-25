@@ -127,10 +127,14 @@ sub _get_biblio_for_export {
     return if $@ or not defined $record;
 
     if ($export_items) {
-        C4::Biblio::EmbedItemsInMarcBiblio({
-            marc_record  => $record,
-            biblionumber => $biblionumber,
-            item_numbers => $itemnumbers });
+        Koha::Biblio::Metadata->record(
+            {
+                record       => $record,
+                embed_items  => 1,
+                biblionumber => $biblionumber,
+                item_numbers => $itemnumbers,
+            }
+        );
         if ($only_export_items_for_branches && @$only_export_items_for_branches) {
             my %export_items_for_branches = map { $_ => 1 } @$only_export_items_for_branches;
             my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField( 'items.homebranch' );
