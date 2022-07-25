@@ -85,9 +85,8 @@
 
                     <div class="searchheader" id="searchheader">
                         <div id="selection_ops">
-                            <a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
-                            |
-                            <a href="#" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                            <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                            <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
                             |
                             [% IF Koha.Preference("StaffHighlightedWords") == 1 %]
                                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
@@ -330,11 +329,13 @@
                     </div> <!-- /#searchheader -->
 
                 [% ELSE # /IF total %]
+                    <form method="post" name="fz3950" class="fz3950bigrpad">
+                        <div id="toolbar" class="btn-toolbar" style="background-color:transparent"><div>
+                            <button class="btn btn-default" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
+                        </div></div>
+                    </form>
 
                     <div id="searchheader">
-                        <form method="post" name="fz3950" class="fz3950bigrpad">
-                            <button class="btn btn-default" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
-                        </form>
                         <h3>No results found</h3>
                         [% IF ( searchdesc ) %]
                             <p>
