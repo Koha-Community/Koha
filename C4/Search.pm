@@ -1800,6 +1800,12 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
+
+            unless ( $item->{itemnumber} ) {
+                warn "MARC item without itemnumber retrieved for biblio ($oldbiblio->{biblionumber})";
+                next;
+            }
+
             $item->{description} = $itemtypes{ $item->{itype} }{translated_description} if $item->{itype};
 
             # OPAC hidden items
