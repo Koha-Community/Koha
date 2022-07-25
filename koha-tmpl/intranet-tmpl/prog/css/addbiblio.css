@@ -271,7 +271,7 @@ tbody tr.active td {
 }
 
 .toolbar-tabs-container {
-    margin: 3em -5px -5px -5px;
+    flex-basis: 100%;
 }
 
 .toolbar-tabs {
@@ -294,30 +294,48 @@ tbody tr.active td {
 }
 
 .toolbar-tabs li a {
-    border: 1px solid #EDF4F6;
+    border: 1px solid #71B443;
     border-left: 0;
-    border-right: 1px solid #EDF4F6;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    background-color: #71B443;
+    border-right: 1px solid #71B443;
+    border-radius: 5px;
+    margin: 5px;
     display: block;
+    color: #fff;
     font-weight: bold;
     padding: .3em 1.5em;
     width: 100%;
 }
 
 .toolbar-tabs li.selected a {
-    background-color: #EDF4F6;
-    border-right: 1px solid #C3D6DB;
-    border-bottom: 1px solid #C3D6DB;
+    background-color: #418940;
+    border-right: 1px solid #418940;
+    border-bottom: 1px solid #418940;
+    text-decoration: none;
     font-weight: bold;
+    margin: 5px;
+    display: block;
+    color: #fff;
+    font-weight: bold;
+    padding: .3em 1.5em;
+    width: 100%;
 }
 
 .toolbar-tabs li.selected a:hover {
-    background-color: #EDF4F6;
+    background-color: #418940;
 }
 
 .toolbar-tabs li a:hover {
-    background-color: #F4F8F9;
+    background-color: #418940;
+    text-decoration: none;
+    border-right: 1px solid #418940;
+    border-bottom: 1px solid #418940;
+    margin: 5px;
+    display: block;
+    color: #fff;
+    font-weight: bold;
+    padding: .3em 1.5em;
+    width: 100%;
 }
 
 .toolbar-tabs li:first-child a {
@@ -342,7 +360,7 @@ tbody tr.active td {
     padding: .5em 0;
 }
 
-.tag_anchors a {
+.tag_anchors a, a:hover {
     border-right: 1px solid #EDF4F6;
     display: inline-block;
     padding: 0 .4em;
