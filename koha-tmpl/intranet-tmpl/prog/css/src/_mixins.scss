@@ -8,22 +8,22 @@ $table-odd-row: #F9F9F9;
 $nav-menu-bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5' viewBox='0 0 25 25'%3E%3Cpath fill='%23999' d='M9.66.95h4.56l9.21 11.85-9.21 10.53H9.66l5.08-10.53z'/%3E%3C/svg%3E");
 
 @mixin default-button {
-    background-image: linear-gradient(to bottom, #FFF 0, #E0E0E0 100%);
+    background-color: transparent;
     border-color: #ADADAD #ADADAD #949494;
     border-radius: 4px;
-    border-width: 1px;
-    color: #333333;
+    border: 1px solid #696969;
+    color: #000;
     display: inline-block;
     font-size: inherit;
     line-height: 1.42857143;
-    padding: .3em .8em;
+    padding: .5em 1em;
     text-align: center;
     text-shadow: 0 1px 0 #fff;
     vertical-align: middle;
     white-space: nowrap;
 
-    &:hover {
-        background: #E0E0E0 none;
+    &:active {
+        box-shadow: inset 0 0 2px #2222227F;
     }
 }
 
