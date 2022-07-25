@@ -737,6 +737,7 @@ sub ParsePatronAttributes {
 
     my $delete_candidates = {};
 
+    my $scrubber = C4::Scrubber->new();
     while ( my ( $code, $value ) = $ea->() ) {
         if ( any { $_ eq $code } @editable_attribute_types ) {
             # It is an editable attribute
@@ -746,7 +747,7 @@ sub ParsePatronAttributes {
             }
             else {
                 # we've got a value
-                push @attributes, { code => $code, attribute => $value };
+                push @attributes, { code => $code, attribute => $scrubber->scrub( $value ) };
 
                 # 'code' is no longer a delete candidate
                 delete $delete_candidates->{$code}
