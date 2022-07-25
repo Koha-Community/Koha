@@ -27,6 +27,8 @@ use C4::Items;
 use XML::Simple;
 use C4::Charset;
 
+use Koha::Biblios;
+
 my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
 
@@ -75,7 +77,8 @@ sub add_bib {
             $record->delete_field($field);
         }
         my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, $frameworkcode );
-        my $new_record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $new_record = $biblio->metadata->record;
         if ( $query->url_param('items') ) {
             foreach my $field ( $fullrecord->field($itemtag) ) {
                 my $one_item_record = $new_record->clone();
@@ -84,9 +87,8 @@ sub add_bib {
             }
         }
 
-        $new_record = C4::Biblio::GetMarcBiblio({
-            biblionumber => $biblionumber,
-            embed_items  => scalar $query->url_param('items') });
+        $biblio = Koha::Biblios->find( $biblionumber );
+        $new_record = $biblio->metadata->record({ embed_items => scalar $query->url_param('items') });
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();

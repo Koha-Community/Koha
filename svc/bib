@@ -26,6 +26,7 @@ use C4::Auth qw( check_api_auth );
 use C4::Biblio qw( GetFrameworkCode );
 use C4::Items;
 use XML::Simple;
+use Koha::Biblios;
 
 my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
@@ -65,9 +66,8 @@ exit 0;
 sub fetch_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $record = C4::Biblio::GetMarcBiblio({
-        biblionumber => $biblionumber,
-        embed_items  => scalar $query->param('items') });
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $record = $biblio->metadata->record({ embed_items => scalar $query->param('items') });
     if  (defined $record) {
         print $query->header(-type => 'text/xml',-charset => 'utf-8',);
         print $record->as_xml_record();
@@ -79,7 +79,8 @@ sub fetch_bib {
 sub update_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $old_record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $old_record = $biblio->metadata->record;
     my $frameworkcode = $query->url_param('frameworkcode') // GetFrameworkCode($biblionumber);
     unless  (defined $old_record) {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
@@ -115,9 +116,8 @@ sub update_bib {
         }
 
         C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode );
-        my $new_record = C4::Biblio::GetMarcBiblio({
-            biblionumber => $biblionumber,
-            embed_items  => scalar $query->url_param('items') });
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $new_record = $biblio->metadata->record({ embed_items => scalar $query->url_param('items') });
 
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;

@@ -24,7 +24,6 @@ use Test::Warn;
 use MARC::Record;
 
 use Koha::Database;
-use C4::Biblio qw( GetMarcBiblio );
 use C4::OAI::Sets qw( AddOAISet GetOAISets GetOAISet GetOAISetBySpec ModOAISet ModOAISetMappings GetOAISetsMappings GetOAISetMappings AddOAISetsBiblios GetOAISetsBiblio ModOAISetsBiblios DelOAISet DelOAISetsBiblio UpdateOAISetsBiblio CalcOAISetsBiblio );
 
 use t::lib::TestBuilder;
@@ -551,7 +550,8 @@ my $biblio_VH = $builder->build_sample_biblio({ author => 'Victor Hugo' });
 my $biblionumberVH = $biblio_VH->biblionumber;
 
 #Update
-my $record = GetMarcBiblio({ biblionumber => $biblionumberVH });
+my $biblio = Koha::Biblios->find( $biblionumberVH );
+my $record = $biblio->metadata->record;
 UpdateOAISetsBiblio($biblionumberVH, $record);
 
 #is biblio attached to setVH ?
@@ -595,7 +595,7 @@ subtest 'OAI-PMH:AutoUpdateSetsEmbedItemData' => sub {
     );
 
     #Update
-    my $recordFIC = GetMarcBiblio( { biblionumber => $biblio_FIC->biblionumber } );
+    my $recordFIC = $biblio_FIC->metadata->record;
     UpdateOAISetsBiblio( $biblio_FIC->biblionumber, $recordFIC );
 
     #is biblio attached to setFIC ?
@@ -660,7 +660,8 @@ my $biblio_NotVH = $builder->build_sample_biblio({ author => 'Sponge, Bob' });
 my $biblionumberNotVH = $biblio_NotVH->biblionumber;
 
 #Update
-$record = GetMarcBiblio({ biblionumber => $biblionumberNotVH });
+$biblio = Koha::Biblios->find( $biblionumberNotVH );
+$record = $biblio->metadata->record;
 UpdateOAISetsBiblio($biblionumberNotVH, $record);
 
 my @setsNotEq = CalcOAISetsBiblio($record);
