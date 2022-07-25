@@ -54,6 +54,8 @@
 
         const ERMModule = [% IF Koha.Preference('ERMModule') %]true[% ELSE %]false[% END %];
 
+        const lang = "[% lang || 'en' | html %]";
+
     </script>
 
     [% Asset.js("js/vue/dist/main.js") | $raw %]

@@ -142,6 +142,7 @@ export default {
             vendorStore,
             erm_providers,
             ERMModule,
+            lang,
         }
     },
     data() {
@@ -151,6 +152,7 @@ export default {
     },
     beforeCreate() {
         fetchVendors().then((vendors) => this.vendorStore.vendors = vendors)
+        this.$i18n.locale = this.lang
     },
     components: {
         Breadcrumb,

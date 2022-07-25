@@ -18,8 +18,12 @@ import { useMainStore } from "./stores/main";
 
 import { createI18n } from "vue-i18n";
 
+// FIXME How do we load the locale list?
 import * as en from "./locales/en.json"; // We could async the load here, see https://vue-i18n.intlify.dev/guide/advanced/lazy.html
-const languages = { en };
+import * as de_DE from "./locales/de-DE.json";
+import * as es_ES from "./locales/es-ES.json";
+import * as fr_FR from "./locales/fr-FR.json";
+const languages = { en, "de-DE": de_DE, "es-ES": es_ES, "fr-FR": fr_FR };
 const messages = Object.assign(languages);
 const i18n = createI18n({ locale: "en", messages });
 
@@ -28,7 +32,7 @@ const app = createApp(App)
     .use(router)
     .use(i18n)
     .component("font-awesome-icon", FontAwesomeIcon);
-app.config.unwrapInjectedRef = true
+app.config.unwrapInjectedRef = true;
 app.mount("#erm");
 const mainStore = useMainStore();
 const { removeMessages } = mainStore;
