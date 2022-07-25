@@ -204,29 +204,21 @@
 
                         [% IF Koha.Preference('UnseenRenewals') %]
                             <div class="renew_formfield">
-                                <div>
-                                    <label for="barcode" class="hint">Enter item barcode: </label>
-                                </div>
-                                <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
+                                <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
                             </div>
                             <div class="renew_formfield">
                                 <label for="unseen" class="hint">Record renewal as unseen if appropriate: </label>
                                 <input value="1" name="unseen" id="unseen" type="checkbox" />
                             </div>
                         [% ELSE %]
-                            <div>
-                                <label for="barcode" class="hint">Enter item barcode: </label>
-                            </div>
-
-                            <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
+                            <input name="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
 
                         [% END %]
                         <button type="submit" class="btn btn-default">Submit</button>
 
                         <div class="circ-settings show">
                             <div class="date-select" id="renew_date_override_fields">
-                                <div><label for="hard_due_date" class="hint">Renewal due date [% INCLUDE 'date-format.inc' %]:</label></div>
-                                <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-enable-time="true" />
+                                <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-enable-time="true" placeholder="Renewal due date [% INCLUDE 'date-format.inc' %]" />
                             </div> <!-- /.date-select -->
                         </div>
                     </fieldset>

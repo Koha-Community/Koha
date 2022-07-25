@@ -1076,15 +1076,19 @@
                                 <h1>Check in</h1>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="hint">Enter item barcode:</div>
                                             <div class="form-control-group">
                                                 [% IF ( exemptfine ) %]
-                                                    <input name="barcode" id="barcode" size="14" class="focus input-warning" type="text" />
+                                                    <input name="barcode" id="barcode" size="14" placeholder="Enter item barcode" class="focus input-warning" type="text" />
                                                 [% ELSIF ( dropboxmode ) %]
-                                                    <input name="barcode" id="barcode" size="14" class="barcode focus input-warning" />
+                                                    <input name="barcode" id="barcode" size="14" placeholder="Enter item barcode" class="barcode focus input-warning" />
                                                 [% ELSE %]
-                                                    <input name="barcode" id="barcode" size="14" class="barcode focus" />
+                                                    <input name="barcode" id="barcode" size="14" placeholder="Enter item barcode" class="barcode focus" />
                                                 [% END %]
+
+                                                <div id="show-circ-settings">
+                                                    <a href="#" title="Checkin settings"><i class="fa fa-sliders"></i></a>
+                                                </div>
+
                                                 <button type="submit" class="btn btn-default">Check in</button>
                                                 [% FOREACH inputloo IN inputloop %]
                                                     <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
@@ -1092,9 +1096,6 @@
                                                     <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                                 [% END %]
                                             </div>
-                                        <div id="show-circ-settings">
-                                            <a href="#"><i class="fa circ-settings-icon fa-caret-down"></i> Checkin settings</a>
-                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         [% IF ( exemptfine ) %]

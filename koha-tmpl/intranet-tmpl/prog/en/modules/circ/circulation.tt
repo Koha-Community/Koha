@@ -658,23 +658,21 @@
 
                                         <label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
 
-                                        [% IF Koha.Preference('itemBarcodeFallbackSearch') %]
-                                            <div class="hint">Enter item barcode or keyword:</div>
-                                        [% ELSE %]
-                                            <div class="hint">Enter item barcode:</div>
-                                        [% END %]
-
                                         [% IF NEEDSCONFIRMATION %]
                                             <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
                                         [% ELSE %]
-                                            <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+                                            [% IF Koha.Preference('itemBarcodeFallbackSearch') %]
+                                                <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" placeholder="Enter item barcode or keyword" />
+                                            [% ELSE %]
+                                                <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" placeholder="Enter item barcode" />
+                                            [% END %]
                                         [% END %]
 
-                                        <button type="submit" class="btn btn-default">Check out</button>
-
                                         <div id="show-circ-settings">
-                                            <a href="#"><i class="fa fa-caret-right circ-settings-icon"></i> Checkout settings</a>
+                                            <a href="#" title="Checkout settings"><i class="fa fa-sliders"></i></a>
                                         </div>
+
+                                        <button type="submit" class="btn btn-default">Check out</button>
 
                                         <div class="circ-settings">
 
