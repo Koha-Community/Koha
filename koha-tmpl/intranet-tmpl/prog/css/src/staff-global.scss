@@ -543,19 +543,6 @@ ul {
         }
     }
 
-    .toolbar {
-        padding-left: 0;
-
-        button {
-            padding-bottom: 2px;
-        }
-
-        li {
-            display: inline;
-            list-style: none;
-        }
-    }
-
     &.budget_hierarchy {
         margin-left: 0;
         padding-left: 0;
@@ -1331,44 +1318,6 @@ dd {
     padding: .2em .2em .2em 2.5em;
 }
 
-#toolbar,
-.btn-toolbar {
-    background-color: #EDF4F6;
-    border: 1px solid #E6F0F2;
-    border-radius: 5px 5px 0 0;
-    margin: 0;
-    padding: 5px;
-
-    .dropdown-menu {
-        border-top-width: 1px;
-        font-size: 13px;
-    }
-
-    &.floating {
-        border-radius: 0;
-        margin-top: 0;
-        z-index: 300;
-    }
-
-    a.addtocart {
-        display: block;
-    }
-
-    a.cartRemove {
-        padding: 6px 12px;
-        font-size: 12px;
-        display: none;
-    }
-
-    a.addtocart.incart {
-        display: none;
-    }
-
-    a.cartRemove.incart {
-        display: block;
-    }
-}
-
 #disabled {
     a {
         color: #999;
@@ -1525,18 +1474,6 @@ dd {
 .dropdown-menu {
     li {
         list-style-type: none;
-    }
-}
-
-.btn-toolbar {
-    fieldset {
-        &.action {
-            margin-top: 0;
-        }
-    }
-
-    .dropdown-menu {
-        font-size: 13px;
     }
 }
 
@@ -3296,18 +3233,6 @@ button,
     }
 }
 
-#toolbar {
-    .dropdown-menu {
-        border-top-width: 1px;
-        font-size: 13px;
-    }
-
-    &.floating {
-        border-radius: 0;
-        margin-top: 0;
-    }
-}
-
 #changelanguage {
     background: #FFF none;
     border-top: 1px solid #EEE;
@@ -3638,13 +3563,6 @@ progress {
             padding: .3em;
         }
     }
-}
-
-// Class to be added to toolbar when it starts being fixed at the top of the screen
-
-.floating {
-    box-shadow: 0 3px 2px 0 rgba(0, 0, 0, .5);
-    z-index: 100;
 }
 
 .inline {
@@ -4582,6 +4500,7 @@ div .suggestion_note {
 }
 
 @import "header";
+@import "toolbar";
 
 @media (min-width: 200px) {
 

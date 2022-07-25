@@ -1,0 +1,71 @@
+#toolbar,
+.btn-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    background-color: #f3F4F4;
+    border: 0;
+    border-radius: 5px 5px 0 0;
+    margin: 0;
+
+    .dropdown-menu {
+        border-top-width: 1px;
+        font-size: 13px;
+    }
+
+    &.floating {
+        border-radius: 0;
+        margin-top: 0;
+        box-shadow: 0 3px 2px 0 rgba(0, 0, 0, .5);
+        z-index: 100;
+    }
+
+    a.addtocart {
+        display: block;
+    }
+
+    a.cartRemove {
+        padding: 6px 12px;
+        font-size: 12px;
+        display: none;
+    }
+
+    a.addtocart.incart {
+        display: none;
+    }
+
+    a.cartRemove.incart {
+        display: block;
+    }
+
+    .btn.btn-default {
+        font-weight: normal;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        padding: 6px 12px;
+        box-shadow: none;
+        border-radius: 4px;
+        user-select: none;
+        font-size: 100%;
+        background-color: transparent;
+        border: 0;
+        display: inline-block;
+        color: #696969;
+
+        &:hover, &:focus {
+            text-decoration: none;
+            background-color: #DADADA;
+            color: #696969;
+            padding: 6px 12px;
+        }
+
+        &:active {
+            border: 0;
+        }
+    }
+}
