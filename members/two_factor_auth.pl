@@ -37,7 +37,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-unless ( C4::Context->preference('TwoFactorAuthentication') ) {
+my $TwoFactorAuthentication = C4::Context->preference('TwoFactorAuthentication');
+if ( $TwoFactorAuthentication ne 'enabled' && $TwoFactorAuthentication ne 'enforced' ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }

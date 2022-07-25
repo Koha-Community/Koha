@@ -21,7 +21,7 @@ subtest 'new' => sub {
     plan tests => 10;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 1);
+    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 'enabled');
     t::lib::Mocks::mock_config('encryption_key', 'bad_example');
 
     # Trivial test: no patron, no object
@@ -63,7 +63,7 @@ subtest 'qr_code' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 1);
+    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 'enabled');
     t::lib::Mocks::mock_config('encryption_key', 'bad_example');
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     $patron->encode_secret('you2wont2guess2it'); # this is base32 btw

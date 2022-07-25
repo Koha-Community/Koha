@@ -190,7 +190,7 @@ subtest 'checkauth() tests' => sub {
             $logout = 0;
         }
 
-        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'disabled' );
         $patron->auth_method('password')->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
@@ -203,7 +203,7 @@ subtest 'checkauth() tests' => sub {
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'Second auth not required' );
         logout($cgi);
 
-        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 1 );
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'enabled' );
         t::lib::Mocks::mock_config('encryption_key', '1234tH1s=t&st');
         $patron->auth_method('password')->store;
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
@@ -238,7 +238,7 @@ subtest 'checkauth() tests' => sub {
         is( $userid, $patron->userid, 'Succesful login at the OPAC' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'No second auth required at the OPAC' );
 
-        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 0 );
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'disabled' );
     };
 
     C4::Context->_new_userenv; # For next tests

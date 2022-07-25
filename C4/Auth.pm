@@ -816,7 +816,10 @@ sub checkauth {
 
     my $session;
     my $invalid_otp_token;
-    my $require_2FA = ( C4::Context->preference('TwoFactorAuthentication') && $type ne "opac" ) ? 1 : 0;
+    my $require_2FA =
+      ( $type ne "opac" # Only available for the staff interface
+          && C4::Context->preference('TwoFactorAuthentication') ne "disabled" ) # If "enabled" or "enforced"
+      ? 1 : 0;
 
     # Basic authentication is incompatible with the use of Shibboleth,
     # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
@@ -1267,7 +1270,9 @@ sub checkauth {
         # Auth is completed unless an additional auth is needed
         if ( $require_2FA ) {
             my $patron = Koha::Patrons->find({userid => $userid});
-            if ( $patron->auth_method eq 'two-factor' ) {
+            if ( C4::Context->preference('TwoFactorAuthentication') eq "enforced"
+                || $patron->auth_method eq 'two-factor' )
+            {
                 # Ask for the OTP token
                 $auth_state = 'additional-auth-needed';
                 $session->param('waiting-for-2FA', 1);

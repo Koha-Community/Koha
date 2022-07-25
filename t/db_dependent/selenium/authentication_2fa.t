@@ -55,11 +55,11 @@ SKIP: {
         fill_login_form($s);
         like( $driver->get_title, qr(Koha staff interface), 'Patron with flags superlibrarian should be able to login' );
 
-        C4::Context->set_preference('TwoFactorAuthentication', 0);
+        C4::Context->set_preference('TwoFactorAuthentication', 'disabled');
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         like( $driver->get_title, qr(Error 404), 'Must be redirected to 404 is the pref is off' );
 
-        C4::Context->set_preference('TwoFactorAuthentication', 1);
+        C4::Context->set_preference('TwoFactorAuthentication', 'enabled');
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         like( $driver->get_title, qr(Two-factor authentication), 'Must be on the page with the pref on' );
 
