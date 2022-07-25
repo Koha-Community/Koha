@@ -61,7 +61,7 @@ if ($uri && ($biblionumber || $itemnumber) ) {
     }
 
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record;
+    my $record = eval{ $biblio->metadata->record };
     my $marc_urls = $record ? C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour')) : [];
     my $search_crit = { uri => { -like => "%$uri%" } };
     if( $itemnumber ) { # itemnumber is leading over biblionumber
