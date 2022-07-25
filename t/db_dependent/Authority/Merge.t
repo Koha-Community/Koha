@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Getopt::Long;
 use MARC::Record;
@@ -21,7 +21,7 @@ use Koha::Biblios;
 use Koha::Database;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority compare_fields DelAuthority ));
+        use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority compare_fields DelAuthority ModAuthority ));
 }
 
 # Optionally change marc flavour
@@ -203,6 +203,86 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     @linkedrecords = ( $biblionumber );
     my $retval = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid2, MARCto => $auth2 });
     is( $retval, 1, 'We touched only one biblio' );
+
+    # Get new marc record for compares
+    my $newbiblio = Koha::Biblios->find($biblionumber)->metadata->record;
+    compare_fields( $oldbiblio, $newbiblio, {}, 'count' );
+    # Exclude 109/609 and 112/612 in comparing order
+    my $excl = { '109' => 1, '112' => 1, '609' => 1, '612' => 1 };
+    compare_fields( $oldbiblio, $newbiblio, $excl, 'order' );
+    # Check position of 612s in the new record
+    my $full_order = join q/,/, map { $_->tag } $newbiblio->fields;
+    is( $full_order =~ /611(,612){3}/, 1, 'Check position of all 612s' );
+
+    # Check some fields
+    is( $newbiblio->field('003')->data,
+        $oldbiblio->field('003')->data,
+        'Check contents of a control field not expected to be touched' );
+    is( $newbiblio->subfield( '245', 'a' ),
+        $oldbiblio->subfield( '245', 'a' ),
+        'Check contents of a data field not expected to be touched' );
+    is( $newbiblio->subfield( '112', 'a' ),
+        $auth2->subfield( '112', 'a' ), 'Check modified 112a' );
+    is( $newbiblio->subfield( '112', 'c' ),
+        $auth2->subfield( '112', 'c' ), 'Check new 112c' );
+
+    # Check 112b; this subfield was cleared when moving from 109 to 112
+    # Note that this fix only applies to the current loose mode only
+    is( $newbiblio->subfield( '112', 'b' ), undef,
+        'Merge respects a cleared subfield in loose mode' );
+
+    # Check the original 612
+    is( ( $newbiblio->field('612') )[0]->subfield( 'a' ),
+        $oldbiblio->subfield( '612', 'a' ), 'Check untouched 612a' );
+    # Check second 612
+    is( ( $newbiblio->field('612') )[1]->subfield( 'a' ),
+        $auth2->subfield( '112', 'a' ), 'Check second touched 612a' );
+    # Check second new 612ax (in LOOSE mode)
+    is( ( $newbiblio->field('612') )[2]->subfield( 'a' ),
+        $auth2->subfield( '112', 'a' ), 'Check touched 612a' );
+    is( ( $newbiblio->field('612') )[2]->subfield( 'x' ),
+        ( $oldbiblio->field('609') )[1]->subfield('x'),
+        'Check 612x' );
+};
+
+subtest 'Test update A with modified heading tag (changing authtype)' => sub {
+# Bug 19693
+# This would happen rarely when updating authorities from authority file
+# when the tag of a heading field is being changed (and thus also
+# the authtype)
+    plan tests => 13;
+
+    # Get back to loose mode now
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
+
+    # create an auth rec
+    my $auth1 = MARC::Record->new;
+    $auth1->append_fields( MARC::Field->new( '109', '0', '0', 'a' => 'George Orwell', b => 'bb' ));
+    my $authid1 = AddAuthority( $auth1, undef, $authtype1 );
+
+    # create a biblio with one 109 and two 609s to be touched
+    # seems exceptional see bug 13760 comment10
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '003', 'some_003' ),
+        MARC::Field->new( '109', '', '', a => 'G. Orwell', b => 'bb', d => 'd', 9 => $authid1 ),
+        MARC::Field->new( '245', '', '', a => 'My title' ),
+        MARC::Field->new( '609', '', '', a => 'Orwell', 9 => "$authid1" ),
+        MARC::Field->new( '609', '', '', a => 'Orwell', x => 'xx', 9 => "$authid1" ),
+        MARC::Field->new( '611', '', '', a => 'Added for testing order' ),
+        MARC::Field->new( '612', '', '', a => 'unrelated', 9 => 'other' ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $marc, '' );
+    my $oldbiblio = Koha::Biblios->find($biblionumber)->metadata->record;
+
+    # Time to merge
+    @linkedrecords = ( $biblionumber );
+    my $auth2 = MARC::Record->new;
+    $auth2->append_fields( MARC::Field->new( '112', '0', '0', 'a' => 'Batman', c => 'cc' ));
+    my $authid2 = ModAuthority($authid1, $auth2, $authtype2 );
+    # inside ModAuthority the following is executed:
+    # merge({ mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth2 });
+    is( $authid2, $authid1, 'authid after ModAuthority OK' );
 
     # Get new marc record for compares
     my $newbiblio = Koha::Biblios->find($biblionumber)->metadata->record;
