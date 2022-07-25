@@ -53,12 +53,9 @@
                 <div id="advanced-search">
                     <input type="hidden" name="advsearch" value="1"/>
                     <h1>Advanced search</h1>
-                    <p>
-                        <a href="/cgi-bin/koha/catalogue/itemsearch.pl">Go to item search</a>
-                        [% IF searchid %]
-                            <div id="previous_search_link"></div>
-                        [% END %]
-                    </p>
+                    [% IF searchid %]
+                        <div id="previous_search_link"></div>
+                    [% END %]
 
                     <!-- SEARCH BUTTONS -->
                     <div id="toolbar" class="btn-toolbar">
@@ -76,6 +73,9 @@
                             [% END %]
                             <div class="btn-group">
                                 <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+                            </div>
+                            <div class="btn-group">
+                                <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-default"><i class="fa fa-search"></i> Go to item search</a>
                             </div>
                         </fieldset> <!-- /.action -->
                     </div> <!-- /#toolbar -->
