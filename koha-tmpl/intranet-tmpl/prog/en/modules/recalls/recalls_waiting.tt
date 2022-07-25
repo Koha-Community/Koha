@@ -8,11 +8,12 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_recalls_awaiting_pickup" class="circ">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
 <div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
     &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
     &rsaquo; <a href="/cgi-bin/koha/recalls/recalls_waiting.pl">Recalls awaiting pickup</a>
 </div>

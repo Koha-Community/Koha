@@ -26,6 +26,7 @@ our @tt_directives = (
     qr{^\s*STOP},
     qr{^\s*NEXT},
     qr{^\s*LAST},
+    qr{^\s*WRAPPER},
 );
 
 our @tt_methods = (

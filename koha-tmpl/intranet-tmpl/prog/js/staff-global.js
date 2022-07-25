@@ -69,6 +69,16 @@ $(document).ready(function() {
 
     $("#header_search > ul > li").show();
 
+    $('#header_search .form-extra-content-toggle').on('click', function () {
+        const extraContent = $(this).closest('form').find('.form-extra-content');
+        console.log(extraContent);
+        if (extraContent.is(':visible')) {
+            extraContent.hide();
+        } else {
+            extraContent.show();
+        }
+    });
+
     $(".focus").focus();
     $(".validated").each(function() {
         $(this).validate();
@@ -116,11 +126,10 @@ $(document).ready(function() {
 
     if ( localStorage.getItem("lastborrowernumber") ){
         if( $("#hiddenborrowernumber").val() != localStorage.getItem("lastborrowernumber") ) {
-            $("#lastborrower-window").detach().appendTo("#breadcrumbs");
             $("#lastborrowerlink").show();
             $("#lastborrowerlink").prop("title", localStorage.getItem("lastborrowername") + " (" + localStorage.getItem("lastborrowercard") + ")");
             $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + localStorage.getItem("lastborrowernumber"));
-            $("#lastborrower-window").css("display", "inline-block");
+            $("#lastborrower-window").css("display", "inline-flex");
         }
     }
 

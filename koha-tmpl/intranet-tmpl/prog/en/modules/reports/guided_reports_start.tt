@@ -63,13 +63,15 @@
 </head>
 
 <body id="rep_guided_reports_start" class="rep">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'circ-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
@@ -146,6 +148,7 @@
         [% END %]
     </ol>
 </nav> <!-- /#breadcrumbs -->
+[% END %]
 
 <div id="update_sql" class="modal" tabindex="-1" role="dialog" aria-labelledby="update_sql_label" aria-hidden="true">
     <div class="modal-dialog">

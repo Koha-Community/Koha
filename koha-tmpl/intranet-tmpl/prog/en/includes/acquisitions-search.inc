@@ -1,32 +1,48 @@
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Acquisitions Resident Search Box -->
-<div id="header_search">
-<div id="supplier_search" class="residentsearch">
-    <label class="tip" for="supplier">Search vendors:</label>
-        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-           <input type="text" size="25" name="supplier" id="supplier" class="focus" />
-            <input type="submit" class="submit" value="Submit" /></form>
-</div>
-    <div id="orders_search" class="residentsearch">
-	<p class="tip">Search orders:</p>
+<!-- Begin Acquisitions Resident Search Box -->
 
-		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
-        <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title | html %]" />
-        <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name | html %]" />
-        <input type="hidden" id="do_search" name="do_search" value="do" />
-        <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[-]</a></span>
-        <span class="filteraction" id="filteraction_on"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[+]</a></span>
-    <input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a>
-    <p id="filters" style="display:none">
-      <label for="basket">Basket: </label><input type="text" name="basket" id="basket" />
-      <label for="booksellerinvoicenumber">Invoice number: </label><input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
-    </p>
-	</form>
+<div id="header_search" class="navbar-form navbar-left">
+    <div id="supplier_search" class="residentsearch">
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+            <span class="form-title">
+                <label class="control-label">Vendor search</label>
+            </span>
+            <span class="form-content">
+                <input type="text" name="supplier" id="supplier" class="head-searchbox form-control" placeholder="Search vendors" />
+            </span>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+        </form>
     </div>
-			<ul id="tabtriggers">
-            <li><a href="#supplier_search">Vendor search</a></li>
-            <li><a href="#orders_search">Orders search</a></li>
-            </ul>
+
+    <div id="orders_search" class="residentsearch">
+        <form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+            <span class="form-title">
+                <label class="control-label">Orders search</label>
+            </span>
+            <span class="form-content">
+                <input type="text" id="title" class="form-control" placeholder="Title" name="title" size="13" value="[% title | html %]" />
+                <input type="text" id="searchsupplier" class="form-control" placeholder="Vendor" name="name" size="13" value="[% name | html %]" />
+                <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+                <input type="hidden" id="do_search" name="do_search" value="do" />
+            </span>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+
+            <div class="form-extra-content">
+                <div>
+                    <label for="basket" class="control-label">Basket</label>
+                    <input type="text" class="form-control" placeholder="Basket" name="basket" id="basket" />
+                </div>
+                <div>
+                    <label for="booksellerinvoicenumber" class="control-label">Basket</label>
+                    <input type="text" class="form-control" placeholder="Invoice number" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ul>
+        <li><a title="Vendor search" href="#supplier_search"><i class="fa fa-upload"></i></a></li>
+        <li><a title="Orders search" href="#orders_search"><i class="fa fa-download"></i></a></li>
+    </ul>
 </div><!-- /header_search -->
-</div><!-- /gradient -->
-<!-- End Acquisitions Resident Search Box -->
+
+<!-- End Main page Resident Search Box -->

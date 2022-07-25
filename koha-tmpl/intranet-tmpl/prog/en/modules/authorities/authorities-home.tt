@@ -5,13 +5,15 @@
 </head>
 
 <body id="auth_authorities_home" class="auth">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'authorities-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'authorities-search.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="#" aria-current="page">
@@ -20,6 +22,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
 <div class="main container-fluid">
     <div class="row">

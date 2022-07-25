@@ -10,13 +10,15 @@
 
 <body id="catalogue_search-history" class="catalogue">
 
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
@@ -28,6 +30,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
 <div class="container-fluid">
     <div class="row">

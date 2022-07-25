@@ -12,13 +12,15 @@
 </head>
 
 <body id="pat_mancredit" class="pat">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'patron-search-header.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'patron-search-header.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
@@ -30,6 +32,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
 <div class="main container-fluid">
     <div class="row">

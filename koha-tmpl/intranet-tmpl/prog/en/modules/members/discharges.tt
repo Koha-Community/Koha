@@ -8,9 +8,11 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_discharges" class="pat">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'patron-search-header.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'patron-search-header.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
@@ -26,6 +28,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
     <div class="main container-fluid">
         <div class="row">

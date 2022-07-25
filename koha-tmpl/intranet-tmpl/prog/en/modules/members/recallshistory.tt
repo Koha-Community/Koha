@@ -9,11 +9,12 @@
 </head>
 
 <body id="recalls_history" class="pat">
-    [% INCLUDE 'header.inc' %]
-    [% INCLUDE 'patron-search-header.inc' %]
+    [% WRAPPER 'header.inc' %]
+        [% INCLUDE 'patron-search-header.inc' %]
+    [% END %]
 
     <div id="breadcrumbs">
-        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a> &rsaquo;
         <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
         Recalls history for [% INCLUDE 'patron-title.inc' %]
     </div>

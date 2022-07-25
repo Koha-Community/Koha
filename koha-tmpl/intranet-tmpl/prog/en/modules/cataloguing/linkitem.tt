@@ -1,15 +1,18 @@
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Link to host record &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_linkitem" class="catalog">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
@@ -21,6 +24,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
 <div class="container-fluid">
     <div class="row">

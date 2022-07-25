@@ -1,23 +1,27 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName|html %]</a></div><!-- Begin Desks Resident Search Box -->
-<div id="header_search">
-        <div id="desk_search" class="residentsearch">
+<div id="header_search" class="navbar-form navbar-left">
+    <div id="desk_search" class="residentsearch">
         <form action="[% script_name|html %]" method="post">
-            <label class="tip" for="desk_name">Desk search:</label>
-        <input class="head-searchbox" type="text" name="desk_name" id="desk_name" value="[% searchfield|html %]" size="40" />
-                <input type="submit" name="submit" value="OK" class="submit" />
+            <span class="form-title">
+                <label class="control-label">Search desks</label>
+            </span>
+
+            <span class="form-content">
+                <input class="head-searchbox form-control" type="text" name="desk_name" placeholder="Search desks" id="desk_name" value="[% searchfield|html %]" size="40" />
+            </span>
+
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
-        </div>
+    </div>
 
     [% INCLUDE 'patron-search-box.inc' %]
+
     [% INCLUDE 'catalogue-search-box.inc' %]
 
-                        <ul>
-            <li><a class="keep_text" href="#desk_search">Search desks</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-                        </ul>
-</div>
+    <ul>
+        <li><a title="Search desks" href="#desk_search"><i class="fa fa-desktop"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
 </div>
 <!-- End Desks Resident Search Box -->

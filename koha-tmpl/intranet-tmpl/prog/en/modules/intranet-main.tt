@@ -9,17 +9,21 @@
 [% Asset.css("css/mainpage.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body id="main_intranet-main" class="intranet-main">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'home-search.inc' %]
 
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="#" aria-current="page">Home</a>
-        </li>
-    </ol>
-</nav>
+<body id="main_intranet-main" class="intranet-main">
+    [% WRAPPER 'header.inc' %]
+        [% INCLUDE 'home-search.inc' %]
+    [% END %]
+
+    [% WRAPPER 'sub-header.inc' %]
+        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+            <ol>
+                <li>
+                    <a href="/cgi-bin/koha/mainpage.pl" aria-current="page"><i class="fa fa-home"></i></a>
+                </li>
+            </ol>
+        </nav>
+    [% END %]
 
     <div id="container-main" class="container-fluid">
         <div class="row">

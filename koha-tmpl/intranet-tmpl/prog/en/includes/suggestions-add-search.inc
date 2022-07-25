@@ -1,26 +1,31 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Suggestions Resident Search Box -->
-<div id="header_search">
-	<div id="suggestions_search" class="residentsearch">
-    <p class="tip">Suggestions search:</p>
-	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
-    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="[% title | html %]" />
-    <label for="searchauthor">Author:</label> <input type="text" id="searchauthor" name="author" size="10" value="[% author | html %]" />
-    <label for="searchpublishercode">Publisher:</label> <input type="text" id="searchpublishercode" name="publishercode" size="10" value="[% publishercode | html %]" />
-    <input type="submit" class="submit" value="Search" />
+<div id="header_search" class="navbar-form navbar-left">
+
+    <div id="suggestions_search" class="residentsearch">
+        <form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+            <span class="form-title">
+                <label class="control-label">Search suggestions</label>
+            </span>
+
+            <span class="form-content">
+                <input type="text" id="searchtitle" class="head-searchbox form-control" placeholder="Title" name="title" size="10" value="[% title | html %]" />
+                <input type="text" id="searchauthor" class="head-searchbox form-control" placeholder="Author"  name="author" size="10" value="[% author | html %]" />
+                <input type="text" class="head-searchbox form-control" placeholder="Publisher" id="searchpublishercode" name="publishercode" size="10" value="[% publishercode | html %]" />
+            </span>
+
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
         </form>
-	</div>
+    </div>
 
     [% INCLUDE 'patron-search-box.inc' %]
+
     [% INCLUDE 'catalogue-search-box.inc' %]
 
-			<ul>
-            <li><a href="#suggestions_search">Search suggestions</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-            </ul>
+    <ul>
+        <li><a title="Search suggestions" href="#suggestions_search"><i class="fa fa-comment-o"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
 </div>
-</div><!-- /gradient -->
 <!-- End Suggestions Resident Search Box -->

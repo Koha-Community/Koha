@@ -1,43 +1,35 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Cataloging Resident Search Box -->
-    <div id="header_search">
-        <div id="addbooks_search" class="residentsearch">
-            <form name="search" action="addbooks.pl">
-                <label class="tip" for="cat_search">Search the catalog and the reservoir:</label>
-                <input class="head-searchbox" type="text" name="q" id="cat_search" size="40" />
-                <input type="submit" class="submit" value="Submit" />
-            </form>
-        </div>
+[% PROCESS 'html_helpers.inc' %]
+[% PROCESS 'patronfields.inc' %]
+<!-- Begin Patrons Resident Search Box -->
 
-        [% INCLUDE 'patron-search-box.inc' %]
+<div id="header_search" class="navbar-form navbar-left">
 
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-        <div id="checkin_search" class="residentsearch">
-            <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
-                <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
-                <input class="head-searchbox" type="text" name="barcode" id="ret_barcode" size="40" />
-                <input value="Submit" class="submit" type="submit" />
-            </form>
-        </div>
-        <div id="renew_search" class="residentsearch">
-            <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
-                <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
-                <input class="head-searchbox" type="text" name="barcode" id="ren_barcode" size="40" />
-                <input value="Submit" class="submit" type="submit" />
-            </form>
-        </div>
-        [% END %]
+    <div id="addbooks_search" class="residentsearch">
+        <form name="search" action="addbooks.pl">
+            <span class="form-title">
+                <label class="control-label">Cataloging search</label>
+            </span>
 
-        [% INCLUDE 'catalogue-search-box.inc' %]
+            <span class="form-content">
+                <input class="head-searchbox form-control" type="text" name="q" id="cat_search" placeholder="Search the catalog and the reservoir" size="40" />
+            </span>
 
-        <ul>
-            <li><a class="keep_text" href="#addbooks_search">Cataloging search</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#checkin_search">Check in</a></li>[% END %]
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#renew_search">Renew</a></li>[% END %]
-            <li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>
-        </ul>
-    </div><!-- /header_search -->
-</div><!-- /gradient -->
-<!-- End Cataloging Resident Search Box -->
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+        </form>
+    </div>
+
+    [% INCLUDE 'patron-search-box.inc' %]
+    [% INCLUDE 'checkin-search-box.inc' %]
+    [% INCLUDE 'renew-search-box.inc' %]
+    [% INCLUDE 'catalogue-search-box.inc' %]
+
+    <ul>
+        <li><a title="Cataloging search" href="#addbooks_search"><i class="fa fa-fw fa-search"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search"><i class="fa fa-download"></i></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search"><i class="fa fa-retweet"></i></a></li>[% END %]
+        <li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>
+    </ul>
+</div><!-- /header_search -->
+<!-- End Main page Resident Search Box -->

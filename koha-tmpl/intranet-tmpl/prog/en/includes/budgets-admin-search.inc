@@ -1,41 +1,43 @@
 [% USE Koha %]
 [% USE Branches %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Fund Admin Resident Search Box -->
+<div id="header_search" class="navbar-form navbar-left">
 
-    <div id="header_search">
-        <div id="budgets_search" class="residentsearch">
-            <p class="tip">Search funds:</p>
-            <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
-                <label for="filter_budgetname">Fund code: </label><input class="query" type="text" name="filter_budgetname" id="filter_budgetname" size="20" value="[% filter_budgetname | html %]" />
-                <label for="filter_budgetbranch">Library: </label>
-                <select name="filter_budgetbranch" id="filter_budgetbranch" style="width:10em;">
-                    <option value=""></option>
-                        [% FOREACH branchloo IN Branches.all( selected => selected_branchcode ) %]
-                            [% IF branchloo.selected %]
+    <div id="budgets_search" class="residentsearch">
+        <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
+            <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+
+            <span class="form-title">
+                <label class="control-label">Search funds</label>
+            </span>
+
+            <span class="form-content">
+                <select name="filter_budgetbranch" id="filter_budgetbranch" class="form-control">
+                    <option value="">All libraries</option>
+                    [% FOREACH branchloo IN Branches.all( selected => selected_branchcode ) %]
+                        [% IF branchloo.selected %]
                             <option value="[% branchloo.branchcode | html %]" selected="selected">[% branchloo.branchname | html %]</option>
-                            [% ELSE %]
+                        [% ELSE %]
                             <option value="[% branchloo.branchcode | html %]" >[% branchloo.branchname | html %]</option>
-                            [% END %]
                         [% END %]
+                    [% END %]
                 </select>
-              <input type="hidden"  name="budget_period_id" value="[% budget_period_id | html %]" />
-              <input type="submit" class="submit" name="filter" value="Submit" />
-            </form>
-        </div>
 
-        [% INCLUDE 'patron-search-box.inc' %]
-        [% INCLUDE 'catalogue-search-box.inc' %]
+                <input class="query form-control" type="text" name="filter_budgetname" id="filter_budgetname" value="[% filter_budgetname | html %]" placeholder="Search funds" />
+            </span>
 
-        <ul>
-            <li><a class="keep_text" href="#budgets_search">Search funds</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                <li><a class="keep_text" href="#circ_search">Check out</a></li>
-            [% END %]
-            [% IF ( CAN_user_catalogue ) %]
-                <li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>
-            [% END %]
-        </ul>
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+        </form>
     </div>
-</div>
+
+    [% INCLUDE 'patron-search-box.inc' %]
+
+    [% INCLUDE 'catalogue-search-box.inc' %]
+
+    <ul>
+        <li><a title="Search funds" href="#budgets_search"><i class="fa fa-credit-card"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
+</div><!-- /header_search -->
+
 <!-- End Suggestions Resident Search Box -->

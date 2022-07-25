@@ -1,34 +1,28 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Patrons Admin Resident Search Box -->
-<div id="header_search">
-	<div id="patron_category_search" class="residentsearch">
-	<form action="[% script_name | html %]" method="post">
-        <label class="tip" for="description">Search by patron category name:</label>
-        <input class="head-searchbox" type="text" name="description" size="40" value="[% searchfield | html %]" />
-		<input type="submit" class="submit" name="search" value="Search" />
-	</form>	
-	</div>
-    [% INCLUDE 'patron-search-box.inc' %]
-	[% IF ( CAN_user_catalogue ) %]
-    <div id="catalog_search" class="residentsearch">
-		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-            [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                <label class="tip" for="search-form">Enter search keywords:</label>
-                [% INCLUDE 'search_indexes.inc' %]
-            [% ELSE %]
-                <label class="tip" for="search-form">Enter search keywords:</label>
-            [% END %]
-            <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
-				<input type="submit" value="Submit"  class="submit" />
-		</form>
-	</div>[% END %]
+<div id="header_search" class="navbar-form navbar-left">
 
-	<ul>
-            <li><a class="keep_text" href="#patron_category_search">Search patron categories</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-			</ul>	
-</div>
+    <div id="patron_category_search" class="residentsearch">
+        <form action="[% script_name | html %]" method="post">
+            <span class="form-title">
+                <label class="control-label">Search patron categories</label>
+            </span>
+
+            <span class="form-content">
+                <input class="head-searchbox form-control" type="text" name="description" value="[% searchfield | html %]" placeholder="Search by patron category name" />
+            </span>
+
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+        </form>
+    </div>
+
+    [% INCLUDE 'patron-search-box.inc' %]
+
+    [% INCLUDE 'catalogue-search-box.inc' %]
+
+    <ul>
+        <li><a title="Search patron categories" href="#patron_category_search"><i class="fa fa-fw fa-id-card-o"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
 </div>
 <!-- End Patrons Admin Resident Search Box -->

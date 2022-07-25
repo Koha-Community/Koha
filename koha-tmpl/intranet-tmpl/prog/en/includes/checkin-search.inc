@@ -1,26 +1,17 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Checkin Resident Search Box -->
-<div id="header_search">
-[% INCLUDE 'patron-search-box.inc' %]
+<!-- Begin Main page Resident Search Box -->
 
-[% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-<div id="renew_search" class="residentsearch">
-    <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
-        <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
-        <input class="head-searchbox" type="text" name="barcode" id="ren_barcode" size="40" />
-        <input value="Submit" class="submit" type="submit" />
-    </form>
-</div>
-[% END %]
+<div id="header_search" class="navbar-form navbar-left">
 
-[% INCLUDE 'catalogue-search-box.inc' %]
-<ul>
-    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#renew_search">Renew</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-</ul>   
+    [% INCLUDE 'patron-search-box.inc' %]
+    [% INCLUDE 'renew-search-box.inc' %]
+    [% INCLUDE 'catalogue-search-box.inc' %]
 
-</div>
-</div><!-- /gradient -->
-<!-- End Checkin Resident Search Box -->
+    <ul>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search"><i class="fa fa-retweet"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
+</div><!-- /header_search -->
+<!-- End Main page Resident Search Box -->
+

@@ -5,10 +5,12 @@
 [% USE Koha %]
 <nav class="navbar">
     <div class="navbar-header">
-        <a href="#" class="header-menu-link collapsed" data-toggle="collapse" data-target="#header" aria-expanded="false" aria-controls="header">
+        <a href="#" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header" aria-expanded="false" aria-controls="header">
             <i class="fa fa-bars"></i> Menu
         </a>
+        <a id="logo" class="navbar-brand" href="/cgi-bin/koha/mainpage.pl"><img src="[% interface | html %]/[% theme | html %]/img/picto-koha.svg" alt="Koha"></a>
     </div>
+
     <div id="header" class="navbar-collapse collapse">
         <ul id="toplevelmenu" class="nav navbar-nav">
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
@@ -23,11 +25,6 @@
                     <li><a href="/cgi-bin/koha/catalogue/itemsearch.pl">Item search</a></li>[% END %]
                 </ul>
             </li>
-            [% IF ( Koha.Preference('intranetbookbag') ) %]
-                <li>
-                    <a href="#" id="cartmenulink"><i class="fa fa-shopping-cart"></i>Cart<span id="basketcount"></span></a>
-                </li>
-            [% END %]
             [% Koha.Preference('IntranetNav') | $raw %]
             <li class="dropdown">
                 <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
@@ -68,7 +65,17 @@
                 </ul>
             </li>
         </ul>
-    </div>
+
+        [% content | $raw %]
+
+        <ul class="nav navbar-nav">
+            [% IF ( Koha.Preference('intranetbookbag') ) %]
+            <li>
+                <a href="#" id="cartmenulink"><i class="fa fa-shopping-cart"></i><span id="basketcount"></span></a>
+            </li>
+            [% END %]
+        </ul>
+
         <ul id="user-menu" class="nav navbar-nav navbar-right">
             [% IF ( loggedinusername ) %]
             <li class="dropdown">
@@ -79,7 +86,7 @@
                     <span id="logged-in-info-full">
                         [% SET is_superlibrarian = CAN_user_superlibrarian ? 'is_superlibrarian' : '' %]
                         <span class="loggedinusername [% is_superlibrarian | html %]">[% logged_in_user.userid | html %]</span>
-                        <span class="separator">|</span>
+
                         [% IF ( AutoLocation ) %]
                             <brand>
                                 [% Branches.GetLoggedInBranchname | html %]
@@ -198,21 +205,19 @@
                 </ul>
             </li>
             [% INCLUDE 'langmenu-staff-top.inc' %]
-            <li>
-                <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper"><i class="fa fa-question-circle"></i> <span>Help</span></a>
-            </li>
+
             [% ELSE %]
             <li class="loggedout">
                 <span>
                     <a href="/cgi-bin/koha/mainpage.pl" id="login">Log in</a>
                     <span class="separator">|</span>
-                    <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper"><i class="fa fa-question-circle"></i> <span>Help</span></a>
                 </span>
             </li>
             [% END %]
         </ul>
+    </div>
 
-    [% IF Koha.Preference('showLastPatron') %][% INCLUDE 'last-borrower.inc' %][% END %]
+
     [% IF ( Koha.Preference('intranetbookbag') ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 
 </nav>

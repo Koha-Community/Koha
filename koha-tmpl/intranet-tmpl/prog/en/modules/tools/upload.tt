@@ -21,10 +21,11 @@
 [% END %]
 
 [% BLOCK breadcrumbs %]
+    [% WRAPPER 'sub-header.inc' %]
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
             <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+                <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
             </li>
             <li>
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
@@ -43,6 +44,7 @@
             </li>
         </ol>
     </nav>
+    [% END %]
 [% END %]
 
 [% BLOCK form_new %]

@@ -5,13 +5,15 @@
 </head>
 
 <body id="plugins_plugins_disabled" class="plugins">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'circ-search.inc' %]
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+[% END %]
 
+[% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
     <ol>
         <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+            <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
         </li>
         <li>
             <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
@@ -23,6 +25,7 @@
         </li>
     </ol>
 </nav>
+[% END %]
 
     <div class="container-fluid">
         <div class="row">

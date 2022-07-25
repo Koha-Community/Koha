@@ -1,34 +1,18 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Circulation Resident Search Box -->
+<!-- Begin Main page Resident Search Box -->
 
-<div id="header_search">
+<div id="header_search" class="navbar-form navbar-left">
+
     [% INCLUDE 'patron-search-box.inc' %]
-[% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-<div id="checkin_search" class="residentsearch">
-    <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
-        <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
-        <input class="head-searchbox" name="barcode" id="ret_barcode" size="40" accesskey="r" type="text" />
-        <input value="Submit" class="submit" type="submit" />
-    </form>
-</div>
-<div id="renew_search" class="residentsearch">
-    <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
-        <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
-        <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" type="text" />
-        <input value="Submit" class="submit" type="submit" />
-    </form>
-</div>
-[% END %]
+    [% INCLUDE 'checkin-search-box.inc' %]
+    [% INCLUDE 'renew-search-box.inc' %]
     [% INCLUDE 'catalogue-search-box.inc' %]
 
-<ul>
-    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#checkin_search">Check in</a></li>[% END %]
-    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#renew_search">Renew</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-</ul>   
-
-</div><!-- /header_search -->
-</div><!-- /gradient -->
-<!-- End Circulation Resident Search Box -->
+    <ul>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search"><i class="fa fa-download"></i></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search"><i class="fa fa-retweet"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
+</div>
+<!-- End Main page Resident Search Box -->

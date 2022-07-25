@@ -1,0 +1,245 @@
+#header {
+    .navbar-nav li a {
+        line-height: 40px;
+        overflow: hidden;
+        color: #FFFFFF;
+
+        &:hover, &:active {
+            border-bottom: 1px 5px #FFFFFF;
+        }
+    }
+
+    .dropdown-menu {
+        background-color: rgb(53, 44, 46);
+
+        li a {
+            &:hover, &:focus {
+                background-color: transparent;
+                text-decoration: underline;
+            }
+        }
+    }
+
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 80%;
+    }
+}
+
+#toplevelmenu {
+    background-color: transparent;
+    box-shadow: none;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+#header_search {
+    border-radius: 28px;
+    display: flex;
+
+    .residentsearch {
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+        display: none;
+
+        &:first-of-type {
+            display: block;
+        }
+    }
+
+    > ul {
+        padding: 0;
+        margin: 0;
+        order: -1;
+        border-radius: 16px 0 0 16px;
+        padding-left: 16px;
+        background-color: #418940;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        color: white;
+
+        li {
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+
+            background-color: transparent;
+            border: 0;
+            border-bottom-width: 0;
+            padding-bottom: 0;
+            margin: 0;
+
+            a {
+                color: #FFF;
+                font-size: .9em;
+                padding: 0 .5em;
+            }
+        }
+    }
+    .ui-state-hover, .ui-state-active {
+        a {
+            i {
+                border-bottom: 2px solid #FFFFFF;
+                padding-bottom: 2px;
+            }
+        }
+    }
+
+    form {
+        display: flex;
+        position: relative;
+    }
+
+    .form-title {
+        padding: 0 .8em;
+        background-image: linear-gradient(to right, #418940, #71B443);
+        border-radius: 0 16px 16px 0;
+        display: flex;
+        align-items: center;
+        z-index: 2;
+        white-space: nowrap;
+
+        label {
+            color: white;
+            font-weight: bold;
+        }
+    }
+
+    .form-content {
+        background-color: white;
+        margin-left: -16px;
+        padding-left: 16px;
+        border-radius: 0 16px 16px 0;
+        position: relative;
+        z-index: 1;
+        white-space: nowrap;
+        display: flex;
+
+        input[type="text"] {
+            border: 0;
+            box-shadow: unset;
+            background-color: transparent;
+        }
+
+        select {
+            margin: 0;
+            background-color: transparent;
+            border: 0;
+            box-shadow: unset;
+            max-width: 15em;
+        }
+    }
+
+    .form-extra-content {
+        left: 0;
+        right: 0;
+        position: absolute;
+        top: 31px;
+        background-color: #352C2E;
+        padding: 1em;
+        border-radius: 0 0 16px 16px;
+        z-index: 1;
+        display: none;
+
+        label {
+            color: white;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    .form-extra-content-toggle {
+        opacity: .5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    input[type="submit"], button[type="submit"] {
+        height: 31px;
+        background-color: #71B443;
+        color: white;
+        border: 0;
+        text-shadow: unset;
+        border-radius: 0 16px 16px 0;
+        margin-left: -16px;
+        padding-left: calc(16px + .5em);
+    }
+
+    input[type="button"], button {
+        height: 31px;
+        border: 0;
+        text-shadow: unset;
+
+        &:active {
+            box-shadow: unset;
+        }
+    }
+}
+
+#logged-in-menu {
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 50px;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.loggedinusername {
+    bottom: 5px;
+    text-decoration: none;
+    position: relative;
+    float: right;
+    right: 0;
+    height: 20px;
+    width: 100%;
+}
+
+.logged-in-branch-name {
+    position: relative;
+    right: 0;
+    height: 20px;
+    top: 10px;
+    width: 100%;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+#lastborrower-window {
+    display: none;
+    background-image: linear-gradient(to left, #418940, #71B443);
+    box-shadow: 1px 1px 1px 0 #999;
+    color: #FFFFFF;
+    padding: .2em;
+    border-radius: 5px 5px 5px 5px;
+
+    > * {
+        padding: 0 .4em;
+    }
+}
+
+#lastborrower-remove {
+    cursor: pointer;
+    border-left: 1px solid #fff;
+}
+
+#lastborrowerlink {
+    color: #FFFFFF;
+}

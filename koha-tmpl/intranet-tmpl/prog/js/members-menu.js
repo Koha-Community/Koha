@@ -1,22 +1,6 @@
 /* global borrowernumber advsearch dateformat __ CAN_user_borrowers_delete_borrowers CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky Cookies*/
 
 $(document).ready(function(){
-
-    $("#filteraction_off, #filteraction_on").on('click', function(e) {
-        e.preventDefault();
-        $('#filters').toggle();
-        $('.filteraction').toggle();
-        if (typeof Sticky !== "undefined" && typeof hcSticky === "function") {
-            Sticky.hcSticky('update');
-        }
-    });
-    if( advsearch ){
-        $("#filteraction_on").toggle();
-        $("#filters").show();
-    } else {
-        $("#filteraction_off").toggle();
-    }
-
     searchfield_date_tooltip("");
     searchfield_date_tooltip('_filter');
     $("#searchfieldstype").change(function() {

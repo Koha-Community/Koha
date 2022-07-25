@@ -59,13 +59,15 @@
 [% END %]
 
 <body id="circ_request-article" class="circ">
-    [% INCLUDE 'header.inc' %]
+    [% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
+[% END %]
 
+    [% WRAPPER 'sub-header.inc' %]
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
             <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+                <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
             </li>
 
             [% IF blocking_error %]
@@ -85,6 +87,7 @@
             [% END %]
         </ol>
     </nav>
+    [% END %]
 
 [% INCLUDE 'blocking_errors.inc' %]
 <div class="main container-fluid">

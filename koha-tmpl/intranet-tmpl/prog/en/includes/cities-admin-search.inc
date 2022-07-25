@@ -1,23 +1,27 @@
 [% USE Koha %]
-<div class="gradient">
-<div id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></div><!-- Begin Cities Resident Search Box -->
-<div id="header_search">
-	<div id="city_search" class="residentsearch">
-	<form action="[% script_name | html %]" method="post">
-        <label class="tip" for="city_name_filter">City search:</label>
-        <input class="head-searchbox" type="text" name="city_name_filter" id="city_name_filter" value="[% city_name_filter | html %]" size="40" />
-		<input type="submit" name="submit" value="OK" class="submit" />
-	</form>
-	</div>
+<div id="header_search" class="navbar-form navbar-left">
+    <div id="city_search" class="residentsearch">
+        <form action="[% script_name | html %]" method="post">
+            <span class="form-title">
+                <label class="control-label">Search cities</label>
+            </span>
+
+            <span class="form-content">
+                <input class="head-searchbox form-control" type="text" name="city_name_filter" id="city_name_filter" value="[% city_name_filter | html %]" placeholder="City search" />
+            </span>
+
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+        </form>
+    </div>
 
     [% INCLUDE 'patron-search-box.inc' %]
+
     [% INCLUDE 'catalogue-search-box.inc' %]
 
-			<ul>
-            <li><a class="keep_text" href="#city_search">Search cities</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>[% END %]
-			</ul>	
-</div>
+    <ul>
+        <li><a title="Search cities" href="#city_search"><i class="fa fa-building-o"></i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+    </ul>
 </div>
 <!-- End Cities Resident Search Box -->

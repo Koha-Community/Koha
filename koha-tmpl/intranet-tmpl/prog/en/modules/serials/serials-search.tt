@@ -13,13 +13,15 @@
 </head>
 
 <body id="ser_serials-search" class="ser">
-    [% INCLUDE 'header.inc' %]
+    [% WRAPPER 'header.inc' %]
     [% INCLUDE 'serials-search.inc' %]
+[% END %]
 
+    [% WRAPPER 'sub-header.inc' %]
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
         <ol>
             <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+                <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
             </li>
             [% IF ( done_searched ) %]
                 <li>
@@ -39,6 +41,7 @@
             [% END %]
         </ol>
     </nav>
+    [% END %]
 
     [% url_params = [] %]
     [% FOREACH param IN CGI.params.pairs %]
