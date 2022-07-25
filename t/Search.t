@@ -190,8 +190,7 @@ subtest "searchResults PassItemMarcToXSLT test" => sub {
     my $builder = t::lib::TestBuilder->new;
 
     my $item = $builder->build_sample_item();
-    my $record = $item->biblio->metadata->record;
-    C4::Biblio::EmbedItemsInMarcBiblio({ marc_record => $record, biblionumber => $item->biblionumber });
+    my $record = $item->biblio->metadata->record({ embed_items => 1 });
 
     t::lib::Mocks::mock_preference('PassItemMarcToXSLT','1');
 
