@@ -1415,6 +1415,13 @@ sub merge {
     my $authfrom = Koha::Authorities->find($mergefrom);
     my $authto = Koha::Authorities->find($mergeto);
     my $authtypefrom = $authfrom ? Koha::Authority::Types->find($authfrom->authtypecode) : undef;
+    # If it is a mod ($authfrom == $authto) and there was a change of a heading tag $authtypefrom read from the database is of the current version of the auth rec., which is misleading, so we ignore it
+    if ($mergeto && $mergefrom == $mergeto && $MARCfrom && $MARCto &&
+        $MARCfrom->field('1..', '2..') && $MARCto->field('1..', '2..') && ($MARCfrom->field('1..', '2..'))[0]->tag ne ($MARCto->field('1..', '2..'))[0]->tag) {
+    undef $authtypefrom;
+    undef $authfrom;
+    }
+
     my $authtypeto   = $authto ? Koha::Authority::Types->find($authto->authtypecode) : undef;
     my $auth_tag_to_report_from = $authtypefrom ? $authtypefrom->auth_tag_to_report : '';
     my $auth_tag_to_report_to   = $authtypeto ? $authtypeto->auth_tag_to_report : '';
