@@ -236,6 +236,28 @@ sub authenticate_api_request {
                 Koha::Exceptions::Authentication::Required->throw(
                     error => 'Authentication failure.' );
             }
+        }
+        elsif (  $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration'
+              || $c->req->url->to_abs->path eq '/api/v1/auth/two-factor/registration/verification' ) {
+
+            if ( $status eq 'setup-additional-auth-needed' ) {
+                $user        = Koha::Patrons->find( $session->param('number') );
+                $cookie_auth = 1;
+            }
+            elsif ( $status eq 'ok' ) {
+                $user = Koha::Patrons->find( $session->param('number') );
+                if ( $user->auth_method ne 'password' ) {
+                    # If the user already enabled 2FA they don't need to register again
+                    Koha::Exceptions::Authentication->throw(
+                        error => 'Cannot request this route.' );
+                }
+                $cookie_auth = 1;
+            }
+            else {
+                Koha::Exceptions::Authentication::Required->throw(
+                    error => 'Authentication failure.' );
+            }
+
         } else {
             if ($status eq "ok") {
                 $user = Koha::Patrons->find( $session->param('number') );

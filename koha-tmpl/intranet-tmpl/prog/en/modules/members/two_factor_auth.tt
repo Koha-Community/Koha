@@ -10,6 +10,7 @@
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'patron-search-header.inc' %]
 [% END %]
+[% PROCESS 'auth-two-factor.inc' %]
 
 [% WRAPPER 'sub-header.inc' %]
 <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
@@ -45,43 +46,14 @@
                         </p>
                     </div>
                 [% ELSE %]
+                    [% PROCESS registration_form %]
 
-                    [% IF op == 'register' %]
-                        <div class="dialog message">
-                            <p>We recommend cloud-based mobile authenticator apps such as Authy, Duo Mobile, and LastPass. They can restore access if you lose your hardware device.</p>
-                            <p>Can't scan the code?</p>
-                            <p>To add the entry manually, provide the following details to the application on your phone.</p>
-                            <p>Account: [% issuer | html %]</p>
-                            <p>Key: [% key_id | html %]</p>
-                            <p>Time based: Yes</p>
-                        </div>
-
-                        [% IF invalid_pin %]
-                            <div class="dialog error">Invalid PIN code</div>
-                        [% END %]
-                        <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                            <fieldset class="rows">
-                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                                <input type="hidden" name="op" value="register-2FA" />
-                                <input type="hidden" name="secret32" value="[% secret32 | html %]" />
-                                <ol>
-                                    <li>
-                                        <label for="qr_code">QR code: </label>
-                                        <img id="qr_code" src="[% qr_code | $raw %]" />
-                                    </li>
-                                    <li>
-                                        <label for="pin_code">PIN code: </label>
-                                        <input type="text" id="pin_code" name="pin_code" value="" />
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="submit" value="Register with two-factor app" />
-                                <a class="cancel" href="/cgi-bin/koha/members/two_factor_auth.pl">Cancel</a>
-                            </fieldset>
-                        </form>
-                    [% ELSE %]
+                    <div id="registration-status">
                         [% IF patron.auth_method == "two-factor" %]
+                        <div id="registration-status-enabled">
+                        [% ELSE %]
+                        <div id="registration-status-enabled" style="display: none;">
+                        [% END %]
                             <div class="two-factor-status">Status: Enabled</div>
 
                             <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
@@ -89,17 +61,21 @@
                                 <input type="hidden" name="op" value="disable-2FA" />
                                 <input type="submit" value="Disable two-factor authentication" />
                             </form>
+                        </div>
+
+                        [% IF patron.auth_method == "password" %]
+                        <div id="registration-status-disabled">
                         [% ELSE %]
-                            <div class="two-factor-status">Status: Disabled</div>
-
-                            <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
-                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                                <input type="hidden" name="op" value="enable-2FA" />
-                                <input type="submit" value="Enable two-factor authentication" />
-                            </form>
-
+                        <div id="registration-status-disabled" style="display: none;">
                         [% END %]
-                    [% END %]
+                            <div class="two-factor-status">Status: Disabled</div>
+                            [% IF Koha.Preference('TwoFactorAuthentication') == 'enforced' %]
+                                <div>Two-factor authentication is mandatory to login. If you do not enable now it will be asked at your next login.</div>
+                            [% END %]
+
+                            <input id="enable-2FA" type="submit" value="Enable two-factor authentication" />
+                        </div>
+                    </div>
                 [% END %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -117,9 +93,52 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function(){
-            $(".delete").on("click", function(e){
-                return confirmDelete(_("Are you sure you want to delete this key?"));
+            $("#enable-2FA").on("click", function(e){
+                e.preventDefault();
+                $.ajax({
+                    data: {},
+                    type: 'POST',
+                    url: '/api/v1/auth/two-factor/registration',
+                    success: function (data) {
+                        $("#qr_code").attr('src', data.qr_code);
+                        $("#secret32").val(data.secret32);
+                        $("#issuer").html(data.issuer);
+                        $("#key_id").html(data.key_id);
+                        $("#registration-form").show();
+                        $("#registration-status").hide();
+                    },
+                    error: function (data) {
+                        alert(data);
+                    },
+                });
             });
+
+            $("#register-2FA").on("click", function(e){
+                e.preventDefault();
+                const data = {
+                    secret32: $("#secret32").val(),
+                    pin_code: $("#pin_code").val(),
+                };
+                if (!data.pin_code) return;
+
+                $.ajax({
+                    data: data,
+                    type: 'POST',
+                    url: '/api/v1/auth/two-factor/registration/verification',
+                    success: function (data) {
+                        window.location = "/cgi-bin/koha/members/two_factor_auth.pl";
+                    },
+                    error: function (data) {
+                        const error = data.responseJSON.error;
+                        if ( error == 'Invalid pin' ) {
+                            $("#errors").html(_("Invalid PIN code")).show();
+                        } else {
+                            alert(error);
+                        }
+                    },
+                });
+            });
+
         });
     </script>
 [% END %]

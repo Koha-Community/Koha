@@ -17,6 +17,7 @@
     [% IF ( nopermission ) %]Access denied[% END %] &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% PROCESS 'auth-two-factor.inc' %]
 </head>
 <body id="main_auth" class="main_main-auth">
 
@@ -71,7 +72,7 @@
 <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
 [% END %]
 
-[% IF !TwoFA_prompt && !Koha.Preference('staffShibOnly') %]
+[% IF !TwoFA_prompt && !TwoFA_setup && !Koha.Preference('staffShibOnly') %]
     <!-- login prompt time-->
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
         <input type="hidden" name="koha_login_context" value="intranet" />
@@ -168,6 +169,8 @@
         </p>
 
     </form>
+[% ELSIF TwoFA_setup %]
+    [% PROCESS registration_form %]
 [% END %]
 
 [% IF ( nopermission ) %]
@@ -216,6 +219,52 @@
                     });
                 [% END %]
             });
+
+            if( $("#registration-form").length ) {
+                $.ajax({
+                    data: {},
+                    type: 'POST',
+                    url: '/api/v1/auth/two-factor/registration',
+                    success: function (data) {
+                        $("#qr_code").attr('src', data.qr_code);
+                        $("#secret32").val(data.secret32);
+                        $("#issuer").html(data.issuer);
+                        $("#key_id").html(data.key_id);
+                        $("#registration-form").show();
+                    },
+                    error: function (data) {
+                        alert(data);
+                    },
+                });
+            };
+
+            $("#register-2FA").on("click", function(e){
+                e.preventDefault();
+                const data = {
+                    secret32: $("#secret32").val(),
+                    pin_code: $("#pin_code").val(),
+                };
+                if (!data.pin_code) return;
+
+                $.ajax({
+                    data: data,
+                    type: 'POST',
+                    url: '/api/v1/auth/two-factor/registration/verification',
+                    success: function (data) {
+                        alert(_("Two-factor authentication correctly configured. You will be redirected to the login screen."));
+                        window.location = "/cgi-bin/koha/mainpage.pl";
+                    },
+                    error: function (data) {
+                        const error = data.responseJSON.error;
+                        if ( error == 'Invalid pin' ) {
+                            $("#errors").html(_("Invalid PIN code")).show();
+                        } else {
+                            alert(error);
+                        }
+                    },
+                });
+            });
+
         });
     </script>
 [% END %]

@@ -1270,9 +1270,11 @@ sub checkauth {
         # Auth is completed unless an additional auth is needed
         if ( $require_2FA ) {
             my $patron = Koha::Patrons->find({userid => $userid});
-            if ( C4::Context->preference('TwoFactorAuthentication') eq "enforced"
-                || $patron->auth_method eq 'two-factor' )
-            {
+            if ( C4::Context->preference('TwoFactorAuthentication') eq "enforced" && $patron->auth_method eq 'password' ) {
+                $auth_state = 'setup-additional-auth-needed';
+                $session->param('waiting-for-2FA-setup', 1);
+                %info = ();# We remove the warnings/errors we may have set incorrectly before
+            } elsif ( $patron->auth_method eq 'two-factor' ) {
                 # Ask for the OTP token
                 $auth_state = 'additional-auth-needed';
                 $session->param('waiting-for-2FA', 1);
@@ -1382,6 +1384,12 @@ sub checkauth {
             TwoFA_prompt => 1,
             invalid_otp_token => $invalid_otp_token,
             notice_email_address => $patron->notice_email_address, # We could also pass logged_in_user if necessary
+        );
+    }
+
+    if ( $auth_state eq 'setup-additional-auth-needed' ) {
+        $template->param(
+            TwoFA_setup => 1,
         );
     }
 
@@ -1777,6 +1785,9 @@ sub check_cookie_auth {
                 );
                 return ( "additional-auth-needed", $session )
                     if $session->param('waiting-for-2FA');
+
+                return ( "setup-additional-auth-needed", $session )
+                    if $session->param('waiting-for-2FA-setup');
 
                 return ( "ok", $session );
             } else {

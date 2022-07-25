@@ -39,3 +39,92 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
+
+/auth/two-factor/registration:
+  post:
+    x-mojo-to: TwoFactorAuth#registration
+    operationId: Two factor register
+    tags:
+      - 2fa
+    summary: Generate a secret
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: OK
+        schema:
+          type: object
+          properties:
+            secret32:
+              type: string
+            qr_code:
+              type: string
+            issuer:
+              type: string
+            key_id:
+              type: string
+          additionalProperties: false
+      "400":
+        description: Bad Request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+
+/auth/two-factor/registration/verification:
+  post:
+    x-mojo-to: TwoFactorAuth#verification
+    operationId: Two factor register verification
+    tags:
+      - 2fa
+    summary: Verify two-factor registration
+    parameters:
+      - name: secret32
+        in: formData
+        description: the secret
+        required: true
+        type: string
+      - name: pin_code
+        in: formData
+        description: the pin code
+        required: true
+        type: string
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: OK
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "400":
+        description: Bad Request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"

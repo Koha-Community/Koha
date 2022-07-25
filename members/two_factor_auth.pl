@@ -56,70 +56,7 @@ else {
         token      => scalar $cgi->param('csrf_token'),
     };
 
-    if ( $op eq 'register-2FA' ) {
-        output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
-          unless Koha::Token->new->check_csrf($csrf_pars);
-
-        my $pin_code = $cgi->param('pin_code');
-        my $secret32 = $cgi->param('secret32');
-        my $auth     = Koha::Auth::TwoFactorAuth->new(
-            { patron => $logged_in_user, secret32 => $secret32 } );
-
-        my $verified = $auth->verify(
-            $pin_code,
-            1,        # range
-            $secret32,
-            undef,    # timestamp (defaults to now)
-            30,       # interval (default 30)
-        );
-
-        if ($verified) {
-
-            # FIXME Generate a (new?) secret
-            $logged_in_user->encode_secret($secret32);
-            $logged_in_user->auth_method('two-factor')->store;
-            $op = 'registered';
-            if ( $logged_in_user->notice_email_address ) {
-                $logged_in_user->queue_notice(
-                    {
-                        letter_params => {
-                            module      => 'members',
-                            letter_code => '2FA_ENABLE',
-                            branchcode  => $logged_in_user->branchcode,
-                            lang        => $logged_in_user->lang,
-                            tables      => {
-                                branches  => $logged_in_user->branchcode,
-                                borrowers => $logged_in_user->id
-                            },
-                        },
-                        message_transports => ['email'],
-                    }
-                );
-            }
-        }
-        else {
-            $template->param( invalid_pin => 1, );
-            $op = 'enable-2FA';
-        }
-    }
-
-    if ( $op eq 'enable-2FA' ) {
-        my $secret = Koha::AuthUtils::generate_salt( 'weak', 16 );
-        my $auth   = Koha::Auth::TwoFactorAuth->new(
-            { patron => $logged_in_user, secret => $secret } );
-
-        $template->param(
-            issuer   => $auth->issuer,
-            key_id   => $auth->key_id,
-            qr_code  => $auth->qr_code,
-            secret32 => $auth->secret32,
-
-            # IMPORTANT: get secret32 after qr_code call !
-        );
-        $auth->clear;
-        $op = 'register';
-    }
-    elsif ( $op eq 'disable-2FA' ) {
+    if ( $op eq 'disable-2FA' ) {
         output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
           unless Koha::Token->new->check_csrf($csrf_pars);
         my $auth =

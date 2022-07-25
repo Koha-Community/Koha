@@ -58,6 +58,8 @@ sub new {
     my $secret32 = $params->{secret32};
     my $secret = $params->{secret};
 
+    # FIXME Raise an exception if the syspref is disabled
+
     Koha::Exceptions::MissingParameter->throw("Mandatory patron parameter missing")
         unless $patron && ref($patron) eq 'Koha::Patron';
 
