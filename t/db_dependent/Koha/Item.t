@@ -37,6 +37,7 @@ use List::MoreUtils qw(all);
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+use t::lib::Dates;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -765,7 +766,7 @@ subtest 'request_transfer' => sub {
 };
 
 subtest 'deletion' => sub {
-    plan tests => 13;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -776,9 +777,13 @@ subtest 'deletion' => sub {
             biblionumber => $biblio->biblionumber,
         }
     );
+    is( $item->deleted_on, undef, 'deleted_on not set for new item' );
 
-    is( ref( $item->move_to_deleted ), 'Koha::Schema::Result::Deleteditem', 'Koha::Item->move_to_deleted should return the Deleted item' )
+    my $deleted_item = $item->move_to_deleted;
+    is( ref( $deleted_item ), 'Koha::Schema::Result::Deleteditem', 'Koha::Item->move_to_deleted should return the Deleted item' )
       ;    # FIXME This should be Koha::Deleted::Item
+    is( t::lib::Dates::compare( $deleted_item->deleted_on, dt_from_string() ), 0 );
+
     is( Koha::Old::Items->search({itemnumber => $item->itemnumber})->count, 1, '->move_to_deleted must have moved the item to deleteditem' );
     $item = $builder->build_sample_item(
         {

@@ -337,6 +337,7 @@ sub move_to_deleted {
     my ($self) = @_;
     my $item_infos = $self->unblessed;
     delete $item_infos->{timestamp}; #This ensures the timestamp date in deleteditems will be set to the current timestamp
+    $item_infos->{deleted_on} = dt_from_string;
     return Koha::Database->new->schema->resultset('Deleteditem')->create($item_infos);
 }
 
