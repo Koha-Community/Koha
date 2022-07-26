@@ -192,7 +192,7 @@ function cloneItemBlock(index, unique_item_fields, callback) {
             $(original).find("input[name='field_value']").each(function(){
                 var kohafield = $(this).siblings("input[name='kohafield']").val();
                 if($(this).val() && $.inArray(kohafield,dont_copy_fields) == -1) {
-                    $(this).parent("div").attr("id").match(/^(subfield.)/);
+                    $(this).closest("li div").attr("id").match(/^(subfield.)/);
                     var id = RegExp.$1;
                     var value = $(this).val();
                     $(clone).find("div[id^='"+id+"'] input[name='field_value']").val(value);
