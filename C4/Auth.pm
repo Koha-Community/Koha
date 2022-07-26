@@ -982,7 +982,7 @@ sub checkauth {
 
         # voluntary logout the user
         # check wether the user was using their shibboleth session or a local one
-        my $shibSuccess = C4::Context->userenv->{'shibboleth'};
+        my $shibSuccess = C4::Context->userenv ? C4::Context->userenv->{'shibboleth'} : undef;
         if ( $session ) {
             $session->delete();
             $session->flush;
