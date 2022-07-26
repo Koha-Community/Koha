@@ -46,7 +46,7 @@ SKIP: {
     my $driver   = $s->driver;
 
     subtest 'Setup' => sub {
-        plan tests => 10;
+        plan tests => 12;
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get($mainpage);
@@ -63,22 +63,50 @@ SKIP: {
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         like( $driver->get_title, qr(Two-factor authentication), 'Must be on the page with the pref on' );
 
-        is( $driver->find_element('//div[@class="two-factor-status"]')->get_text(), 'Status: Disabled', '2FA is disabled' );
+        is(
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            'Status: Disabled',
+            '2FA is disabled'
+        );
 
-        $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
+        is(
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            '', # 'Status: Enabled' is not shown
+            '2FA is disabled'
+        );
+
+        $driver->find_element('//*[@id="enable-2FA"]')->click;
+        $s->wait_for_ajax;
         ok($driver->find_element('//img[@id="qr_code"]'), 'There is a QR code');
 
-        $s->fill_form({pin_code => 'wrong_code'});
-        $s->submit_form;
+        $driver->find_element('//*[@id="pin_code"]')->send_keys('wrong_code');
+        $driver->find_element('//*[@id="register-2FA"]')->click;
+        $s->wait_for_ajax;
         ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid PIN code")]'));
         is( $patron->get_from_storage->secret, undef, 'secret is not set in DB yet' );
 
-        my $secret32 = $driver->find_element('//form[@id="two-factor-auth"]//input[@name="secret32"]')->get_value();
+        my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value();
         my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron, secret32 => $secret32});
         my $code = $auth->code();
-        $s->fill_form({pin_code => $code});
-        $s->submit_form;
-        is( $driver->find_element('//div[@class="two-factor-status"]')->get_text(), 'Status: Enabled', '2FA is enabled' );
+        $driver->find_element('//*[@id="pin_code"]')->clear;
+        $driver->find_element('//*[@id="pin_code"]')->send_keys($code);
+        $driver->find_element('//*[@id="register-2FA"]')->click;
+        # Wait for the response then go to the page, don't wait for the redirect
+        $s->wait_for_ajax;
+        $driver->capture_screenshot('selenium_failure_2.png');
+        $driver->get($s->base_url . q|members/two_factor_auth.pl|);
+        is(
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            '', # 'Status: Disabled' is not shown
+            '2FA is enabled'
+        );
+
+        is(
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            'Status: Enabled',
+            '2FA is enabled'
+        );
+
         $patron = $patron->get_from_storage;
         is( $patron->decoded_secret, $secret32, 'encrypted secret is set in DB' );
 
@@ -202,7 +230,7 @@ SKIP: {
     };
 
     subtest "Disable" => sub {
-        plan tests => 4;
+        plan tests => 6;
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get( $mainpage . q|?logout.x=1| );
@@ -217,7 +245,13 @@ SKIP: {
         $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
 
         is(
-            $driver->find_element('//div[@class="two-factor-status"]')->get_text(),
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            '', # 'Status: Disabled' is not shown
+            '2FA is enabled'
+        );
+
+        is(
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
             'Status: Enabled',
             '2FA is enabled'
         );
@@ -225,9 +259,15 @@ SKIP: {
         $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
 
         is(
-            $driver->find_element('//div[@class="two-factor-status"]')->get_text(),
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
             'Status: Disabled',
-            '2FA has been disabled'
+            '2FA is disabled'
+        );
+
+        is(
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            '', # 'Status: Enabled' is not shown
+            '2FA is disabled'
         );
 
         $patron = $patron->get_from_storage;
