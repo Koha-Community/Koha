@@ -57,8 +57,6 @@ subtest 'send_otp_token' => sub {
     );
 
     my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $patron->borrowernumber );
-    $session->param( 'id',       $patron->userid );
     $session->param( 'ip',       '127.0.0.1' );
     $session->param( 'lasttime', time() );
     $session->flush;
@@ -70,6 +68,9 @@ subtest 'send_otp_token' => sub {
     # Patron is not authenticated yet
     $t->request_ok($tx)->status_is(401);
 
+    # Patron is partially authenticated (credentials correct)
+    $session->param( 'number',   $patron->borrowernumber );
+    $session->param( 'id',       $patron->userid );
     $session->param('waiting-for-2FA', 1);
     $session->flush;
 
@@ -108,6 +109,7 @@ subtest 'send_otp_token' => sub {
     $t->request_ok($tx)->status_is(403);
     $patron->flags(20)->store;
 
+    # Patron is fully authenticated, cannot request a token again
     $session->param('waiting-for-2FA', 0);
     $session->flush;
     $tx = $t->ua->build_tx( POST => "/api/v1/auth/otp/token_delivery" );
