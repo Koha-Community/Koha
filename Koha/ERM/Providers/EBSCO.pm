@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use HTTP::Request;
 use LWP::UserAgent;
-use JSON qw( decode_json );
+use JSON qw( from_json decode_json );
 use List::Util qw( first );
 
 use Koha::Exceptions;
@@ -119,7 +119,7 @@ sub build_additional_params {
 
     my $additional_params;
     if ( $query_params->{q} ) {
-        my $q = decode_json $query_params->{q};
+        my $q = from_json $query_params->{q};
         while ( my ( $attr, $value ) = each %$q ) {
             $additional_params->{$attr} = $value;
         }
