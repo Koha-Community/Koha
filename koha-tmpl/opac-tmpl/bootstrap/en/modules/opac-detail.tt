@@ -102,7 +102,7 @@
 
                             [% IF ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') && normalized_isbn ) %]
                                 [% coce_id = normalized_ean || normalized_isbn %]
-                                <div class="cover-image" id="coce-coverimg">
+                                <div class="cover-image coce-coverimg">
                                     [% IF ( coce_id ) %]
                                         <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
                                     [% END %]
@@ -1506,7 +1506,7 @@
                                 lightbox_descriptions.push(_("Image from Google Books (<a href='%s'>see the original image</a>)").format($(img).data('link')));
                             } else if( div.attr("id") == "openlibrary-coverimg" ){
                                 lightbox_descriptions.push(_("Image from OpenLibrary (<a href='%s'>see the original image</a>)").format($(img).data('link')));
-                            } else if( div.attr("id") == "coce-coverimg" ){
+                            } else if( div.hasClass("coce-coverimg" ) ){
                                 // Identify which service's image is being loaded by Coce
                                 var coce_description;
                                 if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
