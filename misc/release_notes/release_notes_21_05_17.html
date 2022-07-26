@@ -1,0 +1,333 @@
+<h1 id="releasenotesforkoha21.05.17">RELEASE NOTES FOR KOHA 21.05.17</h1>
+
+<p>26 Jul 2022</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="https://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 21.05.17 can be downloaded from:</p>
+
+<ul>
+<li><a href="https://download.koha-community.org/koha-21.05.17.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 21.05.17 is a bugfix/maintenance release with security fixes.</p>
+
+<p>It includes 1 security fixes, 6 bugfixes.</p>
+
+<h3 id="systemrequirements">System requirements</h3>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha here: https://wiki.koha-community.org/wiki/System_requirements_and_recommendations</p>
+
+<h2 id="securitybugs">Security bugs</h2>
+
+<h3 id="koha">Koha</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30969">[30969]</a> Cross site scripting (XSS) attack in OPAC authority search ( opac-authorities-home.pl )</li>
+</ul>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30234">[30234]</a> Serial local covers don't appear in the staff interface for other libraries with SeparateHoldings</p>
+
+<blockquote>
+  <p>This fixes the display of item-specific local cover images in the staff interface. Before this, item images were not shown for holdings on the record's details view page.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29504">[29504]</a> Confirm item parts requires force_checkout permission (checkouts tab)</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=31005">[31005]</a> Cannot edit patrons in other categories if an extended attribute is mandatory and limited to a category</p>
+
+<blockquote>
+  <p>This fixes an error when a mandatory patron attribute limited to a specific patron category was causing a '500 error' when editing a patron not in that category.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="reports">Reports</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30551">[30551]</a> Cash register report shows wrong library when paying fees in two different libraries</li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30883">[30883]</a> Authorities merge is limited to 100 biblio with Elasticsearch</p>
+
+<blockquote>
+  <p>This fixes the hard-coded limit of 100 when merging authorities (when Elasticsearch is the search engine). When merging authorities where the term is used over 100 times, only the first 100 authorities would be merged and the old term deleted, irrespective of the value set in the AuthorityMergeLimit system preference.</p>
+</blockquote></li>
+</ul>
+
+<h3 id="searching-zebra">Searching - Zebra</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29418">[29418]</a> Error searching for analytics in detail view</p>
+
+<p><strong>Sponsored by</strong> <em>Theke Solutions</em></p></li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><a href="https://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>As of the date of these release notes, the Koha manual is available in the following languages:</p>
+
+<ul>
+<li><a href="https://koha-community.org/manual/21.05/ar/html/">Arabic</a> (34.3%)</li>
+<li><a href="https://koha-community.org/manual/21.05/zh_TW/html/">Chinese (Taiwan)</a> (59.9%)</li>
+<li><a href="https://koha-community.org/manual/21.05/cs/html/">Czech</a> (27.6%)</li>
+<li><a href="https://koha-community.org/manual/21.05/en/html/">English (USA)</a></li>
+<li><a href="https://koha-community.org/manual/21.05/fr/html/">French</a> (67.9%)</li>
+<li><a href="https://koha-community.org/manual/21.05/fr_CA/html/">French (Canada)</a> (25.5%)</li>
+<li><a href="https://koha-community.org/manual/21.05/de/html/">German</a> (74.8%)</li>
+<li><a href="https://koha-community.org/manual/21.05/hi/html/">Hindi</a> (100%)</li>
+<li><a href="https://koha-community.org/manual/21.05/it/html/">Italian</a> (48.9%)</li>
+<li><a href="https://koha-community.org/manual/21.05/es/html/">Spanish</a> (37%)</li>
+<li><a href="https://koha-community.org/manual/21.05/tr/html/">Turkish</a> (40.3%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>Arabic (89.3%)</li>
+<li>Armenian (100%)</li>
+<li>Armenian (Classical) (89%)</li>
+<li>Chinese (Taiwan) (91.1%)</li>
+<li>Czech (70.9%)</li>
+<li>English (New Zealand) (61.1%)</li>
+<li>English (USA)</li>
+<li>Finnish (82.1%)</li>
+<li>French (93.3%)</li>
+<li>French (Canada) (98.8%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (60.5%)</li>
+<li>Greek (55.3%)</li>
+<li>Hindi (100%)</li>
+<li>Italian (100%)</li>
+<li>Nederlands-Nederland (Dutch-The Netherlands) (61.3%)</li>
+<li>Norwegian Bokmål (65.4%)</li>
+<li>Polish (100%)</li>
+<li>Portuguese (91.1%)</li>
+<li>Portuguese (Brazil) (86.6%)</li>
+<li>Russian (86%)</li>
+<li>Slovak (72.6%)</li>
+<li>Spanish (100%)</li>
+<li>Swedish (76.5%)</li>
+<li>Telugu (99%)</li>
+<li>Turkish (100%)</li>
+<li>Ukrainian (77.6%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="https://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="https://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="https://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 21.05.17 is</p>
+
+<ul>
+<li><p>Release Manager: Tomás Cohen Arazi</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Jonathan Druart</li>
+<li>Martin Renvoize</li>
+</ul></li>
+<li><p>QA Manager: Katrin Fischer</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Nick Clemens</li>
+<li>Jonathan Druart</li>
+<li>Lucas Gass</li>
+<li>Victor Grousset</li>
+<li>Kyle M Hall</li>
+<li>Joonas Kylmälä</li>
+<li>Andrew Nugged</li>
+<li>Martin Renvoize</li>
+<li>Marcel de Rooy</li>
+<li>Fridolin Somers</li>
+<li>Petro Vashchuk</li>
+<li>David Cook</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>Zebra -- Fridolin Somers</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Jake Deery</li>
+<li>Lucas Gass</li>
+<li>Séverine Queune</li>
+</ul></li>
+<li><p>Packaging Manager: Mason James</p></li>
+<li><p>Documentation Manager: David Nind</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Donna Bachowski</li>
+<li>Aude Charillon</li>
+<li>Martin Renvoize</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Managers: </p>
+
+<ul>
+<li>Bernardo González Kriegel</li>
+</ul></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+<li>Katrin Fischer</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>22.05 -- Lucas Gass</li>
+<li>21.11 -- Arthur Suzuki</li>
+<li>21.05 -- Victor Grousset</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 21.05.17</p>
+
+<ul>
+<li><a href="https://theke.io">Theke Solutions</a></li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 21.05.17</p>
+
+<ul>
+<li>Tomás Cohen Arazi (4)</li>
+<li>Nick Clemens (2)</li>
+<li>Jonathan Druart (1)</li>
+<li>Victor Grousset (4)</li>
+<li>Kyle M Hall (1)</li>
+<li>Martin Renvoize (2)</li>
+<li>Fridolin Somers (1)</li>
+<li>Koha translators (1)</li>
+<li>Shi Yao Wang (1)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 21.05.17</p>
+
+<ul>
+<li>BibLibre (1)</li>
+<li>ByWater-Solutions (3)</li>
+<li>Koha Community Developers (5)</li>
+<li>PTFS-Europe (2)</li>
+<li>Solutions inLibro inc (1)</li>
+<li>Theke Solutions (4)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<ul>
+<li>Tomás Cohen Arazi (6)</li>
+<li>Chris Cormack (1)</li>
+<li>Katrin Fischer (4)</li>
+<li>Lucas Gass (6)</li>
+<li>Victor Grousset (12)</li>
+<li>David Nind (10)</li>
+<li>Martin Renvoize (8)</li>
+<li>Fridolin Somers (1)</li>
+<li>Arthur Suzuki (7)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 21.05.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="https://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 26 Jul 2022 01:21:21.</p>
