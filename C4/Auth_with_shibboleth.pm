@@ -54,6 +54,7 @@ sub logout_shib {
     my $uri = _get_uri();
     my $return = _get_return($query);
     print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$return" );
+    exit;
 }
 
 # Returns Shibboleth login URL with callback to the requesting URL
