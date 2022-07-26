@@ -55,7 +55,7 @@ my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} )
 
 if($op and $op eq 'save') {
     my $estimated_delivery_date = $input->param('estimated_delivery_date');
-    $order->{'estimated_delivery_date'} = dt_from_string( $estimated_delivery_date );
+    $order->{'estimated_delivery_date'} = $estimated_delivery_date ? dt_from_string( $estimated_delivery_date ) : undef;
     ModOrder($order);
     print $input->redirect($referrer);
     exit;
