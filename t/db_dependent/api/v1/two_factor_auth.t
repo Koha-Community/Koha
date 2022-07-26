@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::MockModule;
 
@@ -41,11 +41,122 @@ $mocked_koha_email->mock( 'send_or_die', sub {
     return 1;
 });
 
+subtest 'registration and verification' => sub {
+
+    plan tests => 22;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 'enabled');
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value  => {
+                flags => 20, # Staff access and Patron info
+            }
+        }
+    );
+
+    # Not authenticated yet - 401
+    my $session = C4::Auth::get_session('');
+    $session->param( 'ip',       '127.0.0.1' );
+    $session->param( 'lasttime', time() );
+    $session->flush;
+
+    my $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(401);
+
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(401);
+
+    # Authenticated - can register
+    $session->param( 'number',   $patron->borrowernumber );
+    $session->param( 'id',       $patron->userid );
+    $session->flush;
+
+    $patron->auth_method('password');
+    $patron->secret(undef);
+    $patron->store;
+
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(201);
+    my $secret32 = $t->tx->res->json->{secret32};
+
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(400); # Missing parameter
+
+    my $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron, secret32 => $secret32});
+    my $pin_code = $auth->code;
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" => form => {secret32 => $secret32, pin_code => $pin_code} );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(204);
+
+    $patron = $patron->get_from_storage;
+    is($patron->auth_method, 'two-factor');
+    isnt($patron->secret, undef);
+
+    $patron->auth_method('password');
+    $patron->secret(undef);
+    $patron->store;
+
+    # Setting up 2FA - can register
+    $session->param('waiting-for-2FA-setup', 1);
+    $session->flush;
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(201);
+    $secret32 = $t->tx->res->json->{secret32};
+
+    $auth = Koha::Auth::TwoFactorAuth->new({patron => $patron, secret32 => $secret32});
+    $pin_code = $auth->code;
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" => form => {secret32 => $secret32, pin_code => $pin_code} );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(204);
+
+    $patron = $patron->get_from_storage;
+    is($patron->auth_method, 'two-factor');
+    isnt($patron->secret, undef);
+
+    # 2FA already enabled - cannot register again
+    $patron->auth_method('two-factor');
+    $patron->encode_secret("nv4v65dpobpxgzldojsxiii");
+    $patron->store;
+
+    $session->param('waiting-for-2FA-setup', undef);
+    $session->flush;
+
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(401);
+
+    $tx = $t->ua->build_tx( POST => "/api/v1/auth/two-factor/registration/verification" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(401);
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'send_otp_token' => sub {
 
     plan tests => 11;
 
     $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference('TwoFactorAuthentication', 'enabled');
 
     my $patron = $builder->build_object(
         {
@@ -65,6 +176,7 @@ subtest 'send_otp_token' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
+    # FIXME This is not correct They are authenticated!
     # Patron is not authenticated yet
     $t->request_ok($tx)->status_is(401);
 
