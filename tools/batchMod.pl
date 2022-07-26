@@ -266,7 +266,9 @@ if ($op eq "show"){
     # Getting list of subfields to keep when restricted batchmod edit is enabled
     my @subfields_to_allow = $restrictededition ? split ' ', C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod') : ();
 
-    my $subfields = Koha::UI::Form::Builder::Item->new->edit_form(
+    $biblionumber = Koha::Items->find($itemnumbers[0])->unblessed->{biblionumber} if $itemnumbers[0];
+    my $subfields = Koha::UI::Form::Builder::Item->new(
+        { biblionumber => $biblionumber } )->edit_form(
         {
             restricted_editition => $restrictededition,
             (
