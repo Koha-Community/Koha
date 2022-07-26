@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -52,10 +52,11 @@ SKIP: {
         $driver->get($mainpage);
         like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
 
+        C4::Context->set_preference('TwoFactorAuthentication', 'disabled');
+
         fill_login_form($s);
         like( $driver->get_title, qr(Koha staff interface), 'Patron with flags superlibrarian should be able to login' );
 
-        C4::Context->set_preference('TwoFactorAuthentication', 'disabled');
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         like( $driver->get_title, qr(Error 404), 'Must be redirected to 404 is the pref is off' );
 
@@ -227,6 +228,66 @@ SKIP: {
         #    "The code has been sent by email, please check your inbox.",
         #    'The email must have been sent correctly'
         #);
+    };
+
+    subtest "Enforce 2FA setup on first login" => sub {
+        plan tests => 7;
+
+        C4::Context->set_preference( 'TwoFactorAuthentication', 'enforced' );
+
+        # Make sure the send won't fail because of invalid email addresses
+        $patron->library->set(
+            {
+                branchemail      => 'from@example.org',
+                branchreturnpath => undef,
+                branchreplyto    => undef,
+            }
+        )->store;
+        $patron->auth_method('password');
+        $patron->email(undef);
+        $patron->store;
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get( $mainpage . q|?logout.x=1| );
+        like(
+            $driver->get_title,
+            qr(Log in to Koha),
+            'Must be on the first auth screen'
+        );
+        fill_login_form($s);
+        like(
+            $driver->get_title,
+            qr(Two-factor authentication setup),
+            'Must be on the 2FA auth setup screen'
+        );
+
+        $s->wait_for_ajax; # There is an ajax request to populate the qr_code and the secret
+
+        isnt( $driver->find_element('//*[@id="qr_code"]')->get_attribute("src"), "" );
+        my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value;
+
+        my $auth = Koha::Auth::TwoFactorAuth->new(
+            { patron => $patron, secret32 => $secret32 } );
+        my $pin_code = $auth->code;
+
+        $driver->find_element('//*[@id="pin_code"]')->send_keys("wrong code");
+        $driver->find_element('//*[@id="register-2FA"]')->click;
+        $s->wait_for_ajax;
+        is( $driver->find_element('//*[@id="errors"]')->get_text,
+            "Invalid PIN code" );
+
+        $driver->find_element('//*[@id="pin_code"]')->clear;
+        $driver->find_element('//*[@id="pin_code"]')->send_keys($pin_code);
+        $driver->find_element('//*[@id="register-2FA"]')->click;
+        is( $driver->get_alert_text,
+            "Two-factor authentication correctly configured. You will be redirected to the login screen."
+        );
+        $driver->accept_alert;
+        # FIXME How to test the redirect to the mainpage here
+
+        $patron = $patron->get_from_storage;
+        is( $patron->auth_method, 'two-factor', );
+        isnt( $patron->secret, undef, );
     };
 
     subtest "Disable" => sub {

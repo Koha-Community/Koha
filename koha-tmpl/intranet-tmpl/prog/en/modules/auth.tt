@@ -9,6 +9,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF TwoFA_prompt %]Two-factor authentication[% END %]
+    [% IF TwoFA_setup %]Two-factor authentication setup[% END %]
     [% IF ( loginprompt ) %]Log in to Koha[% END %]
     [% IF too_many_login_attempts %]This account has been locked.
     [% ELSIF invalid_username_or_password %]Invalid username or password[% END %]
