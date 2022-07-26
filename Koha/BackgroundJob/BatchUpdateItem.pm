@@ -173,9 +173,9 @@ Sent the infos to generate the table containing the details of the modified item
 sub additional_report {
     my ( $self, $args ) = @_;
 
-    my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+    return unless $self->report->{modified_itemnumbers};
 
-    my $itemnumbers = $job->report->{modified_itemnumbers};
+    my $itemnumbers = $self->report->{modified_itemnumbers};
     if ( scalar(@$itemnumbers) > C4::Context->preference('MaxItemsToDisplayForBatchMod') ) {
         return { too_many_items_display => 1 };
     } else {
