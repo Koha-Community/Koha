@@ -45,7 +45,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'background_tasks() hooks tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -77,6 +77,12 @@ subtest 'background_tasks() hooks tests' => sub {
     $bj = Koha::BackgroundJob->new;
     $tasks = $bj->type_to_class_mapping;
     $logger->warn_is("A plugin includes the 'background_tasks' method, but doesn't provide the required 'namespace' method (Koha::Plugin::Test)");
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    $bj = Koha::BackgroundJob->new;
+    $tasks = $bj->type_to_class_mapping;
+
+    is_deeply( $tasks, $bj->core_types_to_classes, 'Only core mapping returned when plugins disabled' );
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
