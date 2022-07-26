@@ -82,7 +82,7 @@ function Check(f) {
         // So we use disabled instead. But disabled prevent values from being passed through the form at submit.
         // So we "un-disable" the elements just before submitting.
         // That's a bit clumsy, and if someone comes up with a better solution, feel free to improve that.
-        $("select[name=field_value]").prop('disabled', false);
+        $("select.input_marceditor").prop('disabled', false);
     } else {
         alertString2 = MSG_FORM_NOT_SUBMITTED;
         alertString2 += "\n------------------------------------------------------------------------------------\n";
