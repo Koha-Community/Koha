@@ -861,7 +861,7 @@ sub checkauth {
 
     my $session;
     my $invalid_otp_token;
-    my $require_2FA = ( C4::Context->preference('TwoFactorAuthentication') && $type ne "OPAC" ) ? 1 : 0;
+    my $require_2FA = ( C4::Context->preference('TwoFactorAuthentication') && $type ne "opac" ) ? 1 : 0;
 
     # Basic authentication is incompatible with the use of Shibboleth,
     # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
