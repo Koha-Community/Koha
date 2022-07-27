@@ -133,10 +133,10 @@
                 [% job.ended_on | $KohaDates with_hours = 1 %]
             </li>
             <li><label for="job_data">Report: </label>
-                [% PROCESS 'report' %]
+                [% IF job.status != 'new' %][% PROCESS 'report' %][% END %]
             </li>
             <li><label for="job_data">Detailed messages: </label>
-                [% PROCESS 'detail' %]
+                [% IF job.status != 'new' %][% PROCESS 'detail' %][% END %]
             </li>
         </ol>
     </fieldset>
