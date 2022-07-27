@@ -232,6 +232,14 @@ subtest 'checkauth() tests' => sub {
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
         is( $userid, $patron->userid, 'Succesful login' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), 0, 'Second auth no longer required if OTP token has been verified' );
+        logout($cgi);
+
+        t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'enforced' );
+        $patron->auth_method('password')->store;
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'intranet' );
+        is( $userid, $patron->userid, 'Succesful login' );
+        is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA-setup'), 1, 'Setup 2FA required' );
+        logout($cgi);
 
         logout($cgi);
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'opac' );
