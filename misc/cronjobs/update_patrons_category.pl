@@ -25,6 +25,7 @@ BEGIN {
 }
 
 use C4::Context;
+use C4::Log qw(cronlogaction);
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 use Koha::Logger;
@@ -207,6 +208,8 @@ if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
 ( $verbose && !$doit ) and print "No actions will be taken (test mode)\n";
 
 $verbose and print "Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
+
+cronlogaction();
 
 my %params;
 
