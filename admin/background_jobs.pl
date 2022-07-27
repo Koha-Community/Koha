@@ -52,8 +52,10 @@ if ( $op eq 'view' ) {
         }
         else {
             $template->param( job => $job, );
-            my $report = $job->additional_report() || {};
-            $template->param( %$report );
+            if ( $job->status ne 'new' ) {
+                my $report = $job->additional_report() || {};
+                $template->param( %$report );
+            }
         }
     } else {
         $op = 'list';
