@@ -100,7 +100,11 @@ sub clear_unless {
             $name = $c;
         }
 
-        if( !$self->{_remove_unless}->{$name} ) {
+        # Try stripping _\d+ from name for cookiea like catalogue_editor_123
+        my $stripped_name = $name;
+        $stripped_name =~ s/_\d+$/_/;
+
+        if( !$self->{_remove_unless}->{$stripped_name} && !$self->{_remove_unless}->{$name} ) {
             next if $seen->{$name};
             push @rv, CGI::Cookie->new(
                 # -expires explicitly omitted to create shortlived 'session' cookie
