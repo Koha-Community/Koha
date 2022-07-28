@@ -15,45 +15,41 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`resource_id_${counter}`" class="required"
+                    <label
+                        :for="`resource_package_id_${counter}`"
+                        class="required"
                         >{{ $t("Package") }}:
                     </label>
-                    <select
+                    <!-- Parse to integer, resource.package_id is an integer, but GET /packages return package_id as string -->
+                    <v-select
+                        :id="`resource_package_id_${counter}`"
                         v-model="resource.package_id"
-                        :id="`resource_id_${counter}`"
-                        required
+                        label="name"
+                        :reduce="(p) => parseInt(p.package_id)"
+                        :options="packages"
                     >
-                        <option value=""></option>
-                        <option
-                            v-for="p in packages"
-                            :key="p.package_id"
-                            :value="p.package_id"
-                            :selected="
-                                p.package_id == resource.package_id
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ p.name }}
-                        </option>
-                    </select>
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!resource.package_id"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
-                    <label for="title_vendor_id">{{ $t("Vendor") }}:</label>
-                    <select id="title_vendor_id" v-model="resource.vendor_id">
-                        <option value=""></option>
-                        <option
-                            v-for="vendor in vendors"
-                            :key="vendor.vendor_id"
-                            :value="vendor.id"
-                            :selected="
-                                vendor.id == resource.vendor_id ? true : false
-                            "
-                        >
-                            {{ vendor.name }}
-                        </option>
-                    </select>
+                    <label :for="`resource_vendor_id_${counter}`"
+                        >{{ $t("Vendor") }}:</label
+                    >
+                    <v-select
+                        :id="`resource_vendor_id_${counter}`"
+                        v-model="resource.vendor_id"
+                        label="name"
+                        :reduce="(vendor) => vendor.id"
+                        :options="vendors"
+                    />
                 </li>
 
                 <li>

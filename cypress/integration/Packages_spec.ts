@@ -67,8 +67,8 @@ describe("Package CRUD operations", () => {
             1
         );
         cy.get("#package_name").type(erm_package.name);
-        cy.get("#package_type").select(erm_package.package_type);
-        cy.get("#package_content_type").select(erm_package.content_type);
+        cy.get("#package_type .vs__search").type(erm_package.package_type + '{enter}',{force:true});
+        cy.get("#package_content_type .vs__search").type(erm_package.content_type + '{enter}',{force:true});
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
@@ -116,8 +116,8 @@ describe("Package CRUD operations", () => {
 
         // Form has been correctly filled in
         cy.get("#package_name").should("have.value", erm_package.name);
-        cy.get("#package_type").should("have.value", erm_package.package_type);
-        cy.get("#package_content_type").should("have.value", erm_package.content_type);
+        cy.get("#package_type .vs__selected").contains("Complete");
+        cy.get("#package_content_type .vs__selected").contains("Print");
 
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {

@@ -19,69 +19,57 @@
                     <label :for="`license_id_${counter}`"
                         >{{ $t("License") }}:</label
                     >
-                    <select
+                    <v-select
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
-                        required
+                        label="name"
+                        :reduce="(l) => l.license_id"
+                        :options="licenses"
                     >
-                        <option value=""></option>
-                        <option
-                            v-for="license in licenses"
-                            :key="license.license_id"
-                            :value="license.license_id"
-                            :selected="
-                                license.license_id ==
-                                agreement_license.license_id
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ license.name }}
-                        </option>
-                    </select>
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!agreement_license.license_id"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`license_status_${counter}`"
                         >{{ $t("Status") }}:</label
                     >
-                    <select v-model="agreement_license.status" required>
-                        <option value=""></option>
-                        <option
-                            v-for="r in av_agreement_license_statuses"
-                            :key="r.authorised_values"
-                            :value="r.authorised_value"
-                            :selected="
-                                r.authorised_value == agreement_license.status
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ r.lib }}
-                        </option>
-                    </select>
+                    <v-select
+                        :id="`license_status_${counter}`"
+                        v-model="agreement_license.status"
+                        label="lib"
+                        :reduce="(av) => av.authorised_value"
+                        :options="av_agreement_license_statuses"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!agreement_license.status"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`license_location_${counter}`"
                         >{{ $t("Physical location") }}:
                     </label>
-                    <select v-model="agreement_license.physical_location">
-                        <option value=""></option>
-                        <option
-                            v-for="r in av_agreement_license_location"
-                            :key="r.authorised_values"
-                            :value="r.authorised_value"
-                            :selected="
-                                r.authorised_value ==
-                                agreement_license.physical_location
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ r.lib }}
-                        </option>
-                    </select>
+                    <v-select
+                        :id="`license_location_${counter}`"
+                        v-model="agreement_license.physical_location"
+                        label="lib"
+                        :reduce="(av) => av.authorised_value"
+                        :options="av_agreement_license_location"
+                    />
                 </li>
                 <li>
                     <label :for="`license_notes_${counter}`"

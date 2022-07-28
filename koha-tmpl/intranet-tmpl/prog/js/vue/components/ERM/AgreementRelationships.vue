@@ -18,49 +18,44 @@
                     <label :for="`related_agreement_id_${counter}`"
                         >{{ $t("Related agreement") }}:
                     </label>
-                    <select
-                        v-model="relationship.related_agreement_id"
+                    <v-select
                         :id="`related_agreement_id_${counter}`"
+                        v-model="relationship.related_agreement_id"
+                        label="name"
+                        :reduce="(a) => a.agreement_id"
+                        :options="agreements"
                     >
-                        <option value=""></option>
-                        <option
-                            v-for="agreement in agreements"
-                            :key="agreement.agreement_id"
-                            :value="agreement.agreement_id"
-                            :selected="
-                                agreement.agreement_id ==
-                                relationship.related_agreement_id
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ agreement.name }}
-                        </option>
-                    </select>
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!relationship.related_agreement_id"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                    <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>
                     <label :for="`related_agreement_relationship_${counter}`"
                         >{{ $t("Relationship") }}:
                     </label>
-                    <select
-                        v-model="relationship.relationship"
+                    <v-select
                         :id="`related_agreement_relationship_${counter}`"
-                        required
+                        v-model="relationship.relationship"
+                        label="lib"
+                        :reduce="(av) => av.authorised_value"
+                        :options="av_agreement_relationships"
                     >
-                        <option value=""></option>
-                        <option
-                            v-for="r in av_agreement_relationships"
-                            :key="r.authorised_values"
-                            :value="r.authorised_value"
-                            :selected="
-                                r.authorised_value == relationship.relationship
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ r.lib }}
-                        </option>
-                    </select>
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!relationship.relationship"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
                 <li>

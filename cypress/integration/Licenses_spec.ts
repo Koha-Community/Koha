@@ -77,8 +77,8 @@ describe("License CRUD operations", () => {
         cy.get("#license_name").type(license.name);
         cy.get("#license_description").type(license.description);
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("#license_type").select(license.type);
-        cy.get("#license_status").select(license.status);
+        cy.get("#license_type .vs__search").type(license.type + '{enter}',{force:true});
+        cy.get("#license_status .vs__search").type(license.status + '{enter}',{force:true});
 
         cy.get("#started_on").click();
         cy.get(".flatpickr-calendar")
@@ -143,8 +143,8 @@ describe("License CRUD operations", () => {
             "have.value",
             license.description
         );
-        cy.get("#license_type").should("have.value", license.type);
-        cy.get("#license_status").should("have.value", license.status);
+        cy.get("#license_type .vs__selected").contains("Local");
+        cy.get("#license_status .vs__selected").contains("Active");
         cy.get("#started_on").invoke("val").should("eq", dates["today_us"]);
         cy.get("#ended_on").invoke("val").should("eq", dates["tomorrow_us"]);
 

@@ -5,6 +5,7 @@ import { createPinia } from "pinia";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import vSelect from "vue-select";
 
 library.add(faPlus, faPencil, faTrash);
 
@@ -31,7 +32,8 @@ const app = createApp(App)
     .use(createPinia())
     .use(router)
     .use(i18n)
-    .component("font-awesome-icon", FontAwesomeIcon);
+    .component("font-awesome-icon", FontAwesomeIcon)
+    .component("v-select", vSelect);
 app.config.unwrapInjectedRef = true;
 app.mount("#erm");
 const mainStore = useMainStore();

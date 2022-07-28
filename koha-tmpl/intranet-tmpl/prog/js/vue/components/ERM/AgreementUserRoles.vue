@@ -29,21 +29,22 @@
                     <label :for="`user_role_${counter}`"
                         >{{ $t("Role") }}:</label
                     >
-                    <select v-model="user_role.role" required>
-                        <option value=""></option>
-                        <option
-                            v-for="r in av_agreement_user_roles"
-                            :key="r.authorised_values"
-                            :value="r.authorised_value"
-                            :selected="
-                                r.authorised_value == user_role.role
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ r.lib }}
-                        </option>
-                    </select>
+                    <v-select
+                        :id="`user_role_${counter}`"
+                        v-model="user_role.role"
+                        label="lib"
+                        :reduce="(av) => av.authorised_value"
+                        :options="av_agreement_user_roles"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!user_role.role"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
             </ol>

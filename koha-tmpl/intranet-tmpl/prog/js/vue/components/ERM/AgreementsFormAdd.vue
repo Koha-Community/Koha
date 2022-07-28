@@ -25,24 +25,13 @@
                             <label for="agreement_vendor_id"
                                 >{{ $t("Vendor") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="agreement_vendor_id"
                                 v-model="agreement.vendor_id"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="vendor in vendors"
-                                    :key="vendor.vendor_id"
-                                    :value="vendor.id"
-                                    :selected="
-                                        vendor.id == agreement.vendor_id
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ vendor.name }}
-                                </option>
-                            </select>
+                                label="name"
+                                :reduce="(vendor) => vendor.id"
+                                :options="vendors"
+                            />
                         </li>
                         <li>
                             <label for="agreement_description"
@@ -62,55 +51,40 @@
                             <label for="agreement_status"
                                 >{{ $t("Status") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="agreement_status"
                                 v-model="agreement.status"
-                                @change="onStatusChange($event)"
-                                required
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_agreement_statuses"
+                                @option:selected="onStatusChanged"
+                                :required="!agreement.status"
                             >
-                                <option value=""></option>
-                                <option
-                                    v-for="status in av_agreement_statuses"
-                                    :key="status.authorised_values"
-                                    :value="status.authorised_value"
-                                    :selected="
-                                        status.authorised_value ==
-                                        agreement.status
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ status.lib }}
-                                </option>
-                            </select>
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!agreement.status"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
                             <label for="agreement_closure_reason"
                                 >{{ $t("Closure reason") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="agreement_closure_reason"
                                 v-model="agreement.closure_reason"
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_agreement_closure_reasons"
                                 :disabled="
                                     agreement.status == 'closed' ? false : true
                                 "
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="r in av_agreement_closure_reasons"
-                                    :key="r.authorised_values"
-                                    :value="r.authorised_value"
-                                    :selected="
-                                        r.authorised_value ==
-                                        agreement.closure_reason
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ r.lib }}
-                                </option>
-                            </select>
+                            />
                         </li>
                         <li>
                             <label for="agreement_is_perpetual" class="radio"
@@ -141,22 +115,13 @@
                             <label for="agreement_renewal_priority"
                                 >{{ $t("Renewal priority") }}:</label
                             >
-                            <select v-model="agreement.renewal_priority">
-                                <option value=""></option>
-                                <option
-                                    v-for="p in av_agreement_renewal_priorities"
-                                    :key="p.authorised_values"
-                                    :value="p.authorised_value"
-                                    :selected="
-                                        p.authorised_value ==
-                                        agreement.renewal_priority
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ p.lib }}
-                                </option>
-                            </select>
+                            <v-select
+                                id="agreement_renewal_priority"
+                                v-model="agreement.renewal_priority"
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_agreement_renewal_priorities"
+                            />
                         </li>
                         <li>
                             <label for="agreement_license_info"
@@ -382,8 +347,8 @@ export default {
                     }
                 )
         },
-        onStatusChange(event) {
-            if (event.target.value != 'closed') {
+        onStatusChanged(e) {
+            if (e.authorised_value != 'closed') {
                 this.agreement.closure_reason = ''
             }
         }

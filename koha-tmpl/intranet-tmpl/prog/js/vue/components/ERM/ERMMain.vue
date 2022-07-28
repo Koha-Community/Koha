@@ -161,8 +161,22 @@ export default {
 };
 </script>
 
-<style scoped>
+<style src="vue-select/dist/vue-select.css"></style>
+<style>
 a.router-link-active {
     font-weight: 700;
+}
+
+form .v-select {
+    display: inline-block;
+    background-color: white;
+    width: 30%;
+}
+
+.v-select, input:not([type=submit]):not([type=search]):not([type=button]), textarea {
+    border-color: rgba(60,60,60,0.26);
+    border-width: 1px;
+    border-radius: 4px;
+    min-width: 30%;
 }
 </style>

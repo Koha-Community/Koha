@@ -15,29 +15,25 @@
             </legend>
             <ol>
                 <li>
-                    <label :for="`agreement_id_${counter}`"
+                    <label :for="`agreement_id_${counter}`" class="required"
                         >{{ $t("Agreement") }}:
                     </label>
-                    <select
-                        v-model="package_agreement.agreement_id"
+                    <v-select
                         :id="`agreement_id_${counter}`"
-                        required
+                        v-model="package_agreement.agreement_id"
+                        label="name"
+                        :reduce="(a) => a.agreement_id"
+                        :options="agreements"
                     >
-                        <option value=""></option>
-                        <option
-                            v-for="agreement in agreements"
-                            :key="agreement.agreement_id"
-                            :value="agreement.agreement_id"
-                            :selected="
-                                agreement.agreement_id ==
-                                package_agreement.agreement_id
-                                    ? true
-                                    : false
-                            "
-                        >
-                            {{ agreement.name }}
-                        </option>
-                    </select>
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!package_agreement.agreement_id"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
                     <span class="required">{{ $t("Required") }}</span>
                 </li>
             </ol>

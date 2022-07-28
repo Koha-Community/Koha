@@ -223,25 +223,13 @@
                             <label for="title_publication_type"
                                 >{{ $t("Publication type") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="title_publication_type"
                                 v-model="title.publication_type"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="type in av_title_publication_types"
-                                    :key="type.authorised_values"
-                                    :value="type.authorised_value"
-                                    :selected="
-                                        type.authorised_value ==
-                                        title.publication_type
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ type.lib }}
-                                </option>
-                            </select>
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_title_publication_types"
+                            />
                         </li>
 
                         <li>

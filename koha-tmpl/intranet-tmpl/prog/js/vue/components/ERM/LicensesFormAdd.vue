@@ -25,26 +25,14 @@
                             <label for="license_vendor_id"
                                 >{{ $t("Vendor") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="license_vendor_id"
                                 v-model="license.vendor_id"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="vendor in vendors"
-                                    :key="vendor.vendor_id"
-                                    :value="vendor.id"
-                                    :selected="
-                                        vendor.id == license.vendor_id
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ vendor.name }}
-                                </option>
-                            </select>
+                                label="name"
+                                :reduce="(vendor) => vendor.id"
+                                :options="vendors"
+                            />
                         </li>
-
                         <li>
                             <label for="license_description"
                                 >{{ $t("Description") }}:
@@ -61,51 +49,44 @@
                         </li>
                         <li>
                             <label for="license_type">{{ $t("Type") }}:</label>
-                            <select
+                            <v-select
                                 id="license_type"
                                 v-model="license.type"
-                                required
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_license_types"
                             >
-                                <option value=""></option>
-                                <option
-                                    v-for="type in av_license_types"
-                                    :key="type.authorised_values"
-                                    :value="type.authorised_value"
-                                    :selected="
-                                        type.authorised_value == license.type
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ type.lib }}
-                                </option>
-                            </select>
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!license.type"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
                             <label for="license_status"
                                 >{{ $t("Status") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="license_status"
                                 v-model="license.status"
-                                required
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_license_statuses"
+                                label="lib"
                             >
-                                <option value=""></option>
-                                <option
-                                    v-for="status in av_license_statuses"
-                                    :key="status.authorised_values"
-                                    :value="status.authorised_value"
-                                    :selected="
-                                        status.authorised_value ==
-                                        license.status
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ status.lib }}
-                                </option>
-                            </select>
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!license.status"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>

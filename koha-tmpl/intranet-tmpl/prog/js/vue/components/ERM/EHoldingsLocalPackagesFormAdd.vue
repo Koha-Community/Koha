@@ -25,70 +25,35 @@
                             <label for="package_vendor_id"
                                 >{{ $t("Vendor") }}:</label
                             >
-                            <select
+                            <v-select
                                 id="package_vendor_id"
                                 v-model="erm_package.vendor_id"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="vendor in vendors"
-                                    :key="vendor.vendor_id"
-                                    :value="vendor.id"
-                                    :selected="
-                                        vendor.id == erm_package.vendor_id
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ vendor.name }}
-                                </option>
-                            </select>
+                                label="name"
+                                :reduce="(vendor) => vendor.id"
+                                :options="vendors"
+                            />
                         </li>
                         <li>
                             <label for="package_type">{{ $t("Type") }}:</label>
-                            <select
+                            <v-select
                                 id="package_type"
                                 v-model="erm_package.package_type"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="type in av_package_types"
-                                    :key="type.authorised_values"
-                                    :value="type.authorised_value"
-                                    :selected="
-                                        type.authorised_value ==
-                                        erm_package.package_type
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ type.lib }}
-                                </option>
-                            </select>
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_package_types"
+                            />
                         </li>
                         <li>
                             <label for="package_content_type">{{
                                 $t("Content type: ")
                             }}</label>
-                            <select
+                            <v-select
                                 id="package_content_type"
                                 v-model="erm_package.content_type"
-                            >
-                                <option value=""></option>
-                                <option
-                                    v-for="type in av_package_content_types"
-                                    :key="type.authorised_values"
-                                    :value="type.authorised_value"
-                                    :selected="
-                                        type.authorised_value ==
-                                        erm_package.content_type
-                                            ? true
-                                            : false
-                                    "
-                                >
-                                    {{ type.lib }}
-                                </option>
-                            </select>
+                                label="lib"
+                                :reduce="(av) => av.authorised_value"
+                                :options="av_package_content_types"
+                            />
                         </li>
 
                         <EHoldingsPackageAgreements

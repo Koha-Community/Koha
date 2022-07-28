@@ -102,7 +102,7 @@ describe("Agreement CRUD operations", () => {
             "have.length",
             1
         ); // name, description, status
-        cy.get("#agreement_status").select(agreement.status);
+        cy.get("#agreement_status .vs__search").type(agreement.status + '{enter}',{force:true});
 
         cy.contains("Add new period").click();
         cy.get("#agreements_add").contains("Submit").click();
@@ -215,7 +215,7 @@ describe("Agreement CRUD operations", () => {
             "have.value",
             agreements[0].description
         );
-        cy.get("#agreement_status").should("have.value", agreement.status);
+        cy.get("#agreement_status .vs__selected").contains("Active");
         cy.get("#agreement_is_perpetual_no").should("be.checked");
         cy.get("#started_on_0").invoke("val").should("eq", dates["today_us"]);
         cy.get("#ended_on_0").invoke("val").should("eq", dates["tomorrow_us"]);
