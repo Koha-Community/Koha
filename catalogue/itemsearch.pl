@@ -22,6 +22,7 @@ use CGI;
 use JSON qw( to_json );
 
 use C4::Auth qw( get_template_and_user );
+use C4::Circulation qw( barcodedecode );
 use C4::Output qw( output_with_http_headers output_html_with_http_headers );
 use C4::Items qw( SearchItems );
 use C4::Koha qw( GetAuthorisedValues );
@@ -50,6 +51,12 @@ if (defined $format and $format eq 'json') {
 
     my @f = $cgi->multi_param('f');
     my @q = $cgi->multi_param('q');
+
+    # If index indicates the value is a barcode, we need to preproccess it before searching
+    for ( my $i = 0; $i < @q; $i++ ) {
+        $q[$i] = barcodedecode($q[$i]) if $f[$i] eq 'barcode';
+    }
+
     push @q, '' if @q == 0;
     my @op = $cgi->multi_param('op');
     my @c = $cgi->multi_param('c');
