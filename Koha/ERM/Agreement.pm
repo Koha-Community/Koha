@@ -23,6 +23,7 @@ use MIME::Types;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
+use Koha::Acquisition::Bookseller;
 
 use base qw(Koha::Object);
 
@@ -255,6 +256,19 @@ sub agreement_packages {
     my ( $self ) = @_;
     my $packages_agreements_rs = $self->_result->erm_eholdings_packages_agreements;
     return Koha::ERM::EHoldings::Package::Agreements->_new_from_dbic($packages_agreements_rs);
+}
+
+=head3 vendor
+
+Return the vendor for this agreement
+
+=cut
+
+sub vendor {
+    my ( $self ) = @_;
+    my $vendor_rs = $self->_result->vendor;
+    return unless $vendor_rs;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
 }
 
 =head2 Internal methods

@@ -12,6 +12,7 @@
 <script>
 import Toolbar from "./LicensesToolbar.vue"
 import { createVNode, render } from 'vue'
+import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchLicenses } from "../../fetch"
@@ -19,6 +20,9 @@ import { useDataTable } from "../../composables/datatables"
 
 export default {
     setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
+
         const AVStore = useAVStore()
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
@@ -26,6 +30,7 @@ export default {
         useDataTable(table_id)
 
         return {
+            vendors,
             get_lib_from_av,
             map_av_dt_filter,
             table_id,
@@ -67,6 +72,15 @@ export default {
             let default_search = this.$route.query.q
             let table_id = this.table_id
 
+            window['vendors'] = this.vendors.map(e => {
+                e['_id'] = e['id']
+                e['_str'] = e['name']
+                return e
+            })
+            let vendors_map = this.vendors.reduce((map, e) => {
+                map[e.id] = e
+                return map
+            }, {})
             let avs = ['av_license_types', 'av_license_statuses']
             avs.forEach(function (av_cat) {
                 window[av_cat] = map_av_dt_filter(av_cat)
@@ -98,6 +112,16 @@ export default {
                             return ""
                         }
                     },
+                    {
+                        title: __("Vendor"),
+                        data: "vendor_id",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
+                        }
+                    },
+
                     {
                         title: __("Description"),
                         data: "description",
@@ -189,8 +213,9 @@ export default {
                     })
                 },
                 preDrawCallback: function (settings) {
-                    $("#" + table_id).find("thead th").eq(2).attr('data-filter', 'av_license_types')
-                    $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_license_statuses')
+                    $("#" + table_id).find("thead th").eq(1).attr('data-filter', 'vendors')
+                    $("#" + table_id).find("thead th").eq(3).attr('data-filter', 'av_license_types')
+                    $("#" + table_id).find("thead th").eq(4).attr('data-filter', 'av_license_statuses')
                 }
 
             }, license_table_settings, 1)

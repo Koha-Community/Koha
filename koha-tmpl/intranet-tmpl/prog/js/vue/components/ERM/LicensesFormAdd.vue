@@ -22,6 +22,30 @@
                             <span class="required">{{ $t("Required") }}</span>
                         </li>
                         <li>
+                            <label for="license_vendor_id"
+                                >{{ $t("Vendor") }}:</label
+                            >
+                            <select
+                                id="license_vendor_id"
+                                v-model="license.vendor_id"
+                            >
+                                <option value=""></option>
+                                <option
+                                    v-for="vendor in vendors"
+                                    :key="vendor.vendor_id"
+                                    :value="vendor.id"
+                                    :selected="
+                                        vendor.id == license.vendor_id
+                                            ? true
+                                            : false
+                                    "
+                                >
+                                    {{ vendor.name }}
+                                </option>
+                            </select>
+                        </li>
+
+                        <li>
                             <label for="license_description"
                                 >{{ $t("Description") }}:
                             </label>
@@ -121,6 +145,7 @@
 
 <script>
 import flatPickr from 'vue-flatpickr-component'
+import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { setMessage, setError } from "../../messages"
 import { fetchLicense } from '../../fetch'
@@ -129,6 +154,8 @@ import { storeToRefs } from "pinia"
 export default {
 
     setup() {
+        const vendorStore = useVendorStore()
+        const { vendors } = storeToRefs(vendorStore)
         const AVStore = useAVStore()
         const {
             av_license_types,
@@ -136,6 +163,7 @@ export default {
         } = storeToRefs(AVStore)
 
         return {
+            vendors,
             av_license_types,
             av_license_statuses,
         }
@@ -147,6 +175,7 @@ export default {
             license: {
                 license_id: null,
                 name: '',
+                vendor_id: null,
                 description: '',
                 type: '',
                 status: '',
@@ -190,6 +219,11 @@ export default {
                 apiUrl += '/' + license.license_id
             }
             delete license.license_id
+            delete license.vendor
+
+            if (license.vendor_id == "") {
+                license.vendor_id = null
+            }
 
             license.started_on = license.started_on ? $date_to_rfc3339(license.started_on) : null
             license.ended_on = license.ended_on ? $date_to_rfc3339(license.ended_on) : null

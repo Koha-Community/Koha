@@ -21,6 +21,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use Koha::Acquisition::Bookseller;
+
 =head1 NAME
 
 Koha::ERM::License - Koha ERM License Object class
@@ -30,6 +32,19 @@ Koha::ERM::License - Koha ERM License Object class
 =head2 Class Methods
 
 =cut
+
+=head3 vendor
+
+Return the vendor for this license
+
+=cut
+
+sub vendor {
+    my ( $self ) = @_;
+    my $vendor_rs = $self->_result->vendor;
+    return unless $vendor_rs;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
+}
 
 =head2 Internal methods
 

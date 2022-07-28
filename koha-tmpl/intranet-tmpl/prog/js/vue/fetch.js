@@ -7,7 +7,7 @@ export const fetchAgreement = async function (agreement_id) {
     await fetch(apiUrl, {
         headers: {
             "x-koha-embed":
-                "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package",
+                "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
         },
     })
         .then(checkError)
@@ -42,7 +42,11 @@ export const fetchLicense = async function (license_id) {
     if (!license_id) return;
     const apiUrl = "/api/v1/erm/licenses/" + license_id;
     let license;
-    await fetch(apiUrl)
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "vendor",
+        },
+    })
         .then(checkError)
         .then(
             (result) => {
@@ -58,7 +62,11 @@ export const fetchLicense = async function (license_id) {
 export const fetchLicenses = async function () {
     const apiUrl = "/api/v1/erm/licenses";
     let licenses;
-    await fetch(apiUrl)
+    await fetch(apiUrl, {
+        headers: {
+            "x-koha-embed": "vendor.name",
+        },
+    })
         .then(checkError)
         .then(
             (result) => {

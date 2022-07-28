@@ -32,12 +32,8 @@
                             <a
                                 :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${agreement.vendor_id}`"
                             >
-                                {{
-                                    vendors.find(
-                                        (e) => e.id == agreement.vendor_id
-                                    ).name
-                                }}</a
-                            >
+                                {{ agreement.vendor.name }}
+                            </a>
                         </span>
                     </li>
                     <li>
@@ -303,18 +299,13 @@
 </template>
 
 <script>
-import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { fetchAgreement } from "../../fetch"
-import { storeToRefs } from "pinia"
 
 export default {
     setup() {
         const format_date = $date
         const patron_to_html = $patron_to_html
-
-        const vendorStore = useVendorStore()
-        const { vendors } = storeToRefs(vendorStore)
 
         const AVStore = useAVStore()
         const { get_lib_from_av } = AVStore
@@ -323,7 +314,6 @@ export default {
             format_date,
             patron_to_html,
             get_lib_from_av,
-            vendors,
         }
     },
     data() {

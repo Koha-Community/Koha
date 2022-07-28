@@ -97,12 +97,14 @@ return {
             $dbh->do(q{
                 CREATE TABLE `erm_licenses` (
                     `license_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                    `vendor_id` INT(11) DEFAULT NULL COMMENT 'foreign key to aqbooksellers',
                     `name` VARCHAR(255) NOT NULL COMMENT 'name of the license',
                     `description` LONGTEXT DEFAULT NULL COMMENT 'description of the license',
                     `type` VARCHAR(80) NOT NULL COMMENT 'type of the license',
                     `status` VARCHAR(80) NOT NULL COMMENT 'current status of the license',
                     `started_on` DATE COMMENT 'start of the license',
                     `ended_on` DATE COMMENT 'end of the license',
+                    CONSTRAINT `erm_licenses_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
                     PRIMARY KEY(`license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
@@ -117,8 +119,8 @@ return {
                     `physical_location` VARCHAR(80) DEFAULT NULL COMMENT 'physical location of the license',
                     `notes` mediumtext DEFAULT NULL COMMENT 'notes about this license',
                     `uri` varchar(255) DEFAULT NULL COMMENT 'URI of the license',
-                    CONSTRAINT `erm_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `erm_licenses_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_agreement_licenses_ibfk_1` FOREIGN KEY (`agreement_id`) REFERENCES `erm_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT `erm_agreement_licenses_ibfk_2` FOREIGN KEY (`license_id`) REFERENCES `erm_licenses` (`license_id`) ON DELETE CASCADE ON UPDATE CASCADE,
                     PRIMARY KEY(`agreement_license_id`),
                     UNIQUE KEY `erm_agreement_licenses_uniq` (`agreement_id`, `license_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

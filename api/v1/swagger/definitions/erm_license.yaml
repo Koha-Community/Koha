@@ -5,6 +5,11 @@ properties:
     type: integer
     description: internally assigned license identifier
     readOnly: true
+  vendor_id:
+    description: foreign key to aqbooksellers
+    type:
+      - integer
+      - "null"
   name:
     description: name of the license
     type: string
@@ -33,6 +38,12 @@ properties:
       - "null"
     format: date
     description: End of the license
+  vendor:
+    description: Information about the vendor
+    type:
+      - object
+      - "null"
+
 additionalProperties: false
 required:
   - license_id

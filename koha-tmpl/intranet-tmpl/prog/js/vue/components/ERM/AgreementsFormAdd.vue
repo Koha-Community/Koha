@@ -332,6 +332,7 @@ export default {
                 apiUrl += '/' + agreement.agreement_id
             }
             delete agreement.agreement_id
+            delete agreement.vendor
             agreement.is_perpetual = agreement.is_perpetual ? true : false
 
             if (agreement.vendor_id == "") {

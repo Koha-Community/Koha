@@ -26,6 +26,16 @@
                         </span>
                     </li>
                     <li>
+                        <label>{{ $t("Vendor") }}:</label>
+                        <span v-if="license.vendor_id">
+                            <a
+                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${license.vendor_id}`"
+                            >
+                                {{ license.vendor.name }}
+                            </a>
+                        </span>
+                    </li>
+                    <li>
                         <label>{{ $t("Description") }}:</label>
                         <span>
                             {{ license.description }}
@@ -72,7 +82,6 @@
 
 <script>
 import { useAVStore } from "../../stores/authorised_values"
-import { storeToRefs } from "pinia"
 import { fetchLicense } from "../../fetch"
 
 export default {
@@ -92,6 +101,8 @@ export default {
             license: {
                 license_id: null,
                 name: '',
+                vendor_id: null,
+                vendor: null,
                 description: '',
                 type: '',
                 status: '',
