@@ -141,6 +141,7 @@ use Modern::Perl;
 ## load Koha modules
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers pagination_bar );
+use C4::Circulation qw( barcodedecode );
 use C4::Auth qw( get_template_and_user );
 use C4::Search qw( searchResults enabled_staff_search_views z3950_search_args new_record_from_zebra );
 use C4::Languages qw( getlanguage getLanguages );
@@ -445,6 +446,11 @@ my $builder = Koha::SearchEngine::QueryBuilder->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 my $searcher = Koha::SearchEngine::Search->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+
+# If index indicates the value is a barocode, we need to preproccess it before searching
+for ( my $i = 0; $i < @operands; $i++ ) {
+    $operands[$i] = barcodedecode($operands[$i]) if $indexes[$i] eq 'bc';
+}
 
 ## I. BUILD THE QUERY
 (
