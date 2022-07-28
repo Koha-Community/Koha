@@ -36,8 +36,8 @@ function check_form_borrowers(nav){
 
 function clear_entry(node) {
     var original = $(node).parent();
-    $("textarea", original).attr('value', '');
-    $("select", original).attr('value', '');
+    $("textarea", original).val('');
+    $("select", original).val('');
 }
 
 function clone_entry(node) {
