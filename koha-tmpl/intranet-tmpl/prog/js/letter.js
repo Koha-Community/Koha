@@ -4,7 +4,7 @@
 var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ __('Loading...') +"</div>";
 
 var editing = 0;
-if( add_form == 1 && code !== '' ){
+if( add_form == 1 && code !== '' || copy_form == 1 && code !== ''){
     editing = 1;
 }
 
@@ -28,6 +28,24 @@ function checkCodes( new_lettercode, new_branchcode ){
             }
         }
     });
+}
+
+function confirmOverwrite( new_lettercode, new_branchcode ){
+    var letter_exists;
+    $.ajax({
+        data: { code: new_lettercode, branchcode: new_branchcode },
+        type: 'GET',
+        url: '/cgi-bin/koha/svc/letters/get/',
+        async: !1,
+        success: function (data) {
+            if ( data.letters.length > 0 ) {
+                letter_exists = 1;
+            }
+        }
+    });
+    if(letter_exists){
+        return confirm(__("A letter with the code '%s' already exists for '%s'. Overwrite this letter?").format(new_lettercode, new_branchcode));
+    }
 }
 
 var Sticky;
@@ -103,6 +121,16 @@ $(document).ready(function() {
             // Test if code already exists in DB
             if( editing == 1 ){ // This is an edit operation
                 // We don't need to check for an existing Code
+                // However if we're copying, provide confirm
+                // pop up of overwriting existing notice or slip
+                if(copy_form == 1){
+                    var new_lettercode = $("#code").val();
+                    var new_branchcode = $("#branch").val();
+                    var confirm = confirmOverwrite( new_lettercode, new_branchcode );
+                    if( confirm && confirm === false){
+                        return false;
+                    }
+                }
             } else {
                 var new_lettercode = $("#code").val();
                 var new_branchcode = $("#branch").val();
