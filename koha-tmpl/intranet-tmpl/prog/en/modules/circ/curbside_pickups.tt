@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Koha %]
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
@@ -53,8 +54,14 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+        <div class="col-sm-12">
             <main>
+                <div class="row">
+                [% IF Koha.Preference('CircSidebar') %]
+                    <div class="col-sm-10 col-sm-push-2">
+                [% ELSE %]
+                    <div class="col-sm-12">
+                [% END %]
 
                 <h1>Curbside pickups</h1>
 
@@ -495,6 +502,16 @@
                         [% END %]
                     </div>
                 </div>
+                </div>
+                [% IF Koha.Preference('CircSidebar') %]
+                    </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                        <div class="col-sm-2 col-sm-pull-10">
+                            <aside>
+                                [% INCLUDE 'circ-nav.inc' %]
+                            </aside>
+                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                    </div> <!-- /.row -->
+                [% END %]
             </main>
         </div>
     </div> <!-- /.row -->
