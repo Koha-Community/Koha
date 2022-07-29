@@ -17,7 +17,7 @@
 [% END %]
 
 <div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl"><i class="fa fa-home"></i></a>
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
     &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
     &rsaquo; Mana Knowledge Base report search results
