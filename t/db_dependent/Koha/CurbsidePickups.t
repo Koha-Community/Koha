@@ -296,7 +296,7 @@ subtest 'notify_new_pickup' => sub {
         { borrowernumber => $patron->borrowernumber } );
     is(
         $messages->[0]->{subject},
-        sprintf ("You have schedule a curbside pickup for %s.", $library->branchname),
+        sprintf ("You have scheduled a curbside pickup for %s", $library->branchname),
         "Notice correctly generated"
     );
     my $biblio_title = $item->biblio->title;

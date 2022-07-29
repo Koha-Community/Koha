@@ -60,7 +60,7 @@
 
                 [% UNLESS policy.enabled %]
                     <div class="dialog alert">
-                        Curbside pickups are not enabled for your location.
+                        Curbside pickups are not enabled for your library.
                     </div>
                     [% INCLUDE 'intranet-bottom.inc' %]
                     [% STOP %]
@@ -72,7 +72,7 @@
                         [% CASE 'not_enabled' %]
                             <span>The curbside pickup feature is not enabled for this library.</span>
                         [% CASE 'library_is_closed' %]
-                            <span>Cannot create a curbside pickup for this day, it is an holiday.</span>
+                            <span>Cannot create a curbside pickup for this day, it is a holiday.</span>
                         [% CASE 'no_waiting_holds' %]
                             <span>This patron does not have waiting holds.</span>
                         [% CASE 'too_many_pickups' %]
@@ -150,7 +150,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Pickup Date/Time</th>
+                                            <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
                                             <th>Action</th>
@@ -219,7 +219,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Pickup Date/Time</th>
+                                            <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
                                             <th>Staged by</th>
@@ -301,7 +301,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Pickup Date/Time</th>
+                                            <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
                                             <th>Staged by</th>
@@ -383,7 +383,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Deliver Date/Time</th>
+                                            <th>Deliver date/time</th>
                                             <th>Patron</th>
                                             <th>Items checked out</th>
                                         </tr>
@@ -466,7 +466,7 @@
                                                             </p>
                                                         [% END %]
                                                     [% ELSE %]
-                                                        <span>There is no waiting holds for this patron at this location.</span>
+                                                        <span>There are no waiting holds for this patron at this location.</span>
                                                     [% END %]
                                                 </span>
                                             </li>
@@ -546,14 +546,14 @@
                 let available_count = 0;
                 let dow = selectedDate.day(); // Sunday is 0 (at least for now)
                 if (!slots_per_day[dow]){
-                    $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                    $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
                     return;
                 }
 
                 slots_per_day[dow].forEach(function(slot){
                     let pickup_interval = policy.pickup_interval;
                     if (!pickup_interval) {
-                        $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                        $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
                         return;
                     }
 

@@ -68,7 +68,7 @@
                             [% CASE 'not_enabled' %]
                                 <span>The curbside pickup feature is not enabled for this library.</span>
                             [% CASE 'library_is_closed' %]
-                                <span>Cannot create a curbside pickup for this day, it is an holiday.</span>
+                                <span>Cannot create a curbside pickup for this day, it is a holiday.</span>
                             [% CASE 'no_waiting_holds' %]
                                 <span>This patron does not have waiting holds.</span>
                             [% CASE 'too_many_pickups' %]
@@ -268,7 +268,7 @@
         $("#pickup-branch option").each(function(){
             if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
                 $(this).prop("disabled", "disabled");
-                $(this).attr("title", _("You don't have waiting holds at this location"));
+                $(this).attr("title", _("You don't have waiting holds at this library"));
             }
         });
 
@@ -306,14 +306,14 @@
             let available_count = 0;
             let dow = selectedDate.day(); // Sunday is 0 (at least for now)
             if (!policy.slots_per_day[dow]){
-                $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
                 return;
             }
 
             policy.slots_per_day[dow].forEach(function(slot){
                 let pickup_interval = policy.pickup_interval;
                 if (!pickup_interval) {
-                    $('#pickup-times').html("<div>"+_("No pickup time define for this day.")+"</div>");
+                    $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
                     return;
                 }
 
