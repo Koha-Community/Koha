@@ -4,7 +4,6 @@
 
 <div id="header_search">
     [% INCLUDE 'patron-search-box.inc' %]
-    [% INCLUDE 'catalogue-search-box.inc' %]
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
 <div id="checkin_search" class="residentsearch">
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
@@ -21,6 +20,7 @@
     </form>
 </div>
 [% END %]
+    [% INCLUDE 'catalogue-search-box.inc' %]
 
 <ul>
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
