@@ -175,7 +175,7 @@ CREATE TABLE `action_logs` (
   `object` int(11) DEFAULT NULL COMMENT 'the object that the action was taken against (could be a borrowernumber, itemnumber, etc)',
   `info` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'information about the action (usually includes SQL statement)',
   `interface` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the context this action was taken in',
-  `script` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
+  `script` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
