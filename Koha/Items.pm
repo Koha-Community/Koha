@@ -407,10 +407,22 @@ Search and sort items in a specific order, depending if serials are present or n
 =cut
 
 sub search_ordered {
-    my ($self) = @_;
+    my ($self, $params, $attributes) = @_;
 
-    if ( $self->search({ select => ["enumchron IS NOT NULL"] }) ) {
-        return $self->search( {}, { order_by => 'enumchron' } );
+    $self = $self->search($params, $attributes);
+
+    my @biblionumbers = uniq $self->get_column('biblionumber');
+
+    if ( scalar ( @biblionumbers ) == 1
+        && Koha::Biblios->find( $biblionumbers[0] )->serial )
+    {
+        return $self->search(
+            {},
+            {
+                order_by => [ 'serialid.publisheddate', 'me.enumchron' ],
+                join     => { serialitem => 'serialid' }
+            }
+        );
     } else {
         return $self->search(
             {},
