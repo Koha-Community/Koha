@@ -70,6 +70,13 @@ Name of the queue the job is sent to
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 context
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+JSON-serialized context information for the job
+
 =head2 enqueued_on
 
   data_type: 'datetime'
@@ -112,6 +119,8 @@ __PACKAGE__->add_columns(
   },
   "data",
   { data_type => "longtext", is_nullable => 1 },
+  "context",
+  { data_type => "longtext", is_nullable => 1 },
   "enqueued_on",
   {
     data_type => "datetime",
@@ -145,8 +154,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-04 17:50:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EQUgOEtr2ymejd/0ZffJWg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-29 17:07:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Zl+TGVbM5aSrvghf7gHRHQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
