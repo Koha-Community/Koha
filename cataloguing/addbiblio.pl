@@ -36,6 +36,7 @@ use C4::Biblio qw(
     prepare_host_field
     PrepHostMarcField
     TransformHtmlToMarc
+    ApplyMarcOverlayRules
 );
 use C4::Search qw( FindDuplicate enabled_staff_search_views );
 use C4::Auth qw( get_template_and_user haspermission );
@@ -855,6 +856,20 @@ if ($biblionumber) {
     my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
     $sth->execute($biblionumber);
     ($biblioitemnumber) = $sth->fetchrow;
+    if (C4::Context->preference('MARCOverlayRules')) {
+        my $member = Koha::Patrons->find($loggedinuser);
+        $record = ApplyMarcOverlayRules(
+            {
+                biblionumber    => $biblionumber,
+                record          => $record,
+                overlay_context =>  {
+                        source       => $z3950 ? 'z3950' : 'intranet',
+                        categorycode => $member->categorycode,
+                        userid       => $member->userid
+                }
+            }
+        );
+    }
 }
 
 #-------------------------------------------------------------------------------------
@@ -883,7 +898,7 @@ if ( $op eq "addbiblio" ) {
                 $frameworkcode,
                 {
                     overlay_context => {
-                        source       => $z3950 ? 'z39.50' : 'intranet',
+                        source       => $z3950 ? 'z3950' : 'intranet',
                         categorycode => $member->categorycode,
                         userid       => $member->userid
                     }
