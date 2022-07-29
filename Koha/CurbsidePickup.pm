@@ -62,8 +62,7 @@ sub new {
 
     if ( $policy->enable_waiting_holds_only ) {
         my $patron        = Koha::Patrons->find( $params->{borrowernumber} );
-        my $waiting_holds = $patron->holds->search(
-            { found => 'W', branchcode => $params->{branchcode} } );
+        my $waiting_holds = $patron->holds->waiting->search( { branchcode => $params->{branchcode} } );
 
         Koha::Exceptions::CurbsidePickup::NoWaitingHolds->throw
           unless $waiting_holds->count;
@@ -245,7 +244,7 @@ sub mark_as_delivered {
     my $holds           = $patron->holds;
     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
     foreach my $hold ( $holds->as_list ) {
-        if ( $hold->found eq 'W' && $branchcode && $hold->branchcode eq $branchcode ) {
+        if ( $hold->is_waiting && $branchcode && $hold->branchcode eq $branchcode ) {
             my ( $issuingimpossible, $needsconfirmation ) =
               C4::Circulation::CanBookBeIssued( $patron, $hold->item->barcode );
 
