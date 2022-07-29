@@ -1,0 +1,39 @@
+fieldset.rows ol {
+    $label-width: 12rem;
+    $gap-width: 1rem;
+
+    padding: 0;
+
+    li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        & > * {
+            margin: 0 $gap-width 0 0;
+        }
+
+        label {
+            font-weight: bold;
+
+            &:first-child {
+                flex-basis: $label-width;
+                flex-shrink: 0;
+                flex-grow: 0;
+                text-align: right;
+            }
+
+            &.error {
+                order: -1;
+                width: 100%;
+                padding-left: $label-width + $gap-width;
+            }
+        }
+
+        div.hint {
+            width: 100%;
+            margin-top: .25rem;
+            padding-left: $label-width + $gap-width;
+        }
+    }
+}
