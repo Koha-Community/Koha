@@ -90,10 +90,9 @@ sub logaction {
         }
     }
 
-    my $script =
-        $interface eq 'cron'        ? basename($0)
-      : $interface eq 'commandline' ? basename($0)
-      :                               undef;
+    my $script = ( $interface eq 'cron' or $interface eq 'commandline' )
+        ? basename($0)
+        : undef;
 
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info,interface,script) values (now(),?,?,?,?,?,?,?)");
