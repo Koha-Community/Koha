@@ -80,7 +80,7 @@
 
             <span class="form-content">
                 [% INCLUDE authtype %]
-                <input id="value_mainentry" class="form-control" type="text" name="value" value="[% value | html %]" placeholder="Search main heading ($a only)" />
+                <input id="value_mainentry" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading ($a only)" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
 
@@ -107,7 +107,7 @@
 
             <span class="form-content">
                 [% INCLUDE authtype %]
-                <input id="value_mainheading" class="form-control" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
+                <input id="value_mainheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
 
@@ -132,7 +132,7 @@
 
             <span class="form-content">
                 [% INCLUDE authtype %]
-                <input id="value_matchheading" class="form-control" type="text" name="value" value="[% value | html %]" placeholder="Search any heading" />
+                <input id="value_matchheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any heading" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
 
@@ -159,7 +159,7 @@
 
             <span class="form-content">
                 [% INCLUDE authtype %]
-                <input id="value_anywhere" class="form-control" type="text" name="value" value="[% value | html %]" placeholder="Search any authority field" />
+                <input id="value_anywhere" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any authority field" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
 
@@ -173,10 +173,10 @@
     </div>
 
     <ul>
-        <li><a title="Search main heading ($a only)" href="#mainmain_heading"><i style="font-weight:bold">$a</i></a></li>
-        <li><a title="Search main heading" href="#main_heading"><i class="fa fa-header"></i></a></li>
-        <li><a title="Search all headings" href="#matchheading_search"><i class="fa fa-align-center"></i></a></li>
-        <li><a title="Search entire record" href="#entire_record"><i class="fa fa-folder-open-o"></i></a></li>
+        <li><a title="Search main heading ($a only)" href="#mainmain_heading" class="keep_text"><i style="font-weight:bold">$a</i></a></li>
+        <li><a title="Search main heading" href="#main_heading" class="keep_text"><i class="fa fa-header"></i></a></li>
+        <li><a title="Search all headings" href="#matchheading_search" class="keep_text"><i class="fa fa-align-center"></i></a></li>
+        <li><a title="Search entire record" href="#entire_record" class="keep_text"><i class="fa fa-folder-open-o"></i></a></li>
     </ul>
 </div><!-- /header_search -->
 <!-- End Authorities Resident Search Box -->

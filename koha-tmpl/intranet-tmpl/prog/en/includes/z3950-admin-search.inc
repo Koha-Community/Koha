@@ -20,9 +20,9 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search Z39.50/SRU servers" href="#z3950_search"><i style="font-weight:bold">Z39.50</i></a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><li><a title="Check out" href="#circ_search"><i class="fa fa-upload"></i></a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+        <li><a title="Search Z39.50/SRU servers" href="#z3950_search" class="keep_text"><i style="font-weight:bold">Z39.50</i></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
     </ul>
 </div>
 <!-- End Members Resident Search Box -->
