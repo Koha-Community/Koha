@@ -256,7 +256,7 @@ elsif ($op eq 'add') {
     my $itemtype  = $input->param('itemtype');     # item type
     my $fine = $input->param('fine');
     my $finedays     = $input->param('finedays');
-    my $maxsuspensiondays = $input->param('maxsuspensiondays') || '';
+    my $maxsuspensiondays = $input->param('maxsuspensiondays') || q{};
     my $suspension_chargeperiod = $input->param('suspension_chargeperiod') || 1;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
@@ -264,14 +264,14 @@ elsif ($op eq 'add') {
     my $maxissueqty = strip_non_numeric( scalar $input->param('maxissueqty') );
     my $maxonsiteissueqty = strip_non_numeric( scalar $input->param('maxonsiteissueqty') );
     my $renewalsallowed  = $input->param('renewalsallowed');
-    my $unseen_renewals_allowed  = strip_non_numeric( scalar $input->param('unseen_renewals_allowed') ) // '';
+    my $unseen_renewals_allowed  = strip_non_numeric( scalar $input->param('unseen_renewals_allowed') ) // q{};
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
-    $norenewalbefore = '' if $norenewalbefore =~ /^\s*$/;
+    $norenewalbefore = q{} if $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
-    $no_auto_renewal_after = '' if $no_auto_renewal_after =~ /^\s*$/;
-    my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || '';
+    $no_auto_renewal_after = q{} if $no_auto_renewal_after =~ /^\s*$/;
+    my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || q{};
     $no_auto_renewal_after_hard_limit = eval { dt_from_string( scalar $no_auto_renewal_after_hard_limit ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = strip_non_numeric( scalar $input->param('reservesallowed') );
@@ -281,17 +281,17 @@ elsif ($op eq 'add') {
     my $issuelength  = $input->param('issuelength') || 0;
     my $daysmode = $input->param('daysmode');
     my $lengthunit  = $input->param('lengthunit');
-    my $hardduedate = $input->param('hardduedate') || '';
+    my $hardduedate = $input->param('hardduedate') || q{};
     $hardduedate = eval { dt_from_string( scalar $hardduedate ) } if ( $hardduedate );
     $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount') || 0;
     my $opacitemholds = $input->param('opacitemholds') || 0;
     my $article_requests = $input->param('article_requests') || 'no';
-    my $overduefinescap = $input->param('overduefinescap') || '';
-    my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || '') eq 'on';
+    my $overduefinescap = $input->param('overduefinescap') || q{};
+    my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || q{}) eq 'on';
     my $note = $input->param('note');
-    my $decreaseloanholds = $input->param('decreaseloanholds') || '';
+    my $decreaseloanholds = $input->param('decreaseloanholds') || q{};
     my $recalls_allowed = $input->param('recalls_allowed');
     my $recalls_per_record = $input->param('recalls_per_record');
     my $on_shelf_recalls = $input->param('on_shelf_recalls');
@@ -481,7 +481,7 @@ elsif ( $op eq "add-open-article-requests-limit" ) {
 
     Koha::Exception->throw("No value passed for article request limit")
       if not defined $open_article_requests_limit # There is a JS check for that
-      || $open_article_requests_limit eq '';
+      || $open_article_requests_limit eq q{};
 
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
@@ -555,7 +555,7 @@ elsif ( $op eq "set-article-request-fee" ) {
 
     Koha::Exception->throw("No value passed for article request fee")
       if not defined $fee # There is a JS check for that
-      || $fee eq '';
+      || $fee eq q{};
 
     Koha::CirculationRules->set_rules(
         {   categorycode => ( $category  eq '*' ) ? undef : $category,
@@ -680,7 +680,7 @@ my $definedbranch = $all_rules->count ? 1 : 0;
 my $rules = {};
 while ( my $r = $all_rules->next ) {
     $r = $r->unblessed;
-    $rules->{ $r->{categorycode} // '' }->{ $r->{itemtype} // '' }->{ $r->{rule_name} } = $r->{rule_value};
+    $rules->{ $r->{categorycode} // q{} }->{ $r->{itemtype} // q{} }->{ $r->{rule_name} } = $r->{rule_value};
 }
 
 $template->param(show_branch_cat_rule_form => 1);
@@ -730,6 +730,6 @@ sub by_itemtype {
 sub strip_non_numeric {
     my $string = shift;
     $string =~ s/\s//g;
-    $string = '' if $string !~ /^\d+/;
+    $string = q{} if $string !~ /^\d+/;
     return $string;
 }
