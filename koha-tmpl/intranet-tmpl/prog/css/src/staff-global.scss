@@ -1307,6 +1307,26 @@ details[open] {
     }
 }
 
+#breadcrumbs a[href="/cgi-bin/koha/mainpage.pl"] {
+    color: #71b443;
+    visibility: hidden;
+    font-size: 1px;
+    letter-spacing: -1px;
+
+    &::before {
+        content: "\f015";
+        font-family: "FontAwesome";
+        font-style: normal;
+        font-size: 14px;
+        visibility: visible;
+        padding-right: .3em;
+    }
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 #header {
     + #breadcrumbs {
         margin-top: 1em;
