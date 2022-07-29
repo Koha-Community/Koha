@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE KohaSpan %]
+[% USE Koha %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
@@ -57,6 +59,10 @@
 
     <h1>Curbside pickup configuration</h1>
 
+    [% UNLESS Koha.Preference('CurbsidePickup') %]
+        [% SET pref_CurbsidePickup_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CurbsidePickup">CurbsidePickup</a>' %]
+        <div class="dialog message">The [% pref_CurbsidePickup_link | $raw | $KohaSpan %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
+    [% END %]
     <form method="post" class="form">
         <div id="curbside_pickup_tabs" class="toptabs">
             <ul class="nav nav-tabs" role="tablist">
