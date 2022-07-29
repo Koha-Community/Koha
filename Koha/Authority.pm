@@ -136,9 +136,8 @@ sub get_identifiers {
     for my $field ( $record->field('024') ) {
         my $sf_2 = $field->subfield('2');
         my $sf_a = $field->subfield('a');
-        my $sf_6 = $field->subfield('6');
         next unless $sf_2 && $sf_a;
-        push @identifiers, {source => $sf_2, number => $sf_a, linkage => $sf_6};
+        push @identifiers, {source => $sf_2, number => $sf_a, };
     }
 
     return \@identifiers;

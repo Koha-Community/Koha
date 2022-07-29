@@ -276,12 +276,10 @@ subtest 'get_identifiers' => sub {
             {
                 source  => 'orcid',
                 number  => '0000-0002-1234-5678',
-                linkage => 'https://orcid.org/0000-0002-1234-5678'
             },
             {
                 source => 'scopus',
                 number => '01234567890',
-                linkage => 'https://www.scopus.com/authid/detail.uri?authorId=01234567890'
             }
         ]
     );
