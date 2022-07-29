@@ -44,6 +44,9 @@
             <li><a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a></li>
             <li><a href="/cgi-bin/koha/circ/pendingreserves.pl">Holds to pull</a></li>
             <li><a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a></li>
+            [% IF ( Koha.Preference('CurbsidePickup') && CAN_user_circulate_manage_curbside_pickups ) %]
+                <li><a href="/cgi-bin/koha/circ/curbside_pickups.pl">Curbside pickups</a></li>
+            [% END %]
             <li><a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
             <li><a href="/cgi-bin/koha/circ/transferstoreceive.pl">Transfers to receive</a></li>
             [% IF ( CAN_user_circulate_overdues_report ) %]
