@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Test::MockModule;
 use Test::Exception;
@@ -27,6 +27,7 @@ use Time::Fake;
 
 use C4::Circulation qw( AddIssue LostItem AddReturn );
 use C4::Context;
+use C4::Serials qw( NewIssue AddItem2Serial );
 use Koha::Item;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
@@ -1807,6 +1808,125 @@ subtest 'move_to_biblio() tests' => sub {
 
     is($item1->biblionumber, $biblio2->biblionumber, "Item 1 moved");
     is($item2->biblionumber, $biblio2->biblionumber, "Item 2 moved");
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'search_ordered' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library_a = $builder->build_object(
+        { class => 'Koha::Libraries', value => { branchname => 'TEST_A' } } );
+    my $library_z = $builder->build_object(
+        { class => 'Koha::Libraries', value => { branchname => 'TEST_Z' } } );
+    my $biblio = $builder->build_sample_biblio( { serial => 0 } );
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item3 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    { # Is not a serial
+
+        # order_by homebranch.branchname
+        $item1->discard_changes->update( { homebranch => $library_z->branchcode } );
+        $item2->discard_changes->update( { homebranch => $library_a->branchcode } );
+        $item3->discard_changes->update( { homebranch => $library_z->branchcode } );
+        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item2->itemnumber, $item1->itemnumber, $item3->itemnumber ] );
+
+        # order_by me.enumchron
+        $biblio->items->update( { homebranch => $library_a->branchcode } );
+        $item1->discard_changes->update( { enumchron => 'cc' } );
+        $item2->discard_changes->update( { enumchron => 'bb' } );
+        $item3->discard_changes->update( { enumchron => 'aa' } );
+        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ] );
+
+        # order_by LPAD( me.copynumber, 8, '0' )
+        $biblio->items->update( { enumchron => undef } );
+        $item1->discard_changes->update( { copynumber => '12345678' } );
+        $item2->discard_changes->update( { copynumber => '34567890' } );
+        $item3->discard_changes->update( { copynumber => '23456789' } );
+        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item1->itemnumber, $item3->itemnumber, $item2->itemnumber ] );
+
+        # order_by -desc => 'me.dateaccessioned'
+        $biblio->items->update( { copynumber => undef } );
+        $item1->discard_changes->update( { dateaccessioned => '2022-08-19' } );
+        $item2->discard_changes->update( { dateaccessioned => '2022-07-19' } );
+        $item3->discard_changes->update( { dateaccessioned => '2022-09-19' } );
+        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item3->itemnumber, $item1->itemnumber, $item2->itemnumber ] );
+    }
+
+    {    # Is a serial
+
+        my $sub_freq = $builder->build( { source => 'SubscriptionFrequency' } );
+        my $sub_np =
+          $builder->build( { source => 'SubscriptionNumberpattern' } );
+        my $subscription = $builder->build_object(
+            {
+                class => 'Koha::Subscriptions',
+                value => {
+                    biblionumber  => $biblio->biblionumber,
+                    periodicity   => $sub_freq->{id},
+                    numberpattern => $sub_np->{id}
+                }
+            }
+        );
+        $builder->build_object(
+            {
+                class => 'Koha::Subscription::Histories',
+                value => {
+                    subscriptionid => $subscription->subscriptionid,
+                    biblionumber   => $biblio->biblionumber
+                }
+            }
+        );
+
+        $biblio->update( { serial => 1 } );
+        my $serialid1 =
+          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+            $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
+            "notes", "routingnotes" );
+        C4::Serials::AddItem2Serial( $serialid1, $item1->itemnumber );
+        my $serialid2 =
+          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+            $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
+            "notes", "routingnotes" );
+        C4::Serials::AddItem2Serial( $serialid2, $item2->itemnumber );
+        my $serialid3 =
+          C4::Serials::NewIssue( "serialseq", $subscription->subscriptionid,
+            $biblio->biblionumber, 1, undef, undef, "publisheddatetext",
+            "notes", "routingnotes" );
+        C4::Serials::AddItem2Serial( $serialid3, $item3->itemnumber );
+        my $serial1 = Koha::Serials->find($serialid1);
+        my $serial2 = Koha::Serials->find($serialid2);
+        my $serial3 = Koha::Serials->find($serialid3);
+
+        # order_by serial.publisheddate
+        $serial1->discard_changes->update( { publisheddate => '2022-09-19' } );
+        $serial2->discard_changes->update( { publisheddate => '2022-07-19' } );
+        $serial3->discard_changes->update( { publisheddate => '2022-08-19' } );
+        is_deeply(
+            [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item2->itemnumber, $item3->itemnumber, $item1->itemnumber ]
+        );
+
+        # order_by me.enumchron
+        $serial1->discard_changes->update({ publisheddate => '2022-08-19' });
+        $serial2->discard_changes->update({ publisheddate => '2022-08-19' });
+        $serial3->discard_changes->update({ publisheddate => '2022-08-19' });
+        $item1->discard_changes->update( { enumchron => 'cc' } );
+        $item2->discard_changes->update( { enumchron => 'bb' } );
+        $item3->discard_changes->update( { enumchron => 'aa' } );
+        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
+            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ] );
+
+    }
 
     $schema->storage->txn_rollback;
 
