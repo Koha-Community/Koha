@@ -422,7 +422,7 @@
                                                             </td>
                                                             <td class="information">
                                                                 [% IF ( itemLoo.dateDue ) %]
-                                                                    <span class="checkedout">Due [% itemLoo.dateDue | html %]</span>
+                                                                    <span class="checkedout">Due [% itemLoo.dateDue | $KohaDates as_due_date => 1 %]</span>
                                                                 [% ELSIF ( itemLoo.transfertwhen ) %]
                                                                     <span class="intransit">In transit from [% Branches.GetName( itemLoo.transfertfrom ) | html %] to [% Branches.GetName( itemLoo.transfertto ) | html %] since [% itemLoo.transfertwhen | html %]</span>
                                                                 [% END %]
@@ -438,11 +438,11 @@
                                                                 [% IF ( itemLoo.reservedate ) %]
                                                                     <span class="waiting">
                                                                         [% IF ( itemLoo.waitingdate ) %]
-                                                                            <span>Waiting for patron at [% itemLoo.ExpectedAtLibrary | html %] since [% itemLoo.waitingdate | $KohaDates %]</span>
+                                                                            <span>Waiting for patron at [% Branches.GetName( itemLoo.ExpectedAtLibrary ) | html %] since [% itemLoo.waitingdate | $KohaDates %]</span>
                                                                         [% ELSIF ( itemLoo.reservedate ) %]
-                                                                            <span>On hold for patron expected at [% itemLoo.ExpectedAtLibrary | html %] since [% itemLoo.reservedate | $KohaDates %]</span>
+                                                                            <span>On hold for patron expected at [% Branches.GetName( itemLoo.ExpectedAtLibrary ) | html %] since [% itemLoo.reservedate | $KohaDates %]</span>
                                                                         [% ELSE %]
-                                                                            <span>On hold for patron expected at [% itemLoo.ExpectedAtLibrary | html %]</span>
+                                                                            <span>On hold for patron expected at [% Branches.GetName( itemLoo.ExpectedAtLibrary ) | html %]</span>
                                                                         [% END %]
                                                                     </span>
                                                                 [% ELSE %]
