@@ -68,11 +68,11 @@
     [% END %]
     [% IF cp.patron.debarred %]
         <br/>
-        <span>Patron's account is restricted</span>
+        <span class="patron_restricted">Patron's account is restricted</span>
     [% END %]
     [% IF cp.patron.has_overdues %]
         <br />
-        <span>Patron has items overdue</span>
+        <span class="patron_overdues">Patron has items overdue</span>
     [% END %]
 [% END %]
 
