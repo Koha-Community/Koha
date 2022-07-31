@@ -147,11 +147,17 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-27 11:58:44
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RyZGROB1+g3kb2bo6mwrUQ
 
-
 __PACKAGE__->add_columns(
     '+enabled' => { is_boolean => 1 },
     '+enable_waiting_holds_only' => { is_boolean => 1 },
     '+patron_scheduled_pickup' => { is_boolean => 1 },
 );
+
+sub koha_object_class {
+    'Koha::CurbsidePickupPolicy';
+}
+sub koha_objects_class {
+    'Koha::CurbsidePickupPolicies';
+}
 
 1;
