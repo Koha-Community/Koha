@@ -4,6 +4,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     Curbside pickup &rsaquo; Administration &rsaquo; Koha
@@ -141,20 +142,19 @@
                             <ol>
                                 <li>
                                     <label>New slot:</label>
+                                    [% days = { "0" = t("Sunday"), "1" = t("Monday"), "2" = t("Tuesday"), "3" = t("Wednesday"), "4" = t("Thursday"), "5" = t("Friday"), "6" = t("Saturday") } %]
+                                    [% SET CalendarFirstDayOfWeek = Koha.Preference("CalendarFirstDayOfWeek") %]
                                     <div>
                                         <select id="day-[% l.branchcode | html %]">
-                                            <option value="0">Sunday</option>
-                                            <option value="1">Monday</option>
-                                            <option value="2">Tuesday</option>
-                                            <option value="3">Wednesday</option>
-                                            <option value="4">Thursday</option>
-                                            <option value="5">Friday</option>
-                                            <option value="6">Saturday</option>
+                                            [% FOR i IN [0, 1, 2, 3, 4, 5, 6] %]
+                                                [% SET d = ( CalendarFirstDayOfWeek + i ) % 7 %]
+                                                <option value="[% d | html %]">[% days.$d | html %]</option>
+                                            [% END %]
+                                        </select>
                                             <span>
                                                 From <input type="text" size="5" class="noEnterSubmit" id="new-start-[% l.branchcode | html %]" placeholder="00:00" />
                                                 to <input type="text" size="5" class="noEnterSubmit" id="new-end-[% l.branchcode | html %]" placeholder="23:55" />
                                             </span>
-                                        </select>
                                         <input type="button" class="add-new-slot" data-branchcode="[% l.branchcode | html %]" value="Add" />
                                         <span id="invalid_slot_warning" style="display:none;">Invalid format for this new slot, must be '00:00 to 23:59'.</span>
                                     </div>
@@ -228,43 +228,47 @@
 
             $("#conf-"+branchcode).find(".pickup_hours li").remove();
 
-            Object.keys(slots_per_day).forEach(function(day){
-                let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
-                slots_per_day[day].forEach(function(slot) {
-                    let span_node = $('<span class="pickup-slot"></span>');
-                    span_node.append('<input type="hidden" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
-                    span_node.append('<span>'+format_slot(slot)+'</span>');
+            const CalendarFirstDayOfWeek = [% Koha.Preference("CalendarFirstDayOfWeek") || 0 | html %];
+            [0, 1, 2, 3, 4, 5, 6]
+               .map(i => ( CalendarFirstDayOfWeek + i ) % 7)
+               .filter(d => d in slots_per_day)
+               .map( day => {
+                    let li_node = $('<li><label>'+get_day_lib(day)+'<label></li>');
+                    slots_per_day[day].forEach(function(slot) {
+                        let span_node = $('<span class="pickup-slot"></span>');
+                        span_node.append('<input type="hidden" name="pickup-slot-'+branchcode+'" value="'+slot+'"/>');
+                        span_node.append('<span>'+format_slot(slot)+'</span>');
 
-                    let delete_link = $('<a href="#" on> <i class="fa fa-trash" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on('click', function(e){ e.preventDefault(); delete_slot($(this).closest('li'), branchcode); });
-                    span_node.append(delete_link);
+                        let delete_link = $('<a href="#" on> <i class="fa fa-trash" aria-hidden="true" title="%s"></i>'.format(_("Remove this slot"))).on('click', function(e){ e.preventDefault(); delete_slot($(this).closest('li'), branchcode); });
+                        span_node.append(delete_link);
 
-                    span_node.appendTo(li_node);
+                        span_node.appendTo(li_node);
+                    });
+                    li_node.appendTo($("#conf-"+branchcode).find(".pickup_hours"));
                 });
-                li_node.appendTo($("#conf-"+branchcode).find(".pickup_hours"));
-            });
         }
         function get_day_lib(day){
             let lib;
             switch(day){
-            case '0':
+            case 0:
                 lib = _("Sunday");
                 break;
-            case '1':
+            case 1:
                 lib = _("Monday");
                 break;
-            case '2':
+            case 2:
                 lib = _("Tuesday");
                 break;
-            case '3':
+            case 3:
                 lib = _("Wednesday");
                 break;
-            case '4':
+            case 4:
                 lib = _("Thursday");
                 break;
-            case '5':
+            case 5:
                 lib = _("Friday");
                 break;
-            case '6':
+            case 6:
                 lib = _("Saturday");
                 break;
             }
