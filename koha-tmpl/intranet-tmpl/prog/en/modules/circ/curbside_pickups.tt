@@ -10,6 +10,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Curbside pickups &rsaquo; Circulation &rsaquo; Koha</title>
 <style>
+    #pickup-times {
+        width: 50%;
+    }
     .pickup_time input[type='radio'] {
         display: none;
     }
@@ -20,6 +23,8 @@
         background-color: #ffffcc;
         display: inline-block;
         cursor: pointer;
+        width: 5rem;
+        text-align: center;
     }
     .pickup_time input[type='radio']:checked + label {
         background-color: #bcdb89;

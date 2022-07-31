@@ -8,24 +8,82 @@
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your curbside pickups &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
-
-<style>
-    .pickup_time input[type='radio'] {
-        display: none;
-    }
-    .pickup_time {
-        /*margin: .2em;*/
-    }
-    .pickup_time label {
-        background-color: #ffffcc;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .pickup_time input[type='radio']:checked + label {
-        background-color: #bcdb89;
-    }
-</style>
-
+[% FILTER collapse %]
+    <style>
+        .pickup_time input[type='radio'] {
+            display: none;
+        }
+        .pickup_time {
+            display: inline-block;
+        }
+        #pickup-times {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #pickup-times label {
+            flex-basis: 100%;
+            text-align: center;
+        }
+        fieldset.rows .pickup_time label {
+            background: #e6e6e6 linear-gradient(180deg,#f0f0f0,#e6e6e6);
+            border: 1px solid #b3b3b3;
+            border-radius: 3px;
+            cursor: pointer;
+            float: none;
+            font-weight: normal;
+            padding: .2em .1em;
+            text-align: center;
+            width: 6rem;
+        }
+        fieldset.rows .pickup_time label:hover {
+            background: #e6e6e6 linear-gradient(180deg,#F7F7F7,#F0F0F0);
+        }
+        fieldset.rows .pickup_time label::before {
+            font-family: FontAwesome;
+            color: #AAA;
+            content: "\f1db";
+            display: inline-block;
+            padding-right: .5em;
+        }
+        fieldset.rows .pickup_time input:checked + label {
+            background: #5cb85c linear-gradient(180deg,#5cb85c,#4cae4c);
+            border: 1px solid #548e54;
+            color: #FFF;
+        }
+        fieldset.rows .pickup_time input:checked + label::before {
+            font-family: FontAwesome;
+            color: #FFF;
+            content: "\f05d";
+            display: inline-block;
+            padding-right: .5em;
+        }
+        fieldset.rows .pickup_time input:disabled + label {
+            background: #F0F0F0 none;
+            border: 1px solid #E6E6E6;
+            color: #6c6c6c;
+        }
+        fieldset.rows .pickup_time input:disabled + label:hover {
+            cursor: not-allowed;
+        }
+        fieldset.rows .pickup_time input:disabled + label::before {
+            content: "";
+            display: inline-block;
+        }
+        #existing-pickup-warning {
+            color: #c00;
+            display: inline-block;
+        }
+        .pickups_available {
+            font-size: 90%;
+        }
+        .pickups_available::before {
+            content: "(";
+        }
+        .pickups_available::after {
+            content: ")";
+        }
+    </style>
+[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -173,8 +231,8 @@
                                         <fieldset class="rows">
                                             <ol>
                                                 <li>
-                                                    <label for="pickup_branch">Pickup library:</label>
-                                                    <select name="pickup_branch" id="pickup-branch">
+                                                    <label for="pickup-branch" class="required">Pickup library:</label>
+                                                    <select name="pickup_branch" id="pickup-branch" required="required">
                                                         <option value="">Select a library</option>
                                                         [% FOR p IN policies %]
                                                             <option value="[% p.branchcode | html %]">[% Branches.GetName(p.branchcode) | html %]</option>
@@ -182,16 +240,17 @@
                                                         [% END %]
                                                     </select>
                                                     <span id="existing-pickup-warning" class="required" style="display: none;">You already have a pickup scheduled for this library.</span>
+                                                    <div class="required_label required">Required</div>
                                                 </li>
-                                                <li>
-                                                    <label for="pickup_date">Pickup date:</label>
+                                                <li id="pickup_date_item">
+                                                    <label for="pickup-date">Pickup date:</label>
                                                     <input name="pickup_date" type="text" class="flatpickr" id="pickup-date" disabled required="required"/>
-                                                    <span class="required">Required</span>
+                                                    <div class="required_label required">Required</div>
                                                 </li>
 
-                                                <li id="pickup-times" class="radio"></li>
+                                                <li id="pickup-times"></li>
 
-                                                <li>
+                                                <li id="pickup_notes_item">
                                                     <label for="notes">Notes:</label>
                                                     <input name="notes" id="notes" />
                                                 </li>
@@ -265,145 +324,152 @@
             existingPickupMoments[pickup.branchcode].push(pickupMoment);
         });
 
-        $("#pickup-branch option").each(function(){
-            if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
-                $(this).prop("disabled", "disabled");
-                $(this).attr("title", _("You don't have waiting holds at this library"));
-            }
-        });
+        $(document).ready(function() {
+            $("#pickup-branch option").each(function(){
+                if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
+                    $(this).prop("disabled", "disabled");
+                    $(this).attr("title", _("You don't have waiting holds at this library"));
+                }
+            });
 
-        $('#pickup-branch').on('change', function() {
-            let branchcode = $(this).val();
+            $('#pickup-branch').on('change', function() {
+                let branchcode = $(this).val();
 
-            let existing_pickup = pickup_exists_in.indexOf(branchcode) != -1;
+                let existing_pickup = pickup_exists_in.indexOf(branchcode) != -1;
 
-            $('#pickup-date').val("");
-            $('#pickup-time').val("");
-            $('#pickup-times').hide();
-            $('#schedule-pickup-button').prop('disabled', true);
+                $('#pickup-date').val("");
+                $('#pickup-time').val("");
+                $('#pickup-times').hide();
+                $('#schedule-pickup-button').prop('disabled', true);
 
-            if (existing_pickup) {
-                $('#existing-pickup-warning').show();
-                $('#pickup-date').prop("disabled", true);
-            } else {
-                $('#existing-pickup-warning').hide();
-                $('#pickup-date').prop("disabled", branchcode == "");
-            }
-        });
+                if (existing_pickup) {
+                    $('#existing-pickup-warning').show();
+                    $("#pickup_date_item,#pickup_notes_item").hide();
+                    $('#pickup-date').prop("disabled", true);
+                } else {
+                    $('#existing-pickup-warning').hide();
+                    $("#pickup_date_item").show();
+                    $('#pickup-date').prop("disabled", branchcode == "");
+                }
+            });
 
-        $("#pickup-date").on('change', function() {
+            const pickupDate = document.getElementById("pickup-date");
+            pickupDate._flatpickr.config.onClose.push(function( selectedDates, dateStr, instance ){
+                /* Here we add an onClose event to the existing flatpickr instance */
+                /* It fires after the user has selected a date from the calendar popup */
+                $('#pickup-times').html("<label>" + _("Select a time") + "</label>");
+                $('#schedule-pickup-button').prop( 'disabled', 1 );
 
-            $('#pickup-times').empty();
-            $('#schedule-pickup-button').prop( 'disabled', 1 );
+                var currentDate = dateStr;
+                let branchcode = $("#pickup-branch").val();
+                let policy = policies[branchcode];
 
-            var currentDate = $(this).val();
-            let branchcode = $("#pickup-branch").val();
-            let policy = policies[branchcode];
+                let selectedDate = dayjs(currentDate, get_dateformat_str(dateformat_pref).toUpperCase());
 
-            let selectedDate = dayjs(currentDate, get_dateformat_str(dateformat_pref).toUpperCase());
-
-            let pickupSlots = [];
-            let available_count = 0;
-            let dow = selectedDate.day(); // Sunday is 0 (at least for now)
-            if (!policy.slots_per_day[dow]){
-                $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
-                return;
-            }
-
-            policy.slots_per_day[dow].forEach(function(slot){
-                let pickup_interval = policy.pickup_interval;
-                if (!pickup_interval) {
+                let pickupSlots = [];
+                let available_count = 0;
+                let dow = selectedDate.day(); // Sunday is 0 (at least for now)
+                if (!policy.slots_per_day[dow]){
                     $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
                     return;
                 }
 
-                let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
-                let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
-
-                let keep_going = true;
-                let now = dayjs();
-
-                // Initialize pickup slots starting at opening time
-                let pickupIntervalStartMoment = listStartMoment;
-                let pickupIntervalEndMoment   = listStartMoment.add(pickup_interval, 'minutes');
-                while (keep_going) {
-                    let available = true;
-                    let display_slot = true;
-
-                    if (pickupIntervalStartMoment.isBefore(now)) {
-                        // Slots in the past are unavailable
-                        available = false;
-                        display_slot = false;
+                policy.slots_per_day[dow].forEach(function(slot){
+                    let pickup_interval = policy.pickup_interval;
+                    if (!pickup_interval) {
+                        $('#pickup-times').html("<div>"+_("No pickup time defined for this day.")+"</div>");
+                        return;
                     }
 
-                    if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
-                        // Slots after the end of pickup times for the day are unavailable
-                        available = false;
+                    let listStartMoment = selectedDate.hour(slot.start_hour).minute(slot.start_minute);
+                    let listEndMoment = selectedDate.hour(slot.end_hour).minute(slot.end_minute);
+
+                    let keep_going = true;
+                    let now = dayjs();
+
+                    // Initialize pickup slots starting at opening time
+                    let pickupIntervalStartMoment = listStartMoment;
+                    let pickupIntervalEndMoment   = listStartMoment.add(pickup_interval, 'minutes');
+                    while (keep_going) {
+                        let available = true;
+                        let display_slot = true;
+
+                        if (pickupIntervalStartMoment.isBefore(now)) {
+                            // Slots in the past are unavailable
+                            available = false;
+                            display_slot = false;
+                        }
+
+                        if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                            // Slots after the end of pickup times for the day are unavailable
+                            available = false;
+                        }
+
+                        let pickups_scheduled = 0;
+
+                        if (existingPickupMoments[branchcode]){
+                            existingPickupMoments[branchcode].forEach(function(pickupMoment){
+                                // An existing pickup time
+                                if (pickupMoment.isSameOrAfter(pickupIntervalStartMoment) && pickupMoment.isBefore(pickupIntervalEndMoment)) {
+                                    // This calculated pickup is in use by another scheduled pickup
+                                    pickups_scheduled++;
+                                }
+                            });
+                        }
+
+                        if (pickups_scheduled >= policy.patrons_per_interval) {
+                            available = false;
+                        }
+
+                        if ( display_slot ) {
+                            pickupSlots.push(
+                                {
+                                    "available": available,
+                                    "moment": pickupIntervalStartMoment,
+                                    "pickups_scheduled": pickups_scheduled
+                                }
+                            );
+                        }
+
+                        if ( available ) {
+                            available_count++;
+                        }
+
+                        pickupIntervalStartMoment = pickupIntervalEndMoment;
+                        pickupIntervalEndMoment = pickupIntervalStartMoment.add(pickup_interval, 'minutes');
+                        if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
+                            // This latest slot is after the end of pickup times for the day, so we can stop
+                            keep_going = false;
+                        }
                     }
 
-                    let pickups_scheduled = 0;
+                    $('#schedule-pickup-button').prop( 'disabled', available_count <= 0 );
+                });
 
-                    if (existingPickupMoments[branchcode]){
-                        existingPickupMoments[branchcode].forEach(function(pickupMoment){
-                            // An existing pickup time
-                            if (pickupMoment.isSameOrAfter(pickupIntervalStartMoment) && pickupMoment.isBefore(pickupIntervalEndMoment)) {
-                                // This calculated pickup is in use by another scheduled pickup
-                                pickups_scheduled++;
-                            }
-                        });
-                    }
-
-                    if (pickups_scheduled >= policy.patrons_per_interval) {
-                        available = false;
-                    }
-
-                    if ( display_slot ) {
-                        pickupSlots.push(
-                            {
-                                "available": available,
-                                "moment": pickupIntervalStartMoment,
-                                "pickups_scheduled": pickups_scheduled
-                            }
-                        );
-                    }
-
-                    if ( available ) {
-                        available_count++;
-                    }
-
-                    pickupIntervalStartMoment = pickupIntervalEndMoment;
-                    pickupIntervalEndMoment = pickupIntervalStartMoment.add(pickup_interval, 'minutes');
-                    if (pickupIntervalEndMoment.isAfter(listEndMoment)) {
-                        // This latest slot is after the end of pickup times for the day, so we can stop
-                        keep_going = false;
-                    }
+                for (let i = 0; i < pickupSlots.length; i++) {
+                    let pickupSlot = pickupSlots[i];
+                    let optText = pickupSlot.moment.format("HH:mm");
+                    let optValue = pickupSlot.moment.format("YYYY-MM-DD HH:mm:ss");
+                    let pickups_scheduled = pickupSlot.pickups_scheduled;
+                    let pickups_available = policy.patrons_per_interval - pickups_scheduled;
+                    let disabled = pickupSlot.available ? "" : "disabled";
+                    $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-toggle="tooltip" title="` + _("Appointments available: ") + `${pickups_available}">${optText} <span class="pickups_available">${pickups_available}</span></label></span>`);
                 }
 
-                $('#schedule-pickup-button').prop( 'disabled', available_count <= 0 );
+                $("#pickup_notes_item,#pickup-times").show();
             });
 
-            for (let i = 0; i < pickupSlots.length; i++) {
-                let pickupSlot = pickupSlots[i];
-                let optText = pickupSlot.moment.format("HH:mm");
-                let optValue = pickupSlot.moment.format("YYYY-MM-DD HH:mm:ss");
-                let pickups_scheduled = pickupSlot.pickups_scheduled;
-                let disabled = pickupSlot.available ? "" : "disabled";
-                $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label for="slot_${i}">${optText} (${pickups_scheduled})</label></span>`);
-            }
-
-            $('#pickup-times').show();
-        });
-
-
-        $(document).ready(function() {
-            $("#pickup-times").hide();
+            $("#pickup_date_item,#pickup_notes_item,#pickup-times").hide();
 
             $("#create-pickup").on('submit', function(){
                 if ( ! $("input[type='radio']:checked").length ) {
-                    alert(_("Please select a date and a pickup time"))
+                    alert(_("Please select a date and a pickup time"));
                     return false;
                 }
                 return true;
+            });
+            $("#pickup-times").tooltip({
+                selector: ".pickup_select"
             });
         });
     </script>
