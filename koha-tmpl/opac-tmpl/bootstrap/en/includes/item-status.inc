@@ -18,8 +18,8 @@
 [% END %]
 
 [% IF item.isa('Koha::Item') %]
-    [% SET datedue = issue.date_due %]
-    [% SET onsite_checkout = issue.onsite_checkout %]
+    [% SET datedue = item.checkout.date_due %]
+    [% SET onsite_checkout = item.checkout.onsite_checkout %]
 [% ELSE %]
     [% SET datedue = item.datedue || issue.date_due %]
     [% SET onsite_checkout = item.onsite_checkout %]
@@ -39,7 +39,8 @@
             <span class="item-status checkedout">Checked out</span>
         [% END %]
     [% END %]
-    [% IF item.avail_for_recall %]<a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>[% END %]
+    [%# FIXME We should move avail_for_recall to a Koha::Item method %]
+    [% IF !item.isa('Koha::Item') AND item.avail_for_recall %]<a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>[% END %]
 [% END %]
 
 [% IF NOT ( item.isa('Koha::Item') ) AND item.transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
@@ -100,7 +101,7 @@
     <span class="item-status pendinghold">Pending hold</span>
 [% END %]
 
-[% IF item.has_pending_recall %]
+[% IF Koha.Preference('UseRecalls') && item.has_pending_recall %]
     [% SET itemavailable = 0 %]
     <span class="item-status pendingrecall">Pending recall</span>
 [% END %]

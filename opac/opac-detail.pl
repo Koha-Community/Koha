@@ -79,7 +79,6 @@ use Koha::Virtualshelves;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Ratings;
-use Koha::Recalls;
 use Koha::Reviews;
 use Koha::Serial::Items;
 use Koha::SearchEngine::Search;
@@ -729,21 +728,12 @@ else {
         }
 
         $item_info->{checkout} = $item->checkout;
+        $item_info->{object} = $item;
 
         my $reserve_status =
           C4::Reserves::GetReserveStatus( $item->itemnumber );
         if ( $reserve_status eq "Waiting"  ) { $item_info->{'waiting'} = 1; }
         if ( $reserve_status eq "Reserved" ) { $item_info->{'onhold'}  = 1; }
-
-        if ( C4::Context->preference('UseRecalls') ) {
-            my $pending_recall_count = Koha::Recalls->search(
-                {
-                    item_id   => $item->itemnumber,
-                    status    => 'waiting',
-                }
-            )->count;
-            if ( $pending_recall_count ) { $item_info->has_pending_recall = 1; }
-        }
 
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers( $item->itemnumber );

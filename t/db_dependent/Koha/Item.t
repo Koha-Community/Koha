@@ -1483,7 +1483,7 @@ subtest 'store() tests' => sub {
 
 subtest 'Recalls tests' => sub {
 
-    plan tests => 20;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -1654,12 +1654,15 @@ subtest 'Recalls tests' => sub {
         }
     )->store;
     $recall2->set_waiting( { item => $item1 } );
+    is( $item1->has_pending_recall, 1, 'Item has pending recall' );
 
     # return a waiting recall
     my $check_recall = $item1->check_recalls;
     is( $check_recall->patron_id, $patron1->borrowernumber, "Waiting recall is highest priority and returned" );
 
     $recall2->revert_waiting;
+
+    is( $item1->has_pending_recall, 0, 'Item does not have pending recall' );
 
     # return recall based on recalldate
     $check_recall = $item1->check_recalls;

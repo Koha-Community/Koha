@@ -1,4 +1,4 @@
-[% IF ( item.damaged or item.datedue or item.itemlost or item.transfertwhen or item.waiting ) %]
+[% IF ( item.damaged or item.checkout.date_due or item.itemlost or item.transfertwhen or item.waiting ) %]
     <link property="availability" href="http://schema.org/OutOfStock" />
 [% ELSIF ( item.withdrawn ) %]
     <link property="availability" href="http://schema.org/Discontinued" />

@@ -44,6 +44,7 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Plugins;
+use Koha::Recalls;
 use Koha::Result::Boolean;
 use Koha::SearchEngine::Indexer;
 use Koha::StockRotationItem;
@@ -908,6 +909,26 @@ sub has_pending_hold {
     my ( $self ) = @_;
     my $pending_hold = $self->_result->tmp_holdsqueues;
     return $pending_hold->count ? 1: 0;
+}
+
+=head3 has_pending_recall {
+
+  my $has_pending_recall
+
+Return if whether has pending recall of not.
+
+=cut
+
+sub has_pending_recall {
+    my ( $self ) = @_;
+
+    # FIXME Must be moved to $self->recalls
+    return Koha::Recalls->search(
+        {
+            item_id   => $self->itemnumber,
+            status    => 'waiting',
+        }
+    )->count;
 }
 
 =head3 as_marc_field
