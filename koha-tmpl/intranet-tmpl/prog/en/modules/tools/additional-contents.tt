@@ -484,7 +484,8 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% FOREACH l IN [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote' ] %]
+        [% SET available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote' ] %]
+        [% FOREACH l IN available_options.sort %]
             [% IF l == location %]
                 <option value="[% l | html %]" selected="selected">[% l | html %]</option>
             [% ELSE %]
