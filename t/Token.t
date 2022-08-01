@@ -20,9 +20,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 use Time::HiRes qw|usleep|;
+
 use C4::Context;
 use Koha::Token;
 
@@ -116,4 +117,20 @@ subtest 'JWT' => sub {
 
     my $retrieved_id = $tokenizer->decode_jwt({ token => $jwt });
     is( $retrieved_id, $id, 'id stored in jwt should be correct' );
+};
+
+subtest 'testing _add_default_csrf_params with/without userenv (bug 27849)' => sub {
+    plan tests => 5;
+
+    # Current userenv: userid == 42
+    my $result = Koha::Token::_add_default_csrf_params({ session_id => '567' });
+    is( $result->{session_id}, 567, 'Check session id' );
+    is( $result->{id}, '42_567', 'Check userid' );
+
+    # Clear userenv
+    C4::Context::_unset_userenv('DUMMY SESSION');
+    is( C4::Context::userenv, undef, 'No userenv anymore' );
+    $result = Koha::Token::_add_default_csrf_params({}); # pass no session_id
+    is( $result->{session_id}, Koha::Token::DEFA_SESSION_ID, 'Check session id' );
+    is( $result->{id}, Koha::Token::DEFA_SESSION_USERID. '_'. $result->{session_id}, 'Check userid' );
 };

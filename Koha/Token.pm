@@ -60,6 +60,8 @@ use Koha::Exceptions::Token;
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
 use constant CSRF_EXPIRY_HOURS => 8; # 8 hours instead of 7 days..
+use constant DEFA_SESSION_ID => 0;
+use constant DEFA_SESSION_USERID => 'anonymous';
 
 =head1 METHODS
 
@@ -212,17 +214,11 @@ sub decode_jwt {
 
 sub _add_default_csrf_params {
     my ( $params ) = @_;
-    $params->{session_id} //= '';
-    if( !$params->{id} ) {
-        if( defined( C4::Context->userenv ) ) {
-            $params->{id} = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{session_id} );
-        } else {
-            $params->{id} = Encode::encode( 'UTF-8', $params->{session_id} );
-        }
-    } else {
-        $params->{id} .= $params->{session_id};
-    }
-    $params->{id} //= Encode::encode( 'UTF-8', C4::Context->userenv->{id} );
+    $params->{session_id} //= DEFA_SESSION_ID;
+    my $userenv = C4::Context->userenv // { id => DEFA_SESSION_USERID };
+    $params->{id} //= Encode::encode( 'UTF-8', $userenv->{id} );
+    $params->{id} .= '_' . $params->{session_id};
+
     my $pw = C4::Context->config('pass');
     $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
     return $params;
