@@ -122,7 +122,7 @@
           <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
           <td>
             [% IF ( overdueloo.return_claim_created_on ) %]
-                <span class="badge">[% overdueloo.return_claim_created_on | html %]</span>
+                <span class="badge">[% overdueloo.return_claim_created_on | $KohaDates with_hours => 1 %]</span>
             [% ELSIF Koha.Preference('ClaimReturnedLostValue') %]
                 <a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber=[% overdueloo.itemnum | html %]>
                     <i class="fa fa-exclamation-circle"></i> Claim returned
