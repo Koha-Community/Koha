@@ -55,17 +55,18 @@ subtest 'prep_report' => sub {
         report_name => 'report_name_for_test_1',
         savedsql => 'SELECT * FROM items WHERE itemnumber IN <<Test|list>>',
     })->store;
+    my $id = $report->id;
 
     my ($sql, undef) = $report->prep_report( ['Test|list'],["1\n12\n\r243"] );
-    is( $sql, q{SELECT * FROM items WHERE itemnumber IN ('1','12','243')},'Expected sql generated correctly with single param and name');
+    is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') /* saved_sql.id: $id */},'Expected sql generated correctly with single param and name');
 
     $report->savedsql('SELECT * FROM items WHERE itemnumber IN <<Test|list>> AND <<Another>> AND <<Test|list>>')->store;
 
     ($sql, undef) = $report->prep_report( ['Test|list','Another'],["1\n12\n\r243",'the other'] );
-    is( $sql, q{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243')},'Expected sql generated correctly with multiple params and names');
+    is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and names');
 
     ($sql, undef) = $report->prep_report( [],["1\n12\n\r243",'the other',"42\n32\n22\n12"] );
-    is( $sql, q{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('42','32','22','12')},'Expected sql generated correctly with multiple params and no names');
+    is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('42','32','22','12') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and no names');
 
 };
 
