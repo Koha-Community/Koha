@@ -1416,14 +1416,14 @@ sub buildQuery {
                     if ( $index eq 'nb' ) {
                         if ( C4::Context->preference("SearchWithISBNVariations") ) {
                             my @isbns = C4::Koha::GetVariationsOfISBN( $operand );
-                            $operands[$i] = $operand =  '(nb=' . join(' OR nb=', @isbns) . ')';
+                            $operands[$i] = $operand = '(' . join( ' OR ', map { 'nb=' . $_ } @isbns ) . ')';
                             $indexes[$i] = $index = 'kw';
                         }
                     }
                     if ( $index eq 'ns' ) {
                         if ( C4::Context->preference("SearchWithISSNVariations") ) {
                             my @issns = C4::Koha::GetVariationsOfISSN( $operand );
-                            $operands[$i] = $operand =  '(ns=' . join(' OR ns=', @issns) . ')';
+                            $operands[$i] = $operand = '(' . join( ' OR ', map { 'ns=' . $_ } @issns ) . ')';
                             $indexes[$i] = $index = 'kw';
                         }
                     }
