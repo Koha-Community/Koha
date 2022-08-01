@@ -49,9 +49,10 @@ my $driver        = $s->driver;
 my $base_url      = $s->base_url;
 my $mainpage      = $s->base_url . q|mainpage.pl|;
 my $builder       = t::lib::TestBuilder->new;
+my $schema        = Koha::Database->schema;
 
 subtest 'Search patrons' => sub {
-    plan tests => 24;
+    plan tests => 25;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
@@ -276,6 +277,57 @@ subtest 'Search patrons' => sub {
     $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($patrons[0]->surname);
     $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
+
+    subtest 'remember_search' => sub {
+
+        plan tests => 7;
+
+        C4::Context->set_preference( 'PatronsPerPage', 5 );
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->submit_form;
+        $s->wait_for_ajax;
+        my $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        is( $patron_selected_text, "", "Patrons selected is not displayed" );
+
+        my @checkboxes = $driver->find_elements(
+            '//input[@type="checkbox"][@name="borrowernumber"]');
+        $checkboxes[2]->click;
+        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        is( $patron_selected_text, "Patrons selected: 1", "One patron selected" );
+
+        $checkboxes[4]->click;
+        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        is( $patron_selected_text, "Patrons selected: 2", "Two patrons are selected" );
+
+        $driver->find_element('//*[@id="memberresultst_next"]')->click;
+        @checkboxes = $driver->find_elements(
+            '//input[@type="checkbox"][@name="borrowernumber"]');
+        $checkboxes[0]->click;
+        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        is( $patron_selected_text, "Patrons selected: 3", "Tree patrons are selected" );
+
+
+        # Perform another search
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->submit_form;
+        $s->wait_for_ajax;
+        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        is( $patron_selected_text, "Patrons selected: 3", "Tree patrons still selected" );
+
+        $driver->find_element('//*[@id="patronlist-menu"]')->click;
+        $driver->find_element('//a[@class="patron-list-add"]')->click;
+        my $patron_list_name = "my new list";
+        $driver->find_element('//input[@id="new_patron_list"]')->send_keys($patron_list_name);
+        $driver->find_element('//button[@id="add_to_patron_list_submit"]')->click;
+        $s->wait_for_ajax;
+        is( $driver->find_element('//*[@id="patron_list_dialog"]')->get_text, "Added 3 patrons to $patron_list_name." );
+        my $patron_list = $schema->resultset('PatronList')->search({ name => $patron_list_name })->next;
+        is( $schema->resultset('PatronListPatron')->search({ patron_list_id => $patron_list->patron_list_id })->count, 3 );
+
+        $patron_list->delete;
+    };
 
     push @cleanup, $_ for @patrons;
     push @cleanup, $library;
