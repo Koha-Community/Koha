@@ -79,15 +79,15 @@ sub item {
     return Koha::Item->_new_from_dbic( $item_rs );
 }
 
-=head3 accountlines
+=head3 account_lines
 
-my $accountlines = $checkout->accountlines;
+my $account_lines = $checkout->account_lines;
 
-Return the checked out accountlines
+Return the checked out account_lines
 
 =cut
 
-sub accountlines {
+sub account_lines {
     my ( $self ) = @_;
     my $accountlines_rs = $self->_result->accountlines;
     return Koha::Account::Lines->_new_from_dbic( $accountlines_rs );

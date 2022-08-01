@@ -110,7 +110,7 @@ subtest 'item' => sub {
         'Koha::Checkout->item should return the correct item' );
 };
 
-subtest 'accountlines' => sub {
+subtest 'account_lines' => sub {
     plan tests => 3;
 
     my $accountline = Koha::Account::Line->new(
@@ -128,7 +128,7 @@ subtest 'accountlines' => sub {
         }
     )->store();
 
-    my $accountlines = $retrieved_checkout_1->accountlines;
+    my $accountlines = $retrieved_checkout_1->account_lines;
     is( ref($accountlines), 'Koha::Account::Lines',
         'Koha::Checkout->accountlines should return a Koha::Item' );
 

@@ -346,7 +346,7 @@ subtest 'apply() tests' => sub {
         }
     )->store();
 
-    my $a = $checkout->accountlines->next;
+    my $a = $checkout->account_lines->next;
     is( $a->id, $accountline->id, "Koha::Checkout::accountlines returns the related acountline" );
 
     # Enable renewing upon fine payment
