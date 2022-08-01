@@ -255,6 +255,14 @@ foreign key from the branches table for the library that is currently in possess
 
 date and time this item was last altered
 
+=head2 deleted_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+date/time of deletion
+
 =head2 location
 
   data_type: 'varchar'
@@ -450,6 +458,12 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "deleted_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "permanent_location",
@@ -495,8 +509,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ytND0t16cwo9dseU+JZSGQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-01 17:33:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RMuehNvH+0WSXxEurJks/g
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },

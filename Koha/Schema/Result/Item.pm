@@ -259,6 +259,14 @@ foreign key from the branches table for the library that is currently in possess
 
 date and time this item was last altered
 
+=head2 deleted_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+date/time of deletion
+
 =head2 location
 
   data_type: 'varchar'
@@ -463,6 +471,12 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
     is_nullable => 0,
+  },
+  "deleted_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
   },
   "location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
@@ -925,8 +939,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-13 13:32:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CjfZjLZeYYp3VMuSFJX25A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-01 17:33:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:joGnGYWVILPsYHE9CQxHxg
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
