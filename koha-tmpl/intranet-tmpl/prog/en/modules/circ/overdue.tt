@@ -94,7 +94,9 @@
           <th>Item type</th>
           <th>Price</th>
           <th>Non-public note</th>
-          <th>Return claims</th>
+          [% IF Koha.Preference('ClaimReturnedLostValue') %]
+            <th>Return claims</th>
+          [% END %]
         </tr>
       </thead>
       [%- BLOCK subject -%]Overdue:[%- END -%]
@@ -120,19 +122,17 @@
             <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
           <td>[% overdueloo.replacementprice | $Price %]</td>
           <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
-          <td>
-            [% IF ( overdueloo.return_claim_created_on ) %]
+          [% IF Koha.Preference('ClaimReturnedLostValue') %]
+            <td>
+              [% IF ( overdueloo.return_claim_created_on ) %]
                 <span class="badge">[% overdueloo.return_claim_created_on | $KohaDates with_hours => 1 %]</span>
-            [% ELSIF Koha.Preference('ClaimReturnedLostValue') %]
+              [% ELSE %]
                 <a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber=[% overdueloo.itemnum | html %]>
                     <i class="fa fa-exclamation-circle"></i> Claim returned
                 </a>
-            [% ELSE %]
-                <a class="btn btn-default btn-xs" disabled="disabled" title="ClaimReturnedLostValue is not set, this feature is disabled">
-                    <i class="fa fa-exclamation-circle"></i> Claim returned
-                </a>
-            [% END %]
-          </td>
+              [% END %]
+            </td>
+          [% END %]
         </tr>
       [% END %]
       </tbody>
@@ -319,6 +319,11 @@
 
         $(document).ready(function(){
             var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
+
+            [% IF !Koha.Preference('ClaimReturnedLostValue') %]
+                table_settings['columns'].splice(13, 1);
+            [% END %]
+
             KohaTable("overduest", {
                 "sPaginationType": "full",
                 "autoWidth": false,
