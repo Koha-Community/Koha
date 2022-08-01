@@ -239,7 +239,8 @@ my @search_groups =
   Koha::Library::Groups->get_search_groups( { interface => 'staff' } )->as_list;
 
 my $branch_limit = '';
-if ( scalar $cgi->param('limit') =~ /branch:([\w-]+)/ ) {
+my $limit_param = $cgi->param('limit');
+if ( $limit_param and $limit_param =~ /branch:([\w-]+)/ ) {
     $branch_limit = $1;
 }
 
