@@ -384,25 +384,20 @@ if ($op=~/else/) {
 
         # filter on date fields
         foreach my $field (qw( suggesteddate manageddate accepteddate )) {
-            my $from = $field . "_from";
-            my $to   = $field . "_to";
-            my $from_dt =
-              $suggestion_ref->{$from}
-              ? eval { dt_from_string( $suggestion_ref->{$from} ) }
-              : undef;
-            my $to_dt =
-              $suggestion_ref->{$to}
-              ? eval { dt_from_string( $suggestion_ref->{$to} ) }
-              : undef;
+            my $from    = delete $search_params->{"${field}_from"};
+            my $to      = delete $search_params->{"${field}_to"};
+
+            my $from_dt = $from && eval { dt_from_string($from) };
+            my $to_dt   = $to && eval { dt_from_string($to) };
 
             if ( $from_dt || $to_dt ) {
                 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
                 if ( $from_dt && $to_dt ) {
-                    $search_params->{$field} = { -between => [ $from_dt, $to_dt ] };
+                    $search_params->{$field} = { -between => [ $dtf->format_date($from_dt), $dtf->format_date($to_dt) ] };
                 } elsif ( $from_dt ) {
-                    $search_params->{$field} = { '>=' => $from_dt };
+                    $search_params->{$field} = { '>=' => $dtf->format_date($from_dt) };
                 } elsif ( $to_dt ) {
-                    $search_params->{$field} = { '<=' => $to_dt };
+                    $search_params->{$field} = { '<=' => $dtf->format_date($to_dt) };
                 }
             }
         }
