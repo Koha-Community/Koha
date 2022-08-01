@@ -55,8 +55,8 @@ Return the checked out account_lines
 
 sub account_lines {
     my ( $self ) = @_;
-    my $accountlines_rs = $self->_result->accountlines;
-    return Koha::Account::Lines->_new_from_dbic( $accountlines_rs );
+    my $account_lines_rs = $self->_result->account_lines;
+    return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
 }
 
 =head3 library

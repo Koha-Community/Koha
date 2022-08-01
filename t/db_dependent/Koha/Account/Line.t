@@ -347,7 +347,7 @@ subtest 'apply() tests' => sub {
     )->store();
 
     my $a = $checkout->account_lines->next;
-    is( $a->id, $accountline->id, "Koha::Checkout::accountlines returns the related acountline" );
+    is( $a->id, $accountline->id, "Koha::Checkout::account_lines returns the related acountline" );
 
     # Enable renewing upon fine payment
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );

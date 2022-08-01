@@ -404,7 +404,7 @@ __PACKAGE__->might_have(
 );
 
 __PACKAGE__->has_many(
-    "accountlines",
+    "account_lines",
     "Koha::Schema::Result::Accountline",
     { "foreign.issue_id" => "self.issue_id" },
     { cascade_copy       => 0, cascade_delete => 0 },

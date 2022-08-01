@@ -128,18 +128,18 @@ subtest 'account_lines' => sub {
         }
     )->store();
 
-    my $accountlines = $retrieved_checkout_1->account_lines;
-    is( ref($accountlines), 'Koha::Account::Lines',
-        'Koha::Checkout->accountlines should return a Koha::Item' );
+    my $account_lines = $retrieved_checkout_1->account_lines;
+    is( ref($account_lines), 'Koha::Account::Lines',
+        'Koha::Checkout->account_lines should return a Koha::Account::Lines' );
 
-    my $line = $accountlines->next;
+    my $line = $account_lines->next;
     is( ref($line), 'Koha::Account::Line',
         'next returns a Koha::Account::Line' );
 
     is(
         $accountline->id,
         $line->id,
-        'Koha::Checkout->accountlines should return the correct accountlines'
+        'Koha::Checkout->account_lines should return the correct account_lines'
     );
 };
 
