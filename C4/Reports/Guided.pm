@@ -559,7 +559,7 @@ sub execute_query {
     my $params     = shift;
     my $sql        = $params->{sql};
     my $offset     = $params->{offset} || 0;
-    my $limit      = $params->{limit}  || 999999;
+    my $limit      = $params->{limit}  || C4::Context->config('report_results_limit') || 999999;
     my $sql_params = defined $params->{sql_params} ? $params->{sql_params} : [];
     my $report_id  = $params->{report_id};
 
