@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 52;
+use Test::More tests => 53;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -77,6 +77,11 @@ my $itemtype = $builder->build(
         value  => { notforloan => undef, rentalcharge => 0 }
     }
 )->{itemtype};
+my $itemtype2 = $builder->build(
+    {   source => 'Itemtype',
+        value  => { notforloan => undef }
+    }
+)->{itemtype};
 my $branchcode_1 = $builder->build({ source => 'Branch' })->{branchcode};
 my $branchcode_2 = $builder->build({ source => 'Branch' })->{branchcode};
 my $branchcode_3 = $builder->build({ source => 'Branch' })->{branchcode};
@@ -123,10 +128,17 @@ my $daysago10 = output_pref(
 
 # Add biblio and item
 my $record = MARC::Record->new();
+my $record2 = MARC::Record->new();
 $record->append_fields(
+    MARC::Field->new( '942', '0', '0', c => $itemtype ),
+    MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
+
+$record2->append_fields(
+    MARC::Field->new( '942', '0', '0', c => $itemtype2 ),
     MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
 
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
+my ( $biblionumber2, $biblioitemnumber2 ) = C4::Biblio::AddBiblio( $record2, '' );
 
 my $barcode_1 = 'barcode_1';
 my $barcode_2 = 'barcode_2';
@@ -412,7 +424,8 @@ my $itemnumber = Koha::Item->new(
         homebranch     => $branchcode_1,
         holdingbranch  => $branchcode_1,
         notforloan     => 1,
-        itype          => $itemtype
+        itype          => $itemtype,
+        biblioitemnumber => $biblioitemnumber
     },
 )->store->itemnumber;
 
@@ -424,16 +437,30 @@ AddReturn( 'barcode_3', $branchcode_1 );
 my $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
 
-t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
+my $updatenotforloanstatusoncheckin = "
+_ALL_:\n
+ 1: 0\n
+ 9: 1\n\n
+$itemtype:\n
+  1: 9
+";
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', $updatenotforloanstatusoncheckin );
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
-ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );
+ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin prioritises item type specific rule over _ALL_ rules} );
 my $log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
 is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckin is not logged");
 
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
-ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
+ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin uses item type specific rules even if they do not target the returned items' notforloan value} );
+
+# Change the returning item to an item type without a rule
+Koha::Items->find( $itemnumber )->itype( $itemtype2 )->store;
+Koha::Items->find( $itemnumber )->notforloan( 1 )->store;
+AddReturn( 'barcode_3', $branchcode_1 );
+$item = Koha::Items->find( $itemnumber );
+ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckin _ALL_ rules are applied if there are no specific item type rule matching the returned item} );
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: ONLYMESSAGE' );
 $item->notforloan(1)->store;
@@ -523,6 +550,7 @@ is( $item3->location, 'CART', q{UpdateItemLocationOnCheckin updates location val
 
 
 # Bug 14640 - Cancel the hold on checking out if asked
+Koha::Items->find({ barcode => $barcode_1 })->notforloan('0')->store;
 my $reserve_id = AddReserve(
     {
         branchcode     => $branchcode_1,
