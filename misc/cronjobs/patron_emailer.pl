@@ -96,6 +96,8 @@ Send emails, if omitted script will report as verbose.
 
 =cut
 
+binmode( STDOUT, ":encoding(UTF-8)" );
+
 my $help     = 0;
 my $report_id;
 my $notice;
