@@ -75,6 +75,7 @@ sub search_for_display {
     $search_params->{published_on} = { '<=' => \'CAST(NOW() AS DATE)' };
     $search_params->{-or} = [ expirationdate => { '>=' => \'CAST(NOW() AS DATE)' },
                               expirationdate => undef ];
+    $search_params->{category} = $params->{category} if $params->{category};
 
     if ( $params->{lang} ) {
         # FIXME I am failing to translate the following query
