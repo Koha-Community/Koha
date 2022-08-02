@@ -419,6 +419,7 @@ sub core_types_to_classes {
         batch_item_record_deletion          => 'Koha::BackgroundJob::BatchDeleteItem',
         batch_item_record_modification      => 'Koha::BackgroundJob::BatchUpdateItem',
         batch_hold_cancel                   => 'Koha::BackgroundJob::BatchCancelHold',
+        create_eholdings_from_biblios       => 'Koha::BackgroundJob::CreateEHoldingsFromBiblios',
         update_elastic_index                => 'Koha::BackgroundJob::UpdateElasticIndex',
         update_holds_queue_for_biblios      => 'Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue',
         stage_marc_for_import               => 'Koha::BackgroundJob::StageMARCForImport',

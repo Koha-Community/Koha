@@ -111,4 +111,15 @@ sub delete {
     }
 }
 
+=head3 import_from_list
+
+Controller function that handles importing bibliographic record as local eholdings
+
+=cut
+
+sub import_from_list {
+    my $c = shift->openapi->valid_input or return;
+
+    return Koha::REST::V1::ERM::EHoldings::Titles::Local::import_from_list($c);
+}
 1;

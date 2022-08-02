@@ -387,3 +387,69 @@
     x-koha-authorization:
       permissions:
         erm: 1
+
+/erm/eholdings/local/titles/import:
+  post:
+    x-mojo-to: ERM::EHoldings::Titles#import_from_list
+    operationId: importErmEHoldingsTitles
+    tags:
+      - eholdings
+    summary: Import local titles
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: The list_id of the list to import
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            list_id:
+              type: string
+            package_id:
+              type: string
+    responses:
+      201:
+        description: Successfully enqueued the import job
+        schema:
+          type: object
+          properties:
+            job_id:
+              type: string
+          additionalProperties: false
+      400:
+        description: Bad parameter
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

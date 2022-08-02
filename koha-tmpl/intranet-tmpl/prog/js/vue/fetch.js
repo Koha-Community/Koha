@@ -367,7 +367,7 @@ export const fetchEBSCOResources = function () {
     return _fetchResources(apiUrl);
 };
 
-function checkError(response) {
+export const checkError = function(response) {
     if (response.status >= 200 && response.status <= 299) {
         return response.json();
     } else {
@@ -375,4 +375,4 @@ function checkError(response) {
         console.log(response);
         setError("%s (%s)".format(response.statusText, response.status));
     }
-}
+};

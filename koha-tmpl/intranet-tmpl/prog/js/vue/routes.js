@@ -10,6 +10,7 @@ import EHoldingsLocalHome from "./components/ERM/EHoldingsLocalHome.vue";
 import EHoldingsLocalPackagesFormAdd from "./components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormConfirmDelete from "./components/ERM/EHoldingsLocalTitlesFormConfirmDelete.vue";
 import EHoldingsLocalTitlesFormAdd from "./components/ERM/EHoldingsLocalTitlesFormAdd.vue";
+import EHoldingsLocalTitlesFormImport from "./components/ERM/EHoldingsLocalTitlesFormImport.vue";
 import EHoldingsLocalPackagesList from "./components/ERM/EHoldingsLocalPackagesList.vue";
 import EHoldingsLocalPackagesShow from "./components/ERM/EHoldingsLocalPackagesShow.vue";
 import EHoldingsLocalPackagesFormConfirmDelete from "./components/ERM/EHoldingsLocalPackagesFormConfirmDelete.vue";
@@ -120,6 +121,14 @@ export const routes = [
         path: "/cgi-bin/koha/mainpage.pl",
         beforeEnter(to, from, next) {
             window.location.href = "/cgi-bin/koha/mainpage.pl";
+        },
+    },
+    {
+        path: "/cgi-bin/koha/admin/background_jobs/:id",
+        beforeEnter(to, from, next) {
+            window.location.href =
+                "/cgi-bin/koha/admin/background_jobs.pl?op=view&id=" +
+                to.params.id;
         },
     },
     {
@@ -363,6 +372,21 @@ export const routes = [
                                                     .titles,
                                             ],
                                             "Edit title" // $t("Edit title")
+                                        ),
+                                },
+                            },
+                            {
+                                path: "import",
+                                component: EHoldingsLocalTitlesFormImport,
+                                meta: {
+                                    breadcrumb: () =>
+                                        build_breadcrumb(
+                                            [
+                                                breadcrumb_paths.eholdings_local,
+                                                breadcrumbs.eholdings.local
+                                                    .titles,
+                                            ],
+                                            "Import from a list" // $t("Import from a list")
                                         ),
                                 },
                             },

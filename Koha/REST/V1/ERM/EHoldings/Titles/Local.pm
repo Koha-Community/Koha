@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ERM::EHoldings::Titles;
+use Koha::BackgroundJob::CreateEHoldingsFromBiblios;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
@@ -231,6 +232,44 @@ sub delete {
         return $c->render(
             status  => 204,
             openapi => q{}
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 import_from_list
+
+=cut
+
+sub import_from_list {
+    my $c = shift->openapi->valid_input or return;
+
+    my $body       = $c->validation->param('body');
+    my $list_id    = $body->{list_id};
+    my $package_id = $body->{package_id};
+
+    my $list   = Koha::Virtualshelves->find($list_id);
+    my $patron = $c->stash('koha.user');
+
+    unless ( $list && $list->owner == $c->stash('koha.user')->borrowernumber ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "List not found" }
+        );
+    }
+
+
+    return try {
+
+        my @biblionumbers = $list->get_contents->get_column('biblionumber');
+        my $params = { record_ids => \@biblionumbers, package_id => $package_id };
+        my $job_id = Koha::BackgroundJob::CreateEHoldingsFromBiblios->new->enqueue( $params);
+
+        return $c->render(
+            status  => 201,
+            openapi => { job_id => $job_id }
         );
     }
     catch {
