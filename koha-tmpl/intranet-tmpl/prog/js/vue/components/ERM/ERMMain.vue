@@ -163,7 +163,7 @@ export default {
 
 <style src="vue-select/dist/vue-select.css"></style>
 <style>
-a.router-link-active {
+#navmenulist a.router-link-active {
     font-weight: 700;
 }
 
