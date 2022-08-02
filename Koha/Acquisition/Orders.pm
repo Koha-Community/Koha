@@ -72,6 +72,7 @@ sub filter_by_lates {
     my @estimated_delivery_time_conditions;
     if ( defined $estimated_from or defined $estimated_to ) {
         push @delivery_time_conditions, \[ "$date_add IS NOT NULL" ];
+        push @delivery_time_conditions, \[ "estimated_delivery_date IS NULL" ];
         push @estimated_delivery_time_conditions, \[ "estimated_delivery_date IS NOT NULL" ];
     }
     if ( defined $estimated_from ) {
@@ -118,8 +119,8 @@ sub filter_by_lates {
             ( ( @delivery_time_conditions and @estimated_delivery_time_conditions ) ?
                 ( -or =>
                     [
-                        -and => \@delivery_time_conditions,
-                        -and => \@estimated_delivery_time_conditions
+                        -and => \@estimated_delivery_time_conditions,
+                        -and => \@delivery_time_conditions
                     ]
                 )
                 : ()
