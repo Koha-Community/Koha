@@ -629,10 +629,14 @@ Circulation:
               type: textarea
               syntax: text/x-yaml
               class: code
-            - This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value
-            - "it will be updated to the right-hand value. For example, '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
-            - "Can be used for showing only the not for loan description. E.g. '-1: ONLYMESSAGE'."
-            - Each pair of values should be on a separate line.
+            - "This is a list of item types and value pairs.<br/><br/>"
+            - "<strong>Examples:</strong><br/>"
+            - "_ALL_:<br/>"
+            - "&nbsp-1: 0<br/><br/>"
+            - "CR:<br/>"
+            - "&nbsp1: 0<br/><br/>"
+            - "When an item is checked in, if it's item type matches CR then when the value on the left (1) matches the items' not for loan value it will be updated to the value on the right.<br/><br/>The special term _ALL_ is used on the left side of the colon (:) to affect all item types, <strong>this does not override all other rules</strong><br/><br/>"
+            - "Each item type needs to be defined on a separate line on the left side of the colon (:).<br/>Each pair of not for loan values, for that item type, should be listed on separate lines below the item type, each indented by a leading space<br/><br/>"
         -
             - pref: HidePersonalPatronDetailOnCirculation
               choices:
