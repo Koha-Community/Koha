@@ -1130,7 +1130,8 @@ sub to_api_mapping {
         unititle         => 'uniform_title',
         seriestitle      => 'series_title',
         copyrightdate    => 'copyright_date',
-        datecreated      => 'creation_date'
+        datecreated      => 'creation_date',
+        deleted_on       => undef,
     };
 }
 
