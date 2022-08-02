@@ -186,9 +186,7 @@
                             <span>Identifiers</span>
                             <ul>
                             [% FOR identifier IN author_identifiers %]
-                                <li>
-                                    [% PROCESS "authority-identifiers.inc" identifier => identifier %]
-                                </li>
+                                [% PROCESS "authority-identifiers.inc" identifier => identifier %]
                             [% END %]
                             </ul>
                         </div>

@@ -1,17 +1,27 @@
 [% SWITCH identifier.source.lower %]
 [% CASE 'orcid' %]
-    <span>ORCID: </span>
-    <a href="https://orcid.org/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    <li>
+        <span>ORCID: </span>
+        <a href="https://orcid.org/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    </li>
 [% CASE 'scopus' %]
-    <span>ScopusID: </span>
-    <a href="https://www.scopus.com/authid/detail.uri?authorId=[% identifier.number | url %]">[% identifier.number | html %]</a>
+    <li>
+        <span>ScopusID: </span>
+        <a href="https://www.scopus.com/authid/detail.uri?authorId=[% identifier.number | url %]">[% identifier.number | html %]</a>
+    </li>
 [% CASE 'loop' %]
-    <span>loop: </span>
-    <a href="https://loop.frontiersin.org/people/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    <li>
+        <span>loop: </span>
+        <a href="https://loop.frontiersin.org/people/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    </li>
 [% CASE 'rid' %]
-    <span>Publons: </span>
-    <a href="https://publons.com/researcher/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    <li>
+        <span>Publons: </span>
+        <a href="https://publons.com/researcher/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    </li>
 [% CASE 'viaf' %]
-    <span>VIAF: </span>
-    <a href="https://viaf.org/viaf/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    <li>
+        <span>VIAF: </span>
+        <a href="https://viaf.org/viaf/[% identifier.number | url %]">[% identifier.number | html %]</a>
+    </li>
 [% END %]

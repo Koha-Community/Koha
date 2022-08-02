@@ -965,9 +965,7 @@
                                             <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
                                             <ul>
                                             [% FOR identifier IN author.identifiers %]
-                                                <li>
-                                                    [% PROCESS "authority-identifiers.inc" identifier => identifier %]
-                                                </li>
+                                                [% PROCESS "authority-identifiers.inc" identifier => identifier %]
                                             [% END %]
                                             </ul>
                                         </div>
