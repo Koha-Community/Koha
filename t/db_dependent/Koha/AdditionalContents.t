@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 
 use Koha::AdditionalContents;
@@ -259,3 +259,30 @@ subtest '->search_for_display' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'find_best_match' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $library01 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $html01 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef, lang => 'default' },
+    });
+    my $params = { category => 'html_customizations', location => 'test_best_match', lang => 'nl-NL' };
+    is( Koha::AdditionalContents->find_best_match($params)->idnew, $html01->idnew, 'Found all branches, lang default' );
+
+    my $html02 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef, lang => 'nl-NL' },
+    });
+    is( Koha::AdditionalContents->find_best_match($params)->idnew, $html02->idnew, 'Found all branches, lang nl-NL' );
+
+    $params->{ library_id } = $library01->id;
+    $html02->branchcode( $library01->id )->store;
+    is( Koha::AdditionalContents->find_best_match($params)->idnew, $html02->idnew, 'Found library01, lang nl-NL' );
+
+    # Note: find_best_match is tested further via $libary->opac_info; see t/db_dependent/Koha/Library.t
+
+    $schema->storage->txn_rollback;
+}

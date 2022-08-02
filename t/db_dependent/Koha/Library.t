@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::Database;
+use Koha::AdditionalContents;
 use Koha::SMTP::Servers;
 
 use t::lib::TestBuilder;
@@ -90,6 +91,43 @@ subtest 'smtp_server() tests' => sub {
         Koha::SMTP::Servers->get_default->unblessed,
         q{Resetting twice doesn't explode and has the expected results}
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'opac_info tests' => sub {
+    plan tests => 8;
+    $schema->storage->txn_begin;
+    my $library01 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library02 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $html01 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, lang => 'default', content => '1', expirationdate => undef },
+    });
+    my $html02 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => $library01->id, lang => 'default', content => '2', expirationdate => undef },
+    });
+    my $html03 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => $library01->id, lang => 'nl-NL', content => '3', expirationdate => undef },
+    });
+    my $html04 = $builder->build_object({
+        class => 'Koha::AdditionalContents',
+        value => { category => 'html_customizations', location => 'OpacLibraryInfo', branchcode => undef, lang => 'fr-FR', content => '4', expirationdate => undef },
+    });
+
+    # Start testing
+    is( $library01->opac_info->content, '2', 'specific library, default language' );
+    is( $library01->opac_info({ lang => 'nl-NL' })->content, '3', 'specific library, specific language' );
+    is( $library01->opac_info({ lang => 'nl-BE' })->content, '2', 'specific library, unknown language' );
+    is( $library02->opac_info->content, '1', 'unknown library, default language' );
+    is( $library02->opac_info({ lang => 'fr-FR' })->content, '4', 'unknown library, specific language' );
+    is( $library02->opac_info({ lang => 'de-DE' })->content, '1', 'unknown library, unknown language' );
+    $html01->delete;
+    is( $library02->opac_info, undef, 'unknown library, default language (after removing html01)' );
+    is( $library02->opac_info({ lang => 'de-DE' }), undef, 'unknown library, unknown language (after removing html01)' );
 
     $schema->storage->txn_rollback;
 };

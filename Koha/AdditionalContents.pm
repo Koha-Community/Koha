@@ -110,6 +110,41 @@ sub search_for_display {
     return $self->SUPER::search({%$search_params, lang => 'default'}, { order_by => 'number'});
 }
 
+=head3 find_best_match
+
+    Koha::AdditionalContents->find_best_match({
+        category => , location => , lang => , library_id =>
+    });
+
+    When choosing the best match, a match on lang and library is preferred.
+    Next a match on library and default lang. Then match on All libs and lang.
+    Finally a match with All libs and default lang.
+
+=cut
+
+sub find_best_match {
+    my ( $self, $params ) = @_;
+    my $library_id = $params->{library_id};
+    my $lang = $params->{lang};
+
+    my $rs = $self->SUPER::search({
+        category => $params->{category},
+        location => $params->{location},
+        lang => [ $lang, 'default' ],
+        branchcode => [ $library_id, undef ],
+    });
+
+    # Pick the best
+    my ( $alt1, $alt2, $alt3 );
+    while( my $rec = $rs->next ) {
+        return $rec if $library_id && $rec->branchcode && $rec->branchcode eq $library_id && $lang && $rec->lang eq $lang;
+        $alt1 = $rec if !$alt1 && $library_id && $rec->branchcode && $rec->branchcode eq $library_id;
+        $alt2 = $rec if !$alt2 && $lang && $rec->lang eq $lang;
+        $alt3 = $rec if !$alt3;
+    }
+    return $alt1 // $alt2 // $alt3;
+}
+
 =head3 _type
 
 =cut
