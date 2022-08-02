@@ -2226,11 +2226,21 @@ sub AddReturn {
             warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
         }
         else {
-            foreach my $key ( keys %$rules ) {
-                if ( $item->notforloan eq $key ) {
-                    $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$key} };
-                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 }) unless $rules->{$key} eq 'ONLYMESSAGE';
-                    last;
+            if ( defined $rules->{$item->itype} ) {
+                foreach my $notloan_rule_key (keys %{ $rules->{$item->itype}} ) {
+                    if ( $item->notforloan eq $notloan_rule_key ) {
+                        $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$item->itype}->{$notloan_rule_key} };
+                        $item->notforloan($rules->{$item->itype}->{$notloan_rule_key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 });
+                        last;
+                    }
+                }
+            } elsif ( defined $rules->{'_ALL_'} ) {
+                foreach my $notloan_rule_key (keys %{ $rules->{'_ALL_'}} ) {
+                    if ( $item->notforloan eq $notloan_rule_key ) {
+                        $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{'_ALL_'}->{$notloan_rule_key} };
+                        $item->notforloan($rules->{'_ALL_'}->{$notloan_rule_key})->store({ log_action => 0, skip_record_index => 1, skip_holds_queue => 1 });
+                        last;
+                    }
                 }
             }
         }
