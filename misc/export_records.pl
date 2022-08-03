@@ -54,6 +54,7 @@ my (
     $start_accession,
     $end_accession,
     $marc_conditions,
+    $embed_see_from_headings,
     $help
 );
 
@@ -78,6 +79,7 @@ GetOptions(
     'start_accession=s'       => \$start_accession,
     'end_accession=s'         => \$end_accession,
     'marc_conditions=s'       => \$marc_conditions,
+    'embed_see_from_headings' => \$embed_see_from_headings,
     'h|help|?'                => \$help
 ) || pod2usage(1);
 
@@ -266,6 +268,7 @@ else {
             csv_profile_id     => $csv_profile_id,
             export_items       => (not $dont_export_items),
             clean              => $clean || 0,
+            embed_see_from_headings => $embed_see_from_headings || 0,
         }
     );
 }
@@ -394,6 +397,10 @@ Print a brief help message.
                                 <marc_target> exists regardless of target value, and
                                 "exists(<marc_target>)" will include marc records where
                                 no <marc_target> exists.
+
+=item B<--embed_see_from_headings>
+
+ --embed_see_from_headings      Embed see from (non-preferred form) headings in bibliographic record.
 
 =back
 
