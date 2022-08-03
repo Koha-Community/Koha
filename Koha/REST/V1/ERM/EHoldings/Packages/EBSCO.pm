@@ -104,4 +104,47 @@ sub get {
     };
 }
 
+sub edit {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $body        = $c->validation->param('body');
+        my $is_selected = $body->{is_selected};
+        my ( $vendor_id, $package_id ) = split '-',
+          $c->validation->param('package_id');
+
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
+        my $t     = try {
+            $ebsco->request(
+                PUT => '/vendors/' . $vendor_id . '/packages/' . $package_id,
+                undef,
+                {
+                    isSelected => $is_selected,
+                }
+            );
+        }
+        catch {
+            if ( blessed $_ ) {
+                if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
+                    return $c->render(
+                        status  => 404,
+                        openapi => { error => $_->error }
+                    );
+
+                }
+            }
+
+            $c->unhandled_exception($_);
+        };
+
+        return $c->render(
+            status  => 200,
+            openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

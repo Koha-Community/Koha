@@ -3,6 +3,23 @@
     <div v-else-if="erm_package" id="packages_show">
         <h2>
             {{ $t("Package .id", { id: erm_package.package_id }) }}
+            <span v-if="!updating_is_selected">
+                <a
+                    v-if="!erm_package.is_selected"
+                    class="btn btn-default btn-xs"
+                    role="button"
+                    @click="add_to_holdings"
+                    ><font-awesome-icon icon="plus" /> Add to holdings</a
+                >
+                <a
+                    v-else
+                    class="btn btn-default btn-xs"
+                    role="button"
+                    id="remove-from-holdings"
+                    @click="remove_from_holdings"
+                    ><font-awesome-icon icon="minus" /> Remove from holdings</a
+                > </span
+            ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
         <div>
             <fieldset class="rows">
@@ -89,7 +106,7 @@
 import EHoldingsPackageAgreements from "./EHoldingsEBSCOPackageAgreements.vue"
 import EHoldingsPackageTitlesList from "./EHoldingsEBSCOPackageTitlesList.vue"
 import { useAVStore } from "../../stores/authorised_values"
-import { fetchEBSCOPackage } from "../../fetch"
+import { fetchEBSCOPackage, checkError } from "../../fetch"
 
 export default {
     setup() {
@@ -118,6 +135,7 @@ export default {
                 package_agreements: [],
             },
             initialized: false,
+            updating_is_selected: false,
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -133,6 +151,35 @@ export default {
             const erm_package = await fetchEBSCOPackage(package_id)
             this.erm_package = erm_package
             this.initialized = true
+            this.updating_is_selected = false
+        },
+        edit_selected(is_selected) {
+            this.updating_is_selected = true
+            fetch('/api/v1/erm/eholdings/ebsco/packages/' + this.erm_package.package_id, {
+                method: "PATCH",
+                body: JSON.stringify({ is_selected }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(checkError)
+                .then(
+                    (result) => {
+                        // Refresh the page. We should not need that actually.
+                        this.getPackage(this.erm_package.package_id)
+                    },
+                ).catch(
+                    (error) => {
+                        setError(error)
+                    }
+                )
+        },
+        add_to_holdings() {
+            this.edit_selected(true)
+        },
+        remove_from_holdings() {
+            this.edit_selected(false)
         },
         refreshAgreements() {
             // FIXME We could GET /erm/eholdings/packages/$package_id/agreements instead
