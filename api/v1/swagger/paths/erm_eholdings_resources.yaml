@@ -129,3 +129,64 @@
     x-koha-embed:
       - resources
       - resources.package
+  patch:
+    x-mojo-to: ERM::EHoldings::Resources#edit
+    operationId: editErmEHoldingsResources
+    tags:
+      - eholdings
+    summary: Edit a resource
+    produces:
+      - application/json
+    parameters:
+      - description: Provider name
+        in: path
+        name: provider
+        required: true
+        type: string
+      - description: A JSON object containing the fields to edit
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            is_selected:
+              description: Add or remove this resource from remote holdings
+              type: boolean
+          additionalProperties: false
+      - $ref: "../swagger.yaml#/parameters/eholdings_resource_id_pp"
+    responses:
+      200:
+        description: What has been modified
+        schema:
+          type: object
+          properties:
+            is_selected:
+              description: Add or remove this resource from remote holdings
+              type: boolean
+          additionalProperties: false
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

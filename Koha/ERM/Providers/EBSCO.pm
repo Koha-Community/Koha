@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use HTTP::Request;
 use LWP::UserAgent;
-use JSON qw( from_json decode_json );
+use JSON qw( from_json decode_json encode_json );
 use List::Util qw( first );
 
 use Koha::Exceptions;
@@ -237,14 +237,16 @@ sub build_query {
 }
 
 sub request {
-    my ( $self, $method, $url, $params ) = @_;
+    my ( $self, $method, $url, $params, $payload ) = @_;
 
     $url = $self->build_query($url, $params) if $params;
 
-    warn $url;
     my $config = $self->config;
     my $base_url = 'https://api.ebsco.io/rm/rmaccounts/' . $config->{custid};
-    my $request = HTTP::Request->new( $method => $base_url . $url);
+    my $request = HTTP::Request->new(
+        $method => $base_url . $url,
+        undef, ( $payload ? encode_json($payload) : undef )
+    );
     $request->header( 'x-api-key' => $config->{api_key} );
     my $ua = LWP::UserAgent->new;
     my $response = $ua->simple_request($request);
@@ -271,7 +273,10 @@ sub request {
             die sprintf "ERROR requesting EBSCO API\n%s\ncode %s: %s\n", $url, $response->code,
               $message;
         }
+    } elsif ( $response->code == 204 ) { # No content
+        return
     }
+
     return decode_json( $response->decoded_content );
 }
 

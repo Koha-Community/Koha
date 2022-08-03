@@ -61,4 +61,21 @@ sub get {
     }
 }
 
+=head3 edit
+
+Controller function that handles editing a single Koha::ERM::EHoldings::Resource object
+
+=cut
+
+sub edit {
+    my $c = shift->openapi->valid_input or return;
+
+    my $provider = $c->validation->param('provider');
+    if ( $provider eq 'ebsco' ) {
+        return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::edit($c);
+    } else {
+        die "invalid action";
+    }
+}
+
 1;

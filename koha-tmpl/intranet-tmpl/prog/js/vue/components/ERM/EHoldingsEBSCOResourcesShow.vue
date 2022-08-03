@@ -3,6 +3,23 @@
     <div v-else-if="resource" id="eholdings_resources_show">
         <h2>
             {{ $t("Resource .id", { id: resource.resource_id }) }}
+            <span v-if="!updating_is_selected">
+                <a
+                    v-if="!resource.is_selected"
+                    class="btn btn-default btn-xs"
+                    role="button"
+                    @click="add_to_holdings"
+                    ><font-awesome-icon icon="plus" /> Add to holdings</a
+                >
+                <a
+                    v-else
+                    class="btn btn-default btn-xs"
+                    role="button"
+                    id="remove-from-holdings"
+                    @click="remove_from_holdings"
+                    ><font-awesome-icon icon="minus" /> Remove from holdings</a
+                > </span
+            ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
         <div>
             <fieldset class="rows">
@@ -98,6 +115,8 @@
 import { fetchEBSCOResource } from "../../fetch"
 import { useVendorStore } from "../../stores/vendors"
 import { storeToRefs } from "pinia"
+import { checkError } from '../../fetch.js'
+
 export default {
     setup() {
         const format_date = $date
@@ -122,6 +141,7 @@ export default {
                 package: {},
             },
             initialized: false,
+            updating_is_selected: false,
         }
     },
 
@@ -138,6 +158,35 @@ export default {
             const resource = await fetchEBSCOResource(resource_id)
             this.resource = resource
             this.initialized = true
+            this.updating_is_selected = false
+        },
+        edit_selected(is_selected) {
+            this.updating_is_selected = true
+            fetch('/api/v1/erm/eholdings/ebsco/resources/' + this.resource.resource_id, {
+                method: "PATCH",
+                body: JSON.stringify({ is_selected }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(checkError)
+                .then(
+                    (result) => {
+                        // Refresh the page. We should not need that actually.
+                        this.getResource(this.resource.resource_id)
+                    },
+                ).catch(
+                    (error) => {
+                        setError(error)
+                    }
+                )
+        },
+        add_to_holdings() {
+            this.edit_selected(true)
+        },
+        remove_from_holdings() {
+            this.edit_selected(false)
         },
     },
     name: "EHoldingsEBSCOResourcesShow",

@@ -3,11 +3,17 @@ import { createWebHistory, createRouter } from "vue-router";
 import { createPinia } from "pinia";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPlus, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+    faPlus,
+    faMinus,
+    faPencil,
+    faTrash,
+    faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
 
-library.add(faPlus, faPencil, faTrash);
+library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
 
 import App from "./components/ERM/ERMMain.vue";
 

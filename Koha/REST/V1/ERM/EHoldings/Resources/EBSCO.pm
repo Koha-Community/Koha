@@ -173,4 +173,74 @@ sub get {
     };
 }
 
+=head3 edit
+
+=cut
+
+sub edit {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $body        = $c->validation->param('body');
+        my $is_selected = $body->{is_selected};
+        my ( $vendor_id, $package_id, $resource_id ) = split '-',
+          $c->validation->param('resource_id');
+
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
+        my $t     = try {
+            return $ebsco->request( GET => '/vendors/'
+                  . $vendor_id
+                  . '/packages/'
+                  . $package_id
+                  . '/titles/'
+                  . $resource_id );
+
+        }
+        catch {
+            if ( blessed $_ ) {
+                if ( $_->isa('Koha::Exceptions::ObjectNotFound') ) {
+                    return $c->render(
+                        status  => 404,
+                        openapi => { error => $_->error }
+                    );
+
+                }
+            }
+
+            $c->unhandled_exception($_);
+        };
+
+        unless ($t) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Resource not found" }
+            );
+        }
+
+        $ebsco->request(
+            PUT => '/vendors/'
+              . $vendor_id
+              . '/packages/'
+              . $package_id
+              . '/titles/'
+              . $resource_id,
+            undef,
+            {
+                isSelected => $is_selected,
+                titleName  => $t->{titleName},
+                pubType    => $t->{pubType}
+            }
+        );
+
+        return $c->render(
+            status  => 200,
+            openapi => { is_selected => $is_selected } # We don't want to refetch the resource to make sure it has been updated
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+
+}
+
 1;
