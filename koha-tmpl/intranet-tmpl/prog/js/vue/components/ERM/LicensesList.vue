@@ -179,7 +179,8 @@ export default {
                     var api = new $.fn.dataTable.Api(settings)
 
                     $.each($(this).find("td .actions"), function (index, e) {
-                        let license_id = api.row(index).data().license_id
+                        let tr = $(this).parent().parent()
+                        let license_id = api.row(tr).data().license_id
                         let editButton = createVNode("a", {
                             class: "btn btn-default btn-xs", role: "button", onClick: () => {
                                 edit_license(license_id)
@@ -199,7 +200,8 @@ export default {
                     })
 
                     $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                        let row = api.row(index).data()
+                        let tr = $(this).parent()
+                        let row = api.row(tr).data()
                         if (!row) return // Happen if the table is empty
                         let n = createVNode("a", {
                             role: "button",

@@ -193,7 +193,8 @@ export default {
 
                     if (actions == 'edit_delete') {
                         $.each($(this).find("td .actions"), function (index, e) {
-                            let agreement_id = api.row(index).data().agreement_id
+                            let tr = $(this).parent().parent()
+                            let agreement_id = api.row(tr).data().agreement_id
                             let editButton = createVNode("a", {
                                 class: "btn btn-default btn-xs", role: "button", onClick: () => {
                                     edit_agreement(agreement_id)
@@ -213,7 +214,8 @@ export default {
                         })
                     } else {
                         $.each($(this).find("td .actions"), function (index, e) {
-                            let agreement_id = api.row(index).data().agreement_id
+                            let tr = $(this).parent().parent()
+                            let agreement_id = api.row(tr).data().agreement_id
                             let selectButton = createVNode("a", {
                                 class: "btn btn-default btn-xs", role: "button", onClick: () => {
                                     select_agreement(agreement_id)
@@ -227,7 +229,8 @@ export default {
                     }
 
                     $.each($(this).find("tbody tr td:first-child"), function (index, e) {
-                        let row = api.row(index).data()
+                        let tr = $(this).parent()
+                        let row = api.row(tr).data()
                         if (!row) return // Happen if the table is empty
                         let n = createVNode("a", {
                             role: "button",
