@@ -626,11 +626,12 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
 
 # XSLT processing of some stuff
 my $variables = {};
+my $lang = C4::Languages::getlanguage();
 my @plugin_responses = Koha::Plugins->call(
     'opac_detail_xslt_variables',
     {
         biblio_id => $biblionumber,
-        lang      => C4::Languages::getlanguage(),
+        lang      => $lang,
         patron_id => $borrowernumber,
     },
 );
@@ -679,10 +680,20 @@ if ( not $viewallitems and $items->count > $max_items_to_display ) {
     );
 }
 else {
+    my $library_info;
     while ( my $item = $items->next ) {
         my $item_info = $item->unblessed;
         $item_info->{holds_count} = $item_reserves{ $item->itemnumber };
         $item_info->{priority}    = $priority{ $item->itemnumber };
+
+        # Get opac_info from Additional contents for home and holding library
+        my ( $opac_info_home, $opac_info_holding );
+        $opac_info_holding = $library_info->{ $item->holdingbranch } // $item->holding_branch->opac_info({ lang => $lang });
+        $library_info->{ $item->holdingbranch } = $opac_info_holding;
+        $opac_info_home = $library_info->{ $item->homebranch } // $item->home_branch->opac_info({ lang => $lang });
+        $library_info->{ $item->homebranch } = $opac_info_home;
+        $item_info->{holding_library_info} = $opac_info_holding->content if $opac_info_holding;
+        $item_info->{home_library_info} = $opac_info_home->content if $opac_info_home;
 
         $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy(
             { item => $item, patron => $patron } )

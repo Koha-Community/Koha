@@ -1246,16 +1246,19 @@
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
-                        [% IF ( ITEM_RESULT.holding_branch.opac_info ) %]
-                            <a href="[% ITEM_RESULT.holding_branch.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.holding_branch.branchcode | html %]">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.holding_branch.branchname | html %]
+                        [%# Show opac_info or branchurl from holding library %]
+                        [% SET holding_library_name = ITEM_RESULT.branchname %]
+                        [% SET holding_library_url = Branches.GetURL( ITEM_RESULT.holdingbranch ) %]
+                        [% IF ( ITEM_RESULT.holding_library_info ) %]
+                            <a href="[% holding_library_url | url %]" class="library_info" data-info="[% ITEM_RESULT.holding_library_info | html %]" data-name="[% holding_library_name | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% holding_library_name | html %]
                             </a>
-                        [% ELSIF ( ITEM_RESULT.holding_branch.branchurl ) %]
-                            <a href="[% ITEM_RESULT.branchurl | url %]">
-                                [% ITEM_RESULT.holding_branch.branchname | html %]
+                        [% ELSIF holding_library_url %]
+                            <a href="[% holding_library_url | url %]">
+                                [% holding_library_name | html %]
                             </a>
                         [% ELSE %]
-                            <span>[% ITEM_RESULT.holding_branch.branchname | html %]</span>
+                            <span>[% holding_library_name | html %]</span>
                         [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'holding' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
@@ -1270,16 +1273,19 @@
                         <link property="itemOffered" href="#record" />
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
-                        [% IF ( ITEM_RESULT.holding_branch.opac_info ) %] [%# FIXME Shouldn't this be home_branch instead of holding_branch? %]
-                            <a href="[% ITEM_RESULT.home_branch.branchurl | url %]" class="library_info" data-branchcode="[% ITEM_RESULT.home_branch.branchchode | html %]">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% ITEM_RESULT.home_branch.branchname | html %]
+                        [%# Show opac_info or branchurl from home library %]
+                        [% SET home_library_name = Branches.GetName( ITEM_RESULT.homebranch ) %]
+                        [% SET home_library_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
+                        [% IF ( ITEM_RESULT.home_library_info ) %]
+                            <a href="[% home_library_url | url %]" class="library_info" data-info="[% ITEM_RESULT.home_library_info | html %]" data-name="[% home_library_name | html %]">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> [% home_library_name | html %]
                             </a>
-                        [% ELSIF ( ITEM_RESULT.home_branch.branchurl ) %]
-                            <a href="[% ITEM_RESULT.home_branch.branchurl | url %]">
-                                [% ITEM_RESULT.home_branch.branchname | html %]
+                        [% ELSIF home_library_url %]
+                            <a href="[% home_library_url | url %]">
+                                [% home_library_name | html %]
                             </a>
                         [% ELSE %]
-                            <span>[% ITEM_RESULT.home_branch.branchname | html %]</span>
+                            <span>[% home_library_name | html %]</span>
                         [% END %]
 
                         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'home' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
@@ -1955,29 +1961,42 @@
 
             $(".library_info").on("click", function(e){
                 e.preventDefault();
-                var branchcode = $(this).data("branchcode");
+                var library_name = $(this).data("name");
+                var opac_info = $(this).data("info");
                 var url = $(this).attr("href");
-                $.ajax({
-                    url: "/api/v1/public/libraries/" + branchcode,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(result) {
-                        $("#libraryInfoModalLabel").html( result.name );
-                        $("#libraryInfo").html( result.opac_info );
-                        if( result.url ){
-                            $("#libraryInfoLink").attr("href", result.url );
-                            $("#libraryInfoLink").show();
-                        } else {
-                            $("#libraryInfoLink").hide();
-                        }
-                        $("#libraryInfoModal").modal("show");
-                    },
-                    error: function(xhr, status, error) {
-                        if( url ){
-                            location.href = url;
-                        }
+                if( 1 ) {
+                    $("#libraryInfoModalLabel").html( library_name );
+                    $("#libraryInfo").html( opac_info );
+                    if( url ){
+                        $("#libraryInfoLink").attr("href", url );
+                        $("#libraryInfoLink").show();
+                    } else {
+                        $("#libraryInfoLink").hide();
                     }
-                });
+                    $("#libraryInfoModal").modal("show");
+                } else { // FIXME Temporary disabled: see BZ 29144
+                    $.ajax({
+                        url: "/api/v1/public/libraries/" + branchcode,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(result) {
+                            $("#libraryInfoModalLabel").html( result.name );
+                            $("#libraryInfo").html( opac_info );
+                            if( result.url ){
+                                $("#libraryInfoLink").attr("href", result.url );
+                                $("#libraryInfoLink").show();
+                            } else {
+                                $("#libraryInfoLink").hide();
+                            }
+                            $("#libraryInfoModal").modal("show");
+                        },
+                        error: function(xhr, status, error) {
+                            if( url ){
+                                location.href = url;
+                            }
+                        }
+                    });
+                }
             });
             $("#libraryInfoModal").on("hide.bs.modal", function(){
                 $("#libraryInfoModalLabel, #libraryInfo").html("");
