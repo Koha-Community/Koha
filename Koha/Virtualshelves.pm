@@ -55,12 +55,12 @@ sub disown_or_delete {
                   if C4::Context->preference('ListOwnerDesignated')
                   and Koha::Patrons->find( C4::Context->preference('ListOwnerDesignated') );
 
-                unless ($new_owner) {
+                if( !$new_owner && C4::Context->userenv ) {
                     $new_owner = C4::Context->userenv->{number};
                 }
 
                 while ( my $list = $self->next ) {
-                    if ( $list->is_public or $list->is_shared ) {
+                    if ( $new_owner && ( $list->is_public or $list->is_shared ) ) {
                         $list->transfer_ownership($new_owner);
                     } else {
                         $list->delete;
