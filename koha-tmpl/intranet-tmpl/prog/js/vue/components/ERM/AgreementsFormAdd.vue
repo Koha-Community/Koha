@@ -294,6 +294,17 @@ export default {
                 errors.push(this.$t("A license is used several times"))
             }
 
+            const related_agreement_ids = agreement.agreement_relationships.map(rs => rs.related_agreement_id)
+            const duplicate_related_agreement_ids = related_agreement_ids.filter((id, i) => related_agreement_ids.indexOf(id) !== i)
+
+            if (duplicate_related_agreement_ids.length) {
+                errors.push(this.$t("An agreement is used as relationship several times"))
+            }
+
+            if (agreement_licenses.filter(al => al.status == 'controlling').length > 1) {
+                errors.push(this.$t("Only one controlling license is allowed"))
+            }
+
             errors.forEach(function (e) {
                 setWarning(e)
             })
