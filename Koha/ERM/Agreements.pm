@@ -16,11 +16,13 @@ package Koha::ERM::Agreements;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use DateTime;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::ERM::Agreement;
+use Koha::ERM::Agreement::Periods;
 
 use base qw(Koha::Objects);
 
@@ -33,6 +35,43 @@ Koha::ERM::Agreements- Koha ErmAgreement Object set class
 =head2 Class Methods
 
 =cut
+
+=head3 filter_by_expired
+
+=cut
+
+sub filter_by_expired {
+    my ($self, $max_expiration_date) = @_;
+
+    $max_expiration_date =
+      $max_expiration_date
+      ? dt_from_string( $max_expiration_date, 'iso' )
+      : dt_from_string;
+
+    my $periods = Koha::ERM::Agreement::Periods->search(
+        { agreement_id => [ $self->get_column('agreement_id') ] },
+        {
+            select => [
+                'agreement_id',
+                \do {"CASE WHEN MAX(me.ended_on IS NULL) = 0 THEN max(me.ended_on) END"}
+            ],
+            as       => [ 'agreement_id', 'max_ended_on' ],
+            group_by => ['agreement_id'],
+        }
+    );
+
+    my @expired_agreement_ids;
+    while ( my $p = $periods->next ) {
+        # FIXME Can this be moved in the HAVING clause of the previous query?
+        my $max_ended_on = $p->get_column('max_ended_on');
+        next unless $max_ended_on;
+        my $max_ended_on_dt = dt_from_string($max_ended_on);
+        next if DateTime->compare( $max_ended_on_dt, $max_expiration_date ) == 1;
+        push @expired_agreement_ids, $p->agreement_id;
+    }
+
+    return $self->search( { agreement_id => \@expired_agreement_ids } );
+}
 
 =head3 type
 

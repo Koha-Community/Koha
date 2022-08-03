@@ -71,7 +71,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchCountLocalTitles } from "./../../fetch"
-import { useDataTable } from "../../composables/datatables"
+import { useDataTable, build_url_params, build_url } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -108,7 +108,7 @@ export default {
         }
     },
     computed: {
-        local_titles_url() { return this.build_url("/cgi-bin/koha/erm/eholdings/local/titles") },
+        local_titles_url() { return build_url("/cgi-bin/koha/erm/eholdings/local/titles", this.filters) },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -119,20 +119,10 @@ export default {
         show_title: function (title_id) {
             this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/titles/" + title_id)
         },
-        build_url_params: function () {
-            return Object.entries(this.filters)
-                .map(([k, v]) => v ? k + "=" + v : undefined)
-                .filter(e => e !== undefined)
-                .join('&')
-        },
-        build_url: function (base_url) {
-            let params = this.build_url_params()
-            return base_url + (params.length ? '?' + params : '')
-        },
         filter_table: async function () {
             if (this.filters.publication_title.length) {
                 this.cannot_search = false
-                let new_route = this.build_url("/cgi-bin/koha/erm/eholdings/ebsco/titles")
+                let new_route = build_url("/cgi-bin/koha/erm/eholdings/ebsco/titles", this.filters)
                 this.$router.push(new_route)
                 this.show_table = true
                 this.local_count_titles = null
@@ -148,7 +138,7 @@ export default {
             let show_title = this.show_title
             let get_lib_from_av = this.get_lib_from_av
             if (!this.show_table) {
-                this.show_table = this.build_url_params().length ? true : false
+                this.show_table = build_url_params(this.filters).length ? true : false
             }
             let filters = this.filters
             let table_id = this.table_id

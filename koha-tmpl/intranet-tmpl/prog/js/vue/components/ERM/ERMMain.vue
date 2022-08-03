@@ -173,7 +173,7 @@ form .v-select {
     width: 30%;
 }
 
-.v-select, input:not([type=submit]):not([type=search]):not([type=button]), textarea {
+.v-select, input:not([type=submit]):not([type=search]):not([type=button]):not([type=checkbox]), textarea {
     border-color: rgba(60,60,60,0.26);
     border-width: 1px;
     border-radius: 4px;

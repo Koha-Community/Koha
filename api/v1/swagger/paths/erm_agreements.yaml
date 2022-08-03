@@ -54,6 +54,11 @@
         name: license_info
         required: false
         type: string
+      - description: filter by expired agreements
+        in: query
+        name: max_expiration_date
+        type: string
+        format: date
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"

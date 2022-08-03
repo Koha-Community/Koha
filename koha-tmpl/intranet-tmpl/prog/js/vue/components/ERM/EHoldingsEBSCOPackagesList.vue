@@ -65,7 +65,7 @@ import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchCountLocalPackages } from './../../fetch'
-import { useDataTable } from "../../composables/datatables"
+import { useDataTable, build_url_params, build_url } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -103,7 +103,7 @@ export default {
         }
     },
     computed: {
-        local_packages_url() { return this.build_url("/cgi-bin/koha/erm/eholdings/local/packages") },
+        local_packages_url() { return build_url("/cgi-bin/koha/erm/eholdings/local/packages", this.filters) },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -114,18 +114,8 @@ export default {
         show_package: function (package_id) {
             this.$router.push("/cgi-bin/koha/erm/eholdings/ebsco/packages/" + package_id)
         },
-        build_url_params: function () {
-            return Object.entries(this.filters)
-                .map(([k, v]) => v ? k + "=" + v : undefined)
-                .filter(e => e !== undefined)
-                .join('&')
-        },
-        build_url: function (base_url) {
-            let params = this.build_url_params()
-            return base_url + (params.length ? '?' + params : '')
-        },
         filter_table: async function () {
-            let new_route = this.build_url("/cgi-bin/koha/erm/eholdings/ebsco/packages")
+            let new_route = build_url("/cgi-bin/koha/erm/eholdings/ebsco/packages", this.filters)
             this.$router.push(new_route)
             this.show_table = true
             this.local_count_packages = null
@@ -140,7 +130,7 @@ export default {
             let map_av_dt_filter = this.map_av_dt_filter
 
             if (!this.show_table) {
-                this.show_table = this.build_url_params().length ? true : false
+                this.show_table = build_url_params(this.filters).length ? true : false
             }
             let filters = this.filters
             let show_table = this.show_table

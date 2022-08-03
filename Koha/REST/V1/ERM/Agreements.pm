@@ -35,8 +35,13 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
 
+    my $max_expiration_date = delete $c->validation->output->{max_expiration_date};
+
     return try {
         my $agreements_set = Koha::ERM::Agreements->new;
+        if ( $max_expiration_date ) {
+            $agreements_set = $agreements_set->filter_by_expired( $max_expiration_date );
+        }
         my $agreements = $c->objects->search( $agreements_set );
         return $c->render( status => 200, openapi => $agreements );
     }

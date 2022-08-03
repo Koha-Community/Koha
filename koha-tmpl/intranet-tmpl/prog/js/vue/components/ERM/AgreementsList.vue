@@ -2,6 +2,28 @@
     <div v-if="!this.initialized">{{ $t("Loading") }}</div>
     <div v-else-if="this.agreements" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
+        <fieldset v-if="this.agreements.length">
+            <label for="expired_filter">{{ $t("Filter by expired") }}:</label>
+            <input
+                type="checkbox"
+                id="expired_filter"
+                v-model="filters.by_expired"
+                @keyup.enter="filter_table"
+            />
+            {{ $t("on") }}
+            <flat-pickr
+                id="max_expiration_date_filter"
+                v-model="filters.max_expiration_date"
+                :config="fp_config"
+            />
+
+            <input
+                @click="filter_table"
+                id="filter_table"
+                type="button"
+                :value="$t('Filter')"
+            />
+        </fieldset>
         <table v-if="this.agreements.length" :id="table_id"></table>
         <div v-else-if="this.initialized" class="dialog message">
             {{ $t("There are no agreements defined") }}
@@ -10,13 +32,14 @@
 </template>
 
 <script>
+import flatPickr from 'vue-flatpickr-component'
 import Toolbar from "./AgreementsToolbar.vue"
 import { createVNode, render } from 'vue'
 import { useVendorStore } from "../../stores/vendors"
 import { useAVStore } from "../../stores/authorised_values"
 import { storeToRefs } from "pinia"
 import { fetchAgreements } from "../../fetch"
-import { useDataTable } from "../../composables/datatables"
+import { useDataTable, build_url } from "../../composables/datatables"
 
 export default {
     setup() {
@@ -38,8 +61,13 @@ export default {
     },
     data: function () {
         return {
+            fp_config: flatpickr_defaults, dates_fixed: 0,
             agreements: [],
             initialized: false,
+            filters: {
+                by_expired: this.$route.query.by_expired || false,
+                max_expiration_date: this.$route.query.max_expiration_date || "",
+            },
             before_route_entered: false,
             building_table: false,
         }
@@ -52,6 +80,14 @@ export default {
                 vm.getAgreements().then(() => vm.build_datatable())
             }
         })
+    },
+    computed: {
+        datatable_url() {
+            let url = '/api/v1/erm/agreements'
+            if (this.filters.by_expired)
+                url += '?max_expiration_date=' + $date_to_rfc3339(this.filters.max_expiration_date)
+            return url
+        }
     },
     methods: {
         async getAgreements() {
@@ -72,6 +108,18 @@ export default {
             this.$emit('select-agreement', agreement_id)
             this.$emit('close')
         },
+        filter_table: async function () {
+            let new_route = build_url("/cgi-bin/koha/erm/agreements", this.filters)
+            this.$router.push(new_route)
+            if (this.filters.by_expired) {
+                if (!this.filters.max_expiration_date)
+                    this.filters.max_expiration_date = new Date()
+            }
+            $('#' + this.table_id).DataTable().ajax.url(this.datatable_url).draw()
+        },
+        table_url: function () {
+
+        },
         build_datatable: function () {
             let show_agreement = this.show_agreement
             let edit_agreement = this.edit_agreement
@@ -79,6 +127,7 @@ export default {
             let select_agreement = this.select_agreement
             let get_lib_from_av = this.get_lib_from_av
             let map_av_dt_filter = this.map_av_dt_filter
+            let datatable_url = this.datatable_url
             let default_search = this.$route.query.q
             let actions = this.before_route_entered ? 'edit_delete' : 'select'
             let table_id = this.table_id
@@ -101,7 +150,7 @@ export default {
 
             const table = $("#" + table_id).kohaTable({
                 ajax: {
-                    url: "/api/v1/erm/agreements",
+                    url: datatable_url
                 },
                 order: [[0, "asc"]],
                 autoWidth: false,
@@ -260,7 +309,7 @@ export default {
             this.getAgreements().then(() => this.build_datatable())
         }
     },
-    components: { Toolbar },
+    components: { flatPickr, Toolbar },
     name: "AgreementsList",
     emits: ["select-agreement", "close"],
 }
