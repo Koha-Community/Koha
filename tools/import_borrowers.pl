@@ -114,6 +114,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     my $handle   = $input->upload('uploadborrowers');
     my %defaults = $input->Vars;
     my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
+    my $update_dateexpiry = defined $input->param('update_dateexpiry') ? 1 : 0;
+    my $update_dateexpiry_from_today = defined $input->param('update_dateexpiry_from_today') ? 1 : 0;
     my $return = $Import->import_patrons(
         {
             file                         => $handle,
@@ -123,6 +125,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             overwrite_passwords          => $overwrite_passwords,
             preserve_extended_attributes => scalar $input->param( 'ext_preserve' ) || 0,
             preserve_fields              => \@preserve_fields,
+            update_dateexpiry            => $update_dateexpiry,
+            update_dateexpiry_from_today => $update_dateexpiry_from_today,
             send_welcome                 => $welcome_new,
         }
     );

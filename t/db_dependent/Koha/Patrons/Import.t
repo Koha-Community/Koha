@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 174;
+use Test::More tests => 176;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
@@ -28,6 +28,7 @@ use utf8;
 use Test::MockModule;
 use Koha::Database;
 use Koha::Patron::Relationships;
+use Koha::DateUtils qw(dt_from_string);
 
 use File::Temp qw(tempfile tempdir);
 my $temp_dir = tempdir('Koha_patrons_import_test_XXXX', CLEANUP => 1, TMPDIR => 1);
@@ -189,7 +190,10 @@ is($result_3a->{overwritten}, 1, 'Got the expected 1 overwritten result from imp
 # overwrite but firstname is not
 my $filename_3c = make_csv($temp_dir, $csv_headers, $csv_one_line_b);
 open(my $handle_3c, "<", $filename_3c) or die "cannot open < $filename_3: $!";
-my $params_3c = { file => $handle_3c, matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => [ 'firstname' ] };
+my $params_3c = { file => $handle_3c, matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => [ 'firstname' ], update_dateexpiry => 1, update_dateexpiry_from_today => 1 };
+
+my $patron_3 = Koha::Patrons->find({ cardnumber => '1000' });
+is( $patron_3->dateexpiry, '2015-07-01', "Expiration date is correct with update_dateexpiry = false" );
 
 # When ...
 my $result_3c;
@@ -211,6 +215,8 @@ is($result_3c->{invalid}, 0, 'Got the expected 0 invalid result from import_patr
 is($result_3c->{overwritten}, 1, 'Got the expected 1 overwritten result from import_patrons that matched');
 
 my $patron_3c = Koha::Patrons->find({ cardnumber => '1000' });
+is( $patron_3c->dateexpiry, dt_from_string->add( months => 99, end_of_month => 'limit' )->ymd, "Expiration date is correct with update_dateexpiry = true" );
+
 is( $patron_3c->surname, "Nancy2", "Surname field is preserved from original" );
 is( $patron_3c->firstname, "Jenkins", "Firstname field is overwritten" );
 

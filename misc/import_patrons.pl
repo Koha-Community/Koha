@@ -37,6 +37,8 @@ my $confirm;
 my $verbose      = 0;
 my $help;
 my @preserve_fields;
+my $update_dateexpiry;
+my $update_dateexpiry_from_today;
 
 GetOptions(
     'c|confirm'                      => \$confirm,
@@ -45,6 +47,8 @@ GetOptions(
     'd|default=s'                    => \%defaults,
     'o|overwrite'                    => \$overwrite_cardnumber,
     'op|overwrite_passwords'         => \$overwrite_passwords,
+    'ue|update-expiration'           => \$update_dateexpiry,
+    'et|expiration-from-today'       => \$update_dateexpiry_from_today,
     'en|email-new'                   => \$welcome_new,
     'p|preserve-extended-attributes' => \$ext_preserve,
     'pf|preserve-field=s'            => \@preserve_fields,
@@ -70,6 +74,8 @@ my $return = $Import->import_patrons(
         overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
         preserve_fields              => \@preserve_fields,
+        update_dateexpiry            => $update_dateexpiry
+        update_dateexpiry_from_today => $update_dateexpiry_from_today
         send_welcome                 => $welcome_new,
         dry_run                      => !$confirm,
     }
@@ -110,7 +116,7 @@ import_patrons.pl - CLI script to import patrons data into Koha
 
 =head1 SYNOPSIS
 
-import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve_field <column>] [--preserve-extended-attributes] [--verbose]
+import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve_field <column>] [--preserve-extended-attributes] [--update-expiration] [--verbose]
 
 =head1 OPTIONS
 
@@ -151,6 +157,14 @@ Retain extended patron attributes for existing patrons being overwritten
 =item B<-en|--email-new>
 
 Send the WELCOME notice email to new users
+
+=item B<-ue|--update-expiration>
+
+If a matching patron is found, extend the expiration date of their account using the patron's enrollment date as the base
+
+=item B<-et|--expiration-from-today>
+
+If a matching patron is found, extend the expiration date of their account using the patron's enrollment date as the base
 
 =item B<-v|--verbose>
 

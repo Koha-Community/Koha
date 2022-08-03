@@ -79,6 +79,8 @@ sub import_patrons {
     my $send_welcome         = $params->{send_welcome};
     my $extended             = C4::Context->preference('ExtendedPatronAttributes');
     my $set_messaging_prefs  = C4::Context->preference('EnhancedMessagingPreferences');
+    my $update_dateexpiry            = $params->{update_dateexpiry};
+    my $update_dateexpiry_from_today = $params->{update_dateexpiry_from_today};
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin if $dry_run;
@@ -171,7 +173,8 @@ sub import_patrons {
 
         # Default date enrolled and date expiry if not already set.
         $borrower{dateenrolled} = $self->today_iso() unless $borrower{dateenrolled};
-        $borrower{dateexpiry} = Koha::Patron::Categories->find( $borrower{categorycode} )->get_expiry_date( $borrower{dateenrolled} ) unless $borrower{dateexpiry};
+        my $expiration_start_date = $update_dateexpiry_from_today ? dt_from_string : $borrower{dateenrolled};
+        $borrower{dateexpiry} = Koha::Patron::Categories->find( $borrower{categorycode} )->get_expiry_date( $expiration_start_date ) if $update_dateexpiry;
 
         my $borrowernumber;
         my ( $member, $patron );
