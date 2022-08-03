@@ -4,6 +4,8 @@
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% IF library %][% SET OpacLibraryInfo = library.opac_info( lang => lang ) %][% END %]
+
 <title>
 [% IF op == 'add_form' %]
     [% IF library %]
@@ -248,7 +250,14 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                     </select>
                 </li>
                 <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl | html %]" class="url" /></li>
-                <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info | $raw %]</textarea></li>
+                <li><label for="opac_info">OPAC info: </label>
+                    [% IF OpacLibraryInfo %]<!-- opac_info -->
+                        <div>[% OpacLibraryInfo.content | $raw %]</div>
+                        <div class="hint"><a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&id=[% OpacLibraryInfo.id | $raw %]&editmode=wysiwyg" target="_blank">Edit html content</a></div>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations&op=add_form&editmode=wysiwyg" target="_blank">Add html content</a>
+                    [% END %]
+                </li>
                 <li>
                     <label for="branchip">IP: </label>
                     <input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" />
@@ -461,12 +470,12 @@ Libraries &rsaquo; Administration &rsaquo; Koha
             </div> <!-- /.rows -->
         </div> <!-- /.col-sm-6 -->
     </div> <!-- /.row -->
-    [% IF ( library.opac_info ) %]
+    [% IF OpacLibraryInfo %]<!-- opac_info -->
         <hr />
         <div class="row">
             <div class="col-sm-12">
                 <h2>OPAC information</h2>
-                [% library.opac_info | $raw %]
+                <div>[% OpacLibraryInfo.content | $raw %]</div>
             </div>
         </div>
     [% END %]
@@ -659,7 +668,9 @@ Libraries &rsaquo; Administration &rsaquo; Koha
                         "orderable": false
                     },
                     {
-                        "data": "opac_info",
+                        "data": function( row, type, val, meta ) {
+                            return ''; // provisional placeholder for opac_info
+                        },
                         "searchable": true,
                         "visible": false,
                         "orderable": false

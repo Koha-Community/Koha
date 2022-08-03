@@ -78,7 +78,6 @@ if ( $op eq 'add_form' ) {
       issuing
       branchip
       branchnotes
-      opac_info
       marcorgcode
       pickup_location
       public
