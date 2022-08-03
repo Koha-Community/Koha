@@ -94,7 +94,7 @@ subtest 'disown_or_delete() tests' => sub {
 
     subtest 'Fallback to userenv' => sub {
 
-        plan tests => 6;
+        plan tests => 7;
 
         $schema->storage->txn_begin;
 
@@ -133,12 +133,26 @@ subtest 'disown_or_delete() tests' => sub {
 
         t::lib::Mocks::mock_preference( 'ListOwnershipUponPatronDeletion', 'transfer' );
         t::lib::Mocks::mock_preference( 'ListOwnerDesignated', undef );
-        t::lib::Mocks::mock_userenv({ patron => $patron_3 });
 
-        my $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
+        my $public_list_to_delete = $builder->build_object(
+            {
+                class => "Koha::Virtualshelves",
+                value => { owner => $patron_1->id, public => 1 }
+            }
+        );
 
+        my $rs = Koha::Virtualshelves->search({ shelfnumber => $public_list_to_delete->id });
         my $result = $rs->disown_or_delete;
         is( ref($result), 'Koha::Virtualshelves', 'Return type is correct' );
+        $rs->reset;
+
+        is( $rs->count, 0, 'ListOwnerDesignated and userenv not set yield deletion' );
+
+        t::lib::Mocks::mock_userenv({ patron => $patron_3 });
+
+        $rs = Koha::Virtualshelves->search( { shelfnumber => [ $public_list->id, $private_list->id, $private_list_shared->id ] } );
+
+        $rs->disown_or_delete;
         $rs->reset;
 
         is( $rs->count, 2, 'The private/non-shared list was deleted' );
