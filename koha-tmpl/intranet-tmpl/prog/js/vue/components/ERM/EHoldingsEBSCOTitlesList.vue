@@ -190,12 +190,12 @@ export default {
                         }
                     },
                     {
-                        title: __("Vendor"),
-                        data: "vendor_id",
+                        title: __("Publisher name"),
+                        data: "me.publisher_name",
                         searchable: false,
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            return row.vendor_id != undefined ? escape_str(vendors_map[row.vendor_id].name) : ""
+                            return escape_str(row.publisher_name)
                         }
                     },
                     {
