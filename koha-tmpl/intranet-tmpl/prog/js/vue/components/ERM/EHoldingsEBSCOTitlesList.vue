@@ -240,10 +240,10 @@ export default {
                         },
                             `${row.publication_title} (#${row.title_id})`
                         )
-                        // TODO? We don't have is_selected at title level
-                        //if (row.is_selected) {
-                        //    n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
-                        //}
+
+                        if (row.is_selected) {
+                            n = createVNode('span', {}, [n, " ", createVNode("i", { class: "fa fa-check-square-o", style: { color: "green" }, title: __("Is selected") })])
+                        }
                         render(n, e)
                     })
                 },

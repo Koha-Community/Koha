@@ -67,6 +67,13 @@ sub build_title {
             $title->{online_identifier} = $identifier->{id};
         }
     }
+    for my $r ( @{ $result->{customerResourcesList} } ) {
+        if ( $r->{isSelected} ) {
+            $title->{is_selected} = 1;
+            last;
+        }
+    }
+
     return $title;
 }
 
