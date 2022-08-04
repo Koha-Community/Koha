@@ -173,7 +173,6 @@ export default {
                 ajax: {
                     url: "/api/v1/erm/eholdings/ebsco/titles",
                 },
-                embed: ["resources.package"],
                 ordering: false,
                 dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
                 aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
