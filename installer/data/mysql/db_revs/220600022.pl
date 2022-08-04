@@ -57,7 +57,7 @@ return {
                 CREATE TABLE `curbside_pickup_opening_slots` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT,
                     `curbside_pickup_policy_id` INT(11) NOT NULL,
-                    `day` INT(1) NOT NULL,
+                    `day` TINYINT(1) NOT NULL,
                     `start_hour` INT(2) NOT NULL,
                     `start_minute` INT(2) NOT NULL,
                     `end_hour` INT(2) NOT NULL,
@@ -182,7 +182,7 @@ return {
         unless ( column_exists('curbside_pickup_policy', 'enable_waiting_holds_only') ) {
             $dbh->do(q{
                 ALTER table curbside_pickup_policy
-                ADD COLUMN enable_waiting_holds_only INT(1) NOT NULL DEFAULT 0 AFTER enabled
+                ADD COLUMN enable_waiting_holds_only TINYINT(1) NOT NULL DEFAULT 0 AFTER enabled
             });
         }
     }
