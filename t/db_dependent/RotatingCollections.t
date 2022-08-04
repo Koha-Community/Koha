@@ -191,7 +191,6 @@ my $samplebranch = {
     branchurl      => 'sample url',
     branchip       => 'sample ip',
     branchnotes    => 'sample note',
-    opac_info      => 'sample opac',
 };
 Koha::Library->new($samplebranch)->store;
 my ( $transferred, $messages ) = TransferCollection( $collection_id1, $samplebranch->{branchcode} );

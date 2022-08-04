@@ -48,7 +48,6 @@ my $samplebranch1 = {
     branchemail    => 'sample email',
     branchurl      => 'sample url',
     branchip       => 'sample ip',
-    opac_info      => 'sample opac',
 };
 Koha::Library->new($samplebranch1)->store;
 

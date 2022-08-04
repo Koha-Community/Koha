@@ -53,7 +53,6 @@ my $samplebranch1 = {
     branchemail    => 'sample email',
     branchurl      => 'sample url',
     branchip       => 'sample ip',
-    opac_info      => 'sample opac',
 };
 my $samplebranch2 = {
     branchcode     => 'SAB2',
@@ -70,7 +69,6 @@ my $samplebranch2 = {
     branchemail    => 'sample email2',
     branchurl      => 'sample url2',
     branchip       => 'sample ip2',
-    opac_info      => 'sample opac2',
 };
 Koha::Library->new($samplebranch1)->store;
 Koha::Library->new($samplebranch2)->store;

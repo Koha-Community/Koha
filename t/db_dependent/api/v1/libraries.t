@@ -83,7 +83,6 @@ subtest 'list() tests' => sub {
             url               => 'branchurl',
             ip                => 'branchip',
             notes             => 'branchnotes',
-            opac_info         => 'opac_info',
         };
 
         my $size = keys %{$fields};
