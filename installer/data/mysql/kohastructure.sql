@@ -1531,7 +1531,6 @@ CREATE TABLE `branches` (
   `issuing` tinyint(4) DEFAULT NULL COMMENT 'unused in Koha',
   `branchip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the IP address for your library or branch',
   `branchnotes` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'notes related to your library or branch',
-  `opac_info` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'HTML that displays in OPAC',
   `geolocation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'geolocation of your library',
   `marcorgcode` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode',
   `pickup_location` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'the ability to act as a pickup location',
