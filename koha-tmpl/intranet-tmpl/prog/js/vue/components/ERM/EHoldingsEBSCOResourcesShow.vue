@@ -9,7 +9,7 @@
                     class="btn btn-default btn-xs"
                     role="button"
                     @click="add_to_holdings"
-                    ><font-awesome-icon icon="plus" /> Add to holdings</a
+                    ><font-awesome-icon icon="plus" /> Add title to holdings</a
                 >
                 <a
                     v-else
@@ -17,7 +17,7 @@
                     role="button"
                     id="remove-from-holdings"
                     @click="remove_from_holdings"
-                    ><font-awesome-icon icon="minus" /> Remove from holdings</a
+                    ><font-awesome-icon icon="minus" /> Remove title from holdings</a
                 > </span
             ><span v-else><font-awesome-icon icon="spinner" /></span>
         </h2>
