@@ -162,7 +162,7 @@ $template->param( branch => $branch );
 if ( $op eq 'cud-place_reserve' ) {
     my $reserve_cnt = 0;
     if ($maxreserves) {
-        $reserve_cnt = $patron->holds->count;
+        $reserve_cnt = $patron->holds->count_holds;
     }
 
     # List is composed of alternating biblio/item/branch

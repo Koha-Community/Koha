@@ -598,7 +598,7 @@ if ($patron) {
     my $holds = Koha::Holds->search( { borrowernumber => $borrowernumber } );    # FIXME must be Koha::Patron->holds
     my $waiting_holds = $holds->waiting;
     $template->param(
-        holds_count  => $holds->count(),
+        holds_count  => $holds->count_holds,
         WaitingHolds => $waiting_holds,
     );
 

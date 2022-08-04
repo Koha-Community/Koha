@@ -1078,6 +1078,8 @@
 [% END %]
 [% INCLUDE modals/cancel_booking.inc %]
 
+[% INCLUDE 'hold-group-modal.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'select2.inc' %]
@@ -1117,6 +1119,7 @@
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
     [% Asset.js("js/combobox.js") | $raw %]
     [% INCLUDE 'js-biblio-format.inc' %]
+    [% Asset.js("js/hold-group.js") | $raw %]
     <script>
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
         table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %]

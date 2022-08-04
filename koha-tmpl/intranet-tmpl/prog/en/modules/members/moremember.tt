@@ -757,6 +757,7 @@
 [% END %]
 
 [% INCLUDE modals/cancel_booking.inc %]
+[% INCLUDE 'hold-group-modal.inc' %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -796,6 +797,7 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     [% Asset.js("js/recalls.js") | $raw %]
+    [% Asset.js("js/hold-group.js") | $raw %]
     <script>
         const LoadCheckoutsTableDelay = 0;
         const AlwaysLoadCheckoutsTable = [% Koha.Preference('AlwaysLoadCheckoutsTable') | html %];

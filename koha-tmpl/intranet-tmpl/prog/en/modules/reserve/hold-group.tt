@@ -1,0 +1,31 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Holds group ([% hold_group.id | html %]) &rsaquo; Holds &rsaquo; Circulation &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="hold-group">
+<h1>Holds group ([% hold_group.id | html %])</h1>
+<div id="main">
+    [% holds = hold_group.holds %]
+    [% IF holds.count %]
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Priority</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH hold IN holds %]
+                    [% biblio = hold.biblio %]
+                    <tr>
+                        <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></td>
+                        <td>[% hold.priority | html %]</td>
+                        <td>[% hold.reservenotes | html %]</td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% END %]
+    [% INCLUDE 'intranet-bottom.inc' %]
+</div>

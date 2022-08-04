@@ -619,6 +619,14 @@
                             <input name="non_priority" id="non_priority" type="checkbox" />
                             <span class="hint">A non priority hold doesn't prevent a current checkout from renewing</span>
                         </li>
+
+                        [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold ) ) %]
+                            <li id="hold_group_list_item">
+                                <label for="hold_group">Treat as hold group: </label>
+                                <input name="hold_group" id="hold_group" type="checkbox" />
+                                <span class="hint">Place a hold on the next available title from this group</span>
+                            </li>
+                        [% END %]
                     </ol>
                 </fieldset>
                 <fieldset class="rows any_specific">
@@ -632,7 +640,7 @@
                         [% ELSE %]
                             <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
                         [% END %]
-                        <label for="requestany" class="inline"> Hold next available item </label>
+                        <label for="requestany" class="inline"> Hold next available item: </label>
                     </legend>
                     <input type="hidden" name="alreadyreserved" value="[% alreadyreserved | html %]" />
                     <fieldset class="enable_request_any disable_request_group disable_request_specific">
@@ -668,7 +676,7 @@
                                 [% END %]
                                 [% UNLESS remaining_holds_for_record == 1 %]
                                     <li>
-                                        <label for="holds_to_place_count">Holds to place (count)</label>
+                                        <label for="holds_to_place_count">Holds to place (count): </label>
                                         <input type="text" inputmode="numeric" pattern="[0-9]*" id="holds_to_place_count" name="holds_to_place_count" value="1" />
                                     </li>
                                 [% ELSE %]
@@ -1391,11 +1399,14 @@
     <form id="hold-actions-form"> [% INCLUDE 'csrf-token.inc' %] </form>
 </div>
 
+[% INCLUDE 'hold-group-modal.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw %]
+    [% Asset.js("js/hold-group.js") | $raw %]
 
     [% SET url_biblio_params = "biblionumber=" _ biblionumbers.join("&amp;biblionumber=") %]
     [% IF multi_hold %]

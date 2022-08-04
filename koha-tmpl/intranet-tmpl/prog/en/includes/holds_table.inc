@@ -266,6 +266,9 @@
                     [%- IF hold.non_priority -%]
                         <br /><i>Non priority hold</i>
                     [%- END -%]
+                    [%- IF hold.hold_group_id -%]
+                        <div>(part of a <a href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=[% hold.hold_group_id | uri %]" class="hold-group">hold group</a>)</div>
+                    [%- END -%]
                 </td>
                 [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
                     [%- UNLESS hold.found -%]

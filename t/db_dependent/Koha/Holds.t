@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Warn;
 
 use C4::Circulation qw( AddIssue );

@@ -232,6 +232,17 @@ $(document).ready(function () {
                                         "</span>";
                                 }
 
+                                if (oObj.hold_group_id) {
+                                    title += "<br>";
+                                    var link =
+                                        '<a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=' +
+                                        oObj.hold_group_id +
+                                        '">' +
+                                        __("part of a hold group") +
+                                        "</a>";
+                                    title += "<span>(" + link + ")</span>";
+                                }
+
                                 return title;
                             },
                         },

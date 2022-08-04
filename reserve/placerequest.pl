@@ -29,27 +29,30 @@ use C4::Auth     qw( checkauth );
 
 use Koha::Items;
 use Koha::Patrons;
+use Koha::HoldGroup;
 
 my $input = CGI->new();
 
 checkauth( $input, 0, { reserveforothers => 'place_holds' }, 'intranet' );
 
-my @reqbib         = $input->multi_param('reqbib');
-my @biblionumbers  = $input->multi_param('biblionumber');
-my @holdable_bibs  = $input->multi_param('holdable_bibs');
-my $borrowernumber = $input->param('borrowernumber');
-my $notes          = $input->param('notes');
-my $branch         = $input->param('pickup');
-my $startdate      = $input->param('reserve_date') || '';
-my @rank           = $input->multi_param('rank-request');
-my $title          = $input->param('title');
-my @checkitems     = $input->multi_param('checkitem');
-my $item_group_id  = $input->param('item_group_id');
-my $expirationdate = $input->param('expiration_date');
-my $itemtype       = $input->param('itemtype') || undef;
-my $non_priority   = $input->param('non_priority');
-my $op             = $input->param('op') || q{};
-my $multi_holds    = $input->param('multi_holds');
+my @reqbib           = $input->multi_param('reqbib');
+my @biblionumbers    = $input->multi_param('biblionumber');
+my @holdable_bibs    = $input->multi_param('holdable_bibs');
+my $borrowernumber   = $input->param('borrowernumber');
+my $notes            = $input->param('notes');
+my $branch           = $input->param('pickup');
+my $startdate        = $input->param('reserve_date') || '';
+my @rank             = $input->multi_param('rank-request');
+my $title            = $input->param('title');
+my @checkitems       = $input->multi_param('checkitem');
+my $item_group_id    = $input->param('item_group_id');
+my $expirationdate   = $input->param('expiration_date');
+my $itemtype         = $input->param('itemtype') || undef;
+my $non_priority     = $input->param('non_priority');
+my $op               = $input->param('op') || q{};
+my $multi_holds      = $input->param('multi_holds');
+my $hold_group_param = $input->param('hold_group') || undef;
+my $hold_group;
 
 my $patron = Koha::Patrons->find($borrowernumber);
 
@@ -66,6 +69,10 @@ foreach my $bibnum (@holdable_bibs) {
 
 if ( $op eq 'cud-placerequest' && $patron ) {
     my %failed_holds;
+    if ($hold_group_param) {
+        $hold_group = Koha::HoldGroup->new->store;
+    }
+
     foreach my $biblionumber ( keys %bibinfos ) {
 
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
@@ -102,6 +109,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                                 found            => undef,
                                 itemtype         => $itemtype,
                                 non_priority     => $non_priority,
+                                hold_group_id    => $hold_group ? $hold_group->id : undef,
                             }
                         );
 
@@ -130,6 +138,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                         found            => undef,
                         itemtype         => $itemtype,
                         non_priority     => $non_priority,
+                        hold_group_id    => $hold_group ? $hold_group->id : undef,
                     }
                 );
             }
@@ -153,6 +162,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             itemtype         => $itemtype,
                             non_priority     => $non_priority,
                             item_group_id    => $item_group_id,
+                            hold_group_id    => $hold_group ? $hold_group->id : undef,
                         }
                     );
                 }

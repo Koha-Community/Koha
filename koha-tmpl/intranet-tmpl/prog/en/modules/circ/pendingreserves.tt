@@ -109,6 +109,9 @@
                                                 [% ELSE %]
                                                     [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
                                                 [% END %]
+                                                [% IF ( hold.hold_group_id ) %]
+                                                    <p>(part of a <a class="hold-group" href="/cgi-bin/koha/reserve/hold-group.pl?hold_group_id=[% hold.hold_group_id | html %]">hold group</a>)</p>
+                                                [% END %]
                                             </td>
                                         [% ELSE %]
                                             <td>"</td>
@@ -289,9 +292,12 @@
 </div>
 <!-- /.main.container-fluid -->
 
+[% INCLUDE 'hold-group-modal.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/hold-group.js") | $raw %]
     <script>
         function get_options(column){
             let regex = /(<([^>]+)>)/ig; // Remove html tags

@@ -55,6 +55,16 @@ if ($run_report) {
             locationslimit => $locationslimit
         }
     );
+    for my $item (@$items) {
+        my $related_hold = Koha::Holds->search(
+            {
+                borrowernumber => $item->{borrowernumber}, reservedate => $item->{reservedate},
+                biblionumber   => $item->{biblionumber}
+            },
+            { order_by => 'reservedate' }
+        )->next;
+        $item->{hold_group_id} = $related_hold ? $related_hold->hold_group_id : undef;
+    }
 
     $template->param(
         branchlimit    => $branchlimit,

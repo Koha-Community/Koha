@@ -189,7 +189,7 @@ if ( $borrowernumber_hold && !$op ) {
     # we check the reserves of the user, and if they can reserve a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
-    my $reserves_count = $patron->holds->count;
+    my $reserves_count = $patron->holds->count_holds;
 
     my $new_reserves_count = scalar(@biblionumbers);
 
@@ -677,6 +677,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 $reserve{branchcode}       = $res->branchcode();
                 $reserve{non_priority}     = $res->non_priority();
                 $reserve{object}           = $res;
+                $reserve{hold_group_id}    = $res->hold_group_id;
 
                 if ( $holds_count_per_patron->{ $reserve{'borrowernumber'} } == 1 ) {
                     $reserve{'change_hold_type_allowed'} = 1;
