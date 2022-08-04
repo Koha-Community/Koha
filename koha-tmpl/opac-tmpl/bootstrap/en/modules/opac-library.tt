@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% PROCESS 'display-library-address.inc' %]
 [% USE AdditionalContents %]
-[% SET OpacLibraryInfo = AdditionalContents.get( location => "OpacLibraryInfo",  lang => lang, library => library.branchcode || branchcode, blocktitle => 0 ) %]
+[% IF library %][% SET OpacLibraryInfo = library.opac_info( lang => lang ) %][% END %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -37,7 +37,7 @@
 
 [% BLOCK library_description %]
     <div property="description">
-        [% PROCESS koha_news_block news => OpacLibraryInfo %]
+        [% IF OpacLibraryInfo %][% OpacLibraryInfo.content | $raw %][% END %]
     </div>
 [% END %]
 
