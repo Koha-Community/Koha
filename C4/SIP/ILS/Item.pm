@@ -93,6 +93,7 @@ sub new {
     $self->{object} = $item;
 
     my $it = $item->effective_itemtype;
+    $self->{itemtype} = $it;
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
     $self->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
@@ -142,6 +143,7 @@ my %fields = (
     location            => 0,
     author              => 0,
     title               => 0,
+    itemtype            => 0,
 );
 
 sub next_hold {

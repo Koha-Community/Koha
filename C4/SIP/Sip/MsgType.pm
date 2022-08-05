@@ -556,7 +556,16 @@ sub handle_checkout {
         }
 
         # We never return the obsolete 'U' value for 'desensitize'
-        $resp .= sipbool( desensitize( { status => $status, patron => $patron, server => $server } ) );
+        $resp .= sipbool(
+            desensitize(
+                {
+                    item   => $item,
+                    patron => $patron,
+                    server => $server,
+                    status => $status,
+                }
+            )
+        );
         $resp .= timestamp;
 
         # Now for the variable fields
@@ -1745,17 +1754,26 @@ sub desensitize {
     return unless $desensitize;
 
     my $patron = $params->{patron};
+    my $item   = $params->{item};
     my $server = $params->{server};
 
-    my $patron_categories = $server->{account}->{inhouse_patron_categories};
+    my $patron_categories = $server->{account}->{inhouse_patron_categories} // q{};
+    my $item_types = $server->{account}->{inhouse_item_types} // q{};
 
-    # If no patron categories are set for never desensitize, no need to do anything
-    return $desensitize unless $patron_categories;
+    # If no patron categorie or item typess are set for never desensitize, no need to do anything
+    return $desensitize unless $patron_categories || $item_types;
 
     my $patron_category = $patron->ptype();
     my @patron_categories = split( /,/, $patron_categories );
+    my $found_patron_category = grep( /^$patron_category$/, @patron_categories );
+    return 0 if $found_patron_category;
 
-    return !grep( /^$patron_category$/, @patron_categories );
+    my $item_type = $item->itemtype;
+    my @item_types = split( /,/, $item_types );
+    my $found_item_type = grep( /^$item_type$/, @item_types );
+    return 0 if $found_item_type;
+
+    return 1;
 }
 
 1;
