@@ -318,7 +318,6 @@ sub translate_yaml {
             for my $field ( @translatable ) {                                           # each translatable field
                 if ( @multiline and grep { $_ eq $field } @multiline ) {                # multiline fields, only notices ATM
                     foreach my $line ( @{$row->{$field}} ) {
-                        next if ( $line =~ /^(\s*<\/*\w+\s*>|\s*\[.*\]|\s*<.*\[.*\].*>|\s*)$/ );     # discard pure html, TT, empty
                         my @ttvar;
                         while ( $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/ ) {         # put placeholders, save matches
                             my $var = $1;
