@@ -80,7 +80,7 @@ subtest 'Checkout V2' => sub {
 subtest 'Test checkout desensitize' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 3;
+    plan tests => 6;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkout_desensitize();
     $schema->storage->txn_rollback;
@@ -89,7 +89,7 @@ subtest 'Test checkout desensitize' => sub {
 subtest 'Test renew desensitize' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 3;
+    plan tests => 6;
     $C4::SIP::Sip::protocol_version = 2;
     test_renew_desensitize();
     $schema->storage->txn_rollback;
@@ -899,6 +899,7 @@ sub test_checkout_desensitize {
         homebranch => $branchcode,
         holdingbranch => $branchcode,
     });
+    my $itemtype = $item_object->effective_itemtype;
 
     my $mockILS = $mocks->{ils};
     my $server = { ils => $mockILS, account => {} };
@@ -937,6 +938,26 @@ sub test_checkout_desensitize {
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
     is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_patron_categories" );
+
+    $server->{account}->{inhouse_patron_categories} = "";
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "A,$itemtype,Z";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'N', "Desensitize flag was not set for itemtype in inhouse_item_types" );
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "A,B,C";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for item type not in inhouse_item_types" );
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_item_types" );
 }
 
 sub test_renew_desensitize {
@@ -964,6 +985,7 @@ sub test_renew_desensitize {
         homebranch => $branchcode,
         holdingbranch => $branchcode,
     });
+    my $itemtype = $item_object->effective_itemtype;
 
     my $mockILS = $mocks->{ils};
     my $server = { ils => $mockILS, account => {} };
@@ -1003,6 +1025,27 @@ sub test_renew_desensitize {
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
     is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_patron_categories" );
+
+    $server->{account}->{inhouse_patron_categories} = "";
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "A,B,C";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for item type not in inhouse_item_types" );
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_item_types" );
+
+    undef $response;
+    $server->{account}->{inhouse_item_types} = "A,$itemtype,Z";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 5, 1 );
+    is( $respcode, 'N', "Desensitize flag was not set for itemtype in inhouse_item_types" );
+
 }
 
 # Helper routines
