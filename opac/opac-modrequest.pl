@@ -54,16 +54,11 @@ if ( $reserve_id && $borrowernumber ) {
         exit;
     }
 
-    if ($cancellation_request) {
+    if ( $cancellation_request ) {
         $hold->add_cancellation_request
           if $hold->cancellation_requestable_from_opac;
     }
-    else {
-        $hold->cancel
-          if $hold->is_cancelable_from_opac;
-    }
-
-    if ( $new_pickup_location ) {
+    elsif ( $new_pickup_location ) {
 
         if ( C4::Context->preference('OPACInTransitHoldPickupLocationChange') ) {
             $hold->set_pickup_location({ library_id => $new_pickup_location });
@@ -73,6 +68,9 @@ if ( $reserve_id && $borrowernumber ) {
             print $query->redirect('/cgi-bin/koha/errors/403.pl');
             exit;
         }
+    }
+    elsif ( $hold->is_cancelable_from_opac ) {
+        $hold->cancel;
     }
 }
 
