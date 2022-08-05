@@ -161,7 +161,6 @@ sub authenticate_api_request {
     $c->stash_overrides();
 
     my $cookie_auth = 0;
-    my $pending_auth;
 
     my $authorization = $spec->{'x-koha-authorization'};
 
