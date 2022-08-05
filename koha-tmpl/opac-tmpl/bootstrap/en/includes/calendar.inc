@@ -52,8 +52,10 @@
     flatpickr.l10ns.default.weekdays = flatpickr_weekdays;
     flatpickr.l10ns.default.months   = flatpickr_months;
     flatpickr.setDefaults({
-        allowInput: true,
-        dateFormat: flatpickr_dateformat_string,
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: flatpickr_dateformat_string,
+        altInputClass: 'flatpickr-input',
         nextArrow: '<i class="fa fa-fw fa-arrow-right" aria-hidden="true"></i>',
         prevArrow: '<i class="fa fa-fw fa-arrow-left" aria-hidden="true"></i>',
         time_24hr: flatpickr_timeformat,
@@ -68,7 +70,7 @@
             if( $(instance.input).hasClass("pastdate") ){
                 instance.set("maxDate", new Date().fp_incr(-1));
             }
-            $(instance.input)
+            $(instance.input).siblings('input.flatpickr')
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
                 .after( $("<a/>")
