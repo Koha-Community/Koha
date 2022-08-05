@@ -20,6 +20,7 @@ use Try::Tiny;
 
 use base 'Koha::BackgroundJob';
 
+use Koha::Import::Records;
 use C4::ImportBatch qw(
     BatchCommitRecords
 );
@@ -64,6 +65,8 @@ sub process {
     my ( $num_added, $num_updated, $num_items_added,
         $num_items_replaced, $num_items_errored, $num_ignored );
     try {
+        my $size = Koha::Import::Records->search({ import_batch_id => $import_batch_id })->count;
+        $self->size($size)->store;
         (
             $num_added, $num_updated, $num_items_added,
             $num_items_replaced, $num_items_errored, $num_ignored
