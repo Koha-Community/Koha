@@ -3941,15 +3941,13 @@ sub CalcDateDue {
             if ( $potential_datedue > $library_close and $todayhours->close_time and $tomorrowhours->open_time ) {
                 if ( $considerlibraryhours eq 'close' ) {
                     # datedue will be after the library closes on that day
-                    # shorten loan period to end when library closes
-                    $dur = $potential_datedue->delta_ms( $library_close );
-                    $sethours = $considerlibraryhours;
+                    # shorten loan period to end when library closes by hardcoding due time
+                    $datedue->set( hour => $close[0], minute => $close[1] );
                 } elsif ( $considerlibraryhours eq 'open' ) {
                     # datedue will be after the library closes on that day
-                    # extend loan period to when library opens following day
-                    my $library_open = $datedue->clone->set( hour => $open[0], minute => $open[1] );
-                    $dur = $potential_datedue->delta_ms( $library_open )->add( days => 1 );
-                    $sethours = $considerlibraryhours;
+                    # extend loan period to when library opens following day by hardcoding due time for next open day
+                    $dur = DateTime::Duration->new( days => 1 );
+                    $datedue->set( hour => $open[0], minute => $open[1] );
                 } else {
                     # ignore library open hours
                     $dur = DateTime::Duration->new( hours => $loanlength->{$length_key} );
@@ -3963,16 +3961,10 @@ sub CalcDateDue {
             $dur = DateTime::Duration->new( days => $loanlength->{$length_key} );
         }
         my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $daysmode );
-        $datedue = $calendar->addDuration( $datedue, $dur, $loanlength->{lengthunit} );
+        $datedue = $calendar->addDuration( $datedue, $dur, $loanlength->{lengthunit} ) if $dur;
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
             $datedue->set_minute(59);
-        } else {
-            if ( $sethours and $sethours eq 'close' ) {
-                $datedue->set( hour => $close[0], minute => $close[1] );
-            } elsif ( $sethours and $sethours eq 'open' ) {
-                $datedue->set( hour => $open[0], minute => $open[1] );
-            }
         }
     }
 
