@@ -64,13 +64,15 @@ use Koha::Patrons;
 my $help    = 0;
 my $verbose = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help'    => \$help,
     'verbose' => \$verbose
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my @patron_ids = Koha::Account::Lines->search(
         {
@@ -110,6 +112,8 @@ while (my $patron = $patrons->next) {
         };
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 1;
 

@@ -35,7 +35,9 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Recalls;
 use C4::Log;
 
-cronlogaction();
+my $command_line_options = join(" ",@ARGV);
+
+cronlogaction({ info => $command_line_options });
 
 my $recalls = Koha::Recalls->search({ completed => 0 });
 while( my $recall = $recalls->next ) {
@@ -66,3 +68,5 @@ while( my $recall = $recalls->next ) {
         }
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

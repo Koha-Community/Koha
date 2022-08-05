@@ -11,6 +11,8 @@ use C4::Context;
 use C4::Items;
 use C4::Log qw( cronlogaction );
 
+my $command_line_options = join(" ",@ARGV);
+
 # Getting options
 my ( $verbose, $help, $confirm );
 my $result = GetOptions(
@@ -28,7 +30,7 @@ my $rules = eval { JSON::from_json( $syspref_content ) };
 pod2usage({ -message => "Unable to load the configuration : $@", -exitval => 1 })
     if $@;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $report = C4::Items::ToggleNewStatus( { rules => $rules, report_only => not $confirm } );
 
@@ -48,6 +50,8 @@ if ( $verbose ) {
         say "There is no item to modify";
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);
 

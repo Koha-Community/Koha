@@ -35,6 +35,8 @@ my $verbose = 0;
 my $type = q{};
 my $letter_code;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'u|username:s'      => \$username,
     'p|password:s'      => \$password,
@@ -79,7 +81,7 @@ catch {
     exit;
 };
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 if ( C4::Context->config("enable_plugins") ) {
     my @plugins = Koha::Plugins->new->GetPlugins({
@@ -117,3 +119,4 @@ C4::Letters::SendQueuedMessages(
     }
 );
 
+cronlogaction({ action => 'End', info => "COMPLETED" });

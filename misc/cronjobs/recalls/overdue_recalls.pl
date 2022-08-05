@@ -34,7 +34,9 @@ use Koha::Checkouts;
 use Koha::Recalls;
 use C4::Log;
 
-cronlogaction();
+my $command_line_options = join(" ",@ARGV);
+
+cronlogaction({ info => $command_line_options });
 
 my $recalls = Koha::Recalls->search({ status => 'R' });
 while( my $recall = $recalls->next ) {
@@ -42,3 +44,5 @@ while( my $recall = $recalls->next ) {
         $recall->set_overdue({ interface => 'COMMANDLINE' });
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

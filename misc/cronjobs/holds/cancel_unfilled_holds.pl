@@ -80,6 +80,8 @@ my $use_calendar = 0;
 my $verbose      = 0;
 my $confirm      = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'h|help|?'   => \$help,
     'days=s'     => \$days,
@@ -99,6 +101,9 @@ qq{\nError: You must specify a value for days waiting to cancel holds.\n},
         }
     );
 }
+
+cronlogaction({ info => $command_line_options });
+
 warn "Running in test mode, no actions will be taken" unless ($confirm);
 
 $verbose and warn "Looking for unfilled holds placed $days or more days ago\n";
@@ -136,3 +141,5 @@ foreach my $branch (@branchcodes) {
     }
 
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

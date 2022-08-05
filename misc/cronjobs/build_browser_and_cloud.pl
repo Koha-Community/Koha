@@ -15,6 +15,8 @@ use Getopt::Long;
 use C4::Log;
 use Koha::Biblios;
 
+my $command_line_options = join(" ",@ARGV);
+
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $confirm,$field,$batch,$max_digits,$cloud_tag);
 GetOptions(
@@ -57,7 +59,7 @@ my $browser_subfield = $2;
 warn "browser : $browser_tag / $browser_subfield" unless $batch;
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh;
 
@@ -165,6 +167,7 @@ if ($cloud_tag) {
 my $timeneeded = time() - $starttime;
 print "$i records done in $timeneeded seconds\n" unless $batch;
 
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 sub dewey_french {
 return {

@@ -176,6 +176,8 @@ my $date_input;
 my $opt_out = 0;
 my @mtts;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -194,7 +196,7 @@ pod2usage( -verbose => 2 ) if $man;
 
 $lettercode ||= 'HOLD_REMINDER';
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 # Unless a delay is specified by the user we target all waiting holds
 unless (defined $days) {
@@ -313,3 +315,5 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
 
 
 } #END BRANCH LOOP
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

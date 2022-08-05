@@ -28,6 +28,8 @@ use C4::Context;
 
 my ( $help, $days, $confirm );
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?' => \$help,
     'days:i' => \$days,
@@ -57,8 +59,11 @@ if( !$confirm || $help || !defined($days) ) {
     print "No confirm parameter passed!\n\n" if !$confirm && !$help;
     print $usage;
 } elsif( $days and $days > 0 ) {
-    cronlogaction( " ( days: $days )");
+    $command_line_options .= " ( effective days = $days )";
+    cronlogaction({ info => $command_line_options });
     DelSuggestionsOlderThan($days);
 } else {
     warn "This script requires a positive number of days. Aborted.\n";
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

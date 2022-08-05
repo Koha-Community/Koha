@@ -29,6 +29,8 @@ my (
     @emails,
 );
 
+my $command_line_options = join(" ",@ARGV);
+
 $send = 1;
 GetOptions(
     'h|help'  => \$help,
@@ -72,7 +74,7 @@ if ( $ods and @letter_codes != 1 ) {
 
 $delimiter ||= q|,|;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
 my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );
@@ -141,6 +143,8 @@ if ( @emails ) {
         );
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 sub print_notices {
     my ( $params ) = @_;

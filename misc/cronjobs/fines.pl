@@ -49,6 +49,8 @@ my $output_dir;
 my $log;
 my $maxdays;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
@@ -90,7 +92,7 @@ catch {
     exit;
 };
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my @borrower_fields =
   qw(cardnumber categorycode surname firstname email phone address citystate);
@@ -199,6 +201,8 @@ Number of Overdue Items:
 
 EOM
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 sub set_holiday {
     my ( $branch, $dt ) = @_;

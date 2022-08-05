@@ -10,7 +10,8 @@ use Koha::Logger;
 use Koha::Plugins;
 use Koha::Script -cron;
 
-cronlogaction();
+my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 my $logger = Koha::Logger->get();
 if ( C4::Context->config("enable_plugins") ) {
@@ -30,6 +31,8 @@ if ( C4::Context->config("enable_plugins") ) {
         };
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 =head1 NAME
 

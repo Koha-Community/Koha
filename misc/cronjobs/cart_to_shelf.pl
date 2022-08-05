@@ -37,6 +37,8 @@ use Getopt::Long qw( GetOptions );
 
 my $hours = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions( 'h|hours=s' => \$hours, );
 
 my $usage = << 'ENDUSAGE';
@@ -58,7 +60,7 @@ unless ($hours) {
     die "ERROR: No --hours (-h) option defined";
 }
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
 my $sth = C4::Context->dbh->prepare($query);
@@ -66,3 +68,5 @@ $sth->execute($hours);
 while (my ($itemnumber) = $sth->fetchrow_array) {
     CartToShelf($itemnumber);
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

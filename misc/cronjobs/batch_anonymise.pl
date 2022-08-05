@@ -43,6 +43,8 @@ USAGE
     exit $_[0];
 }
 
+my $command_line_options = join(" ",@ARGV);
+
 my ( $help, $days, $verbose );
 
 GetOptions(
@@ -60,7 +62,7 @@ if ( !$days  ) {
     usage(1);
 }
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $date = dt_from_string->subtract( days => $days );
 
@@ -80,5 +82,7 @@ $rows = Koha::Old::Holds
           ->anonymize;
 
 $verbose and print int($rows) . " holds anonymised.\n";
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);

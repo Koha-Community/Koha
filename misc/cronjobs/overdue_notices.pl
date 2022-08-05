@@ -309,6 +309,8 @@ my @myborcat;
 my @myborcatout;
 my ( $date_input, $today );
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -331,7 +333,7 @@ GetOptions(
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
-cronlogaction() unless $test_mode;
+cronlogaction({ info => $command_line_options });
 
 if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
@@ -937,3 +939,4 @@ sub prepare_letter_for_printing {
     return $return;
 }
 
+cronlogaction({ action => 'End', info => "COMPLETED" });

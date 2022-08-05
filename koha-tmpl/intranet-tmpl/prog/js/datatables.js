@@ -545,6 +545,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                             'beforeSend': function(xhr, settings) {
                                 this._xhr = xhr;
                                 if(options.embed) {
+                                    console.log(Array.isArray(options.embed));
                                     xhr.setRequestHeader('x-koha-embed', Array.isArray(options.embed)?options.embed.join(','):options.embed);
                                 }
                                 if(options.header_filter && options.query_parameters) {

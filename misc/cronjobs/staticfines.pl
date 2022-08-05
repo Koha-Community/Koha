@@ -52,6 +52,8 @@ my $borrowersalreadyapplied; # hashref of borrowers for whom we already applied 
 my $debug = 0;
 my $bigdebug = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'h|help'      => \$help,
     'v|verbose'   => \$verbose,
@@ -81,7 +83,7 @@ This script has the following parameters :
 ENDUSAGE
 die $usage if $help;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh;
 
@@ -238,3 +240,4 @@ Number of Overdue Items:
 EOM
 }
 
+cronlogaction({ action => 'End', info => "COMPLETED" });

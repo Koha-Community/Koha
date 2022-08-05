@@ -59,6 +59,8 @@ my $verbose = 0;
 my $note    = '';
 my $nonote  = 0;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|h|?'  => \$help,
     'man'       => \$man,
@@ -71,7 +73,7 @@ GetOptions(
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 $verbose and !$confirm and print "### Database will not be modified ###\n";
 
@@ -141,3 +143,5 @@ while ( my $issue = $sth->fetchrow_hashref ) {
         }
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

@@ -52,6 +52,8 @@ my $incremental = 0;
 my $commit      = 100;
 my $unit;
 
+my $command_line_options = join(" ",@ARGV);
+
 my $result = GetOptions(
     'v|verbose'    => \$verbose,
     't|test'       => \$test_only,
@@ -90,7 +92,7 @@ if ( not $result or $want_help ) {
     usage();
 }
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -104,6 +106,8 @@ process_items() if $useitems;
 process_stats() if $usestats;
 
 report();
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit 0;
 

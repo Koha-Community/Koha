@@ -13,7 +13,9 @@ use Koha::Script -cron;
 use C4::HoldsQueue qw(CreateQueue);
 use C4::Log qw( cronlogaction );
 
-cronlogaction();
+my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 CreateQueue();
 
+cronlogaction({ action => 'End', info => "COMPLETED" });

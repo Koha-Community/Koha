@@ -186,6 +186,8 @@ my $username = undef;
 my $password = undef;
 my $method = 'LOGIN';
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'            => \$help,
     'man'               => \$man,
@@ -208,7 +210,7 @@ pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ($help and $verbose);
 pod2usage(1) if $help;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";
@@ -359,3 +361,5 @@ foreach my $report_id (@ARGV) {
         print $message;
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

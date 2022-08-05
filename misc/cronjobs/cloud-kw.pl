@@ -33,6 +33,9 @@ use C4::Log qw( cronlogaction );
 my $verbose     = 0;
 my $help        = 0;
 my $conf        = '';
+
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions( 
     'verbose'   => \$verbose,
     'help'      => \$help,
@@ -46,7 +49,7 @@ sub usage {
 
 usage() if $help || !$conf;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my @clouds;
 print "Reading configuration file: $conf\n" if $verbose;
@@ -90,6 +93,7 @@ for my $cloud ( @clouds ) {
     $set_new_context && restore_context C4::Context;
 }
 
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 
 package ZebraIndex;

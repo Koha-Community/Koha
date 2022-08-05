@@ -158,6 +158,8 @@ my $after   = 0;
 my ( $branch, $letter_type );
 my @where;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
@@ -174,7 +176,7 @@ GetOptions(
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $expdays = C4::Context->preference('MembershipExpiryDaysNotice');
 if( !$expdays ) {
@@ -225,3 +227,5 @@ while ( my $recent = $upcoming_mem_expires->next ) {
         });
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

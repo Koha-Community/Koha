@@ -65,12 +65,16 @@ Optionally adds a reason for cancellation (which will trigger a notice to be sen
 my $help = 0;
 my $reason;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'   => \$help,
     'reason=s' => \$reason
 ) or pod2usage(1);
 pod2usage(1) if $help;
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 C4::Reserves::CancelExpiredReserves($reason);
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

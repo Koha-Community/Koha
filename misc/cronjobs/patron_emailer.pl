@@ -25,8 +25,6 @@ use Pod::Usage qw( pod2usage );
 use C4::Log qw( cronlogaction );
 use C4::Reports::Guided qw( EmailReport );
 
-cronlogaction();
-
 =head1 NAME
 
 patron_emailer.pl
@@ -119,6 +117,8 @@ my $error_msgs = {
     NO_BOR         => "There is no borrower with borrowernumber "
 };
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'help|?'      => \$help,
     'report=i'    => \$report_id,
@@ -132,6 +132,8 @@ GetOptions(
 ) or pod2usage(1);
 pod2usage(1) if $help;
 pod2usage(1) unless $report_id && $notice && $module;
+
+cronlogaction({ info => $command_line_options });
 
 my ( $emails, $errors ) = C4::Reports::Guided::EmailReport({
     email      => $email,
@@ -169,3 +171,5 @@ if( $verbose || !$commit ){
         }
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });

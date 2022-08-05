@@ -11,6 +11,8 @@ use C4::UsageStats;
 use C4::Log qw( cronlogaction );
 use POSIX qw( strftime );
 
+my $command_line_options = join(" ",@ARGV);
+
 my ( $help, $verbose, $force, $quiet );
 GetOptions(
     'h|help'    => \$help,
@@ -36,7 +38,7 @@ Setting the quiet flag will silence this message.
     exit 1;
 }
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my $need_update = ($force ? 1 : C4::UsageStats::NeedUpdate() );
 
@@ -50,6 +52,8 @@ if ($need_update) {
 elsif ($verbose) {
     say "Data don't need to be updated";
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 =head1 NAME
 

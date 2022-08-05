@@ -149,6 +149,8 @@ my $cards;
 my @log_modules;
 my @preserve_logs;
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'h|help'            => \$help,
     'confirm'           => \$confirm,
@@ -249,7 +251,7 @@ if ($pDebarments && $allDebarments) {
 
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
 
-cronlogaction() unless $confirm;
+cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh();
 my $sth;
@@ -672,6 +674,8 @@ if ($cards) {
           : sprintf "%d card creator batches would have been purged.", $count;
     }
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 exit(0);
 

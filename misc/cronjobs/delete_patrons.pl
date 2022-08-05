@@ -14,6 +14,8 @@ use C4::Log qw( cronlogaction );
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
     @category_code, $branchcode, $file, $confirm );
 
+my $command_line_options = join(" ",@ARGV);
+
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
@@ -44,7 +46,7 @@ unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code 
     pod2usage(q{At least one filter is mandatory});
 }
 
-cronlogaction();
+cronlogaction({ info => $command_line_options });
 
 my @file_members;
 if ($file) {
@@ -138,6 +140,8 @@ for my $member (@$members) {
 
 
 say $confirm ? "$deleted patrons deleted" : "$deleted patrons would have been deleted" if $verbose;
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 =head1 NAME
 
