@@ -110,9 +110,6 @@ for my $file (@files) {
                     foreach my $line ( @{ $row->{$field} } ) {
                         $mulc++;
 
-                        # discard pure html, TT, empty
-                        next if ( $line =~ /^(\s*<\/*\w+\s*>|\s*\[.*\]|\s*<.*\[.*\].*>|\s*)$/ );
-
                         # put placeholders
                         $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/g;
 
