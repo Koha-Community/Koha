@@ -803,6 +803,7 @@ END_SQL
                                     message_transport_type => $effective_mtt,
                                     from_address           => $admin_email_address,
                                     to_address             => join(',', @emails_to_use),
+                                    reply_address          => $library->inbound_email_address,
                                 }
                             ) unless $test_mode;
                             # A print notice should be sent only once per overdue level.
