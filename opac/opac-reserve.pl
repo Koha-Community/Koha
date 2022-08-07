@@ -515,7 +515,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         if ( my $first_hold = $holds->next ) {
             $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = $first_hold->reservedate,
+            $itemLoopIter->{reservedate}     = $first_hold->reservedate;
             $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
             $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
         }
