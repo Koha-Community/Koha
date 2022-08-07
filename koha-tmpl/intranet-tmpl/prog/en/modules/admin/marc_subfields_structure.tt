@@ -159,11 +159,11 @@
                                                 <fieldset class="rows">
                                                     <legend>Basic constraints</legend>
                                                     <ol>
-                                                        [% IF ( subfieldcode == 0 || subfieldcode ) %]
+                                                        [% IF ( loo.subfieldcode == 0 || loo.subfieldcode ) %]
                                                             <li>
                                                                 <span class="label">Subfield code:</span>
                                                                 [% loo.subfieldcode | html %]
-                                                                <input type="hidden" name="tagsubfield" value="[% loo.subfieldcode | html %]" />
+                                                                <input type="hidden" id="tagsubfield[% loo.row | html %]" name="tagsubfield" value="[% loo.subfieldcode | html %]" />
                                                             </li>
                                                         [% ELSE %]
                                                             <li>
