@@ -618,7 +618,7 @@ sub run_flavoured_tests {
     my ( $biblionumber6_issn, undef ) = AddBiblio( $marc_record_issn, '' );
 
     my $orders_issn = GetHistory( issn => '2434561X' );
-    is( scalar(@$orders_issn), 0, "Precheck that ISSN shouln't be in database" );
+    is( scalar(@$orders_issn), 0, "Precheck that ISSN shouldn't be in database" );
 
     # Create order
     my $ordernumber_issn = Koha::Acquisition::Order->new( {
