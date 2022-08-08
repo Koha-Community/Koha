@@ -1760,7 +1760,7 @@ sub desensitize {
     my $patron_categories = $server->{account}->{inhouse_patron_categories} // q{};
     my $item_types = $server->{account}->{inhouse_item_types} // q{};
 
-    # If no patron categorie or item typess are set for never desensitize, no need to do anything
+    # If no patron categories or item types are set for never desensitize, no need to do anything
     return $desensitize unless $patron_categories || $item_types;
 
     my $patron_category = $patron->ptype();
