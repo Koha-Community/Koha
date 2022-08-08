@@ -1,4 +1,3 @@
-
 [% USE Koha %]
 <!-- modal-claims.inc -->
 
