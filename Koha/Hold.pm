@@ -460,14 +460,15 @@ sub cancellation_requestable_from_opac {
         $controlbranch = $item->homebranch;
     }
 
-    return Koha::CirculationRules->get_effective_rule(
+    my $rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $patron->categorycode,
             itemtype     => $item->itype,
             branchcode   => $controlbranch,
             rule_name    => 'waiting_hold_cancellation',
         }
-    )->rule_value ? 1 : 0;
+    );
+    return ( $rule && $rule->rule_value ) ? 1 : 0;
 }
 
 =head3 is_at_destination
