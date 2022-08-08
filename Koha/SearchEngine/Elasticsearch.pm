@@ -780,9 +780,6 @@ sub marc_records_to_documents {
                     biblionumber => $biblionumber,
                     onloan       => undef,
                     notforloan   => 0,
-                    withdrawn    => 0,
-                    itemlost     => 0,
-                    damaged      => 0
                 })->count;
 
                 $record_document->{available} = $avail_items ? \1 : \0;
