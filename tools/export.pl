@@ -105,9 +105,12 @@ if ( $op eq "export" ) {
         # No need to retrieve the record_ids if we already get them
         unless ( @record_ids ) {
             if ( $record_type eq 'bibs' ) {
+
+                my %it_map = map { $_->itemtype => 1 } Koha::ItemTypes->search->as_list;
+                my @itemtypes = map { $it_map{$_} ? $_ : () } $query->multi_param('itemtype'); #Validate inputs against map
+
                 my $starting_biblionumber = $query->param("StartingBiblionumber");
                 my $ending_biblionumber   = $query->param("EndingBiblionumber");
-                my $itemtype             = $query->param("itemtype");
                 my $start_callnumber     = $query->param("start_callnumber");
                 my $end_callnumber       = $query->param("end_callnumber");
                 my $start_accession =
@@ -148,11 +151,11 @@ if ( $op eq "export" ) {
                         )
                         : (),
                     ( @branchcodes ? ( 'items.homebranch' => { in => \@branchcodes } ) : () ),
-                    ( $itemtype
+                    ( @itemtypes
                         ?
                           C4::Context->preference('item-level_itypes')
-                            ? ( 'items.itype' => $itemtype )
-                            : ( 'me.itemtype' => $itemtype )
+                            ? ( 'items.itype' => { in => \@itemtypes } )
+                            : ( 'me.itemtype' => { in => \@itemtypes } )
                         : ()
                     ),
 

@@ -88,7 +88,7 @@
 
                 <li>
                     <label for="itemtype">Item type: </label>
-                    <select name="itemtype" id="itemtype">
+                    <select name="itemtype" id="itemtype" multiple>
                         <option value="">-- All --</option>
                         [% FOREACH itemtype IN itemtypes %]
                             <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
