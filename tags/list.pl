@@ -60,8 +60,7 @@ else {
         for ( @{$taglist} ) {
             # FIXME We should use Koha::Biblio here
             my $dat    = &GetBiblioData( $_->{biblionumber} );
-            my $biblio = Koha::Biblios->find($dat->{biblionumber});
-            my $items = $biblio->items->search_ordered;
+            my $items = Koha::Items->search_ordered({ 'me.biblionumber' => $dat->{biblionumber} });
             $dat->{biblionumber} = $_->{biblionumber};
             $dat->{tag_id}       = $_->{tag_id};
             $dat->{items}        = $items;
