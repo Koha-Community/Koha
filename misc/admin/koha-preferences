@@ -238,7 +238,9 @@ my %commands = (
 
         print_usage() unless ( $preference );
 
-        print GetPreference( $preference ) . "\n";
+        my $pref = GetPreference( $preference );
+
+        say $pref->{'value'};
     },
     set => sub {
         my ( $preference, $value ) = @_;
