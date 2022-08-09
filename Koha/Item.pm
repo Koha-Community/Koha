@@ -569,19 +569,13 @@ we still expect the item to end up at a final location eventually.
 
 sub get_transfer {
     my ($self) = @_;
-    my $transfer_rs = $self->_result->branchtransfers->search(
-        {
-            datearrived   => undef,
-            datecancelled => undef
-        },
-        {
-            order_by =>
-              [ { -desc => 'datesent' }, { -asc => 'daterequested' } ],
-            rows => 1
-        }
-    )->first;
-    return unless $transfer_rs;
-    return Koha::Item::Transfer->_new_from_dbic($transfer_rs);
+
+    my $transfers_rs = Koha::Item::Transfers
+                ->_new_from_dbic(scalar $self->_result->branchtransfers)
+                ->filter_by_current
+                ->search( {}, { order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ], rows => 1 } );
+
+    return $transfers_rs->next;
 }
 
 =head3 get_transfers
@@ -603,17 +597,13 @@ we still expect the item to end up at a final location eventually.
 
 sub get_transfers {
     my ($self) = @_;
-    my $transfer_rs = $self->_result->branchtransfers->search(
-        {
-            datearrived   => undef,
-            datecancelled => undef
-        },
-        {
-            order_by =>
-              [ { -desc => 'datesent' }, { -asc => 'daterequested' } ],
-        }
-    );
-    return Koha::Item::Transfers->_new_from_dbic($transfer_rs);
+
+    my $transfer_rs = $self->_result->branchtransfers;
+
+    return Koha::Item::Transfers
+                ->_new_from_dbic($transfer_rs)
+                ->filter_by_current
+                ->search( {}, { order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ], } );
 }
 
 =head3 last_returned_by
