@@ -586,7 +586,7 @@ subtest 'get_components_query' => sub {
         $biblio = Koha::Biblios->find( $biblio->biblionumber);
 
         ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
-        is($comp_query_str, "(rcn:$biblionumber AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled without MarcOrgCode");
+        is($comp_query_str, "(rcn:\"$biblionumber\" AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled without MarcOrgCode");
         is($comp_sort, "author_az", "$engine: UseControlNumber enabled without MarcOrgCode sort is correct");
 
         my $marc_003_field = MARC::Field->new('003', 'OSt');
@@ -597,7 +597,7 @@ subtest 'get_components_query' => sub {
         t::lib::Mocks::mock_preference( 'ComponentSortField', 'title' );
         t::lib::Mocks::mock_preference( 'ComponentSortOrder', 'asc' );
         ( $comp_query, $comp_query_str, $comp_sort ) = $biblio->get_components_query;
-        is($comp_query_str, "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled with MarcOrgCode");
+        is($comp_query_str, "(((rcn:\"$biblionumber\" AND cni:\"OSt\") OR rcn:\"OSt $biblionumber\") AND (bib-level:a OR bib-level:b))", "$engine: UseControlNumber enabled with MarcOrgCode");
         is($comp_sort, "title_asc", "$engine: UseControlNumber enabled with MarcOrgCode sort if correct");
         $record->delete_field($marc_003_field);
     }
