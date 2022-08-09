@@ -687,6 +687,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SubscriptionHistory','simplified','simplified|full','Define the display preference for serials issue history in OPAC','Choice'),
 ('SubscriptionLog','1',NULL,'If ON, enables subscriptions log','YesNo'),
 ('suggestion','1','','If ON, enables patron suggestions feature in OPAC','YesNo'),
+('suggestionPatronCategoryExceptions', '', '', 'List the patron categories not affected by suggestion system preference if on', 'Free'),
 ('SuspendHoldsIntranet','1','Allow holds to be suspended from the intranet.',NULL,'YesNo'),
 ('SuspendHoldsOpac','1','Allow holds to be suspended from the OPAC.',NULL,'YesNo'),
 ('SuspensionsCalendar','noSuspensionsWhenClosed','ignoreCalendar|noSuspensionsWhenClosed','Specify whether to use the Calendar in calculating suspension expiration','Choice'),
