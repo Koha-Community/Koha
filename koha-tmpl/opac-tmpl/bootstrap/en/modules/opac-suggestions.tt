@@ -409,7 +409,7 @@
                                                                 [% IF ( suggestion.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 1 ) | html %][% END %]
                                                         </p>
                                                     </td>
-                                                    <td>
+                                                    <td data-order="[% suggestion.suggesteddate | html %]">
                                                         [% IF ( suggestion.suggesteddate ) %][% suggestion.suggesteddate |$KohaDates %][% END %]
                                                     </td>
                                                     <td>
