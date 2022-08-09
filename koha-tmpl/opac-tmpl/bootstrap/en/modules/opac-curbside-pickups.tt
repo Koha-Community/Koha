@@ -20,9 +20,8 @@
             display: flex;
             flex-wrap: wrap;
         }
-        #pickup-times label {
-            flex-basis: 100%;
-            text-align: center;
+        #pickup-time-slots {
+            max-width: 80%;
         }
         fieldset.rows .pickup_time label {
             background: #e6e6e6 linear-gradient(180deg,#f0f0f0,#e6e6e6);
@@ -357,7 +356,7 @@
             pickupDate._flatpickr.config.onClose.push(function( selectedDates, dateStr, instance ){
                 /* Here we add an onClose event to the existing flatpickr instance */
                 /* It fires after the user has selected a date from the calendar popup */
-                $('#pickup-times').html("<label>" + _("Select a time") + "</label>");
+                $('#pickup-times').html("<label>" + _("Select a time") + ":</label><div id=\"pickup-time-slots\"></div>");
                 $('#schedule-pickup-button').prop( 'disabled', 1 );
 
                 var currentDate = dateStr;
@@ -453,7 +452,7 @@
                     let pickups_scheduled = pickupSlot.pickups_scheduled;
                     let pickups_available = policy.patrons_per_interval - pickups_scheduled;
                     let disabled = pickupSlot.available ? "" : "disabled";
-                    $("#pickup-times").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-toggle="tooltip" title="` + _("Appointments available: ") + `${pickups_available}">${optText} <span class="pickups_available">${pickups_available}</span></label></span>`);
+                    $("#pickup-time-slots").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-toggle="tooltip" title="` + _("Appointments available: ") + `${pickups_available}">${optText} <span class="pickups_available">${pickups_available}</span></label></span>`);
                 }
 
                 $("#pickup_notes_item,#pickup-times").show();
