@@ -1835,7 +1835,8 @@ subtest 'search_ordered' => sub {
         $item2->discard_changes->update( { homebranch => $library_a->branchcode } );
         $item3->discard_changes->update( { homebranch => $library_z->branchcode } );
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item2->itemnumber, $item1->itemnumber, $item3->itemnumber ] );
+            [ $item2->itemnumber, $item1->itemnumber, $item3->itemnumber ],
+            "not a serial - order by homebranch" );
 
         # order_by me.enumchron
         $biblio->items->update( { homebranch => $library_a->branchcode } );
@@ -1843,7 +1844,8 @@ subtest 'search_ordered' => sub {
         $item2->discard_changes->update( { enumchron => 'bb' } );
         $item3->discard_changes->update( { enumchron => 'aa' } );
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ] );
+            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
+            "not a serial - order by enumchron" );
 
         # order_by LPAD( me.copynumber, 8, '0' )
         $biblio->items->update( { enumchron => undef } );
@@ -1851,7 +1853,8 @@ subtest 'search_ordered' => sub {
         $item2->discard_changes->update( { copynumber => '34567890' } );
         $item3->discard_changes->update( { copynumber => '23456789' } );
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item1->itemnumber, $item3->itemnumber, $item2->itemnumber ] );
+            [ $item1->itemnumber, $item3->itemnumber, $item2->itemnumber ],
+            "not a serial - order by LPAD( me.copynumber, 8, '0' )" );
 
         # order_by -desc => 'me.dateaccessioned'
         $biblio->items->update( { copynumber => undef } );
@@ -1859,7 +1862,8 @@ subtest 'search_ordered' => sub {
         $item2->discard_changes->update( { dateaccessioned => '2022-07-19' } );
         $item3->discard_changes->update( { dateaccessioned => '2022-09-19' } );
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item3->itemnumber, $item1->itemnumber, $item2->itemnumber ] );
+            [ $item3->itemnumber, $item1->itemnumber, $item2->itemnumber ],
+            "not a serial - order by date accessioned desc" );
     }
 
     {    # Is a serial
@@ -1913,7 +1917,8 @@ subtest 'search_ordered' => sub {
         $serial3->discard_changes->update( { publisheddate => '2022-08-19' } );
         is_deeply(
             [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item2->itemnumber, $item3->itemnumber, $item1->itemnumber ]
+            [ $item2->itemnumber, $item3->itemnumber, $item1->itemnumber ],
+            "serial - order by publisheddate"
         );
 
         # order_by me.enumchron
@@ -1924,7 +1929,8 @@ subtest 'search_ordered' => sub {
         $item2->discard_changes->update( { enumchron => 'bb' } );
         $item3->discard_changes->update( { enumchron => 'aa' } );
         is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ] );
+            [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
+            "serial - order by enumchron" );
 
     }
 
