@@ -200,9 +200,15 @@ subtest 'summary' => sub {
       {
         'total'       => '0.5',
         'credit_type' => {
-            'description' => 'A refund applied to a patrons fine'
+            'description' => 'Refund'
         },
-        'credit_type_code' => 'REFUND'
+        'credit_type_code' => 'REFUND',
+        'related_debit' => {
+            'debit_type_code' => 'LOST',
+            'debit_type' => {
+                'description' => 'Lost item'
+            }
+        }
       };
 
     $expected_total += $expected_income_total;
@@ -322,9 +328,15 @@ subtest 'summary' => sub {
       {
         'total'       => '1',
         'credit_type' => {
-            'description' => 'A refund applied to a patrons fine'
+            'description' => 'Refund'
         },
-        'credit_type_code' => 'REFUND'
+        'credit_type_code' => 'REFUND',
+        'related_debit' => {
+            'debit_type_code' => 'ACCOUNT',
+            'debit_type' => {
+                'description' => 'Account creation fee'
+            }
+        }
       };
 
     $expected_total += $expected_income_total;
