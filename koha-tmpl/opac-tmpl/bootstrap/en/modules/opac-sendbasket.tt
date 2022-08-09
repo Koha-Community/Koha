@@ -150,7 +150,7 @@ Your cart
             <ul>
                 [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]<li>
                     [% Branches.GetName(ITEM_RESULT.holdingbranch) | $raw %]
-                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]%]
+                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
                     [% IF ITEM_RESULT.itemcallnumber %]([% ITEM_RESULT.itemcallnumber | $raw %])[% END %]
                     [% ITEM_RESULT.barcode | $raw %]
                 </li>[% END %]
