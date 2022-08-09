@@ -404,7 +404,7 @@ CREATE TABLE `aqbooksellers` (
   `address4` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'fourth line of vendor physical address',
   `phone` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'vendor phone number',
   `accountnumber` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'vendor account number',
-  `vendor_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `notes` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'order notes',
   `postal` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'vendor postal address (all lines)',
   `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'vendor web address',

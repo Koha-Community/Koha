@@ -150,7 +150,7 @@ for my $vendor (@suppliers) {
         booksellerid  => $vendor->id,
         name        => $vendor->name,
         active      => $vendor->active,
-        vendor_type => $vendor->vendor_type,
+        vendor_type => $vendor->type,
         basketcount   => $vendor->baskets->count,
         subscriptioncount => $vendor->subscriptions->count,
       };
