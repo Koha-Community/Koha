@@ -271,7 +271,7 @@ tables:
             - "Notes: <<article_requests.patron_notes>>"
             - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
-            - "[% IF article_request.format == 'PHOTOCOPY' %]You may pick up your article at [% branch.branchname %].[% ELSIF article_request.format == 'SCAN' %]You can download the scanned materials via the following url(s): [% article_request.urls %].[% END %]"
+            - "[% IF article_request.format == 'PHOTOCOPY' %]You may pick up your article at [% branch.branchname %].[% ELSIF article_request.format == 'SCAN' %]You can download the scanned materials via the following URL(s): [% article_request.urls %].[% END %]"
             - ""
             - "Thank you!"
 
