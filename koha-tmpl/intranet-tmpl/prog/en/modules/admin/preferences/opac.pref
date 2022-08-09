@@ -871,7 +871,12 @@ OPAC:
               choices:
                   1: Allow
                   0: "Don't allow"
-            - patrons to make purchase suggestions on the OPAC.
+            - 'Patron categories allowed to make purchase suggestions on the OPAC:'
+        -
+            - 'Patron categories not affected by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=suggestion">suggestion</a>:'
+            - pref: suggestionPatronCategoryExceptions
+              choices: patron-categories
+              class: multiple
         -
             - pref: OPACSuggestionAutoFill
               default: 0

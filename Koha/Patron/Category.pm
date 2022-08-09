@@ -205,6 +205,31 @@ sub override_hidden_items {
     split( /\|/, C4::Context->preference('OpacHiddenItemsExceptions') );
 }
 
+=head3 can_make_suggestions
+
+
+    if ( $patron->category->can_make_suggestions ) {
+        ...
+    }
+
+Returns if the OPAC logged-in user is allowed to make OPAC purchase suggestions.
+
+=cut
+
+sub can_make_suggestions {
+    my ( $self ) = @_;
+
+    if ( C4::Context->preference('suggestion') ) {
+        my @patron_categories = split ',', C4::Context->preference('suggestionPatronCategoryExceptions');
+        if ( @patron_categories ) {
+            my $categorycode = $self->categorycode;
+            return if grep {$_ eq $categorycode } @patron_categories;
+        }
+        return 1;
+    }
+    return;
+}
+
 =head2 Internal methods
 
 =head3 _library_limits

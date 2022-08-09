@@ -69,12 +69,6 @@ if ($negcaptcha ) {
     exit;
 }
 
-#If suggestions are turned off we redirect to 404 error. This will also redirect guest suggestions
-if ( ! C4::Context->preference('suggestion') ) {
-    print $input->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
-
 my ( $template, $borrowernumber, $cookie, @messages );
 my $deleted = $input->param('deleted');
 my $submitted = $input->param('submitted');
@@ -97,6 +91,12 @@ else {
             type            => "opac",
         }
     );
+}
+
+# If suggestions are turned off, or this patron belongs to a category not allowed to make suggestions (suggestionPatronCategoryExceptions syspref) we redirect to 404 error. This will also redirect guest suggestions
+if ( !Koha::Patrons->find( $borrowernumber )->category->can_make_suggestions ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
 }
 
 my $suggested_by;

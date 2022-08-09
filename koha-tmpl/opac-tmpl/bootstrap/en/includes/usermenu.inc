@@ -83,7 +83,7 @@
                 <a href="/cgi-bin/koha/opac-holdshistory.pl">your holds history</a></li>
             [% END %]
 
-            [% IF Koha.Preference( 'suggestion' ) == 1 %]
+            [% IF ( suggestion ) %]
                 [% IF ( suggestionsview ) %]
                     <li class="active">
                 [% ELSE %]

@@ -38,7 +38,7 @@
         [% END %]
     [% END %]
 
-    [% IF Koha.Preference('suggestion') %]
+    [% IF ( suggestion ) %]
         <li><a class="suggest_for_purchase btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-gift" aria-hidden="true"></i> Suggest for purchase</a></li>
     [% END %]
 

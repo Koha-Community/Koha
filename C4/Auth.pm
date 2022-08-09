@@ -447,6 +447,12 @@ sub get_template_and_user {
 
     # these template parameters are set the same regardless of $in->{'type'}
 
+    # Decide if the patron can make suggestions in the OPAC
+    my $can_make_suggestions;
+    if ( C4::Context->userenv && C4::Context->userenv->{'number'} ) {
+        $can_make_suggestions = Koha::Patrons->find(C4::Context->userenv->{'number'})->category->can_make_suggestions;
+    }
+
     my $minPasswordLength = C4::Context->preference('minPasswordLength');
     $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
@@ -485,7 +491,7 @@ sub get_template_and_user {
             intranetstylesheet                                                         => C4::Context->preference("intranetstylesheet"),
             IntranetUserCSS                                                            => C4::Context->preference("IntranetUserCSS"),
             IntranetUserJS                                                             => C4::Context->preference("IntranetUserJS"),
-            suggestion                                                                 => C4::Context->preference("suggestion"),
+            suggestion                                                                 => $can_make_suggestions,
             virtualshelves                                                             => C4::Context->preference("virtualshelves"),
             StaffSerialIssueDisplayCount                                               => C4::Context->preference("StaffSerialIssueDisplayCount"),
             EasyAnalyticalRecords                                                      => C4::Context->preference('EasyAnalyticalRecords'),
@@ -576,7 +582,7 @@ sub get_template_and_user {
             OpenLibrarySearch                     => C4::Context->preference("OpenLibrarySearch"),
             ShowReviewer                          => C4::Context->preference("ShowReviewer"),
             ShowReviewerPhoto                     => C4::Context->preference("ShowReviewerPhoto"),
-            suggestion                            => "" . C4::Context->preference("suggestion"),
+            suggestion                            => $can_make_suggestions,
             virtualshelves                        => "" . C4::Context->preference("virtualshelves"),
             OPACSerialIssueDisplayCount           => C4::Context->preference("OPACSerialIssueDisplayCount"),
             SyndeticsClientCode                   => C4::Context->preference("SyndeticsClientCode"),
