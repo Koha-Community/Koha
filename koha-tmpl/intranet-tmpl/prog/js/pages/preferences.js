@@ -249,7 +249,7 @@ $( document ).ready( function () {
         document.location.hash = "jumped";
     }
 
-    $("#pref_UpdateItemLocationOnCheckin").change(function(){
+    $("#pref_UpdateItemLocationOnCheckin, #pref_UpdateItemLocationOnCheckout").change(function(){
         var the_text = $(this).val();
         var alert_text = '';
         if (the_text.indexOf('_ALL_:') != -1) alert_text = __("Note: _ALL_ value will override all other values") + '\n';
