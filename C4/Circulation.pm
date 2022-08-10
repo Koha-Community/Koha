@@ -1727,6 +1727,9 @@ sub AddIssue {
                 CartToShelf( $item_object->itemnumber );
             }
 
+            # Update item location
+            $item_object->update_item_location( 'checkout' );
+
             if ( C4::Context->preference('UpdateTotalIssuesOnCirc') ) {
                 UpdateTotalIssues( $item_object->biblionumber, 1, undef, { skip_holds_queue => 1 } );
             }
@@ -2195,69 +2198,10 @@ sub AddReturn {
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
-    my $update_loc_rules = C4::Context->yaml_preference('UpdateItemLocationOnCheckin');
-    if ($update_loc_rules) {
-        if ( defined $update_loc_rules->{_ALL_} ) {
-            if ( $update_loc_rules->{_ALL_} eq '_PERM_' ) {
-                $update_loc_rules->{_ALL_} = $item->permanent_location;
-            }
-            if ( $update_loc_rules->{_ALL_} eq '_BLANK_' ) {
-                $update_loc_rules->{_ALL_} = '';
-            }
-            if (
-                (
-                    defined $item->location
-                    && $item->location ne $update_loc_rules->{_ALL_}
-                )
-                || ( !defined $item->location
-                    && $update_loc_rules->{_ALL_} ne "" )
-              )
-            {
-                $messages->{'ItemLocationUpdated'} =
-                  { from => $item->location, to => $update_loc_rules->{_ALL_} };
-                $item->location( $update_loc_rules->{_ALL_} )->store(
-                    {
-                        log_action        => 0,
-                        skip_record_index => 1,
-                        skip_holds_queue  => 1
-                    }
-                );
-            }
-        }
-        else {
-            foreach my $key ( keys %$update_loc_rules ) {
-                if ( $update_loc_rules->{$key} eq '_PERM_' ) {
-                    $update_loc_rules->{$key} = $item->permanent_location;
-                }
-                elsif ( $update_loc_rules->{$key} eq '_BLANK_' ) {
-                    $update_loc_rules->{$key} = '';
-                }
-                if (
-                    (
-                           defined $item->location
-                        && $item->location eq $key
-                        && $item->location ne $update_loc_rules->{$key}
-                    )
-                    || (   $key eq '_BLANK_'
-                        && ( !defined $item->location || $item->location eq '' )
-                        && $update_loc_rules->{$key} ne '' )
-                  )
-                {
-                    $messages->{'ItemLocationUpdated'} = {
-                        from => $item->location,
-                        to   => $update_loc_rules->{$key}
-                    };
-                    $item->location( $update_loc_rules->{$key} )->store(
-                        {
-                            log_action        => 0,
-                            skip_record_index => 1,
-                            skip_holds_queue  => 1
-                        }
-                    );
-                    last;
-                }
-            }
-        }
+    # Update item location
+    my $loc_messages = $item->update_item_location( 'checkin' );
+    foreach my $loc_msg_key ( keys %$loc_messages ) {
+        $messages->{ $loc_msg_key } = $loc_messages->{ $loc_msg_key };
     }
 
     my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckin');

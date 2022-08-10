@@ -2355,6 +2355,90 @@ sub strings_map {
     return $strings;
 }
 
+=head3 update_item_location
+
+    $item->update_item_location( $action );
+
+Update the item location on checkin or checkout.
+
+=cut
+
+sub update_item_location {
+    my ( $self, $action ) = @_;
+
+    my ($update_loc_rules, $messages);
+    if ( $action eq 'checkin' ) {
+        $update_loc_rules = C4::Context->yaml_preference('UpdateItemLocationOnCheckin');
+    } else {
+        $update_loc_rules = C4::Context->yaml_preference('UpdateItemLocationOnCheckout');
+    }
+
+    if ($update_loc_rules) {
+        if ( defined $update_loc_rules->{_ALL_} ) {
+            if ( $update_loc_rules->{_ALL_} eq '_PERM_' ) {
+                $update_loc_rules->{_ALL_} = $self->permanent_location;
+            }
+            if ( $update_loc_rules->{_ALL_} eq '_BLANK_' ) {
+                $update_loc_rules->{_ALL_} = '';
+            }
+            if (
+                (
+                    defined $self->location
+                    && $self->location ne $update_loc_rules->{_ALL_}
+                )
+                || ( !defined $self->location
+                    && $update_loc_rules->{_ALL_} ne "" )
+              )
+            {
+                $messages->{'ItemLocationUpdated'} =
+                  { from => $self->location, to => $update_loc_rules->{_ALL_} };
+                $self->location( $update_loc_rules->{_ALL_} )->store(
+                    {
+                        log_action        => 0,
+                        skip_record_index => 1,
+                        skip_holds_queue  => 1
+                    }
+                );
+            }
+        }
+        else {
+            foreach my $key ( keys %$update_loc_rules ) {
+                if ( $update_loc_rules->{$key} eq '_PERM_' ) {
+                    $update_loc_rules->{$key} = $self->permanent_location;
+                }
+                elsif ( $update_loc_rules->{$key} eq '_BLANK_' ) {
+                    $update_loc_rules->{$key} = '';
+                }
+                if (
+                    (
+                           defined $self->location
+                        && $self->location eq $key
+                        && $self->location ne $update_loc_rules->{$key}
+                    )
+                    || (   $key eq '_BLANK_'
+                        && ( !defined $self->location || $self->location eq '' )
+                        && $update_loc_rules->{$key} ne '' )
+                  )
+                {
+                    $messages->{'ItemLocationUpdated'} = {
+                        from => $self->location,
+                        to   => $update_loc_rules->{$key}
+                    };
+                    $self->location( $update_loc_rules->{$key} )->store(
+                        {
+                            log_action        => 0,
+                            skip_record_index => 1,
+                            skip_holds_queue  => 1
+                        }
+                    );
+                    last;
+                }
+            }
+        }
+    }
+    return $messages;
+}
+
 =head3 _type
 
 =cut
