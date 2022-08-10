@@ -570,12 +570,7 @@ we still expect the item to end up at a final location eventually.
 sub get_transfer {
     my ($self) = @_;
 
-    my $transfers_rs = Koha::Item::Transfers
-                ->_new_from_dbic(scalar $self->_result->branchtransfers)
-                ->filter_by_current
-                ->search( {}, { order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ], rows => 1 } );
-
-    return $transfers_rs->next;
+    return $self->get_transfers->search( {}, { rows => 1 } )->next;
 }
 
 =head3 get_transfers
