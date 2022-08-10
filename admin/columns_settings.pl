@@ -75,6 +75,8 @@ if ( $action eq 'list' ) {
     my $modules = C4::Utils::DataTables::TablesSettings::get_modules;
     $template->param(
         panel   => defined $input->param('module') ? $input->param('module') : undef,
+        page    => defined $input->param('page') ? $input->param('page') : undef,
+        table   => defined $input->param('table') ? $input->param('table') : undef,
         modules => $modules,
     );
 }

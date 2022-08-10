@@ -441,6 +441,17 @@
         <script>
             $(document).ready( function() {
                 $("#[% panel | uri %]Toggle").click();
+                [%- IF page.defined -%]
+                $("#[% panel | uri %]").on('shown.bs.collapse', function () {
+                    $('html, body').animate({
+                        [%- IF table.defined -%]
+                        scrollTop: ($("#[% page | uri %]\\#[% table | uri %]").offset().top)
+                        [%- ELSE -%]
+                        scrollTop: ($("#[% page | uri %]").offset().top)
+                        [%- END -%]
+                    }, 500);
+                });
+                [%- END -%]
             });
         </script>
     [%- END -%]

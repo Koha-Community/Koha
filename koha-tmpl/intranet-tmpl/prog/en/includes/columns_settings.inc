@@ -168,7 +168,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
                 titleAttr: __("Configure this table"),
                 text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + _("Configure this table") + '</span>',
                 action: function() {
-                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '#' + table_settings['page'] + '#' + table_settings['table'];
+                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
                 },
             }
         );
