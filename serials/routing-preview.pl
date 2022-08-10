@@ -69,13 +69,7 @@ if($op eq 'cud-save_and_preview'){
     $library = Koha::Libraries->find($branch);
 
 	if (C4::Context->preference('RoutingListAddReserves')){
-		# get existing reserves .....
 
-        my $holds = $biblio->current_holds;
-        my $count = $holds->count;
-        while ( my $hold = $holds->next ) {
-            $count-- if $hold->is_waiting;
-        }
 		my $notes;
 		my $title = $subs->{'bibliotitle'};
         for my $routing ( @routinglist ) {
