@@ -222,7 +222,7 @@
                                     <tr>
                                         <th scope="row">Location(s)</th>
                                         <td>
-                                            [% IF BIBLIO_RESULT.ITEM_RESULTS %]
+                                            [% IF BIBLIO_RESULT.ITEM_RESULTS.count %]
                                                 [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                     <p>
                                                         [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
