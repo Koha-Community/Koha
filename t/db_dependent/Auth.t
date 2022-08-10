@@ -524,11 +524,11 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     $patron->set_password({ password => '123', skip_validation => 1 });
 
-    my @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    my @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( $test[0], 1, 'Patron authenticated correctly' );
 
     $patron->password_expiration_date('2020-01-01')->store;
-    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( $test[0], -2, 'Patron returned as expired correctly' );
 
 };
