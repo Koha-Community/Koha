@@ -193,7 +193,10 @@ use C4::Biblio qw( GetMarcFromKohaField );
                 my $kohafield = $v->{kohafield};
                 my ( $table, $column ) = split '\.', $kohafield;
                 while ( my $i = $items->next ) {
-                    my $value = $table eq 'items' ? $i->$column : $i->biblioitem->$column;
+                    my $value =
+                        $table eq 'items'  ? $i->$column
+                      : $table eq 'biblio' ? $i->biblio->$column
+                      :                      $i->biblioitem->$column;
                     $output .= " {" . $i->itemnumber . " => " . $value . "}";
                 }
                 new_item(
