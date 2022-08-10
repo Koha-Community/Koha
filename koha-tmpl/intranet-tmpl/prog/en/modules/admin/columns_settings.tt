@@ -2,7 +2,6 @@
 [% USE Asset %]
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
-[% SET panel_id = 0 %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 0 %]
         <span>Jump to:</span>
@@ -15,8 +14,6 @@
         <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
             <input type="hidden" name="action" value="save" />
             <input type="hidden" name="module" value="[% modulename | html %]" />
-            <input type="hidden" name="panel" value="[% panel_id | html %]" />
-            [% SET panel_id = panel_id + 1 %]
             [% IF module.keys and module.keys.size > 0 %]
                 [% FOR pagename IN module.keys.sort %]
                     <h4 class="page_name" id="[% pagename | html %]">Page: [% pagename | html %]</h4>
@@ -205,7 +202,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="acquiHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#acqui" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="acquiToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#acqui" aria-expanded="false" aria-controls="collapseOne">
                                                 Acquisition
                                             </a>
                                         </h2>
@@ -221,7 +218,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="adminHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#admin" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="adminToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#admin" aria-expanded="false" aria-controls="collapseOne">
                                                 Administration
                                             </a>
                                         </h2>
@@ -237,7 +234,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="authoritiesHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#authorities" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="authoritiesToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#authorities" aria-expanded="false" aria-controls="collapseOne">
                                                 Authorities
                                             </a>
                                         </h2>
@@ -253,7 +250,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="catalogueHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#catalogue" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="catalogueToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#catalogue" aria-expanded="false" aria-controls="collapseOne">
                                                 Catalog
                                             </a>
                                         </h2>
@@ -269,7 +266,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="cataloguingHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#cataloguing" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="cataloguingToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#cataloguing" aria-expanded="false" aria-controls="collapseOne">
                                                 Cataloging
                                             </a>
                                         </h2>
@@ -285,7 +282,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="circulationHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#circulation" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="circulationToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#circulation" aria-expanded="false" aria-controls="collapseOne">
                                                 Circulation
                                             </a>
                                         </h2>
@@ -301,7 +298,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="coursereservesHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#coursereserves" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="coursereservesToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#coursereserves" aria-expanded="false" aria-controls="collapseOne">
                                                 Course reserves
                                             </a>
                                         </h2>
@@ -317,7 +314,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="illHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#ill" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="illToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#ill" aria-expanded="false" aria-controls="collapseOne">
                                                 Interlibrary loans
                                             </a>
                                         </h2>
@@ -333,7 +330,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="membersHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#members" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="membersToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#members" aria-expanded="false" aria-controls="collapseOne">
                                                 Patrons
                                             </a>
                                         </h2>
@@ -349,7 +346,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="posHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#pos" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="posToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#pos" aria-expanded="false" aria-controls="collapseOne">
                                                 Point of sale
                                             </a>
                                         </h2>
@@ -365,7 +362,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="toolsHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#tools" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="toolsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#tools" aria-expanded="false" aria-controls="collapseOne">
                                                 Tools
                                             </a>
                                         </h2>
@@ -381,7 +378,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="opacHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#opac" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="opacToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#opac" aria-expanded="false" aria-controls="collapseOne">
                                                 OPAC
                                             </a>
                                         </h2>
@@ -397,7 +394,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="reportsHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#reports" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="reportsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#reports" aria-expanded="false" aria-controls="collapseOne">
                                                 Reports
                                             </a>
                                         </h2>
@@ -413,7 +410,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="serialsHeading">
                                         <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#serials" aria-expanded="false" aria-controls="collapseOne">
+                                            <a id="serialsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#serials" aria-expanded="false" aria-controls="collapseOne">
                                                 Serials
                                             </a>
                                         </h2>
@@ -440,10 +437,10 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
 
-    [%- IF ( panel.defined && panel >= 0 ) -%]
+    [%- IF ( panel.defined ) -%]
         <script>
             $(document).ready( function() {
-                $("#modules a.collapsed:eq(" + Number( [% panel | html %] ) + ")").click();
+                $("#[% panel | uri %]Toggle").click();
             });
         </script>
     [%- END -%]
