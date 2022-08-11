@@ -35,6 +35,7 @@ my $verbose = 0;
 my $where;
 my @type;
 my @letter_code;
+my $exit_on_plugin_failure = 0;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -48,6 +49,7 @@ GetOptions(
     't|type:s'          => \@type,
     'c|code:s'          => \@letter_code,
     'w|where:s'         => \$where,
+    'e|exit-on-plugin-failure' => \$exit_on_plugin_failure,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -67,6 +69,7 @@ This script has the following parameters :
     -h --help: this message
     -v --verbose: provides verbose output to STDOUT
     -w --where: filter messages to send with additional conditions in the where clause
+    -e --exit-on-plugin-failure: if enabled, script will exit prematurely if any plugin before_send_messages hook fails
 ENDUSAGE
 
 die $usage if $help;
@@ -106,6 +109,7 @@ if ( C4::Context->config("enable_plugins") ) {
             }
             catch {
                 warn "$_";
+                exit 1 if $exit_on_plugin_failure;
             };
         }
     }
