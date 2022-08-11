@@ -85,8 +85,8 @@
                             [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                 [% IF ( content_identifier_exists ) %]
                                     <div class="cover-image" id="syndetics-coverimg">
-                                        <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" title="Syndetics cover image">
-                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" alt="Syndetics cover image" />
+                                        <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" title="Syndetics cover image">
+                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %]&amp;type=xw10&amp;upc=[% normalized_upc | uri %]&amp;oclc=[% normalized_oclc | uri %]" alt="Syndetics cover image" />
                                         </a>
                                         <div class="hint">Image from Syndetics</div>
                                     </div>
@@ -268,27 +268,27 @@
                         [% IF ( SyndeticsSeries && SyndeticsSERIES1Exists ) %]
                             <span class="results_summary">
                                 <span class="label">Series information:</span>
-                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn | html %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode | html %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | html %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | html %][% END %]">Click to open in new window</a>
+                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn | uri %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode | uri %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | uri %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | uri %][% END %]">Click to open in new window</a>
                             </span>
                         [% END # / IF SyndeticsSeries && SyndeticsSERIES1Exists%]
                         [% IF ( SyndeticsAVPROFILEExists ) %]
                             <span class="results_summary">
                                 <span class="label">Audiovisual profile:</span>
-                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/avprofile.html&amp;client=[% SyndeticsClientCode | html %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | html %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | html %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/avprofile.html&amp;client=[% SyndeticsClientCode | uri %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | uri %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | uri %][% END %]&amp;type=xw10">Click to open in new window</a>
                             </span>
                         [% END # / IF SyndeticsAVPROFILEExists %]
 
                         [% IF ( SyndeticsFICTIONExists ) %]
                             <span class="results_summary">
                                 <span class="label">Fiction notes:</span>
-                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/fiction.html&amp;client=[% SyndeticsClientCode | html %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | html %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | html %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | uri %]/fiction.html&amp;client=[% SyndeticsClientCode | uri %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | uri %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | uri %][% END %]&amp;type=xw10">Click to open in new window</a>
                             </span>
                         [% END # / IF SyndeticsFICTIONExists %]
 
                         [% IF ( SyndeticsAwards && SyndeticsAWARDS1Exists ) %]
                             <span class="results_summary">
                                 <span class="label">Awards:</span>
-                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn | html %]&amp;type=awards&amp;client=[% SyndeticsClientCode | html %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | html %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | html %][% END %]">Click to open in new window</a>
+                                <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn | uri %]&amp;type=awards&amp;client=[% SyndeticsClientCode | uri %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc | uri %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc | uri %][% END %]">Click to open in new window</a>
                             </span>
                         [% END # / IF SyndeticsAwards && SyndeticsAWARDS1Exists %]
                     [% END # / IF SyndeticsEnabled%]
@@ -869,7 +869,7 @@
 
                                                 [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                                     [% IF ( XISBN.content_identifier_exists ) %]
-                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | html %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
+                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | uri %]/SC.GIF&amp;client=[% SyndeticsClientCode | uri %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | uri %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | uri %][% END %]&amp;type=xw10" alt="" />
                                                     [% ELSE %]
                                                         <span class="no-image">No cover image available</span>
                                                     [% END # / IF  XISBN.content_identifier_exists %]
