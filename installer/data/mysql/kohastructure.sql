@@ -1569,7 +1569,7 @@ CREATE TABLE `branchtransfers` (
   `tobranch` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch the transfer was going to',
   `comments` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'any comments related to the transfer',
   `reason` ENUM('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','TransferCancellation','Recall','RecallCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
-  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost','WrongTransfer','CancelRecall') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
+  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost','WrongTransfer','RecallCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),

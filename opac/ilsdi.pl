@@ -74,7 +74,7 @@ my @services = (
     'CancelHold',
 
     #	'RecallItem',                        # Not supported by Koha
-    #	'CancelRecall',                      # Not supported by Koha
+    #	'RecallCancellation',                      # Not supported by Koha
     #	Level 4: Robust/domain specific discovery platforms
     #	'SearchCourseReserves',              # TODO
     #	'Explain'                            # TODO
