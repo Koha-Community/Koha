@@ -74,8 +74,8 @@ my $return = $Import->import_patrons(
         overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
         preserve_fields              => \@preserve_fields,
-        update_dateexpiry            => $update_dateexpiry
-        update_dateexpiry_from_today => $update_dateexpiry_from_today
+        update_dateexpiry            => $update_dateexpiry,
+        update_dateexpiry_from_today => $update_dateexpiry_from_today,
         send_welcome                 => $welcome_new,
         dry_run                      => !$confirm,
     }
