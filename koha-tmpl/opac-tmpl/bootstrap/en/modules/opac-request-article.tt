@@ -68,6 +68,7 @@
                                         [% IF mandatory_fields.search('title') %]
                                             <label for="title" class="required">Title:</label>
                                             <input type="text" required="required" name="title" id="title" size="50" value="[% title | html %]"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="title">Title:</label>
                                             <input type="text" name="title" id="title" size="50" value="[% title | html %]"/>
@@ -78,6 +79,7 @@
                                         [% IF mandatory_fields.search('author') %]
                                             <label for="author" class="required">Author:</label>
                                             <input type="text" required="required" name="author" id="author" size="50" value="[% author | html %]"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="author">Author:</label>
                                             <input type="text" name="author" id="author" size="50" value="[% author | html %]"/>
@@ -88,6 +90,7 @@
                                         [% IF mandatory_fields.search('volume') %]
                                             <label for="volume" class="required">Volume:</label>
                                             <input type="text" required="required" name="volume" id="volume" size="50"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="volume">Volume:</label>
                                             <input type="text" name="volume" id="volume" size="50"/>
@@ -98,6 +101,7 @@
                                         [% IF mandatory_fields.search('issue') %]
                                             <label for="issue" class="required">Issue:</label>
                                             <input type="text" required="required" name="issue" id="issue" size="50"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="issue">Issue:</label>
                                             <input type="text" name="issue" id="issue" size="50"/>
@@ -108,6 +112,7 @@
                                         [% IF mandatory_fields.search('date') %]
                                             <label for="date" class="required">Date:</label>
                                             <input type="text" required="required" name="date" id="date" size="50"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="date">Date:</label>
                                             <input type="text" name="date" id="date" size="50"/>
@@ -123,6 +128,7 @@
                                         [% IF mandatory_fields.search('pages') %]
                                             <label for="pages" class="required">Pages:</label>
                                             <input type="text" required="required" name="pages" id="pages" size="50" value="[% pageinfo | html %]"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="pages">Pages:</label>
                                             <input type="text" name="pages" id="pages" size="50" value="[% pageinfo | html %]"/>
@@ -133,6 +139,7 @@
                                         [% IF mandatory_fields.search('chapters') %]
                                             <label for="chapters" class="required">Chapters:</label>
                                             <input type="text" required="required" name="chapters" id="chapters" size="50"/>
+                                            <div class="required_label required">Required</div>
                                         [% ELSE %]
                                             <label for="chapters">Chapters:</label>
                                             <input type="text" name="chapters" id="chapters" size="50"/>
