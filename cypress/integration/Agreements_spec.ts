@@ -82,6 +82,16 @@ describe("Agreement CRUD operations", () => {
     });
 
     it("Add agreement", () => {
+        // No agreement, no license yet
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: [],
+        });
+        cy.intercept("GET", "/api/v1/erm/licenses", {
+            statusCode: 200,
+            body: [],
+        });
+
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/agreements");
         cy.contains("New agreement").click();
@@ -102,7 +112,10 @@ describe("Agreement CRUD operations", () => {
             "have.length",
             1
         ); // name, description, status
-        cy.get("#agreement_status .vs__search").type(agreement.status + '{enter}',{force:true});
+        cy.get("#agreement_status .vs__search").type(
+            agreement.status + "{enter}",
+            { force: true }
+        );
 
         cy.contains("Add new period").click();
         cy.get("#agreements_add").contains("Submit").click();
@@ -165,6 +178,16 @@ describe("Agreement CRUD operations", () => {
         //cy.contains("Add new user").click();
         //cy.contains("Select user").click();
 
+        cy.get("#agreement_licenses").contains(
+            "There are no licenses created yet."
+        );
+        cy.get("#agreement_relationships").contains(
+            "There are no other agreements created yet."
+        );
+
+        cy.get("#agreement_documents").contains("Add new document");
+        // TODO Test document upload
+
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 500,
@@ -184,6 +207,23 @@ describe("Agreement CRUD operations", () => {
         cy.get("main div[class='dialog message']").contains(
             "Agreement created"
         );
+
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: [{ agreement_id: 1, description: "an existing agreement" }],
+        });
+        cy.intercept("GET", "/api/v1/erm/licenses", {
+            statusCode: 200,
+            body: [{ license_id: 1, description: "a license" }],
+        });
+        cy.visit("/cgi-bin/koha/erm/agreements/add");
+        cy.get("#agreement_licenses").contains(
+            "Add new license"
+        );
+        cy.get("#agreement_relationships").contains(
+            "Add new related agreement"
+        );
+
     });
 
     it("Edit agreement", () => {

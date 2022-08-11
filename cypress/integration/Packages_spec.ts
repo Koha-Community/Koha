@@ -9,6 +9,7 @@ function get_package() {
         package_type: "complete",
         content_type: "Print",
         package_agreements: [],
+        resources_count: 0,
     };
 }
 
@@ -47,7 +48,11 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", erm_package);
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.get("#packages_list").contains("Showing 1 to 1 of 1 entries");
     });
@@ -67,8 +72,18 @@ describe("Package CRUD operations", () => {
             1
         );
         cy.get("#package_name").type(erm_package.name);
-        cy.get("#package_type .vs__search").type(erm_package.package_type + '{enter}',{force:true});
-        cy.get("#package_content_type .vs__search").type(erm_package.content_type + '{enter}',{force:true});
+        cy.get("#package_type .vs__search").type(
+            erm_package.package_type + "{enter}",
+            { force: true }
+        );
+        cy.get("#package_content_type .vs__search").type(
+            erm_package.content_type + "{enter}",
+            { force: true }
+        );
+
+        cy.get("#package_agreements").contains(
+            "There are no agreements created yet."
+        );
 
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
@@ -86,9 +101,15 @@ describe("Package CRUD operations", () => {
             body: erm_package,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
-            "Package created"
-        );
+        cy.get("main div[class='dialog message']").contains("Package created");
+
+        // Link with an agreement
+        cy.intercept("GET", "/api/v1/erm/agreements", {
+            statusCode: 200,
+            body: [{ package_id: 1, description: "an agreement" }],
+        });
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/add");
+        cy.get("#package_agreements").contains("Add new agreement");
     });
 
     it("Edit package", () => {
@@ -103,13 +124,13 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", erm_package).as(
-            "get-package"
-        );
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
-        cy.get("#packages_list table tbody tr:first")
-            .contains("Edit")
-            .click();
+        cy.get("#packages_list table tbody tr:first").contains("Edit").click();
         cy.wait("@get-package");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#packages_add h2").contains("Edit package");
@@ -135,9 +156,7 @@ describe("Package CRUD operations", () => {
             body: erm_package,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
-            "Package updated"
-        );
+        cy.get("main div[class='dialog message']").contains("Package updated");
     });
 
     it("Show package", () => {
@@ -152,9 +171,11 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", erm_package).as(
-            "get-package"
-        );
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        ).as("get-package");
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         let name_link = cy.get(
             "#packages_list table tbody tr:first td:first a"
@@ -169,6 +190,43 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_show h2").contains(
             "Package #" + erm_package.package_id
         );
+        // There are no resources, the table should not be displayed
+        cy.contains("Titles (0)");
+        cy.get("#table#title_list").should("not.exist");
+
+        // List resources
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", {
+            ...erm_package,
+            resources_count: 1,
+        });
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/1/resources*",
+            {
+                statusCode: 200,
+                body: [
+                    {
+                        package_id: erm_package.package_id,
+                        resource_id: 1,
+                        title_id: 1,
+                        title: {
+                            biblio_id: 42,
+                            publication_title: "A great title",
+                            publication_type: "",
+                        },
+                    },
+                ],
+                headers: {
+                    "X-Base-Total-Count": "1",
+                    "X-Total-Count": "1",
+                },
+            }
+        ).as("get-resource");
+        cy.visit("/cgi-bin/koha/erm/eholdings/local/packages/1");
+        cy.contains("Titles (1)");
+        cy.wait("@get-resource");
+        cy.wait(500);
+        cy.get("table#title_list").contains("A great title");
     });
 
     it("Delete package", () => {
@@ -184,7 +242,11 @@ describe("Package CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", erm_package);
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            erm_package
+        );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
 
         cy.get("#packages_list table tbody tr:first")
@@ -209,8 +271,6 @@ describe("Package CRUD operations", () => {
             body: null,
         });
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
-            "Package deleted"
-        );
+        cy.get("main div[class='dialog message']").contains("Package deleted");
     });
 });
