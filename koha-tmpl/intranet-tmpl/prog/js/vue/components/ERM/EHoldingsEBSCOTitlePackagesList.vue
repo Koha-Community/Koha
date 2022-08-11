@@ -12,7 +12,7 @@
                         <input
                             type="text"
                             id="package_name_filter"
-                            v-model="this.filters.package_name"
+                            v-model="filters.package_name"
                             @keyup.enter="filter_table"
                         />
                     </li>
@@ -20,7 +20,7 @@
                         <label>{{ $t("Selection status") }}:</label>
                         <select
                             id="selection_type_filter"
-                            v-model="this.filters.selection_type"
+                            v-model="filters.selection_type"
                         >
                             <option value="0">{{ $t("All") }}</option>
                             <option value="1">{{ $t("Selected") }}</option>

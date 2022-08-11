@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
     <div v-else id="packages_add">
         <h2 v-if="erm_package.package_id">
             {{ $t("Edit package .id", { id: erm_package.package_id }) }}

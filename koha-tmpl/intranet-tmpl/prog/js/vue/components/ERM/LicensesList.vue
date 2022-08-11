@@ -1,9 +1,9 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="this.licenses" id="licenses_list">
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-else-if="licenses" id="licenses_list">
         <Toolbar />
         <table v-if="licenses.length" :id="table_id"></table>
-        <div v-else-if="this.initialized" class="dialog message">
+        <div v-else-if="initialized" class="dialog message">
             {{ $t("There are no licenses defined") }}
         </div>
     </div>

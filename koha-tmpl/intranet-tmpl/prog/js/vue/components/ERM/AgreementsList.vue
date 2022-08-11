@@ -1,8 +1,8 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-    <div v-else-if="this.agreements" id="agreements_list">
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
+    <div v-else-if="agreements" id="agreements_list">
         <Toolbar v-if="before_route_entered" />
-        <fieldset v-if="this.agreements.length">
+        <fieldset v-if="agreements.length">
             <label for="expired_filter">{{ $t("Filter by expired") }}:</label>
             <input
                 type="checkbox"
@@ -24,8 +24,8 @@
                 :value="$t('Filter')"
             />
         </fieldset>
-        <table v-if="this.agreements.length" :id="table_id"></table>
-        <div v-else-if="this.initialized" class="dialog message">
+        <table v-if="agreements.length" :id="table_id"></table>
+        <div v-else-if="initialized" class="dialog message">
             {{ $t("There are no agreements defined") }}
         </div>
     </div>

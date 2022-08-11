@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!this.initialized">{{ $t("Loading") }}</div>
+    <div v-if="!initialized">{{ $t("Loading") }}</div>
     <div v-else id="agreements_confirm_delete">
         <h2>{{ $t("Delete agreement") }}</h2>
         <div>

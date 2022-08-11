@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div v-if="!this.initialized">{{ $t("Loading") }}</div>
-        <div v-else-if="this.titles" id="titles_list">
+        <div v-if="!initialized">{{ $t("Loading") }}</div>
+        <div v-else-if="titles" id="titles_list">
             <Toolbar />
-            <div v-if="this.titles.length" id="title_list_result">
-                <table v-if="this.titles.length" :id="table_id"></table>
+            <div v-if="titles.length" id="title_list_result">
+                <table v-if="titles.length" :id="table_id"></table>
             </div>
-            <div v-else-if="this.initialized" class="dialog message">
+            <div v-else-if="initialized" class="dialog message">
                 {{ $t("There are no titles defined") }}
             </div>
         </div>
