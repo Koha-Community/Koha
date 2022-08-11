@@ -169,6 +169,26 @@ restart_plack()
     fi
 }
 
+reload_plack()
+{
+    local instancename=$1
+
+    local PIDFILE="/var/run/koha/${instancename}/plack.pid"
+
+    if is_plack_running ${instancename}; then
+        log_daemon_msg "Reloading Plack daemon for ${instancename}"
+
+        if start-stop-daemon --pidfile ${PIDFILE} --user="${instancename}-koha" --stop --signal HUP; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Plack not running for ${instancename}"
+        log_end_msg 1
+    fi
+}
+
 enable_plack()
 {
     local instancename=$1
@@ -360,6 +380,9 @@ _do_instance() {
         "restart")
             restart_plack $name
             ;;
+        "reload")
+            reload_plack $name
+            ;;
         "enable")
             enable_plack $name
             ;;
@@ -397,6 +420,9 @@ while [ $# -gt 0 ]; do
             shift ;;
         --restart)
             set_action "restart"
+            shift ;;
+        --reload)
+            set_action "reload"
             shift ;;
         --enable)
             set_action "enable"
