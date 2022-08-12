@@ -43,13 +43,16 @@ $scriptname
 This script lets you manage the plack daemons for your Koha instances.
 
 Usage:
-$scriptname --start|--stop|--restart [--quiet|-q] instancename1 [instancename2...]
+$scriptname --start|--stop|--restart|--reload [--quiet|-q] instancename1 [instancename2...]
 $scriptname --enable|--disable instancename1 [instancename2]
 $scriptname -h|--help
 
     --start               Start the plack daemon for the specified instances
     --stop                Stop the plack daemon for the specified instances
     --restart             Restart the plack daemon for the specified instances
+    --reload              Reload the plack daemon for the specified instances,
+                          letting the busy workers finish processing their
+                          requests before restarting them
     --enable              Enable plack for the specified instances
     --disable             Disable plack for the specified instances
     --debugger            Enable running Plack in debug mode

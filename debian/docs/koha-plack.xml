@@ -28,6 +28,7 @@
         <option>--start</option>|
         <option>--stop</option>|
         <option>--restart</option>|
+        <option>--reload</option>|
         <option>--enable</option>|
         <option>--disable</option>|
         <option>--help</option>|<option>-h</option>
@@ -59,6 +60,13 @@
       <term><option>--restart</option></term>
       <listitem>
         <para>Restart the Plack daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--reload</option></term>
+      <listitem>
+        <para>Reload the Plack daemon for the desired Koha instances, letting the busy workers finish processing their requests before restarting them.</para>
       </listitem>
     </varlistentry>
 
