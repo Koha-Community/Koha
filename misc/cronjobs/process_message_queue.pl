@@ -72,6 +72,19 @@ ENDUSAGE
 
 die $usage if $help;
 
+my $script_handler = Koha::Script->new({ script => $0 });
+
+try {
+    $script_handler->lock_exec;
+}
+catch {
+    my $message = "Skipping execution of $0 ($_)";
+    print STDERR "$message\n"
+        if $verbose;
+    cronlogaction( $message );
+    exit;
+};
+
 cronlogaction();
 
 if ( C4::Context->config("enable_plugins") ) {
