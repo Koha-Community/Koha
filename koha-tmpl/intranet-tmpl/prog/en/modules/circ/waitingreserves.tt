@@ -98,7 +98,7 @@
                     </a>
                 </li>
                 <li role="presentation">
-                    <a href="#holdscr" aria-controls="holdscr" role="tab" data-toggle="tab">
+                    <a href="#holdscancelled" aria-controls="holdscancelled" role="tab" data-toggle="tab">
                         Holds with cancellation requests: [% cancel_reqs_count | html %]
                     </a>
                 </li>
@@ -139,7 +139,7 @@
                 <div class="dialog message">No holds found.</div>
             [% END %]
         </div>
-        <div role="tabpanel" class="tab-pane" id="holdscr">
+        <div role="tabpanel" class="tab-pane" id="holdscancelled">
             [% IF cancel_reqs_count %]
                 [% INCLUDE waiting_holds.inc select_column='1' table_name='holdscr' reserveloop=cancel_reqs tab='holdscr' %]
             [% ELSE %]
