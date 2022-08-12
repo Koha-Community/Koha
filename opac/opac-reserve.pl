@@ -155,12 +155,13 @@ foreach my $biblioNumber (@biblionumbers) {
     my $items = Koha::Items->search_ordered(
         [
             biblionumber => $biblioNumber,
-            itemnumber => {
+            'me.itemnumber' => {
                 -in => [
                     $biblio->host_items->get_column('itemnumber')
                 ]
             }
         ],
+        { prefetch => [ 'issue', 'homebranch', 'holdingbranch' ] }
     )->filter_by_visible_in_opac({ patron => $patron });
 
     $biblioData->{items} = [$items->as_list]; # FIXME Potentially a lot in memory here!

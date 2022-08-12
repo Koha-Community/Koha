@@ -362,9 +362,9 @@ sub effective_itemtype {
 sub home_branch {
     my ($self) = @_;
 
-    $self->{_home_branch} ||= Koha::Libraries->find( $self->homebranch() );
+    my $hb_rs = $self->_result->homebranch;
 
-    return $self->{_home_branch};
+    return Koha::Library->_new_from_dbic( $hb_rs );
 }
 
 =head3 holding_branch
@@ -374,9 +374,9 @@ sub home_branch {
 sub holding_branch {
     my ($self) = @_;
 
-    $self->{_holding_branch} ||= Koha::Libraries->find( $self->holdingbranch() );
+    my $hb_rs = $self->_result->holdingbranch;
 
-    return $self->{_holding_branch};
+    return Koha::Library->_new_from_dbic( $hb_rs );
 }
 
 =head3 biblio
@@ -1421,6 +1421,7 @@ sub to_api_mapping {
 
 sub itemtype {
     my ( $self ) = @_;
+
     return Koha::ItemTypes->find( $self->effective_itemtype );
 }
 
