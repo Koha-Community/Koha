@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+
 # Copyright Katipo Communications 2002
 # Copyright Koha Development team 2012
 #
@@ -151,20 +152,16 @@ foreach my $biblioNumber (@biblionumbers) {
 
     my $marcrecord = $biblio->metadata->record;
 
-    my $items =
-      $biblio->items->filter_by_visible_in_opac( { patron => $patron } );
-    my $host_items =
-      $biblio->host_items->filter_by_visible_in_opac( { patron => $patron } );
-    $items = $biblio->items->search_ordered(
-        {
+    my $items = Koha::Items->search_ordered(
+        [
+            biblionumber => $biblioNumber,
             itemnumber => {
                 -in => [
-                    $items->get_column('itemnumber'),
-                    $host_items->get_column('itemnumber')
+                    $biblio->host_items->get_column('itemnumber')
                 ]
             }
-        }
-    );
+        ],
+    )->filter_by_visible_in_opac({ patron => $patron });
 
     $biblioData->{items} = [$items->as_list]; # FIXME Potentially a lot in memory here!
 
