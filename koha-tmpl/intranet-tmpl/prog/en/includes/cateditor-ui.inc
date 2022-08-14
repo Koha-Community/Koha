@@ -251,7 +251,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             saveLabel: _("Duplicate"),
             get: function( id, callback ) {
                 if ( !id ) return false;
-                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] 0 [% ELSE %] 1 [% END %];
+                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %];
 
                 KohaBackend.GetRecord( id, remove_control_num, callback );
             },
@@ -276,7 +276,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             get: function( id, callback ) {
                 if ( !id ) return false;
 
-                KohaBackend.GetRecord( id, "", callback );
+                KohaBackend.GetRecord( id, false, callback );
             },
             save: function( id, record, done ) {
                 function finishCb( data ) {
@@ -412,7 +412,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         backends[ parts[0] ].get( parts[1], function( record ) {
             if ( !record.error ) {
-                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] 0 [% ELSE %] 1 [% END %];
+                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %];
                 if( remove_control_num ){ record.removeField("001"); }
                 editor.displayRecord( record );
                 editor.focus();
