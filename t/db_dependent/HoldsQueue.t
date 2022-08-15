@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 60;
+use Test::More tests => 61;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -2059,4 +2059,35 @@ subtest "Test HoldsQueuePrioritizeBranch" => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest "GetItemsAvailableToFillHoldsRequestsForBib" => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item_1 = $builder->build_sample_item();
+    my $item_2 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+    my $item_3 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+
+    my $transfer_1 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_1->itemnumber,
+        datearrived => undef,
+        datecancelled => undef
+    }});
+    my $transfer_2 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_2->itemnumber,
+        datearrived => dt_from_string,
+        datecancelled => undef
+    }});
+    my $transfer_3 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_3->itemnumber,
+        datearrived => undef,
+        datecancelled => dt_from_string
+    }});
+
+    my $items = C4::HoldsQueue::GetItemsAvailableToFillHoldRequestsForBib( $item_1->biblionumber );
+    is( scalar @$items, 2, "Two items without active transfers correctly retrieved");
+    is_deeply( [$items->[0]->{itemnumber},$items->[1]->{itemnumber}],[$item_2->itemnumber,$item_3->itemnumber],"Correct two items retrieved");
+
 };
