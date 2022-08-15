@@ -493,18 +493,16 @@ $template->param(
     OPACShowCheckoutName => C4::Context->preference("OPACShowCheckoutName"),
 );
 
-my $host_items = $biblio->host_items->filter_by_visible_in_opac({ patron => $patron });
-
-$items = $biblio->items->search_ordered(
-    {
+$items = Koha::Items->search_ordered(
+    [
+        'me.biblionumber' => $biblionumber,
         'me.itemnumber' => {
             -in => [
-                $items->get_column('itemnumber'),
-                $host_items->get_column('itemnumber')
+                $biblio->host_items->get_column('itemnumber')
             ]
         }
-    }
-);
+    ]
+)->filter_by_visible_in_opac({ patron => $patron }) unless $specific_item;
 
 my $dat = &GetBiblioData($biblionumber);
 my $HideMARC = $record_processor->filters->[0]->should_hide_marc(
