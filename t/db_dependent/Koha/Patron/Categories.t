@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Context;
 use Koha::Database;
@@ -114,6 +114,31 @@ my $new_category_4 = Koha::Patron::Category->new(
     }
 )->store;
 is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'upperagelimit and dateofbirthrequired should have a default value if empty string is passed' );
+
+subtest 'can_make_suggestions' => sub {
+    plan tests => 5;
+    t::lib::Mocks::mock_preference('suggestion', 0);
+    my $category = Koha::Patron::Category->new({
+        categorycode => 'the_cat',
+        category_type => 'A',
+        description => 'thecatdesc',
+        enrolementperiod => undef
+    })->store;
+    is ( $category->can_make_suggestions, undef, 'With suggestion syspref disabled and suggestionPatronCategoryExceptions syspref empty then Koha::Patron::Category->can_make_suggestions() returns undef' );
+
+    t::lib::Mocks::mock_preference('suggestion', 1);
+    is( $category->can_make_suggestions, 1, 'With suggestion syspref enabled and suggestionPatronsCategoryExceptions syspref empty then Koha::Patron::Category->can_make_suggestions() returns 1' );
+
+    t::lib::Mocks::mock_preference('suggestionPatronCategoryExceptions', 'the_cat');
+    is( $category->can_make_suggestions, undef, 'With suggestion syspref enabled and suggestionPatronCategoryExceptions syspref = "the_cat" then Koha::Patron::Category->can_make_suggestions() returns undef' );
+
+    t::lib::Mocks::mock_preference('suggestionPatronCategoryExceptions', 'mycatcodeW');
+    is( $category->can_make_suggestions, 1, 'With suggestion syspref enabled and suggestionPatronCategoryExceptions syspref = "mycatcodeW" then Koha::Patron::Category->can_make_suggestions returns 1' );
+
+    t::lib::Mocks::mock_preference('suggestion', 0);
+    is( $category->can_make_suggestions, undef, 'With suggestion syspref disabled and suggestionPatronCategoryExceptions syspref = "mycatcodeW" then Koha::Patron::Category->can_make_suggestions returns undef' );
+    $category->delete;
+};
 
 $schema->storage->txn_rollback;
 
