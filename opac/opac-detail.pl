@@ -501,7 +501,8 @@ $items = Koha::Items->search_ordered(
                 $biblio->host_items->get_column('itemnumber')
             ]
         }
-    ]
+    ],
+    { prefetch => [ 'issue', 'homebranch', 'holdingbranch' ] }
 )->filter_by_visible_in_opac({ patron => $patron }) unless $specific_item;
 
 my $dat = &GetBiblioData($biblionumber);
