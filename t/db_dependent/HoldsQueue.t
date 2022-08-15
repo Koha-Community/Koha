@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 59;
+use Test::More tests => 61;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -1966,4 +1966,128 @@ subtest "GetHoldsQueueItems" => sub {
         1, 'One item of shleving location found when locationslimit passed' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest "Test HoldsQueuePrioritizeBranch" => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
+    t::lib::Mocks::mock_preference( 'UseTransportCostMatrix', 0 );
+
+    my $branch1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' });
+    my $patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch1->branchcode,
+                categorycode => $category->categorycode
+            }
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item1   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch1->branchcode,
+        }
+    )->holdingbranch( $branch2->id )->store();
+
+    my $item2   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch1->branchcode,
+        }
+    )->homebranch( $branch2->id )->store();
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch1->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item1->itemnumber,
+        "Picked the item whose homebranch matches the pickup branch"
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item2->itemnumber,
+        "Picked the item whose holdingbranch matches the pickup branch"
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item1->itemnumber,
+        "Picked the item whose homebranch matches the pickup branch"
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item2->itemnumber,
+        "Picked the item whose holdingbranch matches the pickup branch"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "GetItemsAvailableToFillHoldsRequestsForBib" => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item_1 = $builder->build_sample_item();
+    my $item_2 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+    my $item_3 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+
+    my $transfer_1 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_1->itemnumber,
+        datearrived => undef,
+        datecancelled => undef
+    }});
+    my $transfer_2 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_2->itemnumber,
+        datearrived => dt_from_string,
+        datecancelled => undef
+    }});
+    my $transfer_3 = $builder->build_object({ class => 'Koha::Item::Transfers', value => {
+        itemnumber => $item_3->itemnumber,
+        datearrived => undef,
+        datecancelled => dt_from_string
+    }});
+
+    my $items = C4::HoldsQueue::GetItemsAvailableToFillHoldRequestsForBib( $item_1->biblionumber );
+    is( scalar @$items, 2, "Two items without active transfers correctly retrieved");
+    is_deeply( [$items->[0]->{itemnumber},$items->[1]->{itemnumber}],[$item_2->itemnumber,$item_3->itemnumber],"Correct two items retrieved");
+
 };
