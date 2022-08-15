@@ -36,8 +36,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $page_id = $query->param('page_id');
 my $page;
 
+my $homebranch = $ENV{OPAC_BRANCH_DEFAULT};
+if (C4::Context->userenv) {
+    $homebranch = C4::Context->userenv->{'branch'};
+}
+
 if (defined $page_id){
-    $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['opac_only', 'staff_and_opac'] });
+    $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['opac_only', 'staff_and_opac'], branchcode => [ $homebranch, undef ] });
     if ( $page->count > 0){
         $template->param( page => $page->next );
     } else {

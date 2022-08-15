@@ -28,7 +28,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "tools/page.tt",
         query           => $query,
         type            => "intranet",
-        flagsrequired   => { tools => '*' },
+        flagsrequired   => { catalogue => 1 },
     }
 );
 
@@ -36,7 +36,8 @@ my $page_id = $query->param('page_id');
 my $page;
 
 if (defined $page_id){
-    $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['staff_only', 'staff_and_opac'] });
+    my $branch = C4::Context->userenv->{'branch'};
+    $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['staff_only', 'staff_and_opac'], branchcode => [ $branch, undef ] });
     if ( $page->count > 0){
         $template->param( page => $page->next );
     } else {
