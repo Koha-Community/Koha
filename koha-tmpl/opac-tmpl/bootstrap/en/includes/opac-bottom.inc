@@ -117,6 +117,10 @@
     [% END # /IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
 [% END # / UNLESS is_popup %]
 
+[% IF ( Koha.Preference( 'OpacTrustedCheckout' ) && loggedinusername ) %]
+    [% INCLUDE 'modals/checkout.inc' %]
+[% END %]
+
 <!-- JavaScript includes -->
 [% Asset.js("lib/jquery/jquery-3.6.0.min.js") | $raw %]
 [% Asset.js("lib/jquery/jquery-migrate-3.3.2.min.js") | $raw %]
@@ -284,6 +288,7 @@ $(document).ready(function() {
     }
 });
 </script>
+[% INCLUDE 'js-date-format.inc' %]
 [% PROCESS jsinclude %]
 [% IF ( Koha.Preference('OPACUserJS') ) %]
     <script>
@@ -299,6 +304,9 @@ $(document).ready(function() {
 
         </script>
     [% END %]
+[% END %]
+[% IF ( Koha.Preference( 'OpacTrustedCheckout' ) && loggedinusername ) %]
+    [% Asset.js("js/modals/checkout.js") | $raw %]
 [% END %]
 [% KohaPlugins.get_plugins_opac_js | $raw %]
 </body>
