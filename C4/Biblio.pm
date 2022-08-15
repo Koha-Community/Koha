@@ -45,6 +45,7 @@ BEGIN {
         GetMarcQuantity
         GetAuthorisedValueDesc
         GetMarcStructure
+        GetMarcSubfieldStructure
         IsMarcStructureInternal
         GetMarcFromKohaField
         GetMarcSubfieldStructureFromKohaField
