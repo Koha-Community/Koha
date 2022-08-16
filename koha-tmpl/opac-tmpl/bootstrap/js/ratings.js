@@ -1,4 +1,3 @@
-/* global borrowernumber MSG_YOUR_RATING MSG_AVERAGE_RATING */
 // -----------------------------------------------------
 // star-ratings code
 // -----------------------------------------------------
@@ -14,27 +13,35 @@ $(document).ready(function(){
         showSelectedRating: false,
         allowEmpty: true,
         deselectable: false,
+        readonly: !is_logged_in,
         onSelect: function( value ) {
             var context = $("#" + this.$elem.data("context") );
             $(".rating-loading", context ).show();
-            $.post("/cgi-bin/koha/opac-ratings-ajax.pl", {
-                rating_old_value: $(".rating_value", context ).attr("value"),
-                borrowernumber: borrowernumber,
-                biblionumber: this.$elem.data('biblionumber'),
-                rating_value: value,
-                auth_error: value
-            }, function (data) {
-                $(".rating_value", context ).val(data.rating_value);
-                if (data.rating_value) {
-                    $(".rating_value_text", context ).text( MSG_YOUR_RATING.format(data.rating_value) );
+            let biblionumber = this.$elem.data('biblionumber');
+            if ( value == "" ) value = null;
+            fetch("/api/v1/public/biblios/"+biblionumber+"/ratings", {
+                method: 'POST',
+                body: JSON.stringify({ rating: value }),
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                }
+            }).then(checkError)
+              .then((data) => {
+                $(".rating_value", context ).val(data.rating);
+                console.log(data);
+                  console.log($(".cancel_rating_text", context ));
+                if (data.rating) {
+                    console.log(data.rating);
+                    $(".rating_value_text", context ).text( __("Your rating: %s.").format(data.rating) );
                     $(".cancel_rating_text", context ).show();
                 } else {
                     $(".rating_value_text", context ).text("");
                     $(".cancel_rating_text", context ).hide();
                 }
-                $(".rating_text", context ).text( MSG_AVERAGE_RATING.format(data.rating_avg, data.rating_total) );
+                  console.log($(".rating_text", context ));
+                $(".rating_text", context ).text( __("Average rating: %s (%s votes)").format(data.average, data.count) );
                 $(".rating-loading", context ).hide();
-            }, "json");
+            });
         }
     });
 

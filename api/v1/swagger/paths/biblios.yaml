@@ -383,3 +383,69 @@
         description: Under maintenance
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+"/public/biblios/{biblio_id}/ratings":
+  post:
+    x-mojo-to: Biblios#set_rating
+    operationId: setBiblioRating
+    tags:
+      - biblios
+    summary: set biblio rating (public)
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing rating information
+        schema:
+          type: object
+          properties:
+            rating:
+              description: the rating
+              type:
+                - integer
+                - "null"
+          required:
+              - rating
+          additionalProperties: false
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Rating set
+        schema:
+          type: object
+          properties:
+            rating:
+              description: user's rating
+              type:
+                - number
+                - "null"
+            average:
+              description: average rating
+              type: number
+            count:
+              description: number of ratings
+              type: integer
+          additionalProperties: false
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Biblio not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"

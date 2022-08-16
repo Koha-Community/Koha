@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -675,4 +675,41 @@ subtest 'get_checkouts() tests' => sub {
     is_deeply( $ret, [ $old_checkout_1->to_api ] );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'set_rating() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+    $t->post_ok("/api/v1/public/biblios/" . $biblio->biblionumber . "/ratings" => json => { rating => 3 })
+      ->status_is(403);
+
+    $t->post_ok("//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/ratings" => json => { rating => 3 })
+      ->status_is(200)
+      ->json_is( '/rating', '3' )
+      ->json_is( '/average', '3' )
+      ->json_is( '/count', '1' );
+
+    $t->post_ok("//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber . "/ratings" => json => { rating => undef })
+      ->status_is(200)
+      ->json_is( '/rating', undef )
+      ->json_is( '/average', '0' )
+      ->json_is( '/count', '0' );
+
+    $schema->storage->txn_rollback;
+
 };

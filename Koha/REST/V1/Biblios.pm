@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Biblios;
+use Koha::Ratings;
 use Koha::RecordProcessor;
 use C4::Biblio qw( DelBiblio );
 
@@ -402,6 +403,76 @@ sub get_items_public {
         return $c->render(
             status  => 200,
             openapi => $items
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 set_rating
+
+Set rating for the logged in user
+
+=cut
+
+
+sub set_rating {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio = Koha::Biblios->find( $c->validation->param('biblio_id') );
+
+    unless ($biblio) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => "Object not found."
+            }
+        );
+    }
+
+    my $patron = $c->stash('koha.user');
+    unless ($patron) {
+        return $c->render(
+            status => 403,
+            openapi =>
+                { error => "Cannot rate. Reason: must be logged-in" }
+        );
+    }
+
+    my $body   = $c->validation->param('body');
+    my $rating_value = $body->{rating};
+
+    return try {
+
+        my $rating = Koha::Ratings->find(
+            {
+                biblionumber   => $biblio->biblionumber,
+                borrowernumber => $patron->borrowernumber,
+            }
+        );
+        $rating->delete if $rating;
+
+        if ( $rating_value ) { # Cannot set to 0 from the UI
+            $rating = Koha::Rating->new(
+                {
+                    biblionumber   => $biblio->biblionumber,
+                    borrowernumber => $patron->borrowernumber,
+                    rating_value   => $rating_value,
+                }
+            )->store;
+        };
+        my $ratings =
+          Koha::Ratings->search( { biblionumber => $biblio->biblionumber } );
+        my $average = $ratings->get_avg_rating;
+
+        return $c->render(
+            status  => 200,
+            openapi => {
+                rating  => $rating && $rating->in_storage ? $rating->rating_value : undef,
+                average => $average,
+                count   => $ratings->count
+            },
         );
     }
     catch {

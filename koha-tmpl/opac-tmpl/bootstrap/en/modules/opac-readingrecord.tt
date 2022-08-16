@@ -228,9 +228,6 @@
             }
         });
     });
-    var borrowernumber = "[% logged_in_user.borrowernumber | html %]";
-    var MSG_YOUR_RATING = _("Your rating: %s, ");
-    var MSG_AVERAGE_RATING = _("Average rating: %s (%s votes)");
 </script>
     [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
         [% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %]

@@ -117,6 +117,18 @@ function confirmModal(message, title, yes_label, no_label, callback) {
     $("#bootstrap-confirm-box-modal").modal('show');
 }
 
+
+// Function to check errors from AJAX requests
+const checkError = function(response) {
+    if (response.status >= 200 && response.status <= 299) {
+        return response.json();
+    } else {
+        console.log("Server returned an error:");
+        console.log(response);
+        alert("%s (%s)".format(response.statusText, response.status));
+    }
+};
+
 //Add jQuery :focusable selector
 (function($) {
     function visible(element) {

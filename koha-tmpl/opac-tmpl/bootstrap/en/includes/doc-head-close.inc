@@ -63,6 +63,7 @@
 <script>
     var Koha = {};
     function _(s) { return s } // dummy function for gettext
+    const is_logged_in = [% IF logged_in_user %]true[% ELSE %]false[% END %]
 </script>
 [% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
