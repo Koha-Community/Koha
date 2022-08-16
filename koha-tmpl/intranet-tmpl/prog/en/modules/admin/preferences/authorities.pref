@@ -16,12 +16,12 @@ Authorities:
               type: textarea
         -
             - When editing records,
-            - pref: AllowManualAuthorityEditing
-              default: no
+            - pref: RequireChoosingExistingAuthority
+              default: yes
               choices:
-                  1: allow
-                  0: "don't allow"
-            - catalogers to manually create new headings if needed, rather than having to reference existing authorities.
+                  1: require
+                  0: "don't require"
+            - catalogers to reference existing authorities. If set to don't, catalogers can manually enter uncontrolled terms into controlled fields
         -
             - When editing records,
             - pref: AutoCreateAuthorities
@@ -29,7 +29,7 @@ Authorities:
               choices:
                   1: generate
                   0: "don't generate"
-            - authority records that are missing (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing">AllowManualAuthorityEditing</a> must be set to "allow" for this to have any effect).
+            - authority records that are missing (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority">RequireChoosingExistingAuthority</a> must be set to "don't require" for this to have any effect).
         -
             - When modifying an authority record, do not update attached bibliographic records if the number exceeds
             - pref: AuthorityMergeLimit
@@ -64,13 +64,13 @@ Authorities:
                   "strict": strict
             - mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default.
         -
-            - "Use the following text as default value for the 667$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing'>AllowManualAuthorityEditing</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+            - "Use the following text as default value for the 667$a field of MARC21 authority records (must not require <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField667
               default: "Machine generated authority record"
               type: textarea
               class: code
         -
-            - "Use the following text as default value for the 670$a field of MARC21 authority records (requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowManualAuthorityEditing'>AllowManualAuthorityEditing</a> and <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+            - "Use the following text as default value for the 670$a field of MARC21 authority records (must not require <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
             - pref: GenerateAuthorityField670
               default: "Work cat."
               type: textarea

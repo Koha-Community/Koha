@@ -153,7 +153,7 @@ sub _shared_preferences {
         AuthDisplayHierarchy
         AutoCreateAuthorities
         AutoLinkBiblios
-        AllowManualAuthorityEditing
+        RequireChoosingExistingAuthority
         AuthorityMergeLimit
         AuthorityMergeMode
         UseAuthoritiesForTracings
