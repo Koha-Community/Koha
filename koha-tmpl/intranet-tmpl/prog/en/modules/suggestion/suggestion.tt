@@ -185,6 +185,12 @@
                                     [% note | html %]
                                 </li>
                             [% END %]
+                            [% IF ( privatenote ) %]
+                                <li>
+                                    <span class="label">Notes:</span>
+                                    [% privatenote | html %]
+                                </li>
+                            [% END %]
                         </ol>
                     </fieldset>
 
@@ -408,6 +414,10 @@
                         <li>
                             <label for="note">Notes:</label>
                             <textarea name="note" id="note" rows="5" cols="40">[% note | html %]</textarea>
+                        </li>
+                        <li>
+                            <label for="note">Non-public notes:</label>
+                            <textarea name="privatenote" id="privatenote" rows="5" cols="40">[% privatenote | html %]</textarea>
                         </li>
                     </ol>
                 </fieldset>
@@ -744,6 +754,7 @@
                                             <th>Library</th>
                                             <th>Fund</th>
                                             <th>Status</th>
+                                            <th>Non-public note</th>
                                             <th class="NoSort noExport">&nbsp;</th>
                                         </tr>
                                     </thead>
@@ -843,6 +854,9 @@
                                                     [% IF ( s.reason ) %]
                                                         <br />([% s.reason | html %])
                                                     [% END %]
+                                                </td>
+                                                <td>
+                                                    [% s.privatenote | html %]
                                                 </td>
                                                 <td class="actions">
                                                     <div class="btn-group dropup">
