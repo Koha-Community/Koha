@@ -131,6 +131,7 @@
                                     <th>[% tp('basket created by', 'Created by') | html %]</th>
                                     <th>Date</th>
                                     <th>Basket group</th>
+                                    <th>Internal note</th>
                                     <th>Closed</th>
                                     <th class="noExport">Actions</th>
                                 </tr>
@@ -173,6 +174,9 @@
                                               <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">[% basketgroup.name | html %]</a>
                                             [% END %]
                                           [% END %]
+                                        </td>
+                                        <td>
+                                            [% basket.note | html %]
                                         </td>
                                         <td data-order="[% basket.closedate | html %]">
                                             [% basket.closedate | $KohaDates %]
