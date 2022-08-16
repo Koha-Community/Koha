@@ -54,7 +54,7 @@ subtest 'Existing tests' => sub {
 
     t::lib::Mocks::mock_preference('CronjobLog',1);
     cronlogaction();
-    is(Koha::ActionLogs->search({ module => 'CRONJOBS' })->count,0,"Cronjob logged as expected.");
+    is(Koha::ActionLogs->search({ module => 'CRONJOBS' })->count,1,"Cronjob logged as expected.");
 };
 
 subtest 'logaction(): interface is correctly logged' => sub {
