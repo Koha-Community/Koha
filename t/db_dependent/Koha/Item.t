@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 use Test::Exception;
 use Test::MockModule;
 
@@ -32,6 +32,7 @@ use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Old::Items;
+use Koha::Recalls;
 
 use List::MoreUtils qw(all);
 
@@ -1719,6 +1720,32 @@ subtest 'item_group() tests' => sub {
 
     is( $item_1->item_group->id, $item_group_1->id, 'Got item group 1 correctly' );
     is( $item_2->item_group->id, $item_group_2->id, 'Got item group 2 correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'has_pending_recall() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $item    = $builder->build_sample_item;
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+
+    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+    my ($recall) = Koha::Recalls->add_recall({ biblio => $item->biblio, item => $item, patron => $patron });
+
+    ok( !$item->has_pending_recall, 'The item has no pending recalls' );
+
+    $recall->status('waiting')->store;
+
+    ok( $item->has_pending_recall, 'The item has a pending recall' );
 
     $schema->storage->txn_rollback;
 };
