@@ -165,7 +165,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         dt_parameters[ "buttons" ].push(
             {
                 className: "dt_button_configure_table",
-                titleAttr: __("Configure this table"),
+                titleAttr: _("Configure this table"),
                 text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + _("Configure this table") + '</span>',
                 action: function() {
                     window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
