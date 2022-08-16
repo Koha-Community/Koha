@@ -101,6 +101,9 @@ elsif ( $op eq 'add_validate' ) {
     for my $lang ( sort {$a ne 'default'} @lang ) { # Process 'default' first
         my $title   = $cgi->param( 'title_' . $lang );
         my $content = $cgi->param( 'content_' . $lang );
+        # Force a default record
+        $content ||= '<!-- no_content -->' if $lang eq 'default';
+
         my $additional_content = Koha::AdditionalContents->find(
             {
                 category   => $category,
@@ -110,7 +113,7 @@ elsif ( $op eq 'add_validate' ) {
             }
         );
         # Delete if title or content is empty
-        unless ( $title and $content ) {
+        if( $lang ne 'default' && !$title && !$content ) {
             if ( $additional_content ) {
                 eval { $additional_content->delete };
                 unless ($@) {
