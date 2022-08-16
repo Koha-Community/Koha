@@ -1247,7 +1247,7 @@
                         <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
 
                         [%# Show opac_info or branchurl from holding library %]
-                        [% SET holding_library_name = ITEM_RESULT.branchname %]
+                        [% SET holding_library_name = Branches.GetName( ITEM_RESULT.holdingbranch ) %]
                         [% SET holding_library_url = Branches.GetURL( ITEM_RESULT.holdingbranch ) %]
                         [% IF ( ITEM_RESULT.holding_library_info ) %]
                             <a href="[% holding_library_url | url %]" class="library_info" data-info="[% ITEM_RESULT.holding_library_info | html %]" data-name="[% holding_library_name | html %]">
