@@ -729,6 +729,11 @@
             Edit public lists (Name, settings, and permissions, but not explicitly contents)
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_public_list_contents' -%]
+        <span class="sub_permission edit_public_list_contents_subpermission">
+            Edit public lists contents
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'upload_general_files' -%]
         <span class="sub_permission upload_general_files_subpermission">
             Upload any file
