@@ -448,10 +448,10 @@
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
+                        <th>Estimated delivery date</th>
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>Supplier report</th>
                         [% END %]
-                        <th>Estimated delivery date</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th class="NoSort">Modify</th>
@@ -478,10 +478,10 @@
                         <th>&nbsp;</th>
                         <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
+                        <th>[% foot_loo.estimated_delivery_date | $KohaDates %]</th>
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>&nbsp;</th>
                         [% END %]
-                        <th>[% foot_loo.estimated_delivery_date | $KohaDates %]</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th>&nbsp;</th>
@@ -506,10 +506,10 @@
                     <th>&nbsp;</th>
                     <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
+                    <th>[% estimated_delivery_date | $KohaDates %]</th>
                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
                     <th>&nbsp;</th>
                     [% END %]
-                    <th>[% estimated_delivery_date | $KohaDates %]</th>
                     [% IF ( active ) %]
                         [% UNLESS ( closedate ) %]
                             <th>&nbsp;</th>
@@ -593,9 +593,6 @@
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
-                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                        <td>[% books_loo.suppliers_report | html %]</td>
-                        [% END %]
                         <td class="actions">
                             [% books_loo.estimated_delivery_date | $KohaDates %]
                             [% IF CAN_user_acquisition_order_manage %]
@@ -603,6 +600,9 @@
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
                         </td>
+                        [% IF Koha.Preference('EDIFACT') && ediaccount %]
+                        <td>[% books_loo.suppliers_report | html %]</td>
+                        [% END %]
                     [% END %]
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
