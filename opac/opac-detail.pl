@@ -682,8 +682,8 @@ if ( not $viewallitems and $items->count > $max_items_to_display ) {
 else {
     while ( my $item = $items->next ) {
         my $item_info = $item->unblessed;
-        $item->{holds_count} = $item_reserves{ $item->itemnumber };
-        $item->{priority}    = $priority{ $item->itemnumber };
+        $item_info->{holds_count} = $item_reserves{ $item->itemnumber };
+        $item_info->{priority}    = $priority{ $item->itemnumber };
 
         $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy(
             { item => $item, patron => $patron } )
