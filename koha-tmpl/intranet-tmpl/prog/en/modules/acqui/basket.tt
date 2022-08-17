@@ -478,7 +478,7 @@
                         <th>&nbsp;</th>
                         <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
-                        <th>[% foot_loo.estimated_delivery_date | $KohaDates %]</th>
+                        <th>&nbsp;</th>
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>&nbsp;</th>
                         [% END %]
@@ -506,7 +506,7 @@
                     <th>&nbsp;</th>
                     <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% estimated_delivery_date | $KohaDates %]</th>
+                    <th>&nbsp;</th>
                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
                     <th>&nbsp;</th>
                     [% END %]
@@ -593,7 +593,7 @@
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
-                        <td class="actions">
+                        <td data-order="[% books_loo.estimated_delivery_date | html %]" class="actions">
                             [% books_loo.estimated_delivery_date | $KohaDates %]
                             [% IF CAN_user_acquisition_order_manage %]
                             <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]" id="delivery_date_[% books_loo.ordernumber | html %]" data-delivery_date="[% books_loo.estimated_delivery_date | $KohaDates %]">
