@@ -109,9 +109,9 @@
             [% END %]
             <td data-order="[% estimated_delivery_date | html %]">
                 <p class="delivery_date">
-                    <span id="delivery_date_[% estimated_delivery_date | html %]">[% estimated_delivery_date | $KohaDates %]</span>
+                    <span>[% estimated_delivery_date | $KohaDates %]</span>
                     [% IF CAN_user_acquisition_order_manage %]
-                        <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
+                        <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-delivery_date="[% estimated_delivery_date | $KohaDates %]" id="delivery_date_[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
                             <i class="fa fa-pencil"></i> Edit
                         </a>
                     [% END %]
@@ -409,10 +409,10 @@
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
                 var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
-                var date_text = $( "#delivery_date_" + ordernumber ).html();
+                var date_text = $( "#delivery_date_" + ordernumber ).data("delivery_date");
                 $("#dateEditor .modal-title").text(modalTitle);
                 $("#date_ordernumber").val(ordernumber);
-                $("#estimated_delivery_date").html( date_text );
+                $("#estimated_delivery_date").val(date_text);
                 $("#dateEditor").modal("show");
             });
 
