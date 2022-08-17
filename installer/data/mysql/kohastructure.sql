@@ -6035,6 +6035,7 @@ CREATE TABLE `virtualshelves` (
   `allow_change_from_owner` tinyint(1) DEFAULT 1 COMMENT 'can owner change contents?',
   `allow_change_from_others` tinyint(1) DEFAULT 0 COMMENT 'can others change contents?',
   `allow_change_from_staff` tinyint(1) DEFAULT 0 COMMENT 'can staff change contents?',
+  `allow_change_from_permitted_staff` tinyint(1) DEFAULT 0 COMMENT 'can staff with edit_public_list_contents permission change contents?',
   PRIMARY KEY (`shelfnumber`),
   KEY `virtualshelves_ibfk_1` (`owner`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
