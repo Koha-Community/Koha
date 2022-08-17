@@ -1621,16 +1621,6 @@ sub _create_import_record {
     return $import_record_id;
 }
 
-sub _update_import_record_marc {
-    my ($import_record_id, $marc_record, $marc_type) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE import_records SET marc = ?, marcxml = ?
-                             WHERE  import_record_id = ?");
-    $sth->execute($marc_record->as_usmarc(), $marc_record->as_xml($marc_type), $import_record_id);
-    $sth->finish();
-}
-
 sub _add_auth_fields {
     my ($import_record_id, $marc_record) = @_;
 
