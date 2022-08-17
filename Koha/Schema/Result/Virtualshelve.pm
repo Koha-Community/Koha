@@ -105,6 +105,14 @@ can others change contents?
 
 can staff change contents?
 
+=head2 allow_change_from_permitted_staff
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+can staff with edit_public_list_contents permission change contents?
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -141,6 +149,8 @@ __PACKAGE__->add_columns(
   "allow_change_from_others",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "allow_change_from_staff",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "allow_change_from_permitted_staff",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
@@ -209,8 +219,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-12 10:03:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dzF83u6fWMs2YRrG2yBD8w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-17 19:59:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EKq7nDW2AeZ2NQce2BPMWA
 
 sub koha_object_class {
     'Koha::Virtualshelf';
