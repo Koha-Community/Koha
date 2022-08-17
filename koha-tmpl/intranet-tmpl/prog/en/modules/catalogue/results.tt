@@ -311,7 +311,7 @@
                                             <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% Koha.Preference('numSearchResults') | uri %][% PROCESS sort_search_query %]" id="resultsperpage-default">
                                                 [% IF results_per_page == Koha.Preference('numSearchResults') %]
                                                     <i class="fa fa-check"></i>
-                                                [% END %] Library default: [% Koha.Preference('numSearchResults') | html %]
+                                                [% END %] [% Koha.Preference('numSearchResults') | html %] (default)
                                             </a></li>
                                         [% END %]
                                         <li><a href="/cgi-bin/koha/catalogue/search.pl?count=20[% PROCESS sort_search_query %]">[% IF results_per_page == '20' %]<i class="fa fa-check"></i>[% END %] 20</a></li>

@@ -181,9 +181,9 @@
                                                     <select id="results_per_page" name="count">
                                                         [% IF Koha.Preference('OPACnumSearchResults') %]
                                                             [% IF results_per_page == Koha.Preference('OPACnumSearchResults') %]
-                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]" selected="selected">Library default: [% Koha.Preference('OPACnumSearchResults') | html %]</option>
+                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]" selected="selected">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
                                                             [% ELSE %]
-                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]">Library default: [% Koha.Preference('OPACnumSearchResults') | html %]</option>
+                                                                <option value="[% Koha.Preference('OPACnumSearchResults') | html %]">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>
                                                             [% END %]
                                                         [% END %]
                                                         [% IF results_per_page == '20' %]<option value="20" selected="selected">20</option>[% ELSE %]<option value="20">20</option>[% END %]
