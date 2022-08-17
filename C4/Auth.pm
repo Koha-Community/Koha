@@ -1408,6 +1408,7 @@ sub checkauth {
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
+        password_has_expired                  => ( $patron and $patron->password_expired ),
     );
 
     $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
