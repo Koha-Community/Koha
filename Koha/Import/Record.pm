@@ -37,15 +37,12 @@ Koha::Import::Record - Koha Import Record Object class
 
 Returns a MARC::Record object
 
-    my $marc_record = $import_record->get_marc_record({ embed_items => $embed_items })
-
-If $embed_items is true then items from import_items are embedded into the
-MARC::Record returned
+    my $marc_record = $import_record->get_marc_record()
 
 =cut
 
 sub get_marc_record {
-    my ($self, $args) = @_;
+    my ($self) = @_;
 
     my $marcflavour = C4::Context->preference('marcflavour');
 
@@ -55,11 +52,6 @@ sub get_marc_record {
     }
 
     my $record = MARC::Record->new_from_xml($self->marcxml, $self->encoding, $format);
-
-    if ($self->record_type eq 'biblio' && $args->{embed_items}) {
-        require C4::ImportBatch;
-        C4::ImportBatch::EmbedItemsInImportBiblio($record, $self->id);
-    }
 
     return $record;
 }
