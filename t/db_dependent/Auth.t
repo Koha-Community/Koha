@@ -41,7 +41,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -109,6 +109,47 @@ subtest 'checkauth() tests' => sub {
         $cgi->mock( 'request_method', sub { return 'GET' } );
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
         is( $userid, undef, 'If librarian user is used and password with GET, they should not be logged in' );
+    };
+
+    subtest 'Template params tests (password_expired)' => sub {
+
+        plan tests => 1;
+
+        my $password_expired;
+
+        my $patron_class = Test::MockModule->new('Koha::Patron');
+        $patron_class->mock( 'password_expired', sub { return $password_expired; } );
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
+        my $password = 'password';
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron->set_password( { password => $password } );
+
+        my $cgi_mock = Test::MockModule->new('CGI')->mock( 'request_method', 'POST' );
+        my $cgi = CGI->new;
+        $cgi->param( -name => 'userid',   -value => $patron->userid );
+        $cgi->param( -name => 'password', -value => $password );
+
+        my $auth = Test::MockModule->new( 'C4::Auth' );
+        # Tests will fail if we hit safe_exit
+        $auth->mock( 'safe_exit', sub { return } );
+
+        my ( $userid, $cookie, $sessionID, $flags );
+
+        {
+            t::lib::Mocks::mock_preference( 'DumpTemplateVarsOpac', 1 );
+            # checkauth will redirect and safe_exit if not authenticated and not authorized
+            local *STDOUT;
+            my $stdout;
+            open STDOUT, '>', \$stdout;
+
+            # Password has expired
+            $password_expired = 1;
+            C4::Auth::checkauth( $cgi, 0, { catalogue => 1 } );
+            like( $stdout, qr{'password_has_expired' => 1}, 'password_has_expired is set to 1' );
+
+            close STDOUT;
+        };
     };
 
     subtest 'Two-factor authentication' => sub {
