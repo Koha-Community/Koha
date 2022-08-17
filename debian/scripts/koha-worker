@@ -144,7 +144,7 @@ restart_worker()
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Worker not running for $name ($queue)."
+        log_warning_msg "Worker not running for $name ($queue)."
         start_worker $name $queue
     fi
 }

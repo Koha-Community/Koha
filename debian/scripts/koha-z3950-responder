@@ -167,7 +167,7 @@ restart_z3950()
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Z39.50/SRU not running for ${instancename}."
+        log_warning_msg "Z39.50/SRU not running for ${instancename}."
         start_z3950 $instancename
     fi
 }

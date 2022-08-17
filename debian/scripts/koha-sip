@@ -167,7 +167,7 @@ restart_sip()
         echo $noLF `start_sip ${name}`
     else
         if [ "$verbose" != "no" ]; then
-            log_daemon_msg "Warning: SIP server not running for ${name}."
+            log_warning_msg "Warning: SIP server not running for ${name}."
             start_sip ${name}
         else
             start_sip ${name}

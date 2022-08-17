@@ -134,7 +134,7 @@ restart_indexer()
             log_end_msg 1
         fi
     else
-        log_daemon_msg "Indexer not running for $name."
+        log_warning_msg "Indexer not running for $name."
         start_indexer $name
     fi
 }
