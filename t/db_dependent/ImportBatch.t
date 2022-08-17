@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 18;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -88,8 +88,6 @@ is_deeply( $importbatch1, $sample_import_batch1,
     "GetImportBatch returns the right informations about $sample_import_batch1" );
 
 my $record = MARC::Record->new;
-# FIXME Create another MARC::Record which won't be modified
-# AddItemsToImportBiblio will remove the items field from the record passed in parameter.
 my $original_record = MARC::Record->new;
 $record->leader('03174nam a2200445 a 4500');
 $original_record->leader('03174nam a2200445 a 4500');
@@ -162,15 +160,12 @@ my $import_record_id = AddBiblioToBatch( $id_import_batch1, 0, $record, 'utf8', 
 AddItemsToImportBiblio( $id_import_batch1, $import_record_id, $record, 0 );
 
 my $import_record = Koha::Import::Records->find($import_record_id);
-my $record_from_import_biblio_with_items = $import_record->get_marc_record({ embed_items => 1 });
-$original_record->leader($record_from_import_biblio_with_items->leader());
-is_deeply( $record_from_import_biblio_with_items, $original_record, 'Koha::Import::Record::get_marc_record should return the record with items if specified' );
-my $utf8_field = $record_from_import_biblio_with_items->subfield($item_tag, 'e');
+my $record_from_import_biblio = $import_record->get_marc_record();
+
+$original_record->leader($record_from_import_biblio->leader());
+is_deeply( $record_from_import_biblio, $original_record, 'Koha::Import::Record::get_marc_record should return the record in original state' );
+my $utf8_field = $record_from_import_biblio->subfield($item_tag, 'e');
 is($utf8_field, 'my edition ❤');
-$original_record->delete_fields($original_record->field($item_tag)); #Remove items fields
-my $record_from_import_biblio_without_items = $import_record->get_marc_record();
-$original_record->leader($record_from_import_biblio_without_items->leader());
-is_deeply( $record_from_import_biblio_without_items, $original_record, 'Koha::Import::Record::get_marc_record should return the record without items by default' );
 
 my $another_biblio = $builder->build_sample_biblio;
 C4::ImportBatch::SetMatchedBiblionumber( $import_record_id, $another_biblio->biblionumber );

@@ -62,7 +62,7 @@ if ($importid) {
             $format = 'UNIMARCAUTH';
         }
 
-        $record = $import_record->get_marc_record({ embed_items => 1 });
+        $record = $import_record->get_marc_record();
     }
 }
 else {
