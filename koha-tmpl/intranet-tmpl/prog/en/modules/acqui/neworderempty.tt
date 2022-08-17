@@ -366,7 +366,7 @@
                         [% active_count= active_count + budget_loo.b_active %]
                     [% END %]
                 [% END %]
-                <select id="budget_id" name="budget_id">
+                <select class="select2" id="budget_id" name="budget_id">
                     <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                    [% level_indent_cnt = 0 %]
@@ -540,6 +540,7 @@
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         actTotal = "";
 
