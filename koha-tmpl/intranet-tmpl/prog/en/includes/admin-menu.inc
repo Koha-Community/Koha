@@ -67,6 +67,13 @@
         </ul>
     [% END %]
 
+    [% IF CAN_user_plugins && plugins_enabled %]
+      <h5>Plugins</h5>
+        <ul>
+            <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a></li>
+        </ul>
+    [% END %]
+
     [% IF CAN_user_parameters_manage_background_jobs %]
         <h5>Background jobs</h5>
         <ul>
@@ -74,7 +81,7 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || CAN_user_parameters_manage_search_engine_config || CAN_user_parameters_manage_marc_overlay_rules ) %]
+    [% IF ( CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || CAN_user_parameters_manage_search_engine_config || CAN_user_parameters_manage_marc_overlay_rules || CAN_user_parameters_manage_marc_overlay_rules ) %]
         <h5>Catalog</h5>
         <ul>
             [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
@@ -86,10 +93,13 @@
                 <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_classifications ) %]
-                <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
+                <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification configuration</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_matching_rules ) %]
                 <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
+            [% END %]
+            [% IF ( CAN_user_parameters_manage_marc_overlay_rules ) %]
+                <li><a href="/cgi-bin/koha/admin/marc-overlay-rules.pl">Record overlay rules</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_oai_sets ) %]
                 <li><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a></li>
@@ -100,15 +110,11 @@
             [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                 <li><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></li>
             [% END %]
-            [% IF ( CAN_user_parameters_manage_marc_overlay_rules ) %]
-                <li><a href="/cgi-bin/koha/admin/marc-overlay-rules.pl">MARC overlay rules</a></li>
-            [% END %]
         </ul>
     [% END %]
 
     [% IF ( CAN_user_acquisition_currencies_manage || CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_edi_manage ) %]
         <h5>Acquisition parameters</h5>
-
         <ul>
             [% IF ( CAN_user_acquisition_currencies_manage ) %]
                 <li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
@@ -123,13 +129,6 @@
                 <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                 <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
             [% END %]
-        </ul>
-    [% END %]
-
-    [% IF CAN_user_plugins && plugins_enabled %]
-        <h5>Plugins</h5>
-        <ul>
-            <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">Manage plugins</a></li>
         </ul>
     [% END %]
 
