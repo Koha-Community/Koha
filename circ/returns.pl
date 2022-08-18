@@ -344,11 +344,11 @@ if ($barcode) {
 
     # is there a waiting hold for the item, for which cancellation
     # has been requested?
-    my $waiting_holds_to_be_cancelled =
-      Koha::Holds->waiting->search( { itemnumber => $item->id } )
-      ->filter_by_has_cancellation_requests;
-    while ( my $hold = $waiting_holds_to_be_cancelled->next ) {
-        $hold->cancel;
+    if ($item) {
+        my $waiting_holds_to_be_cancelled = $item->holds->waiting->filter_by_has_cancellation_requests;
+        while ( my $hold = $waiting_holds_to_be_cancelled->next ) {
+            $hold->cancel;
+        }
     }
 
     # do the return
