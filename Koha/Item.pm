@@ -1617,7 +1617,6 @@ sub add_to_bundle {
 
         # FIXME: See if we can move the below copy/paste from Koha::Object::store into it's own class and catch at a lower level in the Schema instantiation, take inspiration from DBIx::Error
         if ( ref($_) eq 'DBIx::Class::Exception' ) {
-            warn $_->{msg};
             if ( $_->{msg} =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
                 # FK constraints
                 # FIXME: MySQL error, if we support more DB engines we should implement this for each
