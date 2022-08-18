@@ -851,6 +851,55 @@ CREATE TABLE `auth_header` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `auth_provider`
+--
+
+DROP TABLE IF EXISTS `auth_providers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_providers` (
+  `auth_provider_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify the provider',
+  `code` varchar(20) NOT NULL COMMENT 'Provider code',
+  `description` varchar(255) NOT NULL COMMENT 'Description for the provider',
+  `protocol` enum('OAuth', 'OIDC', 'LDAP', 'CAS') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Protocol provider speaks',
+  `config` longtext NOT NULL DEFAULT '{}' COMMENT 'Configuration of the provider in JSON format',
+  `mapping` longtext NOT NULL DEFAULT '{}' COMMENT 'Configuration to map provider data to Koha user',
+  `matchpoint` enum('email','userid','cardnumber') NOT NULL COMMENT 'The patron attribute to be used as matchpoint',
+  `icon_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Provider icon URL',
+  PRIMARY KEY (`auth_provider_id`),
+  UNIQUE KEY (`code`),
+  KEY `protocol` (`protocol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `auth_provider`
+--
+
+DROP TABLE IF EXISTS `auth_provider_domains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_provider_domains` (
+  `auth_provider_domain_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key, used to identify providers domain',
+  `auth_provider_id` int(11) NOT NULL COMMENT 'Reference to provider',
+  `domain` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Domain name. If null means all domains',
+  `auto_register` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Allow user auto register',
+  `update_on_auth` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Update user data on auth login',
+  `default_library_id` varchar(10) DEFAULT NULL COMMENT 'Default library to create user if auto register is enabled',
+  `default_category_id` varchar(10) DEFAULT NULL COMMENT 'Default category to create user if auto register is enabled',
+  `allow_opac` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Allow provider from opac interface',
+  `allow_staff` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Allow provider from staff interface',
+  PRIMARY KEY (`auth_provider_domain_id`),
+  UNIQUE KEY (`auth_provider_id`, `domain`),
+  KEY `domain` (`domain`),
+  KEY `allow_opac` (`allow_opac`),
+  KEY `allow_staff` (`allow_staff`),
+  CONSTRAINT `auth_provider_domain_ibfk_1` FOREIGN KEY (`auth_provider_id`) REFERENCES `auth_providers` (`auth_provider_id`) ON DELETE CASCADE,
+  CONSTRAINT `auth_provider_domain_ibfk_2` FOREIGN KEY (`default_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE,
+  CONSTRAINT `auth_provider_domain_ibfk_3` FOREIGN KEY (`default_category_id`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `auth_subfield_structure`
 --
 
