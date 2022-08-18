@@ -524,7 +524,7 @@ sub get_template_and_user {
         $template->param(
             AmazonCoverImages                                                          => C4::Context->preference("AmazonCoverImages"),
             AutoLocation                                                               => C4::Context->preference("AutoLocation"),
-            PatronAutoComplete                                                       => C4::Context->preference("PatronAutoComplete"),
+            PatronAutoComplete                                                         => C4::Context->preference("PatronAutoComplete"),
             FRBRizeEditions                                                            => C4::Context->preference("FRBRizeEditions"),
             IndependentBranches                                                        => C4::Context->preference("IndependentBranches"),
             IntranetNav                                                                => C4::Context->preference("IntranetNav"),
@@ -549,6 +549,7 @@ sub get_template_and_user {
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
             useDischarge                                                               => C4::Context->preference('useDischarge'),
             pending_checkout_notes                                                     => Koha::Checkouts->search({ noteseen => 0 }),
+            plugins_enabled                                                            => C4::Context->config("enable_plugins"),
         );
     }
     else {
