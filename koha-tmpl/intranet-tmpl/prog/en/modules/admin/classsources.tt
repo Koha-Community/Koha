@@ -161,12 +161,12 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
     <ol>
       <li>
           [% IF class_source %]
-		  <span class="label">Classification source code: </span>
+            <span class="label">Classification source code: </span>
             <input type="hidden" name="cn_source" value="[% class_source.cn_source | html %]" />
             [% class_source.cn_source | html %]
           [% ELSE %]
               <label class="required" for="class_source">Classification source code: </label>
-              <input class="required" required="required" type="text" id="class_source" name="cn_source"  size="10" maxlength="10" />
+              <input class="required focus" required="required" type="text" id="class_source" name="cn_source"  size="10" maxlength="10" />
               <span class="required">Required</span>
           [% END %]
        </li>
@@ -176,7 +176,7 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
        </li>
        <li><label for="used">Source in use?</label>
            [% IF ( class_source.used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
-		  <input type="checkbox" id="used" name="used" value="used" />[% END %]
+           <input type="checkbox" id="used" name="used" value="used" />[% END %]
        </li>
         <li>
             <label class="required" for="class_sort_rule">Filing rule: </label>
@@ -225,12 +225,12 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
     <ol>
       <li>
           [% IF sort_rule %]
-		  <span class="label">Filing rule code: </span>
+          <span class="label">Filing rule code: </span>
             <input type="hidden" name="class_sort_rule" value="[% sort_rule.class_sort_rule | html %]" />
             [% sort_rule.class_sort_rule | html %]
           [% ELSE %]
               <label for="class_sort_rule" class="required">Filing rule code: </label>
-              <input class="required" required="required" type="text" id="class_sort_rule" name="class_sort_rule"  size="10" maxlength="10" />
+              <input class="required focus" required="required" type="text" id="class_sort_rule" name="class_sort_rule"  size="10" maxlength="10" />
               <span class="required">Required</span>
           [% END %]
        </li>
@@ -276,7 +276,7 @@ Classification sources &rsaquo; Administration &rsaquo; Koha
             [% split_rule.class_split_rule | html %]
           [% ELSE %]
               <label for="class_split_rule" class="required">Splitting rule code: </label>
-              <input class="required" required="required" type="text" id="class_split_rule" name="class_split_rule"  size="10" maxlength="10" />
+              <input class="required focus" required="required" type="text" id="class_split_rule" name="class_split_rule"  size="10" maxlength="10" />
               <span class="required">Required</span>
           [% END %]
        </li>
