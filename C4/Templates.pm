@@ -213,7 +213,6 @@ sub badtemplatecheck {
 
 sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
-    ($query) or warn "no query in gettemplate";
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);
     badtemplatecheck( $filename ); # single trip for bad templates
@@ -273,7 +272,6 @@ the use case where the DB is not populated already when rewriting/fixing.
 
 sub themelanguage {
     my ($htdocs, $tmpl, $interface, $query) = @_;
-    ($query) or warn "no query in themelanguage";
 
     # Select a language based on cookie, syspref available languages & browser
     my $lang = C4::Languages::getlanguage($query);
