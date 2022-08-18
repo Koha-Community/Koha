@@ -269,6 +269,8 @@ paths:
     $ref: ./paths/libraries.yaml#/~1public~1libraries
   "/public/libraries/{library_id}":
     $ref: "./paths/libraries.yaml#/~1public~1libraries~1{library_id}"
+  "/public/oauth/login/{provider}/{interface}":
+    $ref: ./paths/public_oauth.yaml#/~1public~1oauth~1login~1{provider}~1{interface}
   "/public/patrons/{patron_id}/article_requests/{article_request_id}":
     $ref: "./paths/article_requests.yaml#/~1public~1patrons~1{patron_id}~1article_requests~1{article_request_id}"
   "/public/patrons/{patron_id}/guarantors/can_see_charges":

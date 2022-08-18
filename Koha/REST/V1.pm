@@ -21,10 +21,13 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Context;
 use Koha::Logger;
+use Koha::Auth::Providers;
 
+use Mojolicious::Plugin::OAuth2;
 use JSON::Validator::Schema::OpenAPIv2;
 
 use Try::Tiny qw( catch try );
+use JSON qw( decode_json );
 
 =head1 NAME
 
@@ -136,10 +139,20 @@ sub startup {
         };
     };
 
+    my $oauth_configuration = {};
+    my $search_options = { protocol => [ "OIDC", "OAuth" ] };
+    my $providers = Koha::Auth::Providers->search( $search_options );
+
+    while(my $provider = $providers->next) {
+        $oauth_configuration->{$provider->code} = decode_json($provider->config);
+    }
+
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
     $self->plugin( 'Koha::REST::Plugin::Query' );
     $self->plugin( 'Koha::REST::Plugin::Objects' );
     $self->plugin( 'Koha::REST::Plugin::Exceptions' );
+    $self->plugin( 'Koha::REST::Plugin::Auth' );
+    $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
 }
 
 1;
