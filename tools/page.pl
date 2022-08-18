@@ -32,17 +32,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $branch = C4::Context->userenv->{'branch'};
 my $page_id = $query->param('page_id');
+my $code = $query->param('code');
 my $page;
 
-if (defined $page_id){
-    my $branch = C4::Context->userenv->{'branch'};
+if( $page_id ) {
     $page = Koha::AdditionalContents->search({ idnew => $page_id, location => ['staff_only', 'staff_and_opac'], branchcode => [ $branch, undef ] });
-    if ( $page->count > 0){
-        $template->param( page => $page->next );
-    } else {
-        $template->param( page_error => 1 );
-    }
+} elsif( $code ) {
+    my $lang = $query->param('language') || $query->cookie('KohaOpacLanguage');
+    # In the next query we make sure that the 'default' records come after the regular languages
+    $page = Koha::AdditionalContents->search({ code => $code, lang => ['default', $lang], location => ['staff_only', 'staff_and_opac'], branchcode => [ $branch, undef ] }, { order_by => { -desc => \[ 'CASE WHEN lang="default" THEN "" ELSE lang END' ]}} );
 }
+$template->param( $page && $page->count ? ( page => $page->next ) : ( page_error => 1 ) );
 
 output_html_with_http_headers $query, $cookie, $template->output;
