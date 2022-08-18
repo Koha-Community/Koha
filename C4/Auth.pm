@@ -50,6 +50,7 @@ use C4::Auth_with_shibboleth qw( shib_ok get_login_shib login_shib_url logout_sh
 use Net::CIDR;
 use C4::Log qw( logaction );
 use Koha::CookieManager;
+use Koha::Auth::Permissions;
 
 # use utf8;
 
@@ -323,67 +324,12 @@ sub get_template_and_user {
             );
         }
 
-        my $all_perms = get_all_subpermissions();
-
-        my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
-          editcatalogue updatecharges tools editauthorities serials reports acquisition clubs problem_reports);
-
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
-        if ( $flags && $flags->{superlibrarian} == 1 ) {
-            $template->param( CAN_user_circulate        => 1 );
-            $template->param( CAN_user_catalogue        => 1 );
-            $template->param( CAN_user_parameters       => 1 );
-            $template->param( CAN_user_borrowers        => 1 );
-            $template->param( CAN_user_permissions      => 1 );
-            $template->param( CAN_user_reserveforothers => 1 );
-            $template->param( CAN_user_editcatalogue    => 1 );
-            $template->param( CAN_user_updatecharges    => 1 );
-            $template->param( CAN_user_acquisition      => 1 );
-            $template->param( CAN_user_suggestions      => 1 );
-            $template->param( CAN_user_tools            => 1 );
-            $template->param( CAN_user_editauthorities  => 1 );
-            $template->param( CAN_user_serials          => 1 );
-            $template->param( CAN_user_reports          => 1 );
-            $template->param( CAN_user_staffaccess      => 1 );
-            $template->param( CAN_user_coursereserves   => 1 );
-            $template->param( CAN_user_plugins          => 1 );
-            $template->param( CAN_user_lists            => 1 );
-            $template->param( CAN_user_clubs            => 1 );
-            $template->param( CAN_user_ill              => 1 );
-            $template->param( CAN_user_stockrotation    => 1 );
-            $template->param( CAN_user_cash_management  => 1 );
-            $template->param( CAN_user_problem_reports  => 1 );
-            $template->param( CAN_user_recalls          => 1 );
-
-            foreach my $module ( keys %$all_perms ) {
-                foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
-                    $template->param( "CAN_user_${module}_${subperm}" => 1 );
-                }
-            }
-        }
-
-        if ($flags) {
-            foreach my $module ( keys %$all_perms ) {
-                if ( defined($flags->{$module}) && $flags->{$module} == 1 ) {
-                    foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
-                        $template->param( "CAN_user_${module}_${subperm}" => 1 );
-                    }
-                } elsif ( ref( $flags->{$module} ) ) {
-                    foreach my $subperm ( keys %{ $flags->{$module} } ) {
-                        $template->param( "CAN_user_${module}_${subperm}" => 1 );
-                    }
-                }
-            }
-        }
-
-        if ($flags) {
-            foreach my $module ( keys %$flags ) {
-                if ( $flags->{$module} == 1 or ref( $flags->{$module} ) ) {
-                    $template->param( "CAN_user_$module" => 1 );
-                }
-            }
+        my $authz = Koha::Auth::Permissions->get_authz_from_flags({ flags => $flags });
+        foreach my $permission ( keys %{ $authz } ){
+            $template->param( $permission => $authz->{$permission} );
         }
 
         # Logged-in opac search history
