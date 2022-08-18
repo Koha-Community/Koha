@@ -41,7 +41,7 @@ subtest 'new' => sub {
 };
 
 subtest 'clear_unless' => sub {
-    plan tests => 16;
+    plan tests => 17;
 
     t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'aap', 'noot' ] );
 
@@ -74,19 +74,32 @@ subtest 'clear_unless' => sub {
     is( $rv[1]->httponly, 0, 'cleared wim is not httponly' );
     is( $rv[2]->httponly, 1, 'aap httponly' );
 
-    # Test with _123 prefix
-    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'catalogue_editor_' ] );
+    # Test with numeric suffix (via regex)
+    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'catalogue_editor_\d+' ] );
     $cmgr = Koha::CookieManager->new;
-    $cookie1 = $q->cookie( -name => 'catalogue_editor_234', -value => '1', -expires => '+1y' );
+    $cookie1 = $q->cookie( -name => 'catalogue_editor_abc', -value => '1', -expires => '+1y' );
     $cookie2 = $q->cookie( -name => 'catalogue_editor_345', -value => '1', -expires => '+1y' );
     $cookie3 = $q->cookie( -name => 'catalogue_editor_', -value => '1', -expires => '+1y' );
-    $cookie4 = $q->cookie( -name => 'catalogue_editor', -value => '1', -expires => '+1y' );
+    $cookie4 = $q->cookie( -name => 'catalogue_editor_123x', -value => '1', -expires => '+1y' );
 
     $list = [ $cookie1, $cookie2, $cookie3, $cookie4 ];
     @rv = @{$cmgr->clear_unless( @$list )};
     is_deeply( [ map { $_->value ? $_->name : () } @rv ],
-        [ 'catalogue_editor_234', 'catalogue_editor_345', 'catalogue_editor_' ],
-        'Only cookie4 should have been cleared' );
+        [ 'catalogue_editor_345' ],
+        'Cookie2 should be found only' );
+
+    # Test with another regex (yes, highly realistic examples :)
+    t::lib::Mocks::mock_config( Koha::CookieManager::DENY_LIST_VAR, [ 'next_\w+_number\d{2}_(now|never)' ] );
+    $cmgr = Koha::CookieManager->new;
+    my $cookie5;
+    $cookie1 = $q->cookie( -name => 'next_mynewword_number99_never', -value => '1', -expires => '+1y' ); #fine
+    $cookie2 = $q->cookie( -name => 'prefixed_next_mynewword_number99_never', -value => '1', -expires => '+1y' ); # wrong prefix
+    $cookie3 = $q->cookie( -name => 'next_mynew-word_number99_never', -value => '1', -expires => '+1y' ); # wrong: hyphen in word
+    $cookie4 = $q->cookie( -name => 'mynewword_number999_never', -value => '1', -expires => '+1y' ); # wrong: three digits
+    $cookie5 = $q->cookie( -name => 'next_mynewword_number99_always', -value => '1', -expires => '+1y' ); # wrong: always
+    @rv = @{$cmgr->clear_unless( $cookie1, $cookie2, $cookie3, $cookie4, $cookie5 )};
+    is_deeply( [ map { $_->value ? $_->name : () } @rv ], [ 'next_mynewword_number99_never' ], 'Only cookie1 matched' );
+
 };
 
 subtest 'replace_in_list' => sub {
