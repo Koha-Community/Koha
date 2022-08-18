@@ -1578,7 +1578,7 @@ sub _process_tt {
     my $content    = $params->{content};
     my $tables     = $params->{tables};
     my $loops      = $params->{loops};
-    my $objects    = $params->{objects};
+    my $objects    = $params->{objects} || {};
     my $substitute = $params->{substitute} || {};
     my $lang = defined($params->{lang}) && $params->{lang} ne 'default' ? $params->{lang} : 'en';
     my ($theme, $availablethemes);

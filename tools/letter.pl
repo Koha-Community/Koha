@@ -42,7 +42,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use Template;
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
@@ -197,29 +197,8 @@ sub add_form {
         my $first_flag_name = 1;
         my $lang;
 
-        # Get available includes
-        my $htdocs = C4::Context->config('intrahtdocs');
-        my ($theme, $availablethemes);
-        ($theme, $lang, $availablethemes)= C4::Templates::availablethemes( $htdocs, 'about.tt', 'intranet', $lang);
-        my @includes;
-        foreach (@$availablethemes) {
-            push @includes, "$htdocs/$_/$lang/includes";
-            push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
-        }
-
         # The letter name is contained into each mtt row.
         # So we can only sent the first one to the template.
-        my $tt = Template->new(
-            {
-                EVAL_PERL   => 1,
-                ABSOLUTE    => 1,
-                PLUGIN_BASE => 'Koha::Template::Plugin',
-                INCLUDE_PATH => \@includes,
-                FILTERS     => {},
-                ENCODING    => 'UTF-8',
-            }
-        );
-
         for my $letter ( @$letters ) {
             # The letter_name
             if ( $first_flag_name and $letter->{name} ) {
@@ -229,12 +208,15 @@ sub add_form {
                 $first_flag_name = 0;
             }
 
-            my $output;
-            my $template = $letter->{content};
-            $template = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %][% PROCESS 'html_helpers.inc' %]$template|;
-            unless ( $tt->process( \$template, {}, \$output ) ) {
-                $letter->{tt_error} = $tt->error();
-            }
+            # Catch template issues
+            try {
+                C4::Letters::_process_tt($letter);
+            } catch {
+                my $error = $_;
+                $error =~ s/^ERROR PROCESSING TEMPLATE: //;
+                $error =~ s/at .*\/tools\/letter\.pl line 213\.$//;
+                $letter->{tt_error} = $error;
+            };
 
             my $lang = $letter->{lang};
             my $mtt = $letter->{message_transport_type};
