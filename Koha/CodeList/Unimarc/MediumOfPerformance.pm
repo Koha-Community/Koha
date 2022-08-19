@@ -18,7 +18,28 @@ package Koha::CodeList::Unimarc::MediumOfPerformance;
 use Modern::Perl;
 use utf8;
 
-use Koha::I18N qw( N__ N__p );
+use Koha::I18N;
+
+use parent 'Exporter';
+our @EXPORT = qw(
+    brass
+    choruses
+    conductors
+    electronic
+    keyboard
+    misc
+    number_of_hands_or_keys
+    orchestras
+    other
+    other_performers
+    other2
+    percussion
+    strings_bowed
+    strings_plucked
+    tessitura
+    voices
+    woodwinds
+);
 
 sub voices {
     return {
