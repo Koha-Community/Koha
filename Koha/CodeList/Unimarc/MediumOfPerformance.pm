@@ -18,7 +18,7 @@ package Koha::CodeList::Unimarc::MediumOfPerformance;
 use Modern::Perl;
 use utf8;
 
-use Koha::I18N;
+use Koha::I18N qw( N__ N__p );
 
 sub voices {
     return {
