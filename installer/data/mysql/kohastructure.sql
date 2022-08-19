@@ -1187,7 +1187,7 @@ CREATE TABLE `borrower_debarments` (
   `borrower_debarment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key for the restriction',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key for borrowers.borrowernumber for patron who is restricted',
   `expiration` date DEFAULT NULL COMMENT 'expiration date of the restriction',
-  `type` varchar(50) NOT NULL COMMENT 'type of restriction, FK to debarment_types.code',
+  `type` varchar(50) NOT NULL COMMENT 'type of restriction, FK to restriction_types.code',
   `comment` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'comments about the restriction',
   `manager_id` int(11) DEFAULT NULL COMMENT 'foreign key for borrowers.borrowernumber for the librarian managing the restriction',
   `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date the restriction was added',
@@ -1195,7 +1195,7 @@ CREATE TABLE `borrower_debarments` (
   PRIMARY KEY (`borrower_debarment_id`),
   KEY `borrowernumber` (`borrowernumber`),
   CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `borrower_debarments_ibfk_2` FOREIGN KEY (`type`)  REFERENCES `debarment_types` (`code`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `borrower_debarments_ibfk_2` FOREIGN KEY (`type`)  REFERENCES `restriction_types` (`code`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2081,12 +2081,13 @@ CREATE TABLE `collections_tracking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-DROP TABLE IF EXISTS `debarment_types`;
-CREATE TABLE debarment_types (
-    code varchar(50) NOT NULL PRIMARY KEY,
-    display_text text NOT NULL,
-    is_system tinyint(1) NOT NULL DEFAULT 0,
-    is_default tinyint(1) NOT NULL DEFAULT 0
+DROP TABLE IF EXISTS `restriction_types`;
+CREATE TABLE `restriction_types` (
+    `code` varchar(50) NOT NULL,
+    `display_text` text NOT NULL,
+    `is_system` tinyint(1) NOT NULL DEFAULT 0,
+    `is_default` tinyint(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
