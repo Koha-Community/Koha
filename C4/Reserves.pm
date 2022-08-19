@@ -38,13 +38,12 @@ use Koha::Biblios;
 use Koha::Calendar;
 use Koha::CirculationRules;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string );
-use Koha::Hold;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Old::Hold;
+use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Plugins;
 
