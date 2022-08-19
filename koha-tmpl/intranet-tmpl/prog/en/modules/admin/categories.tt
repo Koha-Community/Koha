@@ -7,9 +7,25 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode | html %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode | html %] in use[% ELSE %]Confirm deletion of category '[% categorycode | html %]'[% END %][% END %] &rsaquo; Patron categories &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF ( categorycode ) %]
+            Modify category '[% categorycode | html %]'
+        [% ELSE %]
+            New category
+        [% END %]
+        &rsaquo;
+    [% END %]
+    [% IF op == 'delete_confirm' %]
+        [% IF ( patrons_in_category > 0 ) %]
+            Cannot delete: category [% categorycode | html %] in use
+        [% ELSE %]
+            Confirm deletion of category '[% categorycode | html %]'
+        [% END %]
+        &rsaquo;
+    [% END %]
+    Patron categories &rsaquo; Administration &rsaquo; Koha
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>#enrolmentmessage.hint { display : none; }</style>
 </head>
