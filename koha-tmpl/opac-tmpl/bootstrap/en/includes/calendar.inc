@@ -70,7 +70,7 @@
             if( $(instance.input).hasClass("pastdate") ){
                 instance.set("maxDate", new Date().fp_incr(-1));
             }
-            $(instance.input).siblings('input.flatpickr')
+            $(instance.input).find('~input.flatpickr:first')
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
                 .wrap("<span class='flatpickr_wrapper'></span>")
                 .after( $("<a/>")
