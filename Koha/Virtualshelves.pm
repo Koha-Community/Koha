@@ -136,12 +136,14 @@ sub get_some_shelves {
     my @conditions;
     my $patron;
     my $staffuser = 0;
+    my $permitteduser = 0;
     if ( $borrowernumber != 0 ) {
         $patron = Koha::Patrons->find( $borrowernumber );
         $staffuser = $patron->can_patron_change_staff_only_lists;
+        $permitteduser = $patron->can_patron_change_permitted_staff_lists;
     }
     if ( $add_allowed ) {
-        if ( $staffuser ) {
+        if ( $permitteduser ) {
             push @conditions, {
                 -or =>
                 [
@@ -149,8 +151,21 @@ sub get_some_shelves {
                         "me.owner" => $borrowernumber,
                         "me.allow_change_from_owner" => 1,
                     },
-                    "me.allow_change_from_others" => 1,
-                    "me.allow_change_from_staff"  => 1
+                    "me.allow_change_from_others"          => 1,
+                    "me.allow_change_from_staff"           => 1,
+                    "me.allow_change_from_permitted_staff" => 1
+                ]
+            };
+        } elsif ( $staffuser ) {
+            push @conditions, {
+                -or =>
+                [
+                    {
+                        "me.owner" => $borrowernumber,
+                        "me.allow_change_from_owner" => 1,
+                    },
+                    "me.allow_change_from_others"          => 1,
+                    "me.allow_change_from_staff"           => 1
                 ]
             };
         } else {

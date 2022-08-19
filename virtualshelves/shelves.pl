@@ -40,8 +40,9 @@ use Koha::CsvProfiles;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 
-use constant ANYONE => 2;
-use constant STAFF  => 3;
+use constant ANYONE    => 2;
+use constant STAFF     => 3;
+use constant PERMITTED => 4;
 
 my $query = CGI->new;
 
@@ -84,9 +85,10 @@ if ( $op eq 'add_form' ) {
             {   shelfname          => scalar $query->param('shelfname'),
                 sortfield          => scalar $query->param('sortfield'),
                 public             => $public,
-                allow_change_from_owner => $allow_changes_from > 0,
-                allow_change_from_others => $allow_changes_from == ANYONE,
-                allow_change_from_staff => $allow_changes_from == STAFF,
+                allow_change_from_owner           => $allow_changes_from > 0,
+                allow_change_from_others          => $allow_changes_from == ANYONE,
+                allow_change_from_staff           => $allow_changes_from == STAFF,
+                allow_change_from_permitted_staff => $allow_changes_from == PERMITTED,
                 owner              => scalar $query->param('owner'),
             }
         );
@@ -117,6 +119,7 @@ if ( $op eq 'add_form' ) {
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
             $shelf->allow_change_from_staff( $allow_changes_from == STAFF );
+            $shelf->allow_change_from_permitted_staff( $allow_changes_from == PERMITTED );
             $shelf->public( scalar $query->param('public') );
             eval { $shelf->store };
 

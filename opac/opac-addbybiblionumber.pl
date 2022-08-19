@@ -119,7 +119,7 @@ if ($newvirtualshelf) {
         );
         my $public_shelves;
         if ( $loggedinuser ) {
-            if ( Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists ) {
+            if ( Koha::Patrons->find( $loggedinuser )->can_patron_change_permitted_staff_lists ) {
                 $public_shelves = Koha::Virtualshelves->search(
                     {   public   => 1,
                         -or      => [
@@ -127,8 +127,23 @@ if ($newvirtualshelf) {
                                 allow_change_from_owner => 1,
                                 owner     => $loggedinuser,
                             },
-                            allow_change_from_others => 1,
-                            allow_change_from_staff  => 1
+                            allow_change_from_others          => 1,
+                            allow_change_from_staff           => 1,
+                            allow_change_from_permitted_staff => 1
+                        ],
+                    },
+                    { order_by => 'shelfname' }
+                );
+            } elsif ( Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists ) {
+                $public_shelves = Koha::Virtualshelves->search(
+                    {   public   => 1,
+                        -or      => [
+                            -and => {
+                                allow_change_from_owner => 1,
+                                owner     => $loggedinuser,
+                            },
+                            allow_change_from_others          => 1,
+                            allow_change_from_staff           => 1
                         ],
                     },
                     { order_by => 'shelfname' }

@@ -2400,6 +2400,21 @@ sub can_patron_change_staff_only_lists {
     return 0;
 }
 
+=head3 can_patron_change_permitted_staff_lists
+
+$patron->can_patron_change_permitted_staff_lists;
+
+Return 1 if a patron has 'Superlibrarian' or 'Catalogue' and 'edit_public_list_contents' permissions.
+Otherwise, return 0.
+
+=cut
+
+sub can_patron_change_permitted_staff_lists {
+    my ( $self, $params ) = @_;
+    return 1 if C4::Auth::haspermission( $self->userid, { 'catalogue' => 1, lists => 'edit_public_list_contents' } );
+    return 0;
+}
+
 =head3 encode_secret
 
   $patron->encode_secret($secret32);

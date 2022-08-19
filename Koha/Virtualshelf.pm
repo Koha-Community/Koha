@@ -59,6 +59,8 @@ sub store {
         unless defined $self->allow_change_from_others;
     $self->allow_change_from_staff( 0 )
         unless defined $self->allow_change_from_staff;
+    $self->allow_change_from_permitted_staff( 0 )
+        unless defined $self->allow_change_from_permitted_staff;
 
     $self->created_on( dt_from_string )
         unless defined $self->created_on;
@@ -181,7 +183,7 @@ sub add_biblio {
 
     # Check permissions
     my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
-    return 0 unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) || $self->allow_change_from_others;
+    return 0 unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists ) || $self->allow_change_from_others;
 
     my $content = Koha::Virtualshelfcontent->new(
         {
@@ -206,6 +208,7 @@ sub remove_biblios {
     my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
     if( ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
       || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists )
+      || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists )
       || $self->allow_change_from_others ) {
         $number_removed += $self->get_contents->search({
             biblionumber => $biblionumbers,
@@ -256,7 +259,7 @@ sub can_biblios_be_added {
     my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
     return 1
       if $borrowernumber
-      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) or $self->allow_change_from_others );
+      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) or ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists ) or $self->allow_change_from_others );
     return 0;
 }
 

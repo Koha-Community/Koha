@@ -48,6 +48,7 @@ use Koha::RecordProcessor;
 
 use constant ANYONE => 2;
 use constant STAFF => 3;
+use constant PERMITTED => 4;
 
 my $query = CGI->new;
 
@@ -118,9 +119,10 @@ if ( $op eq 'add_form' ) {
                 {   shelfname          => scalar $query->param('shelfname'),
                     sortfield          => scalar $query->param('sortfield'),
                     public             => $public,
-                    allow_change_from_owner => $allow_changes_from > 0,
-                    allow_change_from_others => $allow_changes_from == ANYONE,
-                    allow_change_from_staff => $allow_changes_from == STAFF,
+                    allow_change_from_owner            => $allow_changes_from > 0,
+                    allow_change_from_others           => $allow_changes_from == ANYONE,
+                    allow_change_from_staff            => $allow_changes_from == STAFF,
+                    allow_change_from_permitted_staff => $allow_changes_from == PERMITTED,
                     owner              => scalar $loggedinuser,
                 }
             );
@@ -153,6 +155,7 @@ if ( $op eq 'add_form' ) {
             $shelf->allow_change_from_owner( $allow_changes_from > 0 );
             $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
             $shelf->allow_change_from_staff( $allow_changes_from == STAFF );
+            $shelf->allow_change_from_permitted_staff( $allow_changes_from == PERMITTED );
             $shelf->public( $public );
             eval { $shelf->store };
 
@@ -487,17 +490,20 @@ if ( $op eq 'view' ) {
     );
 }
 
-my $staffuser;
+my ($staffuser, $permitteduser);
 $staffuser = Koha::Patrons->find( $loggedinuser )->can_patron_change_staff_only_lists if $loggedinuser;
+$permitteduser = Koha::Patrons->find( $loggedinuser )->can_patron_change_permitted_staff_lists if $loggedinuser;
+
 $template->param(
-    op       => $op,
-    referer  => $referer,
-    shelf    => $shelf,
-    messages => \@messages,
-    public   => $public,
-    print    => scalar $query->param('print') || 0,
-    listsview => 1,
-    staffuser => $staffuser,
+    op            => $op,
+    referer       => $referer,
+    shelf         => $shelf,
+    messages      => \@messages,
+    public        => $public,
+    print         => scalar $query->param('print') || 0,
+    listsview     => 1,
+    staffuser     => $staffuser,
+    permitteduser => $permitteduser
 );
 
 my $content_type = $query->param('rss')? 'rss' : 'html';
