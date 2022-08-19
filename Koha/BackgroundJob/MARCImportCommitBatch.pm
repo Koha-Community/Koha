@@ -86,7 +86,8 @@ sub process {
         num_items_added    => $num_items_added,
         num_items_replaced => $num_items_replaced,
         num_items_errored  => $num_items_errored,
-        num_ignored        => $num_ignored
+        num_ignored        => $num_ignored,
+        import_batch_id    => $import_batch_id,
     };
     my $data = $self->decoded_data;
     $data->{messages} = \@messages;
