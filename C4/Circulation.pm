@@ -2948,7 +2948,10 @@ sub CanBookBeRenewed {
  )
     {
         my $biblio = Koha::Biblios->find($item->biblionumber);
-        my @possible_holds = $biblio->current_holds->unfilled->search({non_priority => 0})->as_list;
+        my @possible_holds = $biblio->current_holds->unfilled->search(
+            {non_priority => 0},
+            { prefetch => 'patron' }
+        )->as_list;
 
         # Get all other items that could possibly fill reserves
         # FIXME We could join reserves (or more tables) here to eliminate some checks later
