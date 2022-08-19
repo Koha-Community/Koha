@@ -121,7 +121,7 @@
                                         </li>
                                         <li>
                                             <label for="enrolmentperioddate">Until date: </label>
-                                            <input type="text" class="enrolmentperioddate" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
+                                            <input type="text" class="enrolmentperioddate" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | html %]" />
                                              <div class="hint">[% INCLUDE 'date-format.inc' dateformat = Koha.Preference('dateformat') %]</div>
                                         </li>
                                     </ol>

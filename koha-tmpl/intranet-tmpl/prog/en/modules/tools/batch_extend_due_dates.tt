@@ -161,7 +161,7 @@
                                 <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected checkouts!</div>
                                 <fieldset class="action">
                                     <input type="hidden" name="op" value="modify" />
-                                    <input type="hidden" name="new_hard_due_date" value="[% new_hard_due_date | $KohaDates %]" />
+                                    <input type="hidden" name="new_hard_due_date" value="[% new_hard_due_date | $KohaDates dateformat => 'iso' %]" />
                                     <input type="hidden" name="due_date_days" value="[% due_date_days | html %]" />
                                     <input type="submit" value="Modify selected checkouts" class="button" />
                                     <a class="cancel" href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Cancel</a>

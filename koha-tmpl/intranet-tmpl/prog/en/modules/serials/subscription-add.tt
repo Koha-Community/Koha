@@ -305,7 +305,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                           <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | html %]" class="flatpickr required" required="required" />
                                         [% ELSE %]
                                           [% firstacquidate | $KohaDates %]
-                                          <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
+                                          <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates dateformat => 'iso' %]"/>
                                         [% END %]
                                         <span class="required">Required</span>
                                     </li>
