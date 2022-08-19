@@ -81,6 +81,12 @@ vendor phone number
 
 vendor account number
 
+=head2 type
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =head2 notes
 
   data_type: 'longtext'
@@ -199,6 +205,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "accountnumber",
   { data_type => "longtext", is_nullable => 1 },
+  "type",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "notes",
   { data_type => "longtext", is_nullable => 1 },
   "postal",
@@ -387,8 +395,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qu4OqSCsEKEeJD9VtOEd4g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 19:19:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EsIKCiL9L92WHNrL78MVaA
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },
