@@ -28,7 +28,7 @@ Koha::RestrictionType - Koha RestrictionType Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 delete
 
@@ -87,12 +87,12 @@ sub make_default {
 
 =head2 Internal methods
 
-=head3 type
+=head3 _type
 
 =cut
 
 sub _type {
-    return 'DebarmentType';
+    return 'RestrictionType';
 }
 
 1;

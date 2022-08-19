@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::DebarmentType;
+package Koha::Schema::Result::RestrictionType;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::DebarmentType
+Koha::Schema::Result::RestrictionType
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<debarment_types>
+=head1 TABLE: C<restriction_types>
 
 =cut
 
-__PACKAGE__->table("debarment_types");
+__PACKAGE__->table("restriction_types");
 
 =head1 ACCESSORS
 
@@ -89,8 +89,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-04 11:05:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cRSViJItfpT3mxCX82/9eQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 17:53:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CC8yZ6IqZPnySpMC5Mn/ig
 
 __PACKAGE__->add_columns(
     '+is_system'  => { is_boolean => 1 },

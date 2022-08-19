@@ -17,10 +17,6 @@ package Koha::RestrictionTypes;
 
 use Modern::Perl;
 
-use Carp;
-
-use C4::Context;
-
 use Koha::Database;
 use Koha::RestrictionType;
 
@@ -32,7 +28,7 @@ Koha::RestrictionTypes - Koha Restriction Types Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -59,7 +55,7 @@ sub keyed_on_code {
 =cut
 
 sub _type {
-    return 'DebarmentType';
+    return 'RestrictionType';
 }
 
 =head3 object_class

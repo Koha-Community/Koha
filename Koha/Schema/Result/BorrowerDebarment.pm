@@ -54,7 +54,7 @@ expiration date of the restriction
   is_nullable: 0
   size: 50
 
-type of restriction, FK to debarment_types.code
+type of restriction, FK to restriction_types.code
 
 =head2 comment
 
@@ -150,20 +150,20 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::DebarmentType>
+Related object: L<Koha::Schema::Result::RestrictionType>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "type",
-  "Koha::Schema::Result::DebarmentType",
+  "Koha::Schema::Result::RestrictionType",
   { code => "type" },
   { is_deferrable => 1, on_delete => "NO ACTION", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-05-04 11:05:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bxRDwUTv9cZVpDfNDatosQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 17:53:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDCkA7XrjKXlrFG5lk8Lgg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
