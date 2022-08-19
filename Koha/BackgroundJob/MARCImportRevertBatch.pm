@@ -83,6 +83,7 @@ sub process {
         num_errors        => $num_errors,
         num_reverted      => $num_reverted,
         num_ignored       => $num_ignored,
+        import_batch_id   => $import_batch_id,
     };
 
     my $data = $self->decoded_data;
