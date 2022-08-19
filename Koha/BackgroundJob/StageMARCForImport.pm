@@ -20,6 +20,7 @@ use Try::Tiny;
 
 use base 'Koha::BackgroundJob';
 
+use Koha::Database;
 use C4::Matcher;
 use C4::ImportBatch qw(
     RecordsFromMARCXMLFile
@@ -87,8 +88,8 @@ sub process {
     my $matcher_failed   = 0;
     my $matcher_code     = "";
 
+    my $schema = Koha::Database->new->schema;
     try {
-        my $schema = Koha::Database->new->schema;
         $schema->storage->txn_begin;
 
         my ( $errors, $marcrecords );
@@ -110,8 +111,7 @@ sub process {
 
         $self->size(scalar @$marcrecords)->store;
 
-        ( $batch_id, $num_valid, $num_items, @import_errors ) =
-          BatchStageMarcRecords(
+        ( $batch_id, $num_valid, $num_items, @import_errors ) = BatchStageMarcRecords(
             $record_type,                $encoding,
             $marcrecords,                $filename,
             $marc_modification_template, $comments,
@@ -123,8 +123,13 @@ sub process {
                     $job_progress /= 2;
                 }
                 $self->progress( int($job_progress) )->store;
-              }
-          );
+            }
+        );
+        if( $num_valid ) {
+            $self->set({ progress => $num_valid, size => $num_valid });
+        } else { # We must assume that something went wrong here
+            $self->set({ progress => 0, status => 'failed' });
+        }
 
         if ($profile_id) {
             my $ibatch = Koha::ImportBatches->find($batch_id);
@@ -155,8 +160,10 @@ sub process {
     }
     catch {
         warn $_;
+        $schema->storage->txn_rollback;
         die "Something terrible has happened!"
-          if ( $_ =~ /Rollback failed/ );    # Rollback failed
+          if ( $_ =~ /Rollback failed/ );    # TODO Check test: Rollback failed
+        $self->set({ progress => 0, status => 'failed' });
     };
 
     my $report = {
@@ -190,8 +197,8 @@ sub enqueue {
     my ( $self, $args) = @_;
 
     $self->SUPER::enqueue({
-        job_size => 0, # unknown for now
-        job_args => $args
+        job_size => 0, # TODO Unknown for now?
+        job_args => $args,
     });
 }
 

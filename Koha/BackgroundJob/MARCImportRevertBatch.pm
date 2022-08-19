@@ -23,6 +23,8 @@ use base 'Koha::BackgroundJob';
 use C4::ImportBatch qw(
     BatchRevertRecords
 );
+use Koha::Database;
+use Koha::Import::Records;
 
 =head1 NAME
 
@@ -64,17 +66,24 @@ sub process {
         $num_items_deleted, $num_ignored
     );
 
+    my $schema = Koha::Database->new->schema;
     try {
-        (
-            $num_deleted,       $num_errors, $num_reverted,
-            $num_items_deleted, $num_ignored
-        ) = BatchRevertRecords( $import_batch_id, 50,
-            sub { my $job_progress = shift; $self->progress( $job_progress )->store } );
+        $schema->storage->txn_begin;
+        ( $num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored ) =
+          BatchRevertRecords( $import_batch_id ); # TODO BatchRevertRecords still needs a progress_callback
+        $schema->storage->txn_commit;
+
+        my $count = $num_deleted + $num_reverted;
+        if( $count ) {
+            $self->set({ progress => $count, size => $count });
+        } else { # TODO Nothing happened? Refine later
+            $self->set({ progress => 0, status => 'failed' });
+        }
     }
     catch {
         warn $_;
-        die "Something terrible has happened!"
-          if ( $_ =~ /Rollback failed/ );    # Rollback failed
+        $schema->storage->txn_rollback;
+        $self->set({ progress => 0, status => 'failed' });
     };
 
     my $report = {
@@ -103,8 +112,8 @@ sub enqueue {
     my ( $self, $args) = @_;
 
     $self->SUPER::enqueue({
-        job_size => 0, # unknown for now
-        job_args => $args
+        job_size => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
+        job_args => $args,
     });
 }
 

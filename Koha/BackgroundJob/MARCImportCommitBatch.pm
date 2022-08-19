@@ -20,6 +20,7 @@ use Try::Tiny;
 
 use base 'Koha::BackgroundJob';
 
+use Koha::Database;
 use Koha::Import::Records;
 use C4::ImportBatch qw(
     BatchCommitRecords
@@ -74,11 +75,19 @@ sub process {
             sub { my $job_progress = shift; $self->progress( $job_progress )->store },
             { skip_intermediate_commit => 1 },
         );
+        my $count = $num_added + $num_updated;
+        if( $count ) {
+            $self->set({ progress => $count, size => $count });
+        } else { # TODO Refine later
+            $self->set({ progress => 0, status => 'failed' });
+        }
     }
     catch {
         warn $_;
+        Koha::Database->schema->storage->txn_rollback; # TODO BatchCommitRecords started a transaction
         die "Something terrible has happened!"
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
+        $self->set({ progress => 0, status => 'failed' });
     };
 
     my $report = {
@@ -107,8 +116,8 @@ sub enqueue {
     my ( $self, $args) = @_;
 
     $self->SUPER::enqueue({
-        job_size => 0, # unknown for now
-        job_args => $args
+        job_size => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
+        job_args => $args,
     });
 }
 
