@@ -2959,6 +2959,8 @@ sub CanBookBeRenewed {
             notforloan   => 0,
             -not         => { itemnumber => $itemnumber } })->as_list;
 
+        return ( 0, "on_reserve" ) if scalar @other_items < scalar @possible_holds;
+
         my %matched_items;
         foreach my $possible_hold (@possible_holds) {
             my $fillable = 0;
