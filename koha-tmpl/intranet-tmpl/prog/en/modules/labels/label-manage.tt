@@ -133,13 +133,12 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% INCLUDE 'tools-menu.inc' %]
+                [% INCLUDE 'cat-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -191,6 +190,7 @@
             return (-1);
         }
         $(document).ready(function(){
+            $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
             $("#print").click(function(e){
                 e.preventDefault();
                 Xport();

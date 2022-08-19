@@ -59,14 +59,13 @@
 
             <div class="col-sm-2 col-sm-pull-10">
                 <aside>
-                    [% INCLUDE 'tools-menu.inc' %]
+                    [% INCLUDE 'cat-menu.inc' %]
                 </aside>
             </div> <!-- /.col-sm-2.col-sm-pull-10 -->
         </div> <!-- /.row -->
     </div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         function Xport() {
             var str = "";
@@ -104,6 +103,7 @@
             }
 
         $(document).ready(function () {
+            $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
             $.validator.addMethod("gt", function(value, element, params) {
                 return parseInt(value) >= parseInt($(params).val());
             }, _("Must be greater or equal to the from value."));

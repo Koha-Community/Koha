@@ -277,13 +277,12 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% INCLUDE 'tools-menu.inc' %]
+                [% INCLUDE 'cat-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/automatic_item_modification_by_age.js") | $raw %]
     [% IF op == 'edit_form' %]

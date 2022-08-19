@@ -140,15 +140,15 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% INCLUDE 'tools-menu.inc' %]
+                [% INCLUDE 'cat-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function(){
+            $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");
             var selectedUnit = $("#units option:selected").attr("value");
             var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
             $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
