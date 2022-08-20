@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Exception;
 use Test::Warn;
 
@@ -920,6 +920,48 @@ subtest 'can_patron_change_staff_only_lists() tests' => sub {
     # make it a superlibrarian
     $patron->set({ flags => 1 })->store->discard_changes;
     is( $patron->can_patron_change_staff_only_lists(), 1, 'Superlibrarian patron can change staff only lists');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_patron_change_permitted_staff_lists() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # make a user with no special permissions
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags => undef
+            }
+        }
+    );
+    is( $patron->can_patron_change_permitted_staff_lists(), 0, 'Patron without permissions cannot change permitted staff lists');
+
+    # make it a 'Catalogue' permission
+    $patron->set({ flags => 4 })->store->discard_changes;
+    is( $patron->can_patron_change_permitted_staff_lists(), 0, 'Catalogue patron cannot change permitted staff lists');
+
+    # make it a 'Catalogue' permission and 'edit_public_list_contents' sub-permission
+    $patron->set({ flags => 4 })->store->discard_changes;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 20,                            # lists
+                code           => 'edit_public_list_contents',
+            },
+        }
+    );
+    is( $patron->can_patron_change_permitted_staff_lists(), 1, 'Catalogue and "edit_public_list_contents" patron can change permitted staff lists');
+
+    # make it a superlibrarian
+    $patron->set({ flags => 1 })->store->discard_changes;
+    is( $patron->can_patron_change_permitted_staff_lists(), 1, 'Superlibrarian patron can change permitted staff lists');
 
     $schema->storage->txn_rollback;
 };
