@@ -18,7 +18,7 @@ package Koha::Virtualshelf;
 use Modern::Perl;
 
 
-use C4::Auth qw( haspermission );
+use C4::Auth;
 
 use Koha::Patrons;
 use Koha::Database;
@@ -234,7 +234,7 @@ sub can_be_deleted {
 
     my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
 
-    return 1 if $self->is_public and haspermission( $patron->userid, { lists => 'delete_public_lists' } );
+    return 1 if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
 
     return 0;
 }
@@ -246,7 +246,7 @@ sub can_be_managed {
 
     my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
     return 1
-      if $self->is_public and haspermission( $patron->userid, { lists => 'edit_public_lists' } );
+      if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_lists' } );
     return 0;
 }
 
@@ -311,7 +311,7 @@ sub cannot_be_transferred {
         if( $self->public ) {
             my $by_patron = Koha::Patrons->find($by);
             return 'unauthorized_transfer'
-                if !$by_patron || !haspermission( $by_patron->userid, { lists => 'edit_public_lists' });
+                if !$by_patron || !C4::Auth::haspermission( $by_patron->userid, { lists => 'edit_public_lists' });
         } else {
             return 'unauthorized_transfer' if !$self->can_be_managed($by);
         }
