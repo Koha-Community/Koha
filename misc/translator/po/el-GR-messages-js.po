@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 19:19-0300\n"
+"POT-Creation-Date: 2022-08-16 22:25-0300\n"
 "PO-Revision-Date: 2022-03-15 09:02+0000\n"
 "Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: none\n"
@@ -24,6 +24,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
 msgid " (current) "
 msgstr " (τρέχουσα) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "απομένουν %s από %s ανεπίβλεπτες ανανεώσεις"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -106,11 +111,6 @@ msgstr ""
 msgid "%s of %s renewals remaining"
 msgstr "απομένουν %s από %s ανανεώσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "απομένουν %s από %s ανεπίβλεπτες ανανεώσεις"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -167,7 +167,7 @@ msgstr "Το AJAX απέτυχε να εγκρίνει την ετικέτα: %s
 msgid "AJAX failed to reject tag: %s"
 msgstr "Το AJAX απέτυχε να απορρίψει την ετικέτα: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
 msgid "Actions"
 msgstr "Ενέργειες"
 
@@ -270,7 +270,7 @@ msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγρ�
 msgid "Are you sure you want to delete this record?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την εγγραφή;"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1173
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1178
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την αξίωση επιστροφής;"
 
@@ -369,7 +369,7 @@ msgstr ""
 "Δε γίνει να οριστεί άλλη αυτό-ανανέωση - ο αριθμός των ημερών δανεισμού έχει "
 "λήξη"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1139
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
 msgid "Cancel"
 msgstr "Ακύρωση"
@@ -513,7 +513,7 @@ msgid "December"
 msgstr "Δεκέμβριος"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1033
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1038
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -522,7 +522,7 @@ msgstr "Διαγραφή"
 msgid "Done"
 msgstr "Έγινε"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1001
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1005
 msgid "Double click to edit"
 msgstr "Διπλό πάτημα για επεξεργασία"
 
@@ -542,7 +542,7 @@ msgstr "Επεξεργασία"
 msgid "Edit action %s"
 msgstr "Επεξεργασία ενέργειας %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
 msgid "Edit notes"
 msgstr "Επεξεργασία σημειώσεων"
 
@@ -915,6 +915,14 @@ msgstr "Νοέμβριος"
 msgid "Number of checkouts by item type"
 msgstr "Αριθμός χρεώσεων ανά τύπο τεκμηρίου"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
 msgstr "Αριθμός αντιτύπων για προσθήκη"
@@ -1070,7 +1078,7 @@ msgstr "Η ανανέωση απορρίφθηκε από τις προτιμή�
 msgid "Renewed, due:"
 msgstr "Ανανεωμένο, λήξη:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Resolve"
 msgstr "Επίλυση"
 
@@ -1140,13 +1148,13 @@ msgstr "Σεπ"
 msgid "September"
 msgstr "Σεπτέμβριος"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Προβολή 1 αξίωσης"
 msgstr[1] "Προβολή όλων {count} αξιώσεων"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1117
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Εμφάνιση 1 "
@@ -1372,7 +1380,7 @@ msgstr "Αδυναμία αναστολής, η κράτηση δεν βρέθη
 msgid "Unable to suspend hold, invalid date"
 msgstr "Αδυναμία αναστολής κράτησης, μη έγκυρη ημερομηνία"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1133
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1138
 msgid "Update"
 msgstr "Ενημέρωση"
 

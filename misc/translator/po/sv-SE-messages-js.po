@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 19:52-0300\n"
+"POT-Creation-Date: 2022-08-16 23:08-0300\n"
 "PO-Revision-Date: 2022-05-03 08:33+0000\n"
 "Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: none\n"
@@ -24,6 +24,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
 msgid " (current) "
 msgstr " (aktuell) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s av %s omlån kvarstår"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -106,11 +111,6 @@ msgstr ""
 msgid "%s of %s renewals remaining"
 msgstr "%s av %s återstående omlån"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s av %s omlån kvarstår"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -166,7 +166,7 @@ msgstr "AJAX kunde inte godkänna tagg: %s"
 msgid "AJAX failed to reject tag: %s"
 msgstr "AJAX kunde inte avvisa tagg: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
 msgid "Actions"
 msgstr "Åtgärder"
 
@@ -265,7 +265,7 @@ msgstr "Är du säker på att du vill ta bort detta fält?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Är du säker på att du vill ta bort posten?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1173
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1178
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Är du säker på att du vill ta bort denna begäran om återlämning?"
 
@@ -360,7 +360,7 @@ msgstr ""
 "Kan inte längre lånas om automatiskt - antal dagar för utlåning har "
 "överskridits"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1139
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
 msgid "Cancel"
 msgstr "Avbryt"
@@ -500,7 +500,7 @@ msgid "December"
 msgstr "December"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1033
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1038
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Ta bort"
@@ -509,7 +509,7 @@ msgstr "Ta bort"
 msgid "Done"
 msgstr "Klart"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1001
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1005
 msgid "Double click to edit"
 msgstr "Dubbelklicka för att redigera"
 
@@ -529,7 +529,7 @@ msgstr "Redigera"
 msgid "Edit action %s"
 msgstr "Redigera åtgärd %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
 msgid "Edit notes"
 msgstr "Redigera anteckningar"
 
@@ -904,6 +904,14 @@ msgstr "November"
 msgid "Number of checkouts by item type"
 msgstr "Antal lån efter exemplartyp"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
 msgstr "Antal exemplar att lägga till"
@@ -1059,7 +1067,7 @@ msgstr "Omlån nekat av syspref"
 msgid "Renewed, due:"
 msgstr "Omlånad, återlämningsdatum:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Resolve"
 msgstr "Markera som löst"
 
@@ -1129,13 +1137,13 @@ msgstr "Sep"
 msgid "September"
 msgstr "September"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1117
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Visa en olöst reklamation"
@@ -1356,7 +1364,7 @@ msgstr "Kunde inte pausa reservation, reservationen ej funnen"
 msgid "Unable to suspend hold, invalid date"
 msgstr "Kunde inte pausa reservation, ogiltigt datum"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1133
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1138
 msgid "Update"
 msgstr "Uppdatera"
 

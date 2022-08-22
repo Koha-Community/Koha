@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 19:54-0300\n"
+"POT-Creation-Date: 2022-08-16 23:11-0300\n"
 "PO-Revision-Date: 2021-10-26 04:35+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
 msgid " (current) "
 msgstr " (ప్రస్తుతం) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s యొక్క %s కనిపించని పునరుద్ధరణలు మిగిలి ఉన్నాయి"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -101,11 +106,6 @@ msgstr ""
 msgid "%s of %s renewals remaining"
 msgstr "%s యొక్క %s పునరుద్ధరణలు మిగిలి ఉన్నాయి"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s యొక్క %s కనిపించని పునరుద్ధరణలు మిగిలి ఉన్నాయి"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -160,7 +160,7 @@ msgstr "ట్యాగ్‌ను ఆమోదించడంలో అజా�
 msgid "AJAX failed to reject tag: %s"
 msgstr "ట్యాగ్‌ను తిరస్కరించడంలో అజాక్స్ విఫలమైంది: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
 msgid "Actions"
 msgstr "చర్యలు"
 
@@ -261,7 +261,7 @@ msgstr "మీరు ఖచ్చితంగా ఈ ఫీల్డ్‌ను
 msgid "Are you sure you want to delete this record?"
 msgstr "మీరు ఖచ్చితంగా ఈ రికార్డ్‌ను తొలగించాలనుకుంటున్నారా?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1173
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1178
 msgid "Are you sure you want to delete this return claim?"
 msgstr "మీరు ఖచ్చితంగా ఈ రిటర్న్ దావాను తొలగించాలనుకుంటున్నారా?"
 
@@ -353,7 +353,7 @@ msgstr "సిఎస్వి"
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "ఇకపై స్వయంచాలకంగా పునరుద్ధరించబడదు - చెక్అవుట్ రోజుల సంఖ్య మించిపోయింది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1139
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
 msgid "Cancel"
 msgstr "రద్దు చేయండి"
@@ -497,7 +497,7 @@ msgid "December"
 msgstr "డిసెంబర్"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1033
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1038
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "తొలగించు"
@@ -506,7 +506,7 @@ msgstr "తొలగించు"
 msgid "Done"
 msgstr "అయినది"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1001
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1005
 msgid "Double click to edit"
 msgstr "సవరించడానికి డబుల్ క్లిక్ చేయండి"
 
@@ -524,7 +524,7 @@ msgstr "మార్చు"
 msgid "Edit action %s"
 msgstr "చర్యను సవరించండి %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
 msgid "Edit notes"
 msgstr "గమనికలను సవరించండి"
 
@@ -893,6 +893,14 @@ msgstr "నవంబర్"
 msgid "Number of checkouts by item type"
 msgstr "అంశం రకం ప్రకారం చెక్అవుట్ల సంఖ్య"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
 msgstr "జోడించాల్సిన అంశాల సంఖ్య"
@@ -1045,7 +1053,7 @@ msgstr "సిస్ప్రెఫ్ చేత పునరుద్ధరణ 
 msgid "Renewed, due:"
 msgstr "పునరుద్ధరించబడింది, గడువు:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Resolve"
 msgstr "పరిష్కరించుకొను"
 
@@ -1115,13 +1123,13 @@ msgstr "సెప్టెంబర్"
 msgid "September"
 msgstr "సెప్టెంబర్"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1117
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] ""
@@ -1340,7 +1348,7 @@ msgstr "పట్టును నిలిపివేయడం సాధ్య�
 msgid "Unable to suspend hold, invalid date"
 msgstr "నిలిపివేయడం సాధ్యం కాలేదు, చెల్లని తేదీని"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1133
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1138
 msgid "Update"
 msgstr "నవీకరణ"
 

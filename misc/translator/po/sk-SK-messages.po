@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 11:26-0300\n"
-"PO-Revision-Date: 2022-06-23 12:32+0000\n"
+"POT-Creation-Date: 2022-08-16 23:05-0300\n"
+"PO-Revision-Date: 2022-08-02 19:29+0000\n"
 "Last-Translator: SK-KOHA <dada.kapustova@gmail.com>\n"
 "Language-Team: none\n"
 "Language: sk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1655987524.821243\n"
+"X-POOTLE-MTIME: 1659468595.425437\n"
 "X-Pootle-Path: /sk/21.05/sk-SK-messages.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -60,7 +60,7 @@ msgstr "Zrušiť"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
 msgid "Check out"
-msgstr ""
+msgstr "Vypožičať"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
 msgctxt "patron restriction created on"
@@ -87,6 +87,10 @@ msgstr "Vytvoril(a):"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:65
 msgid "Elasticsearch is currently disabled."
 msgstr "Elasticsearch je dočasne zakázaný."
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:126
+msgid "Hide SQL code"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/reserve/request.tt:962
 msgid "Hold"
@@ -143,7 +147,7 @@ msgstr "Zobrazenie bolo aktualizované."
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:436
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/basket.tt:639
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/ordered.tt:46
-#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:258
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcel.tt:257
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/spent.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:17
 #: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/transferorder.tt:69
@@ -160,7 +164,7 @@ msgctxt "verb"
 msgid "Order"
 msgstr "Žiadanka"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
+#: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
 msgctxt "Semester"
@@ -176,7 +180,7 @@ msgstr ""
 
 # Singular for cant contain {count}
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:838
-#, perl-brace-format, fuzzy
+#, perl-brace-format
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
@@ -190,44 +194,46 @@ msgstr "Neznámy dôvod"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/members/tables/members_results.tt:22
 msgid "View"
-msgstr ""
+msgstr "Náhľad"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 msgid ""
 "You attempted to delete all mappings for a required index, you must leave at "
 "least one mapping"
 msgstr ""
+"Pokúsili ste sa vymazať všetky mapovania pre požadovaný index, musíte "
+"ponechať aspoň jedno mapovanie"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:230
 msgid "checkout"
 msgid_plural "checkouts"
 msgstr[0] "výpožička"
 msgstr[1] "výpožičky"
 msgstr[2] ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:244
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:246
 msgid "hold pending"
 msgid_plural "holds pending"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "nevybavená rezervácia"
+msgstr[1] "nevybanené rezervácie"
+msgstr[2] "nevybanené rezervácie"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:254
 msgid "hold waiting"
 msgid_plural "holds waiting"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:269
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:276
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:271
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:278
 msgid "message"
 msgid_plural "messages"
 msgstr[0] "správa"
 msgstr[1] "správy"
 msgstr[2] ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:236
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:238
 msgid "overdue"
 msgid_plural "overdues"
 msgstr[0] "omeškaný"

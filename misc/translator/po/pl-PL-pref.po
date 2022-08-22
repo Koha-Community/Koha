@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-07-01 12:26+0000\n"
+"PO-Revision-Date: 2022-08-02 06:15+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1656678363.926311\n"
+"X-POOTLE-MTIME: 1659420929.434040\n"
 "X-Pootle-Path: /pl/21.05/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3103,7 +3103,7 @@ msgstr "<br/> UNIMARC nie jest wspierany."
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
-msgstr ""
+msgstr "Maksymalnie"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3113,32 +3113,27 @@ msgstr "OPAC"
 msgid ""
 "cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
 "linked via field 773, in"
-msgstr ""
+msgstr "Wyświetlaj listę rekordów powiązanych za pomocą pola 773 w "
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
-msgstr "Użyj następującego szablonu ISBD w interfejsie bibliotekarza:"
+msgstr "interfejsie bibliotekarza i OPAC"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# no"
-msgstr "automatycznie wyświetlaj okno dialogowe"
+msgstr "nigdzie"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
-msgstr "Kody kreskowe"
+msgstr "na stronie szczegółów rekordu."
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
-msgstr "Nie wyświetlaj prostszego sposobu"
+msgstr "rekordów będzie wyświetlanych."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
-msgstr "Struktura rekordu"
+msgstr "interfejsie bibliotekarza"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3551,7 +3546,6 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "Wymagaj"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -3561,7 +3555,10 @@ msgid ""
 msgstr ""
 "potwierdzenia ominięcia należności, nawet jeśli użytkownik zalega więcej niż "
 "ustawiono w <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=noissuescharge\">noissuescharge</a>."
+"op=search&searchfield=noissuescharge\">noissuescharge</a>. Włączenie tej "
+"opcji systemowej spowoduje zablokowanie wszystkich wypożyczeń dla "
+"użytkowników z należnościami zarówno za pośrednictwem opcji Samoobsługowych "
+"wypożyczeń, jak i SIP."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -4020,14 +4017,15 @@ msgid ""
 "to host based on MARC21 773$w when the child has no items when requesting "
 "articles on the Opac."
 msgstr ""
+"  przekierowanie od rekordu powiązanego do rekordu głównego na podstawie "
+"MARC21 773$w podczas zamówienia na kopię w OPAC, kiedy rekord powiązany nie "
+"posiada egzemplarza."
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
-msgstr "Włącz"
+msgstr "Wyłącz"
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
 msgstr "Włącz"
 
@@ -4038,13 +4036,15 @@ msgid ""
 "bar. The first listed format is selected by default when you request via the "
 "OPAC.)"
 msgstr ""
+"(Wybór: FOTOKOPIA i SKAN. Obsługiwane formaty oddziel pionową kreską. "
+"Pierwszy wymieniony format jest wybierany domyślnie podczas składania "
+"zamówienia w OPAC.)"
 
 # Circulation > Article requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsSupportedFormats# The following article "
 "request formats are supported:"
-msgstr "linki do zamawiania kopii w wynikach wyszukiwania."
+msgstr "Następujące formaty zamówienia na kopię są dostępne:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
@@ -4431,17 +4431,18 @@ msgid ""
 "circulation.pref#CleanUpDatabaseReturnClaims# <span class=\"hint\">This "
 "system preference is used by the cleanup_database.pl cronjob.</span>"
 msgstr ""
+"<span class=\"hint\">Opcja systemowa jest używana przez skrypt "
+"cleanup_database.pl</span>"
 
 # Circulation > Return claims > CleanUpDatabaseReturnClaims
 msgid ""
 "circulation.pref#CleanUpDatabaseReturnClaims# Remove resolved return claims "
 "older than"
-msgstr ""
+msgstr "Usuń rozwiązane reklamacje zwrotu starsze niż"
 
 # Circulation > Return claims
-#, fuzzy
 msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
-msgstr "."
+msgstr "dzień/dni."
 
 # Circulation > Holds policy
 msgid ""
@@ -4736,7 +4737,6 @@ msgstr ""
 "oczekujących zamówień, opłatą"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# If using <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay"
@@ -4744,21 +4744,17 @@ msgid ""
 msgstr ""
 "Jeśli używasz opcji <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=ExpireReservesMaxPickUpDelay"
-"\">ExpireReservesMaxPickUpDelay</a>, obciąż użytkownika, który nie odebrał "
-"oczekujących zamówień, opłatą"
+"\">ExpireReservesMaxPickUpDelay</a>,"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ExpireReservesOnHolidays# allow"
-msgstr "Zezwalaj"
+msgstr "zezwalaj"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ExpireReservesOnHolidays# don't allow"
-msgstr "Nie zezwalaj"
+msgstr "nie zezwalaj"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
 "days the library is closed per the calendar."
@@ -9265,6 +9261,8 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
 "search results, and show no more than"
 msgstr ""
+"(dostępnych) pojedynczy egzemplarz w wynikach wyszukiwania OPAC XSLT i "
+"wyświetlaj nie więcej niż"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
@@ -9272,32 +9270,33 @@ msgid ""
 "like Checked out, Damaged, On Hold, but only when you group them by branch."
 "<br>"
 msgstr ""
+"(niedostępny) pojedynczy egzemplarz dla statusów Wypożyczony, Zniszczony, "
+"Zamówiony, jedynie po zgrupowaniu ich po bibliotece/filii. <br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by substatus, listing item counts only.)"
 msgstr ""
+"(UWAGA: Dla dużych bibliotek/filii rekomendowane jest grupowanie "
+"niedostępnych egzemplarzy według substatusów, tylko wykaz liczby "
+"egzemplarzy.)"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
-msgstr "biblioteki głównej"
+msgstr "Zgrupuj niedostępne egzemplarze według"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
-msgstr "biblioteki głównej"
+msgstr "Wyświetlaj nie więcej niż"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch"
-msgstr "biblioteki głównej"
+msgstr "biblioteki/filii"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# substatus"
-msgstr "bieżącej biblioteki"
+msgstr "substatusu"
 
 # OPAC > Appearance
 msgid ""
@@ -9624,7 +9623,6 @@ msgid ""
 msgstr "w OPAC propozycje zakupu innym użytkownikom."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
@@ -9637,7 +9635,7 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -9654,7 +9652,6 @@ msgstr ""
 "Wyświetlaj Widok standardowy w OPAC przy użyciu arkuszy stylów XSLT z: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
@@ -9667,7 +9664,7 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -9683,7 +9680,6 @@ msgid ""
 msgstr "Wyświetlaj listy w OPAC używając stylu XSLT w: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value="
@@ -9696,7 +9692,7 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -9818,6 +9814,35 @@ msgstr "Sortowanie"
 # To są dodatkowe opcje zawężania w wyszukiwaniu zaawansowanym, takie jak: Odbiorca, Zawartość itd. - proponuję "Inne opcje" /Ula
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr "Inne opcje"
+
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
+"types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
+"Shelving location (<strong>loc</strong>)."
+msgstr ""
+"<em>Obecnie obsługiwane wartości</em>: Typy dokumentów (<strong>itemtypes</"
+"strong>), Kody Kolekcji (<strong>ccode</strong>) i Lokalizacja (<strong>loc</"
+"strong>)."
+
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
+"limiting searches on the"
+msgstr ""
+"Pokaż zakładki w zaawansowanym wyszukiwaniu w OPAC i interfejsie "
+"bibliotekarza, by ograniczyć wyszukiwanie do"
+
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
+"appear in the order listed.<br/>"
+msgstr ""
+"(oddziel wartości znakiem |). Zakładki pojawiają się w podanej kolejności."
+"<br/>"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
@@ -10621,9 +10646,8 @@ msgstr ""
 "a> (w przypadku braku opóźnienia)."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
-msgstr "Użyj kodu kategorii użytkownika"
+msgstr "Użyj"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11805,9 +11829,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Dodatkowy adres - Numer domu"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
-msgstr "Dodatkowy adres - Numer domu"
+msgstr "Dodatkowy adres - Ulica"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
@@ -11898,9 +11921,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
 msgstr "Główny adres - Numer domu"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
-msgstr "Główny adres - Numer domu"
+msgstr "Główny adres - Ulica"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -11983,9 +12005,8 @@ msgid "patrons.pref#Pseudonymization# City"
 msgstr "Miejscowość"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Collection"
-msgstr "Kod kolekcji"
+msgstr "Kolekcja"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Country"
@@ -12008,14 +12029,12 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "Włącz"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Holding library"
 msgstr "Obecna biblioteka"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Home library"
-msgstr "Macierzysta biblioteka"
+msgstr "Biblioteka macierzysta"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -12106,6 +12125,13 @@ msgstr "Wymagaj"
 msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr "silnego hasła dla bibliotekarzy i użytkowników"
+
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12415,10 +12441,11 @@ msgstr ""
 "W module wyszukiwania zaawansowanego ogranicz języki na liście rozwijanej do"
 
 # Searching > Search form
+#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
-"Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Obecnie obsługiwane wartości</em>: Typy dokumentów (<strong>itemtypes</"
 "strong>), Kody Kolekcji (<strong>ccode</strong>) i Lokalizacja (<strong>loc</"
@@ -13528,7 +13555,6 @@ msgid ""
 msgstr "edytor WYSIWYG, kiedy modyfikujesz pewne opcje ustawień w HTML."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -13542,7 +13568,7 @@ msgid ""
 "interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -13560,7 +13586,6 @@ msgstr ""
 "arkusza stylów XSLT z: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -13573,7 +13598,7 @@ msgid ""
 "{langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"XSLTListsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -13589,7 +13614,6 @@ msgid ""
 msgstr "Wyświetl listy w interfejsie bibliotekarza używając stylu XSLT w: "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13603,7 +13627,7 @@ msgid ""
 "interface language."
 msgstr ""
 "<br />Wartości:<ul><li>Wpisz \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" dla "
+"syspref=\"XSLTResultsDisplay\" data-value=\"default\">domyślny</a>\" dla "
 "domyślnego</li><li>Dodaj ścieżkę do pliku xslt</li><li>Dodaj URL do "
 "konkretnego zewnętrznego arkusza stylów.</li><li>UWAGA: Opcja systemowa <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -13821,24 +13845,20 @@ msgid "tools.pref Upload"
 msgstr "Ładowanie plików"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# ."
 msgstr "."
 
 # Tools > News
-#, fuzzy
 msgid ""
 "tools.pref#AdditionalContentsEditor# By default edit additional contents and "
 "news items with"
-msgstr "Domyślnie edytuj aktualności w"
+msgstr "Domyślnie edytuj aktualności i dodatkową zawartość w"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
 msgstr "edytorze WYSIWYG (TinyMCE)"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# a text editor (CodeMirror)"
 msgstr "edytorze tekstowym (CodeMirror)"
 
@@ -13928,11 +13948,12 @@ msgid "tools.pref#NumSavedReports# By default, show"
 msgstr "Domyślnie, wyświetlaj"
 
 # Tools > Reports
-#, fuzzy
 msgid ""
 "tools.pref#NumSavedReports# reports on the saved reports page. A value of 20 "
 "is recommended. If empty, all reports will be shown."
-msgstr "raportów na stronie Zapisanych raportów."
+msgstr ""
+"raportów na stronie Zapisanych raportów. Rekomendowana jest liczba 20. Jeśli "
+"puste, wszystkie raporty będą wyświetlane."
 
 # Tools > Upload
 msgid ""

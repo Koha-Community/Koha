@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 19:45-0300\n"
+"POT-Creation-Date: 2022-08-16 23:00-0300\n"
 "PO-Revision-Date: 2021-09-30 18:34+0000\n"
 "Last-Translator: jmhenrique <julio.maschio@campinas.sp.gov.br>\n"
 "Language-Team: none\n"
@@ -24,6 +24,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
 msgid " (current) "
 msgstr " (atual) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s de %s renovações não vistas restantes"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -106,11 +111,6 @@ msgstr ""
 msgid "%s of %s renewals remaining"
 msgstr "%s de %s renovações restantes"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:582
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s de %s renovações não vistas restantes"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -166,7 +166,7 @@ msgstr "AJAX falhou ao aprovar tag: %s"
 msgid "AJAX failed to reject tag: %s"
 msgstr "AJAX falhou ao rejeitar tag: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
 msgid "Actions"
 msgstr "Ações"
 
@@ -267,7 +267,7 @@ msgstr "Tem certeza de que deseja excluir este campo?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Tem certeza que deseja excluir este registro?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1173
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1178
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Tem certeza de que deseja excluir esta reclamação de devolução?"
 
@@ -364,7 +364,7 @@ msgstr ""
 "Não pode mais ser renovado automaticamente - número de dias de empréstimo "
 "excedidos"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1134
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1139
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
 msgid "Cancel"
 msgstr "Cancelar"
@@ -510,7 +510,7 @@ msgid "December"
 msgstr "Dezembro"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1033
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1038
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Excluir"
@@ -519,7 +519,7 @@ msgstr "Excluir"
 msgid "Done"
 msgstr "Concluído"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1001
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1005
 msgid "Double click to edit"
 msgstr "Duplo clique para editar"
 
@@ -537,7 +537,7 @@ msgstr "Editar"
 msgid "Edit action %s"
 msgstr "Editar ação %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
 msgid "Edit notes"
 msgstr "Editar notas"
 
@@ -910,6 +910,14 @@ msgstr "Novembro"
 msgid "Number of checkouts by item type"
 msgstr "Número de empréstimos por tipo de item"
 
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
+
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
 msgstr "Número de exemplares a serem adicionados"
@@ -1063,7 +1071,7 @@ msgstr "Renovação negada por syspref"
 msgid "Renewed, due:"
 msgstr "Renovado, devido a:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1041
 msgid "Resolve"
 msgstr "Resolver"
 
@@ -1134,13 +1142,13 @@ msgstr "Set"
 msgid "September"
 msgstr "Setembro"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1107
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] ""
 msgstr[1] ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1112
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1117
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] ""
@@ -1362,7 +1370,7 @@ msgstr "Não é possível suspender, reserva não encontrado"
 msgid "Unable to suspend hold, invalid date"
 msgstr "Incapaz de suspender a espera, data inválida"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1133
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1138
 msgid "Update"
 msgstr "Atualizar"
 

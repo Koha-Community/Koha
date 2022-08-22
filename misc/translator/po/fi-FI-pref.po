@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2022-06-02 10:38+0000\n"
-"Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
+"PO-Revision-Date: 2022-08-19 10:24+0000\n"
+"Last-Translator: pknuuti <paivi.knuutinen@joensuu.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -11,13 +11,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1654166283.282515\n"
+"X-POOTLE-MTIME: 1660904659.651212\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
 # Accounting
 msgid "accounting.pref"
-msgstr ""
+msgstr "accounting.pref"
 
 # Accounting > Features
 msgid "accounting.pref Features"
@@ -543,6 +543,7 @@ msgid ""
 "admin.pref#AddressForFailedOverdueNotices# Email address failed overdue "
 "notices are sent to: "
 msgstr ""
+"Myöhästymisilmoitukset, joiden lähetys epäonnistuu, lähetetään osoitteeseen:"
 
 # Administration > Interface options > AddressForFailedOverdueNotices
 msgid ""
@@ -553,6 +554,12 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
+"Jos tämä jätetään tyhjäksi, käytetään ensimmäistä määriteltyä osoitetta "
+"tästä listasta: Library ReplyTo, Library Email, <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault\""
+">ReplytoDefault</a> ja <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress\""
+">KohaAdminEmailAddress</a>"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -596,39 +603,32 @@ msgid "admin.pref#AutoLocation# Yes"
 msgstr "Kyllä"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# #'s"
-msgstr "n"
+msgstr "#'s"
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#CSVDelimiter# Default separator for columns in an exported CSV "
 "file: "
-msgstr "Sarakkeiden oletuserotinmerkki, kun viedään CSV-tiedostoja: "
+msgstr "Sarakkeiden oletuserotinmerkki viedyissä CSV-tiedostoissa: "
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# backslashes"
 msgstr "kenoviiva"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# commas"
 msgstr "pilkku"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# semicolons"
 msgstr "puolipiste"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# slashes"
 msgstr "kauttaviiva"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#CSVDelimiter# tabs"
 msgstr "tabulaattori"
 
@@ -701,6 +701,8 @@ msgid ""
 "full record searchable may have a negative effect on relevance ranking of "
 "search results."
 msgstr ""
+"<br><strong>HUOM:</strong> Koko tietueen tekeminen haettavaksi voi huonontaa "
+"hakutulosten relevanssinmukaista järjestystä."
 
 # Administration > Search engine
 msgid ""
@@ -708,18 +710,20 @@ msgid ""
 "is faster and takes less space, whereas array format makes the full MARC "
 "record searchable."
 msgstr ""
+"<br>ISO2709-formaattia suositellaan, koska se on nopeampi ja tiiviimpi, "
+"mutta matriisiformaatissa koko MARC-tietue on haettavissa."
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Elasticsearch MARC format: "
-msgstr ""
+msgstr "Elasticsearch MARC-formaatti: "
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# ISO2709 (exchange format)"
-msgstr ""
+msgstr "ISO2709 (tiedonsiirtomuoto)"
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
-msgstr ""
+msgstr "Haettavissa oleva matriisi"
 
 # Patrons > Notices and notifications
 msgid "admin.pref#EmailOverduesNoEmail# Don't send"
@@ -745,6 +749,12 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
+"Käytettynä yhdessä <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a>:n kanssa "
+"mahdollistaa <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
+">GoogleOpenIDConnect</a>:n käytön."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
@@ -758,6 +768,11 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
+"Käytettynä yhdessä <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID\""
+">GoogleOAuth2ClientID</a>:n kanssa mahdollistaa <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
+">GoogleOpenIDConnect.</a>:n käytön."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -768,10 +783,9 @@ msgid "admin.pref#GoogleOpenIDConnect# No"
 msgstr "Ei"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# Use Google OpenID Connect login in the OPAC: "
-msgstr "Käytä Google OpenID Connect -kirjautumista: "
+msgstr "Käytä Google OpenID Connect -kirjautumista verkkokirjastossa: "
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# Yes"
@@ -788,14 +802,21 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
+"Kun luodaan sovellusta Googlen pilven konsolissa, valitaan OAuth2, asetetaan "
+"verkkolähteeksi your_opac_url ja asetetaan uudelleenohjaus osoitteeseen "
+"your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect. Vaatii, että on "
+"asetettu <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> ja <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
-msgstr ""
+msgstr "Salli"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # OPAC > Appearance
 msgid ""
@@ -822,6 +843,8 @@ msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Use this branch code when "
 "automatically registering a Google Open ID patron: "
 msgstr ""
+"Käytä tätä kirjastokoodia, kun asiakas rekisteröidään automaattisesti Google "
+"Open ID:n kautta:"
 
 # OPAC > Appearance
 msgid ""
@@ -837,6 +860,8 @@ msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Use this category code when "
 "automatically registering a Google Open ID patron: "
 msgstr ""
+"Käytä tätä asiakastyyppiä, kun asiakas rekisteröidään automaattisesti Google "
+"Open ID:n kautta:"
 
 # OPAC > Appearance
 msgid ""
@@ -853,6 +878,8 @@ msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Restrict Google OpenID Connect to this "
 "domain (or subdomain of this domain): "
 msgstr ""
+"Rajoita Google OpenID Connect tähän toimialueeseen (tai sen "
+"alitoimialueeseen): "
 
 # Administration > Login options > IndependentBranches
 msgid ""
@@ -860,6 +887,9 @@ msgid ""
 "strong> Changing this system preference will radically alter the behavior of "
 "Koha. Changing preference on a production system is highly discouraged.</p>"
 msgstr ""
+" <p class='text-danger'><strong>Varoitus:</strong> Tämän "
+"järjestelmäasetuksen muuttaminen vaikuttaa radikaalisti Kohan "
+"käyttäytymiseen. Tämän asetuksen muuttamista tuotannossa ei suositella.</p>"
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# No"
@@ -888,6 +918,8 @@ msgid ""
 "superlibrarians) from viewing and approving/denying patron modification "
 "requests for patrons belonging to other libraries: "
 msgstr ""
+"Estä henkilökuntaa (ei koske superlibrarianeja) näkemästä ja hyväksymästä/"
+"hylkäämästä toisten kirjastojen asiakkaiden tietojen muokkauspyyntöjä."
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranchesPatronModifications# Yes"
@@ -962,10 +994,12 @@ msgid ""
 "admin.pref#SendAllEmailsTo# (Leave this field empty to send messages to "
 "their normal recipient.)"
 msgstr ""
+"(Jätä tämä kenttä tyhjäksi, jos haluat lähettää viestit normaalisti "
+"vastaanottajille.)"
 
 # Administration > Interface options
 msgid "admin.pref#SendAllEmailsTo# Email to redirect all messages to: "
-msgstr ""
+msgstr "Lähetä kaikki sähköpostit osoitteeseen:"
 
 # Administration > Login options
 msgid ""
@@ -1010,7 +1044,7 @@ msgstr "Väliaikaistiedostoon"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# ."
-msgstr ""
+msgstr "."
 
 # Administration > Share anonymous usage statistics > UsageStats
 msgid ""
@@ -1019,6 +1053,10 @@ msgid ""
 "a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Muut <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> -järjestelmäasetukset eivät vaikuta mitenkään, jos tähän on "
+"asetettu “Ei” (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1026,6 +1064,9 @@ msgid ""
 "requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii "
+"<code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjobin. "
+"Pyydä kehittäjiä ajastamaan se."
 
 # Administration > Share anonymous usage statistics > UsageStats
 msgid ""
@@ -1033,12 +1074,17 @@ msgid ""
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
 "the statistics you share."
 msgstr ""
+"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-"
+"bin/koha/admin/usage_statistics.pl\">käyttötilastot-asetussivua</a> "
+"muokataksesi jakamiasi tilastoja."
 
 # Administration > Share anonymous usage statistics
 msgid ""
 "admin.pref#UsageStats# <br>Website where usage statistics are published: <a "
 "href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
+"<br>Käyttötilastot julkaistaan sivulla <a href=\"https://hea.koha-community."
+"org\">Hea Koha community website</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1046,7 +1092,7 @@ msgstr "Ei"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No, let me think about it"
-msgstr ""
+msgstr "Ei, harkitsen asiaa"
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1067,6 +1113,8 @@ msgid ""
 "admin.pref#UsageStatsCountry# . This will be shown on the <a href=\"https://"
 "hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
+"Tämä näkyy osoitteessa <a href=\"https://hea.koha-community.org\">Hea Koha "
+"community website</a>."
 
 # Administration > Share anonymous usage statistics > UsageStatsCountry
 msgid ""
@@ -1075,6 +1123,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Tällä arvolla ei ole mitään vaikutusta, jos <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetukseksi on valittu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1866,6 +1917,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1873,6 +1927,9 @@ msgid ""
 "the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated "
 "configuration page</a> to set and edit this system preference."
 msgstr ""
+"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-"
+"bin/koha/admin/usage_statistics.pl\">käyttötilastot-asetussivua</a> "
+"määritelläksesi ja muokataksesi järjestelmäasetusta."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -1885,10 +1942,13 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
-msgstr ""
+msgstr "Älä jaa"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Share"
@@ -1898,13 +1958,13 @@ msgstr "Jaa"
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# libraries information (name, URL, "
 "country)."
-msgstr ""
+msgstr "kirjaston tietoja (nimi, URL, maa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
 "admin.pref#UsageStatsLibraryName# . If this field is empty the data will be "
 "sent anonymously."
-msgstr ""
+msgstr "Jos tämä kenttä on tyhjä, tiedot lähetetään anonyymisti."
 
 # Administration > Share anonymous usage statistics > UsageStatsLibraryName
 msgid ""
@@ -1913,6 +1973,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1931,6 +1994,10 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"admin.pref#UsageStatsLibraryType# <br><strong>HUOM:</strong> Arvolla ei ole "
+"vaikutusta, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1985,6 +2052,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
+">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2017,26 +2087,23 @@ msgid "admin.pref#casLogout# Yes"
 msgstr "Kyllä"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "admin.pref#casServerUrl# URL of the Central Authentication Service (CAS) "
 "server: "
 msgstr "CAS-kirjautumispalvelimen URL: "
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "admin.pref#casServerVersion# CAS 2 or earlier"
-msgstr "CAS-kirjautumispalvelimen URL: "
+msgstr "CAS 2 tai varhaisempi"
 
 # Administration > CAS authentication > casServerVersion
 msgid "admin.pref#casServerVersion# CAS 3 or later"
-msgstr ""
+msgstr "CAS 3 tai uudempi"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "admin.pref#casServerVersion# Version of the CAS server Koha will connect to: "
-msgstr "CAS-kirjautumispalvelimen URL: "
+msgstr "Käytettävän CAS-palvelun versio: "
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# No"
@@ -2045,7 +2112,7 @@ msgstr "Ei"
 # Administration > Interface options
 msgid ""
 "admin.pref#noItemTypeImages# Show itemtype icons in the staff interface: "
-msgstr ""
+msgstr "Näytä aineistotyyppien kuvakkeet hakutuloksissa: "
 
 # Administration > Interface options
 msgid "admin.pref#noItemTypeImages# Yes"
@@ -2115,6 +2182,9 @@ msgid ""
 "number or an asterisk (*), and some_value is a fixed value (one character)."
 "<br>"
 msgstr ""
+"Tässä auth1 and auth2 viittaavat auktoriteettitietueen indikaattoreihin; tag "
+"on bibliografisen kentän numero tai tähti (*); ja some_value on kiinteä arvo "
+"(yksi merkki).<br>"
 
 # Authorities > General
 msgid ""
@@ -2123,12 +2193,17 @@ msgid ""
 "unimarc), tag, ind1:(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|"
 "some_value).<br>"
 msgstr ""
+"Kommenttimerkillä # alkavat rivit jätetään huomiotta. Kunkin rivin tulee "
+"olla muotoa: (marc21|unimarc), tag, ind1:(auth1|auth2|some_value), "
+"ind2:(auth1|auth2|thesaurus|some_value).<br>"
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityControlledIndicators# The MARC21 option thesaurus "
 "refers to indicators controlled by authority field 008/11 and 040$f."
 msgstr ""
+"MARC21-sanasto viittaa informaatiokoodeihin, joita kontrolloivat "
+"auktoriteettikentät 008/11 ja 040$f."
 
 # Authorities > General
 msgid ""
@@ -2136,6 +2211,9 @@ msgid ""
 "edit how authority records control indicators of attached bibliographic "
 "fields (and possibly subfield $2).<br>"
 msgstr ""
+"Käytä seuraavaa tekstiä muuttaaksesi sitä, miten auktoriteettitietueet "
+"kontrolloivat liittyvien nimeketietueiden kenttien indikaattoreita (ja "
+"mahdollisesti osakenttiä $2).<br>"
 
 # Authorities > General
 msgid ""
@@ -2143,12 +2221,17 @@ msgid ""
 "preference requires the <code>misc/cronjobs/merge_authorities.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii "
+"<code>misc/cronjobs/merge_authorities.pl</code> cronjobin. Pyydä kehittäjiä "
+"ajastamaan se."
 
 # Authorities > General
 msgid ""
 "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do "
 "not update attached bibliographic records if the number exceeds"
 msgstr ""
+"Kun päivitetään auktoriteettitietuetta, älä päivitä nimeketietueita, jos "
+"määrä ylittää"
 
 # Authorities > General
 msgid ""
@@ -2162,6 +2245,8 @@ msgid ""
 "from an attached authority record (\"merging\"), handle subfields of "
 "relevant bibliographic record fields in"
 msgstr ""
+"Kun päivitetään nimeketietueita niihin liittyvistä auktoriteettitietueista ("
+"\"yhdistäminen\"), käsittele kyseisten nimeketietueiden osakenttiä"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# loose"
@@ -2199,7 +2284,7 @@ msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
-msgstr ""
+msgstr "älä luo"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# generate"
@@ -2264,15 +2349,15 @@ msgstr "Käytä"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# default"
-msgstr ""
+msgstr "oletus"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# first match"
-msgstr ""
+msgstr "ensimmäinen osuma"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# last match"
-msgstr ""
+msgstr "viimeinen osuma"
 
 # Authorities > Linker
 msgid ""
@@ -2282,13 +2367,13 @@ msgstr "linkitystoimintoa otsikkojen ja auktoriteettitietueiden yhdistämiseen."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerOptions# (separate options with |)."
-msgstr ""
+msgstr "(vaihtoehdot erotetaan | -merkillä)."
 
 # Authorities > Linker
 msgid ""
 "authorities.pref#LinkerOptions# Set the following options for the authority "
 "linker:"
-msgstr ""
+msgstr "Aseta seuraavat asetukset auktoriteettien linkitykselle:"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# Do"
@@ -2296,7 +2381,7 @@ msgstr "Uudelleenlinkitä"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# Don't"
-msgstr ""
+msgstr "Älä uudelleenlinkitä"
 
 # Authorities > Linker
 msgid ""
@@ -2311,6 +2396,8 @@ msgid ""
 "the contents of MARC21 authority control field 008 position 06-39 (fixed "
 "length data elements). Do NOT include the date (position 00-05):"
 msgstr ""
+"Käytä seuraavaa tekstiä MARC21 kontrollikentässä 008 merkkipaikoissa 06-39 ("
+"kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat 00-05):"
 
 # Authorities > General
 msgid ""
@@ -2318,6 +2405,8 @@ msgid ""
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
 msgstr ""
+"Käytä seuraavaa tekstiä UNIMARC-auktoriteettikentässä 100 merkkipaikoissa 08-"
+"35 (kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat 00-07):"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -2356,11 +2445,11 @@ msgstr "Käyttöliittymä"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref Record structure"
-msgstr ""
+msgstr "cataloguing.pref Tietuerakenne"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref Spine labels"
-msgstr ""
+msgstr "cataloguing.pref Selkätarrat"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# Display"
@@ -2711,12 +2800,16 @@ msgid ""
 "cataloguing.pref#MarcFieldDocURL# For example <tt>http://fielddoc.example."
 "com/?marc={MARC}&field={FIELD}&language={LANG}</tt>"
 msgstr ""
+"Esimerkiksi <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&langua"
+"ge={LANG}</tt>"
 
 # Cataloging > Display
 msgid ""
 "cataloguing.pref#MarcFieldDocURL# If left empty, the format documentation on "
 "http://loc.gov (MARC21) or http://archive.ifla.org (UNIMARC) is used."
 msgstr ""
+"Jos jätetään tyhjäksi, käytetään formaattidokumentaatiota osoitteista: "
+"http://loc.gov (MARC21) tai http://archive.ifla.org (UNIMARC)."
 
 # Cataloging > Display
 msgid ""
@@ -2725,15 +2818,18 @@ msgid ""
 "number, eg. \"000\" or \"048\"), <tt>{LANG}</tt> (user language, eg. \"en\" "
 "or \"fi-FI\")."
 msgstr ""
+"Mahdolliset sijoitukset ovat <tt>{MARC}</tt>(marc-formaatti, esim. \"MARC21\""
+" or \"UNIMARC\"), <tt>{FIELD}</tt> (kentät, esim. \"000\" or \"048\"), "
+"<tt>{LANG}</tt> (käyttäjän kieli, esim. \"en\" or \"fi-FI\")."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# Use"
-msgstr ""
+msgstr "Käytä URLia:"
 
 # Cataloging > Display
 msgid ""
 "cataloguing.pref#MarcFieldDocURL# as the URL for MARC field documentation."
-msgstr ""
+msgstr "MARC-kenttien dokumentaatiossa."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#MarcFieldForCreatorId# ."
@@ -3338,7 +3434,7 @@ msgstr "Lainaus ja palautus"
 
 # Circulation > Article requests
 msgid "circulation.pref Article requests"
-msgstr ""
+msgstr "circulation.pref Article requests"
 
 # Circulation > Batch checkout
 msgid "circulation.pref Batch checkout"
@@ -3346,23 +3442,23 @@ msgstr "Erälainaus"
 
 # Circulation > Checkin policy
 msgid "circulation.pref Checkin policy"
-msgstr ""
+msgstr "circulation.pref Checkin policy"
 
 # Circulation > Checkout policy
 msgid "circulation.pref Checkout policy"
-msgstr ""
+msgstr "circulation.pref Checkout policy"
 
 # Circulation > Course reserves
 msgid "circulation.pref Course reserves"
-msgstr ""
+msgstr "circulation.pref Course reserves"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
-msgstr ""
+msgstr "circulation.pref Fines Policy"
 
 # Circulation > Holds policy
 msgid "circulation.pref Holds policy"
-msgstr ""
+msgstr "circulation.pref Holds policy"
 
 # Circulation > Housebound module
 msgid "circulation.pref Housebound module"
@@ -3374,23 +3470,23 @@ msgstr "Käyttöliittymä"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref Interlibrary loans"
-msgstr ""
+msgstr "circulation.pref Interlibrary loans"
 
 # Circulation > Return claims
 msgid "circulation.pref Return claims"
-msgstr ""
+msgstr "circulation.pref Return claims"
 
 # Circulation > Self check-in module
 msgid "circulation.pref Self check-in module"
-msgstr ""
+msgstr "circulation.pref Self check-in module"
 
 # Circulation > Self check-out module
 msgid "circulation.pref Self check-out module"
-msgstr ""
+msgstr "circulation.pref Self check-out module"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref Stock rotation module"
-msgstr ""
+msgstr "circulation.pref Stock rotation module"
 
 # Circulation > Checkout policy
 msgid ""
@@ -3775,120 +3871,126 @@ msgstr "asiakkaiden tehdä artikkelipyyntöjä."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsLinkControl# Always show"
-msgstr ""
+msgstr "Näytä aina"
 
 # Circulation > Article requests
 msgid ""
 "circulation.pref#ArticleRequestsLinkControl# Use algorithm to show or hide"
-msgstr ""
+msgstr "Käytä algoritmia näyttääksesi tai piilottaaksesi"
 
 # Circulation > Article requests
 msgid ""
 "circulation.pref#ArticleRequestsLinkControl# article request links on search "
 "results."
-msgstr ""
+msgstr "artikkelipyyntöjen linkit hakutuloksissa."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Author"
-msgstr ""
+msgstr "Tekijä"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Chapters"
-msgstr ""
+msgstr "Luvut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Date"
-msgstr ""
+msgstr "Aika"
 
 # Circulation > Article requests
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFields# For records that are record "
 "level or item level requestable, make the following fields mandatory:"
 msgstr ""
+"Tietueille, jotka ovat tietuetasolla tai nidetasolla pyydettävissä, aseta "
+"seuraavat kentät pakollisiksi:"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Issue"
-msgstr ""
+msgstr "Numero"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Pages"
-msgstr ""
+msgstr "Sivut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Title"
-msgstr ""
+msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Volume"
-msgstr ""
+msgstr "Volyymi"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Author"
-msgstr ""
+msgstr "Tekijä"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Chapters"
-msgstr ""
+msgstr "Luvut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Date"
-msgstr ""
+msgstr "Aika"
 
 # Circulation > Article requests
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# For records that "
 "are only item level requestable, make the following fields mandatory:"
 msgstr ""
+"Tietueille, jotka ovat vain nidetasolla pyydettävissä, aseta seuraavat "
+"kentät pakollisiksi:"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Issue"
-msgstr ""
+msgstr "Numero"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Pages"
-msgstr ""
+msgstr "Sivut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Title"
-msgstr ""
+msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Volume"
-msgstr ""
+msgstr "Volyymi"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Author"
-msgstr ""
+msgstr "Tekijä"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Chapters"
-msgstr ""
+msgstr "Luvut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Date"
-msgstr ""
+msgstr "Aika"
 
 # Circulation > Article requests
 msgid ""
 "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# For records that "
 "are only record level requestable, make the following fields mandatory:"
 msgstr ""
+"Tietueille, jotka ovat vain tietuetasolla pyydettävissä, aseta seuraavat "
+"kentät pakollisiksi:"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Issue"
-msgstr ""
+msgstr "Numero"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Pages"
-msgstr ""
+msgstr "Sivut"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Title"
-msgstr ""
+msgstr "Nimeke"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
-msgstr ""
+msgstr "Volyymi"
 
 # Circulation > Article requests > ArticleRequestsOpacHostRedirection
 msgid ""
@@ -3896,13 +3998,14 @@ msgid ""
 "to host based on MARC21 773$w when the child has no items when requesting "
 "articles on the Opac."
 msgstr ""
+"  ohjaa osakohteelta emolle perustuen MARC21 773$w -osakenttään, kun "
+"osakohteella ei ole niteitä artikkelipyyntöä tehdessä verkkokirjastossa."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Disable"
 msgstr "Älä salli"
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#ArticleRequestsOpacHostRedirection# Enable"
 msgstr "Salli"
 
@@ -3913,13 +4016,15 @@ msgid ""
 "bar. The first listed format is selected by default when you request via the "
 "OPAC.)"
 msgstr ""
+"(Kelvolliset vaihtoehdot: PHOTOCOPY ja SCAN. Erottele tuetut muodot "
+"pystyviivalla. Ensimmäinen listattu muoto on oletus verkkokirjaston "
+"puolella.)"
 
 # Circulation > Article requests
-#, fuzzy
 msgid ""
 "circulation.pref#ArticleRequestsSupportedFormats# The following article "
 "request formats are supported:"
-msgstr "asiakkaiden tehdä artikkelipyyntöjä."
+msgstr "Seuraavat artikkelipyyntöjen muodot on tuettu:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Do"
@@ -3927,7 +4032,7 @@ msgstr "Salli"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# Don't"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4209,9 +4314,8 @@ msgstr ""
 "palautuksessa/lainauksessa."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#CircControl# Use the calendar and circulation rules of"
-msgstr "Käytä seuraavia laina- ja maksusääntöjä:"
+msgstr "Käytä kalenteria ja laina- ja maksusääntöjä:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# the library the item is from."
@@ -4241,15 +4345,15 @@ msgstr "navigointivalikko kaikilla lainaus- ja palautussivuilla."
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#CirculateILL# Disable"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#CirculateILL# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#CirculateILL# the circulation of ILL requested items."
-msgstr ""
+msgstr "kaukolainapyydettyjen niteiden lainaus ja palatus."
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
@@ -9582,6 +9686,34 @@ msgstr ""
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr ""
 
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
+"types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
+"Shelving location (<strong>loc</strong>)."
+msgstr ""
+"<em>Tuetut arvot</em>: Nidetyypit (<strong>itemtypes</strong>), "
+"Kokoelmakoodi (<strong>ccode</strong>) ja Hyllypaikka (<strong>loc</strong>)."
+
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
+"limiting searches on the"
+msgstr ""
+"Näytä tarkan haun välilehdet verkkokirjastossa ja virkailijaliittymässä "
+"hakujen rajaamiseksi"
+
+# Searching > Search form
+#, fuzzy
+msgid ""
+"opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
+"appear in the order listed.<br/>"
+msgstr ""
+"eri hakukentissä (erota arvot |-merkillä). Välilehdet esitetään tässä "
+"annetussa järjestyksessä.<br/>"
+
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
 msgstr "Salli"
@@ -11754,6 +11886,13 @@ msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
 msgstr ""
 
+# Patrons > Notices and notifications > SMSSendDriver
+msgid ""
+"patrons.pref#SMSSendDriver# <br><strong>NOTE:</strong> Many mobile providers "
+"have deprecated support for this feature and it is not recommended for use "
+"unless you have a dedicated SMS to Email gateway."
+msgstr ""
+
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
@@ -12043,10 +12182,11 @@ msgid ""
 msgstr "Rajoita tarkan haun kielirajauksen alasvetovalikko"
 
 # Searching > Search form
+#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
-"Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</"
-"strong>) and Shelving Location (<strong>loc</strong>)."
+"Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
+"strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Tuetut arvot</em>: Nidetyypit (<strong>itemtypes</strong>), "
 "Kokoelmakoodi (<strong>ccode</strong>) ja Hyllypaikka (<strong>loc</strong>)."
