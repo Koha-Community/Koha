@@ -98,10 +98,10 @@ __PACKAGE__->add_columns(
 );
 
 sub koha_object_class {
-    'Koha::RestrictionType';
+    'Koha::Patron::Restriction::Type';
 }
 sub koha_objects_class {
-    'Koha::RestrictionTypes';
+    'Koha::Patron::Restriction::Types';
 }
 
 1;

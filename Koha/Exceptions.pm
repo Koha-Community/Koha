@@ -32,6 +32,10 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'The default value cannot be deleted'
     },
+    'Koha::Exceptions::CannotDeleteSystem' => {
+        isa => 'Koha::Exception',
+        description => 'The system value cannot be deleted'
+    },
     'Koha::Exceptions::MissingParameter' => {
         isa => 'Koha::Exception',
         description => 'A required parameter is missing'

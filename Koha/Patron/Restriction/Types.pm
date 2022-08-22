@@ -1,4 +1,4 @@
-package Koha::RestrictionTypes;
+package Koha::Patron::Restriction::Types;
 
 # This file is part of Koha.
 #
@@ -18,13 +18,13 @@ package Koha::RestrictionTypes;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::RestrictionType;
+use Koha::Patron::Restriction::Type;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::RestrictionTypes - Koha Restriction Types Object set class
+Koha::Patron::Restriction::Types - Koha Restriction Types Object set class
 
 =head1 API
 
@@ -63,7 +63,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::RestrictionType';
+    return 'Koha::Patron::Restriction::Type';
 }
 
 1;

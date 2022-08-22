@@ -46,7 +46,7 @@ use Koha::CsvProfiles;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( GetDebarments );
 use Koha::DateUtils qw( dt_from_string );
-use Koha::RestrictionTypes;
+use Koha::Patron::Restriction::Types;
 use Koha::Plugins;
 use Koha::Database;
 use Koha::BiblioFrameworks;
@@ -628,7 +628,7 @@ $template->param(
     PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
     debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
-    restriction_types         => scalar Koha::RestrictionTypes->keyed_on_code(),
+    restriction_types         => scalar Koha::Patron::Restriction::Types->keyed_on_code(),
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),

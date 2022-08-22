@@ -20,15 +20,16 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use Try::Tiny qw( try catch );
+
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use Koha::RestrictionTypes;
+use Koha::Patron::Restriction::Types;
 
 my $input = CGI->new;
 my $op    = $input->param('op') // 'list';
 my $code  = uc $input->param('code');
 my @messages = ();
-
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -43,11 +44,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $op eq 'add_form') {
     # Get all existing restrictions, so we can do client-side validation
     $template->param(
-        existing => scalar Koha::RestrictionTypes->search()
+        existing => scalar Koha::Patron::Restriction::Types->search()
     );
     if ($code) {
         $template->param(
-            restriction => scalar Koha::RestrictionTypes->find($code)
+            restriction => scalar Koha::Patron::Restriction::Types->find($code)
         );
     }
 } elsif ( $op eq 'add_validate' ) {
@@ -57,7 +58,7 @@ if ( $op eq 'add_form') {
 
     if ($is_a_modif) {
         # Check whether another restriction already has this display text
-        my $dupe = Koha::RestrictionTypes->find({
+        my $dupe = Koha::Patron::Restriction::Types->find({
             display_text => $display_text
         });
         if ($dupe) {
@@ -65,36 +66,51 @@ if ( $op eq 'add_form') {
                 type => 'error', code => 'duplicate_display_text'
             };
         } else {
-            my $restriction = Koha::RestrictionTypes->find($code);
+            my $restriction = Koha::Patron::Restriction::Types->find($code);
             $restriction->display_text($display_text);
             $restriction->store;
+            push @messages, { type => 'message', code => 'update_success' };
         }
     } else {
         # Check whether another restriction already has this code
-        my $dupe = Koha::RestrictionTypes->find($code);
+        my $dupe = Koha::Patron::Restriction::Types->find($code);
         if ($dupe) {
             push @messages, {
                 type => 'error', code => 'duplicate_code'
             };
         } else {
-            my $restriction = Koha::RestrictionType->new({
+            my $restriction = Koha::Patron::Restriction::Type->new({
                 code => $code,
                 display_text => $display_text
             });
             $restriction->store;
+            push @messages, { type => 'message', code => 'add_success' };
         }
     }
     $op = 'list';
 } elsif ( $op eq 'make_default' ) {
-    my $restriction = Koha::RestrictionTypes->find($code);
+    my $restriction = Koha::Patron::Restriction::Types->find($code);
     $restriction->make_default;
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
     $template->param(
-        restriction => scalar Koha::RestrictionTypes->find($code)
+        restriction => scalar Koha::Patron::Restriction::Types->find($code)
     );
 } elsif ( $op eq 'delete_confirmed' ) {
-    Koha::RestrictionTypes->find($code)->delete;
+    try {
+        Koha::Patron::Restriction::Types->find($code)->delete;
+        push @messages, { type => 'message', code => 'delete_success' };
+    }
+    catch {
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::CannotDeleteDefault') ) {
+                push @messages, { type => 'error', code => 'delete_default' };
+            }
+            elsif ( $_->isa('Koha::Exceptions::CannotDeleteSystem') ) {
+                push @messages, { type => 'error', code => 'delete_system' };
+            }
+        }
+    }
     $op = 'list';
 }
 
@@ -104,7 +120,7 @@ $template->param(
 );
 
 if ( $op eq 'list' ) {
-    my $restrictions = Koha::RestrictionTypes->search();
+    my $restrictions = Koha::Patron::Restriction::Types->search();
     $template->param(
         restrictions => $restrictions,
     )

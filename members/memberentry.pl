@@ -36,7 +36,7 @@ use Koha::AuthUtils;
 use Koha::AuthorisedValues;
 use Koha::Email;
 use Koha::Patron::Debarments qw( AddDebarment DelDebarment GetDebarments );
-use Koha::RestrictionTypes;
+use Koha::Patron::Restriction::Types;
 use Koha::Cities;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
@@ -119,7 +119,7 @@ foreach my $id ( @delete_guarantor ) {
 ## Deal with debarments
 $template->param(
     debarments => scalar GetDebarments( { borrowernumber => $borrowernumber } ),
-    restriction_types => scalar Koha::RestrictionTypes->keyed_on_code()
+    restriction_types => scalar Koha::Patron::Restriction::Types->keyed_on_code()
 );
 my @debarments_to_remove = $input->multi_param('remove_debarment');
 foreach my $d ( @debarments_to_remove ) {

@@ -1,4 +1,4 @@
-package Koha::RestrictionType;
+package Koha::Patron::Restriction::Type;
 
 # This file is part of Koha.
 #
@@ -19,12 +19,14 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
-use Koha::RestrictionTypes;
+use Koha::Exceptions;
+
+use Koha::Patron::Restriction::Types;
 use C4::Context;
 
 =head1 NAME
 
-Koha::RestrictionType - Koha RestrictionType Object class
+Koha::Patron::Restriction::Type - Koha RestrictionType Object class
 
 =head1 API
 
@@ -39,28 +41,29 @@ Overloaded delete method that does extra clean up:
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    # Find out what the default is
-    my $default = Koha::RestrictionTypes->find({ is_default => 1 })->code;
-    # Ensure we're not trying to delete a is_system type (this includes
-    # the default type)
-    return 0 if $self->is_system == 1;
-    # We can't use Koha objects here because Koha::Patron::Debarments
-    # is not a Koha object. So we'll do it old skool
-    my $rows = C4::Context->dbh->do(
-        "UPDATE borrower_debarments SET type = ? WHERE type = ?",
-        undef,
-        ($default, $self->code)
+    # Ensure we can't delete the current default
+    Koha::Exceptions::CannotDeleteDefault->throw if $self->is_default;
+
+    # Ensure we can't delete system values
+    Koha::Exceptions::CannotDeleteSystem->throw if $self->is_system;
+
+    return $self->_result->result_source->schema->txn_do(
+        sub {
+            # Update all linked restrictions to the default
+            my $default =
+              Koha::Patron::Restriction::Types->find( { is_default => 1 } )->code;
+
+            # We can't use Koha objects here because Koha::Patron::Debarments
+            # is not a Koha object. So we'll do it old skool
+            my $rows = C4::Context->dbh->do(
+                "UPDATE borrower_debarments SET type = ? WHERE type = ?",
+                undef, ( $default, $self->code ) );
+
+            return $self->SUPER::delete;
+        }
     );
-
-    # Now do the delete if the update was successful
-    if ($rows) {
-        my $deleted = $self->SUPER::delete($self);
-        return $deleted
-    }
-
-    return 0;
 }
 
 =head3 make_default
@@ -75,7 +78,7 @@ sub make_default {
     $self->_result->result_source->schema->txn_do(
         sub {
             my $types =
-              Koha::RestrictionTypes->search( { code => { '!=' => $self->code } } );
+              Koha::Patron::Restriction::Types->search( { code => { '!=' => $self->code } } );
             $types->update( { is_default => 0 } );
             $self->set( { is_default => 1 } );
             $self->SUPER::store;

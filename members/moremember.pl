@@ -37,7 +37,7 @@ use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Debarments qw( GetDebarments );
-use Koha::RestrictionTypes;
+use Koha::Patron::Restriction::Types;
 use Koha::Patron::Messages;
 use Koha::CsvProfiles;
 use Koha::Holds;
@@ -81,7 +81,7 @@ for (qw(gonenoaddress lost borrowernotes is_debarred)) {
 }
 
 $template->param(
-    restriction_types => scalar Koha::RestrictionTypes->keyed_on_code()
+    restriction_types => scalar Koha::Patron::Restriction::Types->keyed_on_code()
 );
 
 if ( $patron->is_debarred ) {

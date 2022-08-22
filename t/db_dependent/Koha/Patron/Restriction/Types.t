@@ -6,22 +6,21 @@ use C4::Context;
 use Koha::Database;
 use t::lib::TestBuilder;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh     = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
-use_ok('Koha::RestrictionType');
-use_ok('Koha::RestrictionTypes');
+use_ok('Koha::Patron::Restriction::Types');
 
 $dbh->do(q|DELETE FROM borrower_debarments|);
-$dbh->do(q|DELETE FROM debarment_types|);
+$dbh->do(q|DELETE FROM restriction_types|);
 
 $builder->build(
     {
-        source => 'DebarmentType',
+        source => 'RestrictionType',
         value  => {
             code         => 'ONE',
             display_text => 'One',
@@ -32,7 +31,7 @@ $builder->build(
 );
 $builder->build(
     {
-        source => 'DebarmentType',
+        source => 'RestrictionType',
         value  => {
             code         => 'TWO',
             display_text => 'Two',
@@ -43,7 +42,7 @@ $builder->build(
 );
 
 # keyed_on_code
-my $keyed     = Koha::RestrictionTypes->keyed_on_code;
+my $keyed     = Koha::Patron::Restriction::Types->keyed_on_code;
 my $expecting = {
     ONE => {
         code         => 'ONE',
