@@ -817,8 +817,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             settings[ "buttons" ].push(
                 {
                     className: "dt_button_configure_table",
-                    titleAttr: __("Configure this table"),
-                    text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure this table") + '</span>',
+                    titleAttr: __("Table settings"),
+                    text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
                     action: function() {
                         window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
                     },
