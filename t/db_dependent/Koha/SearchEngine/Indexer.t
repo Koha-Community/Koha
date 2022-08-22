@@ -223,10 +223,10 @@ subtest 'Test indexer calls' => sub {
 
         warnings_are{
             ModItemTransfer( $item->itemnumber, $item2->homebranch, $item->homebranch,'Manual');
-        } [$engine,"Koha::Item"], "index_records is called for $engine when calling ModItemTransfer";
+        } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called twice for $engine when calling ModItemTransfer";
         warnings_are{
-            ModItemTransfer( $item->itemnumber, $item->homebranch, $item2->homebranch,'Manual',{skip_record_index=>1});
-        } undef, "index_records is not called for $engine when calling ModItemTransfer with skip_record_index";
+            ModItemTransfer( $item->itemnumber, $item->homebranch, $item2->homebranch,'Manual',{ skip_record_index => 1 });
+        } [$engine,"Koha::Item"], "index_records is called once for $engine when calling ModItemTransfer with skip_record_index";
 
         warnings_are{
             $item->delete();
