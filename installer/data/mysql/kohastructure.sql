@@ -5185,7 +5185,7 @@ CREATE TABLE `suggestions` (
   `STATUS` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'suggestion status (ASKED, CHECKED, ACCEPTED, REJECTED, ORDERED, AVAILABLE or a value from the SUGGEST_STATUS authorised value category)',
   `archived` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the suggestion archived?',
   `note` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'note entered on the suggestion',
-  `privatenote` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'non-public note entered on the suggestion',
+  `staff_note` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'non-public note entered on the suggestion',
   `author` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'author of the suggested item',
   `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'title of the suggested item',
   `copyrightdate` smallint(6) DEFAULT NULL COMMENT 'copyright date of the suggested item',

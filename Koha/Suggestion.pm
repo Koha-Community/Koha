@@ -160,7 +160,7 @@ sub to_api_mapping {
         lastmodificationby   => 'last_status_change_by',
         STATUS               => 'status',
         note                 => 'note',
-        privatenote          => 'privatenote',
+        staff_note           => 'staff_note',
         author               => 'author',
         title                => 'title',
         copyrightdate        => 'copyright_date',

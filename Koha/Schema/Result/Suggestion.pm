@@ -136,7 +136,7 @@ is the suggestion archived?
 
 note entered on the suggestion
 
-=head2 privatenote
+=head2 staff_note
 
   data_type: 'longtext'
   is_nullable: 1
@@ -333,7 +333,7 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "note",
   { data_type => "longtext", is_nullable => 1 },
-  "privatenote",
+  "staff_note",
   { data_type => "longtext", is_nullable => 1 },
   "author",
   { data_type => "varchar", is_nullable => 1, size => 80 },

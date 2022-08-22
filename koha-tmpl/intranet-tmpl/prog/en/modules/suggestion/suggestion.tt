@@ -185,10 +185,10 @@
                                     [% note | html %]
                                 </li>
                             [% END %]
-                            [% IF ( privatenote ) %]
+                            [% IF ( staff_note ) %]
                                 <li>
                                     <span class="label">Notes:</span>
-                                    [% privatenote | html %]
+                                    [% staff_note | html %]
                                 </li>
                             [% END %]
                         </ol>
@@ -417,7 +417,7 @@
                         </li>
                         <li>
                             <label for="note">Non-public notes:</label>
-                            <textarea name="privatenote" id="privatenote" rows="5" cols="40">[% privatenote | html %]</textarea>
+                            <textarea name="staff_note" id="staff_note" rows="5" cols="40">[% staff_note | html %]</textarea>
                         </li>
                     </ol>
                 </fieldset>
@@ -753,8 +753,8 @@
                                             <th>Last updated</th>
                                             <th>Library</th>
                                             <th>Fund</th>
-                                            <th>Status</th>
                                             <th>Non-public note</th>
+                                            <th>Status</th>
                                             <th class="NoSort noExport">&nbsp;</th>
                                         </tr>
                                     </thead>
@@ -833,6 +833,9 @@
                                                     [% s.fund.budget_name | html %]
                                                 </td>
                                                 <td>
+                                                    [% s.staff_note | html %]
+                                                </td>
+                                                <td>
                                                     [% IF s.STATUS == 'ASKED' %]
                                                         <span>Pending</span>
                                                     [% ELSIF s.STATUS == 'ACCEPTED' %]
@@ -854,9 +857,6 @@
                                                     [% IF ( s.reason ) %]
                                                         <br />([% s.reason | html %])
                                                     [% END %]
-                                                </td>
-                                                <td>
-                                                    [% s.privatenote | html %]
                                                 </td>
                                                 <td class="actions">
                                                     <div class="btn-group dropup">
