@@ -3397,6 +3397,11 @@ msgid ""
 msgstr ""
 "منابع در دو زبانه نمایش داده می شود، جایی که اولین زبانه شامل منابع متلق به"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "انجام دادن"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3404,6 +3409,13 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results Display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr "به طور پیش فرض، مرتب سازی نتایج جستجو در کلاینت کارکنان توسط"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3416,9 +3428,49 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "انجام دادن"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "انجام دادن"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "انجام دادن"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3439,6 +3491,11 @@ msgstr "فهرست نویسی.pref#سوابق تحلیلی آسان# نمایش 
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "رابط"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "انجام دادن"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4976,22 +5033,27 @@ msgstr "circulation.pref#از هزینه جایگزینی پیش فرض استف
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "circulation.pref#از هزینه جایگزینی پیش فرض استفاده کنید#استفاده کنید"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "موجودی کتابخانه"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr ""
 "circulation.pref#استرداد هزینه مفقودی ها پس از برگشت کنترل شده# شعبه "
 "نگهدارنده کالا."
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "circulation.pref#از هزینه جایگزینی پیش فرض استفاده کنید#استفاده نکنید"
 
 # Circulation > Holds policy
@@ -6000,7 +6062,23 @@ msgstr ""
 
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"کاربرانی که رزرو می کنند و در فهرست انتظار یک تاریخ ویژه را وارد نمی کنند. . "
+"(AllowHoldDateInFuture همچنین باید فعال شود)."
+
+# Circulation > Holds policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "اجازه ندادن"
 
 # Circulation > Article Requests
@@ -6018,12 +6096,10 @@ msgstr "cataloguing.pref#صف تقسیم منابع# نوع آیتم منابع"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "cataloguing.pref#صف تقسیم منابع# نوع آیتم منابع"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "cataloguing.pref#صف تقسیم منابع# نوع آیتم منابع"
 
 # Circulation > Article Requests
 #, fuzzy

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-07-17 10:13-0300\n"
+"POT-Creation-Date: 2022-08-15 21:29-0300\n"
 "PO-Revision-Date: 2022-05-01 10:46-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: mn\n"
@@ -109,6 +109,16 @@ msgstr "%s %s %s Санамж: энэ цонх 5 секундын дотор а�
 msgid "%s %s %s [%%~ SET line_break = \""
 msgstr ""
 
+#. %1$s:  END # / bibitemloo.holdable 
+#. %2$s:  INCLUDE 'biblio-title.inc' biblio=bibitemloo link=> 1
+#. %3$s:  IF ( bibitemloo.author ) 
+#. %4$s:  bibitemloo.author | html 
+#. %5$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#, fuzzy, c-format
+msgid "%s %s %s, by %s%s "
+msgstr "%s %s %s Koha онлайн %s  "
+
 #. %1$s:  IF RestrictedPageTitle 
 #. %2$s:  RestrictedPageTitle | html 
 #. %3$s:  END 
@@ -207,6 +217,13 @@ msgstr ""
 "%s %s Шинэ мэдээллийг цахим шуудангаар хүлээж авахыг хүсвэл нэвтэрч ороод "
 "захиалах хэрэгтэй %s %s "
 
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=review link=> 1 
+#. %2$s:  IF ( review.author ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:46
+#, fuzzy, c-format
+msgid "%s %s by "
+msgstr "%s %s %s %s(%s)"
+
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
 #. %3$s:  i.author | html 
@@ -215,6 +232,17 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s %s by %s %s "
 msgstr "%s %s %s Koha онлайн %s  "
+
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 
+#. %2$s:  IF ( MY_TAG.author ) 
+#. %3$s:  MY_TAG.author | html 
+#. %4$s:  END 
+#. %5$s:  END # /IF MY_TAG.XSLTBloc 
+#. %6$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
+#, fuzzy, c-format
+msgid "%s %s by %s %s %s %s "
+msgstr "%s %s %s%s%sГарчиггүй%s %s %s%s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
@@ -392,13 +420,13 @@ msgid "%s Issue notes have not been enabled. Please contact the library. %s "
 msgstr "Номын санд бэлэн"
 
 #. %1$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:107
 #, fuzzy, c-format
 msgid "%s Item in transit to "
 msgstr "%s %s -рүү баримт шилжиж байна "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, fuzzy, c-format
 msgid "%s Item waiting at "
 msgstr "%s %s -рүү баримт шилжиж байна "
@@ -450,7 +478,7 @@ msgstr "%s %s Үр дүн олдсонгүй. %s  "
 #. %3$s:  FOREACH subtitle IN biblio.subtitle.split(' \| ') 
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:6
 #, fuzzy, c-format
 msgid "%s No title %s %s%s,%s "
 msgstr "%s %s %s%s%sГарчиггүй%s %s %s%s "
@@ -592,22 +620,6 @@ msgstr "Та ямар нэг хайлтын шалгуурыг тодорхой�
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "Таны энэ номын сангаас юуу ч авч байгаагүй байна. "
 
-#. %1$s:  IF ( review.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#, fuzzy, c-format
-msgid "%s by "
-msgstr ", %s-н өмнө "
-
-#. %1$s:  IF ( MY_TAG.author ) 
-#. %2$s:  MY_TAG.author | html 
-#. %3$s:  END 
-#. %4$s:  END # /IF MY_TAG.XSLTBloc 
-#. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:168
-#, fuzzy, c-format
-msgid "%s by %s %s %s %s "
-msgstr "%s %s %s%s%sГарчиггүй%s %s %s%s "
-
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
 #, fuzzy, c-format
@@ -725,18 +737,10 @@ msgstr ""
 #. %7$s:  HOLD.expirationdate | $KohaDates 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, fuzzy, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
 msgstr "%s %s %s %s %s No title %s %s %s %s "
-
-#. %1$s:  IF ( bibitemloo.author ) 
-#. %2$s:  bibitemloo.author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:194
-#, fuzzy, c-format
-msgid "%s, by %s%s "
-msgstr "%s %s %s %s (%s) "
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | url 
@@ -892,7 +896,7 @@ msgstr ""
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:884
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, fuzzy, c-format
 msgid "%sYes%s "
 msgstr "Гарчиггүй "
@@ -905,8 +909,8 @@ msgstr "Гарчиггүй "
 msgid "%sYes%sNo%s "
 msgstr "Гарчиггүй "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:159
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Өмнөх"
@@ -1321,7 +1325,7 @@ msgstr "(%s номууд)"
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1583,7 +1587,7 @@ msgid "(on hold)"
 msgstr "Барилтанд байгаа"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:857
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
 #, fuzzy, c-format
 msgid "(only %s)"
 msgstr "(%s байна)"
@@ -1788,7 +1792,7 @@ msgstr ""
 msgid "A similar document already exists: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "Тусгай төрөл алга"
@@ -1892,7 +1896,7 @@ msgid "Add another field"
 msgstr "Өөр талбарыг нэмэх"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Add note"
 msgstr "OPAC санамж"
@@ -1953,13 +1957,13 @@ msgid "Add to..."
 msgstr "Дараах рүү нэмэх"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:92
 #, fuzzy, c-format
 msgid "Added %s by"
 msgstr "%s, %s "
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, c-format
 msgid "Added %s by you"
 msgstr ""
@@ -2040,12 +2044,12 @@ msgid "All collections"
 msgstr "Цуглуулга"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will resume."
 msgstr ""
 
@@ -2250,7 +2254,7 @@ msgid "Any item "
 msgstr "Дурын зүйлийн төрөл"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Any item type"
 msgstr "Дурын зүйлийн төрөл"
@@ -2266,14 +2270,14 @@ msgid "Apply field weights to search "
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, fuzzy
 msgid "Are you sure you want to cancel this hold?"
@@ -2292,7 +2296,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 #, fuzzy
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж байна уу?"
@@ -2345,7 +2349,7 @@ msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to remove this recall?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
@@ -2357,7 +2361,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж байна уу?"
@@ -2369,7 +2373,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
@@ -2385,7 +2389,7 @@ msgstr "Хүрэлцэн ирсэн"
 msgid "Article request fee"
 msgstr "Дараахьд хийгдсэн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 #, fuzzy, c-format
 msgid "Article requests"
 msgstr "Дараахьд хийгдсэн"
@@ -2419,7 +2423,7 @@ msgid ""
 msgstr ""
 
 #. OPTION
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
 msgid "At least one item is available at this library"
 msgstr ""
 
@@ -2638,7 +2642,7 @@ msgstr "Бэлэн байдал"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, c-format
 msgid "Average rating: %s (%s votes)"
@@ -2691,7 +2695,7 @@ msgstr "Буцах"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -2924,7 +2928,7 @@ msgstr "%s - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3001,7 +3005,7 @@ msgstr "Холбоо барих утас:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:512
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
@@ -3052,7 +3056,7 @@ msgstr "Цуцлах"
 msgid "CancelRecall "
 msgstr "Цуцлах"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
 #, fuzzy, c-format
 msgid "Canceled"
 msgstr "Цуцлах"
@@ -3084,8 +3088,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr ""
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:390
 #, fuzzy
 msgid "Cannot be put on hold"
 msgstr "Авагдаагүй"
@@ -3381,8 +3385,8 @@ msgstr "Арилгах"
 msgid "Clear date"
 msgstr "Захиалгын лгноо:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:962
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr ""
@@ -3437,7 +3441,7 @@ msgstr "Google Books-д харахаар дарах"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1363
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1372
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:954
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:360
@@ -3518,7 +3522,7 @@ msgstr "Шалгахыг хүсэж байгаа зүйлсээ сонгох"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -3623,7 +3627,7 @@ msgstr "Онлайн Коха каталог "
 msgid "Comments%s"
 msgstr "Сэтгэгдлүүд"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "Completed"
 msgstr ""
@@ -3640,7 +3644,7 @@ msgid "Confirm"
 msgstr "Батлах"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:482
 #, fuzzy
 msgid "Confirm hold"
 msgstr "Батлах"
@@ -3727,7 +3731,7 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, fuzzy, c-format
 msgid "Copy"
@@ -3736,7 +3740,7 @@ msgstr "Зохиогчийн эрх"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
 #, fuzzy, c-format
 msgid "Copy number"
 msgstr "Картындугаар"
@@ -3854,7 +3858,7 @@ msgstr "Онлайн Коха каталог "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:472
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, fuzzy, c-format
@@ -4027,7 +4031,7 @@ msgstr "Фондод авсан огноо: Хамгийн шинээс хамг
 msgid "Date added (oldest to newest)"
 msgstr "Фондод авсан огноо: Хамгийн хуучнаас хамгийн шинэ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, fuzzy, c-format
 msgid "Date added:"
 msgstr "Болзолт огноо"
@@ -4062,7 +4066,7 @@ msgstr "Хүлээж авагдсан огноо"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:75
 #, c-format
 msgid "Date:"
 msgstr "Огноо:"
@@ -4138,7 +4142,7 @@ msgid "Delete selected"
 msgstr "Устгагдсан өгөгдөл"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:183
 #, fuzzy
 msgid "Delete selected tags"
 msgstr "Энэ таагийг устгах"
@@ -4291,7 +4295,7 @@ msgstr ""
 msgid "Displaying availability results"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:968
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:966
 #, fuzzy, c-format
 msgid "Do not suspend"
 msgstr "Бичлэг олдсонгүй"
@@ -4305,19 +4309,19 @@ msgstr ""
 "Та энэ захиалгын шинэ дугаар ирсэн тухай цахим шуудан хүлээж авахыг хүсэж "
 "байна уу?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:219
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Номын сангийн үнэмлэх байхгүй юу?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Нууц үг  байгаа юу?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, fuzzy, c-format
 msgid "Don't have an account? "
 msgstr "Нууц үг  байгаа юу?"
@@ -4384,7 +4388,7 @@ msgstr "Буцааж өгөх хугацаа"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:425
 #, c-format
 msgid "Due %s"
 msgstr "Болзолт  %s"
@@ -4468,7 +4472,7 @@ msgid "Edit list &nbsp;"
 msgstr "Жагсаалтыг засварлах "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Edit note"
 msgstr "Түгээлтийн санамж"
@@ -4502,7 +4506,7 @@ msgstr "Онлайн Коха каталог "
 msgid "Editions"
 msgstr "Хэвлэлтүүд"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:56
 #, c-format
 msgid "Email"
@@ -4795,7 +4799,7 @@ msgid "Expected"
 msgstr "Хүлээгдсэн"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Expecting a specific item selection."
 msgstr ""
 
@@ -4813,8 +4817,8 @@ msgstr "Хугацаа дуусах огноо"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:781
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Expiration:"
 msgstr "Хугацаа дуусах:"
@@ -5000,11 +5004,11 @@ msgstr ""
 msgid "Forgiven"
 msgstr "Өршөөгдсөн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:223
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:402
 #, fuzzy, c-format
 msgid "Forgot your password?"
 msgstr "Та нууц үгээ өөрчилж чадахгүй."
@@ -5214,11 +5218,6 @@ msgstr "Очих"
 msgid "Go to OPAC"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
-#, fuzzy, c-format
-msgid "Go to Staff client"
-msgstr "Холбоо барих дэлгэрэнгүй мэдээлэл"
-
 #. LI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
@@ -5231,6 +5230,11 @@ msgstr "Холбоо барих дэлгэрэнгүй мэдээлэл"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
 msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
+#, fuzzy, c-format
+msgid "Go to staff interface"
+msgstr "Холбоо барих дэлгэрэнгүй мэдээлэл"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:10
@@ -5359,12 +5363,12 @@ msgid "Hi,"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, fuzzy
 msgid "Hide options"
 msgstr "Бусад сонголтууд"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, fuzzy, c-format
 msgid "Hide unholdable items"
 msgstr "Хуулбарууд дараахьд бэлэн байгаа:"
@@ -5385,13 +5389,13 @@ msgstr ""
 msgid "Hold date"
 msgstr "Барилтын огноо"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, fuzzy, c-format
 msgid "Hold date:"
 msgstr "Барилтын огноо"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -5405,12 +5409,12 @@ msgstr "Дараахьд зориулагдаж баригдсан:"
 msgid "Hold filled"
 msgstr "Дараахьд зориулагдаж баригдсан:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "Авсан огноо"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Барилтын огноо"
@@ -5426,11 +5430,11 @@ msgid "Hold requests"
 msgstr "Барилтын харьцаанууд"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold start date should be filled."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "Барилтын огноо"
@@ -5567,7 +5571,7 @@ msgstr "Бүх номын сангууд"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, fuzzy, c-format
 msgid "Home library"
 msgstr "Шинэ номын сан"
@@ -5763,14 +5767,14 @@ msgid ""
 "you may login below."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:220
 #, fuzzy, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr ""
 "Хэрвээ танд номын сангийн карт байхгүй бол локал номын сандаа очиж авна уу."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -5846,14 +5850,16 @@ msgid "Image from Syndetics"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:51
 #, fuzzy, c-format
 msgid "Images"
 msgstr "Зураг"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:72
+#. %1$s:  INCLUDE 'biblio-title.inc' link=> 1 
+#. %2$s:  biblio.author | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #, fuzzy, c-format
-msgid "Images for "
+msgid "Images for %s %s "
 msgstr "Зураг"
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' 
@@ -5915,7 +5921,7 @@ msgstr "%s %s -рүү баримт шилжиж байна "
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:427
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
@@ -5941,7 +5947,7 @@ msgid "Indexes"
 msgstr "Индексүүд"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #, c-format
 msgid "Information"
 msgstr "Мэдээлэл"
@@ -6109,13 +6115,13 @@ msgstr ""
 msgid "Item holds"
 msgstr "Зүйл %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:118
 #, fuzzy, c-format
 msgid "Item in processing"
 msgstr "Зүйлийн боловсруулалтын сонголборыг өөрчилсөн"
 
 #. %1$s:  branch_name| $raw 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:115
 #, fuzzy, c-format
 msgid "Item in transit from %s since"
 msgstr "%s -с %s хүртэлх үр дүнгүүд %s-н"
@@ -6147,7 +6153,7 @@ msgid "Item not renewed"
 msgstr "Зүйлс хүлээгдсэн"
 
 #. %1$s:  HOLD.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:60
 #, fuzzy, c-format
 msgid "Item on hold: %s"
 msgstr "Авагдаагүй"
@@ -6174,7 +6180,7 @@ msgstr "Зүйлс хүлээгдсэн"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6192,7 +6198,7 @@ msgid "Item type:"
 msgstr "Зүйлийн төрөл:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:224
 #, fuzzy, c-format
 msgid "Item type: "
 msgstr "Зүйлийн төрөл:"
@@ -6328,7 +6334,7 @@ msgid "Last "
 msgstr "Сүүлд харагдсан"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, fuzzy, c-format
 msgid "Last location"
 msgstr "Байршил"
@@ -6540,7 +6546,7 @@ msgstr "Кодчилж байна"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #, fuzzy
 msgid "Loading..."
@@ -6612,11 +6618,11 @@ msgid "Locations"
 msgstr "Байршил"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:207
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:414
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:392
 #, fuzzy, c-format
 msgid "Log in"
 msgstr "Архив рүү харагч"
@@ -6716,7 +6722,7 @@ msgstr "Орхих"
 msgid "Log out and try again with a different user."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Энэ каталог руу нэвтрэх нь номын сангаар зөвшөөрөгдөөгүй байна."
@@ -6732,13 +6738,13 @@ msgstr "Нэвтрэх:"
 msgid "Login page"
 msgstr "Нэвтрэх:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:193
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
 #, c-format
 msgid "Login:"
 msgstr "Нэвтрэх:"
@@ -7062,7 +7068,7 @@ msgstr "Хугацаа дуусна: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, fuzzy, c-format
 msgid "Never expires %s %s "
 msgstr "Хугацаа дуусна: "
@@ -7076,7 +7082,7 @@ msgid ""
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
 #, c-format
 msgid "New"
 msgstr "Шинэ"
@@ -7173,12 +7179,12 @@ msgstr "Дараагийн"
 msgid "Next "
 msgstr "Дараагийн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:170
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Дараагийн &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:324
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "Дараагийн бэлэн байгаа"
@@ -7252,9 +7258,9 @@ msgstr "Авагдаагүй."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:118
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:280
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
@@ -7431,13 +7437,13 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "Та эн бичлэгийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not cancel hold"
 msgstr "Авагдаагүй"
@@ -7467,7 +7473,7 @@ msgid "No, do not remove sharing"
 msgstr "Уучлаарай, та %s-с олон ном авч болохгүй. "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not resume holds"
 msgstr "Уучлаарай, та %s-с олон ном авч болохгүй. "
@@ -7546,7 +7552,7 @@ msgstr "Зээллэгт зориулагдаагүй(%s)"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:435
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Зээллэгт зориулагдаагүй(%s)"
@@ -7556,7 +7562,7 @@ msgstr "Зээллэгт зориулагдаагүй(%s)"
 msgid "Not issued"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:461
 #, c-format
 msgid "Not on hold"
 msgstr "Авагдаагүй"
@@ -7592,7 +7598,7 @@ msgstr "Санамжууд:"
 msgid "Note: "
 msgstr "Санамжууд:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7661,7 +7667,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:364
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -7695,7 +7701,7 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7723,7 +7729,7 @@ msgstr ""
 msgid "Number"
 msgstr "Дугаар"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
 #, fuzzy, c-format
 msgid "Number of holds: "
 msgstr "Саруудын тоо:"
@@ -7752,7 +7758,7 @@ msgstr "Зөвшөөрөх"
 msgid "OR"
 msgstr "ЭСВЭЛ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8048,13 +8054,13 @@ msgstr "Нууц үг"
 msgid "Password updated"
 msgstr "Нууц үг шинэчлэгдсэн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:195
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:411
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:390
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:13
 #, c-format
 msgid "Password:"
@@ -8108,14 +8114,14 @@ msgid "Payout"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
 #, fuzzy, c-format
 msgid "Pending"
 msgstr "Үргэлжилж байна"
 
 #. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:123
 #, c-format
 msgid "Pending for next available item of item type '%s'"
 msgstr ""
@@ -8165,9 +8171,9 @@ msgstr "Дараахьд авах:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:792
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:84
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "Дараахьд авах:"
@@ -8189,7 +8195,7 @@ msgid "Pickup location"
 msgstr "Дараахьд авах:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, fuzzy
 msgid "Place a hold on"
 msgstr "Дараахьд хийгдсэн"
@@ -8200,7 +8206,7 @@ msgid "Place a hold on "
 msgstr "Дараахьд хийгдсэн"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, fuzzy
 msgid "Place a hold on: "
 msgstr "Дараахьд хийгдсэн"
@@ -8430,7 +8436,7 @@ msgstr ""
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -8571,7 +8577,7 @@ msgid "Please select a specific item for this article request."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 msgid "Please select a tag to delete."
 msgstr ""
 
@@ -8734,7 +8740,7 @@ msgstr "%s Өөрөө авах"
 msgid "Priority"
 msgstr "Эрэмбэ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:90
 #, c-format
 msgid "Priority:"
 msgstr "Эрэмбэ:"
@@ -8773,7 +8779,7 @@ msgstr ""
 msgid "Problem found on page: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
 #, fuzzy, c-format
 msgid "Processing"
 msgstr "Мэргэжлийн"
@@ -8855,7 +8861,7 @@ msgstr "Хэвлэлт/Хуулбарлах эрхийн огноо:Шинээс
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Хэвлэлт/Хуулбарлах эрхийн огноо: Хуучнаас шинэ рүү"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:54
 #, c-format
 msgid "Publication:"
 msgstr "Хэвлэл:"
@@ -9159,9 +9165,9 @@ msgstr ""
 msgid "Register a new account"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, fuzzy, c-format
 msgid "Register here."
 msgstr "Таагийн төлөв энд байна."
@@ -9282,7 +9288,7 @@ msgstr "Шинэчлэх"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew all"
 msgstr "Бүгдийг шинэчлэх"
@@ -9297,7 +9303,7 @@ msgstr "Шинэчлэх"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Renew selected"
 msgstr "Зүйл сонгогдоогүй байна"
@@ -9395,7 +9401,7 @@ msgstr "Хуулийн өгүүллүүд"
 msgid "Request placed:"
 msgstr "Хуулийн өгүүллүүд"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, fuzzy, c-format
 msgid "Request specific item type:"
 msgstr "Тусгай төрөл алга"
@@ -9500,7 +9506,7 @@ msgstr "Шаардлагатай"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -9577,17 +9583,17 @@ msgstr "%s -с %s хүртэлх үр дүнгүүд %s-н"
 msgid "Results per page: "
 msgstr "Хуудас болгоны үр дүнгүүд :"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:136
 #, fuzzy, c-format
 msgid "Resume"
 msgstr "Үр дүн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:184
 #, c-format
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
 #, fuzzy, c-format
 msgid "Resume hold"
 msgstr "Барилт тавих"
@@ -9759,7 +9765,7 @@ msgstr "Жагсаалт рүү нэмэх:"
 msgid "Save to your lists"
 msgstr "Таны жагсаалтууд руу хадгалах "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, fuzzy, c-format
 msgid "Scan"
@@ -9809,7 +9815,7 @@ msgstr "Шинэ зүйлийг шинжээд түүний бар кодыг о
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:171
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Search"
@@ -9859,7 +9865,7 @@ msgid "Search for this title in:"
 msgstr "Энэ гарчгийг дараахьд хайх:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
 #, fuzzy
 msgid "Search for works by this author"
 msgstr "Энэ гарчгийг дараахьд хайх:"
@@ -9993,7 +9999,7 @@ msgstr "Цуглуулга:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
@@ -10028,7 +10034,7 @@ msgstr "Номын санг сонгох:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #, fuzzy, c-format
 msgid "Select a specific item:"
 msgstr "Одоо байгаа жагсаалтыг сонгох"
@@ -10366,8 +10372,8 @@ msgstr "Жагсаалтыг сонгох"
 msgid "Show more"
 msgstr "Бусад сонголтуудыг харуулах"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:277
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, c-format
 msgid "Show more options"
 msgstr "Бусад сонголтуудыг харуулах"
@@ -10377,7 +10383,7 @@ msgstr "Бусад сонголтуудыг харуулах"
 msgid "Show the top "
 msgstr "Бусад сонголтуудыг харуулах"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 #, fuzzy, c-format
 msgid "Show unholdable items"
 msgstr "Бүх зүйлсийн тоо"
@@ -10462,7 +10468,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -10572,7 +10578,7 @@ msgstr ""
 "Уучлаарай, Энэ өөрөө авалтын станц нь танилтгүй болсон байна. Энэ асуудлыг "
 "шийдэхээр системийн зохицуулагчтай холбоо барина уу."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:199
 #, fuzzy, c-format
 msgid "Sorry, you are too young to place a hold for this item."
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
@@ -10713,7 +10719,7 @@ msgstr "Төлөв"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:95
 #, fuzzy, c-format
 msgid "Status:"
 msgstr "Төлөв"
@@ -10819,7 +10825,7 @@ msgstr "Энэ цонхыг тушааж, хаах"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Submit changes"
 msgstr "Тушаах"
@@ -10833,7 +10839,7 @@ msgstr "Өөрчлөлтийн архив"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "Тушаах"
@@ -11010,30 +11016,30 @@ msgstr "Нэр:"
 msgid "Surveys"
 msgstr "Судалгаанууд"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:965
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:144
 #, c-format
 msgid "Suspend"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:171
 #, fuzzy, c-format
 msgid "Suspend all holds"
 msgstr "Үргэлжил байгаа барилтуудын тусламж"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
 #, fuzzy, c-format
 msgid "Suspend hold"
 msgstr "Барилтанд байгаа"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:959
 #, c-format
 msgid "Suspend until:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "Suspended"
 msgstr "Барилтанд байгаа"
@@ -11463,7 +11469,7 @@ msgstr "Энэ зүйлд сэтгэгдэл алга байна."
 msgid "There are no items available for recall."
 msgstr "Зүйлс бэлэн биш байна:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
 #, c-format
 msgid "There are no items that can be placed on hold."
 msgstr ""
@@ -11687,19 +11693,19 @@ msgstr "Энэ бичлэгт зүйл алга. "
 msgid "This subscription is closed."
 msgstr "Энэ захиалга %s-д хугацаа нь дуусна"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:212
 #, c-format
 msgid "This title cannot be requested."
 msgstr ""
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:94
 msgid "Thumbnail"
 msgstr ""
 
@@ -11787,7 +11793,7 @@ msgstr ""
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Номын санд бэлэн"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #, fuzzy, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Номын санд бэлэн"
@@ -11906,7 +11912,7 @@ msgid "Unable to update your setting!"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Бэлэн биш (алдагдсан)"
@@ -12000,7 +12006,7 @@ msgstr "Таны нууц үгийг өөрчлөх"
 msgid "Use this to report any problems with your currently checked out items"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:243
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Коха-н өөр хэсэг рүү очихын тул дээд цэсний мөрийг ашиглах."
@@ -12015,7 +12021,7 @@ msgstr ""
 msgid "Used for/see from:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:223
 #, fuzzy, c-format
 msgid "User summary"
 msgstr "Дугааруудын хураангуй"
@@ -12093,9 +12099,7 @@ msgid "View all the physical items."
 msgstr "Энэ бичлэгт зүйл алга. "
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:111
 msgid "View details for this title"
 msgstr "Энэ гарчгийн тухай дэлгэрэнгүй мэдээллийг харах"
 
@@ -12137,7 +12141,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "Ботийн мэдээлэл"
@@ -12154,7 +12158,7 @@ msgid "Volume:"
 msgstr "Багана"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:441
 #, fuzzy, c-format
 msgid "Waiting"
 msgstr "Хүлээж байна"
@@ -12193,7 +12197,7 @@ msgstr ""
 msgid "Website"
 msgstr "Веб хуудас"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, fuzzy, c-format
 msgid "Welcome, "
 msgstr "Тавтай морилно уу, <a1> "
@@ -12307,13 +12311,13 @@ msgid "Yes, I agree."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "Та эн бичлэгийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "Цуцлах"
@@ -12343,13 +12347,13 @@ msgid "Yes, remove sharing"
 msgstr "Кодчлогдсон талбарууд"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, resume all holds"
 msgstr "Үргэлжил байгаа барилтуудын тусламж"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "Үргэлжил байгаа барилтуудын тусламж"
@@ -12608,12 +12612,12 @@ msgstr "Та дараах зээлтэй байна:"
 msgid "You have already placed a "
 msgstr "Та дараах зээлтэй байна:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:204
 #, fuzzy, c-format
 msgid "You have already placed a recall on this title."
 msgstr "Энэ зүйлд сэтгэгдэл алга байна."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:202
 #, c-format
 msgid "You have already requested this title."
 msgstr ""
@@ -12623,7 +12627,7 @@ msgstr ""
 msgid "You have checked out too many items and can't check out any more."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:930
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
 #, c-format
 msgid "You have no article requests currently."
 msgstr ""
@@ -12735,7 +12739,7 @@ msgstr ""
 msgid "You may only add up to %s suggestions in %s days."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:231
 #, fuzzy, c-format
 msgid "You may register here."
 msgstr "Таагийн төлөв энд байна."
@@ -13179,18 +13183,18 @@ msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Онлайн Коха каталог "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Энэ каталог руу нэвтрэх нь номын сангаар зөвшөөрөгдөөгүй байна."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "АЛДАА: Ном судлалын дугаар хүлээн авагдсангүй"
@@ -13258,7 +13262,7 @@ msgstr ""
 msgid "Your personal details"
 msgstr "Илүү дэлгэрэнгүй мэдээлэл"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, fuzzy, c-format
 msgid "Your priority: "
 msgstr "Эрэмбэ:"
@@ -13305,7 +13309,7 @@ msgstr "Шинэ худалдан авалтын санал"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "Таны жагсаалтууд "
@@ -13501,7 +13505,7 @@ msgstr ""
 msgid "ask for a discharge"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:447
 #, fuzzy, c-format
 msgid "at"
 msgstr "Карт"
@@ -13611,7 +13615,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:261
 #, fuzzy, c-format
 msgid "due in fines and charges "
 msgstr "Мөнгөний төрлүүд ба солилцох ханшууд"
@@ -13671,7 +13675,7 @@ msgstr ""
 msgid "every year"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:449
 #, fuzzy, c-format
 msgid "expected at"
 msgstr "Хүлээгдсэн"
@@ -13702,7 +13706,7 @@ msgstr "Шинэ жагсаалт үүсгэх"
 msgid "for more information on what it does and how to configure it."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:445
 #, fuzzy, c-format
 msgid "for patron"
 msgstr "Үйлчлүүлэгч"
@@ -14080,7 +14084,7 @@ msgstr ""
 msgid "show_loans"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:451
 #, c-format
 msgid "since"
 msgstr ""
@@ -14223,12 +14227,12 @@ msgstr ""
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "until"
 msgstr "Өсвөр үеийн "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:175
 #, fuzzy, c-format
 msgid "until "
 msgstr "Өсвөр үеийн "
@@ -14431,10 +14435,6 @@ msgstr ""
 #~ msgstr "%s %s %s %s шилжсэн баримт"
 
 #, fuzzy
-#~ msgid "%s %s %s by "
-#~ msgstr "%s %s %s %s(%s)"
-
-#, fuzzy
 #~ msgid "%s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 #~ msgstr ""
 #~ "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s Энэ бичлэг баримтгүй байна. "
@@ -14528,6 +14528,10 @@ msgstr ""
 #~ msgstr "Таны энэ номын сангаас юуу ч авч байгаагүй байна. "
 
 #, fuzzy
+#~ msgid "%s by "
+#~ msgstr ", %s-н өмнө "
+
+#, fuzzy
 #~ msgid ""
 #~ "%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s "
 #~ "%s "
@@ -14550,6 +14554,10 @@ msgstr ""
 #~ "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 #~ "%sPurchase Suggestions%s"
 #~ msgstr "Каталог  &rsaquo;дараахьд зориулсан номын сангийн нүүр "
+
+#, fuzzy
+#~ msgid "%s, by %s%s "
+#~ msgstr "%s %s %s %s (%s) "
 
 #, fuzzy
 #~ msgid "%sby %s%s "

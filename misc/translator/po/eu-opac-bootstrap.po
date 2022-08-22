@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-07-17 09:49-0300\n"
+"POT-Creation-Date: 2022-08-15 21:07-0300\n"
 "PO-Revision-Date: 2022-05-01 09:14-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: eu\n"
@@ -113,6 +113,16 @@ msgstr "%s %s %s Oharra: leiho hau automatikoki itxiko da 5 segundu barru%s "
 msgid "%s %s %s [%%~ SET line_break = \""
 msgstr ""
 
+#. %1$s:  END # / bibitemloo.holdable 
+#. %2$s:  INCLUDE 'biblio-title.inc' biblio=bibitemloo link=> 1
+#. %3$s:  IF ( bibitemloo.author ) 
+#. %4$s:  bibitemloo.author | html 
+#. %5$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#, fuzzy, c-format
+msgid "%s %s %s, by %s%s "
+msgstr "%s, %s %s %s "
+
 #. %1$s:  IF RestrictedPageTitle 
 #. %2$s:  RestrictedPageTitle | html 
 #. %3$s:  END 
@@ -214,6 +224,13 @@ msgid ""
 "issues %s %s "
 msgstr "%s %s Ale berrien e-mail bidezko notifikaziora harpidetu zara %s %s "
 
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=review link=> 1 
+#. %2$s:  IF ( review.author ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:46
+#, fuzzy, c-format
+msgid "%s %s by "
+msgstr "%s egilea: "
+
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
 #. %3$s:  i.author | html 
@@ -222,6 +239,17 @@ msgstr "%s %s Ale berrien e-mail bidezko notifikaziora harpidetu zara %s %s "
 #, c-format
 msgid "%s %s by %s %s "
 msgstr "%s, %s %s %s "
+
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 
+#. %2$s:  IF ( MY_TAG.author ) 
+#. %3$s:  MY_TAG.author | html 
+#. %4$s:  END 
+#. %5$s:  END # /IF MY_TAG.XSLTBloc 
+#. %6$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
+#, fuzzy, c-format
+msgid "%s %s by %s %s %s %s "
+msgstr "%s %s %s %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
@@ -412,13 +440,13 @@ msgstr ""
 "kontsultatu."
 
 #. %1$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:107
 #, fuzzy, c-format
 msgid "%s Item in transit to "
 msgstr "%s %s Itema bidean "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, fuzzy, c-format
 msgid "%s Item waiting at "
 msgstr "%s %s %s Itema zain "
@@ -470,7 +498,7 @@ msgstr "%s Ez da emaitzarik aurkitu, saiatu iragazkiak aldatzen %s "
 #. %3$s:  FOREACH subtitle IN biblio.subtitle.split(' \| ') 
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:6
 #, fuzzy, c-format
 msgid "%s No title %s %s%s,%s "
 msgstr "%s %s %s%s%sIzenbururik gabe%s %s %s%s "
@@ -616,22 +644,6 @@ msgstr "%s Ez duzu bilaketa-irizpiderik zehaztu. %s "
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%sEz duzu inoiz mailegurik eskatu liburutegi honetan. %s "
 
-#. %1$s:  IF ( review.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#, c-format
-msgid "%s by "
-msgstr "%s egilea: "
-
-#. %1$s:  IF ( MY_TAG.author ) 
-#. %2$s:  MY_TAG.author | html 
-#. %3$s:  END 
-#. %4$s:  END # /IF MY_TAG.XSLTBloc 
-#. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:168
-#, fuzzy, c-format
-msgid "%s by %s %s %s %s "
-msgstr "%s %s %s %s %s "
-
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
 #, c-format
@@ -751,18 +763,10 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s "
 #. %7$s:  HOLD.expirationdate | $KohaDates 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, fuzzy, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
 msgstr "%s %s %s%s%s Izenbururik gabe %s %s %s%s "
-
-#. %1$s:  IF ( bibitemloo.author ) 
-#. %2$s:  bibitemloo.author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:194
-#, c-format
-msgid "%s, by %s%s "
-msgstr "%s, egilea %s%s"
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | url 
@@ -923,7 +927,7 @@ msgstr ""
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:884
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, fuzzy, c-format
 msgid "%sYes%s "
 msgstr "%sBai%s"
@@ -936,8 +940,8 @@ msgstr "%sBai%s"
 msgid "%sYes%sNo%s "
 msgstr "%sBai%sEz%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:159
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Aurrekoa"
@@ -1589,7 +1593,7 @@ msgstr "(%s erregistroak)"
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1853,7 +1857,7 @@ msgid "(on hold)"
 msgstr "(Erreserbatua)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:857
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
 #, fuzzy, c-format
 msgid "(only %s)"
 msgstr "(%s da)"
@@ -2064,7 +2068,7 @@ msgstr ""
 msgid "A similar document already exists: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
 #, c-format
 msgid "A specific item"
 msgstr "Kopia jakin bat "
@@ -2173,7 +2177,7 @@ msgid "Add another field"
 msgstr "Gehitu beste eremu bat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Add note"
 msgstr "Agregar cita"
@@ -2234,13 +2238,13 @@ msgid "Add to..."
 msgstr "Gehitu:"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:92
 #, c-format
 msgid "Added %s by"
 msgstr ""
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, c-format
 msgid "Added %s by you"
 msgstr ""
@@ -2321,12 +2325,12 @@ msgid "All collections"
 msgstr "Bilduma guztiak"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will resume."
 msgstr ""
 
@@ -2537,7 +2541,7 @@ msgid "Any item "
 msgstr "Bakarrik elementu hau"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Any item type"
 msgstr "Edozein elementu mota"
@@ -2553,14 +2557,14 @@ msgid "Apply field weights to search "
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Ziur zaude erreserba hau bertan behera utzi nahi duzula?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Ziur zaude erreserba hau bertan behera utzi nahi duzula?"
@@ -2577,7 +2581,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Ziur al zaude zure bilaketa-historiala ezabatu nahi duzula?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 #, fuzzy
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Ziur al zaude erlazionatutako berriak ezabatu nahi dituzula?"
@@ -2624,7 +2628,7 @@ msgstr "Ziur al zaude zerrendako item hauek ezabatu nahi dituzula?"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to remove this recall?"
 msgstr "Ziur al zaude zerrenda hau ezabatu nahi duzula?"
@@ -2635,7 +2639,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Ziur al zaude zerrenda hau ezabatu nahi duzula?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Ziur al zaurde erreserba hau kantzelatu nahi duzula?"
 
@@ -2646,7 +2650,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Ziur zaude elementu hau ezabatu nahi duzula?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Ziur al zaude erreserba guztiak kantzelatu nahi dituzula?"
 
@@ -2662,7 +2666,7 @@ msgid "Article request fee"
 msgstr "Oraindik %s eskaera gelditzen dira"
 
 # Circulation > Article Requests
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 #, fuzzy, c-format
 msgid "Article requests"
 msgstr "Ikastaroen erreserbak"
@@ -2697,7 +2701,7 @@ msgid ""
 msgstr ""
 
 #. OPTION
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
 msgid "At least one item is available at this library"
 msgstr ""
 
@@ -2918,7 +2922,7 @@ msgstr "Eskuragarri dauden aleak"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, fuzzy, c-format
 msgid "Average rating: %s (%s votes)"
@@ -2970,7 +2974,7 @@ msgstr "Aurrekoa"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3205,7 +3209,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3282,7 +3286,7 @@ msgstr "Signatura topografikoa:  %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:512
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
@@ -3333,7 +3337,7 @@ msgstr "CancelHold"
 msgid "CancelRecall "
 msgstr "CancelRecall "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
 #, fuzzy, c-format
 msgid "Canceled"
 msgstr "Bertan behera utzi"
@@ -3365,8 +3369,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr " Bazkidearen erreserba aktiboaren eskaera bertan behera uzten du."
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:390
 msgid "Cannot be put on hold"
 msgstr "Ezin da erreserbatu"
 
@@ -3657,8 +3661,8 @@ msgstr "Garbitu dena"
 msgid "Clear date"
 msgstr "Garbitu data"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:962
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Ezabatu data aldi baterako suspenditzeko"
@@ -3712,7 +3716,7 @@ msgstr " Sakatu Google Books-en ikusteko"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1363
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1372
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:954
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:360
@@ -3792,7 +3796,7 @@ msgstr "Interesatua zauden itemak bildu"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -3896,7 +3900,7 @@ msgstr "%s %s%s%sKoha online%s katalogoa%s"
 msgid "Comments%s"
 msgstr "Iruzkinak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "Completed"
 msgstr ""
@@ -3913,7 +3917,7 @@ msgid "Confirm"
 msgstr "Baieztatu"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:482
 msgid "Confirm hold"
 msgstr "Berretsi erreserba"
 
@@ -3999,7 +4003,7 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, c-format
 msgid "Copy"
@@ -4008,7 +4012,7 @@ msgstr "Kopia"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
 #, c-format
 msgid "Copy number"
 msgstr "Copia número "
@@ -4128,7 +4132,7 @@ msgstr "%s %s%s%sKoha online%s katalogoa%s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:472
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
@@ -4307,7 +4311,7 @@ msgstr "Eskuratze data: berrienetatik hasi"
 msgid "Date added (oldest to newest)"
 msgstr "Eskuratze data: zaharrenetatik hasi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, c-format
 msgid "Date added:"
 msgstr "Sarrera-data:"
@@ -4342,7 +4346,7 @@ msgstr "Jasotze-data"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:75
 #, c-format
 msgid "Date:"
 msgstr "Data:"
@@ -4421,7 +4425,7 @@ msgid "Delete selected"
 msgstr "Ezabatu aukeratutakoak"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:183
 #, fuzzy
 msgid "Delete selected tags"
 msgstr "Ezabatu aukeratutako elementuak"
@@ -4572,7 +4576,7 @@ msgstr "Bistaratu hemendik:"
 msgid "Displaying availability results"
 msgstr "Izenburu orriaren erabilgarritasun kodea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:968
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:966
 #, fuzzy, c-format
 msgid "Do not suspend"
 msgstr "Ez erabili."
@@ -4586,19 +4590,19 @@ msgstr ""
 "Harpidetza honen zenbaki berri bat iristen zaigunean jaso nahi duzu e-mail "
 "bat ?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:219
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Ez daukazu liburutegi-txartelik?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Oraindik ez daukazu pasahitzik?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Don't have an account? "
 msgstr "Oraindik ez daukazu pasahitzik? "
@@ -4665,7 +4669,7 @@ msgstr "Itzulketa"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:425
 #, c-format
 msgid "Due %s"
 msgstr "Itzulketak %s"
@@ -4749,7 +4753,7 @@ msgid "Edit list &nbsp;"
 msgstr "Editar lista "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Edit note"
 msgstr "Editar en servidor"
@@ -4783,7 +4787,7 @@ msgstr "Editar lista de enrutamiento para "
 msgid "Editions"
 msgstr "Edizioak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:56
 #, c-format
 msgid "Email"
@@ -5076,7 +5080,7 @@ msgid "Expected"
 msgstr "Espero da"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Expecting a specific item selection."
 msgstr "Jakineko kopia baten hautaketaren zain"
 
@@ -5094,8 +5098,8 @@ msgstr "Iraungitze-data:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:781
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Expiration:"
 msgstr "Iraungipena:"
@@ -5289,11 +5293,11 @@ msgstr ""
 msgid "Forgiven"
 msgstr "Barkatuta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:223
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:402
 #, c-format
 msgid "Forgot your password?"
 msgstr "Pasahitza ahaztu zaizu?"
@@ -5518,11 +5522,6 @@ msgstr "Joan"
 msgid "Go to OPAC"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
-#, fuzzy, c-format
-msgid "Go to Staff client"
-msgstr "Ikus xehetasunak"
-
 #. LI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
@@ -5535,6 +5534,11 @@ msgstr "Ikus xehetasunak"
 #, fuzzy
 msgid "Go to page %s"
 msgstr "Ir a la página, "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
+#, fuzzy, c-format
+msgid "Go to staff interface"
+msgstr "Ikus xehetasunak"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:10
@@ -5662,11 +5666,11 @@ msgid "Hi,"
 msgstr "Kaixo,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hide options"
 msgstr "Ezkutatu aukerak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, fuzzy, c-format
 msgid "Hide unholdable items"
 msgstr "Agregar múltiples copias "
@@ -5687,13 +5691,13 @@ msgstr "Nabarmendu"
 msgid "Hold date"
 msgstr "Erreserba-data"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, c-format
 msgid "Hold date:"
 msgstr "Erreserba-data"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -5707,12 +5711,12 @@ msgstr "Erreserba kostua"
 msgid "Hold filled"
 msgstr "Erreserba kostua"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Geroago beharrezkoa ez den erreserba"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, c-format
 msgid "Hold notes:"
 msgstr "Erreserba oharra:"
@@ -5728,11 +5732,11 @@ msgid "Hold requests"
 msgstr "Erreserba proportzioak"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold start date should be filled."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
 #, c-format
 msgid "Hold starts on date:"
 msgstr "Erreserba data honetan hasiko da:"
@@ -5869,7 +5873,7 @@ msgstr "Jatorri-liburutegia"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, c-format
 msgid "Home library"
 msgstr "Jatorri-liburutegia"
@@ -6074,7 +6078,7 @@ msgid ""
 msgstr ""
 "CAS kontu bat eduki beharrean kontu lokal bat baduzu ere, sar zaitezke "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:220
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
@@ -6082,7 +6086,7 @@ msgstr ""
 "Liburutegiko bazkidea ez bazara, joan zure liburutegiko administraritzara "
 "eta bazkidetu."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -6158,14 +6162,16 @@ msgid "Image from Syndetics"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:51
 #, c-format
 msgid "Images"
 msgstr "Irudiak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:72
-#, c-format
-msgid "Images for "
+#. %1$s:  INCLUDE 'biblio-title.inc' link=> 1 
+#. %2$s:  biblio.author | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
+#, fuzzy, c-format
+msgid "Images for %s %s "
 msgstr "Imágenes para "
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' 
@@ -6227,7 +6233,7 @@ msgstr "%s %s Itema bidean "
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:427
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6253,7 +6259,7 @@ msgid "Indexes"
 msgstr "Aurkibideak"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #, c-format
 msgid "Information"
 msgstr "Informazioa"
@@ -6421,13 +6427,13 @@ msgstr "Alearen erreserba-errenkadaren lehentasuna"
 msgid "Item holds"
 msgstr "Item erreserbatua"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:118
 #, fuzzy, c-format
 msgid "Item in processing"
 msgstr "Elementuaren prozesatzea:"
 
 #. %1$s:  branch_name| $raw 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:115
 #, fuzzy, c-format
 msgid "Item in transit from %s since"
 msgstr "En cuarso desde %s a %s hasta %s"
@@ -6459,7 +6465,7 @@ msgid "Item not renewed"
 msgstr "Item berritua:"
 
 #. %1$s:  HOLD.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:60
 #, fuzzy, c-format
 msgid "Item on hold: %s"
 msgstr "Item erreserbatua"
@@ -6486,7 +6492,7 @@ msgstr "Item berritua:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6504,7 +6510,7 @@ msgid "Item type:"
 msgstr "Elementu mota:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:224
 #, c-format
 msgid "Item type: "
 msgstr "Item mota: "
@@ -6638,7 +6644,7 @@ msgid "Last "
 msgstr "Azkena "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Last location"
 msgstr "Azken kokalekua"
@@ -6850,7 +6856,7 @@ msgstr "Kargatzen"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "Kargatzen..."
@@ -6921,11 +6927,11 @@ msgid "Locations"
 msgstr "Kokalekua"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:207
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:414
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:392
 #, c-format
 msgid "Log in"
 msgstr "Sartu"
@@ -7025,7 +7031,7 @@ msgstr "Itxi saioa"
 msgid "Log out and try again with a different user."
 msgstr "Itxi saioa eta saiatu berriz erabiltzaile ezberdin batekin."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Liburutegiak ez du baimendu katalogorako sarbidea"
@@ -7041,13 +7047,13 @@ msgstr "Erabiltzailea"
 msgid "Login page"
 msgstr "Hasiera orria"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:193
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
 #, c-format
 msgid "Login:"
 msgstr "Erabiltzailea:"
@@ -7375,7 +7381,7 @@ msgstr "Ez da inoiz iraungitzen %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, fuzzy, c-format
 msgid "Never expires %s %s "
 msgstr "%s asteak %s %s "
@@ -7391,7 +7397,7 @@ msgstr ""
 "mailegatutako edo itzulitako item guztien erregistroa ezabatuko du."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
 #, c-format
 msgid "New"
 msgstr "Berria"
@@ -7488,12 +7494,12 @@ msgstr "Hurrengoa"
 msgid "Next "
 msgstr "Hurrengoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:170
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Hurrengoa &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:324
 #, c-format
 msgid "Next available item"
 msgstr "Urrengo item eskuragarria"
@@ -7570,9 +7576,9 @@ msgstr "Erakutsi maileguak"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:118
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:280
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
@@ -7745,13 +7751,13 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "Ez, ez Ezabatu"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not cancel hold"
 msgstr "Ez, ez Ezabatu"
@@ -7780,7 +7786,7 @@ msgid "No, do not remove sharing"
 msgstr "Ez, ez Ezabatu"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "No, do not resume holds"
 msgstr "Ez, ez Ezabatu"
@@ -7859,7 +7865,7 @@ msgstr "Ezin da mailegatu (%s)"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:435
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Ez da mailegatzen (%s)"
@@ -7869,7 +7875,7 @@ msgstr "Ez da mailegatzen (%s)"
 msgid "Not issued"
 msgstr "Moldatu gabea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:461
 #, c-format
 msgid "Not on hold"
 msgstr "Ez dago erreserbatua"
@@ -7905,7 +7911,7 @@ msgstr "Oharra:"
 msgid "Note: "
 msgstr "Oharra: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7982,7 +7988,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:364
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -8016,7 +8022,7 @@ msgid "Nothing"
 msgstr "Ezer"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8045,7 +8051,7 @@ msgstr "Novelist Select: "
 msgid "Number"
 msgstr "Zenbakia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
 #, c-format
 msgid "Number of holds: "
 msgstr "Erreserba-kopuruak:"
@@ -8074,7 +8080,7 @@ msgstr "Onartu"
 msgid "OR"
 msgstr "OR"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8373,13 +8379,13 @@ msgstr "Ahaztutako pasahitza berreskuratu"
 msgid "Password updated"
 msgstr "Pasahitza eguneratu da"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:195
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:411
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:390
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:13
 #, c-format
 msgid "Password:"
@@ -8433,14 +8439,14 @@ msgid "Payout"
 msgstr "Txantilloia"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
 #, fuzzy, c-format
 msgid "Pending"
 msgstr "Egin gabeko eskaerak"
 
 #. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:123
 #, c-format
 msgid "Pending for next available item of item type '%s'"
 msgstr ""
@@ -8490,9 +8496,9 @@ msgstr "Jasotze kokalekua"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:792
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:84
 #, c-format
 msgid "Pick up location:"
 msgstr "Erretiro kokalekua"
@@ -8514,7 +8520,7 @@ msgid "Pickup location"
 msgstr "Jasotze kokalekua"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on"
 msgstr "Erreserba egin"
 
@@ -8524,7 +8530,7 @@ msgid "Place a hold on "
 msgstr "Erreserba egin"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on: "
 msgstr "Erreserba egin:"
 
@@ -8757,7 +8763,7 @@ msgstr "Por favor, introduzca un valor mayor o igual a {0}."
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Por favor, introduzca un valor menor o igual a {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, fuzzy, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -8907,7 +8913,7 @@ msgid "Please select a specific item for this article request."
 msgstr "Mesedez, aukeratu elementu bat gutxienez esportatzeko."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 #, fuzzy
 msgid "Please select a tag to delete."
 msgstr "Mesedez, aukeratu elementu bat gutxienez."
@@ -9070,7 +9076,7 @@ msgstr "%s %s%s%s%sKoha %s &rsaquo; Automailegurako laguntza"
 msgid "Priority"
 msgstr "Prioritatea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:90
 #, c-format
 msgid "Priority:"
 msgstr "Lehentasuna:"
@@ -9108,7 +9114,7 @@ msgstr "Nirekin partekatutako zerrenda pribatuak"
 msgid "Problem found on page: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
 #, fuzzy, c-format
 msgid "Processing"
 msgstr "Prozesatzen..."
@@ -9188,7 +9194,7 @@ msgstr "Argitaratze/Copyright data: berrietatik hasi."
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Argitaratze/Copyright data: zaharrenetatik hasi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:54
 #, c-format
 msgid "Publication:"
 msgstr "Argitalpena:"
@@ -9493,9 +9499,9 @@ msgstr "Funtsik gabe"
 msgid "Register a new account"
 msgstr "Erregistratu kontu berri bat"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Register here."
 msgstr "Erregistratu hemen."
@@ -9613,7 +9619,7 @@ msgstr "Berritu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew all"
 msgstr "Berritu guztia"
@@ -9628,7 +9634,7 @@ msgstr "Berritu item-ak"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew selected"
 msgstr "Aukeratutatoak berriztu"
@@ -9726,7 +9732,7 @@ msgstr "Eskatuta"
 msgid "Request placed:"
 msgstr "Eskatuta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Request specific item type:"
 msgstr "Item mota espezifiko bat eskatu:"
@@ -9831,7 +9837,7 @@ msgstr "Eskatuta"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -9907,17 +9913,17 @@ msgstr "%s Hauxe bilatu duzu: %s"
 msgid "Results per page: "
 msgstr "Emaitzak orrialde bakoitzeko:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:136
 #, c-format
 msgid "Resume"
 msgstr "Emaitzak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:184
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Berriz ezarri bertan behera lagatako erreserba guztiak."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
 #, fuzzy, c-format
 msgid "Resume hold"
 msgstr "Zure erreserben laburpena"
@@ -10093,7 +10099,7 @@ msgstr "Zure zerrendetan gorde "
 msgid "Save to your lists"
 msgstr "Zure zerrendetan gorde "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, fuzzy, c-format
 msgid "Scan"
@@ -10143,7 +10149,7 @@ msgstr "Beste item bat eskaneatu edo haren inbentarioa sartu:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:171
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Search"
@@ -10193,7 +10199,7 @@ msgid "Search for this title in:"
 msgstr "Bilatu hemen izenburu honetarako:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
 msgid "Search for works by this author"
 msgstr "Bilatu autore honen lanak"
 
@@ -10325,7 +10331,7 @@ msgstr "Atala:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
@@ -10359,7 +10365,7 @@ msgstr "Hautatu zerrenda bat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #, c-format
 msgid "Select a specific item:"
 msgstr "Aukeratu kopia jakin bat"
@@ -10695,8 +10701,8 @@ msgstr "Erakutsi zerrendak"
 msgid "Show more"
 msgstr "Erakutsi gehiago"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:277
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, c-format
 msgid "Show more options"
 msgstr "Aukera gehiago"
@@ -10706,7 +10712,7 @@ msgstr "Aukera gehiago"
 msgid "Show the top "
 msgstr "Hasierakoak erakutsi "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 #, fuzzy, c-format
 msgid "Show unholdable items"
 msgstr "Erakutsi item guztiak"
@@ -10796,7 +10802,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -10909,7 +10915,7 @@ msgstr ""
 "Sentitzen dugu, auto-mailegu estazio honek identifikazioa galdu du. Mesedez, "
 "arazoa konpontzeko jarri harremanetan administratzailearekin"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:199
 #, fuzzy, c-format
 msgid "Sorry, you are too young to place a hold for this item."
 msgstr "Sentitzen dugu, gazteegia zara material hau erreserbatzeko."
@@ -11054,7 +11060,7 @@ msgstr "Statusa"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:95
 #, c-format
 msgid "Status:"
 msgstr "Egoera:"
@@ -11160,7 +11166,7 @@ msgstr "Lehio hau bidali eta itxi"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Submit changes"
 msgstr "Bidali aldaketak"
 
@@ -11173,7 +11179,7 @@ msgstr "Moldaketak bertan behera utzi"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "Ohar publikoa"
@@ -11346,30 +11352,30 @@ msgstr "Abizenak:"
 msgid "Surveys"
 msgstr "Berrikuspenak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:965
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:144
 #, c-format
 msgid "Suspend"
 msgstr "Geldiarazia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:171
 #, c-format
 msgid "Suspend all holds"
 msgstr "Eten erreserba guztiak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
 #, fuzzy, c-format
 msgid "Suspend hold"
 msgstr "Eten erreserba guztiak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:959
 #, c-format
 msgid "Suspend until:"
 msgstr "Geldiarazia data honarte:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "Suspended"
 msgstr "Geldiarazia"
@@ -11806,7 +11812,7 @@ msgstr "Ez dago iruzkinik"
 msgid "There are no items available for recall."
 msgstr "Hautatutako elementu bat edo gehiagoren erreserba ezin da egin."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
 #, fuzzy, c-format
 msgid "There are no items that can be placed on hold."
 msgstr "Hautatutako elementu bat edo gehiagoren erreserba ezin da egin."
@@ -12042,19 +12048,19 @@ msgstr "Erregistro honek item fisiko asko dauzka (%s)."
 msgid "This subscription is closed."
 msgstr "Esta subscripción está cerrada."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr "Izenburu hau ezin da eskatu, dagoeneko zure eskutan baitago."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:212
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Izenburu hau ezin da eskatu."
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:94
 msgid "Thumbnail"
 msgstr "Irudia"
 
@@ -12144,7 +12150,7 @@ msgstr ""
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Akats hau zuzentzeko, jarri Kohako Administrariarekin harremanetan."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr ""
@@ -12265,7 +12271,7 @@ msgid "Unable to update your setting!"
 msgstr "Ezin dira zure ezarpenak eguneratu!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Ez eskuragarria (galdua edo desagertua)"
@@ -12361,7 +12367,7 @@ msgstr "Gaurkotzeak zure xehetasunetara"
 msgid "Use this to report any problems with your currently checked out items"
 msgstr "Erakutsi une honetan maileguan hartuta dauden elementu guztiak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:243
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Erabili goiko menu-barra Koha-tik nabigatzeko"
@@ -12376,7 +12382,7 @@ msgstr "Honen ordez erabilia"
 msgid "Used for/see from:"
 msgstr "Erabiltzen du: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:223
 #, fuzzy, c-format
 msgid "User summary"
 msgstr "Terminoen laburpena"
@@ -12454,9 +12460,7 @@ msgid "View all the physical items."
 msgstr "Ikusi liburutegi guztiak"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:111
 msgid "View details for this title"
 msgstr "Izenburu honen xehetasunak ikusi"
 
@@ -12496,7 +12500,7 @@ msgstr "webgunea"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, c-format
 msgid "Vol info"
 msgstr "Vol info"
@@ -12513,7 +12517,7 @@ msgid "Volume:"
 msgstr "Bolumena:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:441
 #, fuzzy, c-format
 msgid "Waiting"
 msgstr "Hartzeko prest "
@@ -12554,7 +12558,7 @@ msgstr ""
 msgid "Website"
 msgstr "Webgunea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, c-format
 msgid "Welcome, "
 msgstr "Ongi etorri, "
@@ -12666,13 +12670,13 @@ msgstr ""
 
 # Circulation > Article Requests
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "Ikastaroen erreserbak"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "Ezeztatu erreserba"
@@ -12701,13 +12705,13 @@ msgid "Yes, remove sharing"
 msgstr "Partekatua kendu"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, resume all holds"
 msgstr "Berriz ezarri bertan behera lagatako erreserba guztiak."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "Eten erreserba guztiak"
@@ -12976,12 +12980,12 @@ msgstr "Zure kreditua da:"
 msgid "You have already placed a "
 msgstr "Izenburu hau eskatua duzu jadanik."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:204
 #, fuzzy, c-format
 msgid "You have already placed a recall on this title."
 msgstr "Izenburu hau eskatua duzu jadanik."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:202
 #, c-format
 msgid "You have already requested this title."
 msgstr "Izenburu hau eskatua duzu jadanik."
@@ -12991,7 +12995,7 @@ msgstr "Izenburu hau eskatua duzu jadanik."
 msgid "You have checked out too many items and can't check out any more."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:930
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
 #, fuzzy, c-format
 msgid "You have no article requests currently."
 msgstr "Izenburu hau eskatua duzu jadanik."
@@ -13108,7 +13112,7 @@ msgstr ""
 msgid "You may only add up to %s suggestions in %s days."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:231
 #, c-format
 msgid "You may register here."
 msgstr "Hemen erregistra zaitezke."
@@ -13558,18 +13562,18 @@ msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sKoha online%s katalogoa%s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Liburutegiak ez du baimendu katalogorako sarbidea"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "Ez da erregistrorik ezabatu."
@@ -13637,7 +13641,7 @@ msgstr "Zure $%s-ko ordainketa arrakastaz prozesatu da!"
 msgid "Your personal details"
 msgstr "Zure datu pertsonalak"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, c-format
 msgid "Your priority: "
 msgstr "Zure lehentasunak:"
@@ -13684,7 +13688,7 @@ msgstr "Zure erosketa-proposamenak"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "Zure zerrenda: %s "
@@ -13885,7 +13889,7 @@ msgstr ""
 msgid "ask for a discharge"
 msgstr "zorra askatzeko eskatu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:447
 #, fuzzy, c-format
 msgid "at"
 msgstr "Saskia"
@@ -13997,7 +14001,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:261
 #, fuzzy, c-format
 msgid "due in fines and charges "
 msgstr "Zure isunak eta karguak"
@@ -14057,7 +14061,7 @@ msgstr ""
 msgid "every year"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:449
 #, fuzzy, c-format
 msgid "expected at"
 msgstr "Espero da"
@@ -14088,7 +14092,7 @@ msgstr "Oraindik %s eskaera gelditzen dira"
 msgid "for more information on what it does and how to configure it."
 msgstr "funtzio eta konfigurazioari buruzko informazio gehiago lortzeko."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:445
 #, fuzzy, c-format
 msgid "for patron"
 msgstr "LookupPatron"
@@ -14473,7 +14477,7 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:451
 #, c-format
 msgid "since"
 msgstr ""
@@ -14621,12 +14625,12 @@ msgstr ""
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "until"
 msgstr "arte"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:175
 #, c-format
 msgid "until "
 msgstr "arte"
@@ -14934,6 +14938,9 @@ msgstr "×"
 
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sitem%sitem(ak)%s%sHutsik%s"
+
+#~ msgid "%s, by %s%s "
+#~ msgstr "%s, egilea %s%s"
 
 #, fuzzy
 #~ msgid ""

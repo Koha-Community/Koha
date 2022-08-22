@@ -4,14 +4,18 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2022-05-01 11:36-0300\n"
-"Language-Team: Koha Translation Team \n"
-"Language: pt\n"
+"PO-Revision-Date: 2022-08-09 19:22+0000\n"
+"Last-Translator: Ingrid Schiessl <ingridschiessl@gmail.com>\n"
+"Language-Team: Koha Translation Team\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pt_BR/22.05/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
+"X-POOTLE-MTIME: 1660072966.924936\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -158,7 +162,6 @@ msgid "accounting.pref#RequirePaymentType# Require"
 msgstr "accounting.pref#RoundFinesAtPayment# Faz"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -166,8 +169,11 @@ msgid ""
 "when no payment types are defined in the PAYMENT_TYPE authorised value "
 "category."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"accounting.pref#RequirePaymentType# Esta preferência não possui efeito "
+"quando <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> está ativada "
+"ou quando não está definido o tipo de pagamento na categoria do valor "
+"autorizado PAYMENT_TYPE."
 
 # Accounting > Policy
 #, fuzzy
@@ -660,7 +666,6 @@ msgstr ""
 "avisos de atraso são enviados para: "
 
 # Administration > Interface options
-#, fuzzy
 msgid ""
 "admin.pref#AddressForFailedOverdueNotices# If left empty then it will "
 "fallback to the first defined address in the following list: Library "
@@ -669,9 +674,12 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
-"admin.pref # AddressForFailedOverdueNotices # Se deixado em branco, ele "
+"admin.pref#AddressForFailedOverdueNotices# Se deixado em branco, ele "
 "retornará ao primeiro endereço definido na lista a seguir: Library ReplyTo, "
-"Library Email, ReplytoDefault e KohaAdminEmailAddress"
+"Library Email, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=ReplytoDefault\">ReplytoDefault</a> e <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
+"\">KohaAdminEmailAddress</a>"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -866,7 +874,6 @@ msgstr ""
 "Envie todos os avisos como Cópia Oculta BBC para este endereço de e-mail"
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientID# Along with <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
@@ -874,16 +881,17 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-" <br/><i class=\"fa fa-exclamation-triangle\"></i> Se "
-"<code>PhoneNotification</code> estiver ativo, "
-"<code>TalkingTechItivaPhoneNotification</code> devera ser desabilitado."
+"admin.pref#GoogleOAuth2ClientID# Juntamente com <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientSecret"
+"\">GoogleOAuth2ClientSecret</a>, ativar <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
 msgstr "Google OAuth2 Client ID: "
 
 # Patrons > Notices and notifications > PhoneNotification
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOAuth2ClientSecret# Along with <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
@@ -891,9 +899,11 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-" <br/><i class=\"fa fa-exclamation-triangle\"></i> Se "
-"<code>PhoneNotification</code> estiver ativo, "
-"<code>TalkingTechItivaPhoneNotification</code> devera ser desabilitado."
+"admin.pref#GoogleOAuth2ClientSecret# Juntamente com <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a>, ativar <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect.</a>"
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -914,7 +924,6 @@ msgid "admin.pref#GoogleOpenIDConnect# Yes"
 msgstr "Sim"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating "
 "an app in the Google cloud console, and set the web origin to your_opac_url "
@@ -925,10 +934,14 @@ msgid ""
 "op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
 "a> to be set."
 msgstr ""
-"admin.pref # GoogleOpenIDConnect # Você precisará selecionar OAuth2 ao criar "
-"um aplicativo no console da nuvem do Google e definir a origem da web para "
-"your_opac_url e o url de redirecionamento para your_opac_url / cgi-bin / "
-"koha / svc / auth / googleopenidconnect."
+"admin.pref#GoogleOpenIDConnect# Você precisará selecionar OAuth2 ao criar um "
+"aplicativo no console do Google Cloud e definir a origem da Web como "
+"your_opac_url e o URL de redirecionamento para your_opac_url/cgi-bin/koha/"
+"svc/auth/googleopenidconnect. Configure <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=GoogleOAuth2ClientID"
+"\">GoogleOAuth2ClientID</a> e <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a> obrigatoriamente."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -939,23 +952,26 @@ msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't allow"
 msgstr "admin.pref # GoogleOpenIDConnectAutoRegister # Não permitir"
 
 # Administration > Google OpenID Connect
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectAutoRegister# patrons logging in with Google "
 "Open ID to automatically register. Requires <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
 msgstr ""
-"admin.pref # GoogleOpenIDConnectAutoRegister # patrons fazendo login com o "
-"Google Open ID para se registrar automaticamente."
+"admin.pref#GoogleOpenIDConnectAutoRegister# Usuários que fazem login com o "
+"Google Open ID para se registrarem automaticamente. Exige-se <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultBranch# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
-msgstr "Requer que OPACPatronDetails seja ativado."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultBranch# Exige-se <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -966,12 +982,14 @@ msgstr ""
 "ao registrar automaticamente um usuário do Google Open ID: "
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDefaultCategory# Requires <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect</a>."
-msgstr "Requer que OPACPatronDetails seja ativado."
+msgstr ""
+"admin.pref#GoogleOpenIDConnectDefaultCategory# Exige-se <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
+"\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -982,14 +1000,14 @@ msgstr ""
 "categoria ao registrar automaticamente um usuário do Google Open ID: "
 
 # OPAC > OpenURL
-#, fuzzy
 msgid ""
 "admin.pref#GoogleOpenIDConnectDomain# Leave blank for all Google domains. "
 "Requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 msgstr ""
-"Texto de links OpenURL (ou título da imagem se OpenURLImageLocation estiver "
-"definido):"
+"admin.pref#GoogleOpenIDConnectDomain# Deixei em branco para todo o domínio "
+"Google. Requer <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>."
 
 # Administration > Google OpenID Connect
 msgid ""
@@ -1166,16 +1184,16 @@ msgid "admin.pref#UsageStats# ."
 msgstr "."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</"
 "a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> As outras preferências do sistema UsageStats "
-"não têm efeito se essa preferência do sistema for definida como \"Não\" (não "
-"compartilhar)."
+"admin.pref#UsageStats# <br><strong>NOTA:</strong> A outra preferência do "
+"sistema <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> não tem efeito se a "
+"preferência do sistema está configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1236,15 +1254,16 @@ msgstr ""
 "comunidade Hea Koha </a>."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no "
 "effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsCountry# <br><strong>NOTA:</strong> Este valor não tem "
+"efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=UsageStats\">UsageStats</a> está configurada como "
+"\"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -2031,15 +2050,16 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsGeolocation# <br><strong>NOTA:</strong> Este valor não "
+"tem efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> está "
+"configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2056,15 +2076,16 @@ msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "Geolocalização da biblioteca principal:"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value "
 "has no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTA:</strong> Este valor "
+"não tem efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> está "
+"configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
@@ -2088,15 +2109,16 @@ msgstr ""
 ". Se este campo estiver vazio, os dados serão enviados de forma anônima."
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> Este valor não "
+"tem efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> está "
+"configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2111,15 +2133,16 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr " "
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsLibraryType# <br><strong>NOTA:</strong> Este valor não "
+"tem efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> está "
+"configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2168,15 +2191,16 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "assinatura"
 
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has "
 "no effect if the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br> <strong> NOTA: </strong> Este valor não tem efeito se a preferência do "
-"sistema UsageStats estiver definida como \"Não\" (não compartilhar)."
+"admin.pref#UsageStatsLibraryUrl# <br><strong>NOTA:</strong> Este valor não "
+"tem efeito se a preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> está "
+"configurada como \"Não\" (não compartilhar)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2402,15 +2426,16 @@ msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Quando editar registros,"
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> must "
 "be set to \"allow\" for this to have any effect)."
 msgstr ""
-"registros de autoridade estão faltando (BiblioAddsAuthorities precisa estar "
-"configurado para \"permitir\" para isto funcionar)"
+"authorities.pref#AutoCreateAuthorities# registros de autoridade ausentes (<a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> deve "
+"ser definido como \"permitir\" para que se tenha algum efeito)."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# don't generate"
@@ -2458,7 +2483,6 @@ msgstr ""
 "foram salvos os registros no módulo de catalogação."
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (requires <a "
@@ -2467,12 +2491,14 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"usuários podem escolher suas próprias configurações de privacidade para seu "
-"histórico de empréstimo. Isso requer opacreadinghistory e preferências do "
-"sistema AnonymousPatron."
+"Authority.pref#GenerateAuthorityField667# Use o seguinte texto como valor "
+"padrão para o campo 667$a dos registros de autoridade MARC21 (requer <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
 "default value for the 670$a field of MARC21 authority records (requires <a "
@@ -2481,9 +2507,12 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"usuários podem escolher suas próprias configurações de privacidade para seu "
-"histórico de empréstimo. Isso requer opacreadinghistory e preferências do "
-"sistema AnonymousPatron."
+"Authority.pref#GenerateAuthorityField670# Use o texto a seguir como valor "
+"padrão para o campo 670$a dos registros de autoridade MARC21 (requer <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> e <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -3269,6 +3298,11 @@ msgstr ""
 "exibição dos exemplares em duas abas, das quais a primeira contém exemplares "
 "que"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "fazer"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3276,6 +3310,14 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr ""
+"Por padrão, classifique os resultados da pesquisa na interface de STAFF por"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3288,10 +3330,50 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "fazer"
+
 # Cataloging > Display
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "Use o seguinte como o modelo ISBD de interface de equipe:"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "fazer"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "fazer"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3312,6 +3394,11 @@ msgstr "Não exibir"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "cataloguing.pref Estrutura do registro"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "fazer"
 
 # Cataloging > Spine labels
 msgid ""
@@ -3745,7 +3832,6 @@ msgid "circulation.pref#AllFinesNeedOverride# Require"
 msgstr "Exigir"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, "
 "even fines less than set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -3753,8 +3839,12 @@ msgid ""
 "Enabling this system preference will block all checkouts for patrons with "
 "fines both via the web-based self checkout system and via SIP."
 msgstr ""
-"equipe para anular manualmente todas as multas, mesmo multas menores do que "
-"as definidas na preferência do sistema noissuescharge."
+"circulation.pref#AllFinesNeedOverride# equipe anule manualmente todas as "
+"multas, mesmo multas menores do que as definidas no <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</"
+"a> preferência do sistema. A ativação dessa preferência do sistema bloqueará "
+"todos os empréstimos para usuários com multas, tanto pelo sistema de auto-"
+"atendimento baseado na web quanto por SIP."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
@@ -3793,15 +3883,16 @@ msgid "circulation.pref#AllowFineOverride# Don't allow"
 msgstr "Não permitir"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowFineOverride# staff to manually override and check out "
 "items to patrons who have more in fines than set in the <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
 "\">noissuescharge</a> system preference."
 msgstr ""
-"equipe para substituir manualmente e verificar itens para clientes que têm "
-"mais multas do que o definido na preferência do sistema noissuescharge."
+"circulation.pref#AllowFineOverride# que a equipe substitua manualmente e "
+"realize empréstimo de itens para usuários que tenham multas mais altas do "
+"que o definido na preferência do sistema <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\"> noissuescharge</a>."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4458,15 +4549,16 @@ msgstr ""
 "você deve tê-lo ativado."
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> This "
 "system preference requires <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=FinesMode\">FinesMode</a> to be set to \"Calculate and "
 "charge.\""
 msgstr ""
-"<br /> <strong> NOTA: </strong> Esta preferência do sistema requer que "
-"FinesMode seja definido como 'Calcular e cobrar'."
+"circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE:</strong> Esta "
+"preferência do sistema requer que <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=FinesMode\">FinesMode</a> seja definido como "
+"\"Calcular e cobrar.\""
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -4757,20 +4849,25 @@ msgstr "Não use"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "Usar"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "biblioteca atual"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "biblioteca de armazenamento de itens."
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "Não use"
 
 # Circulation > Holds policy
@@ -5718,9 +5815,25 @@ msgid ""
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 msgstr "Categorias de usuários não afetadas por OPACHoldsIfAvailableAtPickup:"
 
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"o último cliente a devolver um item. Essa configuração é independente das "
+"preferências do sistema opacreadinghistory e AnonymousPatron."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Não permitir"
 
 # Circulation > Article requests
@@ -5738,12 +5851,10 @@ msgstr "segurar o tipo de item"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "segurar o tipo de item"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "segurar o tipo de item"
 
 # Circulation > Article requests
 #, fuzzy

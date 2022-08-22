@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 10:00-0300\n"
-"PO-Revision-Date: 2022-05-26 04:46+0000\n"
+"POT-Creation-Date: 2022-08-15 21:17-0300\n"
+"PO-Revision-Date: 2022-08-16 06:57+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hy\n"
@@ -15,11 +15,16 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hy/22.05/hy-Armn-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1653540399.720427\n"
+"X-POOTLE-MTIME: 1660633066.614363\n"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (ընթացիկ) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr " և %s ընդամենը %s չտեսած թարմացումներ են մնում"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -112,11 +117,6 @@ msgstr "%s ամիսներ"
 msgid "%s of %s renewals remaining"
 msgstr "%s ընդ. %s մնացող թարմացումները"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s ընդ. %s չտեսած թարմացումներ են մնում"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -186,7 +186,7 @@ msgstr "AJAX-ը ձախողվեց ցուցիչը մերժելուց: %s"
 msgid "Access to camera denied."
 msgstr "Մատչելիությունը տեսախցիկին արգելափակված է"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "Գործողություններ"
 
@@ -304,7 +304,7 @@ msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս դաշտը։"
 msgid "Are you sure you want to delete this record?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս գրառումը։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել վերադարձի այս հայցը։"
 
@@ -423,7 +423,7 @@ msgstr "Ինքնաշխատ թարմացումը տապալվեց, օգտվողը
 msgid "Back to top"
 msgstr "Հետ դեպի վեր"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "Մատենագիտական գրառումը գոյություն չունի։"
 
@@ -440,7 +440,7 @@ msgstr "CSV"
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "Էլ չի կարող ինքնաթարմացվող լինել - տացքի օրերի թիվը գերազանցված է"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Չեղյալ անել"
@@ -454,7 +454,7 @@ msgstr "Չեղյալ անել պահումը"
 msgid "Cancelled"
 msgstr "Չեղյալ արված"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr "Չի կարող փորձարկել կանխագուշակվող ձևանմուշը հետևյալ պատճառներով: %s"
@@ -601,7 +601,7 @@ msgid "December"
 msgstr "դեկտեմբեր"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Ջնջել"
@@ -614,7 +614,7 @@ msgstr "Արգելված է"
 msgid "Directory is not writeable"
 msgstr "Թղթապանակում գրելը անհնար է։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "Երկկտտացնել խմբագրելու համար"
 
@@ -632,7 +632,7 @@ msgstr "Խմբագրել"
 msgid "Edit action %s"
 msgstr "Խմբագրել գործողությունը %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "Խմբագրել նշումները"
 
@@ -725,7 +725,7 @@ msgstr "Նիշքի տեսակը։"
 msgid "First"
 msgstr "Առաջին"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "Առաջին հրատարակման ամսաթիվը սահմանված չէ"
 
@@ -737,7 +737,7 @@ msgstr ""
 "Ներկայացված հաճախականությունը և բաժանորդագրության երկարությունը լավ չեն "
 "զուգորդվում։ Մուտք արա համարի հաշվարկը քան թե ժամանակահատվածը։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "Հաճախականությունը սահմանված չէ"
 
@@ -942,7 +942,7 @@ msgstr "Հաջորդ"
 msgid "Next available %s item"
 msgstr "Հաջորդ մատչելի %s նյութը"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "Հաջորդ համարի հրատարակման ամսաթիվը սահմանված չէ"
 
@@ -1016,7 +1016,7 @@ msgstr "Մինչ այդ չկան թարմացումներ %s"
 msgid "No results found"
 msgstr "Արդյունքներ չեն գտնվել"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "Չի գտնվել բաժանորդագրություն Mana գիտելիքի շտեմարանում"
 
@@ -1059,6 +1059,14 @@ msgstr "Նոյեմբեր"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "Տացքերի քանակը ըստ նյութի տեսակի"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr "Անձնակազմին ցուցադրվող թողարկումների քանակը պետք է լինի թիվ"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr "Համարների քանակ որ պետք է արտածվի հանրությանը պետք է լինի թիվ"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1107,7 +1115,7 @@ msgstr "Ընտրիր ներգրավման ժամկետը ըստ ամիսների
 msgid "Please choose at least one external target"
 msgstr "Ընտրիր առնվազն մեկ արտաքին թիրախ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "Մինչ բաժանորդագրության հիշելը սեղմիր 'թեստի կանխագուշակման ձևանմուշ'։"
 
@@ -1125,7 +1133,7 @@ msgstr "Ջնջիր %s նիշերը"
 msgid "Please enter %s or more characters"
 msgstr "Մուտք արա %s կամ ավելի նիշ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Մուտք արա անունը այս ձևանմուշի համար"
 
@@ -1134,7 +1142,7 @@ msgstr "Մուտք արա անունը այս ձևանմուշի համար"
 msgid "Please enter a valid date (should match %s)."
 msgstr "Խնդրվում է մուտք անել թույլատրված ամսաթիվ (պետք է համընկնի %s)։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1236,7 +1244,7 @@ msgstr "Թարմացումը արգելափակված է syspref-ի կողմից
 msgid "Renewed, due:"
 msgstr "Թարմացված, ենթակա է վերադարձի։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "Լուծել"
 
@@ -1244,7 +1252,7 @@ msgstr "Լուծել"
 msgid "Results"
 msgstr "Արդյունքներ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Արդյունքներ Mana գիտելիքի շտեմարանից"
 
@@ -1290,7 +1298,7 @@ msgstr "Փնտրեք Google Books -ը"
 msgid "Search:"
 msgstr "Փնտրում։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "Փնտրում է բաժանորդագրության համար Mana գիտելիքի շտեմարանում"
 
@@ -1314,17 +1322,17 @@ msgstr "Սեպտ"
 msgid "September"
 msgstr "Սեպտեմբեր"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Ցույց տուր 1 հայց"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Ցույց տուր 1 չլուծված հայց"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "Ցույց տուր Mana արդյունքները"
 
@@ -1349,7 +1357,7 @@ msgstr "Որոշ դրամագլուխներ սահմանված չեն նյութ
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Ինչ որ բան այնպես չգնաց. Միգուցե արժեքը արդեն առկա՞ է։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Ինչ որ բան սխալ է։ Չի կարող ստեղծել համարակալման նոր ձևանմուշ։"
 
@@ -1357,7 +1365,7 @@ msgstr "Ինչ որ բան սխալ է։ Չի կարող ստեղծել համա
 msgid "Sorry, nothing found."
 msgstr "Կներեք, ոչինչ չի գտնվել:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Բաժանորդագրությունը գտնվել է Mana Knowledge Base -ում։"
 
@@ -1509,7 +1517,7 @@ msgstr "Մատակարարը գոյություն չունի"
 msgid "There is no record selected"
 msgstr "Չկա ընտրված գրառւմ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 msgid "This bibliographic record does not exist"
 msgstr "Մատենագիտական այս գրառումը գոյություն չունի"
 
@@ -1529,7 +1537,7 @@ msgstr "Այս նյութը ավելացվել է սայլակին"
 msgid "This item is already in your cart"
 msgstr "Այս նյութը արդեն քո զամբյուղում է"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Այս ձևանմուշի անունը արդեն կա։ Ցանկանու՞մ ես այն ձևափոխել։"
 
@@ -1580,7 +1588,7 @@ msgstr "Չի կարող շարունակել, պահումը գտնված չէ"
 msgid "Unable to suspend, hold not found"
 msgstr "Չի կարող կասեցնել, պահումը գտնված չէ"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "Թարմացում"
 
@@ -1605,7 +1613,7 @@ msgstr "Դիտել համեմատությունը"
 msgid "Waiting status reverted"
 msgstr "Սպասման կարգավիճակը վերադարձվել է"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1623,7 +1631,7 @@ msgstr ""
 "համալրման մոդուլում կհանգեցնի լուրջ խնդիրների։ Վստա՞հ ես որ ցանկանում ես "
 "ջնջել այս գրառումը։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1660,7 +1668,7 @@ msgstr "Դուք էլ չես կարող ստանալ ավելի նյութեր"
 msgid "You have made changes to system preferences."
 msgstr "Դու կատարել ես ձևափոխումներ համակարգային նախապատվություններում։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1668,11 +1676,11 @@ msgstr ""
 "Դու ձևափոխել ես խորացված կանխագուշակման ձևաչափը։ Հիշիր քո աշխատանքը կամ "
 "չեղյալ արա ձևափոխումները։"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Դու պետք է ընտրես առաջին հրատարակության տարին"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "Դու պետք է ընտրես բաժանորդագրության երկարությունը կամ ավարտի ամսաթիվը։"
 

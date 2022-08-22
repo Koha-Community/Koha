@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2022-07-18 14:41+0000\n"
-"Last-Translator: bargioni <bargioni@pusc.it>\n"
+"PO-Revision-Date: 2022-08-16 10:08+0000\n"
+"Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /it/22.05/it-IT-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1658155308.390441\n"
+"X-POOTLE-MTIME: 1660644515.921919\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2205,9 +2205,8 @@ msgid "admin.pref#noItemTypeImages# Show"
 msgstr "Mostra"
 
 # Administration > Interface options
-#, fuzzy
 msgid "admin.pref#noItemTypeImages# itemtype icons in the staff interface."
-msgstr "Mostra le icone dei tipi di copia nell'interfaccia dello staff: "
+msgstr "le icone dei tipi di copia nell'interfaccia dello staff."
 
 # Administration > Login options
 msgid ""
@@ -3222,6 +3221,10 @@ msgid ""
 "first tab contains items whose"
 msgstr "Le copie in due tab distinti, in cui il primo contine le copie della"
 
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr ","
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARC non è supportato"
@@ -3229,6 +3232,12 @@ msgstr "<br/> UNIMARC non è supportato"
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Un massimo di"
+
+# Searching > Results display
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr "Di default i risultati delle ricerche nello staff sono ordinati per"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3241,9 +3250,41 @@ msgid ""
 msgstr ""
 "Mostra una lista di record subordinati, usando i collegamenti di tag 773, in"
 
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "ascendente."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "autore"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "sia in intranet che in Opac"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "collocazione"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "data aggiunta"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "data di pubblicazione"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "discendente."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "da A a Z."
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "da Z a A."
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3260,6 +3301,10 @@ msgstr "record saranno mostrati."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr " in intranet"
+
+# Cataloging > Spine labels
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "titolo"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4690,20 +4735,24 @@ msgstr "mesi"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr " anni"
 
+# Circulation > Holds policy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "."
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "biblioteca che ha la copia."
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "mesi"
 
 # Circulation > Holds policy
@@ -5654,9 +5703,28 @@ msgstr ""
 "op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
+# Circulation > Checkin policy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"<br><strong>NOTA:</strong> La data di inzio della prenotazione è presente e "
+"attiva quando anche le preferenze <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
+">AllowHoldDateInFuture</a> e <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a> sono attive."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Non permettere"
 
 # Circulation > Article requests
@@ -5674,12 +5742,10 @@ msgstr "tipo di copia prenotata"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "tipo di copia prenotata"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "tipo di copia prenotata"
 
 # Circulation > Article requests
 #, fuzzy

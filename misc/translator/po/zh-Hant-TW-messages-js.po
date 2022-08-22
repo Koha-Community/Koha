@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 10:43-0300\n"
+"POT-Creation-Date: 2022-08-15 22:02-0300\n"
 "PO-Revision-Date: 2022-05-04 09:41+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: Koha Translation Team\n"
@@ -20,6 +20,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (目前) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "續借剩 %s 次(共 %s 次)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -102,11 +107,6 @@ msgstr "%s 月份"
 msgid "%s of %s renewals remaining"
 msgstr "續借剩 %s 次(共 %s 次)"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "續借剩 %s 次(共 %s 次)"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -173,7 +173,7 @@ msgstr "AJAX 不能拒絕標籤：%s"
 msgid "Access to camera denied."
 msgstr "權限不足"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "動作"
 
@@ -293,7 +293,7 @@ msgstr "您確定刪除此欄位嗎？"
 msgid "Are you sure you want to delete this record?"
 msgstr "確定要刪除此記錄嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "您確定要刪除此還入的聲明？"
 
@@ -414,7 +414,7 @@ msgstr "自動續借失敗，讀者尚有未支付罰款"
 msgid "Back to top"
 msgstr "回到工具"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "書目紀錄不存在！"
 
@@ -431,7 +431,7 @@ msgstr "CSV"
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "無法自動續借 - 超過借出日太多時間"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "取消"
@@ -445,7 +445,7 @@ msgstr "取消預約"
 msgid "Cancelled"
 msgstr "已取消"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr "因為下列的原因無法檢視預測模式：%s"
@@ -592,7 +592,7 @@ msgid "December"
 msgstr "十二月"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "刪除"
@@ -605,7 +605,7 @@ msgstr "拒絕"
 msgid "Directory is not writeable"
 msgstr "不能覆寫目錄"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "雙擊已編輯"
 
@@ -623,7 +623,7 @@ msgstr "編輯"
 msgid "Edit action %s"
 msgstr "編輯動作 %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "編輯備註"
 
@@ -716,7 +716,7 @@ msgstr "檔案類型"
 msgid "First"
 msgstr "第一項"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "首次出版日期未定"
 
@@ -726,7 +726,7 @@ msgid ""
 "consider entering an issue count rather than a time period."
 msgstr "刊期與訂閱期限不合理。請鍵入期數而不是期限。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "刊期未設定"
 
@@ -931,7 +931,7 @@ msgstr "下一頁"
 msgid "Next available %s item"
 msgstr "下個可取得 %s 館藏"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "下期出版日期不確定"
 
@@ -1006,7 +1006,7 @@ msgstr "無法在 %s 之前續借"
 msgid "No results found"
 msgstr "未找到結果"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "在 Mana 知識庫找不到訂閱"
 
@@ -1049,6 +1049,14 @@ msgstr "十一月"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "依館藏類型統計借出次數"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1097,7 +1105,7 @@ msgstr "請祗選擇以月計或日計的註冊期間。"
 msgid "Please choose at least one external target"
 msgstr "請至少選擇一個外部目標"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "儲存訂閱前請先勾選 '測試預測模式'。"
 
@@ -1115,7 +1123,7 @@ msgstr "請刪除 %s 字元"
 msgid "Please enter %s or more characters"
 msgstr "請鍵入 %s 或更多的字元"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "請鍵入此模式的名稱"
 
@@ -1124,7 +1132,7 @@ msgstr "請鍵入此模式的名稱"
 msgid "Please enter a valid date (should match %s)."
 msgstr "請鍵入有效日期 (應符合 %s)。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1225,7 +1233,7 @@ msgstr "續借被系統偏好設定阻止"
 msgid "Renewed, due:"
 msgstr "續借到期日："
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "解決"
 
@@ -1233,7 +1241,7 @@ msgstr "解決"
 msgid "Results"
 msgstr "結果"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Mana 知識庫的結果"
 
@@ -1280,7 +1288,7 @@ msgstr ""
 msgid "Search:"
 msgstr "搜尋："
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "在 Mana 知識庫搜尋訂閱"
 
@@ -1304,21 +1312,21 @@ msgstr "九月"
 msgid "September"
 msgstr "九月"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 #, fuzzy
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "顯示字幕"
 msgstr[1] "顯示字幕"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 #, fuzzy
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "解決聲稱的問題 "
 msgstr[1] "解決聲稱的問題 "
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "顯示 Mana 結果"
 
@@ -1345,7 +1353,7 @@ msgid "Something went wrong. Maybe the value already exists?"
 msgstr "出錯了。未儲存此通知"
 
 # pattern是指？樣式或其它意思？
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "出錯了。不能新增編號模式。"
 
@@ -1353,7 +1361,7 @@ msgstr "出錯了。不能新增編號模式。"
 msgid "Sorry, nothing found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "在 Mana 知識庫發現的訂閱："
 
@@ -1495,7 +1503,7 @@ msgstr "供應器不存在"
 msgid "There is no record selected"
 msgstr "未選定紀錄"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 #, fuzzy
 msgid "This bibliographic record does not exist"
 msgstr "書目紀錄不存在！"
@@ -1516,7 +1524,7 @@ msgstr "此館藏已加入您的購物籃"
 msgid "This item is already in your cart"
 msgstr "這個館藏已經在您的購物籃"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "此模式已存在。您仍要修改它嗎？"
 
@@ -1568,7 +1576,7 @@ msgstr "無法復原，未找到預約"
 msgid "Unable to suspend, hold not found"
 msgstr "不能暫停預約，未找到預約"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "更新"
 
@@ -1594,7 +1602,7 @@ msgstr "檢視比較"
 msgid "Waiting status reverted"
 msgstr "標籤狀態在此。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1609,7 +1617,7 @@ msgstr ""
 "警告：此記錄已使用於 %s 訂單。刪除它可能對採訪模組發生嚴重的問題。確定刪除此"
 "記錄嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1644,17 +1652,17 @@ msgstr "您不能再簽收任何館藏"
 msgid "You have made changes to system preferences."
 msgstr "您必須改變系統偏好。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
 msgstr "您已修改進階預測模式。請儲存您的工作或取消修改。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "您必須選擇一個首次出版日期"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "您必須選擇訂閱長度或結束日期。"
 

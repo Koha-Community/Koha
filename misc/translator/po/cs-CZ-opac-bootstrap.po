@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-07-17 09:41-0300\n"
+"POT-Creation-Date: 2022-08-15 20:58-0300\n"
 "PO-Revision-Date: 2022-05-24 19:41+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -118,6 +118,16 @@ msgstr "%s %s %s Poznámka: toto okno se automaticky zavře za 5 sekund. %s "
 msgid "%s %s %s [%%~ SET line_break = \""
 msgstr "%s %s %s [%%~ SET line_break = \""
 
+#. %1$s:  END # / bibitemloo.holdable 
+#. %2$s:  INCLUDE 'biblio-title.inc' biblio=bibitemloo link=> 1
+#. %3$s:  IF ( bibitemloo.author ) 
+#. %4$s:  bibitemloo.author | html 
+#. %5$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#, fuzzy, c-format
+msgid "%s %s %s, by %s%s "
+msgstr "%s %s od %s%s "
+
 #. %1$s:  IF RestrictedPageTitle 
 #. %2$s:  RestrictedPageTitle | html 
 #. %3$s:  END 
@@ -218,6 +228,13 @@ msgstr ""
 "%s %s Pro nastavení odběru upozornění na nová čísla periodik musíte být "
 "přihlášeni %s %s "
 
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=review link=> 1 
+#. %2$s:  IF ( review.author ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:46
+#, fuzzy, c-format
+msgid "%s %s by "
+msgstr "%s od "
+
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
 #. %3$s:  i.author | html 
@@ -226,6 +243,17 @@ msgstr ""
 #, c-format
 msgid "%s %s by %s %s "
 msgstr "%s %s od %s%s "
+
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 
+#. %2$s:  IF ( MY_TAG.author ) 
+#. %3$s:  MY_TAG.author | html 
+#. %4$s:  END 
+#. %5$s:  END # /IF MY_TAG.XSLTBloc 
+#. %6$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
+#, fuzzy, c-format
+msgid "%s %s by %s %s %s %s "
+msgstr "%s od %s %s %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
@@ -413,13 +441,13 @@ msgstr ""
 "pracovníky knihovny. %s "
 
 #. %1$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:107
 #, c-format
 msgid "%s Item in transit to "
 msgstr "%s Jednotka je na cestě do "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, c-format
 msgid "%s Item waiting at "
 msgstr "%s Jednotka čeká v "
@@ -473,7 +501,7 @@ msgstr "%s Žádné výsledky, zkuste změnit nastavení filtrů. %s "
 #. %3$s:  FOREACH subtitle IN biblio.subtitle.split(' \| ') 
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:6
 #, c-format
 msgid "%s No title %s %s%s,%s "
 msgstr "%s Bez názvu %s %s%s,%s "
@@ -618,22 +646,6 @@ msgstr "%s Nezadali jste žádné podmínky vyhledávání. %s "
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Z této knihovny jste si nikdy nic nevypůjčili. %s "
 
-#. %1$s:  IF ( review.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#, c-format
-msgid "%s by "
-msgstr "%s od "
-
-#. %1$s:  IF ( MY_TAG.author ) 
-#. %2$s:  MY_TAG.author | html 
-#. %3$s:  END 
-#. %4$s:  END # /IF MY_TAG.XSLTBloc 
-#. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:168
-#, c-format
-msgid "%s by %s %s %s %s "
-msgstr "%s od %s %s %s %s "
-
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
 #, c-format
@@ -754,18 +766,10 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 #. %7$s:  HOLD.expirationdate | $KohaDates 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
 msgstr "%s, %s,%s %s od %s %s do %s %s %s "
-
-#. %1$s:  IF ( bibitemloo.author ) 
-#. %2$s:  bibitemloo.author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:194
-#, c-format
-msgid "%s, by %s%s "
-msgstr "%s, od %s%s "
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | url 
@@ -928,7 +932,7 @@ msgstr ""
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:884
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, c-format
 msgid "%sYes%s "
 msgstr "%sAno%s "
@@ -941,8 +945,8 @@ msgstr "%sAno%s "
 msgid "%sYes%sNo%s "
 msgstr "%sAno%sNe%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:159
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Předchozí"
@@ -1599,7 +1603,7 @@ msgstr "(%s záznamů)"
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1869,7 +1873,7 @@ msgid "(on hold)"
 msgstr "(Rezervováno)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:857
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
 #, c-format
 msgid "(only %s)"
 msgstr "(pouze %s)"
@@ -2079,7 +2083,7 @@ msgstr "Platba s identifikátorem platby „%s“ již byla poslána na účet."
 msgid "A similar document already exists: "
 msgstr ") %s Podobný dokument již existuje: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
 #, c-format
 msgid "A specific item"
 msgstr "Konkrétní jednotka"
@@ -2187,7 +2191,7 @@ msgid "Add another field"
 msgstr "Vložit další pole"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Add note"
 msgstr "Přidat poznámku"
@@ -2248,13 +2252,13 @@ msgid "Add to..."
 msgstr "Vložit do..."
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:92
 #, c-format
 msgid "Added %s by"
 msgstr ""
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, c-format
 msgid "Added %s by you"
 msgstr ""
@@ -2335,12 +2339,12 @@ msgid "All collections"
 msgstr "Všechny sbírky"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will be suspended."
 msgstr "Všechny rezervace jsou pozastaveny."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will resume."
 msgstr "Všechny rezervace budou obnoveny."
 
@@ -2546,7 +2550,7 @@ msgid "Any item "
 msgstr "Libovolná jednotka "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Any item type"
 msgstr "Jakýkoli typ jednotky"
@@ -2562,13 +2566,13 @@ msgid "Apply field weights to search "
 msgstr "Použít váhy polí přo hledání "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Opravdu chcete zrušit tento požadavek na zpřístupnění článku?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Opravdu chce zrušit tuto rezervaci?"
@@ -2584,7 +2588,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Opravdu chcete vymazat vybrané položky z vaší historie vyhledávání?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Určitě chcete odstranit tento štítek (štítky)?"
 
@@ -2631,7 +2635,7 @@ msgstr "Určitě chcete odebrat tyto položky ze seznamu?"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy
 msgid "Are you sure you want to remove this recall?"
 msgstr "Opravdu chcete zrušit toto sdílení?"
@@ -2642,7 +2646,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Opravdu chcete zrušit toto sdílení?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Určitě chcete obnovit všechny zrušené rezervace?"
 
@@ -2652,7 +2656,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Opravdu chcete vrátit tuto jednotku?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Určitě chcete zrušit všechny rezervace?"
 
@@ -2667,7 +2671,7 @@ msgstr "Došlo"
 msgid "Article request fee"
 msgstr "Požadavky na článek "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 #, c-format
 msgid "Article requests"
 msgstr "Požadavky na texty článků"
@@ -2704,7 +2708,7 @@ msgstr ""
 "vy můžete začít znovu."
 
 #. OPTION
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
 msgid "At least one item is available at this library"
 msgstr "V knihovně je dostupná alespoň jedna jednotka"
 
@@ -2926,7 +2930,7 @@ msgstr "Dostupná vydání"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, c-format
 msgid "Average rating: %s (%s votes)"
@@ -2978,7 +2982,7 @@ msgstr "Moduly"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3213,7 +3217,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3290,7 +3294,7 @@ msgstr "Signatura: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:512
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
@@ -3341,7 +3345,7 @@ msgstr "CancelHold"
 msgid "CancelRecall "
 msgstr "CancelRecall "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
 #, fuzzy, c-format
 msgid "Canceled"
 msgstr "Zrušit"
@@ -3373,8 +3377,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Ruší aktivní požadavek rezervace pro čtenáře."
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:390
 msgid "Cannot be put on hold"
 msgstr "Není možné rezervovat"
 
@@ -3666,8 +3670,8 @@ msgstr "Odebrat označení"
 msgid "Clear date"
 msgstr "Vymazat datum"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:962
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Smažte datum pro odložení na neurčito."
@@ -3720,7 +3724,7 @@ msgstr "Otevřít v Google Books"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1363
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1372
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:954
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:360
@@ -3797,7 +3801,7 @@ msgstr "Vyberte položky, které vás zajímají"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -3901,7 +3905,7 @@ msgstr "Komentáře k %s &rsaquo; %s%s%sKoha online%s katalog"
 msgid "Comments%s"
 msgstr "Komentáře%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "Completed"
 msgstr ""
@@ -3918,7 +3922,7 @@ msgid "Confirm"
 msgstr "Potvrdit"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:482
 msgid "Confirm hold"
 msgstr "Potvrdit rezervaci"
 
@@ -4003,7 +4007,7 @@ msgstr "%d řádků zkopírováno do schránky"
 msgid "Copied one row to clipboard"
 msgstr "Jeden řádek byl zkopírovaný do schránky"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, c-format
 msgid "Copy"
@@ -4012,7 +4016,7 @@ msgstr "Kopírovat"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
 #, c-format
 msgid "Copy number"
 msgstr "Číslo kopie"
@@ -4131,7 +4135,7 @@ msgstr "Vaše souhlasy &rsaquo; %s%s%sKoha online%s katalog"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:472
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
@@ -4304,7 +4308,7 @@ msgstr "Datum vložení (od nejnovějších po nejstarší)"
 msgid "Date added (oldest to newest)"
 msgstr "Datum vložení (od nejstarších po nejnovější)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, c-format
 msgid "Date added:"
 msgstr "Datum vložení:"
@@ -4339,7 +4343,7 @@ msgstr "Datum dodání"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:75
 #, c-format
 msgid "Date:"
 msgstr "Datum:"
@@ -4418,7 +4422,7 @@ msgid "Delete selected"
 msgstr "Odstranit označené"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:183
 msgid "Delete selected tags"
 msgstr "Odstranit označené štítky"
 
@@ -4568,7 +4572,7 @@ msgstr "Zobrazit novinky pro: "
 msgid "Displaying availability results"
 msgstr "Zobrazení výsledků vyhledávání dostupnosti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:968
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:966
 #, fuzzy, c-format
 msgid "Do not suspend"
 msgstr "Neupravovat."
@@ -4580,19 +4584,19 @@ msgid ""
 "arrives?"
 msgstr "Chcete obdržet e-mail vždy, když dorazí nové číslo tohoto periodika?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:219
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Nemáte ještě průkazku do knihovny?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Nemáte ještě nastavené heslo?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Don't have an account? "
 msgstr "Nemáte ještě účet v knihovně? "
@@ -4659,7 +4663,7 @@ msgstr "Půjčeno do"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:425
 #, c-format
 msgid "Due %s"
 msgstr "Půjčeno do %s"
@@ -4742,7 +4746,7 @@ msgid "Edit list &nbsp;"
 msgstr "Upravit seznam &nbsp;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, fuzzy, c-format
 msgid "Edit note"
 msgstr "Upravit poznámku"
@@ -4776,7 +4780,7 @@ msgstr "Úprava poznámky k vydání %s &rsaquo; %s%s%sKoha online%s katalog"
 msgid "Editions"
 msgstr "Vydání"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:56
 #, c-format
 msgid "Email"
@@ -5065,7 +5069,7 @@ msgid "Expected"
 msgstr "Očekáván"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Expecting a specific item selection."
 msgstr "Nebyla vybrána žádná konkrétní jednotka."
 
@@ -5083,8 +5087,8 @@ msgstr "Platnost registrace do:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:781
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Expiration:"
 msgstr "Konec platnosti:"
@@ -5278,11 +5282,11 @@ msgstr ""
 msgid "Forgiven"
 msgstr "Prominuto"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:223
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:402
 #, c-format
 msgid "Forgot your password?"
 msgstr "Zapomněli jste heslo?"
@@ -5502,11 +5506,6 @@ msgstr "OK"
 msgid "Go to OPAC"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
-#, fuzzy, c-format
-msgid "Go to Staff client"
-msgstr "Podrobnosti"
-
 #. LI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
@@ -5518,6 +5517,11 @@ msgstr "Podrobnosti"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
 msgstr "Přejít na stránku %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
+#, fuzzy, c-format
+msgid "Go to staff interface"
+msgstr "Podrobnosti"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:10
@@ -5641,11 +5645,11 @@ msgid "Hi,"
 msgstr "Dobrý den,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hide options"
 msgstr "Skrýt možnosti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, fuzzy, c-format
 msgid "Hide unholdable items"
 msgstr "Přidat více jednotek"
@@ -5666,13 +5670,13 @@ msgstr "Zvýraznit"
 msgid "Hold date"
 msgstr "Datum rezervace"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, c-format
 msgid "Hold date:"
 msgstr "Datum rezervace:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold expiration date should be filled."
 msgstr ""
 
@@ -5686,12 +5690,12 @@ msgstr "Poplatek za rezervaci"
 msgid "Hold filled"
 msgstr "Poplatek za rezervaci"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Rezervace platí do:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, c-format
 msgid "Hold notes:"
 msgstr "Poznámka k rezervaci:"
@@ -5707,11 +5711,11 @@ msgid "Hold requests"
 msgstr "MVS požadavky"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold start date should be filled."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
 #, c-format
 msgid "Hold starts on date:"
 msgstr "Rezervace začíná dne:"
@@ -5848,7 +5852,7 @@ msgstr "Domovské knihovny"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, c-format
 msgid "Home library"
 msgstr "Domovská knihovna"
@@ -6052,7 +6056,7 @@ msgstr ""
 "Pokud nemáte účet Shibboleth, ale pouze lokální účet, můžete se přihlásit "
 "níže."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:220
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
@@ -6060,7 +6064,7 @@ msgstr ""
 "Pokud ještě nemáte průkazku do knihovny, zastavte se u nás a my Vám ji rádi "
 "vystavíme"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -6141,14 +6145,16 @@ msgid "Image from Syndetics"
 msgstr "Obrázek obálky z Adlibris"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:51
 #, c-format
 msgid "Images"
 msgstr "Obrázky"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:72
-#, c-format
-msgid "Images for "
+#. %1$s:  INCLUDE 'biblio-title.inc' link=> 1 
+#. %2$s:  biblio.author | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
+#, fuzzy, c-format
+msgid "Images for %s %s "
 msgstr "Obrázky pro "
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' 
@@ -6213,7 +6219,7 @@ msgstr "%s Jednotka je na cestě do "
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:427
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6239,7 +6245,7 @@ msgid "Indexes"
 msgstr "Indexy"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #, c-format
 msgid "Information"
 msgstr "Informace"
@@ -6409,13 +6415,13 @@ msgstr "Vaše pořadí ve frontě rezervací"
 msgid "Item holds"
 msgstr "Rezervace jednotky"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:118
 #, fuzzy, c-format
 msgid "Item in processing"
 msgstr "Poplatek za zpracování ztracené jednotky %s"
 
 #. %1$s:  branch_name| $raw 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:115
 #, fuzzy, c-format
 msgid "Item in transit from %s since"
 msgstr "Na cestě z %s do %s od %s"
@@ -6449,7 +6455,7 @@ msgid "Item not renewed"
 msgstr "Výpůjčka byla prodloužena"
 
 #. %1$s:  HOLD.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:60
 #, c-format
 msgid "Item on hold: %s"
 msgstr "Rezervace jednotky: %s"
@@ -6476,7 +6482,7 @@ msgstr "Výpůjčka byla prodloužena"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6494,7 +6500,7 @@ msgid "Item type:"
 msgstr "Typ jednotky:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:224
 #, c-format
 msgid "Item type: "
 msgstr "Typ jednotky: "
@@ -6626,7 +6632,7 @@ msgid "Last "
 msgstr "Poslední"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Last location"
 msgstr "Poslední umístění"
@@ -6838,7 +6844,7 @@ msgstr "Načítá se..."
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "Načítá se..."
@@ -6909,11 +6915,11 @@ msgid "Locations"
 msgstr "Umístění"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:207
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:414
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:392
 #, c-format
 msgid "Log in"
 msgstr "Přihlásit se"
@@ -7013,7 +7019,7 @@ msgstr "Odhlásit se"
 msgid "Log out and try again with a different user."
 msgstr "Odhlašte se a zkuste se přihlásit jiným uživatelským účtem."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Přihlášení do katalogu není povoleno."
@@ -7029,13 +7035,13 @@ msgstr "Přihlásit se"
 msgid "Login page"
 msgstr "Přihlašovací stránka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:193
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
 #, c-format
 msgid "Login:"
 msgstr "Přihlašovací jméno:"
@@ -7364,7 +7370,7 @@ msgstr "Neomezená platnost "
 # Neomezená platnost?
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Never expires %s %s "
 msgstr "Neomezená platnost %s %s "
@@ -7380,7 +7386,7 @@ msgstr ""
 "způsobí smazání všech záznamů o výpůjčce ihned po vrácení."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
 #, c-format
 msgid "New"
 msgstr "Nový"
@@ -7477,12 +7483,12 @@ msgstr "Další"
 msgid "Next "
 msgstr "Další "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:170
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Další &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:324
 #, c-format
 msgid "Next available item"
 msgstr "Další dostupná jednotka"
@@ -7557,9 +7563,9 @@ msgstr "Žádné výpůjčky"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:118
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:280
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
@@ -7731,12 +7737,12 @@ msgstr ""
 "nejkratší možné době."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not cancel article request"
 msgstr "Ne, nerušit požadavek na článek"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not cancel hold"
 msgstr "Ne, nerušit rezervaci"
 
@@ -7761,7 +7767,7 @@ msgid "No, do not remove sharing"
 msgstr "Ne, nerušit sdílení"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not resume holds"
 msgstr "Ne, neobnovit rezervace"
 
@@ -7839,7 +7845,7 @@ msgstr "Nelze vypůjčit %s"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:435
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Nelze vypůjčit (%s)"
@@ -7849,7 +7855,7 @@ msgstr "Nelze vypůjčit (%s)"
 msgid "Not issued"
 msgstr "Není vypůjčeno"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:461
 #, c-format
 msgid "Not on hold"
 msgstr "Není rezervováno"
@@ -7885,7 +7891,7 @@ msgstr "Poznámka:"
 msgid "Note: "
 msgstr "Poznámka: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7963,7 +7969,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:364
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -7997,7 +8003,7 @@ msgid "Nothing"
 msgstr "Nic"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8026,7 +8032,7 @@ msgstr "NoveList Select: "
 msgid "Number"
 msgstr "Číslo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
 #, c-format
 msgid "Number of holds: "
 msgstr "Počet požadavků: "
@@ -8055,7 +8061,7 @@ msgstr "OK"
 msgid "OR"
 msgstr "OR"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8352,13 +8358,13 @@ msgstr "Obnovení zapomenutého hesla"
 msgid "Password updated"
 msgstr "Heslo bylo změněno"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:195
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:411
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:390
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:13
 #, c-format
 msgid "Password:"
@@ -8412,14 +8418,14 @@ msgid "Payout"
 msgstr "Rozložení"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
 #, fuzzy, c-format
 msgid "Pending"
 msgstr "Nevyřízená rezervace"
 
 #. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:123
 #, c-format
 msgid "Pending for next available item of item type '%s'"
 msgstr ""
@@ -8469,9 +8475,9 @@ msgstr "Vyzvednout v"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:792
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:84
 #, c-format
 msgid "Pick up location:"
 msgstr "Vyzvednout v:"
@@ -8493,7 +8499,7 @@ msgid "Pickup location"
 msgstr "Vyzvednout v"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on"
 msgstr "Rezervovat"
 
@@ -8503,7 +8509,7 @@ msgid "Place a hold on "
 msgstr "Rezervovat "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on: "
 msgstr "Rezervovat: "
 
@@ -8735,7 +8741,7 @@ msgstr "Vložte, prosím, hodnotu větší nebo rovnou {0}."
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Vložte, prosím, hodnotu menší nebo rovnou {0}."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr "Zadejte prosím další informace ohledně požadované jednotky:"
@@ -8884,7 +8890,7 @@ msgstr ""
 "Vyberte prosím konkrétní jednotku, ke které si přejete vyžádat text článku."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 msgid "Please select a tag to delete."
 msgstr "Prosím vyberte štítek, který chcete smazat."
 
@@ -9051,7 +9057,7 @@ msgstr "Samoobslužné půjčování &rsaquo; %s%s%sKoha %s"
 msgid "Priority"
 msgstr "Priorita"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:90
 #, c-format
 msgid "Priority:"
 msgstr "Priorita:"
@@ -9089,7 +9095,7 @@ msgstr "Soukromé seznamy sdílené se mnou"
 msgid "Problem found on page: "
 msgstr "Na stránce se vyskytla chyba: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
 #, fuzzy, c-format
 msgid "Processing"
 msgstr "Zpracovává se..."
@@ -9169,7 +9175,7 @@ msgstr "Datum vydání: od nejnovějšího po nejstarší"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Datum vydání: od nejstaršího po nejnovější"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:54
 #, c-format
 msgid "Publication:"
 msgstr "Vydání:"
@@ -9474,9 +9480,9 @@ msgstr "Nahradit"
 msgid "Register a new account"
 msgstr "Vytvořit nový účet"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Register here."
 msgstr "Zaregistrujte se."
@@ -9593,7 +9599,7 @@ msgstr "Prodloužit"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew all"
 msgstr "Prodloužit vše"
@@ -9608,7 +9614,7 @@ msgstr "Prodloužit jednotku"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew selected"
 msgstr "Prodloužit vybrané"
@@ -9706,7 +9712,7 @@ msgstr "Požadavek byl zadán"
 msgid "Request placed:"
 msgstr "Požadavek byl zadán:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Request specific item type:"
 msgstr "Požadavek na konkrétní typ jednotky:"
@@ -9811,7 +9817,7 @@ msgstr "Požadavek %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -9887,17 +9893,17 @@ msgstr "Výsledky hledání „%s“"
 msgid "Results per page: "
 msgstr "Výsledků na stránku: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:136
 #, c-format
 msgid "Resume"
 msgstr "Pokračovat"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:184
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Obnovit všechny přerušené rezervace"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
 #, fuzzy, c-format
 msgid "Resume hold"
 msgstr "Pokračovat v rezervaci "
@@ -10072,7 +10078,7 @@ msgid "Save to your lists"
 msgstr "Uložit do vašich seznamů"
 
 # skenovat?
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, fuzzy, c-format
 msgid "Scan"
@@ -10126,7 +10132,7 @@ msgstr "Načtěte jednotku nebo vložte její čárový kód:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:171
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Search"
@@ -10175,7 +10181,7 @@ msgid "Search for this title in:"
 msgstr "Hledat tento titul v:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
 msgid "Search for works by this author"
 msgstr "Hledat díla tohoto autora"
 
@@ -10305,7 +10311,7 @@ msgstr "Část:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
@@ -10339,7 +10345,7 @@ msgstr "Vyberte seznam"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #, c-format
 msgid "Select a specific item:"
 msgstr "Vyberte konkrétní kopii:"
@@ -10674,8 +10680,8 @@ msgstr "Zobrazit seznamy"
 msgid "Show more"
 msgstr "Zobrazit více"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:277
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, c-format
 msgid "Show more options"
 msgstr "Zobrazit více možností"
@@ -10685,7 +10691,7 @@ msgstr "Zobrazit více možností"
 msgid "Show the top "
 msgstr "Zobrazit nejoblíbenějších "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 #, fuzzy, c-format
 msgid "Show unholdable items"
 msgstr "Zobrazit všechny položky"
@@ -10778,7 +10784,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Something went wrong. The note has not been saved"
 msgstr "Něco se pokazilo. Poznámka nebyla uložena"
 
@@ -10894,7 +10900,7 @@ msgstr ""
 "Omlouváme se, ověření této samoobslužné stanice selhalo. Prosím kontaktujte "
 "administrátora pro vyřešení tohoto problému."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:199
 #, fuzzy, c-format
 msgid "Sorry, you are too young to place a hold for this item."
 msgstr ""
@@ -11041,7 +11047,7 @@ msgstr "Stav"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:95
 #, c-format
 msgid "Status:"
 msgstr "Stav:"
@@ -11147,7 +11153,7 @@ msgstr "Potvrdit a zavřít toto okno"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Submit changes"
 msgstr "Potvrdit změny"
 
@@ -11159,7 +11165,7 @@ msgstr "Potvrdit změny"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Submit note"
 msgstr "Odeslat poznámku"
@@ -11332,30 +11338,30 @@ msgstr "Příjmení:"
 msgid "Surveys"
 msgstr "Ankety"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:965
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:144
 #, c-format
 msgid "Suspend"
 msgstr "Pozastavit"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:171
 #, c-format
 msgid "Suspend all holds"
 msgstr "Přerušit všechny rezervace"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
 #, fuzzy, c-format
 msgid "Suspend hold"
 msgstr "Pozastavit rezervaci do"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:959
 #, c-format
 msgid "Suspend until:"
 msgstr "Odložit do:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "Suspended"
 msgstr "Pozastavit"
@@ -11799,7 +11805,7 @@ msgstr "Zatím nikdo nekomentoval."
 msgid "There are no items available for recall."
 msgstr "Žádnou z těchto položek není možné rezervovat."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
 #, c-format
 msgid "There are no items that can be placed on hold."
 msgstr "Žádnou z těchto položek není možné rezervovat."
@@ -12028,20 +12034,20 @@ msgstr "Tento záznam obsahuje mnoho fyzických jednotek (%s). "
 msgid "This subscription is closed."
 msgstr "Tento odběr (předplatné) je ukončen."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 "Není možné vyžádat si vrácení tohoto titulu, protože jej již máte vypůjčený."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:212
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Není možné vyžádat si vrácení tohoto titulu."
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:94
 msgid "Thumbnail"
 msgstr "Náhled"
 
@@ -12130,7 +12136,7 @@ msgstr ""
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha.  "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha."
@@ -12250,7 +12256,7 @@ msgid "Unable to update your setting!"
 msgstr "Nepodařilo se aktualizovat vaše nastavení!"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Nedostupné (ztracené nebo nezvěstné)"
@@ -12346,7 +12352,7 @@ msgstr ""
 "Pomocí této funkce můžete nahlásit případné problémy s aktuálně vypůjčenými "
 "jednotkami"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:243
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr ""
@@ -12362,7 +12368,7 @@ msgstr "Viz"
 msgid "Used for/see from:"
 msgstr "Další varianty jména:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:223
 #, c-format
 msgid "User summary"
 msgstr "Přehled údajů o uživateli"
@@ -12440,9 +12446,7 @@ msgid "View all the physical items."
 msgstr "Zobrazit všechny fyzické položky."
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:111
 msgid "View details for this title"
 msgstr "Zobrazit podrobnosti"
 
@@ -12481,7 +12485,7 @@ msgstr "webová stránka"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, c-format
 msgid "Vol info"
 msgstr "Část"
@@ -12498,7 +12502,7 @@ msgid "Volume:"
 msgstr "Svazek:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:441
 #, fuzzy, c-format
 msgid "Waiting"
 msgstr "Čeká od"
@@ -12539,7 +12543,7 @@ msgstr ""
 msgid "Website"
 msgstr "Webová stránka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, c-format
 msgid "Welcome, "
 msgstr "Vítejte, "
@@ -12652,12 +12656,12 @@ msgid "Yes, I agree."
 msgstr "Ano, souhlasím."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, cancel article request"
 msgstr "Ano, zrušit požadavek na článek"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, cancel hold"
 msgstr "Ano, zrušit rezervaci"
 
@@ -12682,12 +12686,12 @@ msgid "Yes, remove sharing"
 msgstr "Ano, zrušit sdílení"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, resume all holds"
 msgstr "Ano, obnovit všechny přerušené rezervace"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, suspend all holds"
 msgstr "Ano, pozastavit všechny rezervace"
 
@@ -12969,12 +12973,12 @@ msgstr "Máte kredit v hodnotě:"
 msgid "You have already placed a "
 msgstr "Tento titul jste si již vyžádali."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:204
 #, fuzzy, c-format
 msgid "You have already placed a recall on this title."
 msgstr "Tento titul jste si již vyžádali."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:202
 #, c-format
 msgid "You have already requested this title."
 msgstr "Tento titul jste si již vyžádali."
@@ -12984,7 +12988,7 @@ msgstr "Tento titul jste si již vyžádali."
 msgid "You have checked out too many items and can't check out any more."
 msgstr "Máte v knihovně dluh %s není možné provádět výpůjčky."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:930
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
 #, c-format
 msgid "You have no article requests currently."
 msgstr "Nemáte žádné požadavky na kopie článků."
@@ -13105,7 +13109,7 @@ msgstr "Možná jste použili odkaz na záznam, který již není dostupný"
 msgid "You may only add up to %s suggestions in %s days."
 msgstr "Můžete vložit pouze %s návrhů za %s dní."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:231
 #, c-format
 msgid "You may register here."
 msgstr "Vytvořit účet."
@@ -13558,17 +13562,17 @@ msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "Vaše nastaveni komunikace &rsaquo; %s%s%sKoha online%s katalog"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s could not be saved."
 msgstr "Vaši poznámku o %s nebylo možné uložit."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Vaše poznámka ohledně %s byla uložena a odeslána do knihovny."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s was removed."
 msgstr "Vaše poznámka ohledně %s byla smazána."
 
@@ -13637,7 +13641,7 @@ msgstr "Vaše platba na $%s byla úspěšně zpracována!"
 msgid "Your personal details"
 msgstr "Osobní údaje"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, c-format
 msgid "Your priority: "
 msgstr "Vaše pořadí: "
@@ -13684,7 +13688,7 @@ msgstr "Návrhy na nákup"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your rating: %s, "
 msgstr "Vaše hodnocení: %s, "
 
@@ -13881,7 +13885,7 @@ msgstr "a souhlasím se zpracováním osobních údajů v tomto rozsahu."
 msgid "ask for a discharge"
 msgstr "Požádat o ukončení"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:447
 #, fuzzy, c-format
 msgid "at"
 msgstr "Košík"
@@ -13995,7 +13999,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:261
 #, fuzzy, c-format
 msgid "due in fines and charges "
 msgstr "dlužných poplatků"
@@ -14055,7 +14059,7 @@ msgstr ""
 msgid "every year"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:449
 #, fuzzy, c-format
 msgid "expected at"
 msgstr "Očekáván"
@@ -14086,7 +14090,7 @@ msgstr "Dokončit požadavek "
 msgid "for more information on what it does and how to configure it."
 msgstr "pro více informací o možnostech a nastavení této funkce."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:445
 #, fuzzy, c-format
 msgid "for patron"
 msgstr "LookupPatron"
@@ -14469,7 +14473,7 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:451
 #, c-format
 msgid "since"
 msgstr ""
@@ -14621,12 +14625,12 @@ msgstr ""
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, fuzzy, c-format
 msgid "until"
 msgstr "do "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:175
 #, c-format
 msgid "until "
 msgstr "do "
@@ -14944,6 +14948,9 @@ msgstr "×"
 
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sjednotka%sjednotky%s%sPrázdné%s"
+
+#~ msgid "%s, by %s%s "
+#~ msgstr "%s, od %s%s "
 
 #~ msgid ""
 #~ "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "

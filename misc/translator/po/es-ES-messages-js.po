@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 09:49-0300\n"
+"POT-Creation-Date: 2022-08-15 21:06-0300\n"
 "PO-Revision-Date: 2022-05-20 11:29+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -20,6 +20,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (actual) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s de %s renovaciones no vistas restantes"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -112,11 +117,6 @@ msgstr "%s meses"
 msgid "%s of %s renewals remaining"
 msgstr "%s de %s renovaciones restantes"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s de %s renovaciones no vistas restantes"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -186,7 +186,7 @@ msgstr "AJAX no pudo rechazar la etiqueta: %s"
 msgid "Access to camera denied."
 msgstr "Acceso a la cámara denegado."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "Acciones"
 
@@ -305,7 +305,7 @@ msgstr "¿Está seguro de que desea eliminar este campo?"
 msgid "Are you sure you want to delete this record?"
 msgstr "¿Está seguro de querer eliminar este registro?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "¿Está seguro de querer eliminar esta declaración de devolución?"
 
@@ -426,7 +426,7 @@ msgstr "La renovación automática falló, el usuario tiene multas sin pagar."
 msgid "Back to top"
 msgstr "Volver al inicio"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "¡El registro bibliográfico no existe!"
 
@@ -445,7 +445,7 @@ msgstr ""
 "Ya no se puede renovar automáticamente - se superó el número de días de "
 "préstamo"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Cancelar"
@@ -459,7 +459,7 @@ msgstr "Cancelar reserva"
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr ""
@@ -613,7 +613,7 @@ msgid "December"
 msgstr "Diciembre"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Borrar"
@@ -626,7 +626,7 @@ msgstr "Denegado"
 msgid "Directory is not writeable"
 msgstr "No se puede escribir en este directorio"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "Haz doble clic para editar"
 
@@ -646,7 +646,7 @@ msgstr "Editar"
 msgid "Edit action %s"
 msgstr "Editar acción %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "Editar notas"
 
@@ -739,7 +739,7 @@ msgstr "Tipo de archivo:"
 msgid "First"
 msgstr "Primero"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "Primera fecha de publicación no definida"
 
@@ -752,7 +752,7 @@ msgstr ""
 "Por favor considere ingresar un conteo por número en lugar de un período de "
 "tiempo."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "La frecuencia no está definida"
 
@@ -958,7 +958,7 @@ msgstr "Siguiente"
 msgid "Next available %s item"
 msgstr "Próximo disponible %s ítem"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "La fecha de publicación del próximo ejemplar no está definida"
 
@@ -1032,7 +1032,7 @@ msgstr "No renovable antes de %s"
 msgid "No results found"
 msgstr "No se encontraron resultados"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "No se encontró la suscripción en Mana Knowledge Base"
 
@@ -1075,6 +1075,14 @@ msgstr "Noviembre"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "Número de préstamos por tipo de ítem"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1123,7 +1131,7 @@ msgstr "Por favor, elija un período de inscripción en meses o por fecha."
 msgid "Please choose at least one external target"
 msgstr "Por favor, seleccione al menos un servidor externo"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr ""
 "Por favor, haz clic en 'Probar patrón de predicción' antes de guardar la "
@@ -1143,7 +1151,7 @@ msgstr "Por favor elimine %s caracter(es)"
 msgid "Please enter %s or more characters"
 msgstr "Por favor introduzca %s o más caracteres"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Por favor, introduzca un nombre para este patrón"
 
@@ -1152,7 +1160,7 @@ msgstr "Por favor, introduzca un nombre para este patrón"
 msgid "Please enter a valid date (should match %s)."
 msgstr "Por favor introduzca una fecha válida (debería coincidir %s)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1257,7 +1265,7 @@ msgstr "Renovación denegada por preferencia del sistema"
 msgid "Renewed, due:"
 msgstr "Renovación, vencimiento:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "Resolver"
 
@@ -1265,7 +1273,7 @@ msgstr "Resolver"
 msgid "Results"
 msgstr "Resultados"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Resultados de Mana Knowledge Base"
 
@@ -1311,7 +1319,7 @@ msgstr "Buscar en Google Books"
 msgid "Search:"
 msgstr "Buscar:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "Buscando suscripción en Mana Knowledge Base"
 
@@ -1335,19 +1343,19 @@ msgstr "Sep"
 msgid "September"
 msgstr "Septiembre"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Mostrar la declaración de devolución"
 msgstr[1] "Mostrar todas las {count} declaraciones de devolución"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Mostrar la declaración de devolucíón no resuelta"
 msgstr[1] "Mostrar las {count} declaraciones de devolucíón no resueltas"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "Mostrar resultados de Mana"
 
@@ -1372,7 +1380,7 @@ msgstr "Algunos presupuestos no están definidos en los registros de ítems"
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Hubo un error. ¿Quizás ya existe el valor?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Algo salió mal. No se puede crear un nuevo patrón de numeración."
 
@@ -1380,7 +1388,7 @@ msgstr "Algo salió mal. No se puede crear un nuevo patrón de numeración."
 msgid "Sorry, nothing found."
 msgstr "Lo siento, no se encontraron coincidencias."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Suscripción encontrada en Mana Knowledge Base:"
 
@@ -1530,7 +1538,7 @@ msgstr "El vendedor no existe"
 msgid "There is no record selected"
 msgstr "No hay ningún registro seleccionado"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 msgid "This bibliographic record does not exist"
 msgstr "El registro bibliográfico no existe"
 
@@ -1551,7 +1559,7 @@ msgstr "Este ítem ha sido añadido a su carrito"
 msgid "This item is already in your cart"
 msgstr "Este ítem ya está en su carrito"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Este nombre de patrón ya existe. ¿Desea modificarlo?"
 
@@ -1603,7 +1611,7 @@ msgstr "No se ha podido reanudar, no se encontró la reserva"
 msgid "Unable to suspend, hold not found"
 msgstr "No se ha podido suspender la reserva, no se encontró la reserva"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "Actualizar"
 
@@ -1628,7 +1636,7 @@ msgstr "Ver comparación"
 msgid "Waiting status reverted"
 msgstr "Estado de en espera revertido"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1646,7 +1654,7 @@ msgstr ""
 "podría causar serios problemas en el módulo de adquisición. ¿Está seguro que "
 "desea eliminar este registro?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1683,7 +1691,7 @@ msgstr "Usted no puede recibir más ítems"
 msgid "You have made changes to system preferences."
 msgstr "Usted ha realizado cambios a las preferencias el sistema"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1691,11 +1699,11 @@ msgstr ""
 "Ha modificado el patrón de predicción avanzado. Por favor, Guarde el trabajo "
 "o cancele las modificaciones."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Usted debe elegir una primer fecha de publicación"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr ""
 "Usted debe elegir una longitud de suscripción o una fecha de finalización."

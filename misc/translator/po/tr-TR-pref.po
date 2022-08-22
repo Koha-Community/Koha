@@ -3235,6 +3235,11 @@ msgid ""
 msgstr ""
 "materyaller birinci sekmenin materyaller içerdiği iki sekmede gösterilir"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "hayır"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARC desteklenmiyor."
@@ -3242,6 +3247,15 @@ msgstr "<br/> UNIMARC desteklenmiyor."
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Maksimum bir"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr ""
+"Varsayılan olarak, personel arayüzündeki arama sonuçlarını yandaki öğeye "
+"göre sıralayın"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3255,9 +3269,49 @@ msgstr ""
 "773 alanı aracılığıyla bağlantılı olarak bileşen kayıtlarının bir listesini "
 "göster"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "hayır"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "hem personel arayüzü hem de OPAC"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "hayır"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "hayır"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3274,6 +3328,11 @@ msgstr "kayıtlar görüntülenecektir."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "personel arayüzü"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "hayır"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4710,20 +4769,25 @@ msgstr "ay"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "yıl"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "ayırma kütüphanesi"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "Materyali bulunduran kütüphane."
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "ay"
 
 # Circulation > Holds policy
@@ -5676,9 +5740,28 @@ msgstr ""
 "\">OPACHoldsIfAvailableAtPickup</a> sistem tercihinden etkilenmeyen "
 "kullanıcı kategorileri:"
 
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"Materyali iade edecek olan en son kullanıcı. Bu ayar, <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory"
+"\">opacreadinghistory</a> ve <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> sistem "
+"tercihlerinden bağımsızdır."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "İzin verme"
 
 # Circulation > Article requests
@@ -5696,12 +5779,10 @@ msgstr "hold item türü"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "hold item türü"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "hold item türü"
 
 # Circulation > Article requests
 #, fuzzy

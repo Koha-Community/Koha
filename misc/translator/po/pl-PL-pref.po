@@ -3226,6 +3226,11 @@ msgstr ""
 "egzemplarzy na dwie zakładki. Pierwsza zawierać będzie egzemplarze należące "
 "do"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr ""
@@ -3233,6 +3238,15 @@ msgstr ""
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr ""
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr ""
+"Domyślnie sortuj wyniki wyszukiwania w interfejsie bibliotekarza ze względu "
+"na"
 
 # Cataloging > Record structure
 #, fuzzy
@@ -3245,10 +3259,50 @@ msgid ""
 "linked via field 773, in"
 msgstr ""
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
 # Cataloging > Display
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "Użyj następującego szablonu ISBD w interfejsie bibliotekarza:"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "automatycznie wyświetlaj okno dialogowe"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "automatycznie wyświetlaj okno dialogowe"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3269,6 +3323,11 @@ msgstr "Nie wyświetlaj prostszego sposobu"
 #, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "Struktura rekordu"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "automatycznie wyświetlaj okno dialogowe"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4706,20 +4765,25 @@ msgstr "miesięcy"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "lat"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "obecna biblioteka"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "bibliotece obecnej egzemplarza."
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "miesięcy"
 
 # Circulation > Holds policy
@@ -5663,9 +5727,28 @@ msgstr ""
 "admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
+# Circulation > Checkin policy
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"ostatniego użytkownika zwracającego egzemplarz. Ustawienie jest niezależne "
+"od <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> i <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
+"\">AnonymousPatron</a>."
+
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Nie zezwalaj"
 
 # Circulation > Article requests
@@ -5683,12 +5766,10 @@ msgstr "typu dokumentu zamówienia"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "typu dokumentu zamówienia"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "typu dokumentu zamówienia"
 
 # Circulation > Article requests
 #, fuzzy

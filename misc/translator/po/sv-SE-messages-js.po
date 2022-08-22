@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 10:32-0300\n"
+"POT-Creation-Date: 2022-08-15 21:51-0300\n"
 "PO-Revision-Date: 2022-05-23 12:32+0000\n"
 "Last-Translator: Alexander Borkowski <alexander.borkowski@kau.se>\n"
 "Language-Team: Koha Translation Team\n"
@@ -20,6 +20,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (aktuell) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s av %s omlån kvarstår"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -112,11 +117,6 @@ msgstr "%s månader"
 msgid "%s of %s renewals remaining"
 msgstr "%s av %s återstående omlån"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s av %s omlån kvarstår"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -186,7 +186,7 @@ msgstr "AJAX kunde inte avvisa tagg: %s"
 msgid "Access to camera denied."
 msgstr "Åtkomst till kamera nekad."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "Åtgärder"
 
@@ -304,7 +304,7 @@ msgstr "Är du säker på att du vill ta bort detta fält?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Är du säker på att du vill ta bort posten?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Är du säker på att du vill ta bort denna begäran om återlämning?"
 
@@ -424,7 +424,7 @@ msgstr "Automatisk förnyelse misslyckades, låntagaren har obetalda avgifter"
 msgid "Back to top"
 msgstr "Tillbaka till Verktyg"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "Denna bibliografiska post finns inte!"
 
@@ -443,7 +443,7 @@ msgstr ""
 "Kan inte längre lånas om automatiskt - antal dagar för utlåning har "
 "överskridits"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Avbryt"
@@ -457,7 +457,7 @@ msgstr "Annullera reservation"
 msgid "Cancelled"
 msgstr "Annullerad"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr "Kan inte testa förutsägningsmönstret av följande anledning(ar): %s"
@@ -604,7 +604,7 @@ msgid "December"
 msgstr "December"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Ta bort"
@@ -617,7 +617,7 @@ msgstr "Nekad"
 msgid "Directory is not writeable"
 msgstr "Katalogen är inte skrivbar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "Dubbelklicka för att redigera"
 
@@ -637,7 +637,7 @@ msgstr "Redigera"
 msgid "Edit action %s"
 msgstr "Redigera åtgärd %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "Redigera anteckningar"
 
@@ -730,7 +730,7 @@ msgstr "Filtyp:"
 msgid "First"
 msgstr "Första"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "Första utgivningsdatum är inte definierat"
 
@@ -743,7 +743,7 @@ msgstr ""
 "sätt. Överväg att ange ett antal för antalet nummer istället för en "
 "tidsperiod."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "Frekvens har inte definierats"
 
@@ -949,7 +949,7 @@ msgstr "Nästa"
 msgid "Next available %s item"
 msgstr "Nästa tillgängliga %s exemplar"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "Nästa nummers utgivningsdatum är inte definierat"
 
@@ -1023,7 +1023,7 @@ msgstr "Kan inte lånas om före %s"
 msgid "No results found"
 msgstr "Inga resultat hittades"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "Prenumeration hittades inte i Mana"
 
@@ -1066,6 +1066,14 @@ msgstr "November"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "Antal lån efter exemplartyp"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1116,7 +1124,7 @@ msgstr ""
 msgid "Please choose at least one external target"
 msgstr "Välj minst ett externt mål"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "Klicka på 'Testa prognosmönster' innan prenumerationen sparas."
 
@@ -1134,7 +1142,7 @@ msgstr "Ta bort %s tecken"
 msgid "Please enter %s or more characters"
 msgstr "Vänligen ange %s eller fler tecken"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Ange ett namn för detta mönster"
 
@@ -1143,7 +1151,7 @@ msgstr "Ange ett namn för detta mönster"
 msgid "Please enter a valid date (should match %s)."
 msgstr "Ange ett giltigt datum (som matchar %s)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1243,7 +1251,7 @@ msgstr "Omlån nekat av syspref"
 msgid "Renewed, due:"
 msgstr "Omlånad, återlämningsdatum:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "Markera som löst"
 
@@ -1251,7 +1259,7 @@ msgstr "Markera som löst"
 msgid "Results"
 msgstr "Resultat"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Resultat från Mana Knowledge Base"
 
@@ -1297,7 +1305,7 @@ msgstr "Sök i Google Books"
 msgid "Search:"
 msgstr "Sök:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "Söker efter prenumeration i Mana"
 
@@ -1321,19 +1329,19 @@ msgstr "Sep"
 msgid "September"
 msgstr "September"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Visa 1 ärende"
 msgstr[1] "Visa alla {count} ärenden"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Visa en olöst reklamation"
 msgstr[1] "Visa {count} olösta reklamationer"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "Visa resultat från Mana"
 
@@ -1358,7 +1366,7 @@ msgstr "Några budgetar är inte definierade i exemplarposter"
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Något gick fel. Värdet kanske redan finns?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Något gick fel. Kan inte skapa nytt numreringsmönster."
 
@@ -1366,7 +1374,7 @@ msgstr "Något gick fel. Kan inte skapa nytt numreringsmönster."
 msgid "Sorry, nothing found."
 msgstr "Tyvärr gav sökningen inga träffar."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Prenumeration funnen i Mana Knowledge Base:"
 
@@ -1512,7 +1520,7 @@ msgstr "Leverantören finns inte"
 msgid "There is no record selected"
 msgstr "Ingen post är vald"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 msgid "This bibliographic record does not exist"
 msgstr "Denna bibliografiska post finns inte"
 
@@ -1532,7 +1540,7 @@ msgstr "Detta exemplar lades till i din vagn"
 msgid "This item is already in your cart"
 msgstr "Exemplaret finns redan i din vagn"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Detta mönsternamn finns redan. Vill du redigera det?"
 
@@ -1581,7 +1589,7 @@ msgstr "Kunde inte återuppta, reservation ej funnen"
 msgid "Unable to suspend, hold not found"
 msgstr "Kunde inte pausa reservation, reservation ej funnen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "Uppdatering"
 
@@ -1606,7 +1614,7 @@ msgstr "Se jämförelse"
 msgid "Waiting status reverted"
 msgstr "Väntestatus återställd"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1624,7 +1632,7 @@ msgstr ""
 "orsaka allvarliga problem i inköpsmodulen. Är du säker på att du vill ta "
 "bort denna post?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1661,7 +1669,7 @@ msgstr "Du kan inte ta emot fler exemplar"
 msgid "You have made changes to system preferences."
 msgstr "Du har redigerat systeminställningarna."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1669,11 +1677,11 @@ msgstr ""
 "Du har redigerat det avancerade prognosmönstret. Spara ditt arbete eller "
 "annullera ändringarna."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Du måste välja ett första utgivningsdatum"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "Du måste välja ett slutdatum eller en prenumerationslängd."
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 09:51-0300\n"
+"POT-Creation-Date: 2022-08-15 21:08-0300\n"
 "PO-Revision-Date: 2022-06-14 05:58+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
@@ -20,6 +20,12 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (nykyinen) "
+
+# Käänsin unseen renewalin nyt verkkouusinnaksi. Muutetaan termi, jos osoittautuu kamalaksi.
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s / %s verkkouusintaa jäljellä"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -109,12 +115,6 @@ msgstr "%s kuukautta"
 msgid "%s of %s renewals remaining"
 msgstr "%s / %s uusintakertaa jäljellä"
 
-# Käänsin unseen renewalin nyt verkkouusinnaksi. Muutetaan termi, jos osoittautuu kamalaksi.
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "%s / %s verkkouusintaa jäljellä"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -184,7 +184,7 @@ msgstr "AJAX: Tagin %s hylkääminen ei onnistunut"
 msgid "Access to camera denied."
 msgstr "Pääsy kameraan kielletty."
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "Toiminnot"
 
@@ -302,7 +302,7 @@ msgstr "Haluatko varmasti poistaa tämän kentän?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Haluatko varmasti poistaa tämän tietueen?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Haluatko varmasti poistaa palautusilmoituksen?"
 
@@ -421,7 +421,7 @@ msgstr ""
 msgid "Back to top"
 msgstr "Takaisin alkuun"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "Nimeketietuetta ei ole olemassa!"
 
@@ -438,7 +438,7 @@ msgstr "CSV"
 msgid "Can no longer be auto-renewed - number of checkout days exceeded"
 msgstr "Ei voi enää uusia automaattisesti - lainapäivien määrä ylitetty"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Peruuta"
@@ -452,7 +452,7 @@ msgstr "Poista varaus"
 msgid "Cancelled"
 msgstr "Peruutettu"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr "Ennustuskaavaa ei voida kokeilla, koska: %s"
@@ -601,7 +601,7 @@ msgid "December"
 msgstr "Joulukuu"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Poista"
@@ -614,7 +614,7 @@ msgstr "Estetty"
 msgid "Directory is not writeable"
 msgstr "Kansioon ei voi kirjoittaa"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "Kaksoisnapsauta muokataksesi"
 
@@ -632,7 +632,7 @@ msgstr "Muokkaa"
 msgid "Edit action %s"
 msgstr "Muokkaa toimintoa %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "Muokkaa huomautuksia"
 
@@ -725,7 +725,7 @@ msgstr "Tiedostotyyppi:"
 msgid "First"
 msgstr "Ensimmäinen"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "Ensimmäistä julkaisupäivää ei määritetty"
 
@@ -737,7 +737,7 @@ msgstr ""
 "Ilmestymistiheys ja tilauksen pituus eivät sovi yhteen. Syötä mieluummin "
 "numeroiden määrä kuin aikaväli."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "Ilmestymistiheyttä ei ole määritelty"
 
@@ -942,7 +942,7 @@ msgstr "Seuraava"
 msgid "Next available %s item"
 msgstr "Seuraava vapaa %s nide"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "Seuraavan numeron julkaisupäivää ei määritetty"
 
@@ -1017,7 +1017,7 @@ msgstr "Ei uusintaa ennen %s"
 msgid "No results found"
 msgstr "Ei hakutuloksia"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "Tilausta ei löydy Mana Knowledge Base -tietokannasta"
 
@@ -1060,6 +1060,14 @@ msgstr "Marraskuu"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "Lainojen määrä nidetyypeittäin"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1108,7 +1116,7 @@ msgstr "Valitse ilmoittautuminen kuukausissa tai päivämäärän mukaan."
 msgid "Please choose at least one external target"
 msgstr "Valitse vähintään yksi ulkoinen kohde"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr "Valitse 'Testaa numeroinnin ennustuskaavaa' ennen tallennusta."
 
@@ -1126,7 +1134,7 @@ msgstr "Poista %s merkki(ä)"
 msgid "Please enter %s or more characters"
 msgstr "Syötä vähintään %s merkkiä"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Aseta tämän ilmestymiskaavan nimi"
 
@@ -1135,7 +1143,7 @@ msgstr "Aseta tämän ilmestymiskaavan nimi"
 msgid "Please enter a valid date (should match %s)."
 msgstr "Syötä kelvollinen päivämäärä (pitää olla muodossa %s)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1235,7 +1243,7 @@ msgstr "Uusinta on estetty."
 msgid "Renewed, due:"
 msgstr "Uusittu, erääntyy:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "Ratkaise"
 
@@ -1243,7 +1251,7 @@ msgstr "Ratkaise"
 msgid "Results"
 msgstr "Tulokset"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Tulokset Mana-tietämyskannasta"
 
@@ -1289,7 +1297,7 @@ msgstr "Hae Google Books -palvelusta"
 msgid "Search:"
 msgstr "Haku:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "Etsitään tilausta Mana tietämyskannasta"
 
@@ -1314,20 +1322,20 @@ msgid "September"
 msgstr "Syyskuu"
 
 # The "Python brace placeholders" error with this translation appears to be false positive
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Näytä 1 palautusilmoitus"
 msgstr[1] "Näytä kaikki {count} palautusilmoitusta"
 
 # The "Python brace placeholders" error with this translation appears to be false positive
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Näytä 1 ratkaisematon palautusilmoitus"
 msgstr[1] "Näytä {count} ratkaisematonta palautusilmoitusta"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "Näytä Mana-tulokset"
 
@@ -1352,7 +1360,7 @@ msgstr "Joitain budjetteja ei ole määritetty nidetietueissa"
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Jokin meni pieleen. Ehkä arvo on jo olemassa?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Uuden numerointikaavan luonti epäonnistui."
 
@@ -1360,7 +1368,7 @@ msgstr "Uuden numerointikaavan luonti epäonnistui."
 msgid "Sorry, nothing found."
 msgstr "Pahoittelut, mitään ei löytynyt."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Tilaus löytyi Mana-tietämyskannasta:"
 
@@ -1508,7 +1516,7 @@ msgstr "Toimittajaa ei ole olemassa"
 msgid "There is no record selected"
 msgstr "Ei valittua tietuetta"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 msgid "This bibliographic record does not exist"
 msgstr "Nimeketietuetta ei ole olemassa"
 
@@ -1529,7 +1537,7 @@ msgstr "Tämä nide on lisätty koriisi"
 msgid "This item is already in your cart"
 msgstr "Tämä nide on jo korissasi"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Tällä nimellä on jo kaava. Haluatko muokata sitä?"
 
@@ -1580,7 +1588,7 @@ msgstr "Ei voida jatkaa, varausta ei löytynyt"
 msgid "Unable to suspend, hold not found"
 msgstr "Varausta ei voitu keskeyttää, koska sitä ei löytynyt"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "Päivitä"
 
@@ -1605,7 +1613,7 @@ msgstr "Näytä vertailu"
 msgid "Waiting status reverted"
 msgstr "Odotustila palautettu"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1622,7 +1630,7 @@ msgstr ""
 "Varoitus: Tätä tietuetta käyttää %s tilausta. Poistaminen saattaa aiheuttaa "
 "ongelmia hankinnan puolella. Haluatko varmasti poistaa tämän tietueen?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1658,7 +1666,7 @@ msgstr "Et voi vastaanottaa enempää niteitä"
 msgid "You have made changes to system preferences."
 msgstr "Olet tehnyt muutoksia järjestelmäasetuksiin."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1666,11 +1674,11 @@ msgstr ""
 "Olet muokannut edistynyttä ilmestymisajan ennakointia. Ole hyvä ja tallenna "
 "työsi tai peruuta muokkaukset."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Valitse julkaisupäivä"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "Sinun täytyy valita kausijulkaisutilauksen kesto tai loppumispäivä."
 

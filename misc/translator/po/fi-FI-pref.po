@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2022-06-20 11:29+0000\n"
+"PO-Revision-Date: 2022-08-22 07:06+0000\n"
 "Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.05/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1655724598.736254\n"
+"X-POOTLE-MTIME: 1661151985.122401\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -3202,6 +3202,11 @@ msgid ""
 msgstr ""
 "nidenäyttö kahteen välilehteen, ensimmäisessä välilehdessä on niteet joiden"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "ei"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARCia ei tueta."
@@ -3209,6 +3214,13 @@ msgstr "<br/> UNIMARCia ei tueta."
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Korkeintaan"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr "Virkailijaliittymän hakutulosten oletusjärjestys on"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3220,9 +3232,49 @@ msgid ""
 "linked via field 773, in"
 msgstr "Näytä lista osakohdetietueista, jotka linkitetty kentän 773 kautta"
 
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "ei"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "sekä virkailijaliittymässä että verkkokirjastossa"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "ei"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "ei"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3239,6 +3291,11 @@ msgstr "tietueet näytetään."
 # Cataloging > Interface
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "virkailijaliittymässä"
+
+# Cataloging > Spine labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "ei"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4652,20 +4709,25 @@ msgstr "kuukautta"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "vuotta"
 
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "noutokirjastoa"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 
 # Circulation > Fines Policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "sijaintikirjaston sääntöjä."
 
 # Circulation > Holds policy
 #, fuzzy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "kuukautta"
 
 # Circulation > Holds policy
@@ -5600,8 +5662,29 @@ msgstr ""
 "admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
+# Circulation > Checkin policy > StoreLastBorrower
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"<br><strong>HUOMAA:</strong> Varauksen \"aloituspvm\" -vaihtoehto on "
+"voimassa ja näytetään varauslomakkeella vain, jos <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
+">AllowHoldDateInFuture</a> ja <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a> "
+"järjestelmäasetukset on otettu käyttöön."
+
 # Circulation > Holds policy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "Määritä verkokirjaston varauslomakkeelle pakolliseksi:"
 
 # Circulation > Article requests
@@ -5616,14 +5699,10 @@ msgstr "varauksen loppumispvm"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "varauksen aloituspvm"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
-". Huomaa: Tämä asetus on voimassa varauksen aloituspvm:lle vain, jos "
-"OPACAllowHoldDateInFuture on myös sallittu."
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "varauksen loppumispvm"
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
@@ -10606,11 +10685,11 @@ msgstr "Kirjaston asiakkaat "
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# allowed"
-msgstr "eivät saa"
+msgstr "saavat"
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# not allowed"
-msgstr "saavat"
+msgstr "eivät saa"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSeparateHoldings# Don't separate"
@@ -10958,12 +11037,10 @@ msgid ""
 msgstr "Jos tyhjä, listataan kaikki kirjastot."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
 msgstr "Älä näytä ja täytä automaattisesti"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
 msgstr "Näytä ja täytä automaattisesti"
 
@@ -14639,6 +14716,15 @@ msgstr "riviä raportista, joka on tehty nettipalvelun kautta."
 # Administration > Interface options
 #~ msgid "admin.pref#noItemTypeImages# Yes"
 #~ msgstr "Kyllä"
+
+# Circulation > Holds policy > OPACMandatoryHoldDates
+#~ msgid ""
+#~ "circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only "
+#~ "is effective for the hold start date when OPACAllowHoldDateInFuture is "
+#~ "enabled too."
+#~ msgstr ""
+#~ ". Huomaa: Tämä asetus on voimassa varauksen aloituspvm:lle vain, jos "
+#~ "OPACAllowHoldDateInFuture on myös sallittu."
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."

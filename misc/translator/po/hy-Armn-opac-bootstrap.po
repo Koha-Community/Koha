@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-07-17 10:00-0300\n"
-"PO-Revision-Date: 2022-06-21 05:28+0000\n"
+"POT-Creation-Date: 2022-08-15 21:17-0300\n"
+"PO-Revision-Date: 2022-08-16 06:58+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hy\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hy/22.05/hy-Armn-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1655789321.843839\n"
+"X-POOTLE-MTIME: 1660633085.266861\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -118,6 +118,16 @@ msgstr "%s %s %s Նշում: այս պատուհանը 5 վայրկյանի ըն
 msgid "%s %s %s [%%~ SET line_break = \""
 msgstr "%s %s %s [%%~ SET line_break = \""
 
+#. %1$s:  END # / bibitemloo.holdable 
+#. %2$s:  INCLUDE 'biblio-title.inc' biblio=bibitemloo link=> 1
+#. %3$s:  IF ( bibitemloo.author ) 
+#. %4$s:  bibitemloo.author | html 
+#. %5$s:  END 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#, c-format
+msgid "%s %s %s, by %s%s "
+msgstr "%s %s %s, %s%s "
+
 #. %1$s:  IF RestrictedPageTitle 
 #. %2$s:  RestrictedPageTitle | html 
 #. %3$s:  END 
@@ -219,6 +229,13 @@ msgstr ""
 "%s %s Դու պետք է մուտք գործես եթե ցանկանում ես բաժանորդագրվել նոր նյութերի "
 "մասին էլ փոստով ծանուցումներին %s %s "
 
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=review link=> 1 
+#. %2$s:  IF ( review.author ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:46
+#, c-format
+msgid "%s %s by "
+msgstr "%s %s "
+
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
 #. %3$s:  i.author | html 
@@ -227,6 +244,17 @@ msgstr ""
 #, c-format
 msgid "%s %s by %s %s "
 msgstr "%s %s  %s %s "
+
+#. %1$s:  INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 
+#. %2$s:  IF ( MY_TAG.author ) 
+#. %3$s:  MY_TAG.author | html 
+#. %4$s:  END 
+#. %5$s:  END # /IF MY_TAG.XSLTBloc 
+#. %6$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
+#, c-format
+msgid "%s %s by %s %s %s %s "
+msgstr "%s %s %s %s %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
@@ -410,13 +438,13 @@ msgid "%s Issue notes have not been enabled. Please contact the library. %s "
 msgstr "%s Համարի նշումները չեն թույլատրվել։ Կապվիր գրադարանի հետ։ %s "
 
 #. %1$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:107
 #, c-format
 msgid "%s Item in transit to "
 msgstr "%s Նյութը տեղափոխման մեջ է դեպի "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
 #, c-format
 msgid "%s Item waiting at "
 msgstr "%s Նյութը սպասում է "
@@ -470,7 +498,7 @@ msgstr "%s Չկան արդյունքներ, փորձիր փոխել զտիչնե
 #. %3$s:  FOREACH subtitle IN biblio.subtitle.split(' \| ') 
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/biblio-title.inc:6
 #, c-format
 msgid "%s No title %s %s%s,%s "
 msgstr "%s Վերնագիր չկա %s %s%s,%s "
@@ -613,22 +641,6 @@ msgstr "%s Չես մասնավորեցրել որոնման որևէ չափան�
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Այս գրադարանից դու երբեք նյութ չես վերցրել։ %s "
 
-#. %1$s:  IF ( review.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#, c-format
-msgid "%s by "
-msgstr "%s կողմից "
-
-#. %1$s:  IF ( MY_TAG.author ) 
-#. %2$s:  MY_TAG.author | html 
-#. %3$s:  END 
-#. %4$s:  END # /IF MY_TAG.XSLTBloc 
-#. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:168
-#, c-format
-msgid "%s by %s %s %s %s "
-msgstr "%s %s %s %s %s "
-
 #. %1$s:  Branches.GetLoggedInBranchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
 #, c-format
@@ -749,18 +761,10 @@ msgstr "%s(ԱԱ/ՕՕ/ՏՏՏՏ)%s(ՕՕ/ԱԱ/ՏՏՏՏ)%s(ՏՏՏՏ-ԱԱ-ՕՕ)%s"
 #. %7$s:  HOLD.expirationdate | $KohaDates 
 #. %8$s:  END 
 #. %9$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
 msgstr "%s, %s,%s %s սկսած %s %s մինչ %s %s %s "
-
-#. %1$s:  IF ( bibitemloo.author ) 
-#. %2$s:  bibitemloo.author | html 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:194
-#, c-format
-msgid "%s, by %s%s "
-msgstr "%s, %s%s "
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | url 
@@ -924,7 +928,7 @@ msgstr ""
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:884
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, c-format
 msgid "%sYes%s "
 msgstr "%sԱյո%s "
@@ -937,8 +941,8 @@ msgstr "%sԱյո%s "
 msgid "%sYes%sNo%s "
 msgstr "%sԱյո%sՈչ%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:159
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Նախորդ"
@@ -1598,7 +1602,7 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1866,7 +1870,7 @@ msgid "(on hold)"
 msgstr "(պահված)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:857
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
 #, c-format
 msgid "(only %s)"
 msgstr "(միայն %s)"
@@ -2075,7 +2079,7 @@ msgstr "Վճարումը տրանզակցիայի id '%s' արդեն առաքվ�
 msgid "A similar document already exists: "
 msgstr "Նման փաստաթուղթ արդեն առկա է: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
 #, c-format
 msgid "A specific item"
 msgstr "Հատուկ նյութ"
@@ -2181,7 +2185,7 @@ msgid "Add another field"
 msgstr "Ավելացրու մեկ այլ դաշտ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Add note"
 msgstr "Ավելացրու նշում"
@@ -2242,13 +2246,13 @@ msgid "Add to..."
 msgstr "Ավելացրու..."
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:92
 #, c-format
 msgid "Added %s by"
 msgstr "Ավելացված է %s սրա կողմից"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, c-format
 msgid "Added %s by you"
 msgstr "Ավելացված է %s քո կողմից"
@@ -2332,12 +2336,12 @@ msgid "All collections"
 msgstr "Բոլոր հավաքածուները"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will be suspended."
 msgstr "Բոլոր պահումները կկասեցվեն"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "All holds will resume."
 msgstr "Բոլոր պահումները կվերսկսվեն:"
 
@@ -2546,7 +2550,7 @@ msgid "Any item "
 msgstr "Ցանկացած նյութ "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:146
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Any item type"
 msgstr "Ինչ որ նյութի տեսակ"
@@ -2562,13 +2566,13 @@ msgid "Apply field weights to search "
 msgstr "Կիրառեք դաշտի կշիռները որոնման համար "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Վստա՞հ ես որ ուզում ես չեղյալ անել այս հոդվածի պահանջը։"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Վստա՞հ ես որ ուզում ես չեղյալ անել այս պահումը։"
@@ -2584,7 +2588,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել փնտրման քո պատմության մուտքերը։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել ընտրված ցուցիչ(ներ)ը։"
 
@@ -2630,7 +2634,7 @@ msgstr "Վստա՞հ ես որ ցանկանում ես հեռացնել այս �
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to remove this recall?"
 msgstr "Վստա՞հ ես որ ցանկանում ես հեռացնել այս հաետկանչը։"
 
@@ -2640,7 +2644,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Վստա՞հ ես որ ցանկանում ես հեռացնել այս համատեղը։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Վստա՞հ ես որ ցանկանում ես չեղյալ անել կամ կասեցնել այս պահումը։"
 
@@ -2650,7 +2654,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Վստա՞հ ես որ ուզում ես վերադարձնել այս նյութը։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Վստա՞հ ես որ ցանկանում ես կասեցնել բոլոր պահումները։"
 
@@ -2665,7 +2669,7 @@ msgstr "Ժամանած"
 msgid "Article request fee"
 msgstr "Հոդվածի պատվերի վճար"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 #, c-format
 msgid "Article requests"
 msgstr "Հոդվածի պատվեր"
@@ -2702,7 +2706,7 @@ msgstr ""
 "կոդերը և կսկսվի նորից։"
 
 #. OPTION
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
 msgid "At least one item is available at this library"
 msgstr "Առնվազն մեկ նյութ այս գրադարանում հասանելի է"
 
@@ -2923,7 +2927,7 @@ msgstr "Հասանելի նյութեր"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, c-format
 msgid "Average rating: %s (%s votes)"
@@ -2975,7 +2979,7 @@ msgstr "Հետնամաս"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
@@ -3210,7 +3214,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -3287,7 +3291,7 @@ msgstr "Դասիչ: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:512
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
@@ -3338,7 +3342,7 @@ msgstr "CancelHold"
 msgid "CancelRecall "
 msgstr "Չեղյալ անել Հետ կանչը "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
 #, c-format
 msgid "Canceled"
 msgstr "Չեղյալ անել"
@@ -3370,8 +3374,8 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Չեղյալ է անում ընթերցողի համար ակտիվ պահման պահանջը"
 
 #. INPUT type=radio name=checkitem
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:390
 msgid "Cannot be put on hold"
 msgstr "Չի կարող դնել պահման"
 
@@ -3660,8 +3664,8 @@ msgstr "Մաքրիր բոլորը"
 msgid "Clear date"
 msgstr "Մաքրիր ամսաթիվը"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:964
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:179
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:962
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Մաքրիր ամսաթիվը անորոշ ժամանակով կասեցնելու համար"
@@ -3714,7 +3718,7 @@ msgstr "Սեղմիր Google Books-ում դիտելու համար"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1363
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1372
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:954
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:360
@@ -3791,7 +3795,7 @@ msgstr "Հավաքիր նյութերը որոնցում հետաքրքրված 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:119
 #, c-format
@@ -3895,7 +3899,7 @@ msgstr "Մեկնաբանություններ %s &rsaquo; %s%s%sԿոհա առցա
 msgid "Comments%s"
 msgstr "Նշումներ%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
 #, c-format
 msgid "Completed"
 msgstr "Ավարտված"
@@ -3912,7 +3916,7 @@ msgid "Confirm"
 msgstr "Հաստատիր"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:482
 msgid "Confirm hold"
 msgstr "Հաստատիր պահումը"
 
@@ -3997,7 +4001,7 @@ msgstr "Պատճենել է %d տողեր փոխանակման բուֆեր"
 msgid "Copied one row to clipboard"
 msgstr "Պատճենել է մեկ տող փոխանակման բուֆեր"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, c-format
 msgid "Copy"
@@ -4006,7 +4010,7 @@ msgstr "Պատճեն"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
 #, c-format
 msgid "Copy number"
 msgstr "Պատճենի համար"
@@ -4123,7 +4127,7 @@ msgstr "Դասընթացներ &rsaquo; %s%s%sԿոհա առցանց%s քարտա
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:472
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
@@ -4298,7 +4302,7 @@ msgstr "Ամսաթիվը ավելացվեց (թարմից հին)"
 msgid "Date added (oldest to newest)"
 msgstr "Ամսաթիվն ավելացվեց (հնից թարմ)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, c-format
 msgid "Date added:"
 msgstr "Ամսաթիվն ավելացված է"
@@ -4333,7 +4337,7 @@ msgstr "Ստացման ամսաթիվ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:75
 #, c-format
 msgid "Date:"
 msgstr "Ամսաթիվ։"
@@ -4409,7 +4413,7 @@ msgid "Delete selected"
 msgstr "Ջնջել ընտրանքը"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:185
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:183
 msgid "Delete selected tags"
 msgstr "Ջնջել ընտրված ցուցիչները"
 
@@ -4559,7 +4563,7 @@ msgstr "Արտածիր նորությունները։ "
 msgid "Displaying availability results"
 msgstr "Արտածվում են հասանելի արդյունքները"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:968
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:966
 #, c-format
 msgid "Do not suspend"
 msgstr "Մի կասեցրու"
@@ -4573,19 +4577,19 @@ msgstr ""
 "Ցանկանու՞մ ես ստանալ էլ փոստ երբ այս բաժանորդագրության համար նոր նյութ է "
 "ստացված։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:219
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Չունե՞ս գրադարանային քարտ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Դեռ չունե՞ս գաղտնաբառ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Don't have an account? "
 msgstr "Դու չունե՞ս հաշիվ "
@@ -4652,7 +4656,7 @@ msgstr "Վերադարձ"
 #. For the first occurrence,
 #. %1$s:  item.checkout.date_due | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:425
 #, c-format
 msgid "Due %s"
 msgstr "Վերադարձ %s"
@@ -4735,7 +4739,7 @@ msgid "Edit list &nbsp;"
 msgstr "Խմբագրել ցուցակը &nbsp;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Edit note"
 msgstr "Խմբագրել նշումը"
@@ -4769,7 +4773,7 @@ msgstr "Նյութի նշումի խմբագրում %s &rsaquo; %s%s%sԿոհա 
 msgid "Editions"
 msgstr "Հրատարակումներ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:56
 #, c-format
 msgid "Email"
@@ -5059,7 +5063,7 @@ msgid "Expected"
 msgstr "Սպասվող"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Expecting a specific item selection."
 msgstr "Սպասվում է հատկանշական նյութի ընտրություն։"
 
@@ -5077,8 +5081,8 @@ msgstr "Ժամկետը լրանալու ամսաթիվ։"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:781
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Expiration:"
 msgstr "Ժամկետի լրացում"
@@ -5274,11 +5278,11 @@ msgstr ""
 msgid "Forgiven"
 msgstr "Ներված"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:223
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:402
 #, c-format
 msgid "Forgot your password?"
 msgstr "Մոռացե՞լ ես քո գաղտնաբառը։"
@@ -5500,11 +5504,6 @@ msgstr "Գնա"
 msgid "Go to OPAC"
 msgstr "Գնա ՀՕԱՔ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
-#, c-format
-msgid "Go to Staff client"
-msgstr "Գնա Աշխատակազմի հաճախորդին"
-
 #. LI
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
@@ -5516,6 +5515,11 @@ msgstr "Գնա մանրամասներին"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:23
 msgid "Go to page %s"
 msgstr "Գնա դեպի էջը %s"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:73
+#, c-format
+msgid "Go to staff interface"
+msgstr "Գնա աշխատակազմի միջերես"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:10
@@ -5639,11 +5643,11 @@ msgid "Hi,"
 msgstr "Բարև,"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hide options"
 msgstr "Թաքցրու ընտրությունները"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
 #, c-format
 msgid "Hide unholdable items"
 msgstr "Թաքցնել չպահվող նյութերը"
@@ -5664,13 +5668,13 @@ msgstr "Ընդգծել"
 msgid "Hold date"
 msgstr "Պահման ամսաթիվ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, c-format
 msgid "Hold date:"
 msgstr "Պահման ամսաթիվ։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold expiration date should be filled."
 msgstr "Պահպանման ժամկետը պետք է լրացվի:"
 
@@ -5684,12 +5688,12 @@ msgstr "Պահման գումար"
 msgid "Hold filled"
 msgstr "Պահումը լրացված է"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Պահումը հետո պետք չէ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:312
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, c-format
 msgid "Hold notes:"
 msgstr "Պահման նշումներ:"
@@ -5705,11 +5709,11 @@ msgid "Hold requests"
 msgstr "Պահման հարցումներ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Hold start date should be filled."
 msgstr "Պահպանման մեկնարկի ամսաթիվը պետք է լրացվի:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
 #, c-format
 msgid "Hold starts on date:"
 msgstr "Պահումը սկսվում է այս ամսաթվից:"
@@ -5846,7 +5850,7 @@ msgstr "Տնային գրադարաններ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, c-format
 msgid "Home library"
 msgstr "Տնային գրադարան"
@@ -6050,13 +6054,13 @@ msgstr ""
 "Եթե չունես Shibboleth հաշիվ, բայց ունես տեղային հաշիվ, ապա ստորին մասից "
 "կարող ես մուտք գործել։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:220
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr "Եթե չունես գրադարանի քարտ, այցելիր տեղային գրադարան գրանցվելու։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:218
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -6133,15 +6137,17 @@ msgid "Image from Syndetics"
 msgstr "Պատկերը Syndetics -ից"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:51
 #, c-format
 msgid "Images"
 msgstr "Պատկերներ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:72
+#. %1$s:  INCLUDE 'biblio-title.inc' link=> 1 
+#. %2$s:  biblio.author | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #, c-format
-msgid "Images for "
-msgstr "Պատկերներ համար "
+msgid "Images for %s %s "
+msgstr "Պատկերներ սրա համար %s %s "
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -6211,7 +6217,7 @@ msgstr "Տեղափոխման մեջ է"
 #. %2$s:  Branches.GetName( item.get_transfer.tobranch ) | html 
 #. %3$s:  item.get_transfer.datesent | $KohaDates 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:133
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:428
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:427
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:47
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6237,7 +6243,7 @@ msgid "Indexes"
 msgstr "Ցուցիչներ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:108
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #, c-format
 msgid "Information"
 msgstr "Տեղեկատվություն"
@@ -6405,13 +6411,13 @@ msgstr "Նյութի պահման հարցման առաջնայնություն"
 msgid "Item holds"
 msgstr "Նյութի պահումներ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:118
 #, c-format
 msgid "Item in processing"
 msgstr "Նյութը մշակվում է"
 
 #. %1$s:  branch_name| $raw 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:115
 #, c-format
 msgid "Item in transit from %s since"
 msgstr "Նյութը տեղափոխման մեջ է %s -ից սկսած"
@@ -6443,7 +6449,7 @@ msgid "Item not renewed"
 msgstr "Նյութը չի թարմացվել"
 
 #. %1$s:  HOLD.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:60
 #, c-format
 msgid "Item on hold: %s"
 msgstr "Նյութը պահման մեջ է։ %s"
@@ -6470,7 +6476,7 @@ msgstr "Նյութի թարմացված է"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
@@ -6488,7 +6494,7 @@ msgid "Item type:"
 msgstr "Նյութի տեսակ։"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:224
 #, c-format
 msgid "Item type: "
 msgstr "Նյութի տեսակ։ "
@@ -6620,7 +6626,7 @@ msgid "Last "
 msgstr "Վերջին "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:102
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
 #, c-format
 msgid "Last location"
 msgstr "Վերջին Տեղաբաշխում"
@@ -6832,7 +6838,7 @@ msgstr "Բեռնավորում"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "Բեռնավորվում է..."
@@ -6903,11 +6909,11 @@ msgid "Locations"
 msgstr "Տեղակայություններ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:207
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:414
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:392
 #, c-format
 msgid "Log in"
 msgstr "Մուտք գործիր"
@@ -7007,7 +7013,7 @@ msgstr "Դուրս գալ "
 msgid "Log out and try again with a different user."
 msgstr "Դուրս արի և փորձիր կրկին որպես այլ օգտվող։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:238
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Մուտք դեպի քարտարան չի թույլատրվել գրադարանի կողմից։"
@@ -7023,13 +7029,13 @@ msgstr "Գրանցում"
 msgid "Login page"
 msgstr "Մուտքի էջ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:193
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
 #, c-format
 msgid "Login:"
 msgstr "Գրանցում"
@@ -7356,7 +7362,7 @@ msgstr "Անժամկետ "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:76
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, c-format
 msgid "Never expires %s %s "
 msgstr "Ժամկետը երբեք չի լրանում %s %s "
@@ -7372,7 +7378,7 @@ msgstr ""
 "դուրս են տրվել վերադարձից հետո և պահման պատմությունը չեղարկման պահից:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
 #, c-format
 msgid "New"
 msgstr "Նոր"
@@ -7469,12 +7475,12 @@ msgstr "Հաջորդ"
 msgid "Next "
 msgstr "Հաջորդը "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:172
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:170
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Հաջորդ &gt;&gt;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:324
 #, c-format
 msgid "Next available item"
 msgstr "Հաջորդ մատչելի նյութը"
@@ -7547,9 +7553,9 @@ msgstr "Դուրս տրումներ չկան"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:118
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:280
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
@@ -7720,12 +7726,12 @@ msgstr ""
 "Ոչ, ես համաձայն չեմ։ խնդրում եմ, խելամիտ ժամանակում հեռացրեք իմ հաշիվը։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not cancel article request"
 msgstr "Ոչ, մի չեղարկիր հոդվածի պահանջը։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not cancel hold"
 msgstr "Ոչ, մի չեղարկեք պահումը"
 
@@ -7750,7 +7756,7 @@ msgid "No, do not remove sharing"
 msgstr "Ոչ, մի հեռացրու կիսումը"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "No, do not resume holds"
 msgstr "Ոչ, մի վերսկսեք պահումները"
 
@@ -7828,7 +7834,7 @@ msgstr "Տացքի համար չէ %s"
 #. For the first occurrence,
 #. %1$s:  item.notforloan | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:139
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:435
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Տացքի համար չէ (%s)"
@@ -7838,7 +7844,7 @@ msgstr "Տացքի համար չէ (%s)"
 msgid "Not issued"
 msgstr "Չսպասարկված"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:462
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:461
 #, c-format
 msgid "Not on hold"
 msgstr "Պահման մեջ չէ"
@@ -7874,7 +7880,7 @@ msgstr "Նշում։"
 msgid "Note: "
 msgstr "Նշում։ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7947,7 +7953,7 @@ msgstr "Նշում։ Քո ցուցիչը ամբողջովին նշագրված �
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:364
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Notes"
@@ -7981,7 +7987,7 @@ msgid "Nothing"
 msgstr "Ոչինչ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr "Ոչինչ չի ընտրված։ Թարմացվող յուրաքանչյուրի նյութի համար ընտրիր վանդակը"
@@ -8009,7 +8015,7 @@ msgstr "Novelist Select: "
 msgid "Number"
 msgstr "Թիվ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
 #, c-format
 msgid "Number of holds: "
 msgstr "Պահումների քանակը։ "
@@ -8038,7 +8044,7 @@ msgstr "ԼԱՎ"
 msgid "OR"
 msgstr "ԿԱՄ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8338,13 +8344,13 @@ msgstr "Գաղտնաբառի վերականգնում"
 msgid "Password updated"
 msgstr "Գաղտնաբառը թարմացվել է"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:195
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:411
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:390
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:13
 #, c-format
 msgid "Password:"
@@ -8400,14 +8406,14 @@ msgid "Payout"
 msgstr "Վճարել"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
 #, c-format
 msgid "Pending"
 msgstr "Սպասող"
 
 #. %1$s:  ItemTypes.GetDescription( HOLD.itemtype ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:123
 #, c-format
 msgid "Pending for next available item of item type '%s'"
 msgstr "Սպասվում է հաջորդ հասանելի նոյւթին '%s' նյութի տեսակի համար"
@@ -8457,9 +8463,9 @@ msgstr "Վերցնելու վայր"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:792
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:84
 #, c-format
 msgid "Pick up location:"
 msgstr "Վերցնելու վայր։"
@@ -8481,7 +8487,7 @@ msgid "Pickup location"
 msgstr "Վերցնելու վայր"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on"
 msgstr "Դիր պահում"
 
@@ -8491,7 +8497,7 @@ msgid "Place a hold on "
 msgstr "Դիր պահում "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 msgid "Place a hold on: "
 msgstr "Դիր պահում։ "
 
@@ -8721,7 +8727,7 @@ msgstr "Մուտք արա արժեք մեծ կամ հավասար {0}։"
 msgid "Please enter a value less than or equal to {0}."
 msgstr "Մուտք արա արժեք փոքր կամ հավասար {0}։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr "Պատվիրված նյութի համար մուտք արա լրացուցիչ տեղեկատվություն։"
@@ -8869,7 +8875,7 @@ msgid "Please select a specific item for this article request."
 msgstr "Ընտրիր որոշակի նյութ այս հոդվածը պատվիրելու համար։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:195
 msgid "Please select a tag to delete."
 msgstr "Ջնջելու համար ընտրիր ցուցիչը։"
 
@@ -9034,7 +9040,7 @@ msgstr "Տպած ստացական %s համար &rsaquo; Ինքնատացք &rsa
 msgid "Priority"
 msgstr "Առաջնայնություն"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:90
 #, c-format
 msgid "Priority:"
 msgstr "Առաջնայնություն։"
@@ -9072,7 +9078,7 @@ msgstr "Մասնավոր ցուցակները կիսել են իմ հետ"
 msgid "Problem found on page: "
 msgstr "Էջում հայտնվել է խնդիր։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
 #, c-format
 msgid "Processing"
 msgstr "Կատարվում է"
@@ -9152,7 +9158,7 @@ msgstr "Հրատարակման/Արտոնագրման ամսաթիվ։ Թարմ�
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Հրատարակման/Արտոնագրման ամսաթիվ։ Հնից դեպի թարմ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:54
 #, c-format
 msgid "Publication:"
 msgstr "Հրատարակություն։"
@@ -9456,9 +9462,9 @@ msgstr "Փոխհատուցում"
 msgid "Register a new account"
 msgstr "Գրանցիր նոր հաշիվ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
 #, c-format
 msgid "Register here."
 msgstr "Գրանցիր այստեղ։"
@@ -9575,7 +9581,7 @@ msgstr "Թարմացրու"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew all"
 msgstr "Թարմացրու բոլորը"
@@ -9590,7 +9596,7 @@ msgstr "Թարմացրու նյութը"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Renew selected"
 msgstr "Թարմացրու ընտրվածը"
@@ -9688,7 +9694,7 @@ msgstr "Հարցումը դրված է"
 msgid "Request placed:"
 msgstr "Հարցումը դրված է։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #, c-format
 msgid "Request specific item type:"
 msgstr "Պահանջիր որոշակի նյութի տեսակ։"
@@ -9793,7 +9799,7 @@ msgstr "Հարցումներ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:932
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:987
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -9869,17 +9875,17 @@ msgstr "Փնտրման արդյունքներ սրա համար '%s'"
 msgid "Results per page: "
 msgstr "Արդյունքները էջ առ էջ ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:136
 #, c-format
 msgid "Resume"
 msgstr "Վերսկսել"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:184
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Կատարի բոլոր կասեցված պահումները"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
 #, c-format
 msgid "Resume hold"
 msgstr "Վերսկսիր քո պահումը"
@@ -10055,7 +10061,7 @@ msgstr "Հիշիր ցուցակներում"
 msgid "Save to your lists"
 msgstr "Հիշիր քո ցուցակներում"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:900
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, c-format
 msgid "Scan"
@@ -10107,7 +10113,7 @@ msgstr "Սքան արա նյութը կամ մուտք արա դրա շտրիխ 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:171
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Search"
@@ -10154,7 +10160,7 @@ msgid "Search for this title in:"
 msgstr "Որոնիր այս վերնագիրը ներսում՝"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
 msgid "Search for works by this author"
 msgstr "Փնտրիր այս հեղինակի գործերը"
 
@@ -10283,7 +10289,7 @@ msgstr "Բաժին։"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
@@ -10317,7 +10323,7 @@ msgstr "Ընտրել ցուցակը"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #, c-format
 msgid "Select a specific item:"
 msgstr "Ընտրիր հատուկ նյութը։"
@@ -10650,8 +10656,8 @@ msgstr "Ցույց տուր ցուցակները"
 msgid "Show more"
 msgstr "Ցույց տուր ավելին"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:277
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:494
 #, c-format
 msgid "Show more options"
 msgstr "Ցույց տուր ավելին հնարավորություններ"
@@ -10661,7 +10667,7 @@ msgstr "Ցույց տուր ավելին հնարավորություններ"
 msgid "Show the top "
 msgstr "Ցույց տուր վերինը "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 #, c-format
 msgid "Show unholdable items"
 msgstr "Ցույց տալ չպահվող նյութերը"
@@ -10752,7 +10758,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Something went wrong. The note has not been saved"
 msgstr "Ինչ որ բան գնացել է սխալ։ Նշումը չի հիշվել։"
 
@@ -10868,7 +10874,7 @@ msgstr ""
 "Ցավում եմ, ինքնատացքի այս մեքենան կորցրել է փոխճանաչումը։ Կապվիր կառավարչի "
 "հետ, խնդիրը լուծելու համար։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:199
 #, c-format
 msgid "Sorry, you are too young to place a hold for this item."
 msgstr "Ցավում եմ, դուք շատ երիտասարդ ես այս նյութի վրա պահում դնելու համար։"
@@ -11012,7 +11018,7 @@ msgstr "Վիճակ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:95
 #, c-format
 msgid "Status:"
 msgstr "Վիճակ։"
@@ -11119,7 +11125,7 @@ msgstr "Հաստատիր և փակիր այս պատուհանը"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Submit changes"
 msgstr "Հաստատիր փոփոխությունները"
 
@@ -11131,7 +11137,7 @@ msgstr "Հաստատիր ձևափոխումները"
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Submit note"
 msgstr "Հաստատիր նշումը"
@@ -11304,30 +11310,30 @@ msgstr "Ազգանուն։"
 msgid "Surveys"
 msgstr "Հարցախույզներ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:967
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:965
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:144
 #, c-format
 msgid "Suspend"
 msgstr "Կասեցնել"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:171
 #, c-format
 msgid "Suspend all holds"
 msgstr "Կասեցրու բոլոր պահումները"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
 #, c-format
 msgid "Suspend hold"
 msgstr "Կասեցրու պահումը"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:959
 #, c-format
 msgid "Suspend until:"
 msgstr "Կասեցրու մինչև։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, c-format
 msgid "Suspended"
 msgstr "Կասեցված"
@@ -11770,7 +11776,7 @@ msgstr "Այս վերնագրի համար չկան մեկնաբանությու
 msgid "There are no items available for recall."
 msgstr "Հետկանչման համար մատչելի նյութեր չկան:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
 #, c-format
 msgid "There are no items that can be placed on hold."
 msgstr "Չկան նյութեր, որոնց կարելի է դնել պահման։"
@@ -12001,19 +12007,19 @@ msgstr "Այս գրառումը ունի ֆիզիկական շատ նյութե�
 msgid "This subscription is closed."
 msgstr "Այս բաժանորդագրությունը փակված է։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr "Այս վերնագիրը հնարավոր չէ պահանջել, այն քո տրամադրության տակ է։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:212
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Այս վերնագիրը հնարավոր չէ պահանջել։"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:97
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:92
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:94
 msgid "Thumbnail"
 msgstr "Մանրապատկեր"
 
@@ -12101,7 +12107,7 @@ msgstr "Քո գրառման մեջ փոփոխություններ կատարել
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:242
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։"
@@ -12221,7 +12227,7 @@ msgid "Unable to update your setting!"
 msgstr "Չի կարող թարմացնել քո կարգաբերումը"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:432
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Անհասանելի (կորած կամ բացակա)"
@@ -12316,7 +12322,7 @@ msgstr ""
 "Օգտագործեք սա` ներկայումս սպասարկված նյութերի հետ կապված ցանկացած խնդրի "
 "մասին հաղորդելու համար"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:243
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Օգտագործիր ընտրացանկի վերին տողը Կոհայի այլ մասեր տեղափոխվելու համար։"
@@ -12331,7 +12337,7 @@ msgstr "Օգտագործված համար"
 msgid "Used for/see from:"
 msgstr "Օգտագործված համար/տես այնտեղից։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:223
 #, c-format
 msgid "User summary"
 msgstr "Օգտվողի համառոտագրություն"
@@ -12407,9 +12413,7 @@ msgid "View all the physical items."
 msgstr "Դիտեք ֆիզիկական բոլոր նյութերը։"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:113
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:111
 msgid "View details for this title"
 msgstr "Դիտիր մանրամասները այս վերնագրի համար"
 
@@ -12448,7 +12452,7 @@ msgstr "Այցելեք կայքը"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, c-format
 msgid "Vol info"
 msgstr "Հատորի տվյալ"
@@ -12465,7 +12469,7 @@ msgid "Volume:"
 msgstr "Հատոր։"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:156
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:441
 #, c-format
 msgid "Waiting"
 msgstr "Սպասում"
@@ -12507,7 +12511,7 @@ msgstr ""
 msgid "Website"
 msgstr "Կայք"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, c-format
 msgid "Welcome, "
 msgstr "Բարի գալուստ, "
@@ -12618,12 +12622,12 @@ msgid "Yes, I agree."
 msgstr "Այո, համաձայն եմ։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, cancel article request"
 msgstr "Այո, չեղարկիր հոդվածի պատվերը"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, cancel hold"
 msgstr "Այո, չեղարկիր պահումը"
 
@@ -12648,12 +12652,12 @@ msgid "Yes, remove sharing"
 msgstr "Այո, հեռացրու համատեղումը"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, resume all holds"
 msgstr "Այո, կատարիր բոլոր պահումները"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Yes, suspend all holds"
 msgstr "Այո, կասեցրու բոլոր պահումները"
 
@@ -12920,12 +12924,12 @@ msgstr "Դու ունես կանխավճար։"
 msgid "You have already placed a "
 msgstr "Դու արդեն իսկ տեղադրել ես "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:204
 #, c-format
 msgid "You have already placed a recall on this title."
 msgstr "Դու արդեն իսկ տեղադրել ես հետ կանչ այս վերնագրի համար։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:202
 #, c-format
 msgid "You have already requested this title."
 msgstr "Դու արդեն իսկ պահանջել ես այս վերնագիրը։"
@@ -12935,7 +12939,7 @@ msgstr "Դու արդեն իսկ պահանջել ես այս վերնագիրը
 msgid "You have checked out too many items and can't check out any more."
 msgstr "Դուք դուրս եք տվել չափազանց շատ նյութեր և այլևս չեք կարող դուրս տալ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:930
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
 #, c-format
 msgid "You have no article requests currently."
 msgstr "Դու չունես հոդվածների պատվերներ։"
@@ -13053,7 +13057,7 @@ msgstr "Դու օգտագործել ես արտաքին հղում արդեն ա
 msgid "You may only add up to %s suggestions in %s days."
 msgstr "Դու կարող ես %s օրերի ընթացքում ավելացնել մինչև %s առաջարկ։"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:231
 #, c-format
 msgid "You may register here."
 msgstr "Դու կարող ես գրանցվել այստեղ։"
@@ -13504,17 +13508,17 @@ msgstr ""
 "քարտարան"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s could not be saved."
 msgstr "Քո նշումը սրա մասին %s չի կարող հիշվել։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Քո նշումը սրա մասին %s հիշված է, և ուղարկված է գրադարանին։"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your note about %s was removed."
 msgstr "Քո նշումը սրա մասին %s հեռացված է։"
 
@@ -13583,7 +13587,7 @@ msgstr "Քո այս վճարը $%s հաջողությամբ կատարվել է�
 msgid "Your personal details"
 msgstr "Քո անձնական մանրամասները"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, c-format
 msgid "Your priority: "
 msgstr "Քո առաջնայնությունը։ "
@@ -13630,7 +13634,7 @@ msgstr "Քո գնման առաջարկները"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 msgid "Your rating: %s, "
 msgstr "Քո գնահատականը։ %s, "
 
@@ -13827,7 +13831,7 @@ msgstr "և համաձայն եմ որ մշակես իմ անհատական տվ�
 msgid "ask for a discharge"
 msgstr "հարցրու լիցքաթափման համար"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:448
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:447
 #, c-format
 msgid "at"
 msgstr "at"
@@ -13942,7 +13946,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:259
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:261
 #, c-format
 msgid "due in fines and charges "
 msgstr "վճարման ենթակա տուգանքները և ծախսերը "
@@ -14002,7 +14006,7 @@ msgstr "ամեն շաբաթ"
 msgid "every year"
 msgstr "ամեն տարի"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:450
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:449
 #, c-format
 msgid "expected at"
 msgstr "ապասվող"
@@ -14033,7 +14037,7 @@ msgstr "ամեն հարցման համար "
 msgid "for more information on what it does and how to configure it."
 msgstr "ինչ է դա անում և ինչպես կարգաբերելու մասին առավել տեղեկատվություն"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:445
 #, c-format
 msgid "for patron"
 msgstr "այցելուի համար"
@@ -14420,7 +14424,7 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:451
 #, c-format
 msgid "since"
 msgstr "մինչ"
@@ -14569,12 +14573,12 @@ msgstr "տարեկան երկու անգամ"
 msgid "unAPI"
 msgstr "unAPI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:120
 #, c-format
 msgid "until"
 msgstr "մինչ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:175
 #, c-format
 msgid "until "
 msgstr "մինչ "
@@ -14921,6 +14925,9 @@ msgstr "×"
 
 #~ msgid "%s%s %sitem%sitems%s%sEmpty%s"
 #~ msgstr "%s%s %sնյութ%sնյութեր%s%sԴատարկ%s"
+
+#~ msgid "%s, by %s%s "
+#~ msgstr "%s, %s%s "
 
 #~ msgid ""
 #~ "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "

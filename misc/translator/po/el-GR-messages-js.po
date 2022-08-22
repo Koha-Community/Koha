@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 09:46-0300\n"
+"POT-Creation-Date: 2022-08-15 21:03-0300\n"
 "PO-Revision-Date: 2022-05-01 08:55-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: el\n"
@@ -16,6 +16,11 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
 msgstr " (τρέχουσα) "
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "απομένουν %s από %s ανεπίβλεπτες ανανεώσεις"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
@@ -108,11 +113,6 @@ msgstr "%s μήνες"
 msgid "%s of %s renewals remaining"
 msgstr "απομένουν %s από %s ανανεώσεις"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#, javascript-format
-msgid "%s of %s unseen renewals remaining"
-msgstr "απομένουν %s από %s ανεπίβλεπτες ανανεώσεις"
-
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
 #, javascript-format
 msgid ""
@@ -184,7 +184,7 @@ msgstr "Το AJAX απέτυχε να απορρίψει την ετικέτα: 
 msgid "Access to camera denied."
 msgstr "Δεν επιτρέπεται η πρόσβαση"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1059
 msgid "Actions"
 msgstr "Ενέργειες"
 
@@ -309,7 +309,7 @@ msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγρ�
 msgid "Are you sure you want to delete this record?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την εγγραφή;"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1186
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1191
 msgid "Are you sure you want to delete this return claim?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την αξίωση επιστροφής;"
 
@@ -439,7 +439,7 @@ msgstr "Η αυτόματη ανανέωση απέτυχε, το μέλος έ�
 msgid "Back to top"
 msgstr "Επιστροφή στα Εργαλεία"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:72
 msgid "Bibliographic record does not exist!"
 msgstr "Η βιβλιογραφική εγγραφή δεν υπάρχει!"
 
@@ -459,7 +459,7 @@ msgstr ""
 "Δε γίνει να οριστεί άλλη αυτό-ανανέωση - ο αριθμός των ημερών δανεισμού έχει "
 "λήξη"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1147
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1152
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:403
 msgid "Cancel"
 msgstr "Ακύρωση"
@@ -473,7 +473,7 @@ msgstr "Ακύρωση κράτησης"
 msgid "Cancelled"
 msgstr "Ακυρώθηκε"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:292
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
 msgid "Cannot test prediction pattern for the following reason(s): %s"
 msgstr ""
@@ -626,7 +626,7 @@ msgid "December"
 msgstr "Δεκέμβριος"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1046
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1051
 #: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -640,7 +640,7 @@ msgstr ""
 msgid "Directory is not writeable"
 msgstr "Η δυνατότητα αυτή δεν είναι ενεργοποιημένη"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1014
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1018
 msgid "Double click to edit"
 msgstr "Διπλό πάτημα για επεξεργασία"
 
@@ -660,7 +660,7 @@ msgstr "Επεξεργασία"
 msgid "Edit action %s"
 msgstr "Επεξεργασία ενέργειας %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1057
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1062
 msgid "Edit notes"
 msgstr "Επεξεργασία σημειώσεων"
 
@@ -757,7 +757,7 @@ msgstr "Τύπος αρχείου"
 msgid "First"
 msgstr "Πρώτη"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:280
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:293
 msgid "First publication date is not defined"
 msgstr "Ημερομηνία πρώτης έκδοσης δεν έχει οριστεί"
 
@@ -770,7 +770,7 @@ msgstr ""
 "Παρακαλούμε σκεφτείτε την εισαγωγή αριθμού τεύχους αντί για χρονικής "
 "περιόδου."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:275
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:288
 msgid "Frequency is not defined"
 msgstr "Η συχνότητα δεν έχει οριστεί"
 
@@ -977,7 +977,7 @@ msgstr "Επόμενο"
 msgid "Next available %s item"
 msgstr "Επόμενο διαθέσιμο %s τεκμήριο"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:286
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:299
 msgid "Next issue publication date is not defined"
 msgstr "Ημερομηνία δημοσίευσης επόμενου τεύχους δεν έχει οριστεί"
 
@@ -1053,7 +1053,7 @@ msgstr "Δεν επιτρέπεται ανανέωση πριν από %s"
 msgid "No results found"
 msgstr "Δε βρέθηκαν αποτελέσματα"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "Καμία συνδρομή δεν βρέθηκε στη Mana Knowledge Base"
 
@@ -1096,6 +1096,14 @@ msgstr "Νοέμβριος"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:692
 msgid "Number of checkouts by item type"
 msgstr "Αριθμός χρεώσεων ανά τύπο τεκμηρίου"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:77
+msgid "Number of issues to display to staff must be a number"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:81
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
 msgid "Number of items to add"
@@ -1144,7 +1152,7 @@ msgstr "Παρακαλώ επιλέξτε μια περίοδος εγγραφή
 msgid "Please choose at least one external target"
 msgstr "Παρακαλώ επιλέξτε τουλάχιστον έναν εξωτερικό στόχο"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:107
 msgid "Please click on 'Test prediction pattern' before saving subscription."
 msgstr ""
 "Παρακαλώ πατήστε \"Δοκιμή μοτίβου πρόβλεψης\" πριν αποθηκεύσετε τη συνδρομή."
@@ -1163,7 +1171,7 @@ msgstr "Παρακαλώ διαγράψτε %s χαρακτήρα(ες)"
 msgid "Please enter %s or more characters"
 msgstr "Παρακαλώ εισάγετε %s ή περισσότερους χαρακτήρες"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:341
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:354
 msgid "Please enter a name for this pattern"
 msgstr "Παρακαλώ εισάγετε ένα όνομα για αυτό το μοτίβο"
 
@@ -1172,7 +1180,7 @@ msgstr "Παρακαλώ εισάγετε ένα όνομα για αυτό το
 msgid "Please enter a valid date (should match %s)."
 msgstr "Παρακαλώ εισάγετε μία έγκυρη ημερομηνία (πρέπει να ταιριάζει με %s)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:436
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
 "Please feel free to share your pattern with all others librarians once you "
 "are done"
@@ -1279,7 +1287,7 @@ msgstr "Η ανανέωση απορρίφθηκε από τις προτιμή�
 msgid "Renewed, due:"
 msgstr "Ανανεωμένο, λήξη:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1049
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1054
 msgid "Resolve"
 msgstr "Επίλυση"
 
@@ -1287,7 +1295,7 @@ msgstr "Επίλυση"
 msgid "Results"
 msgstr "Αποτελέσματα"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:419
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:432
 msgid "Results from Mana Knowledge Base"
 msgstr "Αποτελέσματα από Mana Knowledge Base"
 
@@ -1335,7 +1343,7 @@ msgstr ""
 msgid "Search:"
 msgstr "Αναζήτηση:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:408
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:421
 msgid "Searching for subscription in Mana Knowledge Base"
 msgstr "Αναζήτηση συνδρομής στη Mana Knowledge Base"
 
@@ -1359,19 +1367,19 @@ msgstr "Σεπ"
 msgid "September"
 msgstr "Σεπτέμβριος"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1120
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
 msgid "Show 1 claim"
 msgid_plural "Show all {count} claims"
 msgstr[0] "Προβολή 1 αξίωσης"
 msgstr[1] "Προβολή όλων {count} αξιώσεων"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1125
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1130
 msgid "Show 1 unresolved claim"
 msgid_plural "Show {count} unresolved claims"
 msgstr[0] "Εμφάνιση 1 "
 msgstr[1] "Εμφάνιση {count} ανεπίλυτων αξιώσεων"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Show Mana results"
 msgstr "Προβολή αποτελεσμάτων Mana"
 
@@ -1396,7 +1404,7 @@ msgstr "Μερικά κονδύλια δεν καθορίστηκαν για τ�
 msgid "Something went wrong. Maybe the value already exists?"
 msgstr "Κάτι δε λειτούργησε σωστά. Ίσως η τιμή να υπάρχει ήδη;"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:387
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:400
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr ""
 "Κάτι δε λειτούργησε σωστά. Αδύνατη η δημιουργία ενός νέου μοτίβου αρίθμησης."
@@ -1405,7 +1413,7 @@ msgstr ""
 msgid "Sorry, nothing found."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:433
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:446
 msgid "Subscription found on Mana Knowledge Base:"
 msgstr "Συνδρομή βρέθηκε στη Mana Knowledge Base:"
 
@@ -1551,7 +1559,7 @@ msgstr "Ο προμηθευτής δεν υπάρχει"
 msgid "There is no record selected"
 msgstr "Δεν έχει επιλεχθεί εγγραφή."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:724
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:737
 msgid "This bibliographic record does not exist"
 msgstr "Η βιβλιογραφική εγγραφή δεν υπάρχει"
 
@@ -1573,7 +1581,7 @@ msgstr "Αυτό το τεκμήριο προστέθηκε στο καλάθι 
 msgid "This item is already in your cart"
 msgstr "Το τεκμήριο βρίσκεται ήδη στο καλάθι σας"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:356
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:369
 msgid "This pattern name already exists. Do you want to modify it?"
 msgstr "Αυτό το όνομα μοτίβου υπάρχει ήδη. Επιθυμείτε να το τροποποιήσετε;"
 
@@ -1626,7 +1634,7 @@ msgstr "Αδυναμία συνέχισης, η κράτηση δεν βρέθη
 msgid "Unable to suspend, hold not found"
 msgstr "Αδυναμία αναστολής κράτησης, η κράτηση δεν βρέθηκε"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1146
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1151
 msgid "Update"
 msgstr "Ενημέρωση"
 
@@ -1652,7 +1660,7 @@ msgstr "Προβολή σύγκρισης"
 msgid "Waiting status reverted"
 msgstr "Κατάσταση επισημείωσης εδώ."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:92
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:105
 msgid ""
 "Warning! Present pattern has planned irregularities. Click on 'Test "
 "prediction pattern' to check if it's still valid"
@@ -1671,7 +1679,7 @@ msgstr ""
 "διαγραφή της θα προκαλέσει σοβαρά προβλήματα στην υπομονάδα των προσκτήσεων. "
 "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την εγγραφή;"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:357
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:370
 msgid ""
 "Warning: This will modify the pattern for all subscriptions that are using "
 "it."
@@ -1708,7 +1716,7 @@ msgstr "Δε μπορείτε να παραλάβετε άλλα τεκμήρι�
 msgid "You have made changes to system preferences."
 msgstr "Έχετε κάνει αλλαγές στις προτιμήσεις συστήματος."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:87
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:100
 msgid ""
 "You have modified the advanced prediction pattern. Please save your work or "
 "cancel modifications."
@@ -1716,11 +1724,11 @@ msgstr ""
 "Έχετε τροποποιήσει το σύνθετο μοτίβο πρόβλεψης. Παρακαλώ αποθηκεύστε την "
 "εργασία σας ή ακυρώστε τις τροποποιήσεις."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:78
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:91
 msgid "You must choose a first publication date"
 msgstr "Πρέπει να επιλέξετε μια πρώτη χρονολογία δημοσίευσης"
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:83
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:96
 msgid "You must choose a subscription length or an end date."
 msgstr "Πρέπει να επιλέξετε μια διάρκεια συνδρομής ή μια χρονολογία λήξης."
 

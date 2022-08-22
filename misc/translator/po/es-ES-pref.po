@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2022-07-18 13:54+0000\n"
+"PO-Revision-Date: 2022-08-18 12:28+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /es/22.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1658152481.176166\n"
+"X-POOTLE-MTIME: 1660825706.210595\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3250,6 +3250,11 @@ msgstr ""
 "la visualización de los items en dos pestañas, donde la primer pestaña "
 "contiene items cuya"
 
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ,"
+msgstr "no"
+
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
 msgstr "<br/> UNIMARC no está soportado."
@@ -3257,6 +3262,15 @@ msgstr "<br/> UNIMARC no está soportado."
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Un máximo de"
+
+# Searching > Results display
+#, fuzzy
+msgid ""
+"cataloguing.pref#ShowComponentRecords# By default, sort component results in "
+"the staff interface by"
+msgstr ""
+"De forma predeterminada, ordenar los resultados de búsqueda en el interfaz "
+"administrativo por"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3269,9 +3283,49 @@ msgid ""
 msgstr ""
 "Mostrar una lista de registros componentes, vinculados via el campo 773, en"
 
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# ascending."
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# author"
+msgstr "no"
+
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "la interfaz administrativa y el OPAC"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# call number"
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date added"
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# date of publication"
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# descending."
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
+msgstr "no"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
+msgstr "no"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3288,6 +3342,11 @@ msgstr "registros serán mostrados."
 # Cataloging > Record structure
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "interfaz administrativa"
+
+# Cataloging > Spine Labels
+#, fuzzy
+msgid "cataloguing.pref#ShowComponentRecords# title"
+msgstr "no"
 
 # Cataloging > Spine Labels
 msgid ""
@@ -4723,20 +4782,28 @@ msgstr "meses"
 msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "años"
 
+# Circulation > Holds Policy
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# ."
+msgstr "biblioteca de sesión"
+
 # Circulation > Holds policy > DefaultHoldPickupLocation
+#, fuzzy
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
-"staff client default the pickup location to the"
+"staff interface default the pickup location to the"
 msgstr ""
 "Al hacer una reserva desde la interfaz administrativa, predeterminar la sede "
 "de retiro como"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's holding branch"
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "biblioteca depositaria del ítem"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#DefaultHoldPickupLocation# item's home branch"
+#, fuzzy
+msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "biblioteca de origen del ítem"
 
 # Circulation > Holds Policy
@@ -5690,8 +5757,28 @@ msgstr ""
 "preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup"
 "\">OPACHoldsIfAvailableAtPickup</a>:"
 
+# Circulation > Checkin policy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
+"start date option is only effective and shown on the hold form when <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a> are enabled."
+msgstr ""
+"<br><strong>NOTA:</strong> La opción de fecha de inicio de reserva solo es "
+"efectiva y mostrada en el formulario de reserva cuando se habilitan <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"AllowHoldDateInFuture\">AllowHoldDateInFuture</a> y <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a>."
+
 # Circulation > Holds Policy
-msgid "circulation.pref#OPACMandatoryHoldDates# On the opac-reserve form, make"
+#, fuzzy
+msgid ""
+"circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
+"make"
 msgstr "En el formulario opac-reserve, hacer"
 
 # Circulation > Article requests
@@ -5706,15 +5793,10 @@ msgstr "la fecha de fin de reserva"
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "la fecha de inicio de reserva"
 
-# Circulation > Holds policy > OPACMandatoryHoldDates
-msgid ""
-"circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only is "
-"effective for the hold start date when OPACAllowHoldDateInFuture is enabled "
-"too."
-msgstr ""
-"obligatoria. Notar que esta preferencia es efectiva para la fecha de inicio "
-"de la reserva sólo cuando OPACAllowHoldDateInFuture también se encuentra "
-"habilitada."
+# Circulation > Holds policy
+#, fuzzy
+msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
+msgstr "la fecha de fin de reserva"
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
@@ -14803,8 +14885,8 @@ msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
-"el client credentials grant de OAuth2 para la API REST. Requiere tener "
-"Net::OAuth2::AuthorizationServer instalado."
+"el client credentials grant de OAuth2 para la API REST. Requiere tener Net::"
+"OAuth2::AuthorizationServer instalado."
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"
@@ -14857,6 +14939,16 @@ msgstr "filas del reporte solicitado a través del web service de reportes."
 # Administration > Interface options
 #~ msgid "admin.pref#noItemTypeImages# Yes"
 #~ msgstr "Sí"
+
+# Circulation > Holds policy > OPACMandatoryHoldDates
+#~ msgid ""
+#~ "circulation.pref#OPACMandatoryHoldDates# mandatory. Note this pref only "
+#~ "is effective for the hold start date when OPACAllowHoldDateInFuture is "
+#~ "enabled too."
+#~ msgstr ""
+#~ "obligatoria. Notar que esta preferencia es efectiva para la fecha de "
+#~ "inicio de la reserva sólo cuando OPACAllowHoldDateInFuture también se "
+#~ "encuentra habilitada."
 
 # Circulation > Interface
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
