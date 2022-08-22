@@ -161,7 +161,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         }
     );
 
-    if ( CAN_user_parameters_manage_column_config ) {
+    if ( table_settings && CAN_user_parameters_manage_column_config ) {
         dt_parameters[ "buttons" ].push(
             {
                 className: "dt_button_configure_table",

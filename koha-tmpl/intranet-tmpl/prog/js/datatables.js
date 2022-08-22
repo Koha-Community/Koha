@@ -813,7 +813,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             }
         );
 
-        if ( CAN_user_parameters_manage_column_config ) {
+        if ( table_settings && CAN_user_parameters_manage_column_config ) {
             settings[ "buttons" ].push(
                 {
                     className: "dt_button_configure_table",
