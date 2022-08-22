@@ -18,7 +18,7 @@ package Koha::Virtualshelf;
 use Modern::Perl;
 
 
-use C4::Auth qw( haspermission );
+use C4::Auth;
 
 use Koha::Patrons;
 use Koha::Database;
@@ -237,6 +237,11 @@ sub can_be_managed {
     my ( $self, $borrowernumber ) = @_;
     return 1
       if $borrowernumber and $self->owner == $borrowernumber;
+
+    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    return 1
+      if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_lists' } );
+
     return 0;
 }
 
