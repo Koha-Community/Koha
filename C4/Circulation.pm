@@ -2945,7 +2945,8 @@ sub CanBookBeRenewed {
         }
     }
 
-    if ( C4::Context->preference('AllowRenewalIfOtherItemsAvailable') && !Koha::Holds->search( { itemnumber => $itemnumber, found => undef } )->count()
+    my $biblio_has_holds = Koha::Holds->search({ biblionumber => $item->biblionumber, non_priority => 0 } )->count > 0;
+    if ( $biblio_has_holds && C4::Context->preference('AllowRenewalIfOtherItemsAvailable') && !Koha::Holds->search( { itemnumber => $itemnumber, found => undef } )->count()
  )
     {
         my $biblio = Koha::Biblios->find($item->biblionumber);
@@ -2987,9 +2988,9 @@ sub CanBookBeRenewed {
             return ( 0, "on_reserve" ) unless $fillable;
         }
 
-    } else {
+    } elsif ($biblio_has_holds) {
         my ($status, $matched_reserve, $possible_reserves) = CheckReserves($itemnumber);
-        return ( 0, "on_reserve" ) if $matched_reserve;
+        return ( 0, "on_reserve" ) if $status;
     }
 
     return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
