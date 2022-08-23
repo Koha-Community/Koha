@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -527,6 +527,43 @@ subtest do_checkout_with_patron_blocked => sub {
     $circ = $ils->checkout($overdue_patron->cardnumber, $item->barcode);
     is( $circ->{screen_msg}, 'Patron blocked', "Got correct blocked screen message" );
 
+};
+
+subtest do_checkout_with_noblock => sub {
+    plan tests => 3;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+                debarred => '9999/01/01',
+            },
+        }
+    );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $co_transaction = C4::SIP::ILS::Transaction::Checkout->new();
+    is( $co_transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction" );
+    is( $co_transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction" );
+
+    $co_transaction->do_checkout(undef, '19990102    030405');
+
+    is( $patron->checkouts->count, 1, 'No Block checkout was performed for debarred patron');
 };
 
 subtest do_checkout_with_holds => sub {
