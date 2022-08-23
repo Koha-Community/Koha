@@ -3344,7 +3344,7 @@ CREATE TABLE `itemtypes` (
   PRIMARY KEY (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`),
   KEY `itemtypes_ibfk_1` (`parent_type`),
-  CONSTRAINT `itemtypes_ibfk_1` FOREIGN KEY (`parent_type`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `itemtypes_ibfk_1` FOREIGN KEY (`parent_type`) REFERENCES `itemtypes` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
