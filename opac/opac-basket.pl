@@ -98,7 +98,6 @@ foreach my $biblionumber ( @bibs ) {
     foreach my $item (@$items) {
         my $reserve_status = C4::Reserves::GetReserveStatus($item->{itemnumber});
         if( $reserve_status eq "Waiting"){ $item->{'waiting'} = 1; }
-        if( $reserve_status eq "Reserved"){ $item->{'onhold'} = 1; }
     }
 
     my $hasauthors = 0;

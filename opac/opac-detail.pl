@@ -729,11 +729,6 @@ else {
         $item_info->{checkout} = $item->checkout;
         $item_info->{object} = $item;
 
-        my $reserve_status =
-          C4::Reserves::GetReserveStatus( $item->itemnumber );
-        if ( $reserve_status eq "Waiting"  ) { $item_info->{'waiting'} = 1; }
-        if ( $reserve_status eq "Reserved" ) { $item_info->{'onhold'}  = 1; }
-
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers( $item->itemnumber );
         if ( defined($transfertwhen) && $transfertwhen ne '' ) {
