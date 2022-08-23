@@ -259,9 +259,12 @@ sub get_template_and_user {
                 -sameSite => 'Lax',
             ));
 
+            my $auth_error = $in->{query}->param('auth_error');
+
             $template->param(
                 loginprompt => 1,
                 script_name => get_script_name(),
+                auth_error  => $auth_error,
             );
 
             print $in->{query}->header(
@@ -1336,6 +1339,7 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
     my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
+    my $auth_error = $query->param('auth_error');
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
     $template->param(
         login                                 => 1,
@@ -1373,6 +1377,7 @@ sub checkauth {
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
         password_has_expired                  => ( $patron and $patron->password_expired ),
+        auth_error                            => $auth_error,
     );
 
     $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
@@ -1556,6 +1561,7 @@ sub check_api_auth {
         # new login
         my $userid   = $query->param('userid');
         my $password = $query->param('password');
+        my $auth_client_login = $query->param('auth_client_login');
         my ( $return, $cardnumber, $cas_ticket );
 
         # Proxy CAS auth
@@ -1565,6 +1571,9 @@ sub check_api_auth {
             # In case of a CAS authentication, we use the ticket instead of the password
             my $PT = $query->param('PT');
             ( $return, $cardnumber, $userid, $cas_ticket ) = check_api_auth_cas( $PT, $query );    # EXTERNAL AUTH
+        } elsif ( $auth_client_login && ( $userid || $query->param('cardnumber') ) ) {
+            $cardnumber = $query->param('cardnumber');
+            $return = 1;
         } else {
 
             # User / password auth
@@ -1769,7 +1778,8 @@ sub check_cookie_auth {
         } elsif ( $userid ) {
             $session->param( 'lasttime', time() );
             my $patron = Koha::Patrons->find({ userid => $userid });
-            $patron = Koha::Patron->find({ cardnumber => $userid }) unless $patron;
+            $patron = Koha::Patrons->find({ cardnumber => $userid })
+              unless $patron;
             return ("password_expired", undef ) if $patron->password_expired;
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
