@@ -45,7 +45,6 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Circulation qw( GetTransfers );
 use C4::Tags qw( get_tags );
 use C4::XISBN qw( get_xisbns );
 use C4::External::Amazon qw( get_amazon_tld );
@@ -728,14 +727,6 @@ else {
 
         $item_info->{checkout} = $item->checkout;
         $item_info->{object} = $item;
-
-        my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          GetTransfers( $item->itemnumber );
-        if ( defined($transfertwhen) && $transfertwhen ne '' ) {
-            $item_info->{transfertwhen} = $transfertwhen;
-            $item_info->{transfertfrom} = $transfertfrom;
-            $item_info->{transfertto}   = $transfertto;
-        }
 
         if ( C4::Context->preference('OPACAcquisitionDetails') ) {
             $item_info->{on_order} = 1

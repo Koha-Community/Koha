@@ -43,10 +43,22 @@
     [% IF !item.isa('Koha::Item') AND item.avail_for_recall %]<a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>[% END %]
 [% END %]
 
-[% IF NOT ( item.isa('Koha::Item') ) AND item.transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
+[% IF item.isa('Koha::Item') %]
+    [% SET transfer = item.get_transfer %]
+    [% IF transfer AND transfer.in_transit %]
+        [% SET transfertwhen = transfer.datesent %]
+        [% SET transfertfrom = transfer.frombranch %]
+        [% SET transfertto = transfer.tobranch %]
+    [% END %]
+[% ELSE %]
+        [% SET transfertwhen = item.transfertwhen %]
+        [% SET transfertfrom = item.transfertfrom %]
+        [% SET transfertto = item.transfertto %]
+[% END %]
+[% IF transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
     [% SET itemavailable = 0 %]
-    <span class="item-status intransit">In transit from [% Branches.GetName( item.transfertfrom ) | html %]
-    to [% Branches.GetName( item.transfertto ) | html %] since [% item.transfertwhen | $KohaDates %]</span>
+    <span class="item-status intransit">In transit from [% Branches.GetName( transfertfrom ) | html %]
+    to [% Branches.GetName( transfertto ) | html %] since [% transfertwhen | $KohaDates %]</span>
 [% END %]
 
 [% IF (item.isa('Koha::Item') AND item.holds.waiting.count) OR (NOT item.isa('Koha::Item') AND item.waiting) %]
