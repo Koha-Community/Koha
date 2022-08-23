@@ -875,7 +875,7 @@ sub as_marc_field {
         my $kohafield = $subfield->{kohafield};
         my $tagsubfield = $subfield->{tagsubfield};
         my $value;
-        if ( defined $kohafield ) {
+        if ( defined $kohafield && $kohafield ne '' ) {
             next if $kohafield !~ m{^items\.}; # That would be weird!
             ( my $attribute = $kohafield ) =~ s|^items\.||;
             $value = $self->$attribute # This call may fail if a kohafield is not a DB column but we don't want to add extra work for that there
