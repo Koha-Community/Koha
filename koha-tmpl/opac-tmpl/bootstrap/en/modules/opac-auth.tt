@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Categories %]
 [% USE AdditionalContents %]
+[% USE AuthClient %]
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -73,6 +74,13 @@
                                 <!-- This is what is displayed if user doesn't have permission or account is locked. (Do not expose more information than needed.) -->
                                 <div class="alert alert-info">
                                     <p>You entered an incorrect username or password. Please try again! But note that passwords are case sensitive[% IF Koha.Preference('FailedLoginAttempts') %] and that your account will be locked out after a fixed number of failed login attempts[% END %]. Please contact a library staff member if you continue to have problems.</p>
+                                </div>
+                            [% END %]
+
+                            [% IF auth_error %]
+                                <div class="alert alert-info">
+                                    <p>There was an error authenticating to external identity provider</p>
+                                    <p>[% auth_error | html %]</p>
                                 </div>
                             [% END %]
 
@@ -154,6 +162,24 @@
                                 [% END %]
 
                             [% END # / IF casAuthentication %]
+
+                            [% SET auth_providers = AuthClient.get_providers('opac') %]
+                            [% IF ( ! auth_providers.empty ) %]
+                                [% FOREACH provider IN auth_providers %]
+                                    <p class="clearfix">
+                                        <a href="[% provider.url | url %]" class="btn btn-light col-md-12" id="provider_[% provider.code | html %]">
+                                            [% IF provider.icon_url %]
+                                                <img src="[% provider.icon_url | url %]" style="max-height: 20px; max-width: 20px;"/>
+                                            [% ELSE %]
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            [% END %]
+                                            Log in with [% provider.description | html %]
+                                        </a>
+                                    </p>
+                                [% END %]
+                                <hr/>
+                                <p>If you do not have an external account, but do have a local account, you can still log in: </p>
+                            [% END # /IF  auth_providers %]
 
                             [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
                                 [% IF ( invalidGoogleOpenIDConnectLogin ) %]
