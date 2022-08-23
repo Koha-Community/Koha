@@ -738,10 +738,6 @@ else {
         }
 
 
-        if ( $item->in_bundle ) {
-            $item_info->{bundle_host} = $item->bundle_host;
-        }
-
         if ( C4::Context->preference('UseCourseReserves') ) {
             $item_info->{course_reserves} = GetItemCourseReservesInfo( itemnumber => $item->itemnumber );
         }
