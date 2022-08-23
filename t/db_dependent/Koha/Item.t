@@ -115,7 +115,7 @@ subtest "as_marc_field() tests" => sub {
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
 
-    plan tests => 2 * (scalar @mapped_columns + 1) + 3;
+    plan tests => 2 * (scalar @mapped_columns + 1) + 4;
 
     $schema->storage->txn_begin;
 
@@ -160,9 +160,17 @@ subtest "as_marc_field() tests" => sub {
             tagsubfield   => 'X',
         }
     )->store;
+    Koha::MarcSubfieldStructure->new(
+        {
+            frameworkcode => '',
+            tagfield      => $itemtag,
+            tagsubfield   => 'Y',
+            kohafield     => '',
+        }
+    )->store;
 
     my @unlinked_subfields;
-    push @unlinked_subfields, X => 'Something weird';
+    push @unlinked_subfields, X => 'Something weird', Y => 'Something else';
     $item->more_subfields_xml( C4::Items::_get_unlinked_subfields_xml( \@unlinked_subfields ) )->store;
 
     Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
@@ -182,7 +190,8 @@ subtest "as_marc_field() tests" => sub {
     } @subfields;
     is_deeply(\@subfields, \@ordered_subfields);
 
-    is( scalar $marc_field->subfield('X'), 'Something weird', 'more_subfield_xml is considered' );
+    is( scalar $marc_field->subfield('X'), 'Something weird', 'more_subfield_xml is considered when kohafield is NULL' );
+    is( scalar $marc_field->subfield('Y'), 'Something else', 'more_subfield_xml is considered when kohafield = ""' );
 
     $schema->storage->txn_rollback;
     Koha::Caches->get_instance->clear_from_cache( "MarcStructure-1-" );
