@@ -1191,7 +1191,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'ressurname'} = $patron->surname;
                     $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
                     $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
-                    $needsconfirmation{'resbranchcode'} = $patron->branchcode;
+                    $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'resreservedate'} = $res->{reservedate};
                     $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
@@ -1202,7 +1202,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'ressurname'} = $patron->surname;
                     $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
                     $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
-                    $needsconfirmation{'resbranchcode'} = $patron->branchcode;
+                    $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'resreservedate'} = $res->{reservedate};
                     $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
@@ -1213,7 +1213,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'ressurname'} = $patron->surname;
                     $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
                     $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
-                    $needsconfirmation{'resbranchcode'} = $patron->branchcode;
+                    $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'resreservedate'} = $res->{reservedate};
                     $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
