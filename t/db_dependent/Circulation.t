@@ -597,6 +597,7 @@ subtest "CanBookBeRenewed tests" => sub {
             itemnumber     => $item_1->itemnumber,
             branchcode     => $branch,
             priority       => 3,
+            reservedate    => '1999-01-01',
         }
     );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
