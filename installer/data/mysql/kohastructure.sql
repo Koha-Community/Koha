@@ -1373,7 +1373,7 @@ DROP TABLE IF EXISTS `borrower_relationships`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `borrower_relationships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `guarantor_id` int(11) DEFAULT NULL,
+  `guarantor_id` int(11) NOT NULL,
   `guarantee_id` int(11) NOT NULL,
   `relationship` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
