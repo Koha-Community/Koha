@@ -2944,52 +2944,57 @@ sub CanBookBeRenewed {
         }
     }
 
-    my $biblio_has_holds = Koha::Holds->search({ biblionumber => $item->biblionumber, non_priority => 0 } )->count > 0;
-    if ( $biblio_has_holds && C4::Context->preference('AllowRenewalIfOtherItemsAvailable') && !Koha::Holds->search( { itemnumber => $itemnumber, found => undef } )->count()
- )
-    {
-        my $biblio = Koha::Biblios->find($item->biblionumber);
-        my @possible_holds = $biblio->current_holds->unfilled->search(
-            {non_priority => 0},
-            { prefetch => 'patron' }
-        )->as_list;
+    my $fillable_holds = Koha::Holds->search(
+        {
+            biblionumber => $item->biblionumber,
+            non_priority => 0,
+            found        => undef,
+            reservedate  => { '<=' => \'NOW()' },
+            suspend      => 0,
+        },
+        { prefetch => 'patron' }
+    );
+    if ( $fillable_holds->count ) {
+        if ( C4::Context->preference('AllowRenewalIfOtherItemsAvailable') ) {
+            my @possible_holds = $fillable_holds->as_list;
 
-        # Get all other items that could possibly fill reserves
-        # FIXME We could join reserves (or more tables) here to eliminate some checks later
-        my @other_items = Koha::Items->search({
-            biblionumber => $biblio->biblionumber,
-            onloan       => undef,
-            notforloan   => 0,
-            -not         => { itemnumber => $itemnumber } })->as_list;
+            # Get all other items that could possibly fill reserves
+            # FIXME We could join reserves (or more tables) here to eliminate some checks later
+            my @other_items = Koha::Items->search({
+                biblionumber => $item->biblionumber,
+                onloan       => undef,
+                notforloan   => 0,
+                -not         => { itemnumber => $itemnumber } })->as_list;
 
-        return ( 0, "on_reserve" ) if @possible_holds && (scalar @other_items < scalar @possible_holds);
+            return ( 0, "on_reserve" ) if @possible_holds && (scalar @other_items < scalar @possible_holds);
 
-        my %matched_items;
-        foreach my $possible_hold (@possible_holds) {
-            my $fillable = 0;
-            my $patron_with_reserve = Koha::Patrons->find($possible_hold->borrowernumber);
-            my $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron_with_reserve });
+            my %matched_items;
+            foreach my $possible_hold (@possible_holds) {
+                my $fillable = 0;
+                my $patron_with_reserve = Koha::Patrons->find($possible_hold->borrowernumber);
+                my $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron_with_reserve });
 
-            # FIXME: We are not checking whether the item we are renewing can fill the hold
+                # FIXME: We are not checking whether the item we are renewing can fill the hold
 
-            foreach my $other_item (@other_items) {
-              next if defined $matched_items{$other_item->itemnumber};
-              next if IsItemOnHoldAndFound( $other_item->itemnumber );
-              next unless IsAvailableForItemLevelRequest($other_item, $patron_with_reserve, undef, $items_any_available);
-              next unless CanItemBeReserved($patron_with_reserve,$other_item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
-              # NOTE: At checkin we call 'CheckReserves' which checks hold 'policy'
-              # CanItemBeReserved checks 'rules' and 'policies' which means
-              # items will fill holds at checkin that are rejected here
-              $fillable = 1;
-              $matched_items{$other_item->itemnumber} = 1;
-              last;
+                foreach my $other_item (@other_items) {
+                  next if defined $matched_items{$other_item->itemnumber};
+                  next if IsItemOnHoldAndFound( $other_item->itemnumber );
+                  next unless IsAvailableForItemLevelRequest($other_item, $patron_with_reserve, undef, $items_any_available);
+                  next unless CanItemBeReserved($patron_with_reserve,$other_item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
+                  # NOTE: At checkin we call 'CheckReserves' which checks hold 'policy'
+                  # CanItemBeReserved checks 'rules' and 'policies' which means
+                  # items will fill holds at checkin that are rejected here
+                  $fillable = 1;
+                  $matched_items{$other_item->itemnumber} = 1;
+                  last;
+                }
+                return ( 0, "on_reserve" ) unless $fillable;
             }
-            return ( 0, "on_reserve" ) unless $fillable;
-        }
 
-    } elsif ($biblio_has_holds) {
-        my ($status, $matched_reserve, $possible_reserves) = CheckReserves($itemnumber);
-        return ( 0, "on_reserve" ) if $status;
+        } else {
+            my ($status, $matched_reserve, $possible_reserves) = CheckReserves($itemnumber);
+            return ( 0, "on_reserve" ) if $status;
+        }
     }
 
     return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
