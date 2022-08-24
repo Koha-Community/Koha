@@ -5555,7 +5555,7 @@ DROP TABLE IF EXISTS `z3950servers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `z3950servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `host` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'target''s host name',
+  `host` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'target''s host name',
   `port` int(11) DEFAULT NULL COMMENT 'port number used to connect to target',
   `db` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'target''s database name',
   `userid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'username needed to log in to target',
@@ -5563,10 +5563,10 @@ CREATE TABLE `z3950servers` (
   `servername` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'name given to the target by the library',
   `checked` smallint(6) DEFAULT NULL COMMENT 'whether this target is checked by default  (1 for yes, 0 for no)',
   `rank` int(11) DEFAULT NULL COMMENT 'where this target appears in the list of targets',
-  `syntax` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'marc format provided by this target',
+  `syntax` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'marc format provided by this target',
   `timeout` int(11) NOT NULL DEFAULT 0 COMMENT 'number of seconds before Koha stops trying to access this server',
   `servertype` enum('zed','sru') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'zed' COMMENT 'zed means z39.50 server',
-  `encoding` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'characters encoding provided by this target',
+  `encoding` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'characters encoding provided by this target',
   `recordtype` enum('authority','biblio') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'biblio' COMMENT 'server contains bibliographic or authority records',
   `sru_options` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'options like sru=get, sru_version=1.1; will be passed to the server via ZOOM',
   `sru_fields` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'contains the mapping between the Z3950 search fields and the specific SRU server indexes',
