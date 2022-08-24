@@ -51,6 +51,7 @@ use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Patron::Modifications;
 use Koha::Patron::Relationships;
+use Koha::Patron::Restrictions;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Recalls;
@@ -1254,6 +1255,21 @@ sub overdues {
             prefetch => { item => { biblio => 'biblioitems' } },
         }
     );
+}
+
+
+=head3 restrictions
+
+  my $restrictions = $patron->restrictions;
+
+Returns the patron restrictions.
+
+=cut
+
+sub restrictions {
+    my ($self) = @_;
+    my $restrictions_rs = $self->_result->borrower_debarments;
+    return Koha::Patron::Restrictions->_new_from_dbic($restrictions_rs);
 }
 
 =head3 get_routing_lists
