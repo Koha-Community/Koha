@@ -32,24 +32,6 @@ Koha::Patron::Restriction::Types - Koha Restriction Types Object set class
 
 =cut
 
-=head3 keyed_on_code
-
-Return all restriction types as a hashref keyed on the code
-
-=cut
-
-sub keyed_on_code {
-    my ( $self ) = @_;
-
-    my @all = $self->_resultset()->search();
-    my $out = {};
-    for my $r( @all ) {
-        my %col = $r->get_columns;
-        $out->{$r->code} = \%col;
-    }
-    return $out;
-}
-
 =head3 _type
 
 =cut
