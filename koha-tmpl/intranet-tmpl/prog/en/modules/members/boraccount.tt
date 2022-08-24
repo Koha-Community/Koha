@@ -42,6 +42,17 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
+            [% IF receipt_sent == '1' %]
+            <div id="receipt_sent_dialog" class="dialog message">
+              Receipt sent.
+            </div>
+            [% END %]
+            [% IF receipt_sent == '-1' %]
+            <div id="receipt_sent_dialog" class="dialog warning">
+              Receipt not sent, failed to find template.
+            </div>
+            [% END %]
+
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
 <form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
@@ -120,7 +131,17 @@
       [% IF account.amountoutstanding <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
       <td class="actions">
         [% IF ( account.is_credit ) %]
+          [% IF Koha.Preference('UseEmailReceipts') %]
+          <div class="btn-group">
+          <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-receipt"></i> Receipt <span class="caret"></span></button>
+          <ul class="dropdown-menu dropdown-menu-right">
+              <li><a target="_blank" href="printfeercpt.pl?accountlines_id=[% account.accountlines_id | uri %]" class="receipt-print-action"><i class="fa fa-print"></i> Print</a></li>
+              <li><a href="boraccount.pl?action=send_receipt&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="receipt-email-action"><i class="fa fa-envelope"></i> Email</a></li>
+          </ul>
+          </div>
+          [% ELSE %]
           <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs receipt-print-action"><i class="fa fa-print"></i> Print</a>
+          [% END %]
         [% ELSE %]
           <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs invoice-print-action"><i class="fa fa-print"></i> Print</a>
         [% END %]

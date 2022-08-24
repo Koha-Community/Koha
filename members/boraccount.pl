@@ -30,6 +30,7 @@ use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_htt
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
+use C4::Letters;
 use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -171,6 +172,44 @@ if ( $action eq 'discount' ) {
     );
 }
 
+my $receipt_sent = 0;
+if ( $action eq 'send_receipt' ) {
+    my $credit_id = scalar $input->param('accountlines_id');
+    my $credit    = Koha::Account::Lines->find($credit_id);
+    my @credit_offsets =
+      $credit->credit_offsets( { type => 'APPLY' } )->as_list;
+    if (
+        my $letter = C4::Letters::GetPreparedLetter(
+            module      => 'circulation',
+            letter_code => uc( "ACCOUNT_" . $credit->credit_type_code ),
+            message_transport_type => 'email',
+            lang                   => $patron->lang,
+            tables                 => {
+                borrowers => $patron->borrowernumber,
+                branches  => C4::Context::mybranch,
+            },
+            substitute => {
+                credit  => $credit,
+                offsets => \@credit_offsets,
+            },
+        )
+      )
+    {
+        my $message_id = C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $patron->borrowernumber,
+                message_transport_type => 'email',
+            }
+        );
+        C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+        $receipt_sent = 1;
+    }
+    else {
+        $receipt_sent = -1;
+    }
+}
+
 #get account details
 my $total = $patron->account->balance;
 
@@ -213,6 +252,7 @@ $template->param(
     payment_id          => $payment_id,
     change_given        => $change_given,
     renew_results       => $renew_results_display,
+    receipt_sent        => $receipt_sent,
     csrf_token          => $csrf_token,
 );
 
