@@ -76,7 +76,7 @@
                             <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
                             <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value=""/> Example: 5.00</li>
-                            [% INCLUDE 'transaction_types.inc' %]
+                            [% INCLUDE 'transaction_types.inc' type="credit" %]
                             [% IF Koha.Preference('UseCashRegisters') %]
                             <li>
                                 [% IF Koha.Preference('RequireCashRegister') %]
