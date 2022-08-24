@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 85;
+use Test::More tests => 86;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -904,6 +904,67 @@ EOF
 02/01/2042\ta second title\ta_second_barcode\ta_second_author\t2
 EOF
     is( $items_content, $expected_items_content, 'get_item_content should return correct items info without time (if dateonly => 1)' );
+};
+
+subtest 'Test where parameter for SendQueuedMessages' => sub {
+    plan tests => 1;
+
+    my $dbh = C4::Context->dbh;
+
+    my $borrowernumber = Koha::Patron->new({
+        firstname    => 'Jane',
+        surname      => 'Smith',
+        categorycode => $patron_category,
+        branchcode   => $library->{branchcode},
+        dateofbirth  => $date,
+        smsalertnumber => undef,
+    })->store->borrowernumber;
+
+    $dbh->do(q|DELETE FROM message_queue|);
+    $my_message = {
+        'letter' => {
+            'content'      => 'a message',
+            'metadata'     => 'metadata',
+            'code'         => 'TEST_MESSAGE',
+            'content_type' => 'text/plain',
+            'title'        => 'message title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    my $my_message2 = {
+        'letter' => {
+            'content'      => 'another message',
+            'metadata'     => 'metadata',
+            'code'         => 'TEST_MESSAGE',
+            'content_type' => 'text/plain',
+            'title'        => 'message title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    my $my_message3 = {
+        'letter' => {
+            'content'      => 'a skipped message',
+            'metadata'     => 'metadata',
+            'code'         => 'TEST_MESSAGE',
+            'content_type' => 'text/plain',
+            'title'        => 'message title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'sms',
+        'from_address'           => 'from@example.com'
+    };
+    C4::Letters::EnqueueLetter($my_message);
+    C4::Letters::EnqueueLetter($my_message2);
+    C4::Letters::EnqueueLetter($my_message3);
+    my $messages_processed = C4::Letters::SendQueuedMessages( { where => q{content NOT LIKE '%skipped%'} } );
+    is( $messages_processed, 2, "Correctly skipped processing one message containing the work 'skipped' in contents" );
 };
 
 subtest 'Test limit parameter for SendQueuedMessages' => sub {

@@ -972,12 +972,13 @@ Returns number of messages sent.
 sub SendQueuedMessages {
     my $params = shift;
 
-    my $which_unsent_messages  = {
-        'message_id'     => $params->{'message_id'},
-        'limit'          => $params->{'limit'} // 0,
-        'borrowernumber' => $params->{'borrowernumber'} // q{},
-        'letter_code'    => $params->{'letter_code'} // q{},
-        'message_transport_type'           => $params->{'type'} // q{},
+    my $which_unsent_messages = {
+        'message_id'             => $params->{'message_id'},
+        'limit'                  => $params->{'limit'} // 0,
+        'borrowernumber'         => $params->{'borrowernumber'} // q{},
+        'letter_code'            => $params->{'letter_code'} // q{},
+        'message_transport_type' => $params->{'type'} // q{},
+        'where'                  => $params->{'where'} // q{},
     };
     my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
     MESSAGE: foreach my $message ( @$unsent_messages ) {
@@ -1280,6 +1281,9 @@ sub _get_unsent_messages {
         if ( $params->{message_id} ) {
             $statement .= ' AND message_id = ?';
             push @query_params, $params->{message_id};
+        }
+        if ( $params->{where} ) {
+            $statement .= " AND $params->{where} ";
         }
         if ( $params->{'limit'} ) {
             $statement .= ' limit ? ';
