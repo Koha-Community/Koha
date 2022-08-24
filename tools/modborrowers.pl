@@ -35,7 +35,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron qw( GetPatronLists );
 use Koha::Libraries;
 use Koha::Patron::Categories;
-use Koha::Patron::Debarments qw( AddDebarment DelDebarment GetDebarments );
+use Koha::Patron::Debarments qw( AddDebarment DelDebarment );
 use Koha::Patrons;
 use List::MoreUtils qw(uniq);
 
@@ -364,6 +364,7 @@ if ( $op eq 'do' ) {
     my @borrowernumbers = $input->multi_param('borrowernumber');
     # For each borrower selected
     for my $borrowernumber ( @borrowernumbers ) {
+
         # If at least one field are filled, we want to modify the borrower
         if ( defined $infos ) {
             # If a debarred date or debarred comment has been submitted make a new debarment
@@ -378,19 +379,19 @@ if ( $op eq 'do' ) {
             }
 
             # If debarment date or debarment comment are disabled then remove all debarrments
+            my $patron = Koha::Patrons->find( $borrowernumber );
             if ( grep { /debarred/ } @disabled ) {
                 eval {
-                   my $debarrments = GetDebarments( { borrowernumber => $borrowernumber } );
+                   my $debarrments = $patron->restrictions;
                    foreach my $debarment (@$debarrments) {
-                      DelDebarment( $debarment->{'borrower_debarment_id'} );
+                      DelDebarment( $debarment->borrower_debarment_id );
                    }
                 };
             }
 
             $infos->{borrowernumber} = $borrowernumber;
-            eval { Koha::Patrons->find( $borrowernumber )->set($infos)->store; };
+            eval { $patron->set($infos)->store; };
             if ( $@ ) { # FIXME We could provide better error handling here
-                my $patron = Koha::Patrons->find( $borrowernumber );
                 $infos->{cardnumber} = $patron ? $patron->cardnumber || '' : '';
                 push @errors, { error => "can_not_update", borrowernumber => $infos->{borrowernumber}, cardnumber => $infos->{cardnumber} };
             }
