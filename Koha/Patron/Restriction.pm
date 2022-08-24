@@ -18,6 +18,7 @@ package Koha::Patron::Restriction;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Patron::Restriction::Type;
 
 use base qw(Koha::Object);
 
@@ -28,6 +29,22 @@ Koha::Patron::Restriction - Koha Patron::Restriction Object class
 =head1 API
 
 =head2 Class methods
+
+=head2 Relation accessors
+
+=head3 type
+
+  my $restriction_type = $restriction->type;
+
+Returns the restriction type
+
+=cut
+
+sub type {
+    my ($self) = @_;
+    my $type_rs = $self->_result->type;
+    return Koha::Patron::Restriction::Type->_new_from_dbic($type_rs);
+}
 
 =head2 Internal methods
 
