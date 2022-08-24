@@ -19,7 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 5;
+
+use Test::MockModule;
+use Test::Exception;
+
+use JSON qw(encode_json);
 
 use Koha::Auth::Providers;
 
@@ -35,16 +40,140 @@ subtest 'domains() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $provider = $builder->build_object({ class => 'Koha::Auth::Providers' });
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Providers' } );
     my $domains  = $provider->domains;
 
-    is( ref($domains), 'Koha::Auth::Provider::Domains', 'Type is correct' );
-    is( $domains->count, 0, 'No domains defined' );
+    is( ref($domains),   'Koha::Auth::Provider::Domains', 'Type is correct' );
+    is( $domains->count, 0,                               'No domains defined' );
 
-    $builder->build_object({ class => 'Koha::Auth::Provider::Domains', value => { auth_provider_id => $provider->id } });
-    $builder->build_object({ class => 'Koha::Auth::Provider::Domains', value => { auth_provider_id => $provider->id } });
+    $builder->build_object( { class => 'Koha::Auth::Provider::Domains', value => { auth_provider_id => $provider->id } } );
+    $builder->build_object( { class => 'Koha::Auth::Provider::Domains', value => { auth_provider_id => $provider->id } } );
 
     is( $provider->domains->count, 2, 'The provider has 2 domains defined' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_config() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Providers', value => { config => '{' } } );
+
+    throws_ok { $provider->get_config() }
+    'Koha::Exceptions::Object::BadValue', 'Expected exception thrown on bad JSON';
+
+    my $config = { some => 'value', and => 'another' };
+    $provider->config( encode_json($config) )->store;
+
+    is_deeply( $provider->get_config, $config, 'Config correctly retrieved' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_config() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    subtest 'OIDC protocol tests' => sub {
+
+        plan tests => 4;
+
+        my $provider = $builder->build_object( { class => 'Koha::Auth::Providers', value => { protocol => 'OIDC' } } );
+
+        my $config = {
+            key    => 'key',
+            secret => 'secret',
+        };
+
+        throws_ok { $provider->set_config($config) }
+        'Koha::Exceptions::MissingParameter', 'Exception thrown on missing parameter';
+
+        is( $@->error, 'The well_known_url parameter is mandatory', 'Message is correct' );
+
+        $config->{well_known_url} = 'https://koha-community.org/auth';
+
+        my $return = $provider->set_config($config);
+        is( ref($return), 'Koha::Auth::Provider', 'Return type is correct' );
+
+        is_deeply( $provider->get_config, $config, 'Configuration stored correctly' );
+    };
+
+    subtest 'OAuth protocol tests' => sub {
+
+        plan tests => 4;
+
+        my $provider = $builder->build_object( { class => 'Koha::Auth::Providers', value => { protocol => 'OAuth' } } );
+
+        my $config = {
+            key       => 'key',
+            secret    => 'secret',
+            token_url => 'https://koha-community.org/auth/token',
+        };
+
+        throws_ok { $provider->set_config($config) }
+        'Koha::Exceptions::MissingParameter', 'Exception thrown on missing parameter';
+
+        is( $@->error, 'The authorize_url parameter is mandatory', 'Message is correct' );
+
+        $config->{authorize_url} = 'https://koha-community.org/auth/authorize';
+
+        my $return = $provider->set_config($config);
+        is( ref($return), 'Koha::Auth::Provider', 'Return type is correct' );
+
+        is_deeply( $provider->get_config, $config, 'Configuration stored correctly' );
+    };
+
+    subtest 'Unsupported protocol tests' => sub {
+
+        plan tests => 2;
+
+        my $provider = $builder->build_object( { class => 'Koha::Auth::Providers', value => { protocol => 'CAS' } } );
+
+        throws_ok { $provider->set_config() }
+        'Koha::Exception', 'Exception thrown on unsupported protocol';
+
+        like( "$@", qr/Unsupported protocol CAS/, 'Message is correct' );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_mapping() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Providers', value => { config => '{' } } );
+
+    throws_ok { $provider->get_mapping() }
+    'Koha::Exceptions::Object::BadValue', 'Expected exception thrown on bad JSON';
+
+    my $mapping = { some => 'value', and => 'another' };
+    $provider->mapping( encode_json($mapping) )->store;
+
+    is_deeply( $provider->get_mapping, $mapping, 'Mapping correctly retrieved' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_mapping() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $provider = $builder->build_object( { class => 'Koha::Auth::Providers' } );
+
+    my $mapping = { some => 'value', and => 'another' };
+    $provider->set_mapping($mapping)->store;
+
+    is_deeply( $provider->get_mapping, $mapping, 'Mapping correctly retrieved' );
 
     $schema->storage->txn_rollback;
 };
