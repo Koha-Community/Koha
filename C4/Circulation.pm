@@ -48,7 +48,7 @@ use Koha::Checkouts;
 use Koha::Illrequests;
 use Koha::Items;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw( DelUniqueDebarment GetDebarments AddUniqueDebarment );
+use Koha::Patron::Debarments qw( DelUniqueDebarment AddUniqueDebarment );
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Account::Lines;
@@ -2558,10 +2558,11 @@ sub MarkIssueReturned {
         }
 
         # Remove any OVERDUES related debarment if the borrower has no overdues
+        my $overdue_restrictions = $patron->restrictions->search({ type => 'OVERDUES' });
         if ( C4::Context->preference('AutoRemoveOverduesRestrictions')
           && $patron->debarred
           && !$patron->has_overdues
-          && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+          && $overdue_restrictions->count
         ) {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
@@ -2650,9 +2651,10 @@ sub _calculate_new_debar_dt {
 
         my ( $has_been_extended );
         if ( C4::Context->preference('CumulativeRestrictionPeriods') and $borrower->{debarred} ) {
-            my $debarment = @{ GetDebarments( { borrowernumber => $borrower->{borrowernumber}, type => 'SUSPENSION' } ) }[0];
+            my $patron = Koha::Patrons->find($borrower->{borrowernumber});
+            my $debarment = $patron->restrictions->search({type => 'SUSPENSION' },{rows => 1})->single;
             if ( $debarment ) {
-                $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
+                $return_date = dt_from_string( $debarment->expiration, 'sql' );
                 $has_been_extended = 1;
             }
         }
@@ -3189,10 +3191,11 @@ sub AddRenewal {
         }
 
         # Remove any OVERDUES related debarment if the borrower has no overdues
+        my $overdue_restrictions = $patron->restrictions->search({ type => 'OVERDUES' });
         if ( $patron
           && $patron->is_debarred
           && ! $patron->has_overdues
-          && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+          && $overdue_restrictions->count
         ) {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
