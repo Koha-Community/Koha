@@ -36,7 +36,6 @@ use C4::Form::MessagingPreferences;
 use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
 use Koha::Patron::Attribute::Types;
-use Koha::Patron::Debarments qw( GetDebarments );
 use Koha::Patron::Restriction::Types;
 use Koha::Patron::Messages;
 use Koha::CsvProfiles;
@@ -81,12 +80,11 @@ for (qw(gonenoaddress lost borrowernotes is_debarred)) {
 }
 
 $template->param(
-    restriction_types => scalar Koha::Patron::Restriction::Types->keyed_on_code()
+    restriction_types => scalar Koha::Patron::Restriction::Types->search()
 );
 
 if ( $patron->is_debarred ) {
     $template->param(
-        'debarments'      => scalar GetDebarments({ borrowernumber => $borrowernumber }),
         'userdebarred'    => $patron->debarred,
         'debarredcomment' => $patron->debarredcomment,
     );
@@ -281,7 +279,6 @@ $template->param(
     relatives_borrowernumbers => \@relatives,
     logged_in_user => $logged_in_user,
     files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
-    #debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     has_modifications         => $has_modifications,
 );
 
