@@ -48,15 +48,17 @@
                 <option value="1">Owner only</option>
             [% END %]
 
-            [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
-
-            [% IF staffuser == 1 %][% IF shelf.allow_change_from_staff %]<option value="3" selected="selected">Staff only</option>[% ELSE %]<option value="3">Staff only</option>[% END %][% END %]
             [% IF permitteduser == 1 %][% IF shelf.allow_change_from_permitted_staff %]<option value="4" selected="selected">Permitted staff only</option>[% ELSE %]<option value="4">Permitted staff only</option>[% END %][% END %]
 
+            [% IF staffuser == 1 %][% IF shelf.allow_change_from_staff %]<option value="3" selected="selected">Staff only</option>[% ELSE %]<option value="3">Staff only</option>[% END %][% END %]
+
+            [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
+
+
         </select>
-        &emsp; <span id="anyone_remark" style="display:none;color:red;">The "Anyone" permission has no actual effect while this list is strictly private.</span>
+        &emsp; <span id="permitted_staff_remark" style="display:none;color:red;">The "Permitted staff only" permission has no actual effect while this list is strictly private.</span>
         &emsp; <span id="staff_remark" style="display:none;color:red;">The "Staff only" permission has no actual effect while this list is strictly private.</span>
-         &emsp; <span id="permitted_staff_remark" style="display:none;color:red;">The "Permitted staff only" permission has no actual effect while this list is strictly private.</span>
+        &emsp; <span id="anyone_remark" style="display:none;color:red;">The "Anyone" permission has no actual effect while this list is strictly private.</span>
     </li>
 [% END %]
 
