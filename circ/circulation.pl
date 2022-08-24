@@ -44,7 +44,6 @@ use CGI::Session;
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw( GetDebarments );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron::Restriction::Types;
 use Koha::Plugins;
@@ -626,10 +625,9 @@ my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber =>
 $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
-    PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
-    debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
+    PatronAutoComplete        => C4::Context->preference("PatronAutoComplete"),
     todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
-    restriction_types         => scalar Koha::Patron::Restriction::Types->keyed_on_code(),
+    restriction_types         => scalar Koha::Patron::Restriction::Types->search(),
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
