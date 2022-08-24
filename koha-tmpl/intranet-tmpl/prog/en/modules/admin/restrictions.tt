@@ -1,7 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
-[% PROCESS 'patron_restrictions.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% PROCESS restriction_type_description %]'[% ELSE %]New restriction[% END %][% END %]
