@@ -713,7 +713,7 @@
                             [% END %]
 
                             <li role="presentation">
-                                <a id="debarments-tab-link" href="#reldebarments" aria-controls="reldebarments" role="tab" data-toggle="tab">Restrictions ([% debarments.size || 0 | html %])</a>
+                                <a id="debarments-tab-link" href="#reldebarments" aria-controls="reldebarments" role="tab" data-toggle="tab">Restrictions ([% patron.restrictions.count | html %])</a>
                             </li>
 
                             [% SET enrollments = patron.get_club_enrollments %]
@@ -748,7 +748,7 @@
                                 </div>
                             [% END %]
 
-                            [% INCLUDE borrower_debarments.inc %]
+                            [% INCLUDE 'patron-restrictions-tab.inc' %]
 
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                                 <div id="reserves" role="tabpanel" class="tab-pane">
