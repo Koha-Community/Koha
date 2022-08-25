@@ -30,7 +30,7 @@ use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Old::Checkouts;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw( GetDebarments AddUniqueDebarment );
+use Koha::Patron::Debarments qw( AddUniqueDebarment );
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -199,13 +199,14 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_1->itemnumber );
 
-    my $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( $debarments->[0]->{type}, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues' );
+    my $restrictions = $patron->restrictions;
+    my $THE_restriction = $restrictions->next;
+    is( $THE_restriction->type->code, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues' );
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
 
-    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if patron does not have overdues' );
+    $restrictions = $patron->restrictions;
+    is( $restrictions->count, 0, 'OVERDUES debarment is removed if patron does not have overdues' );
 
     $schema->storage->txn_rollback;
 };
