@@ -189,6 +189,18 @@ sub debug_to_screen {
     $self->{logger}->level( $Log::Log4perl::DEBUG );
 }
 
+=head2 context
+
+Mojolicous 8.23 added a "context" method, which Mojolicious will die
+on if it's missing from the logger.
+
+=cut
+
+sub context {
+    my $self = shift;
+    return $self;
+}
+
 =head1 AUTHOR
 
 Kyle M Hall, E<lt>kyle@bywatersolutions.comE<gt>

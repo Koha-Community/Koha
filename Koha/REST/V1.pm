@@ -43,6 +43,9 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
+    my $logger = Koha::Logger->get({ interface => 'api' });
+    $self->log($logger);
+
     $self->hook(
         before_dispatch => sub {
             my $c = shift;
