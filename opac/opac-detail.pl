@@ -651,19 +651,10 @@ $template->param(
 );
 
 # Get items on order
-my ( @itemnumbers_on_order );
 if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
-    my $orders = C4::Acquisition::SearchOrders({
-        biblionumber => $biblionumber,
-        ordered => 1,
-    });
+    my $orders = $biblio->orders->filter_by_active;
     my $total_quantity = 0;
-    for my $order ( @$orders ) {
-        my $order = Koha::Acquisition::Orders->find( $order->{ordernumber} );
-        my $basket = $order->basket;
-        if ( $basket->effective_create_items eq 'ordering' ) {
-            @itemnumbers_on_order = $order->items->get_column('itemnumber');
-        }
+    while ( my $order = $orders->next ) {
         $total_quantity += $order->quantity;
     }
     $template->{VARS}->{acquisition_details} = {
@@ -739,10 +730,6 @@ else {
         $item_info->{checkout} = $item->checkout;
         $item_info->{object} = $item;
 
-        if ( C4::Context->preference('OPACAcquisitionDetails') ) {
-            $item_info->{on_order} = 1
-              if grep { $_ eq $item->itemnumber } @itemnumbers_on_order;
-        }
 
         if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
             $item_info->{cover_images} = $item->cover_images;
