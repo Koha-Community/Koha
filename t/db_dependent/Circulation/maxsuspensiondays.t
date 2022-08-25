@@ -9,7 +9,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Patron::Debarments qw( GetDebarments DelDebarment );
+use Koha::Patron::Debarments qw( DelDebarment );
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
@@ -48,7 +48,8 @@ my $borrowernumber = Koha::Patron->new({
     categorycode => $patron_category->{categorycode},
     branchcode => $branchcode,
 })->store->borrowernumber;
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+my $patron_object = Koha::Patrons->find( $borrowernumber );
+my $borrower = $patron_object->unblessed;
 
 my $record = MARC::Record->new();
 $record->append_fields(
@@ -76,13 +77,14 @@ my $daysafter40 = dt_from_string->add_duration(DateTime::Duration->new(days => 4
 
 AddIssue( $borrower, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );
-my $debarments = GetDebarments({borrowernumber => $borrower->{borrowernumber}});
+my $debarments = $patron_object->restrictions;
+my $THE_debarment = $debarments->next;
 is(
-    $debarments->[0]->{expiration},
+    $THE_debarment->expiration,
     output_pref({ dt => $daysafter40, dateformat => 'iso', dateonly => 1 }),
     'calculate suspension with no maximum set'
 );
-DelDebarment( $debarments->[0]->{borrower_debarment_id} );
+DelDebarment( $THE_debarment->borrower_debarment_id );
 
 # Test with maxsuspensiondays = 10 days
 Koha::CirculationRules->set_rules(
@@ -99,13 +101,14 @@ Koha::CirculationRules->set_rules(
 my $daysafter10 = dt_from_string->add_duration(DateTime::Duration->new(days => 10));
 AddIssue( $borrower, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );
-$debarments = GetDebarments({borrowernumber => $borrower->{borrowernumber}});
+$debarments = $patron_object->restrictions;
+$THE_debarment = $debarments->next;
 is(
-    $debarments->[0]->{expiration},
+    $THE_debarment->expiration,
     output_pref({ dt => $daysafter10, dateformat => 'iso', dateonly => 1 }),
     'calculate suspension with a maximum set'
 );
-DelDebarment( $debarments->[0]->{borrower_debarment_id} );
+DelDebarment( $THE_debarment->borrower_debarment_id );
 
 subtest "suspension_chargeperiod" => sub {
     Koha::CirculationRules->set_rules(
