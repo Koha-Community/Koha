@@ -474,6 +474,53 @@ sub clone {
     }
 }
 
+=head2 get_return_branch_policy
+
+  my $returnbranch = Koha::CirculationRules->get_return_branch_policy($item);
+
+Returns the branch to use for returning the item based on the
+item type, and a branch selected via CircControlReturnsBrnch.
+
+The return value is the branch to which to return item.  Possible values:
+  noreturn: do not return, let item remain where checked in (floating collections)
+  homebranch: return to item's home branch
+  holdingbranch: return to issuer branch
+
+This searches branchitemrules in the following order:
+  * Same branchcode and itemtype
+  * Same branchcode, itemtype '*'
+  * branchcode '*', same itemtype
+  * branchcode and itemtype '*'
+
+=cut
+
+sub get_return_branch_policy {
+    my ( $self, $item ) = @_;
+
+    my $pref = C4::Context->preference('CircControlReturnsBranch');
+
+    my $branchcode =
+        $pref eq 'ItemHomeLibrary'     ? $item->homebranch
+      : $pref eq 'ItemHoldingLibrary' ? $item->holdingbranch
+      : $pref eq 'CheckInLibrary'      ? C4::Context->userenv
+          ? C4::Context->userenv->{branch}
+          : $item->homebranch
+      : $item->homebranch;
+
+    my $itemtype = $item->effective_itemtype;
+
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'returnbranch',
+            itemtype   => $itemtype,
+            branchcode => $branchcode,
+        }
+    );
+
+    return $rule ? $rule->rule_value : 'homebranch';
+}
+
+
 =head3 get_opacitemholds_policy
 
 my $can_place_a_hold_at_item_level = Koha::CirculationRules->get_opacitemholds_policy( { patron => $patron, item => $item } );

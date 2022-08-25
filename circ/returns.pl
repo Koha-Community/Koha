@@ -47,10 +47,11 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Calendar;
 use Koha::Checkouts;
+use Koha::CirculationRules;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
-use Koha::Items;
 use Koha::Item::Transfers;
+use Koha::Items;
 use Koha::Patrons;
 use Koha::Recalls;
 
@@ -296,7 +297,7 @@ if ($barcode) {
         }
 
         # make sure return branch respects home branch circulation rules, default to homebranch
-        my $hbr = GetBranchItemRule($item->homebranch, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
+        my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
         $returnbranch = $hbr ne 'noreturn' ? $item->$hbr : $userenv_branch; # can be noreturn, homebranch or holdingbranch
 
         my $materials = $item->materials;

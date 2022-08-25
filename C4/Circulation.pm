@@ -1932,11 +1932,6 @@ holdallowed => Hold policy for this branch and itemtype. Possible values:
   from_any_library:      Holds allowed from any patron.
   from_local_hold_group: Holds allowed from libraries in hold group
 
-returnbranch => branch to which to return item.  Possible values:
-  noreturn: do not return, let item remain where checked in (floating collections)
-  homebranch: return to item's home branch
-  holdingbranch: return to issuer branch
-
 This searches branchitemrules in the following order:
 
   * Same branchcode and itemtype
@@ -1955,13 +1950,12 @@ sub GetBranchItemRule {
     my $rules = Koha::CirculationRules->get_effective_rules({
         branchcode => $branchcode,
         itemtype => $itemtype,
-        rules => ['holdallowed', 'hold_fulfillment_policy', 'returnbranch']
+        rules => ['holdallowed', 'hold_fulfillment_policy']
     });
 
     # built-in default circulation rule
     $rules->{holdallowed} //= 'from_any_library';
     $rules->{hold_fulfillment_policy} //= 'any';
-    $rules->{returnbranch} //= 'homebranch';
 
     return $rules;
 }
@@ -2094,7 +2088,7 @@ sub AddReturn {
     }
 
         # full item data, but no borrowernumber or checkout info (no issue)
-    my $hbr = GetBranchItemRule($item->homebranch, $itemtype)->{'returnbranch'} || "homebranch";
+    my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
         # get the proper branch to which to return the item
     my $returnbranch = $hbr ne 'noreturn' ? $item->$hbr : $branch;
         # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
