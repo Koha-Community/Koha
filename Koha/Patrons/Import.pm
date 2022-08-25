@@ -29,7 +29,7 @@ use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
-use Koha::Patron::Debarments qw( AddDebarment GetDebarments );
+use Koha::Patron::Debarments qw( AddDebarment );
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
@@ -293,16 +293,15 @@ sub import_patrons {
                     if ( $borrower{debarred} && ( ( $borrower{debarred} ne $member->{debarred} ) || ( $borrower{debarredcomment} ne $member->{debarredcomment} ) ) ) {
 
                         # Check to see if this debarment already exists
-                        my $debarrments = GetDebarments(
+                        my $restrictions = $patron->restrictions->search(
                             {
-                                borrowernumber => $borrowernumber,
-                                expiration     => $borrower{debarred},
-                                comment        => $borrower{debarredcomment}
+                                expiration => $borrower{debarred},
+                                comment    => $borrower{debarredcomment}
                             }
                         );
 
                         # If it doesn't, then add it!
-                        unless (@$debarrments) {
+                        unless ($restrictions->count) {
                             AddDebarment(
                                 {
                                     borrowernumber => $borrowernumber,
