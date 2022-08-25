@@ -27,8 +27,6 @@ BEGIN {
     require Exporter;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      GetDebarments
-
       AddDebarment
       DelDebarment
       ModDebarment
@@ -44,28 +42,6 @@ BEGIN {
 Koha::Patron::Debarments - Module for managing patron debarments
 
 =cut
-
-=head2 GetDebarments
-
-my $arrayref = GetDebarments({ borrowernumber => $borrowernumber [, key => $value ] );
-
-=cut
-
-sub GetDebarments {
-    my ($params) = @_;
-
-    return unless ( $params->{'borrowernumber'} );
-
-    my @keys   = keys %$params;
-    my @values = values %$params;
-
-    my $where = join( ' AND ', map { "$_ = ?" } @keys );
-    my $sql   = "SELECT * FROM borrower_debarments WHERE $where";
-    my $sth   = C4::Context->dbh->prepare($sql);
-    $sth->execute(@values);
-
-    return $sth->fetchall_arrayref( {} );
-}
 
 =head2 AddDebarment
 
@@ -197,18 +173,22 @@ sub AddUniqueDebarment {
 
     return unless ( $borrowernumber && $type );
 
-    my $debarment = @{ GetDebarments( { borrowernumber => $borrowernumber, type => $type } ) }[0];
+    my $patron = Koha::Patrons->find($borrowernumber);
+    return unless $patron;
+
+    my $debarment =
+      $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
 
     my $r;
     if ($debarment) {
 
         # We don't want to shorten a unique debarment's period, so if this 'update' would do so, just keep the current expiration date instead
-        $params->{'expiration'} = $debarment->{'expiration'}
-          if ( $debarment->{'expiration'}
-            && $debarment->{'expiration'} gt $params->{'expiration'} );
+        $params->{'expiration'} = $debarment->expiration
+          if ( $debarment->expiration
+            && $debarment->expiration gt $params->{'expiration'} );
 
         $params->{'borrower_debarment_id'} =
-          $debarment->{'borrower_debarment_id'};
+          $debarment->borrower_debarment_id;
         $r = ModDebarment($params);
     } else {
 
@@ -242,11 +222,15 @@ sub DelUniqueDebarment {
 
     return unless ( $borrowernumber && $type );
 
-    my $debarment = @{ GetDebarments( { borrowernumber => $borrowernumber, type => $type } ) }[0];
+    my $patron = Koha::Patrons->find($borrowernumber);
+    return unless $patron;
+
+    my $debarment =
+      $patron->restrictions->search( { type => $type }, { rows => 1 } )->single;
 
     return unless ( $debarment );
 
-    return DelDebarment( $debarment->{'borrower_debarment_id'} );
+    return DelDebarment( $debarment->borrower_debarment_id );
 }
 
 =head2 UpdateBorrowerDebarmentFlags
