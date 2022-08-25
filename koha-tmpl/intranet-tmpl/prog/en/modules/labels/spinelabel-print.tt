@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Spine labels &rsaquo; Tools &rsaquo; Koha</title>
@@ -21,7 +22,7 @@
             </div>
 	[% ELSE %]
             <body id="labels_spinelabel-print" class="tools labels">
-            <div id="spinelabel">
+            <div id="spinelabel" class="[% Branches.GetLoggedInBranchcode | html %]">
 				[% content | $raw %]
             </div>
             <div id="print_button" class="noprint">
