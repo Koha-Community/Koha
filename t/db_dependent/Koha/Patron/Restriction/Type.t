@@ -81,13 +81,10 @@ subtest 'delete() tests' => sub {
         }
     );
     ok( $used_restriction_type->delete, 'Used restriction type deleted' );
-    my $debarments = Koha::Patron::Debarments::GetDebarments(
-        {
-            borrowernumber => $patron->borrowernumber
-        }
-    );
+    my $restrictions = $patron->restrictions;
+    my $THE_restriction = $restrictions->next;
     is(
-        $debarments->[0]->{type},
+        $THE_restriction->type->code,
         $default_restriction_type->code,
         'Used restriction updated to default'
     );
