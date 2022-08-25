@@ -280,20 +280,43 @@
                 <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | $KohaDates %]" class="flatpickr" />
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
-       <li><label for="bookfund">Fund: </label><select id="bookfund" name="bookfund">
-            <option value="">Keep current ([% budget_period_description | html %] - [% order.fund.budget_name | html %])</option>
-            [% FOREACH period IN budget_loop %]
-                <optgroup label="[% period.description | html %]">
-                [% FOREACH fund IN period.funds %]
-                    [% IF ( fund.b_sel ) %]
-                        <option value="[% fund.b_id | html %]" selected="selected">[% fund.b_txt | html %]</option>
-                    [% ELSE %]
-                        <option value="[% fund.b_id | html %]">[% fund.b_txt | html %]</option>
-                    [% END %]
+       <li>
+            <label class="required" for="bookfund">Fund: </label>
+            [% active_count = 0 %]
+            [% IF !ordernumber %]
+                [% FOREACH budget_loo IN budget_loop %]
+                    [% active_count= active_count + budget_loo.b_active %]
                 [% END %]
-                </optgroup>
             [% END %]
-       </select></li>
+            <select class="select2" id="bookfund" name="bookfund">
+            [% FOREACH budget_loo IN budget_loop %]
+               [% level_indent_cnt = 0 %]
+                [% level_indent = "" %]
+                [% WHILE level_indent_cnt < budget_loo.b_level %]
+                    [% level_indent = level_indent _ " -- " %]
+                    [% level_indent_cnt = level_indent_cnt +1 %]
+                [% END %]
+
+                [% IF ( budget_loo.b_sel ) %]
+                    [% active_count = 0 #select no other fund %]
+                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                    >
+                [% ELSIF active_count==1 && budget_loo.b_active %]
+                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                    >
+                [% ELSE %]
+                    [% bdgclass=budget_loo.b_active? "": "b_inactive" | html %]
+                    <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                    >
+                [% END %]
+                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                </option>
+            [% END %]
+            </select>
+            <span class="required">Required</span>
+            <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
+            <input type="checkbox" id="showallbudgets" />
+       </li>
        <li><label>&nbsp;</label><span>(Current: [% budget_period_description | html %] - [% bookfund | html %])</span></li>
        <li>
         <label for="creator">Ordered by: </label>
@@ -427,6 +450,7 @@
 [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         function Check(form) {
             [% IF (AcqCreateItem == 'receiving') %]
@@ -521,6 +545,20 @@
         [% END %]
 
         $(document).ready(function() {
+
+            //keep a copy of all budgets before removing the inactives
+            disabledBudgetsCopy = $('#bookfund').html();
+            $('#bookfund .b_inactive').remove();
+
+            $('#showallbudgets').click(function() {
+                if ($(this).is(":checked")) {
+                    $('#bookfund').html(disabledBudgetsCopy); //Puts back all the funds
+                }
+                else {
+                    $('#bookfund .b_inactive').remove();
+                }
+            });
+
             [% IF (AcqCreateItem == 'receiving') %]
                 cloneItemBlock(0, '[% Koha.Preference('UniqueItemFields') | html %]');
             [% ELSIF (AcqCreateItem == 'ordering') && not order.subscriptionid %]
