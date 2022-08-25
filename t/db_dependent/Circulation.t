@@ -46,7 +46,7 @@ use Koha::Items;
 use Koha::Item::Transfers;
 use Koha::Checkouts;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw( GetDebarments AddDebarment DelUniqueDebarment );
+use Koha::Patron::Debarments qw( AddDebarment DelUniqueDebarment );
 use Koha::Holds;
 use Koha::CirculationRules;
 use Koha::Subscriptions;
@@ -90,19 +90,19 @@ sub test_debarment_on_checkout {
     );
     my @caller      = caller;
     my $line_number = $caller[2];
-    AddIssue( $patron, $item->barcode, $due_date );
+    AddIssue( $patron->unblessed, $item->barcode, $due_date );
 
     my ( undef, $message ) = AddReturn( $item->barcode, $library->{branchcode}, undef, $return_date );
     is( $message->{WasReturned} && exists $message->{Debarred}, 1, 'AddReturn must have debarred the patron' )
         or diag('AddReturn returned message ' . Dumper $message );
-    my $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1, 'Test at line ' . $line_number );
+    my $suspensions = $patron->restrictions->search({ type => 'SUSPENSION' } );
+    is( $suspensions->count, 1, 'Test at line ' . $line_number );
 
-    is( $debarments->[0]->{expiration},
+    my $THE_suspension = $suspensions->next;
+    is( $THE_suspension->expiration,
         $expected_expiration_date, 'Test at line ' . $line_number );
     Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+        { borrowernumber => $patron->borrowernumber, type => 'SUSPENSION' } );
 };
 
 my $schema = Koha::Database->schema;
@@ -2507,7 +2507,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     # Add 2 items
     my $biblionumber = $builder->build_sample_biblio(
@@ -2548,15 +2548,15 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     my $now = dt_from_string;
     my $five_days_ago = $now->clone->subtract( days => 5 );
     my $ten_days_ago  = $now->clone->subtract( days => 10 );
-    AddIssue( $patron, $item_1->barcode, $five_days_ago );    # Add an overdue
-    AddIssue( $patron, $item_2->barcode, $ten_days_ago )
+    AddIssue( $patron->unblessed, $item_1->barcode, $five_days_ago );    # Add an overdue
+    AddIssue( $patron->unblessed, $item_2->barcode, $ten_days_ago )
       ;    # Add another overdue
 
     t::lib::Mocks::mock_preference( 'CumulativeRestrictionPeriods', '0' );
     AddReturn( $item_1->barcode, $library->{branchcode}, undef, $now );
-    my $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
+    my $suspensions = $patron->restrictions->search( { type => 'SUSPENSION' } );
+    is( $suspensions->count, 1, "Suspension added" );
+    my $THE_suspension = $suspensions->next;
 
     # FIXME Is it right? I'd have expected 5 * 2 - 1 instead
     # Same for the others
@@ -2567,12 +2567,13 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             dateonly   => 1
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
+    is( $THE_suspension->expiration, $expected_expiration, "Suspesion expiration set" );
 
     AddReturn( $item_2->barcode, $library->{branchcode}, undef, $now );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
+    $suspensions = $patron->restrictions->search( { type => 'SUSPENSION' } );
+    is( $suspensions->count, 1, "Only one suspension" );
+    $THE_suspension = $suspensions->next;
+
     $expected_expiration = output_pref(
         {
             dt         => $now->clone->add( days => ( 10 - 1 ) * 2 ),
@@ -2580,19 +2581,20 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             dateonly   => 1
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
+    is( $THE_suspension->expiration, $expected_expiration, "Suspension expiration date updated" );
 
     Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+        { borrowernumber => $patron->borrowernumber, type => 'SUSPENSION' } );
 
     t::lib::Mocks::mock_preference( 'CumulativeRestrictionPeriods', '1' );
-    AddIssue( $patron, $item_1->barcode, $five_days_ago );    # Add an overdue
-    AddIssue( $patron, $item_2->barcode, $ten_days_ago )
+    AddIssue( $patron->unblessed, $item_1->barcode, $five_days_ago );    # Add an overdue
+    AddIssue( $patron->unblessed, $item_2->barcode, $ten_days_ago )
       ;    # Add another overdue
     AddReturn( $item_1->barcode, $library->{branchcode}, undef, $now );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
+    $suspensions = $patron->restrictions->search( { type => 'SUSPENSION' } );
+    is( $suspensions->count, 1, "Only one suspension" );
+    $THE_suspension = $suspensions->next;
+
     $expected_expiration = output_pref(
         {
             dt         => $now->clone->add( days => ( 5 - 1 ) * 2 ),
@@ -2600,12 +2602,13 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             dateonly   => 1
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
+    is( $THE_suspension->expiration, $expected_expiration, "Suspension expiration date updated" );
 
     AddReturn( $item_2->barcode, $library->{branchcode}, undef, $now );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
+    $suspensions = $patron->restrictions->search( { type => 'SUSPENSION' } );
+    is( $suspensions->count, 1, "Only one suspension" );
+    $THE_suspension = $suspensions->next;
+
     $expected_expiration = output_pref(
         {
             dt => $now->clone->add( days => ( 5 - 1 ) * 2 + ( 10 - 1 ) * 2 ),
@@ -2613,14 +2616,14 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             dateonly   => 1
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
+    is( $THE_suspension->expiration, $expected_expiration, "Suspension expiration date updated" );
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
     plan tests => 29;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblionumber = $builder->build_sample_biblio(
         {
@@ -2945,8 +2948,13 @@ subtest 'AddReturn | is_overdue' => sub {
     t::lib::Mocks::mock_preference('MaxFine', '100');
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
-    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
 
     my $item = $builder->build_sample_item(
@@ -2976,7 +2984,6 @@ subtest 'AddReturn | is_overdue' => sub {
     my $two_days_ago  = $now->clone->subtract( days => 2 );
     my $five_days_ago = $now->clone->subtract( days => 5 );
     my $ten_days_ago  = $now->clone->subtract( days => 10 );
-    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
     # No return date specified, today will be used => 10 days overdue charged
     AddIssue( $patron->unblessed, $item->barcode, $ten_days_ago ); # date due was 10d ago
