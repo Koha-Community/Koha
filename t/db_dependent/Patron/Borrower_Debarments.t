@@ -8,7 +8,7 @@ use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 
 use_ok('Koha::Patron::Debarments');
 
@@ -22,12 +22,18 @@ my $library = $builder->build({
 });
 
 my $patron_category = $builder->build({ source => 'Category' });
-my $borrowernumber = Koha::Patron->new({
-    firstname =>  'my firstname',
-    surname => 'my surname',
-    categorycode => $patron_category->{categorycode},
-    branchcode => $library->{branchcode},
-})->store->borrowernumber;
+my $patron = $builder->build_object(
+    {
+        class  => 'Koha::Patrons',
+        value => {
+            firstname    => 'my firstname',
+            surname      => 'my surname',
+            categorycode => $patron_category->{categorycode},
+            branchcode   => $library->{branchcode},
+        }
+    }
+);
+my $borrowernumber = $patron->borrowernumber;
 
 my $success = Koha::Patron::Debarments::AddDebarment({
     borrowernumber => $borrowernumber,
@@ -38,11 +44,12 @@ my $success = Koha::Patron::Debarments::AddDebarment({
 is( $success, 1, "AddDebarment returned true" );
 
 
-my $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber });
-is( @$debarments, 1, "GetDebarments returns 1 debarment" );
-is( $debarments->[0]->{'type'}, 'MANUAL', "Correctly stored 'type'" );
-is( $debarments->[0]->{'expiration'}, '9999-06-10', "Correctly stored 'expiration'" );
-is( $debarments->[0]->{'comment'}, 'Test 1', "Correctly stored 'comment'" );
+my $restrictions = $patron->restrictions;
+my $THE_restriction = $restrictions->next;
+is( $restrictions->count, 1, '$patron->restrictions returns 1 restriction' );
+is( $THE_restriction->type->code, 'MANUAL', "Correctly stored 'type'" );
+is( $THE_restriction->expiration, '9999-06-10', "Correctly stored 'expiration'" );
+is( $THE_restriction->comment, 'Test 1', "Correctly stored 'comment'" );
 
 
 $success = Koha::Patron::Debarments::AddDebarment({
@@ -50,108 +57,128 @@ $success = Koha::Patron::Debarments::AddDebarment({
     comment => 'Test 2',
 });
 
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber });
-is( @$debarments, 2, "GetDebarments returns 2 debarments" );
-is( $debarments->[1]->{'type'}, 'MANUAL', "Correctly stored 'type'" );
-is( $debarments->[1]->{'expiration'}, undef, "Correctly stored debarrment with no expiration" );
-is( $debarments->[1]->{'comment'}, 'Test 2', "Correctly stored 'comment'" );
+$restrictions = $patron->restrictions;
+$THE_restriction = $restrictions->last;
+is( $restrictions->count, 2, '$patron->restrictions returns 2 restrictions' );
+is( $THE_restriction->type->code, 'MANUAL', "Correctly stored 'type'" );
+is( $THE_restriction->expiration, undef, "Correctly stored debarrment with no expiration" );
+is( $THE_restriction->comment, 'Test 2', "Correctly stored 'comment'" );
 
 
 Koha::Patron::Debarments::ModDebarment({
-    borrower_debarment_id => $debarments->[1]->{'borrower_debarment_id'},
+    borrower_debarment_id => $THE_restriction->borrower_debarment_id,
     comment => 'Test 3',
     expiration => '9998-06-10',
 });
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber });
-is( $debarments->[1]->{'comment'}, 'Test 3', "ModDebarment functions correctly" );
 
-my $patron = Koha::Patrons->find( $borrowernumber )->unblessed;
-is( $patron->{'debarred'}, '9999-06-10', "Field borrowers.debarred set correctly" );
-is( $patron->{'debarredcomment'}, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
+$restrictions = $patron->restrictions;
+$THE_restriction = $restrictions->last;
+is( $restrictions->count, 2, '$patron->restrictions returns 2 restrictions' );
+is( $THE_restriction->comment, 'Test 3', "ModDebarment functions correctly" );
+
+$patron = $patron->get_from_storage;
+is( $patron->debarred, '9999-06-10', "Field borrowers.debarred set correctly" );
+is( $patron->debarredcomment, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
 
 
 Koha::Patron::Debarments::AddUniqueDebarment({
     borrowernumber => $borrowernumber,
     type           => 'OVERDUES'
 });
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "GetDebarments returns 1 OVERDUES debarment" );
-is( $debarments->[0]->{'type'}, 'OVERDUES', "AddOverduesDebarment created new debarment correctly" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+$THE_restriction = $restrictions->next;
+is( $restrictions->count, 1, '$patron->restrictions->search({ type => "OVERDUES" }) returns 1 OVERDUES restriction after running AddUniqueDebarment once' );
+is( $THE_restriction->type->code, 'OVERDUES', "AddOverduesDebarment created new debarment correctly" );
 
 Koha::Patron::Debarments::AddUniqueDebarment({
     borrowernumber => $borrowernumber,
     expiration => '9999-11-09',
     type => 'OVERDUES'
 });
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "GetDebarments returns 1 OVERDUES debarment after running AddOverduesDebarment twice" );
-is( $debarments->[0]->{'expiration'}, '9999-11-09', "AddOverduesDebarment updated OVERDUES debarment correctly" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+$THE_restriction = $restrictions->next;
+is( $restrictions->count, 1, '$patron->restrictions->search({ type => "OVERDUES" }) returns 1 OVERDUES restriction after running AddUniqueDebarent twice' );
+is( $THE_restriction->expiration, '9999-11-09', "AddUniqueDebarment updated the OVERDUES restriction correctly" );
 
 
 my $delUniqueDebarment = Koha::Patron::Debarments::DelUniqueDebarment({
 });
 is( $delUniqueDebarment, undef, "DelUniqueDebarment without the arguments 'borrowernumber' and 'type' returns undef" );
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "DelUniqueDebarment without the arguments 'borrowernumber' and 'type' does not delete the debarment" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+is( $restrictions->count, 1, "DelUniqueDebarment without the arguments 'borrowernumber' and 'type' does not delete the debarment" );
 
 $delUniqueDebarment = Koha::Patron::Debarments::DelUniqueDebarment({
     borrowernumber => $borrowernumber,
 });
 is( $delUniqueDebarment, undef, "DelUniqueDebarment without the argument 'type' returns undef" );
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "DelUniqueDebarment without the argument 'type' does not delete the debarment" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+is( $restrictions->count, 1, "DelUniqueDebarment without the argument 'type' does not delete the debarment" );
 
 $delUniqueDebarment = Koha::Patron::Debarments::DelUniqueDebarment({
     type => 'OVERDUES'
 });
 is( $delUniqueDebarment, undef, "DelUniqueDebarment without the argument 'borrowernumber' returns undef" );
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "DelUniqueDebarment without the argument 'borrowerumber' does not delete the debarment" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+is( $restrictions->count, 1, "DelUniqueDebarment without the argument 'borrowerumber' does not delete the debarment" );
 
 $delUniqueDebarment = Koha::Patron::Debarments::DelUniqueDebarment({
     borrowernumber => $borrowernumber,
     type => 'SUSPENSION',
 });
 is( $delUniqueDebarment, undef, "DelUniqueDebarment with wrong arguments returns undef" );
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 1, "DelUniqueDebarment with wrong arguments does not delete the debarment" );
+
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+is( $restrictions->count, 1, "DelUniqueDebarment with wrong arguments does not delete the debarment" );
 
 $delUniqueDebarment = Koha::Patron::Debarments::DelUniqueDebarment({
     borrowernumber => $borrowernumber,
     type => 'OVERDUES',
 });
 is( $delUniqueDebarment, 1, "DelUniqueDebarment returns 1" );
-$debarments = Koha::Patron::Debarments::GetDebarments({
-    borrowernumber => $borrowernumber,
-    type => 'OVERDUES',
-});
-is( @$debarments, 0, "DelUniqueDebarment functions correctly" );
 
+$restrictions = $patron->restrictions->search(
+    {
+        type => 'OVERDUES',
+    }
+);
+is( $restrictions->count, 0, "DelUniqueDebarment functions correctly" );
 
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber });
-foreach my $d ( @$debarments ) {
-    Koha::Patron::Debarments::DelDebarment( $d->{'borrower_debarment_id'} );
+$restrictions = $patron->restrictions;
+while ( my $restriction = $restrictions->next ) {
+    Koha::Patron::Debarments::DelDebarment( $restriction->borrower_debarment_id );
 }
-$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber });
-is( @$debarments, 0, "DelDebarment functions correctly" );
+
+$restrictions = $patron->restrictions;
+is( $restrictions->count, 0, "DelDebarment functions correctly" );
 
 $dbh->do(q|UPDATE borrowers SET debarred = '1970-01-01'|);
 is( Koha::Patrons->find( $borrowernumber )->is_debarred, undef, 'A patron with a debarred date in the past is not debarred' );
