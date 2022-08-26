@@ -401,7 +401,7 @@ foreach my $item (@items) {
     $item_info->{checkout} = $item->checkout;
 
     # Check the transit status
-    my $transfer = $item_object->get_transfer;
+    my $transfer = $item->get_transfer;
     if ( $transfer && $transfer->in_transit ) {
         $item->{transfertwhen} = $transfer->datesent;
         $item->{transfertfrom} = $transfer->frombranch;
