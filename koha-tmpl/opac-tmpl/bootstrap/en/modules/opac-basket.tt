@@ -244,7 +244,7 @@
                                                         [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                                                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
                                                         [% ELSE %]
-                                                            [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                            [% BIBLIO_RESULT.HOSTITEMENTRIES | html %]
                                                         [% END %]
                                                     </p>
                                                 </td>
@@ -315,7 +315,7 @@
                                                         [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a> [% BIBLIO_RESULT.RELATEDPARTS | html %]
                                                         [% ELSE %]
-                                                        [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        [% BIBLIO_RESULT.HOSTITEMENTRIES | html %]
                                                         [% END %]
                                                     </p>
                                                 [% END %]
