@@ -1699,7 +1699,7 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     $rules = { itemlost => ['AB'] };
     my $c = Koha::Items->filter_by_visible_in_opac->count;
     my @warnings = C4::Context->dbh->selectrow_array('SHOW WARNINGS');
-    is( $warnings[2], q{Truncated incorrect DOUBLE value: 'AB'});
+    like( $warnings[2], qr/Truncated incorrect (DOUBLE|DECIMAL) value: 'AB'/);
 
     $schema->storage->txn_rollback;
 };
