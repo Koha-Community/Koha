@@ -57,7 +57,7 @@ sub get {
     my ( $class, $params ) = @_;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     my $category = $params ? ( $params->{category} || caller ) : caller;
-    my $l4pcat = $interface . '.' . $category;
+    my $l4pcat = ( C4::Context->psgi_env ? 'plack-' : q{} ) . $interface . '.' . $category;
 
     my $init = _init();
     my $self = {};
