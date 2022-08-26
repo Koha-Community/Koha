@@ -140,7 +140,7 @@ Your list: [% shelfname | $raw %]
                 [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                 [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | $raw %]
                 [% ELSE %]
-                [% BIBLIO_RESULT.HOSTITEMENTRIES %]
+                [% BIBLIO_RESULT.HOSTITEMENTRIES | html %]
                 [% END %]
             </span>
             <br/>
