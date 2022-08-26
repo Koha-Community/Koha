@@ -549,7 +549,7 @@
                     [% END # / IF total %]
 
                     [%# Display "Not finding what you're looking for" for suggestion or ILL %]
-                    [% IF suggestion && ( Koha.Preference( 'AnonSuggestions' ) == 1 || loggedinusername ) || ( Koha.Preference( 'ILLModule' ) == 1 && loggedinusername ) %]
+                    [% IF suggestion || ( Koha.Preference( 'ILLModule' ) == 1 && loggedinusername ) %]
                         <div class="suggestion">
                             Not finding what you're looking for?
                             <ul>

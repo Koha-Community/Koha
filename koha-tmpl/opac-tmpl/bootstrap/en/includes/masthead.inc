@@ -329,7 +329,7 @@
                             <a href="/cgi-bin/koha/opac-browse.pl">Browse search</a>
                         </li>
                     [% END %]
-                    [% IF Koha.Preference( 'suggestion' ) == 1 %]
+                    [% IF suggestion %]
                         [% IF Koha.Preference( 'AnonSuggestions' ) == 1 || Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                             <li class="nav-item">
                                 <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">Purchase suggestions</a>

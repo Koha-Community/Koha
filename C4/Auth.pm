@@ -449,7 +449,9 @@ sub get_template_and_user {
 
     # Decide if the patron can make suggestions in the OPAC
     my $can_make_suggestions;
-    if ( C4::Context->userenv && C4::Context->userenv->{'number'} ) {
+    if ( C4::Context->preference('Suggestion') && C4::Context->preference('AnonSuggestions') ) {
+        $can_make_suggestions = 1;
+    } elsif ( C4::Context->userenv && C4::Context->userenv->{'number'} ) {
         $can_make_suggestions = Koha::Patrons->find(C4::Context->userenv->{'number'})->category->can_make_suggestions;
     }
 

@@ -94,9 +94,11 @@ else {
 }
 
 # If suggestions are turned off, or this patron belongs to a category not allowed to make suggestions (suggestionPatronCategoryExceptions syspref) we redirect to 404 error. This will also redirect guest suggestions
-if ( !Koha::Patrons->find( $borrowernumber )->category->can_make_suggestions ) {
-    print $input->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
+if ( defined $borrowernumber && !C4::Context->preference('AnonSuggestions') ) {
+    if ( (!Koha::Patrons->find( $borrowernumber )->category->can_make_suggestions) ) {
+        print $input->redirect("/cgi-bin/koha/errors/404.pl");
+        exit;
+    }
 }
 
 my $suggested_by;
