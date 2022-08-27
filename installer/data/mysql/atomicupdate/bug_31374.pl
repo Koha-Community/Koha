@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number => "31374",
-    description => "Add a non-public note collumn to the suggestions table",
+    description => "Add a non-public note column to the suggestions table",
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
