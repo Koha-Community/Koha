@@ -337,8 +337,6 @@ foreach my $biblioNumber (@biblionumbers) {
     my $biblio = Koha::Biblios->find( $biblioNumber );
     next unless $biblio;
 
-    my $marcrecord = $biblio->metadata->record;
-
     my $items = Koha::Items->search_ordered(
         [
             biblionumber => $biblioNumber,
