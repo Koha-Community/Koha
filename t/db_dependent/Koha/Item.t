@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::Exception;
 use Test::MockModule;
 
@@ -1755,6 +1755,68 @@ subtest 'has_pending_recall() tests' => sub {
     $recall->status('waiting')->store;
 
     ok( $item->has_pending_recall, 'The item has a pending recall' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_denied_renewal' => sub {
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries'});
+
+    my $deny_book = $builder->build_object({ class => 'Koha::Items', value => {
+        homebranch => $library->branchcode,
+        withdrawn => 1,
+        itype => 'HIDE',
+        location => 'PROC',
+        itemcallnumber => undef,
+        itemnotes => "",
+        }
+    });
+
+    my $allow_book = $builder->build_object({ class => 'Koha::Items', value => {
+        homebranch => $library->branchcode,
+        withdrawn => 0,
+        itype => 'NOHIDE',
+        location => 'NOPROC'
+        }
+    });
+
+    my $idr_rules = "";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 0, 'Renewal allowed when no rules' );
+
+    $idr_rules="withdrawn: [1]";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked when 1 rules (withdrawn)' );
+    is( $allow_book->is_denied_renewal, 0, 'Renewal allowed when 1 rules not matched (withdrawn)' );
+
+    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]";
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked when 2 rules matched (withdrawn, itype)' );
+    is( $allow_book->is_denied_renewal, 0, 'Renewal allowed when 2 rules not matched (withdrawn, itype)' );
+
+    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]\nlocation: [PROC]";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked when 3 rules matched (withdrawn, itype, location)' );
+    is( $allow_book->is_denied_renewal, 0, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
+
+    $idr_rules="itemcallnumber: [NULL]";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked for undef when NULL in pref' );
+
+    $idr_rules="itemcallnumber: ['']";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 0, 'Renewal not blocked for undef when "" in pref' );
+
+    $idr_rules="itemnotes: [NULL]";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 0, 'Renewal not blocked for "" when NULL in pref' );
+
+    $idr_rules="itemnotes: ['']";
+    C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked for empty string when "" in pref' );
 
     $schema->storage->txn_rollback;
 };

@@ -1927,6 +1927,35 @@ sub is_notforloan {
     return $is_notforloan;
 }
 
+=head3 is_denied_renewal
+
+    my $is_denied_renewal = $item->is_denied_renewal;
+
+Determine whether or not this item can be renewed based on the
+rules set in the ItemsDeniedRenewal system preference.
+
+=cut
+
+sub is_denied_renewal {
+    my ( $self ) = @_;
+
+    my $denyingrules = Koha::Config::SysPrefs->find('ItemsDeniedRenewal')->get_yaml_pref_hash();
+    return 0 unless $denyingrules;
+    foreach my $field (keys %$denyingrules) {
+        my $val = $self->$field;
+        if( !defined $val) {
+            if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
+                return 1;
+            }
+        } elsif (any { defined($_) && $val eq $_ } @{$denyingrules->{$field}}) {
+           # If the results matches the values in the syspref
+           # We return true if match found
+            return 1;
+        }
+    }
+    return 0;
+}
+
 =head3 _type
 
 =cut

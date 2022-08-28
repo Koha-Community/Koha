@@ -4107,10 +4107,8 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");
 };
 
-subtest 'ItemsDeniedRenewal preference' => sub {
-    plan tests => 18;
-
-    C4::Context->set_preference('ItemsDeniedRenewal','');
+subtest 'ItemsDeniedRenewal rules are checked' => sub {
+    plan tests => 4;
 
     my $idr_lib = $builder->build_object({ class => 'Koha::Libraries'});
     Koha::CirculationRules->set_rules(
@@ -4132,15 +4130,6 @@ subtest 'ItemsDeniedRenewal preference' => sub {
         }
     );
 
-    my $deny_book = $builder->build_object({ class => 'Koha::Items', value => {
-        homebranch => $idr_lib->branchcode,
-        withdrawn => 1,
-        itype => 'HIDE',
-        location => 'PROC',
-        itemcallnumber => undef,
-        itemnotes => "",
-        }
-    });
     my $allow_book = $builder->build_object({ class => 'Koha::Items', value => {
         homebranch => $idr_lib->branchcode,
         withdrawn => 0,
@@ -4154,21 +4143,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
         }
     });
     my $future = dt_from_string->add( days => 1 );
-    my $deny_issue = $builder->build_object(
-        {
-            class => 'Koha::Checkouts',
-            value => {
-                returndate      => undef,
-                renewals_count  => 0,
-                auto_renew      => 0,
-                borrowernumber  => $idr_borrower->borrowernumber,
-                itemnumber      => $deny_book->itemnumber,
-                onsite_checkout => 0,
-                date_due        => $future,
-            }
-        }
-    );
-    my $allow_issue = $builder->build_object(
+    my $issue = $builder->build_object(
         {
             class => 'Koha::Checkouts',
             value => {
@@ -4183,70 +4158,21 @@ subtest 'ItemsDeniedRenewal preference' => sub {
         }
     );
 
-    my $idr_rules;
+    my $mock_item_class = Test::MockModule->new("Koha::Item");
+    $mock_item_class->mock( 'is_denied_renewal', sub { return 1; } );
 
-    my ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal allowed when no rules' );
-    is( $idr_error, undef, 'Renewal allowed when no rules' );
+    my ( $mayrenew, $error ) = CanBookBeRenewed( $idr_borrower->borrowernumber, $issue->itemnumber );
+    is( $mayrenew, 0, 'Renewal blocked when $item->is_denied_renewal returns true' );
+    is( $error, 'item_denied_renewal', 'Renewal blocked when $item->is_denied_renewal returns true' );
 
-    $idr_rules="withdrawn: [1]";
+    $mock_item_class->unmock( 'is_denied_renewal' );
+    $mock_item_class->mock( 'is_denied_renewal', sub { return 0; } );
 
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 0, 'Renewal blocked when 1 rules (withdrawn)' );
-    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 1 rule (withdrawn)' );
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal allowed when 1 rules not matched (withdrawn)' );
-    is( $idr_error, undef, 'Renewal allowed when 1 rules not matched (withdrawn)' );
+    ( $mayrenew, $error ) = CanBookBeRenewed( $idr_borrower->borrowernumber, $issue->itemnumber );
+    is( $mayrenew, 1, 'Renewal allowed when $item->is_denied_renewal returns false' );
+    is( $error, undef, 'Renewal allowed when $item->is_denied_renewal returns false' );
 
-    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]";
-
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 0, 'Renewal blocked when 2 rules matched (withdrawn, itype)' );
-    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 2 rules matched (withdrawn,itype)' );
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal allowed when 2 rules not matched (withdrawn, itype)' );
-    is( $idr_error, undef, 'Renewal allowed when 2 rules not matched (withdrawn, itype)' );
-
-    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]\nlocation: [PROC]";
-
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 0, 'Renewal blocked when 3 rules matched (withdrawn, itype, location)' );
-    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 3 rules matched (withdrawn,itype, location)' );
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
-    is( $idr_error, undef, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
-
-    $idr_rules="itemcallnumber: [NULL]";
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 0, 'Renewal blocked for undef when NULL in pref' );
-    $idr_rules="itemcallnumber: ['']";
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal not blocked for undef when "" in pref' );
-
-    $idr_rules="itemnotes: [NULL]";
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 1, 'Renewal not blocked for "" when NULL in pref' );
-    $idr_rules="itemnotes: ['']";
-    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
-    ( $idr_mayrenew, $idr_error ) =
-    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
-    is( $idr_mayrenew, 0, 'Renewal blocked for empty string when "" in pref' );
+    $mock_item_class->unmock( 'is_denied_renewal' );
 };
 
 subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
