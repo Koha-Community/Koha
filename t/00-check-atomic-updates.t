@@ -19,19 +19,23 @@ use Modern::Perl;
 use Test::More;
 use File::Find;
 
-my $dir = ('installer/data/mysql/atomicupdate');
-my @files;
+SKIP: {
+    skip "Building custom packages", 1, if $ENV{'CUSTOM_PACKAGE'};
 
-find( \&wanted, $dir );
+    my $dir = ('installer/data/mysql/atomicupdate');
+    my @files;
 
-sub wanted {
-    push @files, $_;
-    return;
-}
+    find( \&wanted, $dir );
 
-foreach my $f (@files) {
-    next if $f eq 'skeleton.pl';
-    unlike( $f, qr/.*pl$/, "check for unhandled atomic updates: $f" );
-}
+    sub wanted {
+        push @files, $_;
+        return;
+    }
+
+    foreach my $f (@files) {
+        next if $f eq 'skeleton.pl';
+        unlike( $f, qr/.*pl$/, "check for unhandled atomic updates: $f" );
+    }
+};
 
 done_testing();
