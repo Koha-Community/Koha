@@ -89,7 +89,7 @@
 
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
         [% SET not_for_loan = 0 %]
-        [% IF ITEM_DAT.notforloan || ITEM_DAT.itemtype.notforloan %]
+        [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
             [% SET not_for_loan = 1 %]
             [% SET not_for_loan_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
         [% END %]

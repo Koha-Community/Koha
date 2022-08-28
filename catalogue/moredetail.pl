@@ -151,7 +151,8 @@ foreach my $item (@items){
 
     my $item_info = $item->unblessed;
     $item_info->{object} = $item;
-    $item_info->{itemtype} = $itemtypes->{$item->effective_itemtype};
+    $item_info->{itype} = $itemtypes->{ $item->itype }->{'translated_description'} if exists $itemtypes->{ $item->itype };
+    $item_info->{effective_itemtype} = $itemtypes->{$item->effective_itemtype};
     $item_info->{'ccode'}              = $ccodes->{ $item->ccode } if $ccodes && $item->ccode && exists $ccodes->{ $item->ccode };
     if ( defined $item->copynumber ) {
         $item_info->{'displaycopy'} = 1;
