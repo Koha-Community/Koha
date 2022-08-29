@@ -218,7 +218,11 @@
                         <em>"[% patron_message.message | html %]"</em>
                     </span>
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
+                        [% IF moremember %]
                         <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash"></i> Delete</a>
+                        [% ELSE %]
+                        <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
+                        [% END %]
                     [% END %]
                 </li>
             [% END %]
