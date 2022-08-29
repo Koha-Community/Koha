@@ -414,7 +414,6 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{rank} = $biblioData->{rank};
     $biblioLoopIter{reservecount} = $biblioData->{reservecount};
     $biblioLoopIter{already_reserved} = $biblioData->{already_reserved};
-    $biblioLoopIter{reqholdnotes}=0; #TODO: For future use
 
     if (!$itemLevelTypes && $biblioData->{itemtype}) {
         $biblioLoopIter{translated_description} = $itemtypes->{$biblioData->{itemtype}}{translated_description};

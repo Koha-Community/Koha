@@ -317,9 +317,6 @@
                                                     <li>
                                                         <div class="notesrow" id="notesrow_[% bibitemloo.biblionumber | html %]">
                                                             <label for="holdnotes_[% bibitemloo.biblionumber | html %]">Hold notes:</label>
-                                                            [% IF bibitemloo.reqholdnotes %]
-                                                                <span id="reqholdnotes_[% bibitemloo.biblionumber | html %]">Please enter additional information about the requested item:</span>
-                                                            [% END %]
                                                             <textarea id="holdnotes_[% bibitemloo.biblionumber | html %]" rows="2" cols="30" name="notes_[% bibitemloo.biblionumber | html %]" >[% bibitemloo.holdnotes | html %]</textarea>
                                                         </div>
                                                     </li>
@@ -557,9 +554,6 @@
                 $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").click();
             $("#reqspecific_[% bibitemloo.biblionumber | html %]").click();
             $("#copiesrow_[% bibitemloo.biblionumber | html %]").show();
-          [% END %]
-          [% IF bibitemloo.reqholdnotes %]
-              $("#holdnotes_[% bibitemloo.biblionumber | html %]").attr( 'required', true );
           [% END %]
         [% END %]
 
