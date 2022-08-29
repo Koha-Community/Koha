@@ -25,7 +25,6 @@
         [% END %]
         [% INCLUDE 'patron-title.inc' %]
     </h5>
-
 [% IF Koha.Preference('showLastPatron') %]
     <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
     <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
@@ -52,6 +51,10 @@
 
 <ul class="patronbriefinfo">
     [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
+        [% IF patron.pronouns %]
+            <li class="patronpronouns">([% patron.pronouns | html %])</li>
+        [% END %]
+
         [% PROCESS 'display-address-style' %]
 
         [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]<li class="patronphone">
