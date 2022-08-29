@@ -163,7 +163,7 @@
                     [% END # / IF patron_flagged %]
 
                     [% IF savings %]
-                        <div class="alert alert-info">
+                        <div class="alert alert-info" id="savings">
                             Congratulations, you have saved a total of [% savings | $Price with_symbol => 1 %] by using the library.
                         </div>
                     [% END %]

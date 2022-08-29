@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Exception;
 use Test::Warn;
 
@@ -29,6 +29,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::ArticleRequests;
 use Koha::Patrons;
 use Koha::Patron::Relationships;
+use C4::Circulation qw( AddIssue AddReturn );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -1346,6 +1347,34 @@ subtest 'notify_library_of_registration()' => sub {
     $to_address = $sth->fetchrow_array;
     is( $to_address, 'root@localhost', 'OPAC_REG email queued to go to KohaAdminEmailAddress syspref when EmailPatronRegistration equals KohaAdminEmailAddress' );
     $dbh->do(q|DELETE FROM message_queue|);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_savings tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' }, { value => { branchcode => $library->branchcode } });
+
+    t::lib::Mocks::mock_userenv({ patron => $patron, branchcode => $library->branchcode });
+
+    my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
+    my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
+    my $item2 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber, replacementprice => '5.00', holdingbranch => $library->branchcode, homebranch => $library->branchcode } });
+
+    AddIssue( $patron->unblessed, $item1->barcode );
+    AddIssue( $patron->unblessed, $item2->barcode );
+
+    my $savings = $patron->get_savings;
+    is( $savings, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );
+
+    AddReturn( $item2->barcode, $item2->homebranch );
+
+    $savings = $patron->get_savings;
+    is( $savings, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current and old issues" );
 
     $schema->storage->txn_rollback;
 };

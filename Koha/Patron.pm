@@ -2441,22 +2441,20 @@ sub get_savings {
 
     my $savings = 0;
 
-    # get old issues
-    my $old_issues_rs = $self->_result->old_issues;
-    my @old_itemnumbers = $old_issues_rs->get_column('itemnumber')->all;
-
-    foreach my $itemnumber ( @old_itemnumbers ) {
-        my $item = Koha::Items->find( $itemnumber );
-        $savings += $item->replacementprice;
+    # get old checkouts
+    my @old_checkouts = $self->old_checkouts->as_list;
+    foreach my $old_checkout ( @old_checkouts ) {
+        if ( $old_checkout->item ) {
+            $savings += $old_checkout->item->replacementprice;
+        }
     }
 
-    # get current issues
-    my $issues_rs = $self->_result->issues;
-    my @itemnumbers = $issues_rs->get_column('itemnumber')->all;
-
-    foreach my $itemnumber ( @itemnumbers ) {
-        my $item = Koha::Items->find( $itemnumber );
-        $savings += $item->replacementprice;
+    # get current checkouts
+    my @checkouts = $self->checkouts->as_list;
+    foreach my $checkout ( @checkouts ) {
+        if ( $checkout->item ) {
+            $savings += $checkout->item->replacementprice;
+        }
     }
 
     return $savings;
