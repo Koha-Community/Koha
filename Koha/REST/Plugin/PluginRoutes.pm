@@ -21,7 +21,6 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Koha::Exceptions::Plugin;
 use Koha::Plugins;
-use Koha::Logger;
 
 use Clone qw( clone );
 use JSON::Validator::Schema::OpenAPIv2;
@@ -57,7 +56,7 @@ sub register {
         );
 
         foreach my $plugin ( @plugins ) {
-            $spec = $self->inject_routes( $spec, $plugin, $validate );
+            $spec = $self->inject_routes( $spec, $plugin, $validate, $app->log );
         }
 
     }
@@ -70,7 +69,7 @@ sub register {
 =cut
 
 sub inject_routes {
-    my ( $self, $spec, $plugin, $validate ) = @_;
+    my ( $self, $spec, $plugin, $validate, $logger ) = @_;
 
     return merge_spec( $spec, $plugin ) unless $validate;
 
@@ -91,8 +90,7 @@ sub inject_routes {
     catch {
         my $error = $_;
         my $class = ref $plugin;
-        my $logger = Koha::Logger->get({ interface => 'api' });
-        $logger->error("Plugin $class route injection failed: $error");
+        $logger->error( "Plugin $class route injection failed: $error" );
         return $spec;
     };
 }
