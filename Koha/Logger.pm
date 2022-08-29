@@ -194,10 +194,13 @@ sub debug_to_screen {
 Mojolicous 8.23 added a "context" method, which Mojolicious will die
 on if it's missing from the logger.
 
+Note: We are just preventing a crash here not returning a new context logger.
+
 =cut
 
 sub context {
-    my $self = shift;
+    my ( $self, @context ) = @_;
+    $self->{context} = \@context;
     return $self;
 }
 
