@@ -1,16 +1,16 @@
-"/public/oauth/login/{provider}/{interface}":
+"/public/oauth/login/{provider_code}/{interface}":
   get:
     x-mojo-to: OAuth::Client#login
-    operationId: loginOAuthClient
+    operationId: loginOAuthClientPublic
     tags:
       - oauth
     summary: Login to OAuth provider
     produces:
       - application/json
     parameters:
-      - name: provider
+      - name: provider_code
         in: path
-        description: Name of OAuth provider
+        description: Code for OAuth provider
         required: true
         type: string
       - name: interface
@@ -25,7 +25,8 @@
         type: string
       - name: state
         in: query
-        description: An opaque value used by the client to maintain state between the request and callback. This is the callback part.
+        description: An opaque value used by the client to maintain state between the
+          request and callback. This is the callback part.
         required: false
         type: string
       - name: scope
@@ -60,8 +61,19 @@
       "400":
         description: Bad Request
         schema:
-          $ref: "../swagger.yaml#/definitions/error"
+          $ref: ../swagger.yaml#/definitions/error
       "403":
         description: Access forbidden
         schema:
-          $ref: "../swagger.yaml#/definitions/error"
+          $ref: ../swagger.yaml#/definitions/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error

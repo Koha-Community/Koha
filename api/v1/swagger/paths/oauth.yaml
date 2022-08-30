@@ -43,3 +43,82 @@
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+"/oauth/login/{provider_code}/{interface}":
+  get:
+    x-mojo-to: OAuth::Client#login
+    operationId: loginOAuthClient
+    tags:
+      - oauth
+    summary: Login to OAuth provider
+    produces:
+      - application/json
+    parameters:
+      - name: provider_code
+        in: path
+        description: Code for OAuth provider
+        required: true
+        type: string
+      - name: interface
+        in: path
+        description: Name of the interface this login is for
+        required: true
+        type: string
+      - name: code
+        in: query
+        description: Code returned from OAuth server for Authorization Code grant
+        required: false
+        type: string
+      - name: state
+        in: query
+        description: An opaque value used by the client to maintain state between the
+          request and callback. This is the callback part.
+        required: false
+        type: string
+      - name: scope
+        in: query
+        description: Scope returned by OAuth server
+        type: string
+      - name: prompt
+        in: query
+        description: Prompt returned by OAuth server
+        type: string
+      - name: authuser
+        in: query
+        description: Auth user returned by OAuth server
+        type: string
+      - name: error
+        in: query
+        description: OAuth error code
+        type: string
+      - name: error_description
+        in: query
+        description: OAuth error description
+        type: string
+      - name: error_uri
+        in: query
+        description: Web page with user friendly description of the error
+        type: string
+    responses:
+      "302":
+        description: User authorized
+        schema:
+          type: string
+      "400":
+        description: Bad Request
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: ../swagger.yaml#/definitions/error
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: ../swagger.yaml#/definitions/error

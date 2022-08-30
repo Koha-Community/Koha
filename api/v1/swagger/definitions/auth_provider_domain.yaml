@@ -1,0 +1,48 @@
+---
+type: object
+properties:
+  auth_provider_domain_id:
+    type: integer
+    description: Internally assigned authentication provider domain identifier
+    readOnly: true
+  auth_provider_id:
+    type: integer
+    description: Internally assigned authentication provider identifier
+  domain:
+    description: Matching domain ('*' used as wildcard)
+    type:
+      - string
+      - "null"
+  auto_register:
+    description: If patrons will be generated on login if required
+    type: boolean
+  update_on_auth:
+    description: If patron data is updated on login
+    type: boolean
+  default_library_id:
+    description: Internal identifier for the default library to be assigned to the new patrons
+    type:
+      - string
+      - "null"
+  default_category_id:
+    description: Internal identifier for the default patron's category
+    type:
+      - string
+      - "null"
+  allow_opac:
+    description: If this domain can be used for OPAC login
+    type: boolean
+  allow_staff:
+    description: If this domain can be used for staff login
+    type: boolean
+additionalProperties: false
+required:
+  - auth_provider_domain_id
+  - auth_provider_id
+  - domain
+  - auto_register
+  - update_on_auth
+  - default_library_id
+  - default_category_id
+  - allow_opac
+  - allow_staff

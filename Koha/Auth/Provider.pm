@@ -97,22 +97,11 @@ This method stores the passed config in JSON format.
 sub set_config {
     my ($self, $config) = @_;
 
-    my @mandatory;
-
-    if ( $self->protocol eq 'OIDC' ) {
-        @mandatory = qw(key secret well_known_url);
-    }
-    elsif ( $self->protocol eq 'OAuth' ) {
-        @mandatory = qw(key secret authorize_url token_url);
-    }
-    else {
-        Koha::Exception->throw( 'Unsupported protocol ' . $self->protocol );
-    }
+    my @mandatory = $self->mandatory_config_attributes;
 
     for my $param (@mandatory) {
         unless ( defined( $config->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( parameter => $param );
         }
     }
 
@@ -167,7 +156,50 @@ sub set_mapping {
     return $self;
 }
 
+=head3 upgrade_class
+
+    my $upgraded_object = $provider->upgrade_class
+
+Returns a new instance of the object, with the right class.
+
+=cut
+
+sub upgrade_class {
+    my ( $self ) = @_;
+    my $protocol = $self->protocol;
+
+    my $class = $self->protocol_to_class_mapping->{$protocol};
+
+    Koha::Exception->throw($protocol . ' is not a valid protocol')
+        unless $class;
+
+    eval "require $class";
+    return $class->_new_from_dbic( $self->_result );
+}
+
 =head2 Internal methods
+
+=head3 to_api
+
+    my $json = $provider->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Auth::Provider object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $config  = $self->get_config;
+    my $mapping = $self->get_mapping;
+
+    my $json = $self->SUPER::to_api($params);
+    $json->{config}  = $config;
+    $json->{mapping} = $mapping;
+
+    return $json;
+}
 
 =head3 _type
 
@@ -175,6 +207,33 @@ sub set_mapping {
 
 sub _type {
     return 'AuthProvider';
+}
+
+=head3 protocol_to_class_mapping
+
+    my $mapping = Koha::Auth::Provider::protocol_to_class_mapping
+
+Internal method that returns a mapping between I<protocol> codes and
+implementing I<classes>. To be used by B<upgrade_class>.
+
+=cut
+
+sub protocol_to_class_mapping {
+    return {
+        OAuth => 'Koha::Auth::Provider::OAuth',
+        OIDC  => 'Koha::Auth::Provider::OIDC',
+    };
+}
+
+=head3 mandatory_config_attributes
+
+Stub method for raising exceptions on invalid protocols.
+
+=cut
+
+sub mandatory_config_attributes {
+    my ($self) = @_;
+    Koha::Exception->throw("This method needs to be subclassed");
 }
 
 1;
