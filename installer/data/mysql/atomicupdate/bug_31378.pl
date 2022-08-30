@@ -8,6 +8,15 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
+        # Add new permission
+        $dbh->do(qq{
+            INSERT IGNORE permissions (module_bit, code, description)
+            VALUES
+            ( 3, 'manage_authentication_providers', 'Manage authentication providers')
+        });
+
+        say $out "manage_authentication_providers permission added";
+
         unless (TableExists('auth_providers')) {
             $dbh->do(q{
                 CREATE TABLE `auth_providers` (

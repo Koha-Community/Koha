@@ -830,5 +830,11 @@
             Manage recalls for patrons
         </span>
         <span class="permissioncode">([% name | html %])</span>
+  [%# authentication_providers %]
+    [%- CASE 'manage_authentication_providers' -%]
+        <span class="sub_permission manage_authentication_providers_subpermission">
+            Manage authentication providers
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]
