@@ -467,13 +467,17 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated availability-limited search matched right number of records");
 
-    @newresults = searchResults({'interface'=>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
-        $results_hashref->{'biblioserver'}->{"RECORDS"});
-    my $allavailable = 'true';
-    foreach my $result (@newresults) {
-        $allavailable = 'false' unless $result->{availablecount} > 0;
+    {
+        my $mock_items = Test::MockModule->new('Koha::Items');
+        $mock_items->mock( 'count', 1 );
+        @newresults = searchResults({'interface'=>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+            $results_hashref->{'biblioserver'}->{"RECORDS"});
+        my $allavailable = 'true';
+        foreach my $result (@newresults) {
+            $allavailable = 'false' unless $result->{availablecount} > 0;
+        }
+        is ($allavailable, 'true', 'All records have at least one item available');
     }
-    is ($allavailable, 'true', 'All records have at least one item available');
 
     my $mocked_xslt = Test::MockModule->new('Koha::XSLT::Base');
     $mocked_xslt->mock( 'transform', sub {
@@ -751,11 +755,16 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "Can do a search that retrieves an over-large bib record (bug 11096)");
-    @newresults = searchResults({'interface' =>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
-        $results_hashref->{'biblioserver'}->{"RECORDS"});
-    is($newresults[0]->{title}, 'Marc the Large Record', 'Able to render the title for over-large bib record (bug 11096)');
-    is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');
-    like($newresults[0]->{notes}, qr/This is large note #550/, 'Able to render the notes field for over-large bib record (bug 11096)');
+
+    {
+        my $mock_items = Test::MockModule->new('Koha::Items');
+        $mock_items->mock( 'count', 1 );
+        @newresults = searchResults({'interface' =>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
+            $results_hashref->{'biblioserver'}->{"RECORDS"});
+        is($newresults[0]->{title}, 'Marc the Large Record', 'Able to render the title for over-large bib record (bug 11096)');
+        is($newresults[0]->{biblionumber}, '300', 'Over-large bib record has the correct biblionumber (bug 11096)');
+        like($newresults[0]->{notes}, qr/This is large note #550/, 'Able to render the notes field for over-large bib record (bug 11096)');
+    }
 
     # notforloancount should be returned as part of searchResults output
     ok( defined $newresults[0]->{notforloancount},
