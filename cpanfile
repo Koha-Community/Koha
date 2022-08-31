@@ -55,6 +55,7 @@ requires 'HTML::Scrubber', '0.08';
 requires 'HTTP::Cookies', '1.39';
 requires 'HTTP::OAI', '3.2';
 requires 'HTTP::Request::Common', '1.26';
+requires 'HTTP::Tiny', '0.076';
 requires 'IPC::Cmd', '0.46';
 requires 'JSON', '2.07';
 requires 'JSON::Validator', '3.14';
