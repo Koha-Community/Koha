@@ -491,7 +491,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     like( $newresults[0]->{XSLTResultsRecord}, qr/<variable name="anonymous_session">1<\/variable>/, "Variable injected correctly" );
 
     my $biblio_id = $newresults[0]->{biblionumber};
-    my $fw = C4::Biblio::GetFrameworkCode($biblio_id);
+    my $fw = C4::Biblio::GetFrameworkCode($biblio_id) // '';
 
     my $dbh = C4::Context->dbh;
     # FIXME This change is revert in END
