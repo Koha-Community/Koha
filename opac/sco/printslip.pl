@@ -80,7 +80,7 @@ my $print = $input->param('print');
 my $error = $input->param('error');
 
 my ($slip, $is_html);
-if (my $letter = IssueSlip ($patron->branchcode, $patron->borrowernumber, $print eq "qslip")) {
+if (my $letter = IssueSlip (Koha::Patrons->find( $loggedinuser )->branchcode, $patron->borrowernumber, $print eq "qslip")) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }
