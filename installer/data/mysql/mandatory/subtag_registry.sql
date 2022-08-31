@@ -1900,3 +1900,73 @@ VALUES ( 'yi', 'language', 'yi', 'יידיש');
 
 INSERT INTO language_script_mapping(language_subtag,script_subtag)
 VALUES ( 'yi', 'Hebr');
+
+-- Cree
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'cr', 'language', 'Cree', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'cr','cre');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cr', 'language', 'en', 'Cree');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'cr', 'language', 'fr', 'Cree');
+
+-- Afrikaans
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'af', 'language', 'Afrikaans', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'af','afr');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'af', 'language', 'en', 'Afrikaans');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'af', 'language', 'fr', 'Afrikaans');
+
+-- Multiple languages
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'mul', 'language', 'Multiple languages', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'mu','mul');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mu', 'language', 'en', 'Multiple languages');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'mu', 'language', 'fr', 'Multilingue');
+
+-- Undetermined
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'und', 'language', 'Undetermined', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'und','und');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'un', 'language', 'en', 'Undetermined');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'un', 'language', 'fr', 'Indéterminée');
+
+-- No linguistic content
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'zxx', 'language', 'No linguistic content', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'zxx','zxx');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'zxx', 'language', 'en', 'No linguistic content');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'zxx', 'language', 'fr', 'Pas de contenu linguistique');
