@@ -54,6 +54,9 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                 type => 'text',
                 facet => 1
             },
+            'subject-heading-thesaurus-conventions' => {
+                type => 'text'
+            },
             itemnumber => {
                 type => 'integer'
             },
@@ -101,7 +104,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
-    plan tests => 65;
+    plan tests => 72;
 
     my $qb;
 

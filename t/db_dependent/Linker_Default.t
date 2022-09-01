@@ -42,16 +42,26 @@ my $schema  = $builder->schema();
 $schema->storage->txn_begin;
 
 subtest 'Test caching in get_link and update_cache' => sub {
-    plan tests => 6;
+    plan tests => 13;
 
     my @tags = C4::Context->preference('marcflavour') eq 'UNIMARC' ? (601,'j',602,'a') : (650,'a',655,'a');
 
     my $subject_field = MARC::Field->new($tags[0],0,2,$tags[1]=>'Science fiction');
     my $subject_field2 = MARC::Field->new($tags[0],0,2,$tags[1]=>'Science fiction');
+    my $subject_field3 = MARC::Field->new($tags[0],0,0,$tags[1]=>'Science fiction');
+    my $subject_field4 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'bnb');
+    my $subject_field5 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'sao');
+    my $subject_field6 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'sao');
+    my $subject_field7 = MARC::Field->new($tags[0],0,4,$tags[1]=>'Science fiction');
     my $genre_field = MARC::Field->new($tags[2],0,2,$tags[3]=>'Science fiction');
     # Can we build a heading from it?
     my $subject_heading = C4::Heading->new_from_field( $subject_field, q{} );
-    my $subject_heading2 = C4::Heading->new_from_field( $subject_field, q{} );
+    my $subject_heading2 = C4::Heading->new_from_field( $subject_field2, q{} );
+    my $subject_heading3 = C4::Heading->new_from_field( $subject_field3, q{} );
+    my $subject_heading4 = C4::Heading->new_from_field( $subject_field4, q{} );
+    my $subject_heading5 = C4::Heading->new_from_field( $subject_field5, q{} );
+    my $subject_heading6 = C4::Heading->new_from_field( $subject_field6, q{} );
+    my $subject_heading7 = C4::Heading->new_from_field( $subject_field7, q{} );
     my $genre_heading = C4::Heading->new_from_field( $genre_field, q{} );
 
 
@@ -67,13 +77,31 @@ subtest 'Test caching in get_link and update_cache' => sub {
     $linker->get_link($subject_heading2);
     is( keys %{$linker->{cache}},2, "Third (matching) term not added to cache because of matching type");
 
+    $linker->get_link($subject_heading3);
+    is( keys %{$linker->{cache}},3, "Fourth (matching) term added to cache because of different thesaurus (lcsh)");
+
+    $linker->get_link($subject_heading4);
+    is( keys %{$linker->{cache}},4, "Fifth (matching) term added to cache because of different thesaurus (bnb)");
+
+    $linker->get_link($subject_heading5);
+    is( keys %{$linker->{cache}},5, "Sixth (matching) term added to cache because of different thesaurus (sao)");
+
+    $linker->get_link($subject_heading6);
+    is( keys %{$linker->{cache}},5, "Seventh (matching) term not added to cache because of matching type and thesaurus (sao)");
+
+    $linker->get_link($subject_heading7);
+    is( keys %{$linker->{cache}},6, "Eighth (matching) term added to cache because of thesaurus source not specified (2nd indicator is 4)");
 
     $linker->update_cache($subject_heading,32);
-    is( $linker->{cache}->{$subject_heading->search_form.$subject_heading->auth_type}->{authid}, 32, "Linker cache is correctly updated by 'update_cache'");
+    is( $linker->{cache}->{$subject_heading->search_form.$subject_heading->auth_type.$subject_heading->{'thesaurus'}}->{authid}, 32, "Linker cache is correctly updated by 'update_cache'");
     my ( $authid, undef ) = $linker->get_link($subject_heading);
     is( $authid, 32, "Correct id is retrieved from the cache" );
     ( $authid, undef ) = $linker->get_link($genre_heading);
     isnt( $authid, 32, "Genre term is not updated by update_cache");
+    ( $authid, undef ) = $linker->get_link($subject_heading5);
+    is( $authid, 4, "Correct id for sao term is retrieved from the cache" );
+    $linker->update_cache($subject_heading4,78);
+    is( $linker->{cache}->{$subject_heading4->search_form.$subject_heading4->auth_type.$subject_heading4->{'thesaurus'}}->{authid}, 78, "Linker cache for the bnb record is correctly updated by 'update_cache'");
 };
 
 $schema->storage->txn_rollback;
