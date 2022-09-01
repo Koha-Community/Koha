@@ -4688,7 +4688,11 @@ div .suggestion_note {
 
     .result_item_details {
         display:inline-block;
-        white-space:nowrap
+        white-space:nowrap;
+
+        &::before {
+            content: "\2022";
+        }
     }
 
     .item-date-due {
