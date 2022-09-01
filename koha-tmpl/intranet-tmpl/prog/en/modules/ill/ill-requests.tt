@@ -32,13 +32,13 @@
                     New request
                 </a>
             </li>
-        [% ELSIF query_type == 'status' %]
+        [% ELSIF query_type == 'illview' %]
             <li>
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Status
+                    Manage request [% request.id_prefix _ request.illrequest_id | html %]
                 </a>
             </li>
         [% ELSE %]
