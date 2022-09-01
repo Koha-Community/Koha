@@ -539,9 +539,8 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
 }
 
 if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-    my $images = $biblio->cover_images;
     $template->param(
-        localimages => $biblio->cover_images->search(
+        localimages => scalar $biblio->cover_images->search(
             {}, { order_by => [ \"COALESCE(itemnumber, 0, 1)", 'timestamp' ] }
         ),
     );
