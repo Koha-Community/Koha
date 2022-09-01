@@ -241,6 +241,7 @@
     <table id="itemst">
         <thead>
             <tr>
+                <th></th>
                 [% IF checkboxes_edit OR checkboxes_delete %]
                     <th></th>
                 [% END %]
@@ -262,6 +263,7 @@
                 [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
 
                 <tr>
+                    <td>[% item.index + 1 | html %]</td>
                     [% IF checkboxes_edit %]
                         [% UNLESS can_be_edited%]
                             <td class="error">Cannot edit</td>
@@ -331,7 +333,6 @@
                             <td>[% item.$attribute | html %]</td>
                         [% END %]
                     [% END %]
-
                 </tr>
             [% END # /FOREACH items %]
         </tbody>
