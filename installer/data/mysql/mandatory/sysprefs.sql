@@ -135,7 +135,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
 ('CircConfirmItemParts', '0', NULL, 'Require staff to confirm that all parts of an item are present at checkin/checkout.', 'Yes/No'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
-('CircSidebar','0',NULL,'Activate or deactivate the navigation sidebar on all Circulation pages','YesNo'),
+('CircSidebar','1',NULL,'Activate or deactivate the navigation sidebar on all Circulation pages','YesNo'),
 ('CirculateILL','0','','If enabled, it is possible to circulate ILL items from within ILL','YesNo'),
 ('ClaimsBccCopy','0','','Bcc the ClaimAcquisition and ClaimIssues alerts','YesNo'),
 ('ClaimReturnedChargeFee', 'ask', 'ask|charge|no_charge', 'Controls whether or not a lost item fee is charged for return claims', 'Choice'),
