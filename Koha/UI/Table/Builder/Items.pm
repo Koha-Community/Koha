@@ -19,7 +19,6 @@ use Modern::Perl;
 use List::MoreUtils qw( uniq );
 use C4::Biblio qw( GetMarcStructure GetMarcFromKohaField IsMarcStructureInternal );
 use Koha::Items;
-use List::MoreUtils qw(first_index);
 
 =head1 NAME
 
@@ -72,16 +71,15 @@ Use it with:
 
 sub build_table {
     my ( $self, $params ) = @_;
-    my @itemnumbers = @{ $self->{itemnumbers} };
+    my %itemnumbers_to_idx = map { $self->{itemnumbers}->[$_] => $_ } 0..$#{$self->{itemnumbers}};
     my $items = Koha::Items->search( { itemnumber => $self->{itemnumbers} } );
 
     my @items;
     while ( my $item = $items->next ) {
         my $item_info = $item->columns_to_str;
-        my $index = first_index { $_ eq $item->itemnumber } @itemnumbers;
         $item_info = {
             %$item_info,
-            index          => $index,
+            index          => $itemnumbers_to_idx{$item->itemnumber},
             biblio         => $item->biblio,
             safe_to_delete => $item->safe_to_delete,
             holds          => $item->biblio->holds->count,
