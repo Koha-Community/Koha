@@ -71,7 +71,7 @@ Use it with:
 
 sub build_table {
     my ( $self, $params ) = @_;
-
+    my %itemnumbers_to_idx = map { $self->{itemnumbers}->[$_] => $_ } 0..$#{$self->{itemnumbers}};
     my $items = Koha::Items->search( { itemnumber => $self->{itemnumbers} } );
 
     my @items;
@@ -79,6 +79,7 @@ sub build_table {
         my $item_info = $item->columns_to_str;
         $item_info = {
             %$item_info,
+            index          => $itemnumbers_to_idx{$item->itemnumber},
             biblio         => $item->biblio,
             safe_to_delete => $item->safe_to_delete,
             holds          => $item->biblio->holds->count,
