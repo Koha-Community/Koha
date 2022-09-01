@@ -121,7 +121,8 @@ $(document).ready(function () {
     $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sDom": 't',
         "aoColumnDefs": [
-            { "aTargets": [0], "bSortable": false, "bSearchable": false },
+            { "aTargets": [0, 1], "bSortable": false, "bSearchable": false },
+            { "aTargets": [0], "bVisible": false },
             { "sType": "anti-the", "aTargets": ["anti-the"] }
         ],
         "bPaginate": false,
