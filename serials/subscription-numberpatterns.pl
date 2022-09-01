@@ -48,7 +48,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'serials/subscription-numberpatterns.tt',
     query           => $input,
     type            => 'intranet',
-    flagsrequired   => { 'serials' => 1 }
+    flagsrequired   => { 'serials' => "*" }
 } );
 
 my $op = $input->param('op');
