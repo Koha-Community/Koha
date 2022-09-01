@@ -62,7 +62,7 @@
                                 [% IF ( circ_error_UNKNOWN_BARCODE ) %]
                                     <span id="ce_unknown_barcode">The system does not recognize this barcode.</span>
                                 [% ELSIF ( circ_error_max_loans_allowed ) %]
-                                    <span id="ce_max_loans_allowed">You have checked out too many items and can't check out any more.</span>
+                                    <span id="ce_max_loans_allowed">You have reached the maximum limit of items checked out.</span>
                                 [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
                                     <span id="ce_issued_to_another">This item is checked out to someone else.</span>
                                 [% ELSIF ( circ_error_NO_MORE_RENEWALS ) %]
