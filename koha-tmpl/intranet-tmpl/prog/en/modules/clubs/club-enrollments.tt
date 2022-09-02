@@ -36,7 +36,9 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-
+                [% IF !club %]
+                <div class="dialog message">The club you requested does not exist.</div>
+                [% ELSE %]
                 <h1>Club enrollments for <em>[% club.name | html %]</em></h1>
 
                 <table id="enrollments-table">
@@ -61,6 +63,7 @@
                         [% END %]
                     </tbody>
                 </table>
+                [% END %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
