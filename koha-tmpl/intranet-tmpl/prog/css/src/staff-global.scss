@@ -1,3 +1,4 @@
+@import "variables";
 @import "mixins";
 @import "tables";
 @import "flatpickr";
@@ -11,7 +12,7 @@
 a {
     &:link,
     &:visited {
-        color: #71B443;
+        color: $green-text-color;
         border: 0;
         background-color: transparent;
         box-shadow: none;
@@ -22,7 +23,7 @@ a {
     &:active,
     &:focus {
         text-decoration: underline;
-        color: #71B443;
+        color: $green-text-color;
         border: 0;
         background-color: transparent;
         box-shadow: none;
@@ -47,7 +48,7 @@ a {
         &.btn-link {
             &:link,
             &:visited {
-                color: #71B443;
+                color: $green-text-color;
             }
 
             &:hover {
@@ -83,7 +84,7 @@ a {
         vertical-align: middle;
 
         &:hover {
-            color: #71B443;
+            color: $green-text-color;
             text-decoration: none;
         }
     }
@@ -91,7 +92,7 @@ a {
     &.settings {
         i, img {
             text-align: center;
-            color: #71B443;
+            color: $green-text-color;
             border: solid 3px #71B443;
             border-radius: 50%;
             background-color: transparent;
@@ -193,7 +194,7 @@ a {
 
 #resetZ3950Search {
     font-size: 110%;
-    color: #71B443;
+    color: $green-text-color;
 }
 
 a {
@@ -484,7 +485,7 @@ button {
 }
 
 #add_to_patron_list_submit {
-    color: #71B443;
+    color: $green-text-color;
 
     &:hover {
         border: 0;
@@ -864,7 +865,7 @@ ol {
 
 fieldset {
     width: 100%;
-    color: #71B443;
+    color: $green-text-color;
     background-color: #FFF;
     position: relative;
     color: #696969;
@@ -1048,7 +1049,7 @@ details[open] {
 }
 
 #breadcrumbs a[href="/cgi-bin/koha/mainpage.pl"] {
-    color: #71b443;
+    color: $green-text-color;
     visibility: hidden;
     font-size: 1px;
     letter-spacing: -1px;
@@ -1448,7 +1449,7 @@ dd {
 }
 
 #addColumn, #delColumn{
-    color: #71b443;
+    color: $green-text-color;
     padding: .3em;
     border: none;
     background-color: transparent;
@@ -2003,7 +2004,7 @@ li {
 
         button, a {
             &.btn-default {
-                color: #71B443;
+                color: $green-text-color;
                 padding: .3em;
                 border: 0;
                 background-color: transparent;
@@ -2013,7 +2014,7 @@ li {
 
                 &:hover, &:active, &:focus, &:active:hover, &:active:focus {
                     background-color: transparent;
-                    color: #71B443;
+                    color: $green-text-color;
                     text-decoration: underline;
                 }
             }
@@ -2279,7 +2280,7 @@ td {
 }
 
 .highlight_toggle {
-    color: #71B443;
+    color: $green-text-color;
     padding: .3em;
     border: 0;
     background-color: transparent;
@@ -2321,7 +2322,7 @@ td {
 #CheckPending {
     font-weight: normal;
     margin: 0 .5em 0 0;
-    color: #71B443;
+    color: $green-text-color;
 }
 
 .lost,
@@ -3406,14 +3407,9 @@ button,
     .navbar-nav {
         li {
             a {
+                color: $green-text-color;
                 line-height: 20px;
                 padding: .4em 15px;
-                color: #000;
-
-                &:hover, &:active, &:focus{
-                    color: #418940;
-                    text-decoration: none;
-                }
             }
         }
     }
@@ -3920,7 +3916,7 @@ input.renew {
 #i18nMenu {
     .navbar-text {
         .currentlanguage {
-            color: #418940;
+            color: #000;
             font-weight: bold;
         }
     }
