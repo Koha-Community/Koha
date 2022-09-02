@@ -84,14 +84,4 @@ sub Version {
     };
 }
 
-=head3 ArePluginsEnabled
-
-Returns true if plugins are enabled, false otherwise.
-
-=cut
-
-sub ArePluginsEnabled {
-    return C4::Context->config('enable_plugins');
-}
-
 1;
