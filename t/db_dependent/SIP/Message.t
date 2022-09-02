@@ -122,9 +122,6 @@ subtest 'UseLocationAsAQInSIP syspref tests' => sub {
     my $builder = t::lib::TestBuilder->new();
 
     my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my $branchcode_permanent_location = $builder->build({ source => 'Branch' })->{branchcode};
-
-    my $mocks = create_mocks( \$branchcode, \$branchcode_permanent_location );
 
     t::lib::Mocks::mock_preference('UseLocationAsAQInSIP', 0);
 
@@ -136,7 +133,7 @@ subtest 'UseLocationAsAQInSIP syspref tests' => sub {
             restricted    => 0,
             homebranch    => $branchcode,
             holdingbranch => $branchcode,
-            permanent_location => $branchcode_permanent_location
+            permanent_location => "PERMANENT_LOCATION"
         }
     );
 
@@ -145,20 +142,8 @@ subtest 'UseLocationAsAQInSIP syspref tests' => sub {
 
     t::lib::Mocks::mock_preference('UseLocationAsAQInSIP', 1);
 
-    $item = $builder->build_sample_item(
-        {
-            damaged       => 0,
-            withdrawn     => 0,
-            itemlost      => 0,
-            restricted    => 0,
-            homebranch    => $branchcode,
-            holdingbranch => $branchcode,
-            permanent_location => $branchcode_permanent_location
-        }
-    );
-
     $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
-    is( $sip_item->permanent_location, $branchcode_permanent_location, "When UseLocationAsAQInSIP is set SIP item has permanent_location set to value of item permanent_location" );
+    is( $sip_item->permanent_location, "PERMANENT_LOCATION", "When UseLocationAsAQInSIP is set SIP item has permanent_location set to value of item permanent_location" );
 
     $schema->storage->txn_rollback;
 };
