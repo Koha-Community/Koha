@@ -50,7 +50,7 @@ use C4::Search qw( searchResults );
 use C4::Search::History;
 use C4::Biblio qw( GetXmlBiblio CountItemsIssued );
 use C4::Koha qw( GetItemTypesCategorized getitemtypeimagelocation GetAuthorisedValues );
-use C4::Tags qw( get_tags get_tag );
+use C4::Tags qw( get_tags );
 use C4::SocialData;
 use C4::External::OverDrive;
 use C4::External::BakerTaylor qw( image_url link_url );

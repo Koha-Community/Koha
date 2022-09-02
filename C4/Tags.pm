@@ -36,7 +36,7 @@ our (@ISA, @EXPORT_OK);
 BEGIN {
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      get_tag get_tags get_tag_rows
+      get_tags get_tag_rows
       add_tags
       add_tag
       add_tag_approval
@@ -436,13 +436,6 @@ sub add_tag_index {
 	$sth = C4::Context->dbh->prepare($query);
 	$sth->execute($term,$biblionumber);
 	return $sth->rows;
-}
-
-sub get_tag {		# by tag_id
-	(@_) or return;
-    my $sth = C4::Context->dbh->prepare(TAG_SELECT . "WHERE tag_id = ?");
-	$sth->execute(shift);
-	return $sth->fetchrow_hashref;
 }
 
 sub increment_weights {

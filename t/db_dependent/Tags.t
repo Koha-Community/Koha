@@ -30,7 +30,7 @@ use Koha::Tags;
 use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
 
-use C4::Tags qw( add_tag_approval add_tag add_tag_index get_tag_rows get_tag stratify_tags );
+use C4::Tags qw( add_tag_approval add_tag add_tag_index get_tag_rows stratify_tags );
 
 # So any output is readable :-D
 binmode STDOUT, ':encoding(utf8)';
