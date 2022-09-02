@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 4;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -74,18 +74,6 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => undef
     }, "Correct maintenance version");
-
-};
-
-subtest "Koha::Template::Plugin::Koha::ArePluginsEnabled tests" => sub {
-
-    plan tests => 2;
-
-    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
-    is(Koha::Template::Plugin::Koha::ArePluginsEnabled(), 1, "Correct ArePluginsEnabled is yes");
-
-    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
-    is(Koha::Template::Plugin::Koha::ArePluginsEnabled(), 0, "Correct ArePluginsEnabled is no");
 
 };
 
