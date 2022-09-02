@@ -82,7 +82,7 @@ is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
 
 subtest '_get_match_keys() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     my $matchpoint = get_title_matchpoint({
         length => 0,
@@ -262,6 +262,13 @@ subtest '_get_match_keys() tests' => sub {
     is( $keys[2], '1NOTISBN3',
         'Match key passed through if not an isbn when ISBN normalizer used');
 
+    $matchpoint = get_title_matchpoint({
+        length => 0,
+        offset => 0
+    });
+    delete $matchpoint->{component}->{subfields};
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], '  .; thE t[]:,aliS(m)/An\'" Stephen King, Peter Straub.', "Match key correctly returns whole field if no subfields specified" )
 };
 
 subtest '_get_match_keys() leader tests' => sub {
