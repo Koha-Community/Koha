@@ -2345,6 +2345,7 @@ sub AddReturn {
     }
 
     # Record the fact that this book was returned.
+    my $categorycode = $patron_unblessed ? $patron_unblessed->{categorycode} : undef;
     C4::Stats::UpdateStats({
         branch         => $branch,
         type           => $stat_type,
@@ -2353,7 +2354,7 @@ sub AddReturn {
         location       => $item->location,
         borrowernumber => $borrowernumber,
         ccode          => $item->ccode,
-        ( $patron_unblessed ? ( categorycode   => $patron_unblessed->{categorycode} ) : () ),
+        categorycode   => $categorycode,
     });
 
     # Send a check-in slip. # NOTE: borrower may be undef. Do not try to send messages then.
