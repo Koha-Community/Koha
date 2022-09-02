@@ -210,11 +210,13 @@ while ( my $auto_renew = $auto_renews->next ) {
         if ($digest_per_branch) {
             $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{success}++ if $error eq 'auto_renew';
             $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{error}++ unless $error eq 'auto_renew' || $error eq 'auto_too_soon';
+            $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{results}->{$error}++ ;
             push @{$renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{issues}}, $auto_renew->itemnumber;
             $renew_digest->{ $auto_renew->branchcode }->{ $auto_renew->borrowernumber }->{updated} = 1 if $updated && $error ne 'auto_too_soon';
         } else {
             $renew_digest->{ $auto_renew->borrowernumber }->{success} ++ if $error eq 'auto_renew';
             $renew_digest->{ $auto_renew->borrowernumber }->{error}++ unless $error eq 'auto_renew' || $error eq 'auto_too_soon';
+            $renew_digest->{ $auto_renew->borrowernumber }->{results}->{$error}++ ;
             $renew_digest->{ $auto_renew->borrowernumber }->{updated} = 1 if $updated && $error ne 'auto_too_soon';
             push @{$renew_digest->{ $auto_renew->borrowernumber }->{issues}}, $auto_renew->itemnumber;
         }
@@ -344,6 +346,7 @@ sub send_digests {
                 substitute => {
                     error => $digest->{error}||0,
                     success => $digest->{success}||0,
+                    results => $digest->{results},
                 },
                 loops => { issues => \@{$digest->{issues}} },
                 tables      => {
