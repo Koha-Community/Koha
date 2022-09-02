@@ -25,6 +25,9 @@ use Exporter;
 
 use C4::Context;
 use Module::Load::Conditional qw( check_install );
+use Koha::Tags;
+use Koha::Tags::Approvals;
+use Koha::Tags::Indexes;
 #use Data::Dumper;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
 use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
@@ -38,9 +41,7 @@ BEGIN {
       add_tag
       add_tag_approval
       add_tag_index
-      delete_tag_row_by_id
       remove_tag
-      delete_tag_rows_by_ids
       get_approval_rows
       blacklist
       whitelist
@@ -126,45 +127,16 @@ sub remove_tag {
 	my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
 	my $index = shift(@$tags);
 	if ($index->{weight} <= 1) {
-		delete_tag_index($row->{term},$row->{biblionumber});
+		Koha::Tags::Indexes->search({ term => $row->{term}, biblionumber => $row->{biblionumber} })->delete;
 	} else {
 		decrement_weight($row->{term},$row->{biblionumber});
 	}
 	if ($index->{weight_total} <= 1) {
-		delete_tag_approval($row->{term});
+		Koha::Tags::Approvals->search({ term => $row->{term} })->delete;
 	} else {
 		decrement_weight_total($row->{term});
 	}
-	delete_tag_row_by_id($tag_id);
-}
-
-sub delete_tag_index {
-	(@_) or return;
-	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_index WHERE term = ? AND biblionumber = ? LIMIT 1");
-	$sth->execute(@_);
-	return $sth->rows || 0;
-}
-sub delete_tag_approval {
-	(@_) or return;
-	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_approval WHERE term = ? LIMIT 1");
-	$sth->execute(shift);
-	return $sth->rows || 0;
-}
-sub delete_tag_row_by_id {
-	(@_) or return;
-	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_all WHERE tag_id = ? LIMIT 1");
-	$sth->execute(shift);
-	return $sth->rows || 0;
-}
-sub delete_tag_rows_by_ids {
-	(@_) or return;
-	my $i=0;
-	foreach(@_) {
-		$i += delete_tag_row_by_id($_);
-	}
-	($i == scalar(@_)) or
-		warn sprintf "delete_tag_rows_by_ids tried %s tag_ids, only succeeded on $i", scalar(@_);
-	return $i;
+	Koha::Tags->search({ tag_id => $tag_id })->delete;
 }
 
 sub get_tag_rows {
