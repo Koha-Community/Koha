@@ -1192,6 +1192,56 @@ div {
         }
     }
 
+    &.rows {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+
+        + div {
+            &.rows {
+                margin-top: .6em;
+            }
+        }
+
+        li {
+            border-bottom: 1px solid #EEE;
+            clear: left;
+            float: left;
+            list-style-type: none;
+            padding: .275em;
+            width: 100%;
+        }
+
+        ol {
+            list-style-type: none;
+            padding: .5em 1em 0 0;
+
+            li {
+                li {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+        p {
+            margin-left: 10em;
+        }
+
+        span {
+            &.label {
+                float: left;
+                font-weight: bold;
+                margin-right: 1em;
+                padding-top: 0;
+                text-align: left;
+                width: 9em;
+                white-space: normal;
+            }
+        }
+    }
+
     &.pages {
         margin: .5em 0;
 
