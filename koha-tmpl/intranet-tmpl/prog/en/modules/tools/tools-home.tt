@@ -96,7 +96,7 @@
 
 
 <div class="col-sm-4 col-sm-push-4">
-[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
+[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( plugins_enabled && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h3>Additional tools</h3>
 [% END %]
 <dl>
@@ -136,7 +136,7 @@
     <dd>Manage 'Quote of the day' quotes</dd>
     [% END %]
 
-    [% IF ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool && tool_plugins ) %]
+    [% IF ( plugins_enabled && CAN_user_plugins_tool && tool_plugins ) %]
     <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></dt>
     <dd>
         Use tool plugins
