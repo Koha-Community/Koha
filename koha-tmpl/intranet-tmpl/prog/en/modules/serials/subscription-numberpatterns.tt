@@ -69,16 +69,18 @@
             <fieldset class="rows">
               <ol>
                 <li>
-                  <label for="label">Name:</label>
-                  <input type="text" id="label" name="label" value="[% label | html %]" />
+                  <label class="required" for="label">Name:</label>
+                  <input type="text" id="label" name="label" value="[% label | html %]" class="required" required="required" />
+                  <span class="required">Required</span>
                 </li>
                 <li>
                   <label for="description">Description:</label>
                   <input type="text" id="description" name="description" value="[% description | html %]" size="50" />
                 </li>
                 <li>
-                  <label for="numberingmethod">Numbering formula:</label>
-                  <input type="text" id="numberingmethod" name="numberingmethod" value="[% numberingmethod | html %]" />
+                  <label class="required" for="numberingmethod">Numbering formula:</label>
+                  <input type="text" id="numberingmethod" name="numberingmethod" value="[% numberingmethod | html %]" class="required" required="required" />
+                  <span class="required">Required</span>
                 </li>
                 <li>
                   <label for="displayorder">Display order:</label>
