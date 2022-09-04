@@ -59,7 +59,7 @@ subtest 'normal staff user test' => sub {
       'CAN_user_circulate' => 1,
       'CAN_user_circulate_circulate_remaining_permissions' => 1,
     };
-    is_deeply($authz,$expected,'Expected permissions generated for superlibrarian');
+    is_deeply($authz,$expected,'Expected permissions generated for normal staff user');
 };
 
 subtest 'superlibrarian tests' => sub {
