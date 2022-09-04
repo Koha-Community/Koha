@@ -713,10 +713,6 @@ $template->param(
 # pass the userenv branch if no pickup location selected
 $template->param( pickup => $pickup || C4::Context->userenv->{branch} );
 
-if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
-    $template->param( reserve_in_future => 1 );
-}
-
 $template->param(borrowernumber => $borrowernumber_hold);
 
 # printout the page
