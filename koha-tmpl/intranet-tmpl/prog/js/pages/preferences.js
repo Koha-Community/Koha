@@ -13,7 +13,7 @@ KOHA.Preferences = {
         // If a multiple select has all its entries unselected
         var unserialized = new Array();
         $(modified_prefs).each(function(){
-            if ( $(this).attr('multiple') && $(this).val() == null ) {
+            if ( $(this).attr('multiple') && $(this).val().length == 0 ) {
                 unserialized.push($(this));
             }
         });
