@@ -717,11 +717,7 @@ if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );
 }
 
-$template->param(
-    SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
-    borrowernumber => $borrowernumber_hold,
-);
+$template->param(borrowernumber => $borrowernumber_hold);
 
 # printout the page
 output_html_with_http_headers $input, $cookie, $template->output;
