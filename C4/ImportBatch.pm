@@ -509,28 +509,23 @@ sub BatchFindDuplicates {
 
 =head2 BatchCommitRecords
 
-  my ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored) =
-        BatchCommitRecords($batch_id, $framework,
-        $progress_interval, $progress_callback);
+    my ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored) =
+        BatchCommitRecords( $batch_id, $framework, $progress_interval, $progress_callback, $params );
+
+    Parameter skip_intermediate_commit does what is says.
 
 =cut
 
 sub BatchCommitRecords {
-    my $batch_id = shift;
-    my $framework = shift;
+    my ( $batch_id, $framework, $progress_interval, $progress_callback, $params ) = @_;
+    my $skip_intermediate_commit = $params->{skip_intermediate_commit};
+    $progress_interval = 0 unless $progress_interval && $progress_interval =~ /^\d+$/;
+    $progress_interval = 0 unless ref($progress_callback) eq 'CODE';
 
     my $schema = Koha::Database->schema;
-
-    # optional callback to monitor status 
-    # of job
-    my $progress_interval = 0;
-    my $progress_callback = undef;
-    if ($#_ == 1) {
-        $progress_interval = shift;
-        $progress_callback = shift;
-        $progress_interval = 0 unless $progress_interval =~ /^\d+$/ and $progress_interval > 0;
-        $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
-    }
+    $schema->txn_begin;
+    # NOTE: Moved this transaction to the front of the routine. Note that inside the while loop below
+    # transactions may be committed and started too again. The final commit is close to the end.
 
     my $record_type;
     my $num_added = 0;
@@ -560,7 +555,6 @@ sub BatchCommitRecords {
 
     my $rec_num = 0;
     my @biblio_ids;
-    $schema->txn_begin; # We commit in a transaction
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
 
@@ -568,9 +562,9 @@ sub BatchCommitRecords {
 
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             # report progress and commit
-            $schema->txn_commit;
+            $schema->txn_commit unless $skip_intermediate_commit;
             &$progress_callback( $rec_num );
-            $schema->txn_begin;
+            $schema->txn_begin unless $skip_intermediate_commit;
         }
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'imported') {
             $num_ignored++;
@@ -704,8 +698,6 @@ sub BatchCommitRecords {
         &$progress_callback($rec_num);
     }
 
-    $schema->txn_commit; # Commit final records that may not have hit callback threshold
-
     $sth->finish();
 
     if ( @biblio_ids ) {
@@ -714,6 +706,10 @@ sub BatchCommitRecords {
     }
 
     SetImportBatchStatus($batch_id, 'imported');
+
+    # Moved final commit to the end
+    $schema->txn_commit;
+
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }
 

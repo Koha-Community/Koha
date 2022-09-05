@@ -67,12 +67,13 @@ sub process {
     try {
         my $size = Koha::Import::Records->search({ import_batch_id => $import_batch_id })->count;
         $self->size($size)->store;
-        (
-            $num_added, $num_updated, $num_items_added,
-            $num_items_replaced, $num_items_errored, $num_ignored
-          )
-          = BatchCommitRecords( $import_batch_id, $frameworkcode, 50,
-            sub { my $job_progress = shift; $self->progress( $job_progress )->store } );
+        ( $num_added, $num_updated, $num_items_added,
+          $num_items_replaced, $num_items_errored, $num_ignored ) =
+          BatchCommitRecords(
+            $import_batch_id, $frameworkcode, 50,
+            sub { my $job_progress = shift; $self->progress( $job_progress )->store },
+            { skip_intermediate_commit => 1 },
+        );
     }
     catch {
         warn $_;
