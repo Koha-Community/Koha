@@ -246,7 +246,7 @@ Makes the job record as finished. If the job status is I<cancelled>, it is kept.
 sub finish {
     my ( $self, $data ) = @_;
 
-    $self->status('finished') unless $self->status eq 'cancelled';
+    $self->status('finished') unless $self->status eq 'cancelled' or $self->status eq 'failed';
 
     return $self->set(
         {
