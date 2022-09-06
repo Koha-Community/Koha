@@ -17,7 +17,7 @@ package Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
 use Modern::Perl;
 
-use JSON qw( encode_json decode_json );
+use JSON;
 use Try::Tiny;
 
 use Koha::Biblios;
@@ -120,14 +120,15 @@ sub process {
         $self->progress( $self->progress + 1 )->store;
     }
 
-    my $job_data = decode_json $self->data;
+    my $json = JSON->new;
+    my $job_data = $json->decode($self->data);
     $job_data->{messages} = \@messages;
     $job_data->{report}   = $report;
 
     $self->set(
         {
             ended_on => \'NOW()',
-            data     => encode_json $job_data,
+            data     => $json->encode($job_data),
             status   => 'finished',
         }
     )->store;
