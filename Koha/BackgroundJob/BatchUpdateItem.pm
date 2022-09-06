@@ -16,8 +16,7 @@ package Koha::BackgroundJob::BatchUpdateItem;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( encode_json decode_json );
-use Encode qw( encode_utf8 );
+use JSON;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
@@ -130,11 +129,12 @@ sub process {
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
+    my $json = JSON->new;
     $self->discard_changes;
-    my $job_data = decode_json encode_utf8 $self->data;
+    my $job_data = $json->decode($self->data);
     $job_data->{report} = $report;
 
-    $self->ended_on(dt_from_string)->data( encode_json $job_data);
+    $self->ended_on(dt_from_string)->data($json->encode($job_data));
     $self->status('finished') if $self->status ne 'cancelled';
     $self->store;
 }

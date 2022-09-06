@@ -16,7 +16,7 @@ package Koha::BackgroundJob::BatchUpdateAuthority;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( decode_json encode_json );
+use JSON;
 
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use C4::AuthoritiesMarc qw( ModAuthority );
@@ -106,12 +106,13 @@ sub process {
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
     $indexer->index_records( \@record_ids, "specialUpdate", "authorityserver" );
 
-    my $job_data = decode_json $self->data;
+    my $json = JSON->new;
+    my $job_data = $json->decode($self->data);
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;
 
     $self->ended_on(dt_from_string)
-        ->data(encode_json $job_data);
+        ->data($json->encode($job_data));
     $self->status('finished') if $self->status ne 'cancelled';
     $self->store;
 

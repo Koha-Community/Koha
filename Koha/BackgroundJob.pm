@@ -16,8 +16,7 @@ package Koha::BackgroundJob;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( decode_json encode_json );
-use Encode qw( encode_utf8 );
+use JSON;
 use Carp qw( croak );
 use Net::Stomp;
 use Try::Tiny qw( catch try );
@@ -101,11 +100,12 @@ sub enqueue {
     my $job_args    = $params->{job_args};
     my $job_context = $params->{job_context} // C4::Context->userenv;
     my $job_queue   = $params->{job_queue}  // 'default';
+    my $json = JSON->new;
 
     my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
     $job_context->{interface} = C4::Context->interface;
-    my $json_context = encode_json $job_context;
-    my $json_args = encode_json $job_args;
+    my $json_context = $json->encode($job_context);
+    my $json_args = $json->encode($job_args);
 
     $self->set(
         {
@@ -130,7 +130,7 @@ sub enqueue {
     };
     return unless $conn;
 
-    $json_args = encode_json $job_args;
+    $json_args = $json->encode($job_args);
     try {
         # This namespace is wrong, it must be a vhost instead.
         # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
@@ -167,7 +167,7 @@ sub process {
     $args ||= {};
 
     if ( $self->context ) {
-        my $context = decode_json($self->context);
+        my $context = JSON->new->decode($self->context);
         C4::Context->_new_userenv(-1);
         C4::Context->interface( $context->{interface} );
         C4::Context->set_userenv(
@@ -251,7 +251,7 @@ sub finish {
     return $self->set(
         {
             ended_on => \'NOW()',
-            data     => encode_json($data),
+            data     => JSON->new->encode($data),
         }
     )->store;
 }
@@ -267,7 +267,7 @@ Returns the decoded JSON contents from $self->data.
 sub decoded_data {
     my ($self) = @_;
 
-    return $self->data ? decode_json( $self->data ) : undef;
+    return $self->data ? JSON->new->decode( $self->data ) : undef;
 }
 
 =head3 set_encoded_data
@@ -281,7 +281,7 @@ Serializes I<$data> as a JSON string and sets the I<data> attribute with it.
 sub set_encoded_data {
     my ( $self, $data ) = @_;
 
-    return $self->data( $data ? encode_json($data) : undef );
+    return $self->data( $data ? JSON->new->encode($data) : undef );
 }
 
 =head3 job_type
@@ -302,7 +302,7 @@ sub messages {
     my ( $self ) = @_;
 
     my @messages;
-    my $data_dump = decode_json encode_utf8 $self->data;
+    my $data_dump = JSON->new->decode($self->data);
     if ( exists $data_dump->{messages} ) {
         @messages = @{ $data_dump->{messages} };
     }
@@ -319,7 +319,7 @@ Report of the job.
 sub report {
     my ( $self ) = @_;
 
-    my $data_dump = decode_json encode_utf8 $self->data;
+    my $data_dump = JSON->new->decode($self->data);
     return $data_dump->{report} || {};
 }
 
