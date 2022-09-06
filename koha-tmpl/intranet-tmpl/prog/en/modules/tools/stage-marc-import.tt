@@ -74,7 +74,7 @@
             <h1>MARC staging</h1>
             <div class="dialog message">
               <p>The job has been enqueued! It will be processed as soon as possible.</p>
-              <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
+              <p><a class="job_details" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
             </div>
         [% ELSE %]
 <h1>Stage MARC records for import</h1>
@@ -421,6 +421,12 @@
                     alert(_("An error occurred")+"\n\n"+((error.responseJSON && error.responseJSON.error) || error.responseText || error.statusText));
                 })
             });
+            [% IF job_enqueued %]
+                setTimeout(
+                    function() { window.location.href=$('a.job_details').attr('href'); },
+                    5000, // 5 secs to read
+                );
+            [% END %]
         });
 
         function StartUpload() {
