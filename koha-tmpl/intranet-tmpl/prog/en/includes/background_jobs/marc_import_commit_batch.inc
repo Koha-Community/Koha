@@ -3,7 +3,9 @@
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
-        <div class="dialog message">Completed import of records</div>
+        [% IF job.status == 'finished' %]
+            <div class="dialog message">Completed import of records</div>
+        [% END %]
         <table>
             <tr>
                 <td>Number of records added</td>

@@ -3,8 +3,12 @@
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
+        [% IF job.status == 'finished' %]
+            <div class="dialog message">Completed staging records</div>
+        [% END %]
+
         <h2>MARC staging results</h2>
-        [% SWITCH (record_type) %]
+        [% SWITCH job.decoded_data.record_type %]
         [% CASE 'biblio' %]
             <h3>Processing bibliographic records</h3>
         [% CASE 'auth' %]
