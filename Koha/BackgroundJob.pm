@@ -100,7 +100,7 @@ sub enqueue {
     my $job_args    = $params->{job_args};
     my $job_context = $params->{job_context} // C4::Context->userenv;
     my $job_queue   = $params->{job_queue}  // 'default';
-    my $json = JSON->new;
+    my $json = $self->json;
 
     my $borrowernumber = (C4::Context->userenv) ? C4::Context->userenv->{number} : undef;
     $job_context->{interface} = C4::Context->interface;
@@ -167,7 +167,7 @@ sub process {
     $args ||= {};
 
     if ( $self->context ) {
-        my $context = JSON->new->decode($self->context);
+        my $context = $self->json->decode($self->context);
         C4::Context->_new_userenv(-1);
         C4::Context->interface( $context->{interface} );
         C4::Context->set_userenv(
@@ -251,9 +251,24 @@ sub finish {
     return $self->set(
         {
             ended_on => \'NOW()',
-            data     => JSON->new->encode($data),
+            data     => $self->json->encode($data),
         }
     )->store;
+}
+
+=head3 json
+
+   my $JSON_object = $self->json;
+
+Returns a JSON object with utf8 disabled. Encoding to UTF-8 should be
+done later.
+
+=cut
+
+sub json {
+    my ( $self ) = @_;
+    $self->{_json} //= JSON->new->utf8(0); # TODO Should we allow_nonref ?
+    return $self->{_json};
 }
 
 =head3 decoded_data
@@ -267,7 +282,7 @@ Returns the decoded JSON contents from $self->data.
 sub decoded_data {
     my ($self) = @_;
 
-    return $self->data ? JSON->new->decode( $self->data ) : undef;
+    return $self->data ? $self->json->decode( $self->data ) : undef;
 }
 
 =head3 set_encoded_data
@@ -281,7 +296,7 @@ Serializes I<$data> as a JSON string and sets the I<data> attribute with it.
 sub set_encoded_data {
     my ( $self, $data ) = @_;
 
-    return $self->data( $data ? JSON->new->encode($data) : undef );
+    return $self->data( $data ? $self->json->encode($data) : undef );
 }
 
 =head3 job_type
@@ -302,7 +317,7 @@ sub messages {
     my ( $self ) = @_;
 
     my @messages;
-    my $data_dump = JSON->new->decode($self->data);
+    my $data_dump = $self->json->decode($self->data);
     if ( exists $data_dump->{messages} ) {
         @messages = @{ $data_dump->{messages} };
     }
@@ -319,7 +334,7 @@ Report of the job.
 sub report {
     my ( $self ) = @_;
 
-    my $data_dump = JSON->new->decode($self->data);
+    my $data_dump = $self->json->decode($self->data);
     return $data_dump->{report} || {};
 }
 
