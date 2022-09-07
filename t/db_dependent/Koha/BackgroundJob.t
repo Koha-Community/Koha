@@ -16,6 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
+use Encode;
 
 use Test::More tests => 5;
 use Test::MockModule;
@@ -242,15 +244,41 @@ subtest 'process tests' => sub {
 
 subtest 'decoded_data() and set_encoded_data() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 8;
+    $schema->storage->txn_begin;
 
     my $job = Koha::BackgroundJob::BatchUpdateItem->new->set_encoded_data( undef );
-    is( $job->decoded_data, undef );
+    is( $job->decoded_data, undef, 'undef is undef' );
 
     my $data = { some => 'data' };
 
     $job->set_encoded_data( $data );
 
-    is_deeply( $job->json->decode($job->data), $data );
-    is_deeply( $job->decoded_data, $data );
+    is_deeply( $job->json->decode($job->data), $data, 'decode what we sent' );
+    is_deeply( $job->decoded_data, $data, 'check with decoded_data' );
+
+    # Let's get some Unicode stuff into the game
+    $data = { favorite_Chinese => [ '葑', '癱' ], latin_dancing => [ '¢', '¥', 'á', 'û' ] };
+    $job->set_encoded_data( $data )->store;
+
+    $job->discard_changes; # refresh
+    is_deeply( $job->decoded_data, $data, 'Deep compare with Unicode data' );
+    # To convince you even more
+    is( ord( $job->decoded_data->{favorite_Chinese}->[0] ), 33873, 'We still found Unicode \x8451' );
+    is( ord( $job->decoded_data->{latin_dancing}->[0] ), 162, 'We still found the equivalent of Unicode \x00A2' );
+
+    # Testing with sending encoded data (which we normally shouldnt do)
+    my $utf8_data;
+    foreach my $k ( 'favorite_Chinese', 'latin_dancing' ) {
+        foreach my $c ( @{$data->{$k}} ) {
+            push @{$utf8_data->{$k}}, Encode::encode('UTF-8', $c);
+        }
+    }
+    $job->set_encoded_data( $utf8_data )->store;
+    $job->discard_changes; # refresh
+    is_deeply( $job->decoded_data, $utf8_data, 'Deep compare with utf8_data' );
+    # Need more evidence?
+    is( ord( $job->decoded_data->{favorite_Chinese}->[0] ), 232, 'We still found a UTF8 encoded byte' ); # ord does not need substr here
+
+    $schema->storage->txn_rollback;
 };
