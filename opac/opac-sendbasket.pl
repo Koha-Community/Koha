@@ -102,7 +102,6 @@ if ( $email_add ) {
         C4::Letters::EnqueueLetter({
             letter => $letter,
             message_transport_type => 'email',
-            borrowernumber => $patron->borrowernumber,
             to_address => $email_add,
             reply_address => $user_email,
             attachments => [$attachment],
