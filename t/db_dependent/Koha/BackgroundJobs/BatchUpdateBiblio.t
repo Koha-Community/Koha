@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 use Test::MockModule;
-use JSON qw( encode_json decode_json );
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -50,16 +49,15 @@ subtest "Exceptions must be stringified" => sub {
             size           => 1,
             borrowernumber => $patron->borrowernumber,
             type           => 'batch_biblio_record_modification',
-            data           => encode_json {
-                record_ids => [ $biblio->biblionumber ],
-            }
         }
-    )->store;
+    );
+    my $data = $job->json->encode({ record_ids => [ $biblio->biblionumber ] });
+    $job->data( $data )->store;
     $job = Koha::BackgroundJobs->find( $job->id );
     $job->process(
         { job_id => $job->id, record_ids => [ $biblio->biblionumber ] } );
 
-    my $data = decode_json $job->get_from_storage->data;
+    $data = $job->json->decode( $job->get_from_storage->data );
     is_deeply(
         $data->{messages}->[0],
         {

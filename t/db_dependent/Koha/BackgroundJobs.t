@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use Test::More tests => 12;
 use Test::MockModule;
-use JSON qw( decode_json );
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -60,7 +59,7 @@ my $job_id   = t::lib::Koha::BackgroundJob::BatchTest->new->enqueue(
 # Enqueuing a new job
 my $new_job = Koha::BackgroundJobs->find($job_id);
 ok( $new_job, 'New job correctly enqueued' );
-is_deeply( decode_json( $new_job->data ),
+is_deeply( $new_job->json->decode( $new_job->data ),
     $data, 'data retrieved and json encoded correctly' );
 is( t::lib::Dates::compare( $new_job->enqueued_on, dt_from_string ),
     0, 'enqueued_on correctly filled with now()' );
