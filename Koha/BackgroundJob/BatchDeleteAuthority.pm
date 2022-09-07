@@ -1,7 +1,6 @@
 package Koha::BackgroundJob::BatchDeleteAuthority;
 
 use Modern::Perl;
-use JSON;
 
 use C4::AuthoritiesMarc;
 
@@ -84,7 +83,7 @@ sub process {
         $indexer->index_records( \@deleted_authids, "recordDelete", "authorityserver" );
     }
 
-    my $json = JSON->new;
+    my $json = $self->json;
     my $job_data = $json->decode($self->data);
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;

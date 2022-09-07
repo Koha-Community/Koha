@@ -90,7 +90,7 @@ while (1) {
         }
 
         my $body = $frame->body;
-        my $args = decode_json($body);
+        my $args = decode_json($body); # TODO Should this be from_json? Check utf8 flag.
 
         # FIXME This means we need to have create the DB entry before
         # It could work in a first step, but then we will want to handle job that will be created from the message received
@@ -102,7 +102,7 @@ while (1) {
     } else {
         my $jobs = Koha::BackgroundJobs->search({ status => 'new', queue => \@queues });
         while ( my $job = $jobs->next ) {
-            my $args = decode_json($job->data);
+            my $args = $job->json->decode($job->data);
             process_job( $job, { job_id => $job->id, %$args } );
         }
         sleep 10;

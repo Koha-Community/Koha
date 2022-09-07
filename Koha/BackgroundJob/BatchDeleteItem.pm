@@ -22,7 +22,6 @@ Koha::BackgroundJob::BatchDeleteItem - Background job derived class to process i
 =cut
 
 use Modern::Perl;
-use JSON;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
@@ -199,7 +198,7 @@ sub process {
     $report->{not_deleted_itemnumbers} = \@not_deleted_itemnumbers;
     $report->{deleted_biblionumbers}   = \@deleted_biblionumbers;
 
-    my $json = JSON->new;
+    my $json = $self->json;
     my $job_data = $json->decode($self->data);
     $job_data->{messages} = \@messages;
     $job_data->{report}   = $report;

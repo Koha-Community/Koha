@@ -1,7 +1,6 @@
 package Koha::BackgroundJob::BatchDeleteBiblio;
 
 use Modern::Perl;
-use JSON;
 
 use C4::Biblio;
 
@@ -167,7 +166,7 @@ sub process {
         ) if C4::Context->preference('RealTimeHoldsQueue');
     }
 
-    my $json = JSON->new;
+    my $json = $self->json;
     my $job_data = $json->decode($self->data);
     $job_data->{messages} = \@messages;
     $job_data->{report} = $report;
