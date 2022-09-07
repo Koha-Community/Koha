@@ -1096,7 +1096,7 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         );
 
         # in which tab shelf browser should open ?
-        if (grep { $starting_itemnumber == $_->itemnumber } @itemloop) {
+        if (grep { $starting_itemnumber == $_->{itemnumber} } @itemloop) {
             $template->param(shelfbrowser_tab => 'holdings');
         } else {
             $template->param(shelfbrowser_tab => 'otherholdings');
