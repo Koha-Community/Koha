@@ -25,8 +25,6 @@ use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateItem;
 
-use JSON qw( decode_json encode_json );
-
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
@@ -108,7 +106,7 @@ subtest 'enqueue() tests' => sub {
     is( $job->size,           3,           'Three steps' );
     is( $job->status,         'new',       'Initial status set correctly' );
     is( $job->borrowernumber, $patron->id, 'Borrowernumber set from userenv' );
-    is_deeply( decode_json( $job->context ), $job_context, 'Context set from userenv + interface' );
+    is_deeply( $job->json->decode( $job->context ), $job_context, 'Context set from userenv + interface' );
 
     $schema->storage->txn_rollback;
 };
@@ -150,14 +148,14 @@ subtest 'start(), step() and finish() tests' => sub {
 
     is( $job->status, 'cancelled', "'finish' leaves 'cancelled' untouched" );
     isnt( $job->ended_on, undef, 'ended_on set' );
-    is_deeply( decode_json( $job->data ), $data );
+    is_deeply( $job->json->decode( $job->data ), $data );
 
     $job->status('started')->store;
     $job->finish( $data );
 
     is( $job->status, 'finished' );
     isnt( $job->ended_on, undef, 'ended_on set' );
-    is_deeply( decode_json( $job->data ), $data );
+    is_deeply( $job->json->decode( $job->data ), $data );
 
     throws_ok
         { $job->start; }
@@ -224,15 +222,14 @@ subtest 'process tests' => sub {
     is_deeply( C4::Context->interface, 'intranet', "Interface set from job context on process" );
 
     # Manually add a job (->new->store) without context
+    my $json = $job->json; # sorry, quickly borrowing your json object
+    my $data = $json->encode({ a => 'a', b => 'b' });
     my $incomplete_job = t::lib::Koha::BackgroundJob::BatchTest->new(
         {   status         => 'new',
             size           => 1,
             borrowernumber => $patron->borrowernumber,
             type           => 'batch_test',
-            data           => encode_json {
-                a => 'a',
-                b => 'b',
-            },
+            data           => $data,
         }
     )->store;
 
@@ -254,6 +251,6 @@ subtest 'decoded_data() and set_encoded_data() tests' => sub {
 
     $job->set_encoded_data( $data );
 
-    is_deeply( decode_json($job->data), $data );
+    is_deeply( $job->json->decode($job->data), $data );
     is_deeply( $job->decoded_data, $data );
 };
