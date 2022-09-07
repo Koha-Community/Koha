@@ -15,12 +15,12 @@
 [% END %]
 
 [%# Display a complex patron search form %]
-[%# - Search: <input> %]
+[%# - Search: input %]
 [%# You can then pass a list of filters %]
-[%# - branch: <select library list> %]
-[%# - category: <select patron category list> %]
-[%# - search_field: <select patron field list> %]
-[%# - search_type: <select "contain" or "start with"> %]
+[%# - branch: select library list %]
+[%# - category: select patron category list %]
+[%# - search_field: select patron field list %]
+[%# - search_type: select 'contain' or 'start with' %]
 [% BLOCK patron_search_filters %]
     <form id="patron_search_form">
         <fieldset class="brief">
