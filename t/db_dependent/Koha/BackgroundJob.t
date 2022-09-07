@@ -267,7 +267,7 @@ subtest 'decoded_data() and set_encoded_data() tests' => sub {
     is( ord( $job->decoded_data->{favorite_Chinese}->[0] ), 33873, 'We still found Unicode \x8451' );
     is( ord( $job->decoded_data->{latin_dancing}->[0] ), 162, 'We still found the equivalent of Unicode \x00A2' );
 
-    # Testing with sending encoded data (which we normally shouldnt do)
+    # Testing with sending encoded data (which we normally shouldn't do)
     my $utf8_data;
     foreach my $k ( 'favorite_Chinese', 'latin_dancing' ) {
         foreach my $c ( @{$data->{$k}} ) {
