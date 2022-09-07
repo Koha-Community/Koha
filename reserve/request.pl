@@ -511,7 +511,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                         # Send the pickup locations count to the UI, the pickup locations will be pulled using the API
                         my $pickup_locations = $item_object->pickup_locations({ patron => $patron });
                         $item->{pickup_locations_count} = $pickup_locations->count;
-                        if ( $item->{pickup_locations_count} > 0 ) {
+                        if ( $item->{pickup_locations_count} > 0 || C4::Context->preference('AllowHoldPolicyOverride') ) {
                             $num_items_available++;
                             $item->{available} = 1;
                             # pass the holding branch for use as default
@@ -533,7 +533,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                             my @pickup_locations = $item_object->pickup_locations({ patron => $patron })->as_list;
                             $item->{pickup_locations_count} = scalar @pickup_locations;
 
-                            if ( @pickup_locations ) {
+                            if ( @pickup_locations || C4::Context->preference('AllowHoldPolicyOverride') ) {
                                 $num_items_available++;
                                 $item->{override} = 1;
 
