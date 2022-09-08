@@ -1061,6 +1061,27 @@
             </span>
         </xsl:if>
 
+        <!-- Content Warning -->
+        <xsl:variable name="ContentWarningField" select="marc:sysprefs/marc:syspref[@name='ContentWarningField']"/>
+        <xsl:if test="marc:datafield[@tag=$ContentWarningField]">
+           <span class="results_summary content_warning">
+               <span class="label">Content warning: </span>
+               <xsl:for-each select="marc:datafield[@tag=$ContentWarningField]">
+                   <xsl:choose>
+                       <xsl:when test="marc:subfield[@code='z']">
+                           <xsl:value-of select="marc:subfield[@code='z']"/><xsl:text> </xsl:text>
+                       </xsl:when>
+                       <xsl:otherwise>
+                           <xsl:call-template name="subfieldSelect">
+                               <xsl:with-param name="codes">abcdefgijklnou</xsl:with-param>
+                           </xsl:call-template>
+                       </xsl:otherwise>
+                   </xsl:choose>
+                   <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
+               </xsl:for-each>
+           </span>
+        </xsl:if>
+
         <!-- 866 textual holdings -->
         <xsl:if test="marc:datafield[@tag=866]">
             <span class="results_summary holdings_note basic_bibliographic_unit"><span class="label">Holdings: </span>

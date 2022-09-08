@@ -98,7 +98,7 @@ sub get_xslt_sysprefs {
                               OPACResultsLibrary OPACShowOpenURL
                               OpenURLResolverURL OpenURLImageLocation
                               OPACResultsMaxItems OPACResultsMaxItemsUnavailable OPACResultsUnavailableGroupingBy
-                              OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts / )
+                              OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts ContentWarningField / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);
