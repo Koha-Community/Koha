@@ -25,7 +25,11 @@
         <label for="allow_changes_from">Allow changes to contents from: </label>
         <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
 
-            [% IF shelf.allow_change_from_owner %]<option value="0">Nobody</option>[% ELSE %]<option value="0" selected="selected">Nobody</option>[% END %]
+            [% IF shelf.allow_change_from_owner %]
+                <option value="0">Nobody</option>
+            [% ELSE %]
+                <option value="0" selected="selected">Nobody</option>
+            [% END %]
 
             [% IF shelf.allow_change_from_owner && (( !shelf.is_public && !shelf.is_shared ) || !shelf.allow_change_from_others ) %]
                 <option value="1" selected="selected">Owner only</option>
@@ -33,10 +37,17 @@
                 <option value="1">Owner only</option>
             [% END %]
 
-            [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
+            [% IF shelf.allow_change_from_others %]
+                <option value="2" selected="selected">Anyone seeing this list</option>
+            [% ELSE %]
+                <option value="2">Anyone seeing this list</option>
+            [% END %]
 
-            [% IF shelf.allow_change_from_staff %]<option value="3" selected="selected">Staff only</option>[% ELSE %]<option value="3">Staff only</option>[% END %]
-
+            [% IF shelf.allow_change_from_staff %]
+                <option value="3" selected="selected">Staff only</option>
+            [% ELSE %]
+                <option value="3">Staff only</option>
+                [% END %]
         </select>
         &emsp; <span id="anyone_remark" style="display:none;color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
         &emsp; <span id="staff_remark" style="display:none;color:red;">The Staff only permission has no actual effect while this list is strictly private.</span>
@@ -96,7 +107,7 @@
         [% IF op == 'view' %]
             <li>
                 <a href="#" aria-current="page">
-            Contents of <em>[% shelf.shelfname | html %]</em>
+                    Contents of <em>[% shelf.shelfname | html %]</em>
                 </a>
             </li>
         [% END %]
@@ -118,378 +129,420 @@
         [% END %]
 
         [% IF op == 'transfer' %]
-            <li><a href="#" aria-current="page">Transfer list <em>[% shelf.shelfname | html %]</em></a></li>
+            <li>
+                <a href="#" aria-current="page">Transfer list <em>[% shelf.shelfname | html %]</em></a>
+            </li>
         [% END %]
     </ol>
 </nav>
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-sm-10 col-sm-push-1">
-                <main>
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-1">
+            <main>
 
-                [% IF op != 'transfer' %][% INCLUDE 'virtualshelves-toolbar.inc' %][% END %]
+            [% IF op != 'transfer' %][% INCLUDE 'virtualshelves-toolbar.inc' %][% END %]
 
-[% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_update' %]
-            <span>An error occurred when updating this list.</span>
-        [% CASE 'error_on_insert' %]
-            <span>An error occurred when creating this list.</span>
-        [% CASE 'error_on_delete' %]
-            <span>An error occurred when deleting this list.</span>
-        [% CASE 'error_on_add_biblio' %]
-            [% IF m.item_barcode %]
-               <span>The item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
-            [% ELSE %]
-                <span>The record ([% m.bibnum | html %]) has not been added to the list. Please verify it is not already in the list.</span>
-            [% END %]
-        [% CASE 'success_on_update' %]
-            <span>List updated.</span>
-        [% CASE 'success_on_insert' %]
-            <span>List created.</span>
-        [% CASE 'success_on_delete' %]
-            <span>List deleted.</span>
-        [% CASE 'success_on_add_biblio' %]
-            [% IF m.item_barcode %]
-                <span>The item ([% m.item_barcode | html %]) has been added to the list.</span>
-            [% ELSE %]
-                <span>The record ([% m.bibnum | html %]) has been added to the list.</span>
-            [% END %]
-        [% CASE 'success_on_remove_biblios' %]
-            <span>The item has been removed from the list.</span>
-        [% CASE 'does_not_exist' %]
-            <span>This list does not exist.</span>
-        [% CASE 'item_does_not_exist' %]
-            [% IF m.item_barcode %]
-                <span>The item ([% m.item_barcode | html %]) does not exist.</span>
-            [% ELSE %]
-                <span>The record ([% m.bibnum | html %]) does not exist.</span>
-            [% END %]
-        [% CASE 'unauthorized_on_view' %]
-            <span>You do not have permission to view this list.</span>
-        [% CASE 'unauthorized_on_update' %]
-            <span>You do not have permission to update this list.</span>
-        [% CASE 'unauthorized_on_delete' %]
-           <span>You do not have permission to delete this list.</span>
-        [% CASE 'unauthorized_on_add_biblio' %]
-            <span>You do not have permission to add a record to this list.</span>
-        [% CASE 'unauthorized_transfer' %]
-            <span>You do not have permission to transfer ownership of this list.</span>
-        [% CASE 'new_owner_not_found' %]
-            <span>The new owner could not be found anymore.</span>
-        [% CASE 'no_biblio_removed' %]
-            <span>No record was removed.</span>
-
-        [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
-            <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
-        [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
-            <span>List could not be created. (Do not use the database administrator account.)</span>
-        [% CASE 'DBIx::Class::Exception' %]
-            [% m.msg | html %]
-
-        [% CASE %]
-            [% m.code | html %] [% m.msg | html %]
-        [% END %]
-    </div>
-[% END %]
-
-[% IF op == 'transfer' %]
-    <h1>Transfer ownership of public list [% shelf.shelfname | html %]</h1>
-
-    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
-    <fieldset>
-        <input type="hidden" name="op" value="transfer" />
-        <input type="hidden" name="public" value="1" />
-        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-
-        <div>
-            <label for="find_patron">Search for new owner: </label>
-            <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
-        </div>
-
-        <br/>
-        <div>
-            <label for="find_patron">New owner: </label>
-            <span id="new_owner_name"></span>
-            <input type="hidden" id="new_owner" name="new_owner" value="" />
-        </div>
-
-        <br/>
-        <fieldset class="action">
-            <input type="submit" value="Transfer" class="submit" />
-            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
-        </fieldset>
-
-    </fieldset>
-    </form>
-[% END %]
-
-[% IF op == 'view' %]
-    <h1>Contents of <em>[% shelf.shelfname | html %]</em></h1>
-    [% IF itemsloop %]
-    <div class="pages">[% pagination_bar | $raw %]</div>
-    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
-        <input type="hidden" name="op" value="remove_biblios" />
-        <input type="hidden" name="referer" value="view" />
-        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-
-[% IF direction == 'asc' %]
-    [% SET new_direction = 'desc' %]
-[% ELSE %]
-    [% SET direction = 'desc' %]
-    [% SET new_direction = 'asc' %]
-[% END %]
-
-[% IF itemsloop %]
-    <div id="searchheader" class="searchheader noprint">
-        <div id="selection_ops"><span class="checkall"></span> |
-        <span class="clearall"></span>
-
-        <span class="addto">| </span>
-        &nbsp;
-        [% IF CAN_user_reserveforothers && Koha.Preference('DisplayMultiPlaceHold') %]
-            <div class="btn-group"><button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button></div>
-        [% END %]
-        [% IF can_remove_biblios %]
-            <div class="btn-group"><button type="submit" class="btn btn-default btn-xs list-remove"><i class="fa fa-trash"></i> Remove selected</button></div>
-        [% END %]
-        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<div class="btn-group"><button type="submit" class="btn btn-default btn-xs merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>[% END %]
-        </div>
-    </div>
-[% END %]
-
-    <table id="searchresults" class="dataTable">
-        <thead>
-            <tr>
-                [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
-
-                [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                [% IF sortfield == 'title' %]
-                    <th class="sorting_[% direction | html %]">
-                [% ELSE %]
-                    <th class="sorting">
-                [% END %]
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
-                </th>
-                [% IF sortfield == 'author' %]
-                    <th class="sorting_[% direction | html %]">
-                [% ELSE %]
-                    <th class="sorting">
-                [% END %]
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
-                </th>
-                [% IF sortfield == 'dateadded' %]
-                    <th class="sorting_[% direction | html %]">
-                [% ELSE %]
-                    <th class="sorting">
-                [% END %]
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
-                </th>
-                [% IF sortfield == 'itemcallnumber' %]
-                     <th class="sorting_[% direction | html %]">
-                [% ELSE %]
-                    <th class="sorting">
-                [% END %]
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
-                 </th>
-            </tr>
-        </thead>
-        [% FOREACH itemsloo IN itemsloop %]
-                <tr>
-            [% IF itemsloop %]
-                <td>
-                    <input type="checkbox" class="selection" value="[% itemsloo.biblionumber | html %]" name="biblionumber" />
-                </td>
-            [% END %]
-			[% UNLESS ( item_level_itypes ) %]<td>
-                [% UNLESS ( noItemTypeImages || !itemsloo.imageurl ) %]<img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />[% END %][% itemsloo.description | html %]
-			</td>[% END %]
-			<td>
-                [% IF ( itemsloo.XSLTBloc ) %]
-                    [% itemsloo.XSLTBloc | $raw %]
-                [% ELSE %]
-                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
-                    </a>
-                [% END %]
-                    <p class="hold">
-                        [% IF ( itemsloo.notforloan ) %]
-                            <span class="noholdstext">No holds allowed</span>
-                        [% ELSE %]
-                            [% IF ( itemsloo.ITEM_RESULTS.count ) %]
-                                <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
-                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 %]</a></span>[% END %]
+            [% FOR m IN messages %]
+                <div class="dialog [% m.type | html %]">
+                    [% SWITCH m.code %]
+                        [% CASE 'error_on_update' %]
+                            <span>An error occurred when updating this list.</span>
+                        [% CASE 'error_on_insert' %]
+                            <span>An error occurred when creating this list.</span>
+                        [% CASE 'error_on_delete' %]
+                            <span>An error occurred when deleting this list.</span>
+                        [% CASE 'error_on_add_biblio' %]
+                            [% IF m.item_barcode %]
+                                <span>The item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
                             [% ELSE %]
-                                <span class="noholdstext">No holds allowed</span>
+                                <span>The record ([% m.bibnum | html %]) has not been added to the list. Please verify it is not already in the list.</span>
+                            [% END %]
+                        [% CASE 'success_on_update' %]
+                            <span>List updated.</span>
+                        [% CASE 'success_on_insert' %]
+                            <span>List created.</span>
+                        [% CASE 'success_on_delete' %]
+                            <span>List deleted.</span>
+                        [% CASE 'success_on_add_biblio' %]
+                            [% IF m.item_barcode %]
+                                <span>The item ([% m.item_barcode | html %]) has been added to the list.</span>
+                            [% ELSE %]
+                                <span>The record ([% m.bibnum | html %]) has been added to the list.</span>
+                            [% END %]
+                        [% CASE 'success_on_remove_biblios' %]
+                            <span>The item has been removed from the list.</span>
+                        [% CASE 'does_not_exist' %]
+                            <span>This list does not exist.</span>
+                        [% CASE 'item_does_not_exist' %]
+                            [% IF m.item_barcode %]
+                                <span>The item ([% m.item_barcode | html %]) does not exist.</span>
+                            [% ELSE %]
+                                <span>The record ([% m.bibnum | html %]) does not exist.</span>
+                            [% END %]
+                        [% CASE 'unauthorized_on_view' %]
+                            <span>You do not have permission to view this list.</span>
+                        [% CASE 'unauthorized_on_update' %]
+                            <span>You do not have permission to update this list.</span>
+                        [% CASE 'unauthorized_on_delete' %]
+                            <span>You do not have permission to delete this list.</span>
+                        [% CASE 'unauthorized_on_add_biblio' %]
+                            <span>You do not have permission to add a record to this list.</span>
+                        [% CASE 'unauthorized_transfer' %]
+                            <span>You do not have permission to transfer ownership of this list.</span>
+                        [% CASE 'new_owner_not_found' %]
+                            <span>The new owner could not be found anymore.</span>
+                        [% CASE 'no_biblio_removed' %]
+                            <span>No record was removed.</span>
+
+                        [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
+                            <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
+                        [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
+                            <span>List could not be created. (Do not use the database administrator account.)</span>
+                        [% CASE 'DBIx::Class::Exception' %]
+                            [% m.msg | html %]
+
+                        [% CASE %]
+                            [% m.code | html %] [% m.msg | html %]
+                    [% END %]
+                </div>
+            [% END %]
+
+            [% IF op == 'transfer' %]
+                <h1>Transfer ownership of public list [% shelf.shelfname | html %]</h1>
+
+                <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
+                    <fieldset>
+                        <input type="hidden" name="op" value="transfer" />
+                        <input type="hidden" name="public" value="1" />
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+
+                        <div>
+                            <label for="find_patron">Search for new owner: </label>
+                            <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
+                        </div>
+
+                        <br/>
+                        <div>
+                            <label for="find_patron">New owner: </label>
+                            <span id="new_owner_name"></span>
+                            <input type="hidden" id="new_owner" name="new_owner" value="" />
+                        </div>
+
+                        <br/>
+                        <fieldset class="action">
+                            <input type="submit" value="Transfer" class="submit" />
+                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
+                        </fieldset>
+
+                    </fieldset>
+                </form>
+            [% END %]
+
+            [% IF op == 'view' %]
+                <h1>Contents of <em>[% shelf.shelfname | html %]</em></h1>
+                [% IF itemsloop %]
+                    <div class="pages">[% pagination_bar | $raw %]</div>
+                    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
+                        <input type="hidden" name="op" value="remove_biblios" />
+                        <input type="hidden" name="referer" value="view" />
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+
+                        [% IF direction == 'asc' %]
+                            [% SET new_direction = 'desc' %]
+                        [% ELSE %]
+                            [% SET direction = 'desc' %]
+                            [% SET new_direction = 'asc' %]
+                        [% END %]
+
+                        [% IF itemsloop %]
+                            <div id="searchheader" class="searchheader noprint">
+                                <div id="selection_ops">
+                                    <span class="checkall"></span> |
+                                    <span class="clearall"></span>
+
+                                    <span class="addto">| </span>
+                                    &nbsp;
+                                    [% IF CAN_user_reserveforothers && Koha.Preference('DisplayMultiPlaceHold') %]
+                                        <div class="btn-group"><button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button></div>
+                                    [% END %]
+                                    [% IF can_remove_biblios %]
+                                        <div class="btn-group"><button type="submit" class="btn btn-default btn-xs list-remove"><i class="fa fa-trash"></i> Remove selected</button></div>
+                                    [% END %]
+                                    [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                        <div class="btn-group"><button type="submit" class="btn btn-default btn-xs merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
+                                    [% END %]
+                                </div>
+                            </div>
+                        [% END %]
+
+                        <table id="searchresults" class="dataTable">
+                            <thead>
+                                <tr>
+                                    [% IF ( itemsloop ) %]
+                                        <th class="checkall">&nbsp;</th>
+                                    [% END %]
+                                    [% UNLESS ( item_level_itypes ) %]
+                                        <th>Item type</th>
+                                    [% END %]
+                                    [% IF sortfield == 'title' %]
+                                        <th class="sorting_[% direction | html %]">
+                                    [% ELSE %]
+                                        <th class="sorting">
+                                    [% END %]
+                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
+                                    </th>
+                                    [% IF sortfield == 'author' %]
+                                        <th class="sorting_[% direction | html %]">
+                                    [% ELSE %]
+                                        <th class="sorting">
+                                    [% END %]
+                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
+                                    </th>
+                                    [% IF sortfield == 'dateadded' %]
+                                        <th class="sorting_[% direction | html %]">
+                                    [% ELSE %]
+                                        <th class="sorting">
+                                    [% END %]
+                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
+                                    </th>
+                                    [% IF sortfield == 'itemcallnumber' %]
+                                        <th class="sorting_[% direction | html %]">
+                                    [% ELSE %]
+                                        <th class="sorting">
+                                    [% END %]
+                                        <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            [% FOREACH itemsloo IN itemsloop %]
+                                <tr>
+                                    [% IF itemsloop %]
+                                        <td>
+                                            <input type="checkbox" class="selection" value="[% itemsloo.biblionumber | html %]" name="biblionumber" />
+                                        </td>
+                                    [% END %]
+                                    [% UNLESS ( item_level_itypes ) %]
+                                        <td>
+                                            [% UNLESS ( noItemTypeImages || !itemsloo.imageurl ) %]
+                                                <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
+                                            [% END %]
+                                            [% itemsloo.description | html %]
+                                        </td>
+                                    [% END %]
+                                    <td>
+                                        [% IF ( itemsloo.XSLTBloc ) %]
+                                            [% itemsloo.XSLTBloc | $raw %]
+                                        [% ELSE %]
+                                            [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
+                                            </a>
+                                        [% END %]
+                                        <p class="hold">
+                                            [% IF ( itemsloo.notforloan ) %]
+                                                <span class="noholdstext">No holds allowed</span>
+                                            [% ELSE %]
+                                                [% IF ( itemsloo.ITEM_RESULTS.count ) %]
+                                                    <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
+                                                    [% IF ( holdfor ) %]
+                                                        <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 %]</a></span>
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    <span class="noholdstext">No holds allowed</span>
+                                                [% END %]
+                                            [% END %]
+                                            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                                | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit record</a>
+                                            [% END %]
+                                            [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                                | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit items</a>
+                                            [% END %]
+                                        </p>
+                                    </td>
+                                    <td>
+                                        [% itemsloo.author | html %]
+                                    </td>
+                                    <td>
+                                        [% itemsloo.dateadded | $KohaDates%]
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            [% FOREACH item IN itemsloo.ITEM_RESULTS %]
+                                                <li>
+                                                    [% Branches.GetName(item.holdingbranch) | html %]
+                                                    [% IF ( item.location ) %]
+                                                        <span class="shelvingloc">
+                                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
+                                                        </span>
+                                                    [% END %]
+                                                    [% IF ( item.itemcallnumber ) %]
+                                                        [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
+                                                    [% END %]
+                                                </li>
+                                            [% END %]
+                                        </ul>
+                                    </td>
+                                </tr>
+                            [% END %]<!-- /itemsloop -->
+                        </table>
+                        <div class="pages">[% pagination_bar | $raw %]</div>
+                    </form>
+                [% END %]
+            [% END %]
+
+            [% IF op == 'add_form' OR op == 'edit_form' %]
+
+                <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
+                    <fieldset class="rows">
+                        [% IF op == 'add_form' %]
+                            <legend><h1>Create a new list</h1></legend>
+                            <input type="hidden" name="op" value="add" />
+                        [% ELSE %]
+                            <legend><h1>Edit list <em>[% shelf.shelfname | html %]</em></h1></legend>
+                            <input type="hidden" name="op" value="edit" />
+                        [% END %]
+                        <input type="hidden" name="referer" value="[% referer | html %]" />
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                        <ol>
+                            <li>
+                                <label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname | html %]" required="required" class="focus required" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <span class="label">Owner: </span>
+                                [% IF op == 'add_form' %]
+                                    <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
+                                [% ELSE %]
+                                    [% IF owner %]
+                                        <input type="hidden" id="owner" name="owner" value="[% owner.borrowernumber | html %]" />[% owner.firstname _ ' ' _ owner.surname | html %]
+                                    [% ELSE %]
+                                        <input type="hidden" id="owner" name="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
+                                    [% END %]
+                                [% END %]
+                            </li>
+                            <li>
+                                <label for="sortfield" >Sort this list by: </label>
+                                <select name="sortfield">
+                                    [% IF shelf.sortfield == "title" %]
+                                        <option value="title" selected="selected">Title</option>
+                                    [% ELSE %]
+                                        <option value="title">Title</option>
+                                    [% END %]
+                                    [% IF shelf.sortfield == "author" %]
+                                        <option value="author" selected="selected">Author</option>
+                                    [% ELSE %]
+                                        <option value="author">Author</option>
+                                    [% END %]
+                                    [% IF shelf.sortfield == "copyrightdate" %]
+                                        <option value="copyrightdate" selected="selected">Copyrightdate</option>
+                                    [% ELSE %]
+                                        <option value="copyrightdate">Copyrightdate</option>
+                                    [% END %]
+                                    [% IF shelf.sortfield == "itemcallnumber" %]
+                                        <option value="itemcallnumber" selected="selected">Call number</option>
+                                    [% ELSE %]
+                                        <option value="itemcallnumber">Call number</option>
+                                    [% END %]
+                                    [% IF shelf.sortfield == "dateadded" %]
+                                        <option value="dateadded" selected="selected">Date added</option>
+                                    [% ELSE %]
+                                        <option value="dateadded">Date added</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li>
+                                <label for="public">Public: </label>
+                                <select id="public" name="public" onchange="AdjustRemark()">
+                                    [% IF shelf.is_private %]
+                                        <option value="0" selected="selected">Private</option>
+                                    [% ELSE %]
+                                        <option value="0">Private</option>
+                                    [% END %]
+                                    [% IF shelf.is_public %]
+                                        <option value="1" selected="selected">Public</option>
+                                    [% ELSE %]
+                                        <option value="1">Public</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            [% INCLUDE list_permissions %]
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="action">
+                        <input type="submit" value="Save" class="submit" />
+                        [% IF referer == 'view' %]
+                            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
+                        [% ELSE %]
+                            [% IF public %]
+                                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
+                            [% ELSE %]
+                                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=0" class="cancel">Cancel</a>
                             [% END %]
                         [% END %]
-                        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                            | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit record</a>
-                        [% END %]
-                        [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                            | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit items</a>
-                        [% END %]
-                    </p>
-            </td>
-            <td>[% itemsloo.author | html %]</td>
-            <td>[% itemsloo.dateadded | $KohaDates%]</td>
-            <td>
-                <ul>
-                [% FOREACH item IN itemsloo.ITEM_RESULTS %]
-                    <li>
-                        [% Branches.GetName(item.holdingbranch) | html %]
-                        [% IF ( item.location ) %]
-                            <span class="shelvingloc">
-                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
-                            </span>
-                        [% END %]
-                        [% IF ( item.itemcallnumber ) %]
-                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
-                        [% END %]
-                    </li>
-                [% END %]
-                </ul>
-            </td>
-			</tr>
-		[% END %]<!-- /itemsloop -->
-    </table>
-    <div class="pages">[% pagination_bar | $raw %]</div>
-</form>
-
-	[% END %]
-[% END %]
-
-[% IF op == 'add_form' OR op == 'edit_form' %]
-
-    <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
-        <fieldset class="rows">
-
-        [% IF op == 'add_form' %]
-        <legend><h1>Create a new list</h1></legend>
-            <input type="hidden" name="op" value="add" />
-        [% ELSE %]
-        <legend><h1>Edit list <em>[% shelf.shelfname | html %]</em></h1></legend>
-            <input type="hidden" name="op" value="edit" />
-        [% END %]
-        <input type="hidden" name="referer" value="[% referer | html %]" />
-        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-        <ol>
-            <li>
-                <label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname | html %]" required="required" class="focus required" />
-            <span class="required">Required</span>
-            </li>
-            <li>
-                <span class="label">Owner: </span>
-                [% IF op == 'add_form' %]
-                    <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
-                [% ELSE %]
-                    [% IF owner %]
-                        <input type="hidden" id="owner" name="owner" value="[% owner.borrowernumber | html %]" />[% owner.firstname _ ' ' _ owner.surname | html %]
-                    [% ELSE %]
-                        <input type="hidden" id="owner" name="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
-                    [% END %]
-                [% END %]
-            </li>
-            <li><label for="sortfield" >Sort this list by: </label>
-            <select name="sortfield">
-            [% IF shelf.sortfield == "title" %]<option value="title" selected="selected">Title</option>[% ELSE %]<option value="title">Title</option>[% END %]
-            [% IF shelf.sortfield == "author" %]<option value="author" selected="selected">Author</option>[% ELSE %]<option value="author">Author</option>[% END %]
-            [% IF shelf.sortfield == "copyrightdate" %]<option value="copyrightdate" selected="selected">Copyrightdate</option>[% ELSE %]<option value="copyrightdate">Copyrightdate</option>[% END %]
-            [% IF shelf.sortfield == "itemcallnumber" %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
-            [% IF shelf.sortfield == "dateadded" %]<option value="dateadded" selected="selected">Date added</option>[% ELSE %]<option value="dateadded">Date added</option>[% END %]
-            </select></li>
-            <li><label for="public">Public: </label>
-                <select id="public" name="public" onchange="AdjustRemark()">
-                [% IF shelf.is_private %]
-                    <option value="0" selected="selected">Private</option>
-                [% ELSE %]
-                    <option value="0">Private</option>
-                [% END %]
-                [% IF shelf.is_public %]
-                    <option value="1" selected="selected">Public</option>
-                [% ELSE %]
-                    <option value="1">Public</option>
-                [% END %]
-                           </select></li>
-
-            [% INCLUDE list_permissions %]
-
-        </ol>
-    </fieldset>
-
-    <fieldset class="action">
-        <input type="submit" value="Save" class="submit" />
-        [% IF referer == 'view' %]
-           <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
-       [% ELSE %]
-            [% IF public %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=1" class="cancel">Cancel</a>
-            [% ELSE %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;public=0" class="cancel">Cancel</a>
+                    </fieldset>
+                </form>
             [% END %]
-        [% END %]
-    </fieldset>
-    </form>
 
-[% END %]
+            [% IF op == 'list' %]
+                <h1>Lists</h1>
+                <div id="tabs" class="toptabs">
+                    <ul>
+                        <li id="privateshelves_tab" class="active">
+                            <a href="#tab_content">Your lists</a>
+                        </li>
+                        <li id="publicshelves_tab" class="active">
+                            <a href="#tab_content">Public lists</a>
+                        </li>
+                    </ul>
 
-[% IF op == 'list' %]
-    <h1>Lists</h1>
-    <div id="tabs" class="toptabs">
-        <ul>
-            <li id="privateshelves_tab" class="active"><a href="#tab_content">Your lists</a></li>
-            <li id="publicshelves_tab" class="active"><a href="#tab_content">Public lists</a></li>
-        </ul>
+                    <div id="tab_content">
+                        <table id="listresultst">
+                            <thead>
+                                <tr>
+                                    <th class="NoVisible">Type</th>
+                                    <th>List name</th>
+                                    <th>Contents</th>
+                                    <th>Type</th>
+                                    <th>Owner</th>
+                                    <th>Sort by</th>
+                                    <th>Creation date</th>
+                                    <th>Modification date</th>
+                                    <th class="noExport">Actions</th>
+                                </tr>
+                                <tr class="filters_row">
+                                    <th></th>
+                                    <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
+                                    <th>
+                                        <select class="filter text_filter" id="searchsortby_filter">
+                                            <option value=""></option>
+                                            <option value="title">Title</option>
+                                            <option value="author">Author</option>
+                                            <option value="copyrightdate">Copyrightdate</option>
+                                            <option value="itemcallnumber">Call number</option>
+                                            <option value="dateadded">Date added</option>
+                                        </select>
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            [% END %]
 
-        <div id="tab_content">
-            <table id="listresultst">
-                <thead>
-                    <tr>
-                        <th class="NoVisible">Type</th>
-                        <th>List name</th>
-                        <th>Contents</th>
-                        <th>Type</th>
-                        <th>Owner</th>
-                        <th>Sort by</th>
-                        <th>Creation date</th>
-                        <th>Modification date</th>
-                        <th class="noExport">Actions</th>
-                    </tr>
-                    <tr class="filters_row">
-                        <th></th>
-                        <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
-                        <th></th>
-                        <th></th>
-                        <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
-                        <th>
-                            <select class="filter text_filter" id="searchsortby_filter">
-                                <option value=""></option>
-                                <option value="title">Title</option>
-                                <option value="author">Author</option>
-                                <option value="copyrightdate">Copyrightdate</option>
-                                <option value="itemcallnumber">Call number</option>
-                                <option value="dateadded">Date added</option>
-                            </select>
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-[% END %]
+            <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
+                <!-- Values will be set here by placeHold() -->
+            </form>
 
-<form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
-    <!-- Values will be set here by placeHold() -->
-</form>
-
-            </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
-    </div> <!-- /.row -->
+        </main>
+    </div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.row -->
 
 [% IF ( can_add_biblios ) %]
     <!-- Modal -->
@@ -503,22 +556,22 @@
                     </div>
                     <div class="modal-body">
                         <fieldset class="brief">
-                        <ol>
-                            <li>
-                                <label for="barcodes">Barcodes:</label>
-                                <textarea name="barcodes" id="barcodes" rows="5"></textarea>
-                                <input type="hidden" name="op" value="add_biblio" />
-                                <input type="hidden" name="referer" value="view" />
-                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                            </li>
-                            <li>
-                                <label for="biblionumbers">Biblio numbers:</label>
-                                <textarea name="biblionumbers" id="biblionumbers" rows="5"></textarea>
-                                <input type="hidden" name="op" value="add_biblio" />
-                                <input type="hidden" name="referer" value="view" />
-                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                            </li>
-                        </ol>
+                            <ol>
+                                <li>
+                                    <label for="barcodes">Barcodes:</label>
+                                    <textarea name="barcodes" id="barcodes" rows="5"></textarea>
+                                    <input type="hidden" name="op" value="add_biblio" />
+                                    <input type="hidden" name="referer" value="view" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                </li>
+                                <li>
+                                    <label for="biblionumbers">Biblio numbers:</label>
+                                    <textarea name="biblionumbers" id="biblionumbers" rows="5"></textarea>
+                                    <input type="hidden" name="op" value="add_biblio" />
+                                    <input type="hidden" name="referer" value="view" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                </li>
+                            </ol>
                         </fieldset>
                     </div>
                     <div class="modal-footer">
