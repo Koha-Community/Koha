@@ -146,67 +146,67 @@
             [% FOR m IN messages %]
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
-                        [% CASE 'error_on_update' %]
-                            <span>An error occurred when updating this list.</span>
-                        [% CASE 'error_on_insert' %]
-                            <span>An error occurred when creating this list.</span>
-                        [% CASE 'error_on_delete' %]
-                            <span>An error occurred when deleting this list.</span>
-                        [% CASE 'error_on_add_biblio' %]
-                            [% IF m.item_barcode %]
-                                <span>The item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
-                            [% ELSE %]
-                                <span>The record ([% m.bibnum | html %]) has not been added to the list. Please verify it is not already in the list.</span>
-                            [% END %]
-                        [% CASE 'success_on_update' %]
-                            <span>List updated.</span>
-                        [% CASE 'success_on_insert' %]
-                            <span>List created.</span>
-                        [% CASE 'success_on_delete' %]
-                            <span>List deleted.</span>
-                        [% CASE 'success_on_add_biblio' %]
-                            [% IF m.item_barcode %]
-                                <span>The item ([% m.item_barcode | html %]) has been added to the list.</span>
-                            [% ELSE %]
-                                <span>The record ([% m.bibnum | html %]) has been added to the list.</span>
-                            [% END %]
-                        [% CASE 'success_on_remove_biblios' %]
-                            <span>The item has been removed from the list.</span>
-                        [% CASE 'does_not_exist' %]
-                            <span>This list does not exist.</span>
-                        [% CASE 'item_does_not_exist' %]
-                            [% IF m.item_barcode %]
-                                <span>The item ([% m.item_barcode | html %]) does not exist.</span>
-                            [% ELSE %]
-                                <span>The record ([% m.bibnum | html %]) does not exist.</span>
-                            [% END %]
-                        [% CASE 'unauthorized_on_view' %]
-                            <span>You do not have permission to view this list.</span>
-                        [% CASE 'unauthorized_on_update' %]
-                            <span>You do not have permission to update this list.</span>
-                        [% CASE 'unauthorized_on_delete' %]
-                            <span>You do not have permission to delete this list.</span>
-                        [% CASE 'unauthorized_on_add_biblio' %]
-                            <span>You do not have permission to add a record to this list.</span>
-                        [% CASE 'unauthorized_transfer' %]
-                            <span>You do not have permission to transfer ownership of this list.</span>
-                        [% CASE 'new_owner_not_found' %]
-                            <span>The new owner could not be found anymore.</span>
-                        [% CASE 'no_biblio_removed' %]
-                            <span>No record was removed.</span>
+                    [% CASE 'error_on_update' %]
+                        <span>An error occurred when updating this list.</span>
+                    [% CASE 'error_on_insert' %]
+                        <span>An error occurred when creating this list.</span>
+                    [% CASE 'error_on_delete' %]
+                        <span>An error occurred when deleting this list.</span>
+                    [% CASE 'error_on_add_biblio' %]
+                        [% IF m.item_barcode %]
+                            <span>The item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
+                        [% ELSE %]
+                            <span>The record ([% m.bibnum | html %]) has not been added to the list. Please verify it is not already in the list.</span>
+                        [% END %]
+                    [% CASE 'success_on_update' %]
+                        <span>List updated.</span>
+                    [% CASE 'success_on_insert' %]
+                        <span>List created.</span>
+                    [% CASE 'success_on_delete' %]
+                        <span>List deleted.</span>
+                    [% CASE 'success_on_add_biblio' %]
+                        [% IF m.item_barcode %]
+                            <span>The item ([% m.item_barcode | html %]) has been added to the list.</span>
+                        [% ELSE %]
+                            <span>The record ([% m.bibnum | html %]) has been added to the list.</span>
+                        [% END %]
+                    [% CASE 'success_on_remove_biblios' %]
+                        <span>The item has been removed from the list.</span>
+                    [% CASE 'does_not_exist' %]
+                        <span>This list does not exist.</span>
+                    [% CASE 'item_does_not_exist' %]
+                        [% IF m.item_barcode %]
+                            <span>The item ([% m.item_barcode | html %]) does not exist.</span>
+                        [% ELSE %]
+                            <span>The record ([% m.bibnum | html %]) does not exist.</span>
+                        [% END %]
+                    [% CASE 'unauthorized_on_view' %]
+                        <span>You do not have permission to view this list.</span>
+                    [% CASE 'unauthorized_on_update' %]
+                        <span>You do not have permission to update this list.</span>
+                    [% CASE 'unauthorized_on_delete' %]
+                        <span>You do not have permission to delete this list.</span>
+                    [% CASE 'unauthorized_on_add_biblio' %]
+                        <span>You do not have permission to add a record to this list.</span>
+                    [% CASE 'unauthorized_transfer' %]
+                        <span>You do not have permission to transfer ownership of this list.</span>
+                    [% CASE 'new_owner_not_found' %]
+                        <span>The new owner could not be found anymore.</span>
+                    [% CASE 'no_biblio_removed' %]
+                        <span>No record was removed.</span>
 
-                        [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
-                            <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
-                        [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
-                            <span>List could not be created. (Do not use the database administrator account.)</span>
-                        [% CASE 'DBIx::Class::Exception' %]
-                            [% m.msg | html %]
+                    [% CASE 'Koha::Exceptions::Virtualshelf::DuplicateObject' %]
+                        <span>An error occurred when creating this list. The name [% shelfname | html %] already exists.</span>
+                    [% CASE 'Koha::Exceptions::Virtualshelf::UseDbAdminAccount' %]
+                        <span>List could not be created. (Do not use the database administrator account.)</span>
+                    [% CASE 'DBIx::Class::Exception' %]
+                        [% m.msg | html %]
 
-                        [% CASE %]
-                            [% m.code | html %] [% m.msg | html %]
-                    [% END %]
+                    [% CASE %]
+                        [% m.code | html %] [% m.msg | html %]
+                    [% END # /SWITCH %]
                 </div>
-            [% END %]
+            [% END # /FOR m IN messages %]
 
             [% IF op == 'transfer' %]
                 <h1>Transfer ownership of public list [% shelf.shelfname | html %]</h1>
@@ -237,7 +237,7 @@
 
                     </fieldset>
                 </form>
-            [% END %]
+            [% END # /IF op == transfer %]
 
             [% IF op == 'view' %]
                 <h1>Contents of <em>[% shelf.shelfname | html %]</em></h1>
@@ -378,16 +378,16 @@
                                                         [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% item.itemcallnumber | uri %]%22">[% item.itemcallnumber | html %]</a>]
                                                     [% END %]
                                                 </li>
-                                            [% END %]
+                                            [% END # /FOREACH item %]
                                         </ul>
                                     </td>
                                 </tr>
-                            [% END %]<!-- /itemsloop -->
-                        </table>
+                            [% END #/FOREACH itemsloo %]
+                        </table> <!-- /#searchresults -->
                         <div class="pages">[% pagination_bar | $raw %]</div>
                     </form>
-                [% END %]
-            [% END %]
+                [% END # /IF itemsloop %]
+            [% END # /IF op == 'view' %]
 
             [% IF op == 'add_form' OR op == 'edit_form' %]
 
@@ -481,7 +481,7 @@
                         [% END %]
                     </fieldset>
                 </form>
-            [% END %]
+            [% END # /IF op == 'add_form'... %]
 
             [% IF op == 'list' %]
                 <h1>Lists</h1>
@@ -531,10 +531,10 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            [% END %]
+                        </table> <!-- /#listresultst -->
+                    </div> <!-- #/tab_content -->
+                </div> <!-- /#tabs -->
+            [% END # /IF op == 'list' %]
 
             <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
                 <!-- Values will be set here by placeHold() -->
@@ -573,16 +573,16 @@
                                 </li>
                             </ol>
                         </fieldset>
-                    </div>
+                    </div> <!-- /.modal-body -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-default">Save</button>
                         <a href="#" data-dismiss="modal" class="cancel">Cancel</a>
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-[% END %]
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#addToList -->
+[% END # IF /( can_add_biblios ) %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -597,7 +597,7 @@
                 setTimeout('window.close()', 1000); // Hack for Chrome < 63
             });
         </script>
-    [% END %]
+    [% END #/print %]
 
     [% IF op == 'view' %]
         [% Asset.js("lib/hc-sticky.js") | $raw %]
@@ -707,7 +707,7 @@
                     return confirmDelete(MSG_CONFIRM_DELETE_LIST);
                 });
             });
-        [% END %]
+        [% END # /IF op == 'list' %]
 
         [% IF shelf AND op == 'view' %]
             var Sticky;
@@ -804,7 +804,7 @@
                     $("#barcodes").focus();
                 });
             });
-        [% END %]
+        [% END # /IF shelf %]
 
         [% IF shelf AND op == 'edit_form' %]
             $(document).ready(function(){
