@@ -183,10 +183,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             # loop through each subfield
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless defined $subf[$i][0];
-                next
-                  if (
-                    $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{tab}
-                    ne $tabloop );
+                next if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{tab} // q{} ) ne $tabloop; # Note: defaulting to '0' changes behavior!
                 next
                   if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
                     ->{hidden} =~ /-7|-4|-3|-2|2|3|5|8/);
