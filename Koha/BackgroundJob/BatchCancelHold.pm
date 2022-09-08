@@ -17,10 +17,8 @@ package Koha::BackgroundJob::BatchCancelHold;
 
 use Modern::Perl;
 
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::Patrons;
-use Koha::Holds;
 
 use base 'Koha::BackgroundJob';
 
@@ -57,9 +55,7 @@ sub process {
         return;
     }
 
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)->progress($job_progress)
-      ->status('started')->store;
+    $self->start;
 
     my @hold_ids = @{ $args->{hold_ids} };
 
@@ -105,18 +101,14 @@ sub process {
               };
             $report->{total_success}++;
         }
-        $self->progress( ++$job_progress )->store;
+        $self->step;
     }
 
-    my $json = $self->json;
-    my $job_data = $json->decode($self->data);
-    $job_data->{messages} = \@messages;
-    $job_data->{report}   = $report;
+    my $data = $self->decoded_data;
+    $data->{messages} = \@messages;
+    $data->{report} = $report;
 
-    $self->ended_on(dt_from_string)->data($json->encode($job_data));
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
-
+    $self->finish( $data );
 }
 
 =head3 enqueue

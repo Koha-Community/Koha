@@ -25,7 +25,6 @@ use Modern::Perl;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 
 use base 'Koha::BackgroundJob';
@@ -80,9 +79,7 @@ sub process {
     # FIXME If the job has already been started, but started again (worker has been restart for instance)
     # Then we will start from scratch and so double delete the same records
 
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)->progress($job_progress)
-      ->status('started')->store;
+    $self->start;
 
     my @record_ids     = @{ $args->{record_ids} };
     my $delete_biblios = $args->{delete_biblios};
@@ -130,7 +127,7 @@ sub process {
                     push @biblionumbers,       $item->biblionumber;
 
                     $report->{total_success}++;
-                    $self->progress( ++$job_progress )->store;
+                    $self->step;
                 }
 
                 # If there are no items left, delete the biblio
@@ -198,14 +195,11 @@ sub process {
     $report->{not_deleted_itemnumbers} = \@not_deleted_itemnumbers;
     $report->{deleted_biblionumbers}   = \@deleted_biblionumbers;
 
-    my $json = $self->json;
-    my $job_data = $json->decode($self->data);
-    $job_data->{messages} = \@messages;
-    $job_data->{report}   = $report;
+    my $data = $self->decoded_data;
+    $data->{messages} = \@messages;
+    $data->{report} = $report;
 
-    $self->ended_on(dt_from_string)->data( $json->encode($job_data));
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
+    $self->finish( $data );
 }
 
 =head3 enqueue

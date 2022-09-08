@@ -89,9 +89,7 @@ sub process {
     # FIXME If the job has already been started, but started again (worker has been restart for instance)
     # Then we will start from scratch and so double process the same records
 
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)->progress($job_progress)
-      ->status('started')->store;
+    $self->start;
 
     my @record_ids = @{ $args->{record_ids} };
     my $regex_mod  = $args->{regex_mod};
@@ -107,21 +105,14 @@ sub process {
     };
 
     try {
-        my ($results) =
-          Koha::Items->search( { itemnumber => \@record_ids } )
-          ->batch_update(
-            {
-                regex_mod  => $regex_mod,
-                new_values => $new_values,
-                exclude_from_local_holds_priority =>
-                  $exclude_from_local_holds_priority,
-                mark_items_returned => $mark_items_returned,
-                callback => sub {
-                    my ($progress) = @_;
-                    $self->progress($progress)->store;
-                },
+        my ($results) = Koha::Items->search( { itemnumber => \@record_ids } )->batch_update(
+            {   regex_mod                         => $regex_mod,
+                new_values                        => $new_values,
+                exclude_from_local_holds_priority => $exclude_from_local_holds_priority,
+                mark_items_returned               => $mark_items_returned,
+                callback                          => sub { $self->step; },
             }
-          );
+        );
         $report->{modified_itemnumbers} = $results->{modified_itemnumbers};
         $report->{modified_fields}      = $results->{modified_fields};
     }
@@ -131,14 +122,10 @@ sub process {
           if ( $_ =~ /Rollback failed/ );    # Rollback failed
     };
 
-    my $json = $self->json;
-    $self->discard_changes;
-    my $job_data = $json->decode($self->data);
-    $job_data->{report} = $report;
+    my $data = $self->decoded_data;
+    $data->{report} = $report;
 
-    $self->ended_on(dt_from_string)->data($json->encode($job_data));
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
+    $self->finish( $data );
 }
 
 =head3 enqueue

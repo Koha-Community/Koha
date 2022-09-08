@@ -18,7 +18,6 @@ package Koha::BackgroundJob::BatchUpdateBiblio;
 use Modern::Perl;
 
 use Koha::Biblios;
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Virtualshelves;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
@@ -65,11 +64,7 @@ sub process {
     # FIXME If the job has already been started, but started again (worker has been restart for instance)
     # Then we will start from scratch and so double process the same records
 
-    my $job_progress = 0;
-    $self->started_on(dt_from_string)
-        ->progress($job_progress)
-        ->status('started')
-        ->store;
+    $self->start;
 
     my $mmtid = $args->{mmtid};
     my @record_ids = @{ $args->{record_ids} };
@@ -111,21 +106,18 @@ sub process {
             };
             $report->{total_success}++;
         }
-        $self->progress( ++$job_progress )->store;
+
+        $self->step;
     }
 
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( \@record_ids, "specialUpdate", "biblioserver" );
 
-    my $json = $self->json;
-    my $job_data = $json->decode($self->data);
-    $job_data->{messages} = \@messages;
-    $job_data->{report} = $report;
+    my $data = $self->decoded_data;
+    $data->{messages} = \@messages;
+    $data->{report} = $report;
 
-    $self->ended_on(dt_from_string)
-        ->data($json->encode($job_data));
-    $self->status('finished') if $self->status ne 'cancelled';
-    $self->store;
+    $self->finish( $data );
 }
 
 =head3 enqueue
