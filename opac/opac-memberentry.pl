@@ -41,8 +41,6 @@ use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Attributes;
 use Koha::Patron::Images;
-use Koha::Patron::Modification;
-use Koha::Patron::Modifications;
 use Koha::Patron::Categories;
 use Koha::Token;
 use Koha::AuthorisedValues;
