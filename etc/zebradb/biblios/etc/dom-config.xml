@@ -28,6 +28,7 @@ Bibliographic DOM config for MARC XML input
 -->
 <dom>
   <extract name="index">
+    <xslt stylesheet="preprocess_marcxml.xsl"/>
     <xslt stylesheet="biblio-zebra-indexdefs.xsl"/>
   </extract>
   <retrieve name="marc">
