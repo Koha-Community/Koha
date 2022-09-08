@@ -2,10 +2,8 @@
 $headings-color: #727272;
 $headings-font-weight: 600;
 $enable-gradients: false;
-
-$info:#2679cc;
-$danger: rgb(185, 32, 32);
-
+$info: #2679CC;
+$danger: rgb( 185, 32, 32 );
 $font-size-base: 1rem;
 $h1-font-size: $font-size-base * 1.5;
 $h2-font-size: $font-size-base * 1.4;
@@ -13,21 +11,17 @@ $h3-font-size: $font-size-base * 1.3;
 $h4-font-size: $font-size-base * 1.2;
 $h5-font-size: $font-size-base * 1.1;
 $h6-font-size: $font-size-base;
-
 $base-theme-color: #548300;
-
 $color: #999999;
 $links: #0074AD;
 $links-hover: #005580;
 $footer-height: 45px;
-
 $sci-link-color: #0076B6;
 $sci-heading-color: #727272;
-
 $high-contrast-grey: #666666;
 
 @mixin shadowed {
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 1px 0 rgba( 0, 0, 0, .2 );
 }
 
 @mixin border-radius-all($radius: 3px) {
@@ -36,7 +30,7 @@ $high-contrast-grey: #666666;
 
 @mixin input-focus {
     border-color: $base-theme-color;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(194, 228, 136, .6);
+    box-shadow: inset 0 1px 1px rgba( 0, 0, 0, .075 ), 0 0 8px rgba( 194, 228, 136, .6 );
 }
 
 /* Bootstrap imports */
@@ -44,20 +38,25 @@ $high-contrast-grey: #666666;
 @import "../../../../../node_modules/bootstrap/scss/variables";
 @import "../../../../../node_modules/bootstrap/scss/mixins";
 @import "../../../../../node_modules/bootstrap/scss/alert";
+
 // @import "../../../../../node_modules/bootstrap/scss/badge";
 @import "../../../../../node_modules/bootstrap/scss/breadcrumb";
 @import "../../../../../node_modules/bootstrap/scss/button-group";
 @import "../../../../../node_modules/bootstrap/scss/buttons";
 @import "../../../../../node_modules/bootstrap/scss/card";
+
 // @import "../../../../../node_modules/bootstrap/scss/carousel";
 @import "../../../../../node_modules/bootstrap/scss/close";
+
 // @import "../../../../../node_modules/bootstrap/scss/code";
 @import "../../../../../node_modules/bootstrap/scss/custom-forms";
 @import "../../../../../node_modules/bootstrap/scss/dropdown";
 @import "../../../../../node_modules/bootstrap/scss/forms";
 @import "../../../../../node_modules/bootstrap/scss/grid";
+
 // @import "../../../../../node_modules/bootstrap/scss/images";
 @import "../../../../../node_modules/bootstrap/scss/input-group";
+
 // @import "../../../../../node_modules/bootstrap/scss/jumbotron";
 // @import "../../../../../node_modules/bootstrap/scss/list-group";
 // @import "../../../../../node_modules/bootstrap/scss/media";
@@ -65,19 +64,22 @@ $high-contrast-grey: #666666;
 @import "../../../../../node_modules/bootstrap/scss/navbar";
 @import "../../../../../node_modules/bootstrap/scss/nav";
 @import "../../../../../node_modules/bootstrap/scss/pagination";
+
 // @import "../../../../../node_modules/bootstrap/scss/popover";
 @import "../../../../../node_modules/bootstrap/scss/print";
+
 // @import "../../../../../node_modules/bootstrap/scss/progress";
 @import "../../../../../node_modules/bootstrap/scss/reboot";
 @import "../../../../../node_modules/bootstrap/scss/root";
+
 // @import "../../../../../node_modules/bootstrap/scss/spinners";
 @import "../../../../../node_modules/bootstrap/scss/tables";
+
 // @import "../../../../../node_modules/bootstrap/scss/toasts";
 @import "../../../../../node_modules/bootstrap/scss/tooltip";
 @import "../../../../../node_modules/bootstrap/scss/transitions";
 @import "../../../../../node_modules/bootstrap/scss/type";
 @import "../../../../../node_modules/bootstrap/scss/utilities";
-
 @import "flatpickr";
 
 /* Koha imports */
@@ -87,14 +89,15 @@ $high-contrast-grey: #666666;
 html,
 body {
     height: 100%;
+
     // The html and body elements cannot have any padding or margin.
 }
 
 body {
     background: #FCF9FC none;
     display: flex;
-    height: 100%;
     flex-direction: column;
+    height: 100%;
 }
 
 a {
@@ -160,7 +163,6 @@ caption {
             }
         }
     }
-
 }
 
 .main {
@@ -170,7 +172,6 @@ caption {
     padding: 1rem 0;
 }
 
-
 .alert {
     &.alert-info,
     &.alert-warning {
@@ -178,13 +179,13 @@ caption {
     }
 
     &.alert-error {
-        @extend .alert-warning
+        @extend .alert-warning;
     }
 }
 
 .btn-primary {
     background-color: $base-theme-color;
-    border: 1px solid darken($base-theme-color, 10%);
+    border: 1px solid darken( $base-theme-color, 10% );
     color: #FFF;
 
     &:link,
@@ -195,58 +196,61 @@ caption {
     &:hover,
     &:active {
         background-color: $base-theme-color;
-        border-color: lighten($base-theme-color, 5%);
-        box-shadow: 0 0 0 1px lighten(saturate($base-theme-color, 0.5), 4);
+        border-color: lighten( $base-theme-color, 5% );
+        box-shadow: 0 0 0 1px lighten( saturate( $base-theme-color, .5 ), 4 );
         color: #FFF;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px lighten($base-theme-color, 10%);
+        box-shadow: 0 0 0 2px lighten( $base-theme-color, 10% );
     }
 
     &.disabled,
     &:disabled {
-        background-color: lighten($base-theme-color, 5%);
-        border-color: lighten($base-theme-color, 5%);
+        background-color: lighten( $base-theme-color, 5% );
+        border-color: lighten( $base-theme-color, 5% );
         box-shadow: none;
-        color: #fff;
+        color: #FFF;
         cursor: not-allowed;
+
         &:hover,
         &.hover {
-            background-color: lighten($base-theme-color, 5%);
-            border-color: lighten($base-theme-color, 5%);
+            background-color: lighten( $base-theme-color, 5% );
+            border-color: lighten( $base-theme-color, 5% );
             box-shadow: none;
-            color: #fff;
+            color: #FFF;
             cursor: not-allowed;
         }
     }
 
-    &:not(:disabled):not(.disabled):active:focus,&
-    &:not(:disabled):not(.disabled).active:focus {
-        box-shadow: 0 0 0 0.2rem lighten($base-theme-color, 10%);
+    &:not( :disabled, .disabled ):active:focus,
+    & &:not( :disabled, .disabled ).active:focus {
+        box-shadow: 0 0 0 .2rem lighten( $base-theme-color, 10% );
     }
 
-    &:not(:disabled):not(.disabled).active,
-    &:not(:disabled):not(.disabled):active,
-    &:not(:disabled):not(.disabled):focus,
-    &:not(:disabled):not(.disabled).focus {
-        background-color: lighten($base-theme-color, 5%);
-        border-color: lighten($base-theme-color, 10%);
+    &:not( :disabled, .disabled ).active,
+    &:not( :disabled, .disabled ):active,
+    &:not( :disabled, .disabled ):focus,
+    &:not( :disabled, .disabled ).focus {
+        background-color: lighten( $base-theme-color, 5% );
+        border-color: lighten( $base-theme-color, 10% );
     }
 }
 
 .show > .btn-primary.dropdown-toggle {
-    background-color: lighten($base-theme-color, 5%);
-    border-color: lighten($base-theme-color, 10%);
+    background-color: lighten( $base-theme-color, 5% );
+    border-color: lighten( $base-theme-color, 10% );
+
     &:focus {
-        box-shadow: 0 0 0 0.2rem lighten($base-theme-color, 10%);
+        box-shadow: 0 0 0 .2rem lighten( $base-theme-color, 10% );
     }
 }
 
 .btn-danger {
     $base-bg: #B92020;
+
     background-color: $base-bg;
-    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+    background-image: linear-gradient( to bottom, lighten( saturate( $base-bg, .5 ), 4 ), $base-bg );
     background-position: 0;
     border: 1px solid darken( $base-bg, 5% );
     color: #FFF;
@@ -258,24 +262,26 @@ caption {
 
     &:hover,
     &:active {
-        $base-bg: darken( $base-bg, 2);
+        $base-bg: darken( $base-bg, 2 );
+
         background-color: $base-bg;
-        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+        background-image: linear-gradient( to bottom, lighten( saturate( $base-bg, .5 ), 4 ), $base-bg );
         color: #FFF;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px lighten($base-bg, 10%);
+        box-shadow: 0 0 0 2px lighten( $base-bg, 10% );
     }
 }
 
 .btn-default,
 .btn-secondary {
-    $base-bg: #e6e6e6;
+    $base-bg: #E6E6E6;
+
     background-color: $base-bg;
-    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
+    background-image: linear-gradient( to bottom, lighten( saturate( $base-bg, .5 ), 4 ), $base-bg );
     background-position: 0;
-    border: 1px solid darken($base-bg, 20%);
+    border: 1px solid darken( $base-bg, 20% );
     color: #000;
 
     &:link,
@@ -285,18 +291,19 @@ caption {
 
     &:hover,
     &:active {
-        $base-bg: darken($base-bg, 2);
+        $base-bg: darken( $base-bg, 2 );
+
         background-color: $base-bg;
-        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
+        background-image: linear-gradient( to bottom, lighten( saturate( $base-bg, .5 ), 4 ), $base-bg );
         color: #000;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px darken($base-bg, 10%);
+        box-shadow: 0 0 0 2px darken( $base-bg, 10% );
     }
 
-    &:not(:disabled):not(.disabled):active,
-    &:not(:disabled):not(.disabled).active {
+    &:not( :disabled, .disabled ):active,
+    &:not( :disabled, .disabled ).active {
         color: #000;
     }
 }
@@ -308,7 +315,7 @@ textarea,
 .form-control {
     &:focus {
         border-color: $base-theme-color;
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(194,228,136,.6)
+        box-shadow: inset 0 1px 1px rgba( 0, 0, 0, .075 ), 0 0 8px rgba( 194, 228, 136, .6 );
     }
 }
 
@@ -324,7 +331,7 @@ textarea,
     line-height: 20px;
     padding: 4px 12px;
     text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 1px rgba( 255, 255, 255, .75 );
     vertical-align: middle;
 
     &:hover {
@@ -337,8 +344,8 @@ textarea,
 
     &::before {
         color: #4466AE;
-        font-family: FontAwesome;
         display: inline-block;
+        font-family: FontAwesome;
         padding-right: .5em;
     }
 
@@ -349,17 +356,16 @@ textarea,
 
         &:hover {
             color: #333;
-            filter: alpha(opacity=65);
-            opacity: 0.65;
+            filter: alpha( opacity=65 );
+            opacity: .65;
         }
 
         i {
-
             &.fa,
             &.fa:hover {
                 color: #333;
-                filter: alpha(opacity=65);
-                opacity: 0.65;
+                filter: alpha( opacity=65 );
+                opacity: .65;
             }
         }
     }
@@ -368,93 +374,93 @@ textarea,
 div.dt-button-collection button.dt-button,
 div.dt-button-collection div.dt-button,
 div.dt-button-collection a.dt-button {
-    position: relative;
-    left: 0;
-    right: 0;
-    width: 100%;
     display: block;
     float: none;
+    left: 0;
     margin-bottom: 4px;
     margin-right: 0;
+    position: relative;
+    right: 0;
+    width: 100%;
 }
 
 div.dt-button-collection {
-    width: auto
+    width: auto;
 }
 
 div.dt-button-collection button.dt-button {
     border-radius: 2px;
-    text-align: left
+    text-align: left;
 }
 
 div.dt-button-collection button.dt-button.buttons-collection {
-    border: 0
+    border: 0;
 }
 
 div.dt-button-collection button.dt-button.buttons-columnVisibility {
-    background: #fff none;
-    border: 1px solid #eee;
+    background: #FFF none;
+    border: 1px solid #EEE;
     box-shadow: none;
     font-size: 1em;
     margin: 0 0 4px;
     padding: .3em .7em;
-    text-shadow: none
+    text-shadow: none;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility:before {
-    color: #c00;
+div.dt-button-collection button.dt-button.buttons-columnVisibility::before {
+    color: #C00;
     content: "\f00d";
     display: inline-block;
     font-family: FontAwesome;
     margin-right: .5em;
-    width: 1em
+    width: 1em;
 }
 
 div.dt-button-collection button.dt-button.buttons-columnVisibility:hover {
-    background: #ffc none;
+    background: #FFC none;
     border: 1px solid #999;
-    box-shadow: none
+    box-shadow: none;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility:hover:before {
+div.dt-button-collection button.dt-button.buttons-columnVisibility:hover::before {
     color: #538200;
     content: "\f00c";
     display: inline-block;
     font-family: FontAwesome;
     margin-right: .5em;
-    width: 1em
+    width: 1em;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility:active:not(.disabled):hover:not(.disabled) {
+div.dt-button-collection button.dt-button.buttons-columnVisibility:active:not( .disabled ):hover:not( .disabled ) {
     background: transparent none;
-    box-shadow: none
+    box-shadow: none;
 }
 
 div.dt-button-collection button.dt-button.buttons-columnVisibility.active {
-    background: #e6f0f2 none;
+    background: #E6F0F2 none;
     border-color: #999;
-    box-shadow: none
+    box-shadow: none;
 }
 
 div.dt-button-collection button.dt-button.buttons-columnVisibility.active:hover {
-    background: #ffc none
+    background: #FFC none;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility.active:hover:before {
-    color: #c00;
+div.dt-button-collection button.dt-button.buttons-columnVisibility.active:hover::before {
+    color: #C00;
     content: "\f00d";
     display: inline-block;
     font-family: FontAwesome;
     margin-right: .5em;
-    width: 1em
+    width: 1em;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility.active:not(.disabled):hover:not(.disabled) {
+div.dt-button-collection button.dt-button.buttons-columnVisibility.active:not( .disabled ):hover:not( .disabled ) {
     background: transparent none;
-    box-shadow: none
+    box-shadow: none;
 }
 
-div.dt-button-collection button.dt-button.buttons-columnVisibility.active:before {
+div.dt-button-collection button.dt-button.buttons-columnVisibility.active::before {
     color: $base-theme-color;
     content: "\f00c";
     display: inline-block;
@@ -465,72 +471,72 @@ div.dt-button-collection button.dt-button.buttons-columnVisibility.active:before
 
 div.dt-button-collection button.dt-button.buttons-html5,
 div.dt-button-collection button.dt-button.buttons-print {
-    background: #fff none;
-    border: 1px solid #eee;
+    background: #FFF none;
+    border: 1px solid #EEE;
     box-shadow: none;
     font-size: 1.2em;
     margin: 0 0 4px;
     padding: .3em .7em;
-    text-shadow: none
+    text-shadow: none;
 }
 
 div.dt-button-collection button.dt-button.buttons-html5:hover,
 div.dt-button-collection button.dt-button.buttons-print:hover {
-    background: #ffc none
+    background: #FFC none;
 }
 
-div.dt-button-collection button.dt-button.buttons-html5:not(.disabled):before {
-    color: #222bac;
+div.dt-button-collection button.dt-button.buttons-html5:not( .disabled )::before {
+    color: #222BAC;
     display: inline-block;
     font-family: FontAwesome;
     margin-right: .5em;
-    width: 1em
+    width: 1em;
 }
 
-div.dt-button-collection button.dt-button.buttons-excel:not(.disabled):before {
-    content: "\f1c3"
+div.dt-button-collection button.dt-button.buttons-excel:not( .disabled )::before {
+    content: "\f1c3";
 }
 
-div.dt-button-collection button.dt-button.buttons-csv:not(.disabled):before {
-    content: "\f0ce"
+div.dt-button-collection button.dt-button.buttons-csv:not( .disabled )::before {
+    content: "\f0ce";
 }
 
-div.dt-button-collection button.dt-button.buttons-copy:not(.disabled):before {
-    content: "\f0c5"
+div.dt-button-collection button.dt-button.buttons-copy:not( .disabled )::before {
+    content: "\f0c5";
 }
 
-div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
-    color: #222bac;
+div.dt-button-collection button.dt-button.buttons-print:not( .disabled )::before {
+    color: #222BAC;
     content: "\f02f";
     display: inline-block;
     font-family: FontAwesome;
     margin-right: .5em;
-    width: 1em
+    width: 1em;
 }
 
 .dt-button-info {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    margin-top: -100px;
-    margin-left: -200px;
     background-color: #FFF;
     border: 2px solid $links-hover;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
+    box-shadow: 3px 3px 8px rgba( 0, 0, 0, .3 );
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -100px;
+    position: fixed;
     text-align: center;
+    top: 50%;
+    width: 400px;
     z-index: 21;
 
     h2 {
-        padding: 0.5em;
-        margin: 0;
+        background-color: #F3F3F3;
+        border-bottom: 1px solid #DDD;
         font-weight: normal;
-        border-bottom: 1px solid #ddd;
-        background-color: #f3f3f3;
+        margin: 0;
+        padding: .5em;
     }
 
-    &>div {
+    & > div {
         padding: 1em;
     }
 }
@@ -591,6 +597,7 @@ div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
         input {
             @extend .form-control;
             @extend .form-control-sm;
+
             display: inline-block;
             width: auto;
 
@@ -602,32 +609,33 @@ div.dt-button-collection button.dt-button.buttons-print:not(.disabled):before {
 }
 
 .table_entries {
+    color: #797979;
+    font-size: 90%;
     margin-left: 5px;
     padding: 5px 0;
-    font-size: 90%;
-    color: #797979;
 }
 
 [class^="icon-"] {
     vertical-align: 0;
 }
+
 [class*=" icon-"] {
     vertical-align: 0;
 }
 
 .table {
     .sorting_asc {
-        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi4zODRtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMiAyLjM4NDAzODkiPjxnPjxwYXRoIGZpbGw9IiMwMDZhY2MiIGQ9Ik00LjA1IDEuNzRoLTIuMUwzIC42NHoiLz48L2c+PC9zdmc+") no-repeat scroll 100% 80% #E2E8E8;
+        background: url( "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi4zODRtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMiAyLjM4NDAzODkiPjxnPjxwYXRoIGZpbGw9IiMwMDZhY2MiIGQ9Ik00LjA1IDEuNzRoLTIuMUwzIC42NHoiLz48L2c+PC9zdmc+" ) no-repeat scroll 100% 80% #E2E8E8;
         padding-right: 19px;
     }
 
     .sorting_desc {
-        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi4zODRtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMiAyLjM4NDAzODkiPjxnPjxwYXRoIGZpbGw9IiMwMDZhY2MiIGQ9Ik00LjA1LjY0aC0yLjFMMyAxLjc0eiIvPjwvZz48L3N2Zz4=") no-repeat scroll 100% 80% #E2E8E8;
+        background: url( "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi4zODRtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMiAyLjM4NDAzODkiPjxnPjxwYXRoIGZpbGw9IiMwMDZhY2MiIGQ9Ik00LjA1LjY0aC0yLjFMMyAxLjc0eiIvPjwvZz48L3N2Zz4=" ) no-repeat scroll 100% 80% #E2E8E8;
         padding-right: 19px;
     }
 
     .sorting {
-        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi41NTFtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMyAyLjU1MDY2MTQiPjxwYXRoIGZpbGw9IiNhY2FjYWMiIGQ9Ik00LjA1IDEuNDVoLTIuMUwzIDIuNTV6Ii8+PHBhdGggZmlsbD0iI2FjYWNhYyIgZD0iTTQuMDUgMS4xaC0yLjFMMyAweiIvPjwvc3ZnPg==") no-repeat scroll 100% 75% #E2E8E8;
+        background: url( "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi41NTFtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMyAyLjU1MDY2MTQiPjxwYXRoIGZpbGw9IiNhY2FjYWMiIGQ9Ik00LjA1IDEuNDVoLTIuMUwzIDIuNTV6Ii8+PHBhdGggZmlsbD0iI2FjYWNhYyIgZD0iTTQuMDUgMS4xaC0yLjFMMyAweiIvPjwvc3ZnPg==" ) no-repeat scroll 100% 75% #E2E8E8;
         padding-right: 19px;
     }
 
@@ -691,6 +699,7 @@ ul {
 
                 &.ui-state-hover {
                     background: #FFF none;
+
                     &.ui-state-active {
                         background: #FFF none;
                     }
@@ -744,17 +753,14 @@ ul {
 }
 
 .ui-corner-top {
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .statictabs {
     ul {
         background: none repeat scroll 0 0 transparent;
         border: 0 none;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
+        border-radius: 4px;
         color: #222222;
         font-size: 100%;
         font-weight: bold;
@@ -905,7 +911,7 @@ ul {
 
 .tab-content {
     background-color: #FFF;
-    border: 1px solid #d8d8d8;
+    border: 1px solid #D8D8D8;
     border-top-width: 0;
     margin-bottom: 1em;
     padding: 1em;
@@ -913,19 +919,19 @@ ul {
 
 .nav-tabs {
     .nav-link {
-        background-color: #f0f3f3;
-        border: 1px solid #d8d8d8;
+        background-color: #F0F3F3;
+        border: 1px solid #D8D8D8;
         border-radius: 0;
         margin-right: .4em;
 
         &:hover,
         &:focus {
-            border-color: #d8d8d8;
+            border-color: #D8D8D8;
         }
 
         &.active {
-            background-color: #fff;
-            border: 1px solid #d8d8d8;
+            background-color: #FFF;
+            border: 1px solid #D8D8D8;
             border-bottom-color: transparent;
             color: #000;
             cursor: default;
@@ -956,6 +962,7 @@ ul {
 }
 
 /* Redefine a new style for Bootstrap's class "close" since we use that already */
+
 /* Use <a class="closebtn" href="#">&times;</a> */
 
 .modal-header .closebtn {
@@ -993,7 +1000,7 @@ button {
 
             i {
                 &.fa {
-                    color: #c60000;
+                    color: #C60000;
                 }
             }
         }
@@ -1009,7 +1016,7 @@ button {
     }
 
     &:focus {
-        box-shadow: 0 0 0 1px lighten($links, 20%);
+        box-shadow: 0 0 0 1px lighten( $links, 20% );
     }
 
     &.btn-lg {
@@ -1020,12 +1027,13 @@ button {
 .btn.disabled,
 .btn[disabled] {
     &:hover {
-        opacity: 0.65;
+        opacity: .65;
     }
+
     i {
         &.fa,
         &.fa:hover {
-            opacity: 0.65;
+            opacity: .65;
         }
     }
 }
@@ -1054,6 +1062,7 @@ button {
         padding: 40px 0 0;
         text-decoration: none;
         width: 100px;
+
         &:focus {
             background-color: transparent;
         }
@@ -1063,8 +1072,20 @@ button {
 #changelanguage {
     background-color: #FFF;
     border-top: 1px solid #EEE;
-    padding: 0 1rem;
+    clear: both;
     flex-shrink: 0;
+
+    // Set the fixed height of the footer here
+    min-height: $footer-height;
+    padding: 0 1rem;
+
+    .nav {
+        > .active {
+            > p {
+                padding: 0 15px;
+            }
+        }
+    }
 
     .navbar-text {
         font-weight: bold;
@@ -1079,7 +1100,7 @@ button {
     option,
     select,
     textarea {
-        font-family: "NotoSans", sans-serif;
+        font-family: NotoSans, sans-serif;
     }
 }
 
@@ -1206,24 +1227,11 @@ button {
     height: auto !important;
     height: 100%;
     margin: 0 auto -#{$footer-height + 1};
+
     // Negative indent footer by its height
     min-height: 100%;
     padding-left: 40px;
     padding-right: 40px;
-}
-
-#changelanguage {
-    clear: both;
-    // Set the fixed height of the footer here
-    min-height: $footer-height;
-
-    .nav {
-        > .active {
-            > p {
-                padding: 0 15px;
-            }
-        }
-    }
 }
 
 #i18nMenu {
@@ -1233,6 +1241,8 @@ button {
         font-size: 85%;
 
         a {
+            color: $links;
+
             &:hover {
                 color: $base-theme-color;
             }
@@ -1248,11 +1258,6 @@ button {
                     color: #FFF;
                 }
             }
-
-        }
-
-        a {
-            color: $links;
         }
     }
 
@@ -1271,13 +1276,16 @@ button {
 }
 
 .dropdown-menu {
-    border-radius: 0px;
+    border-radius: 0;
+
     > li {
         > a {
             font-size: 90%;
+
             &:hover {
                 background: $base-theme-color none;
             }
+
             &:focus {
                 background: $base-theme-color none;
             }
