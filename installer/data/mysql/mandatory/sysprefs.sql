@@ -730,7 +730,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('TransferWhenCancelAllWaitingHolds','0',NULL,'Transfer items when cancelling all waiting holds','YesNo'),
 ('TranslateNotices','0',NULL, 'Allow notices to be translated','YesNo'),
 ('TrapHoldsOnOrder','1',NULL,'If enabled, Koha will trap holds for on order items ( notforloan < 0 )','YesNo'),
-('TwoFactorAuthentication', 'disable', 'enforce|enabled|disabled', 'Enables two-factor authentication', 'Choice'),
+('TwoFactorAuthentication', 'disabled', 'enforced|enabled|disabled', 'Enables two-factor authentication', 'Choice'),
 ('UNIMARCAuthorityField100','afrey50      ba0',NULL,'Define the contents of UNIMARC authority control field 100 position 08-35','Textarea'),
 ('UNIMARCAuthorsFacetsSeparator',', ',NULL,'UNIMARC authors facets separator','short'),
 ('UNIMARCField100Language','fre',NULL,'UNIMARC field 100 default language','short'),
