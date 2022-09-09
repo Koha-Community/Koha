@@ -241,7 +241,6 @@ subtest 'checkauth() tests' => sub {
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA-setup'), 1, 'Setup 2FA required' );
         logout($cgi);
 
-        logout($cgi);
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired', undef, 'opac' );
         is( $userid, $patron->userid, 'Succesful login at the OPAC' );
         is( C4::Auth::get_session($sessionID)->param('waiting-for-2FA'), undef, 'No second auth required at the OPAC' );

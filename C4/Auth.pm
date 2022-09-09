@@ -1073,7 +1073,7 @@ sub checkauth {
                 }
                 else {
                     my $retuserid;
-                    my $request_method = $query->request_method();
+                    my $request_method = $query->request_method // q{};
 
                     if (
                         $request_method eq 'POST'
@@ -1108,7 +1108,7 @@ sub checkauth {
             }
 
             # $return: 1 = valid user
-            if ($return > 0) {
+            if( $return && $return > 0 ) {
 
                 if ( $flags = haspermission( $userid, $flagsrequired ) ) {
                     $auth_state = "logged_in";
