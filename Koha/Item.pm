@@ -179,8 +179,7 @@ sub store {
 
 
         if (    exists $updated_columns{location}
-            and $self->location ne 'CART'
-            and $self->location ne 'PROC'
+            and ( !defined($self->location) or $self->location !~ /^(CART|PROC)$/ )
             and not exists $updated_columns{permanent_location} )
         {
             $self->permanent_location( $self->location );
