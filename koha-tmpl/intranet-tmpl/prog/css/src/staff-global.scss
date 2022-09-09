@@ -207,7 +207,7 @@ a {
 
 aside {
     fieldset {
-        box-shadow: 8px 8px 12px rgba(170, 170, 170, .356);
+        @include card;
         padding: .9em;
 
         button + button,
@@ -704,7 +704,7 @@ label,
     }
 
     &.circ_barcode {
-        display: inline-block;
+        display: block;
         font-size: 105%;
         font-weight: bold;
         margin-bottom: 1rem;
@@ -864,15 +864,14 @@ ol {
 }
 
 fieldset {
+    @include card;
     width: 100%;
     color: $green-text-color;
-    background-color: #FFF;
     position: relative;
     color: #696969;
     left: 0;
     top: 0;
     margin: 0 1em 1em 0;
-    box-shadow: 8px 8px 12px rgba(170, 170, 170, .356);
     padding: 1em;
 
     + fieldset {
@@ -1094,11 +1093,10 @@ div {
     }
 
     .circmessage {
-        margin-bottom: .3em;
-        padding: 0 .4em .4em;
+        padding: .4em;
 
-        &:first-child {
-            margin-top: 1em;
+        .circmessage {
+            margin-bottom: .3em;
         }
     }
 
@@ -1194,8 +1192,6 @@ div {
     }
 
     &.rows {
-        clear: left;
-        float: left;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -1208,8 +1204,6 @@ div {
 
         li {
             border-bottom: 1px solid #EEE;
-            clear: left;
-            float: left;
             list-style-type: none;
             padding: .275em;
             width: 100%;
@@ -1232,7 +1226,7 @@ div {
 
         span {
             &.label {
-                float: left;
+                display: inline-block;
                 font-weight: bold;
                 margin-right: 1em;
                 padding-top: 0;
@@ -1381,6 +1375,7 @@ dd {
 .patroninfo-section {
     padding: .5em;
     margin: .5em;
+    @include card;
 }
 
 .patroninfo-heading {
@@ -1653,6 +1648,10 @@ i {
         list-style: $nav-menu-bullet;
         margin-bottom: .4em;
     }
+}
+
+#circmessages {
+    @include card;
 }
 
 #circ_needsconfirmation {
@@ -2894,10 +2893,9 @@ td.bundle {
 }
 
 .statictabs {
+    @include card;
 
-    background-color: #FFFFFF;
     margin-top: 20px;
-    box-shadow: 8px 8px 12px rgba(170, 170, 170, .356);
     padding: 20px;
 
     h3{
