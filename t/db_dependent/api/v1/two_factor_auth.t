@@ -176,8 +176,7 @@ subtest 'send_otp_token' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
-    # FIXME This is not correct They are authenticated!
-    # Patron is not authenticated yet
+    # Session is still anonymous, no borrowernumber yet: Unauthorized
     $t->request_ok($tx)->status_is(401);
 
     # Patron is partially authenticated (credentials correct)
