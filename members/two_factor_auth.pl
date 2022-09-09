@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => 'members/two_factor_auth.tt',
         query         => $cgi,
         type          => 'intranet',
-        flagsrequired => { editcatalogue => '*' },
+        flagsrequired => { catalogue => 1 },
     }
 );
 
