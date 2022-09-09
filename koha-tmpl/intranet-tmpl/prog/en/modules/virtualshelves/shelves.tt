@@ -486,53 +486,55 @@
             [% IF op == 'list' %]
                 <h1>Lists</h1>
                 <div id="tabs" class="toptabs">
-                    <ul>
-                        <li id="privateshelves_tab" class="active">
-                            <a href="#tab_content">Your lists</a>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li id="privateshelves_tab" role="presentation" class="active">
+                            <a href="#shelves_list" aria-controls="shelves_list" role="tab" data-toggle="tab" data-public="0">Your lists</a>
                         </li>
-                        <li id="publicshelves_tab" class="active">
-                            <a href="#tab_content">Public lists</a>
+                        <li id="publicshelves_tab" role="presentation">
+                            <a href="#shelves_list" aria-controls="shelves_list" role="tab" data-toggle="tab" data-public="1">Public lists</a>
                         </li>
                     </ul>
 
-                    <div id="tab_content">
-                        <table id="listresultst">
-                            <thead>
-                                <tr>
-                                    <th class="NoVisible">Type</th>
-                                    <th>List name</th>
-                                    <th>Contents</th>
-                                    <th>Type</th>
-                                    <th>Owner</th>
-                                    <th>Sort by</th>
-                                    <th>Creation date</th>
-                                    <th>Modification date</th>
-                                    <th class="noExport">Actions</th>
-                                </tr>
-                                <tr class="filters_row">
-                                    <th></th>
-                                    <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
-                                    <th>
-                                        <select class="filter text_filter" id="searchsortby_filter">
-                                            <option value=""></option>
-                                            <option value="title">Title</option>
-                                            <option value="author">Author</option>
-                                            <option value="copyrightdate">Copyrightdate</option>
-                                            <option value="itemcallnumber">Call number</option>
-                                            <option value="dateadded">Date added</option>
-                                        </select>
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table> <!-- /#listresultst -->
-                    </div> <!-- #/tab_content -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="shelves_list">
+                            <table id="listresultst">
+                                <thead>
+                                    <tr>
+                                        <th class="NoVisible">Type</th>
+                                        <th>List name</th>
+                                        <th>Contents</th>
+                                        <th>Type</th>
+                                        <th>Owner</th>
+                                        <th>Sort by</th>
+                                        <th>Creation date</th>
+                                        <th>Modification date</th>
+                                        <th class="noExport">Actions</th>
+                                    </tr>
+                                    <tr class="filters_row">
+                                        <th></th>
+                                        <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
+                                        <th>
+                                            <select class="filter text_filter" id="searchsortby_filter">
+                                                <option value=""></option>
+                                                <option value="title">Title</option>
+                                                <option value="author">Author</option>
+                                                <option value="copyrightdate">Copyrightdate</option>
+                                                <option value="itemcallnumber">Call number</option>
+                                                <option value="dateadded">Date added</option>
+                                            </select>
+                                        </th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table> <!-- /#listresultst -->
+                        </div> <!-- /#shelves_list -->
+                    </div> <!-- #/.tab-content -->
                 </div> <!-- /#tabs -->
             [% END # /IF op == 'list' %]
 
@@ -686,23 +688,21 @@
 
                 dtListResults.fnAddFilters("filter", 750);
 
-                var tabs = $("#tabs").tabs({
-                    [% IF public %]
-                        active: 1,
-                    [% ELSE %]
-                        active: 0,
-                    [% END %]
-                    activate: function(e, ui) {
-                        var active = tabs.tabs("option", "active" );
-                        if ( active == 0 ) {
-                            public = 0;
-                            dtListResults.fnDraw();
-                        } else if ( active == 1 ) {
-                            public = 1;
-                            dtListResults.fnDraw();
-                        }
-                    }
+                /* Select correct tab based on URL parameter */
+                if( public == 0 ){
+                    $('#privateshelves_tab').tab('show');
+                } else {
+                    $("#publicshelves_tab").tab("show");
+                }
+
+                $('a[data-toggle="tab"]')
+                .on("click", function(){
+                    public = $(this).data("public");
+                })
+                .on('shown.bs.tab', function (e) {
+                    dtListResults.fnDraw();
                 });
+
                 $("body").on("click", ".deleteshelf", function(){
                     return confirmDelete(MSG_CONFIRM_DELETE_LIST);
                 });
