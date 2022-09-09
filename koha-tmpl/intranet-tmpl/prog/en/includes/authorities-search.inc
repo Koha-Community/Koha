@@ -65,7 +65,7 @@
     </select>
 [% END %]
 
-<div id="header_search" class="navbar-form navbar-left">
+<div id="header_search">
     <div id="mainmain_heading" class="residentsearch">
         <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
             <input type="hidden" name="op" value="do_search" />
@@ -73,10 +73,6 @@
             <input type="hidden" name="marclist" value="mainmainentry" />
             <input type="hidden" name="and_or" value="and" />
             <input type="hidden" name="excluding" value="" />
-
-            <span class="form-title">
-                <label class="control-label">Main heading ($a)</label>
-            </span>
 
             <span class="form-content">
                 [% INCLUDE authtype %]
@@ -101,10 +97,6 @@
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
 
-            <span class="form-title">
-                <label class="control-label">Main heading</label>
-            </span>
-
             <span class="form-content">
                 [% INCLUDE authtype %]
                 <input id="value_mainheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
@@ -125,10 +117,6 @@
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="marclist" value="match" />
-
-            <span class="form-title">
-                <label class="control-label">All headings</label>
-            </span>
 
             <span class="form-content">
                 [% INCLUDE authtype %]
@@ -153,10 +141,6 @@
             <input type="hidden" name="and_or" value="and" />
             <input type="hidden" name="excluding" value="" />
 
-            <span class="form-title">
-                <label class="control-label">Entire record</label>
-            </span>
-
             <span class="form-content">
                 [% INCLUDE authtype %]
                 <input id="value_anywhere" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any authority field" />
@@ -173,10 +157,10 @@
     </div>
 
     <ul>
-        <li><a title="Search main heading ($a only)" href="#mainmain_heading" class="keep_text"><i style="font-weight:bold">$a</i></a></li>
-        <li><a title="Search main heading" href="#main_heading" class="keep_text"><i class="fa fa-header"></i></a></li>
-        <li><a title="Search all headings" href="#matchheading_search" class="keep_text"><i class="fa fa-align-center"></i></a></li>
-        <li><a title="Search entire record" href="#entire_record" class="keep_text"><i class="fa fa-folder-open-o"></i></a></li>
+        <li><a title="Search main heading ($a only)" href="#mainmain_heading" class="keep_text"><i style="font-weight:bold">$a</i> Search main heading ($a only)</a></li>
+        <li><a title="Search main heading" href="#main_heading" class="keep_text"><i class="fa fa-header"></i> Search main heading</a></li>
+        <li><a title="Search all headings" href="#matchheading_search" class="keep_text"><i class="fa fa-align-center"></i> Search all headings</a></li>
+        <li><a title="Search entire record" href="#entire_record" class="keep_text"><i class="fa fa-folder-open-o"></i> Search entire record</a></li>
     </ul>
 </div><!-- /header_search -->
 <!-- End Authorities Resident Search Box -->

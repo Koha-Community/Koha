@@ -6,10 +6,6 @@
         <form method="post" action="/cgi-bin/koha/members/member.pl">
             <input type="hidden" name="quicksearch" value="1" />
 
-            <span class="form-title">
-                <label class="control-label">Search patrons</label>
-            </span>
-
             <span class="form-content">
                 [% IF ( Koha.Preference('RetainPatronsSearchTerms') ) %]
                     <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25" value="[% searchmember | html %]"/>

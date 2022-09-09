@@ -1,6 +1,5 @@
 #header {
-    .navbar-nav li a {
-        line-height: 40px;
+    .navbar-nav > li > a {
         overflow: hidden;
         color: #FFFFFF;
 
@@ -13,6 +12,7 @@
         background-color: rgb(53, 44, 46);
 
         li a {
+            color: #FFFFFF;
             &:hover, &:focus {
                 background-color: transparent;
                 text-decoration: underline;
@@ -40,8 +40,11 @@
 }
 
 #header_search {
-    border-radius: 28px;
+    background-color: #418940;
+    border-radius: 0;
+    border: 1px solid #418940;
     display: flex;
+    padding: 0 .8em;
 
     .residentsearch {
         padding: 0;
@@ -55,23 +58,22 @@
     }
 
     > ul {
-        padding: 0;
+        padding: 0 .8em 0 0;
         margin: 0;
         order: -1;
-        border-radius: 16px 0 0 16px;
-        padding-left: 16px;
-        background-color: #418940;
+        border-radius: 0 16px 16px 0;
         display: flex;
         justify-content: space-around;
         align-items: center;
         color: white;
+        background-color: #418940;
+        z-index: 2;
 
         li {
             background: transparent;
             border: 0;
             border-radius: 0;
 
-            background-color: transparent;
             border: 0;
             border-bottom-width: 0;
             padding-bottom: 0;
@@ -80,16 +82,15 @@
             a {
                 color: #FFF;
                 font-size: .9em;
-                padding: 0 .5em;
+                padding: 0 .25em;
+                margin: 0 .25em;
+                border: 2px solid transparent;
             }
         }
     }
     .ui-state-hover, .ui-state-active {
         a {
-            i {
-                border-bottom: 2px solid #FFFFFF;
-                padding-bottom: 2px;
-            }
+            border-bottom: 2px solid #FFFFFF;
         }
     }
 
@@ -98,29 +99,13 @@
         position: relative;
     }
 
-    .form-title {
-        padding: 0 .8em;
-        background-image: linear-gradient(to right, #418940, #71B443);
-        border-radius: 0 16px 16px 0;
-        display: flex;
-        align-items: center;
-        z-index: 2;
-        white-space: nowrap;
-
-        label {
-            color: white;
-            font-weight: bold;
-        }
-    }
-
     .form-content {
         background-color: white;
         margin-left: -16px;
         padding-left: 16px;
         border-radius: 0 16px 16px 0;
-        position: relative;
-        z-index: 1;
         white-space: nowrap;
+        z-index: 1;
         display: flex;
 
         input[type="text"] {
@@ -139,19 +124,19 @@
     }
 
     .form-extra-content {
-        left: 0;
-        right: 0;
+        left: -16px;
+        right: 60px;
         position: absolute;
         top: 31px;
-        background-color: #352C2E;
+        background-color: #f3f4f4;
+        background-color: white;
         padding: 1em;
-        border-radius: 0 0 16px 16px;
+        border-radius: 0 0 8px 8px;
+        border: 1px solid #418940;
+        border-top: 0;
+        box-shadow: 0 2px 2px 1px #00000030;
         z-index: 1;
         display: none;
-
-        label {
-            color: white;
-        }
 
         .form-control {
             display: block;
@@ -190,35 +175,8 @@
 }
 
 #logged-in-menu {
-    position: relative;
-    left: 0;
-    top: 0;
-    height: 50px;
-
-    &:hover {
+    &:hover, &:active, &:focus {
         text-decoration: none;
-    }
-}
-
-.loggedinusername {
-    bottom: 5px;
-    text-decoration: none;
-    position: relative;
-    float: right;
-    right: 0;
-    height: 20px;
-    width: 100%;
-}
-
-.logged-in-branch-name {
-    position: relative;
-    right: 0;
-    height: 20px;
-    top: 10px;
-    width: 100%;
-
-    &:hover {
-        text-decoration: underline;
     }
 }
 

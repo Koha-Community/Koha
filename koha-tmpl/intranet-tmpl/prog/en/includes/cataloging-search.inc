@@ -3,13 +3,10 @@
 [% PROCESS 'patronfields.inc' %]
 <!-- Begin Patrons Resident Search Box -->
 
-<div id="header_search" class="navbar-form navbar-left">
+<div id="header_search">
 
     <div id="addbooks_search" class="residentsearch">
         <form name="search" action="addbooks.pl">
-            <span class="form-title">
-                <label class="control-label">Cataloging search</label>
-            </span>
 
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="q" id="cat_search" placeholder="Search the catalog and the reservoir" size="40" />
@@ -25,11 +22,11 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Cataloging search" href="#addbooks_search" class="keep_text"><i class="fa fa-fw fa-search"></i></a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i></a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search" class="keep_text"><i class="fa fa-download"></i></a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search" class="keep_text"><i class="fa fa-retweet"></i></a></li>[% END %]
-        <li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i></a></li>
+        <li><a title="Cataloging search" href="#addbooks_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Cataloging search</a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search" class="keep_text"><i class="fa fa-download"></i> Check in</a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search" class="keep_text"><i class="fa fa-retweet"></i> Renew</a></li>[% END %]
+        <li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>
     </ul>
 </div><!-- /header_search -->
 <!-- End Main page Resident Search Box -->

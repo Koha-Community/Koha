@@ -66,8 +66,6 @@
             </li>
         </ul>
 
-        [% content | $raw %]
-
         <ul class="nav navbar-nav">
             [% IF ( Koha.Preference('intranetbookbag') ) %]
             <li>
@@ -221,3 +219,5 @@
     [% IF ( Koha.Preference('intranetbookbag') ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 
 </nav>
+
+[% content | $raw %]

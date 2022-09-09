@@ -1,12 +1,9 @@
 [% USE Koha %]
-<div id="header_search" class="navbar-form navbar-left">
+<div id="header_search">
 
     <div id="suggestions_search" class="residentsearch">
         <form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-            <span class="form-title">
-                <label class="control-label">Search suggestions</label>
-            </span>
 
             <span class="form-content">
                 <input type="text" id="searchtitle" class="head-searchbox form-control" placeholder="Title" name="title" size="10" value="[% title | html %]" />
@@ -23,9 +20,9 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search suggestions" href="#suggestions_search" class="keep_text"><i class="fa fa-comment-o"></i></a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i></a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i></a></li>[% END %]
+        <li><a title="Search suggestions" href="#suggestions_search" class="keep_text"><i class="fa fa-comment-o"></i> Search suggestions</a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>[% END %]
     </ul>
 </div>
 <!-- End Suggestions Resident Search Box -->
