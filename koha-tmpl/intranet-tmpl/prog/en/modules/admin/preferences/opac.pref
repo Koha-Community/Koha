@@ -641,6 +641,14 @@ OPAC:
                 0: "Don't block"
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
         -
+            - The cleanup_database.pl cronjob will automatically delete unaccepted private list share invites after a period of
+            - pref: PurgeListShareInvitesOlderThan
+              class: integer
+            - "days. Example: [14] Sets purgation of unaccepted private list share invites for those older than 14 days."
+            - "<br><strong>WARNING</strong>: This system preference will be overridden when the cleanup_database.pl cronjob is run with the --list-invites parameter."
+            - "<br>If neither the --list-invites parameter or this system preference are set then the cronjob will not delete any unaccepted private list share invites."
+            - "<br><strong>Note:</strong> This system preference requires the <i>misc/cronjobs/cleanup_database.pl</i> cronjob. Ask your system administrator to schedule it."
+        -
             - pref: OpacTrustedCheckout
               default: 0
               choices:
