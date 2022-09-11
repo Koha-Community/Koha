@@ -19,7 +19,7 @@
                     if ( data.street_type ) {
                         roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type].street_type : data.street_type;
                     }
-                    address += '<li class="patronaddress1">' + escape_str(data.streetnumber) + ' ' + escape_str(data.address) + ' ' + escape_str(roadtype_desc) + '</li>';
+                    address += '<li class="patronaddress1">' + escape_str(data.street_number) + ' ' + escape_str(data.address) + ' ' + escape_str(roadtype_desc) + '</li>';
                 }
             }
             if ( data.address2 ) {
