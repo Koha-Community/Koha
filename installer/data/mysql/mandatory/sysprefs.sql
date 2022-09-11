@@ -601,6 +601,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('Pseudonymization','0',NULL,'If enabled patrons and transactions will be copied in a separate table for statistics purpose','YesNo'),
 ('PseudonymizationPatronFields','','title,city,state,zipcode,country,branchcode,categorycode,dateenrolled,sex,sort1,sort2','Patron fields to copy to the pseudonymized_transactions table','multiple'),
 ('PseudonymizationTransactionFields','','datetime,branchcode,transaction_type,itemnumber,itemtype,holdingbranch,location,itemcallnumber,ccode','Transaction fields to copy to the pseudonymized_transactions table','multiple'),
+('PurgeListShareInvitesOlderThan', '14', NULL, 'If not empty, number of days used when deleting unaccepted list share invites', 'Integer'),
 ('PurgeSuggestionsOlderThan', '', NULL, 'If this script is called without the days parameter', 'Integer'),
 ('QueryAutoTruncate','1',NULL,'If ON, query truncation is enabled by default','YesNo'),
 ('QueryFuzzy','1',NULL,'If ON, enables fuzzy option for searches','YesNo'),
