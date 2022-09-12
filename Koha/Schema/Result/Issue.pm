@@ -35,7 +35,7 @@ primary key for issues table
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 foreign key, linking this to the borrowers table for the patron this item was checked out to
 
@@ -51,7 +51,7 @@ foreign key, linking this to the borrowers table for the user who checked out th
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 foreign key, linking this to the items table for the item that was checked out
 
@@ -172,11 +172,11 @@ __PACKAGE__->add_columns(
   "issue_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "borrowernumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "issuer_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "date_due",
   {
     data_type => "datetime",
@@ -272,12 +272,7 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 =head2 issuer
@@ -312,17 +307,12 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-11 15:10:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TERiBbm+B4jMEuNM2dVbfQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-12 11:34:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eNzDAKc3bmTLWeDu8u4nTQ
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
