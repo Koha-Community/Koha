@@ -4326,15 +4326,29 @@ input.renew {
 /* ==== MODULE LINKS - Start ==== */
 .buttons-list {
     /* List containing the module links */
-    margin: 30px 0;
     padding: 0;
-    margin-left: 15px;
+    max-width: 260px;
 
     li {
         /* Standard attributes for the list elements */
         list-style-type: none;
-        display: table;
         margin-bottom: 15px;
+
+        a {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            color: #101010;
+            display: block;
+            font-size: 110%;
+            font-weight: bold;
+
+            &:hover {
+                background-color: #418940;
+                color: white;
+                text-decoration: none;
+            }
+        }
     }
 }
 
