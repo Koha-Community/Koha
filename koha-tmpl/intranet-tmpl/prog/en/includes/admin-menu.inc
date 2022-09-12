@@ -81,9 +81,9 @@
     [% END %]
 
     [% IF CAN_user_parameters_manage_background_jobs %]
-        <h5>Background jobs</h5>
+        <h5>Jobs</h5>
         <ul>
-            <li><a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a></li>
+            <li><a href="/cgi-bin/koha/admin/background_jobs.pl">Jobs</a></li>
         </ul>
     [% END %]
 

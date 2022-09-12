@@ -56,7 +56,7 @@
     [% IF op == 'view' %]
         Details of job #[% job.id | html %] &rsaquo;
     [% END %]
-    Background jobs &rsaquo;
+    Jobs &rsaquo;
     Administration &rsaquo; Koha
 </title>
 
@@ -79,14 +79,14 @@
         </li>
         [% IF op == 'view' %]
             <li>
-                <a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a>
+                <a href="/cgi-bin/koha/admin/background_jobs.pl">Jobs</a>
             </li>
             <li>
                 <a href="#" aria-current="page">Details of job #[% job.id | html %]</a>
             </li>
         [% ELSE %]
             <li>
-                <a href="#" aria-current="page">Background jobs</a>
+                <a href="#" aria-current="page">Jobs</a>
             </li>
         [% END %]
     [% ELSE %]
@@ -160,7 +160,7 @@
 
 [% IF op == 'list' %]
 
-    <h1>Background jobs</h1>
+    <h1>Jobs</h1>
 
     <div>
         <input type="checkbox" id="only_current" checked />
