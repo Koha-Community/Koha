@@ -296,7 +296,7 @@ subtest "Test build_custom_field_string" => sub {
 };
 
 subtest "Test cr_item_field" => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $builder = t::lib::TestBuilder->new();
     my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
@@ -368,6 +368,18 @@ subtest "Test cr_item_field" => sub {
 
     my $itype = $item_object->itype;
     ok( $response =~ m/CR$itype/, "Found correct CR field in response");
+
+    $server->{account}->{format_due_date} = 1;
+    t::lib::Mocks::mock_preference( 'dateFormat',  'sql' );
+    my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item_object->itemnumber, date_due => "1999-01-01 12:59:00" })->store;
+    $siprequest = ITEM_INFORMATION . 'YYYYMMDDZZZZHHMMSS' .
+        FID_INST_ID . $branchcode . '|'.
+        FID_ITEM_ID . $item_object->barcode . '|' .
+        FID_TERMINAL_PWD . 'ignored' . '|';
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_item_information( $server );
+    ok( $response =~ m/AH1999-01-01 12:59/, "Found correct CR field in response");
 };
 
 subtest 'Patron info summary > 5 should not crash server' => sub {
