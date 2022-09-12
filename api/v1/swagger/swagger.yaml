@@ -8,8 +8,6 @@ definitions:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
     $ref: ./definitions/allows_renewal.yaml
-  background_job:
-    $ref: ./definitions/background_job.yaml
   basket:
     $ref: ./definitions/basket.yaml
   bundle_link:
@@ -48,6 +46,8 @@ definitions:
     $ref: ./definitions/item.yaml
   item_group:
     $ref: ./definitions/item_group.yaml
+  job:
+    $ref: ./definitions/job.yaml
   library:
     $ref: ./definitions/library.yaml
   order:
@@ -105,10 +105,6 @@ paths:
     $ref: "./paths/article_requests.yaml#/~1article_requests~1{article_request_id}"
   /auth/otp/token_delivery:
     $ref: paths/auth.yaml#/~1auth~1otp~1token_delivery
-  /background_jobs:
-    $ref: ./paths/background_jobs.yaml#/~1background_jobs
-  "/background_jobs/{background_job_id}":
-    $ref: "./paths/background_jobs.yaml#/~1background_jobs~1{background_job_id}"
   "/biblios/{biblio_id}":
     $ref: "./paths/biblios.yaml#/~1biblios~1{biblio_id}"
   "/biblios/{biblio_id}/checkouts":
@@ -185,6 +181,10 @@ paths:
     $ref: ./paths/items.yaml#/~1items~1{item_id}~1bundled_items~1{bundled_item_id}
   "/items/{item_id}/pickup_locations":
     $ref: "./paths/items.yaml#/~1items~1{item_id}~1pickup_locations"
+  /jobs:
+    $ref: ./paths/jobs.yaml#/~1jobs
+  "/jobs/{job_id}":
+    $ref: "./paths/jobs.yaml#/~1jobs~1{job_id}"
   /libraries:
     $ref: ./paths/libraries.yaml#/~1libraries
   "/libraries/{library_id}":
@@ -260,12 +260,6 @@ parameters:
     name: advancededitormacro_id
     required: true
     type: integer
-  background_job_id_pp:
-    description: Job internal identifier
-    in: path
-    name: background_job_id
-    required: true
-    type: integer
   biblio_id_pp:
     description: Record internal identifier
     in: path
@@ -336,6 +330,12 @@ parameters:
     description: Internal item identifier
     in: path
     name: item_id
+    required: true
+    type: integer
+  job_id_pp:
+    description: Job internal identifier
+    in: path
+    name: job_id
     required: true
     type: integer
   library_id_pp:
@@ -604,6 +604,9 @@ tags:
   - description: "Manage items\n"
     name: items
     x-displayName: Items
+  - description: "Manage jobs\n"
+    name: jobs
+    x-displayName: Jobs
   - description: "Manage libraries\n"
     name: libraries
     x-displayName: Libraries

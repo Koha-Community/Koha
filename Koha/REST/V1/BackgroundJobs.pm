@@ -29,49 +29,66 @@ use Try::Tiny;
 
 =head3 list
 
+Controller function that handles listing Koha::BackgrounJob objects
+
 =cut
 
 sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $background_jobs_set = Koha::BackgroundJobs->new;
-        my $background_jobs     = $c->objects->search($background_jobs_set);
-        return $c->render( status => 200, openapi => $background_jobs );
-    }
-    catch {
+
+        my $only_current = delete $c->validation->output->{only_current};
+
+        my $bj_rs = Koha::BackgroundJobs->new;
+
+        if ($only_current) {
+            $bj_rs = $bj_rs->filter_by_current;
+        }
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search($bj_rs)
+        );
+    } catch {
         $c->unhandled_exception($_);
     };
 }
+
+=head3 get
+
+Controller function that handles retrieving a single Koha::BackgroundJob object
+
+=cut
 
 sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
 
-        my $background_job_id = $c->validation->param('background_job_id');
-        my $patron            = $c->stash('koha.user');
+        my $job_id = $c->validation->param('job_id');
+        my $patron = $c->stash('koha.user');
 
         my $can_manage_background_jobs =
           $patron->has_permission( { parameters => 'manage_background_jobs' } );
 
-        my $background_job = Koha::BackgroundJobs->find($background_job_id);
+        my $job = Koha::BackgroundJobs->find($job_id);
 
         return $c->render(
             status  => 404,
             openapi => { error => "Object not found" }
-        ) unless $background_job;
+        ) unless $job;
 
         return $c->render(
             status  => 403,
             openapi => { error => "Cannot see background job info" }
           )
           if !$can_manage_background_jobs
-          && $background_job->borrowernumber != $patron->borrowernumber;
+          && $job->borrowernumber != $patron->borrowernumber;
 
         return $c->render(
             status  => 200,
-            openapi => $background_job->to_api
+            openapi => $job->to_api
         );
     }
     catch {

@@ -1,0 +1,54 @@
+---
+type: object
+properties:
+  job_id:
+    type: integer
+    description: internally assigned job identifier
+    readOnly: true
+  status:
+    description: job status
+    type: string
+  progress:
+    description: job progress
+    type:
+      - string
+      - "null"
+  size:
+    description: job size
+    type:
+      - string
+      - "null"
+  patron_id:
+    description: job enqueuer
+    type:
+      - string
+      - "null"
+  type:
+    description: job type
+    type: string
+  queue:
+    description: job queue
+    type: string
+  data:
+    description: job data
+    type: object
+  context:
+    description: job context
+    type: object
+  enqueued_date:
+    description: job enqueue date
+    type: string
+    format: date-time
+  started_date:
+    description: job start date
+    type:
+      - string
+      - "null"
+    format: date-time
+  ended_date:
+    description: job end date
+    type:
+      - string
+      - "null"
+    format: date-time
+additionalProperties: false

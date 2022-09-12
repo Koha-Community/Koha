@@ -558,6 +558,9 @@ sub _gen_blob {
 sub _gen_default_values {
     my ($self) = @_;
     return {
+        BackgroundJob => {
+            context => '{}'
+        },
         Borrower => {
             login_attempts => 0,
             gonenoaddress  => undef,

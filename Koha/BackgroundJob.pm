@@ -472,6 +472,27 @@ sub plugin_types_to_classes {
     return $self->{_plugin_mapping};
 }
 
+=head3 to_api
+
+    my $json = $job->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::BackgroundJob object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $json = $self->SUPER::to_api( $params );
+
+    $json->{context} = $self->json->decode($self->context)
+      if defined $self->context;
+    $json->{data} = $self->decoded_data;
+
+    return $json;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::BackgroundJob object
@@ -481,8 +502,11 @@ on the API.
 
 sub to_api_mapping {
     return {
-        id             => 'background_job_id',
+        id             => 'job_id',
         borrowernumber => 'patron_id',
+        ended_on       => 'ended_date',
+        enqueued_on    => 'enqueued_date',
+        started_on     => 'started_date',
     };
 }
 

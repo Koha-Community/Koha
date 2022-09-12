@@ -1,64 +1,19 @@
 ---
-/background_jobs:
+/jobs:
   get:
     x-mojo-to: BackgroundJobs#list
-    operationId: listBackgroundJobs
+    operationId: listJobs
     tags:
-      - background_jobs
-    summary: List background jobs
+      - jobs
+    summary: List jobs
     produces:
       - application/json
     parameters:
-      - name: status
+      - name: only_current
         in: query
-        description: Case insensative search on job status
         required: false
-        type: string
-      - name: progress
-        in: query
-        description: Case insensative search on job progress
-        required: false
-        type: string
-      - name: size
-        in: query
-        description: Case insensative search on job size
-        required: false
-        type: string
-      - name: patron_id
-        in: query
-        description: Case insensative search on job enqueuer id
-        required: false
-        type: string
-      - name: type
-        in: query
-        description: Case insensative search on job type
-        required: false
-        type: string
-      - name: queue
-        in: query
-        description: Case insensative search on job queue
-        required: false
-        type: string
-      - name: context
-        in: query
-        description: Case insensative search on context
-        required: false
-        type: string
-      - name: enqueued_on
-        in: query
-        description: Case insensative search on job enqueue date
-        required: false
-        type: string
-      - name: started_on
-        in: query
-        description: Case insensative search on job start date
-        required: false
-        type: string
-      - name: ended_on
-        in: query
-        description: Case insensative search on job end date
-        required: false
-        type: string
+        type: boolean
+        description: If should filter out not current jobs
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"
@@ -73,7 +28,7 @@
         schema:
           type: array
           items:
-            $ref: "../swagger.yaml#/definitions/background_job"
+            $ref: "../swagger.yaml#/definitions/job"
       "403":
         description: Access forbidden
         schema:
@@ -92,28 +47,28 @@
     x-koha-authorization:
       permissions:
         catalogue: "1"
-"/background_jobs/{background_job_id}":
+"/jobs/{job_id}":
   get:
     x-mojo-to: BackgroundJobs#get
-    operationId: getBackgroundJob
+    operationId: getJob
     tags:
-      - background_job
-    summary: Get background job
+      - jobs
+    summary: Get a job
     parameters:
-      - $ref: "../swagger.yaml#/parameters/background_job_id_pp"
+      - $ref: "../swagger.yaml#/parameters/job_id_pp"
     produces:
       - application/json
     responses:
       "200":
-        description: A background job
+        description: A job
         schema:
-          $ref: "../swagger.yaml#/definitions/background_job"
+          $ref: "../swagger.yaml#/definitions/job"
       "403":
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "404":
-        description: Background job not found
+        description: Job not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":

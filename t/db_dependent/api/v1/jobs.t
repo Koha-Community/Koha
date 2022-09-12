@@ -65,11 +65,11 @@ my $patron = $builder->build_object(
 $patron->set_password( { password => $password, skip_validation => 1 } );
 my $patron_userid = $patron->userid;
 
-$t->get_ok("//$librarian_userid:$password@/api/v1/background_jobs")
+$t->get_ok("//$librarian_userid:$password@/api/v1/jobs")
   ->status_is(200)
   ->json_is( [] );
 
-my $background_job = $builder->build_object(
+my $job = $builder->build_object(
     {
         class => 'Koha::BackgroundJobs',
         value => {
@@ -86,39 +86,39 @@ my $background_job = $builder->build_object(
 );
 
 {
-    $t->get_ok("//$superlibrarian_userid:$password@/api/v1/background_jobs")
-      ->status_is(200)->json_is( [ $background_job->to_api ] );
+    $t->get_ok("//$superlibrarian_userid:$password@/api/v1/jobs")
+      ->status_is(200)->json_is( [ $job->to_api ] );
 
-    $t->get_ok("//$librarian_userid:$password@/api/v1/background_jobs")
+    $t->get_ok("//$librarian_userid:$password@/api/v1/jobs")
       ->status_is(200)->json_is( [] );
 
-    $t->get_ok("//$patron_userid:$password@/api/v1/background_jobs")
+    $t->get_ok("//$patron_userid:$password@/api/v1/jobs")
       ->status_is(403);
 
-    $background_job->borrowernumber( $librarian->borrowernumber )->store;
+    $job->borrowernumber( $librarian->borrowernumber )->store;
 
-    $t->get_ok("//$librarian_userid:$password@/api/v1/background_jobs")
-      ->status_is(200)->json_is( [ $background_job->to_api ] );
+    $t->get_ok("//$librarian_userid:$password@/api/v1/jobs")
+      ->status_is(200)->json_is( [ $job->to_api ] );
 }
 
 {
-    $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/background_jobs/"
-          . $background_job->id )->status_is(200)
-      ->json_is( $background_job->to_api );
+    $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/jobs/"
+          . $job->id )->status_is(200)
+      ->json_is( $job->to_api );
 
-    $t->get_ok( "//$librarian_userid:$password@/api/v1/background_jobs/"
-          . $background_job->id )->status_is(200)
-      ->json_is( $background_job->to_api );
+    $t->get_ok( "//$librarian_userid:$password@/api/v1/jobs/"
+          . $job->id )->status_is(200)
+      ->json_is( $job->to_api );
 
-    $background_job->borrowernumber( $superlibrarian->borrowernumber )->store;
-    $t->get_ok( "//$librarian_userid:$password@/api/v1/background_jobs/"
-          . $background_job->id )->status_is(403);
+    $job->borrowernumber( $superlibrarian->borrowernumber )->store;
+    $t->get_ok( "//$librarian_userid:$password@/api/v1/jobs/"
+          . $job->id )->status_is(403);
 }
 
 {
-    $background_job->delete;
-    $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/background_jobs/"
-          . $background_job->id )->status_is(404)
+    $job->delete;
+    $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/jobs/"
+          . $job->id )->status_is(404)
       ->json_is( '/error' => 'Object not found' );
 }
 
