@@ -298,12 +298,7 @@ OPAC:
                   homebranch: Home library
                   holdingbranch: Holding library
             - "is the default sort field for the holdings table."
-        -
-            - pref: OpacSuggestionManagedBy
-              choices:
-                  1: Show
-                  0: Don't show
-            - "the name of the staff member who managed a suggestion in OPAC."
+
         -
             - Display up to
             - pref: OpacMaxItemsToDisplay
@@ -422,12 +417,7 @@ OPAC:
                   1: Allow
                   0: "Don't allow"
             - patrons to access a list of the most checked out items on the OPAC. Note that this is somewhat experimental, and should be avoided if your collection has a large number of items.
-        -
-            - pref: suggestion
-              choices:
-                  1: Allow
-                  0: "Don't allow"
-            - patrons to make purchase suggestions on the OPAC.
+
         -
             - pref: OPACComments
               choices:
@@ -514,13 +504,7 @@ OPAC:
                   1: Show
                   0: Don't show
             - a library selection list for news items in the OPAC.
-        -
-            - pref: OPACSuggestionAutoFill
-              default: 0
-              choices:
-                  1: Enable
-                  0: Disable
-            - OPAC suggestions form automatically filling with data from Google Books API.
+
         -
             - "Use the following as the OPAC ISBD template:"
             - pref: OPACISBD
@@ -605,25 +589,7 @@ OPAC:
                   0: "Don't include"
             - outstanding/unapplied credits when applying the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a> rule to patrons.
         -
-            - pref: OPACViewOthersSuggestions
-              choices:
-                  1: Show
-                  0: "Don't show"
-            - purchase suggestions from other patrons on the OPAC.
-        -
-            - "Fields that should be mandatory for patron purchase suggestions:"
-            - pref: OPACSuggestionMandatoryFields
-              type: modalselect
-              source: suggestions
-              required: title
-            - "<br />Note: if none of the above options are selected, 'Title' field would be mandatory anyway, by default."
-        -
-            - "Fields that should be hidden for patron purchase suggestions:"
-            - pref: OPACSuggestionUnwantedFields
-              type: modalselect
-              source: suggestions
-              exclusions: title
-            - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
+
         -
             - pref: OpacHiddenItems
               type: textarea
@@ -660,26 +626,10 @@ OPAC:
                 1: "Block"
                 0: "Don't block"
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
-        -
-            - Limit patrons to
-            - pref: MaxOpenSuggestions
-              class: integer
-            - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions."
-        -
-            - Number of total suggestions allowed
-            - pref: MaxTotalSuggestions
-              class: integer
-            - "in"
-            - pref: NumberOfSuggestionDays
-              class: integer
-            - "days."
+
     Privacy:
         -
-            - pref: AnonSuggestions
-              choices:
-                  1: Allow
-                  0: "Don't allow"
-            - 'patrons that aren''t logged in to make purchase suggestions. Suggestions are connected to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preference.'
+
         -
             - pref: opacreadinghistory
               choices:
@@ -877,7 +827,64 @@ OPAC:
             - '<br>If you chooose <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailAddressForPatronRegistrations">EmailAddressForPatronRegistrations</a> you have to enter a valid email address: '
             - pref: EmailAddressForPatronRegistrations
               class: email
-
+    Suggestions:
+        -
+            - pref: OpacSuggestionManagedBy
+              choices:
+                  1: Show
+                  0: Don't show
+            - "the name of the staff member who managed a suggestion in OPAC."
+        -
+            - pref: AnonSuggestions
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - 'patrons that aren''t logged in to make purchase suggestions. Suggestions are connected to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preference.'
+        -
+            - Limit patrons to
+            - pref: MaxOpenSuggestions
+              class: integer
+            - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions."
+        -
+            - Number of total suggestions allowed
+            - pref: MaxTotalSuggestions
+              class: integer
+            - "in"
+            - pref: NumberOfSuggestionDays
+              class: integer
+            - "days."
+            - pref: OPACViewOthersSuggestions
+              choices:
+                  1: Show
+                  0: "Don't show"
+            - purchase suggestions from other patrons on the OPAC.
+        -
+            - "Fields that should be mandatory for patron purchase suggestions:"
+            - pref: OPACSuggestionMandatoryFields
+              type: modalselect
+              source: suggestions
+              required: title
+            - "<br />Note: if none of the above options are selected, 'Title' field would be mandatory anyway, by default."
+        -
+            - "Fields that should be hidden for patron purchase suggestions:"
+            - pref: OPACSuggestionUnwantedFields
+              type: modalselect
+              source: suggestions
+              exclusions: title
+            - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
+        -
+            - pref: suggestion
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - patrons to make purchase suggestions on the OPAC.
+                    -
+            - pref: OPACSuggestionAutoFill
+              default: 0
+              choices:
+                  1: Enable
+                  0: Disable
+            - OPAC suggestions form automatically filling with data from Google Books API.
     Advanced search options:
         -
             - "Show search options:"
