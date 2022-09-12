@@ -190,7 +190,7 @@ sub get_biblio_marcxml {
                 }
             }
         );
-        $record_processor->process($record) if $expanded_avs;
+        $record_processor->process($record);
     }
 
     return $record ? $record->as_xml_record() : undef;
