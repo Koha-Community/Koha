@@ -875,6 +875,7 @@ sub checkauth {
                 # The token is correct, the user is fully logged in!
                 $auth_state = 'completed';
                 $session->param( 'waiting-for-2FA', 0 );
+                $session->param( 'waiting-for-2FA-setup', 0 );
 
                # This is an ugly trick to pass the test
                # $query->param('koha_login_context') && ( $q_userid ne $userid )
