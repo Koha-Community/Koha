@@ -408,26 +408,26 @@ tbody {
     }
 
     .dataTables_info {
-        float: left;
+        float: none;
         line-height: 1.9em;
         padding-right: 1em;
         padding-top: 0;
     }
 
     .dataTables_length {
+        float: none;
         display: none;
-        float: left;
         line-height: 1.5em;
         padding-right: 1em;
     }
 
     .dataTables_filter {
-        float: left;
+        float: none;
+        line-height: 1.5em;
         padding-right: 1em;
     }
 
     .dataTables_paginate {
-        float: left;
         line-height: 1.5em;
         padding: 0;
         padding-right: 1em;
@@ -497,6 +497,7 @@ tbody {
 }
 
 .pager {
+    display: flex;
     font-size: 90%;
 
     &.top {
@@ -510,10 +511,12 @@ tbody {
         display: none;
     }
 
-    div{
-        &.dt-buttons {
-            position: relative;
-            float: right;
+    div.dt-buttons {
+        flex-grow: 1;
+        display: flex;
+
+        button:first-of-type {
+            margin-right: auto;
         }
     }
 
@@ -526,10 +529,9 @@ tbody {
             color: #696969;
             font-size: 1em;
             line-height: 1.7em;
-            margin: 3px 3px 0;
+            margin: 0 3px 0 0;
             padding: 0 .5em;
             position: relative;
-            float: right;
 
             &::before {
                 content: '';
