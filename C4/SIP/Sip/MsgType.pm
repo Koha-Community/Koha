@@ -574,12 +574,10 @@ sub handle_checkout {
         $resp .= add_field( FID_ITEM_ID,   $item_id, $server );
         $resp .= add_field( FID_TITLE_ID,  $item->title_id, $server );
         if ( $item->due_date ) {
-            my $due_date;
-            if( $account->{format_due_date} ){
-                $due_date = output_pref({ str => $item->due_date, as_due_date => 1 });
-            } else {
-                $due_date = timestamp( $item->due_date );
-            }
+            my $due_date =
+              $account->{format_due_date}
+              ? output_pref( { str => $item->due_date, as_due_date => 1 } )
+              : timestamp( $item->due_date );
             $resp .= add_field( FID_DUE_DATE, $due_date, $server );
         } else {
             $resp .= add_field( FID_DUE_DATE, q{}, $server );
@@ -1203,10 +1201,11 @@ sub handle_fee_paid {
 
 sub handle_item_information {
     my ( $self, $server ) = @_;
-    my $ils = $server->{ils};
+    my $account = $server->{account};
+    my $ils     = $server->{ils};
+    my $fields  = $self->{fields};
+    my $resp    = ITEM_INFO_RESP;
     my $trans_date;
-    my $fields = $self->{fields};
-    my $resp   = ITEM_INFO_RESP;
     my $item;
     my $i;
 
@@ -1266,7 +1265,11 @@ sub handle_item_information {
             $resp .= add_field( FID_HOLD_QUEUE_LEN, $i, $server );
         }
         if ( $item->due_date ) {
-            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
+            my $due_date =
+              $account->{format_due_date}
+              ? output_pref( { str => $item->due_date, as_due_date => 1 } )
+              : timestamp( $item->due_date );
+            $resp .= add_field( FID_DUE_DATE, $due_date, $server );
         }
         if ( ( $i = $item->recall_date ) != 0 ) {
             $resp .= add_field( FID_RECALL_DATE, timestamp($i), $server );
