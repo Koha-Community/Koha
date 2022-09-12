@@ -16,8 +16,10 @@ package Koha::BackgroundJobs;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use base qw(Koha::Objects);
+
 use Koha::BackgroundJob;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
@@ -25,9 +27,7 @@ Koha::BackgroundJobs - Koha BackgroundJob Object set class
 
 =head1 API
 
-=head2 Class Methods
-
-=cut
+=head2 Class methods
 
 =head2 search_limited
 
@@ -56,6 +56,26 @@ sub search_limited {
       : $self->search( { borrowernumber => $logged_in_user->borrowernumber } )
       ->search( $params, $attributes );
 }
+
+=head3 filter_by_current
+
+    my $current_jobs = $jobs->filter_by_current;
+
+Returns a new resultset, filtering out finished jobs.
+
+=cut
+
+sub filter_by_current {
+    my ($self) = @_;
+
+    return $self->search(
+        {
+            status => { not_in => [ 'cancelled', 'failed', 'finished' ] }
+        }
+    );
+}
+
+=head2 Internal methods
 
 =head3 _type
 

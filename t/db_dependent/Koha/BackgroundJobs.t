@@ -19,8 +19,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
+
+use List::MoreUtils qw(any);
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -31,7 +33,8 @@ use t::lib::Mocks;
 use t::lib::Dates;
 use t::lib::Koha::BackgroundJob::BatchTest;
 
-my $schema = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
+my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 t::lib::Mocks::mock_userenv;
@@ -91,3 +94,31 @@ is_deeply(
 is_deeply( $new_job->additional_report(), {} );
 
 $schema->storage->txn_rollback;
+
+subtest 'filter_by_current() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $job_new       = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'new' } } );
+    my $job_cancelled = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'cancelled' } } );
+    my $job_failed    = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'failed' } } );
+    my $job_finished  = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { status => 'finished' } } );
+
+    my $rs = Koha::BackgroundJobs->search(
+        {
+            id => [ $job_new->id, $job_cancelled->id, $job_failed->id, $job_finished->id ]
+        }
+    );
+
+    is( $rs->count, 4, '4 jobs in resultset' );
+    ok( any {$_->status eq 'new'} @{$rs->as_list}, "There is a 'new' job"  );
+
+    $rs = $rs->filter_by_current;
+
+    is( $rs->count, 1, 'Only 1 job in filtered resultset' );
+    is( $rs->next->status, 'new', "The only job in resultset is 'new'"  );
+
+    $schema->storage->txn_rollback;
+};
