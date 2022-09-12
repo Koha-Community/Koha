@@ -206,9 +206,15 @@ a.tagnum {
     box-sizing: content-box;
 }
 
+#cataloguing_additem_newitem .subfield_line {
+    flex-basis: 100%;
+    display: flex;
+}
+
 #cataloguing_additem_newitem fieldset.rows label, #cataloguing_additem_newitem fieldset.rows span.label {
 	font-size : 100%;
-	width : 25%;
+    flex-basis : 25%;
+    margin-right: 1rem;
 }
 
 #cataloguing_additem_newitem fieldset.rows li {
@@ -216,7 +222,7 @@ a.tagnum {
 }
 
 #cataloguing_additem_newitem .input_marceditor {
-    width: 50%;
+    flex-basis: 50%;
 }
 
 #cataloguing_additem_newitem textarea.input_marceditor {
