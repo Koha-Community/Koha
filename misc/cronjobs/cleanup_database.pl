@@ -89,8 +89,11 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
                          Defaults to 30 days if no days specified
-   --list-invites  DAYS  purge (unaccepted) list share invites older than DAYS
-                         days.  Defaults to 14 days if no days specified.
+   --list-invites  DAYS  purge (unaccepted) list share invites older than DAYS days.
+                         This parameter is prioritised over the
+                         PurgeListShareInvitesOlderThan system preference.
+                         Defaults to 14 days if no days specified for this parameter and
+                         the PurgeListShareInvitesOlderThan system preference is empty.
    --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
                          Defaults to 30 days if no days specified.
    --all-restrictions   purge all expired patrons restrictions.
@@ -224,12 +227,23 @@ $pLogs             = DEFAULT_LOGS_PURGEDAYS               if defined($pLogs)    
 $zebraqueue_days   = DEFAULT_ZEBRAQ_PURGEDAYS             if defined($zebraqueue_days)   && $zebraqueue_days == 0;
 $mail              = DEFAULT_MAIL_PURGEDAYS               if defined($mail)              && $mail == 0;
 $pSearchhistory    = DEFAULT_SEARCHHISTORY_PURGEDAYS      if defined($pSearchhistory)    && $pSearchhistory == 0;
-$pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
 $pDebarments       = DEFAULT_DEBARMENTS_PURGEDAYS         if defined($pDebarments)       && $pDebarments == 0;
 $pMessages         = DEFAULT_MESSAGES_PURGEDAYS           if defined($pMessages)         && $pMessages == 0;
 $jobs_days         = DEFAULT_JOBS_PURGEDAYS               if defined($jobs_days)         && $jobs_days == 0;
 @jobs_types        = (DEFAULT_JOBS_PURGETYPES)            if $jobs_days                  && @jobs_types == 0;
 $edifact_msg_days  = DEFAULT_EDIFACT_MSG_PURGEDAYS        if defined($edifact_msg_days)  && $edifact_msg_days == 0;
+
+# Choose the number of days at which to purge unaccepted list invites:
+# - DAYS defined in the list-invites parameter is prioritised first
+# - PurgeListShareInvitesOlderThan system preference is prioritised second
+# - Default value of 14 days is prioritised last - if the list-invites parameter is passed without a DAYS value and the PurgeListShareInvitesOlderThan syspref is empty.
+if ( !defined($pListShareInvites) ) {
+    if ( C4::Context->preference('PurgeListShareInvitesOlderThan') ) {
+        $pListShareInvites = C4::Context->preference('PurgeListShareInvitesOlderThan');
+    }
+} elsif ( defined($pListShareInvites) && $pListShareInvites == 0 ) {
+    $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS;
+}
 
 if ($help) {
     usage(0);
