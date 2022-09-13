@@ -74,7 +74,6 @@ table {
         margin-top: .5em;
         margin-bottom: .5em;
 
-
         tfoot {
             td,
             th {
@@ -83,20 +82,14 @@ table {
         }
 
         thead {
-
-
             th,
             td {
-
-                border-top: none;
-                border-left: none;
-                border-right: none;
-                border: none;
                 padding: .5em;
             }
 
             tr {
-            background-color: #fff;
+                background-color: #fff;
+
                 &.columnFilter {
                     th {
                         padding: 0;
@@ -105,7 +98,6 @@ table {
             }
 
             .sorting_asc {
-
                 &.fixed_sort {
                     background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iOS4wMSIgdmlld0JveD0iMCAwIDYgMi4zODQiPjxwYXRoIGZpbGw9IiM5NDk0OTQiIGQ9Ik00LjA1IDEuNzRoLTIuMUwzIC42NHoiLz48L3N2Zz4=") no-repeat scroll right center $table-header-background;
                     cursor: default;
@@ -123,11 +115,10 @@ table {
         }
 
         tbody {
-            border-top: 2px solid #A19B9E;
+            border-top: 2px solid $table-border-color;
 
             td {
                 padding: .5em;
-                border: none;
             }
         }
     }
@@ -137,13 +128,10 @@ table {
         tr {
             &.odd td {
                 background-color: #F3F3F3;
-                border: 1px solid $table-border-color;
-                border-right: 1px solid $table-border-color;
             }
 
             &.even td {
                 background-color: #FFF;
-                border-right: 1px solid $table-border-color;
             }
         }
 
@@ -158,6 +146,7 @@ table {
 td,
 th {
     padding: .2em .9em;
+    border: 1px solid $table-border-color;
 }
 
 td {
@@ -372,12 +361,6 @@ caption {
 
 tbody {
     tr {
-
-        &:nth-child(odd):not(.dtrg-group) {
-            td {
-                border: none;
-            }
-        }
         &:nth-child(odd):not(.dtrg-group):not(.active):not(.ok) {
             td {
                 &:not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-success):not(.bg-primary) {
