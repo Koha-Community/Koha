@@ -94,11 +94,14 @@
                             </div>
                         [% END %]
 
-                        <div class="col-sm-12">
-                            <div id="patron_messages" class="circmessage attention">
-                                [% INCLUDE 'patron_messages.inc' moremember = 1 %]
+                        [% messages = INCLUDE 'patron_messages.inc' moremember = 1 | trim %]
+                        [% IF messages %]
+                            <div class="col-sm-12">
+                                <div id="patron_messages" class="circmessage attention">
+                                    [% messages | $raw %]
+                                </div>
                             </div>
-                        </div>
+                        [% END %]
 
                         <div class="col-sm-12">
                             <h1>[% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
