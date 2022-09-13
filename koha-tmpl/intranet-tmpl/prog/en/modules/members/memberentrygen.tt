@@ -1807,10 +1807,24 @@ legend:hover {
                         input_label='title';
                     }
                     if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
-                       $(this).parent().clone().appendTo("#quick_add_list");
-                       [% UNLESS mandatorypassword %]
-                             if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
-                       [% END %]
+                       let orig_li = $(this).parent();
+                       if( orig_li.attr('class') == 'radio' ){
+                           let new_field = orig_li.clone();
+                           new_field.children('label').each(function(){
+                                let child_input = $(this).children('input');
+                                child_input.attr("id",child_input.attr("id") + "_qa");
+                            });
+                           new_field.appendTo("#quick_add_list");
+                       } else {
+                           let orig_input_id = orig_li.children("input,textarea,select").attr("id");
+                           console.log( orig_input_id);
+                           let new_field = orig_li.clone();
+                           new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_qa");
+                           new_field.appendTo("#quick_add_list");
+                           [% UNLESS mandatorypassword %]
+                                 if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                           [% END %]
+                       }
                     }
                 });
                 if ( $("#memberentry_guarantor").length ) {
