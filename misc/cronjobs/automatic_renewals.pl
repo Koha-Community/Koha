@@ -235,7 +235,7 @@ if ( $send_notices && $confirm ) {
         for my $issue ( @{ $report{$borrowernumber} } ) {
             my $item = $issue->item;
             # Force sending of email and only email if pref is set to "cron"
-            my @transports = $send_notices_pref eq 'preferences' ? keys %{ $borrower_preferences->{'transports'} } : 'sms';
+            my @transports = $send_notices_pref eq 'preferences' ? keys %{ $borrower_preferences->{'transports'} } : 'email';
             foreach my $transport ( @transports ) {
                 my $letter = C4::Letters::GetPreparedLetter (
                     module      => 'circulation',
