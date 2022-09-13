@@ -7,9 +7,9 @@
                     [% INCLUDE 'search_indexes.inc' $header_pulldown = 1 %]
                 [% END %]
                 [% IF ( Koha.Preference('RetainCatalogSearchTerms') ) %]
-                    <input type="text" name="q" id="search-form" size="20" value="[% ms_value | html %]" title="Enter the terms you wish to search for." class="query form-text head-searchbox" />
+                    <input type="text" name="q" id="search-form" size="20" value="[% ms_value | html %]" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% ELSE %]
-                    <input type="text" name="q" id="search-form" size="20" title="Enter the terms you wish to search for." class="query form-text head-searchbox" />
+                    <input type="text" name="q" id="search-form" size="20" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% END %]
 
                 [% IF ( Koha.Preference('IntranetAddMastheadLibraryPulldown') ) %]
