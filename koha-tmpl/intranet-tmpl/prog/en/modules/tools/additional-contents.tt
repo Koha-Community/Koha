@@ -687,6 +687,7 @@
                    so We don't need to keep track of it */
                 let editor = tinyMCE.init({
                     branding : false,
+                    block_unsupported_drop : false,
                     content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
                     custom_elements:"style,link,~link",
                     extended_valid_elements:"style,link[href|rel]",
