@@ -868,7 +868,7 @@ fieldset {
     color: #696969;
     left: 0;
     top: 0;
-    margin: 0 1em 1em 0;
+    margin-bottom: 1em;
     padding: 1em;
 
     + fieldset {
@@ -878,13 +878,15 @@ fieldset {
     }
 
     legend {
-        position: relative;
-        top: 1.5em;
-        margin: .5em 0;
         font-size: 131%;
         font-weight: bold;
-        color: #696969;
         border-bottom: none;
+        color: #696969;
+        float: left;
+
+        & + * {
+            clear: both;
+        }
     }
 
     &.lastchecked {
