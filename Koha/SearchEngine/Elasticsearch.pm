@@ -779,7 +779,7 @@ sub marc_records_to_documents {
                 my $avail_items = Koha::Items->search({
                     biblionumber => $biblionumber,
                     onloan       => undef,
-                    notforloan   => 0,
+                    itemlost     => 0,
                 })->count;
 
                 $record_document->{available} = $avail_items ? \1 : \0;
