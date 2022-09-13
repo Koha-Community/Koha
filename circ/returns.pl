@@ -96,7 +96,7 @@ my $forgivemanualholdsexpire = $query->param('forgivemanualholdsexpire');
 my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') eq 'production');
 
 #set up so only the last 8 returned items display (make for faster loading pages)
-my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
+my $returned_counter = C4::Context->preference('numReturnedItemsToShow') || 8;
 
 # Set up the item stack ....
 my %returneditems;
