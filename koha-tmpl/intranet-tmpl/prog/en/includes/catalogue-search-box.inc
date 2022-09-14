@@ -2,6 +2,10 @@
 [% IF ( CAN_user_catalogue ) %]
     <div id="catalog_search" class="residentsearch">
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+            <span class="form-title">
+                <label class="control-label">Search catalog</label>
+            </span>
+
             <span class="form-content">
                 [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
                     [% INCLUDE 'search_indexes.inc' $header_pulldown = 1 %]

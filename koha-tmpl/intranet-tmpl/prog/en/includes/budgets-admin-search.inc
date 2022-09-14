@@ -6,6 +6,10 @@
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
             <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 
+            <span class="form-title">
+                <label class="control-label">Search funds</label>
+            </span>
+
             <span class="form-content">
                 <select name="filter_budgetbranch" id="filter_budgetbranch" class="form-control">
                     <option value="">All libraries</option>

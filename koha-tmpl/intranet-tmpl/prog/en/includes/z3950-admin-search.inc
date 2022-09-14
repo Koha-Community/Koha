@@ -3,6 +3,10 @@
 
     <div id="z3950_search" class="residentsearch">
         <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
+            <span class="form-title">
+                <label class="control-label">Search Z39.50/SRU servers</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
             </span>

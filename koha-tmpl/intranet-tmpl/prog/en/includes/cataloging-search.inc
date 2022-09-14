@@ -7,6 +7,9 @@
 
     <div id="addbooks_search" class="residentsearch">
         <form name="search" action="addbooks.pl">
+            <span class="form-title">
+                <label class="control-label">Cataloging search</label>
+            </span>
 
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="q" id="cat_search" placeholder="Search the catalog and the reservoir" size="40" />

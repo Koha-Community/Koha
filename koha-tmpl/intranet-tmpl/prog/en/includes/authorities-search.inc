@@ -74,6 +74,10 @@
             <input type="hidden" name="and_or" value="and" />
             <input type="hidden" name="excluding" value="" />
 
+            <span class="form-title">
+                <label class="control-label">Search main heading ($a only)</label>
+            </span>
+
             <span class="form-content">
                 [% INCLUDE authtype %]
                 <input id="value_mainentry" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading ($a only)" />
@@ -97,6 +101,10 @@
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
 
+            <span class="form-title">
+                <label class="control-label">Search main heading</label>
+            </span>
+
             <span class="form-content">
                 [% INCLUDE authtype %]
                 <input id="value_mainheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
@@ -117,6 +125,10 @@
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="marclist" value="match" />
+
+            <span class="form-title">
+                <label class="control-label">Search all headings</label>
+            </span>
 
             <span class="form-content">
                 [% INCLUDE authtype %]
@@ -140,6 +152,10 @@
             <input type="hidden" name="marclist" value="all" />
             <input type="hidden" name="and_or" value="and" />
             <input type="hidden" name="excluding" value="" />
+
+            <span class="form-title">
+                <label class="control-label">Search entire record</label>
+            </span>
 
             <span class="form-content">
                 [% INCLUDE authtype %]

@@ -4,6 +4,10 @@
             <input type="hidden" name="tab" value="[% last_tab | html %]" />
             <input type="hidden" name="op" value="search" />
 
+            <span class="form-title">
+                <label class="control-label">Search system preferences</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="" placeholder="System preference search">
             </span>

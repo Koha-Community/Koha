@@ -1,10 +1,15 @@
 [% USE Branches %]
+[% USE Categories %]
 [% USE Koha %]
 [% PROCESS 'patronfields.inc' %]
 [% IF CAN_user_borrowers_edit_borrowers %]
     <div id="patron_search" class="residentsearch">
         <form method="post" action="/cgi-bin/koha/members/member.pl">
             <input type="hidden" name="quicksearch" value="1" />
+
+            <span class="form-title">
+                <label class="control-label">Search patrons</label>
+            </span>
 
             <span class="form-content">
                 [% IF ( Koha.Preference('RetainPatronsSearchTerms') ) %]

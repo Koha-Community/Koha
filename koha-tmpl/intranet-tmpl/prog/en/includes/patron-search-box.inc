@@ -1,6 +1,10 @@
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     <div id="circ_search" class="residentsearch">
         <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="post">
+            <span class="form-title">
+                <label class="control-label">Check out</label>
+            </span>
+
             <span class="form-content">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="40"/>
 

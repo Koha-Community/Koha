@@ -9,6 +9,10 @@
             [% END %]
             <input type="hidden" name="searched" value="1" />
 
+            <span class="form-title">
+                <label class="control-label">Search subscriptions</label>
+            </span>
+
             <span class="form-content">
                 <input type="text" class="form-control" placeholder="ISSN" size="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter | html %]" />
 

@@ -3,6 +3,10 @@
 <div id="header_search">
     <div id="currency_search" class="residentsearch">
         <form action="[% script_name | html %]" method="post">
+            <span class="form-title">
+                <label class="control-label">Search currencies</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="description" id="description" value="[% searchfield | html %]" placeholder="Currencies search" />
             </span>

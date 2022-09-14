@@ -2,6 +2,10 @@
 <div id="header_search">
     <div id="city_search" class="residentsearch">
         <form action="[% script_name | html %]" method="post">
+            <span class="form-title">
+                <label class="control-label">Search cities</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="city_name_filter" id="city_name_filter" value="[% city_name_filter | html %]" placeholder="City search" />
             </span>

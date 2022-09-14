@@ -3,6 +3,10 @@
 <div id="header_search">
     <div id="notices_search" class="residentsearch">
         <form action="/cgi-bin/koha/tools/letter.pl" method="post">
+            <span class="form-title">
+                <label class="control-label">Search notices</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="" placeholder="Search existing notices"/>
             </span>

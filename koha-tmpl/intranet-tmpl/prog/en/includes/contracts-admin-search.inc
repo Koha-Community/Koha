@@ -3,6 +3,10 @@
 <div id="header_search">
     <div id="contract_description_search" class="residentsearch">
         <form action="[% script_name | html %]" method="post">
+            <span class="form-title">
+                <label class="control-label">Search contracts</label>
+            </span>
+
             <span class="form-content">
                 <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Search by contract name or/and description:" size="40"/>
             </span>

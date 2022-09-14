@@ -5,6 +5,10 @@
         <form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 
+            <span class="form-title">
+                <label class="control-label">Search suggestions</label>
+            </span>
+
             <span class="form-content">
                 <input type="text" id="searchtitle" class="head-searchbox form-control" placeholder="Title" name="title" size="10" value="[% title | html %]" />
                 <input type="text" id="searchauthor" class="head-searchbox form-control" placeholder="Author"  name="author" size="10" value="[% author | html %]" />

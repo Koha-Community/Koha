@@ -51,6 +51,7 @@
         border: 0;
         background-color: transparent;
         display: none;
+        flex-grow: 1;
 
         &:first-of-type {
             display: block;
@@ -60,7 +61,6 @@
     > ul {
         padding: 0 .8em 0 0;
         margin: 0;
-        order: -1;
         border-radius: 0 16px 16px 0;
         display: flex;
         justify-content: space-around;
@@ -99,6 +99,24 @@
         position: relative;
     }
 
+    .form-title {
+        padding: 0 16px 0 0;
+        background-color: #418940;
+        border-radius: 0 16px 16px 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        z-index: 2;
+        white-space: nowrap;
+        flex-basis: 15%;
+
+        label {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+        }
+    }
+
     .form-content {
         background-color: white;
         margin-left: -16px;
@@ -107,24 +125,24 @@
         white-space: nowrap;
         z-index: 1;
         display: flex;
+        flex-grow: 1;
 
-        input[type="text"] {
-            border: 0;
-            box-shadow: unset;
-            background-color: transparent;
-        }
-
+        input[type="text"],
         select {
-            margin: 0;
             background-color: transparent;
             border: 0;
+            border-radius: 0;
             box-shadow: unset;
-            max-width: 15em;
+            margin: 0;
+
+            &:not(:first-child) {
+                border-left: 1px solid #e0e0e0;
+            }
         }
     }
 
     .form-extra-content {
-        left: -16px;
+        left: 284px;
         right: 60px;
         position: absolute;
         top: 31px;
@@ -133,7 +151,7 @@
         padding: 1em;
         border-radius: 0 0 8px 8px;
         border: 1px solid #418940;
-        border-top: 0;
+        border-top: 1px solid #e0e0e0;
         box-shadow: 0 2px 2px 1px #00000030;
         z-index: 1;
         display: none;
