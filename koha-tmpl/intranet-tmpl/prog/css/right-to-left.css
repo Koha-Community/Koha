@@ -102,11 +102,6 @@ fieldset.rows div.hint
    margin-left:0;
 }
 
-div#header_search
-{
-   margin-right:200px;
-}
-
 ul
 {
    padding-left: 0;
@@ -300,6 +295,39 @@ div.dt-buttons {
 #catalog-search-dropdown > a:hover {
     border-left: 0;
     border-right: 1px solid #82b4be;
+}
+
+
+#header_search .form-title {
+    border-radius: 16px 0 0 16px;
+    padding: 0 0 0 16px;
+}
+
+#header_search .form-content {
+    margin-left: 0;
+    margin-right: -16px;
+    padding-left: 0;
+    padding-right: 16px;
+    border-radius: 16px 0 0 16px;
+}
+
+#header_search .form-content input[type="text"]:not(:first-child),
+#header_search .form-content select:not(:first-child) {
+    border-left: 0 none;
+    border-right: 1px solid #e0e0e0;
+}
+
+#header_search input[type="submit"],
+#header_search button[type="submit"] {
+    border-radius: 16px  0 0 16px;
+    margin-left: 0;
+    margin-right: -16px;
+    padding-left: 1em;
+    padding-right: calc(16px + .5em);
+}
+
+.fa-arrow-right::before {
+    content: "\f060";
 }
 
 @media (max-width: 767px) {
