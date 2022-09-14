@@ -42,8 +42,8 @@
     </div>
 
     <ul>
-        <li><a title="Vendor search" href="#supplier_search"><i class="fa fa-upload"></i> Vendor search</a></li>
-        <li><a title="Orders search" href="#orders_search"><i class="fa fa-download"></i> Orders search</a></li>
+        <li><a title="Vendor search" href="#supplier_search"><i class="fa fa-upload"></i> <span class="tab-title">Vendor search</span></a></li>
+        <li><a title="Orders search" href="#orders_search"><i class="fa fa-download"></i> <span class="tab-title">Orders search</span></a></li>
     </ul>
 </div><!-- /header_search -->
 

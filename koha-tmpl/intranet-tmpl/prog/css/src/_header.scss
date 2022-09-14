@@ -63,15 +63,15 @@ a.navbar-toggle {
     }
 
     > ul {
-        padding: 0 .8em 0 0;
+        padding: 0;
         margin: 0;
         border-radius: 0 16px 16px 0;
         display: flex;
-        justify-content: space-around;
         align-items: center;
         color: white;
         background-color: #418940;
         z-index: 2;
+        flex-grow: 1;
 
         li {
             background: transparent;
@@ -146,7 +146,6 @@ a.navbar-toggle {
     }
 
     .form-extra-content {
-        left: 284px;
         right: 60px;
         position: absolute;
         top: 31px;
@@ -155,7 +154,7 @@ a.navbar-toggle {
         padding: 1em;
         border-radius: 0 0 8px 8px;
         border: 1px solid #418940;
-        border-top: 1px solid #e0e0e0;
+        border-top: 0 none;
         box-shadow: 0 2px 2px 1px #00000030;
         z-index: 1;
         display: none;
@@ -163,6 +162,11 @@ a.navbar-toggle {
         .form-control {
             display: block;
             width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0;
         }
     }
 
@@ -222,4 +226,24 @@ a.navbar-toggle {
 
 #lastborrowerlink {
     color: #FFFFFF;
+}
+
+@media (max-width: 768px) {
+    #header_search {
+        .form-title {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    #header_search {
+        .tab-title {
+            display: none;
+        }
+
+        > ul {
+            flex-grow: 0;
+        }
+    }
 }

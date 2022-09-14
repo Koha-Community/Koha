@@ -53,16 +53,22 @@
 [% END %]
 
 [% BLOCK authtype %]
-    <select name="authtypecode" class="form-control">
-    [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
-    [% FOREACH authority_type IN authority_types %]
-        [% IF authority_type.authtypecode == authtypecode %]
-        <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
-        [% ELSE %]
-        <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
-        [% END %]
-    [% END %]
-    </select>
+    <div>
+        <label>
+            Authority type
+
+            <select name="authtypecode" class="form-control">
+            [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
+            [% FOREACH authority_type IN authority_types %]
+                [% IF authority_type.authtypecode == authtypecode %]
+                <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
+                [% ELSE %]
+                <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
+                [% END %]
+            [% END %]
+            </select>
+        </label>
+    </div>
 [% END %]
 
 <div id="header_search">
@@ -79,7 +85,6 @@
             </span>
 
             <span class="form-content">
-                [% INCLUDE authtype %]
                 <input id="value_mainentry" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading ($a only)" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
@@ -87,6 +92,7 @@
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
             <span class="form-extra-content">
+                [% INCLUDE authtype %]
                 [% INCLUDE operator %]
                 [% INCLUDE orderby %]
             </span>
@@ -106,7 +112,6 @@
             </span>
 
             <span class="form-content">
-                [% INCLUDE authtype %]
                 <input id="value_mainheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search main heading" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
@@ -114,6 +119,7 @@
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
             <span class="form-extra-content">
+                [% INCLUDE authtype %]
                 [% INCLUDE operator %]
                 [% INCLUDE orderby %]
             </span>
@@ -131,7 +137,6 @@
             </span>
 
             <span class="form-content">
-                [% INCLUDE authtype %]
                 <input id="value_matchheading" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any heading" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
@@ -139,6 +144,7 @@
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
             <span class="form-extra-content">
+                [% INCLUDE authtype %]
                 [% INCLUDE operator %]
                 [% INCLUDE orderby %]
             </span>
@@ -158,7 +164,6 @@
             </span>
 
             <span class="form-content">
-                [% INCLUDE authtype %]
                 <input id="value_anywhere" class="form-control head-searchbox" type="text" name="value" value="[% value | html %]" placeholder="Search any authority field" />
                 <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
@@ -166,6 +171,7 @@
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
 
             <span class="form-extra-content">
+                [% INCLUDE authtype %]
                 [% INCLUDE operator %]
                 [% INCLUDE orderby %]
             </span>
@@ -173,10 +179,10 @@
     </div>
 
     <ul>
-        <li><a title="Search main heading ($a only)" href="#mainmain_heading" class="keep_text"><i style="font-weight:bold">$a</i> Search main heading ($a only)</a></li>
-        <li><a title="Search main heading" href="#main_heading" class="keep_text"><i class="fa fa-header"></i> Search main heading</a></li>
-        <li><a title="Search all headings" href="#matchheading_search" class="keep_text"><i class="fa fa-align-center"></i> Search all headings</a></li>
-        <li><a title="Search entire record" href="#entire_record" class="keep_text"><i class="fa fa-folder-open-o"></i> Search entire record</a></li>
+        <li><a title="Search main heading ($a only)" href="#mainmain_heading" class="keep_text"><i style="font-weight:bold">$a</i> <span class="tab-title">Main heading ($a only)</span></a></li>
+        <li><a title="Search main heading" href="#main_heading" class="keep_text"><i class="fa fa-header"></i> <span class="tab-title">Main heading</span></a></li>
+        <li><a title="Search all headings" href="#matchheading_search" class="keep_text"><i class="fa fa-align-center"></i> <span class="tab-title">All headings</span></a></li>
+        <li><a title="Search entire record" href="#entire_record" class="keep_text"><i class="fa fa-folder-open-o"></i> <span class="tab-title">Entire record</span></a></li>
     </ul>
 </div><!-- /header_search -->
 <!-- End Authorities Resident Search Box -->

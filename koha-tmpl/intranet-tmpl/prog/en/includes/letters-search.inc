@@ -20,9 +20,9 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search notices" href="#notices_search" class="keep_text"><i class="fa fa-commenting-o"></i> Search notices</a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>[% END %]
+        <li><a title="Search notices" href="#notices_search" class="keep_text"><i class="fa fa-commenting-o"></i> <span class="tab-title">Search notices</span></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a></li>[% END %]
     </ul>
 </div>
 <!-- End Notices Resident Search Box -->

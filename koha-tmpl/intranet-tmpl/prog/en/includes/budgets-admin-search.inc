@@ -11,6 +11,16 @@
             </span>
 
             <span class="form-content">
+                <input class="query form-control" type="text" name="filter_budgetname" id="filter_budgetname" value="[% filter_budgetname | html %]" placeholder="Search funds" />
+
+                <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
+            </span>
+
+            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+
+            <div class="form-extra-content">
+                <label for="filter_budgetbranch">Library</label>
+
                 <select name="filter_budgetbranch" id="filter_budgetbranch" class="form-control">
                     <option value="">All libraries</option>
                     [% FOREACH branchloo IN Branches.all( selected => selected_branchcode ) %]
@@ -21,11 +31,7 @@
                         [% END %]
                     [% END %]
                 </select>
-
-                <input class="query form-control" type="text" name="filter_budgetname" id="filter_budgetname" value="[% filter_budgetname | html %]" placeholder="Search funds" />
-            </span>
-
-            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            </div>
         </form>
     </div>
 
@@ -34,9 +40,9 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search funds" href="#budgets_search" class="keep_text"><i class="fa fa-credit-card"></i> Search funds</a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>[% END %]
+        <li><a title="Search funds" href="#budgets_search" class="keep_text"><i class="fa fa-credit-card"></i> <span class="tab-title">Search funds</span></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a></li>[% END %]
     </ul>
 </div><!-- /header_search -->
 

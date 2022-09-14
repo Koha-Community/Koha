@@ -6,10 +6,10 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search patrons" href="#patron_search" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> Search patrons</a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search" class="keep_text"><i class="fa fa-download"></i> Check in</a></li>[% END %]
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search" class="keep_text"><i class="fa fa-retweet"></i> Renew</a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>[% END %]
+        <li><a title="Search patrons" href="#patron_search" class="keep_text"><i class="fa fa-fw fa-id-card-o"></i> <span class="tab-title"><span class="tab-title">Search patrons</span></span></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title"><span class="tab-title">Check out</span></span></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check in" href="#checkin_search" class="keep_text"><i class="fa fa-download"></i> <span class="tab-title"><span class="tab-title">Check in</span></span></a></li>[% END %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Renew" href="#renew_search" class="keep_text"><i class="fa fa-retweet"></i> <span class="tab-title"><span class="tab-title">Renew</span></span></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title"><span class="tab-title">Search catalog</span></span></a></li>[% END %]
     </ul>
 </div><!-- /header_search -->

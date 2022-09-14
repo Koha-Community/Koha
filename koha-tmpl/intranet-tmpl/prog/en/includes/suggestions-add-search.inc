@@ -24,9 +24,9 @@
     [% INCLUDE 'catalogue-search-box.inc' %]
 
     <ul>
-        <li><a title="Search suggestions" href="#suggestions_search" class="keep_text"><i class="fa fa-comment-o"></i> Search suggestions</a></li>
-        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> Check out</a></li>[% END %]
-        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> Search catalog</a></li>[% END %]
+        <li><a title="Search suggestions" href="#suggestions_search" class="keep_text"><i class="fa fa-comment-o"></i> <span class="tab-title">Search suggestions</span></a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a title="Check out" href="#circ_search" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a></li>[% END %]
+        [% IF ( CAN_user_catalogue ) %]<li><a title="Search catalog" href="#catalog_search" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a></li>[% END %]
     </ul>
 </div>
 <!-- End Suggestions Resident Search Box -->

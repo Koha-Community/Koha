@@ -7,23 +7,34 @@
             </span>
 
             <span class="form-content">
-                [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                    [% INCLUDE 'search_indexes.inc' $header_pulldown = 1 %]
-                [% END %]
                 [% IF ( Koha.Preference('RetainCatalogSearchTerms') ) %]
                     <input type="text" name="q" id="search-form" size="20" value="[% ms_value | html %]" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% ELSE %]
                     <input type="text" name="q" id="search-form" size="20" title="Enter the terms you wish to search for." class="query form-text head-searchbox form-control" placeholder="Enter search keywords" />
                 [% END %]
 
-                [% IF ( Koha.Preference('IntranetAddMastheadLibraryPulldown') ) %]
-                    <select id="select_library" name="limit" style="margin-left:5px;">
-                        <option value="">All libraries</option>
-                        [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => branch_limit ) %]
-                    </select>
-                [% END %]
+                <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
             </span>
             <button type="submit"><i class="fa fa-arrow-right"></i></button>
+
+            <div class="form-extra-content">
+                [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
+                    <div>
+                        <label for="idx">Search index</label>
+                        [% INCLUDE 'search_indexes.inc' $header_pulldown = 1 %]
+                    </div>
+                [% END %]
+
+                [% IF ( Koha.Preference('IntranetAddMastheadLibraryPulldown') ) %]
+                    <div>
+                        <label for="select_library">Library</label>
+                        <select id="select_library" name="limit">
+                            <option value="">All libraries</option>
+                            [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => branch_limit ) %]
+                        </select>
+                    </div>
+                [% END %]
+            </div>
         </form>
     </div>
 [% END %]
