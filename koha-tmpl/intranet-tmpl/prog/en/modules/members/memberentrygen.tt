@@ -1315,7 +1315,11 @@ legend:hover {
                                         <ol class="radio">
                                             [% UNLESS nogonenoaddress %]
                                                 <li>
-                                                    <label class="radio" for="yesgonenoaddress">
+                                                    [% IF mandatorygonenoaddress %]
+                                                        <label class="radio required" for="yesgonenoaddress">
+                                                    [% ELSE %]
+                                                        <label class="radio" for="yesgonenoaddress">
+                                                    [% END %]
                                                         Gone no address:
                                                     </label>
                                                     [% IF CAN_user_circulate_manage_restrictions %]
@@ -1338,11 +1342,19 @@ legend:hover {
                                                     [% ELSE %]
                                                         [% IF borrower_data.gonenoaddress %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                                                     [% END # /IF CAN_user_circulate_manage_restrictions %]
+                                                    [% IF mandatorygonenoaddress %]
+                                                        <span class="required">Required</span>
+                                                    [% END %]
                                                 </li>
+
                                             [% END # /UNLESS nogonenoaddress %]
                                             [% UNLESS nolost %]
                                                 <li>
-                                                    <label class="radio" for="yeslost">
+                                                    [% IF mandatorylost %]
+                                                        <label class="radio required" for="yeslost">
+                                                    [% ELSE %]
+                                                        <label class="radio" for="yeslost">
+                                                    [% END %]
                                                         Lost card:
                                                     </label>
                                                     [% IF CAN_user_circulate_manage_restrictions %]
@@ -1365,6 +1377,9 @@ legend:hover {
                                                     [% ELSE %]
                                                         [% IF borrower_data.lost %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                                                     [% END # /IF CAN_user_circulate_manage_restrictions %]
+                                                    [% IF mandatorylost %]
+                                                        <span class="required">Required</span>
+                                                    [% END %]
                                                 </li>
                                             [% END # /UNLESS nogonenoaddress %]
                                         </ol>
