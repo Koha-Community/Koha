@@ -46,13 +46,13 @@
 
         [% IF ( patron.gonenoaddress ) %]
             <li class="gonenoaddress blocker">
-                <span class="circ-hlt">Address:</span> Patron's address in doubt
+                <span title="gonenoaddress flag is set in patron record"><span class="circ-hlt">Address:</span> Patron's address flagged as in doubt</span>
             </li>
         [% END %]
 
         [% IF ( patron.lost ) %]
             <li class="lost blocker">
-                <span class="circ-hlt">Lost: </span> Patron's card is lost
+                <span title="lost flag is set in patron record"><span class="circ-hlt">Lost: </span> Patron's card is flagged as lost</span>
             </li>
         [% END %]
 
