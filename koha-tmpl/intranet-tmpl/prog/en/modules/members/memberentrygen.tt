@@ -1309,38 +1309,64 @@ legend:hover {
                                 [% END # UNLESS nouserid && nopassword && !CanUpdatePasswordExpiration %]
 
                                 <!--this zones are not necessary in modif mode -->
-                                [% UNLESS ( opadd || opduplicate ) %]
+                                [% UNLESS ( opadd || opduplicate || ( nogonenoaddress && nolost ) ) %]
                                     <fieldset class="rows" id="memberentry_account_flags">
                                         <legend id="account_flags_lgd">Patron account flags</legend>
                                         <ol class="radio">
-                                            [% FOREACH flagloo IN flagloop %]
+                                            [% UNLESS nogonenoaddress %]
                                                 <li>
-                                                    <label class="radio" for="yes[% flagloo.name | html %]">
-                                                        [% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no address:[% END %]
-                                                        [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
+                                                    <label class="radio" for="yesgonenoaddress">
+                                                        Gone no address:
                                                     </label>
                                                     [% IF CAN_user_circulate_manage_restrictions %]
-                                                        <label for="yes[% flagloo.name | html %]">
-                                                            [% IF ( flagloo.yes ) %]
-                                                                <input type="radio" id="yes[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="1" checked="checked" />
+                                                        <label for="yesgonenoaddress">
+                                                            [% IF ( borrower_data.gonenoaddress ) %]
+                                                                <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" checked="checked" />
                                                             [% ELSE %]
-                                                                <input type="radio" id="yes[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="1" />
+                                                                <input type="radio" id="yesgonenoaddress" name="gonenoaddress" value="1" />
                                                             [% END %]
                                                                 Yes
                                                         </label>
-                                                        <label for="no[% flagloo.name | html %]">
-                                                            [% IF ( flagloo.no ) %]
-                                                                <input type="radio" id="no[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="0" checked="checked"/>
+                                                        <label for="nogonenoaddress">
+                                                            [% IF ( borrower_data.gonenoaddress ) %]
+                                                                <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" />
                                                             [% ELSE %]
-                                                                <input type="radio" id="no[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="0" />
+                                                                <input type="radio" id="nogonenoaddress" name="gonenoaddress" value="0" checked="checked"/>
                                                             [% END %]
                                                                 No
                                                         </label>
                                                     [% ELSE %]
-                                                        [% IF flagloo.yes %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
+                                                        [% IF borrower_data.gonenoaddress %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
                                                     [% END # /IF CAN_user_circulate_manage_restrictions %]
                                                 </li>
-                                            [% END # /FOREACH flagloo %]
+                                            [% END # /UNLESS nogonenoaddress %]
+                                            [% UNLESS nolost %]
+                                                <li>
+                                                    <label class="radio" for="yeslost">
+                                                        Lost card:
+                                                    </label>
+                                                    [% IF CAN_user_circulate_manage_restrictions %]
+                                                        <label for="yeslost">
+                                                            [% IF ( borrower_data.lost ) %]
+                                                                <input type="radio" id="yeslost" name="lost" value="1" checked="checked" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="yeslost" name="lost" value="1" />
+                                                            [% END %]
+                                                                Yes
+                                                        </label>
+                                                        <label for="nolost">
+                                                            [% IF ( borrower_data.lost ) %]
+                                                                <input type="radio" id="nolost" name="lost" value="0" />
+                                                            [% ELSE %]
+                                                                <input type="radio" id="nolost" name="lost" value="0" checked="checked"/>
+                                                            [% END %]
+                                                                No
+                                                        </label>
+                                                    [% ELSE %]
+                                                        [% IF borrower_data.lost %]<span>Yes</span>[% ELSE %]<span>No</span>[% END %]
+                                                    [% END # /IF CAN_user_circulate_manage_restrictions %]
+                                                </li>
+                                            [% END # /UNLESS nogonenoaddress %]
                                         </ol>
                                     </fieldset> <!-- /#memberentry_account_flags -->
 
