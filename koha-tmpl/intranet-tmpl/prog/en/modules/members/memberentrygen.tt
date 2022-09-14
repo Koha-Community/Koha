@@ -227,13 +227,13 @@ legend:hover {
                         [% UNLESS ( check_member ) %]
                             <div id="toolbar" class="btn-toolbar">
                                 [% IF quickadd && opadd %]
-                                    <button class="btn btn-default toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
+                                    <button class="btn btn-primary toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
                                 [% END %]
-                                <button class="btn btn-default toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-primary toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
                                 [% IF opadd %]
-                                    <a class="btn btn-default" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
+                                    <a class="btn btn-link" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
                                 [% ELSE %]
-                                    <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
+                                    <a class="btn btn-link" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
                                 [% END %]
                                     <i class="fa fa-times"></i> Cancel
                                 </a>

@@ -59,25 +59,23 @@
 
                     <!-- SEARCH BUTTONS -->
                     <div id="toolbar" class="btn-toolbar">
-                        <fieldset class="action" id="submit1">
-                            <div class="btn-group">
-                                <button class="btn btn-default" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
-                            </div>
-                            <div class="btn-group">
-                            [% IF ( expanded_options ) %]
-                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
-                            </div>
-                            [% ELSE %]
-                                <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
-                            </div>
-                            [% END %]
-                            <div class="btn-group">
-                                <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
-                            </div>
-                            <div class="btn-group">
-                                <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-default"><i class="fa fa-search"></i> Go to item search</a>
-                            </div>
-                        </fieldset> <!-- /.action -->
+                        <div class="btn-group">
+                            <button class="btn btn-primary" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
+                        </div>
+                        <div class="btn-group">
+                        [% IF ( expanded_options ) %]
+                            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
+                        </div>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
+                        </div>
+                        [% END %]
+                        <div class="btn-group">
+                            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="/cgi-bin/koha/catalogue/itemsearch.pl" class="btn btn-link"><i class="fa fa-search"></i> Go to item search</a>
+                        </div>
                     </div> <!-- /#toolbar -->
                     <!-- /SEARCH BUTTONS -->
 

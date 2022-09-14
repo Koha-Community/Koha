@@ -877,12 +877,12 @@ function PopupMARCFieldDoc(field) {
                     [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                         [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
                             <!-- Action is under fast cataloging - Save button redirecting to items -->
-                            <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-default"><i class="fa fa-save"></i> Save</a></div>
+                            <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-primary"><i class="fa fa-save"></i> Save</a></div>
                         [% ELSE %]
                             <!-- Not using fast cataloging - Display split menu -->
                             <div class="btn-group">
-                                <button class="btn btn-default" id="saverecord"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <button class="btn btn-primary" id="saverecord"><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
@@ -949,11 +949,11 @@ function PopupMARCFieldDoc(field) {
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
                         [% IF (biblionumber) %]
                             <div class="btn-group">
-                                <a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" class="btn btn-default" id="cancel">Cancel</a>
+                                <a href="[% PROCESS biblio_a_href biblionumber => biblionumber %]" class="btn btn-link" id="cancel">Cancel</a>
                             </div>
                         [% ELSE %]
                             <div class="btn-group">
-                                <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
+                                <a class="btn btn-link" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
                             </div>
                         [% END %]
                         <div id="show-errors" class="btn-group"></div>
