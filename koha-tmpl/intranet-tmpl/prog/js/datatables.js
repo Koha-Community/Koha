@@ -578,9 +578,6 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
                                 function build_query(col, value){
 
-                                    // escape SQL special characters
-                                    value = value.replace(/(\%|\_|\\)/g, "\\$1" );
-
                                     var parts = [];
                                     var attributes = col.data.split(':');
                                     for (var i=0;i<attributes.length;i++){
@@ -590,6 +587,9 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                         if ( value.match(/^\^(.*)\$$/) ) {
                                             value = value.replace(/^\^/, '').replace(/\$$/, '');
                                             criteria = "exact";
+                                        } else {
+                                           // escape SQL LIKE special characters % and _
+                                           value = value.replace(/(\%|\\)/g, "\\$1");
                                         }
                                         part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
                                             ? value
