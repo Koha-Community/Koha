@@ -185,7 +185,7 @@ subtest "Test endpoints without permission" => sub {
     $t->get_ok( "//$nopermission_userid:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber ) # no permission
       ->status_is(403);
 
-    $t->get_ok( "//$userid_3:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )    # no permission
+    $t->get_ok( "//$userid_2:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )    # no permission
       ->status_is(403);
 
     $t->post_ok( "//$nopermission_userid:$password@/api/v1/holds" => json => $post_data )
@@ -225,7 +225,7 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(404)
       ->json_has('/error');
 
-    $t->get_ok( "//$userid_2:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
+    $t->get_ok( "//$userid_3:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
       ->status_is(200)
       ->json_is([]);
 
