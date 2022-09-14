@@ -719,29 +719,6 @@ while (@relationships) {
   push(@relshipdata, \%row);
 }
 
-my %flags = (
-    'gonenoaddress' => ['gonenoaddress'],
-    'lost'          => ['lost']
-);
-
-my @flagdata;
-foreach ( keys(%flags) ) {
-    my $key = $_;
-    my %row = (
-        'key'  => $key,
-        'name' => $flags{$key}[0]
-    );
-    if ( $data{$key} ) {
-        $row{'yes'} = ' checked';
-        $row{'no'}  = '';
-    }
-    else {
-        $row{'yes'} = '';
-        $row{'no'}  = ' checked';
-    }
-    push @flagdata, \%row;
-}
-
 # get Branch Loop
 # in modify mod: userbranch value comes from borrowers table
 # in add    mod: userbranch value comes from branches table (ip correspondence)
@@ -834,7 +811,6 @@ $template->param(
   borrowernumber  => $borrowernumber, #register number
   relshiploop => \@relshipdata,
   btitle=> $default_borrowertitle,
-  flagloop  => \@flagdata,
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to know if an error
