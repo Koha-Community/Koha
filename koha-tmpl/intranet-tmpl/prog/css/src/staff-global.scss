@@ -13,7 +13,6 @@ a {
     &:link,
     &:visited {
         color: $green-text-color;
-        background-color: transparent;
         box-shadow: none;
         font-size: 100%;
     }
@@ -3727,8 +3726,8 @@ progress {
 }
 
 #browse-return-to-results {
-    background-color: #E8F0F6;
-    border: 1px solid #bfd9b9;
+    background-color: #e6e6e6;
+    border: 1px solid lighten(#418940, 30%);
     border-bottom-width: 0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -3738,25 +3737,27 @@ progress {
 }
 
 .browse-button {
-    background-color: #FFF;
-    border: 1px solid #bfd9b9;
-    color: #004D99;
+    background-color: transparent;
+    border: 1px solid lighten(#418940, 30%);
     display: block;
     overflow: hidden;
     padding: .4em .6em;
     text-align: center;
     white-space: nowrap;
     width: 100%;
+}
+
+a.browse-button {
+    color: $green-text-color;
 
     &:hover {
-        background: #FAFAFA;
+        background: #fff;
     }
 }
 
 span {
     &.browse-button {
-        background: #FAFAFA;
-        color: #222;
+        color: #999;
     }
 
     &.circ-hlt {
