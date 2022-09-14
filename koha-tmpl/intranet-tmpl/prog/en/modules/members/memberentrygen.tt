@@ -1291,6 +1291,7 @@ legend:hover {
                                 [% UNLESS ( opadd || opduplicate || ( nogonenoaddress && nolost ) ) %]
                                     <fieldset class="rows" id="memberentry_account_flags">
                                         <legend id="account_flags_lgd">Patron account flags</legend>
+                                        <p>Setting a value here will prevent patron from circulating materials and placing holds on the OPAC</p>
                                         <ol class="radio">
                                             [% UNLESS nogonenoaddress %]
                                                 <li>
