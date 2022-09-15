@@ -146,7 +146,11 @@ table {
 td,
 th {
     padding: .2em .9em;
-    border: 1px solid $table-border-color;
+    border-left: 1px solid $table-border-color;
+
+    &:first-child {
+        border-left: none;
+    }
 }
 
 td {
