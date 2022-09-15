@@ -22,6 +22,7 @@ use MARC::Record;
 
 use C4::Context;
 use Koha::Database;
+use Koha::Import::Record::Biblios;
 
 use base qw(Koha::Object);
 
@@ -54,6 +55,20 @@ sub get_marc_record {
     my $record = MARC::Record->new_from_xml($self->marcxml, $self->encoding, $format);
 
     return $record;
+}
+
+=head3 import_biblio
+
+Returns the import biblio object for this import record
+
+    my $import_biblio = $import_record->import_biblio()
+
+=cut
+
+sub import_biblio {
+    my ( $self ) = @_;
+    my $import_biblio_rs = $self->_result->import_biblio;
+    return Koha::Import::Record::Biblio->_new_from_dbic( $import_biblio_rs );
 }
 
 =head2 Internal methods

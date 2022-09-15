@@ -3052,6 +3052,7 @@ CREATE TABLE `import_biblios` (
   `isbn` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `issn` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `has_items` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`import_record_id`),
   KEY `import_biblios_ibfk_1` (`import_record_id`),
   KEY `matched_biblionumber` (`matched_biblionumber`),
   KEY `title` (`title`(191)),
