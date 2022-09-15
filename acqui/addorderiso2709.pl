@@ -51,6 +51,7 @@ use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
+use Koha::Import::Records;
 use Koha::Patrons;
 
 my $input = CGI->new;
@@ -442,7 +443,10 @@ sub import_biblios_list {
     my ($template, $import_batch_id) = @_;
     my $batch = GetImportBatch($import_batch_id,'staged');
     return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
-    my $biblios = GetImportRecordsRange($import_batch_id,'','',$batch->{import_status});
+    my $import_records = Koha::Import::Records->search({
+        import_batch_id => $import_batch_id,
+        status => $batch->{import_status}
+    });
     my @list = ();
     my $item_error = 0;
 
@@ -464,30 +468,22 @@ sub import_biblios_list {
     }
 
     my $biblio_count = 0;
-    foreach my $biblio (@$biblios) {
+    while ( my $import_record = $import_records->next ) {
         my $item_id = 1;
         $biblio_count++;
-        my $citation = $biblio->{'title'};
-        $citation .= " $biblio->{'author'}" if $biblio->{'author'};
-        $citation .= " (" if $biblio->{'issn'} or $biblio->{'isbn'};
-        $citation .= $biblio->{'isbn'} if $biblio->{'isbn'};
-        $citation .= ", " if $biblio->{'issn'} and $biblio->{'isbn'};
-        $citation .= $biblio->{'issn'} if $biblio->{'issn'};
-        $citation .= ")" if $biblio->{'issn'} or $biblio->{'isbn'};
-        my $match = GetImportRecordMatches($biblio->{'import_record_id'}, 1);
+        my $match = GetImportRecordMatches($import_record->import_record_id, 1);
         my %cellrecord = (
-            import_record_id => $biblio->{'import_record_id'},
-            citation => $citation,
+            import_record_id => $import_record->import_record_id,
+            import_biblio => $import_record->import_biblio,
             import  => 1,
-            status => $biblio->{'status'},
-            record_sequence => $biblio->{'record_sequence'},
-            overlay_status => $biblio->{'overlay_status'},
+            status => $import_record->status,
+            record_sequence => $import_record->record_sequence,
+            overlay_status => $import_record->overlay_status,
             match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
             match_citation     => $#$match > -1 ? $match->[0]->{'title'} || '' . ' ' . $match->[0]->{'author'} || '': '',
             match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
         );
-        my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
-        my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
+        my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
 
         my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2','replacementprice']);
         my $price = $infos->{price};
@@ -584,7 +580,7 @@ sub import_biblios_list {
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
-    $template->param(biblio_list => \@list,
+    $template->param(import_biblio_list => \@list,
                         num_results => $num_records,
                         import_batch_id => $import_batch_id,
                         "overlay_action_${overlay_action}" => 1,
