@@ -55,7 +55,7 @@ a.navbar-toggle {
         border: 0;
         background-color: transparent;
         display: none;
-        flex-grow: 1;
+        flex-basis: 50%;
 
         &:first-of-type {
             display: block;
@@ -238,6 +238,10 @@ a.navbar-toggle {
 
 @media (max-width: 992px) {
     #header_search {
+        .residentsearch {
+            flex-grow: 1;
+        }
+
         .tab-title {
             display: none;
         }
