@@ -119,11 +119,11 @@
                                                     <input type="checkbox" name="import_record_id" id="record_[% biblio.import_record_id | html %]" value="[% biblio.import_record_id | html %]" />
                                                     <span class="citation">
                                                         [%- biblio.import_biblio.title | html -%]
-                                                         [% biblio.import_biblio.author -%]
+                                                         [% biblio.import_biblio.author | html -%]
                                                         [% IF (biblio.import_biblio.isbn || biblio.import_biblio.issn) -%](
-                                                            [% biblio.import_biblio.isbn -%]
+                                                            [% biblio.import_biblio.isbn | html -%]
                                                             [%- IF (biblio.import_biblio.isbn && biblio.import_biblio.issn ) %] & [%- END -%]
-                                                            [%- biblio.import_biblio.issn %]
+                                                            [%- biblio.import_biblio.issn | html %]
                                                              )
                                                         [%- END -%]
                                                     </span>
