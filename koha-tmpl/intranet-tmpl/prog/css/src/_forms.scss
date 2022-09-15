@@ -1,4 +1,19 @@
 fieldset {
+    @include card;
+    margin-bottom: 1em;
+    padding: 12px;
+
+    legend {
+        border-bottom: 0 none;
+        color: #696969;
+        float: left;
+        font-weight: bold;
+
+        ~ * {
+            clear: left;
+        }
+    }
+
     fieldset {
         box-shadow: none;
         padding: 0;
