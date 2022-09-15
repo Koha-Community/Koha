@@ -135,7 +135,9 @@ if ($op eq ""){
 
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
-    my $biblios = GetImportRecordsRange($import_batch_id);
+    my $import_records = Koha::Import::Records->search({
+        import_batch_id => $import_batch_id,
+    });
     my $duplinbatch;
     my $imported = 0;
     my @import_record_id_selected = $input->multi_param("import_record_id");
@@ -149,14 +151,13 @@ if ($op eq ""){
     my $matcher_id = $input->param('matcher_id');
     my $active_currency = Koha::Acquisition::Currencies->get_active;
     my $biblio_count = 0;
-    for my $biblio (@$biblios){
+    while( my $import_record = $import_records->next ){
         $biblio_count++;
         my $duplifound = 0;
         # Check if this import_record_id was selected
-        next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
-        my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
-        my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
-        my $match = GetImportRecordMatches( $biblio->{'import_record_id'}, 1 );
+        next if not grep { $_ eq $import_record->import_record_id } @import_record_id_selected;
+        my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
+        my $match = GetImportRecordMatches( $import_record->import_record_id, 1 );
         my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
@@ -196,12 +197,12 @@ if ($op eq ""){
                 }
             }
             ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
-            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
+            $import_record->status('imported')->store;
         } else {
-            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
+            $import_record->status('imported')->store;
         }
 
-        SetMatchedBiblionumber( $biblio->{import_record_id}, $biblionumber );
+        $import_record->import_biblio->matched_biblionumber($biblionumber)->store;
 
         # Add items from MarcItemFieldsToOrder
         my @homebranches = $input->multi_param('homebranch_' . $biblio_count);
@@ -358,7 +359,7 @@ if ($op eq ""){
                 $order->add_item( $itemnumber );
                 }
             } else {
-                SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
+                $import_record->status( 'imported' )->store;
             }
         }
         $imported++;
@@ -366,8 +367,8 @@ if ($op eq ""){
 
     # If all bibliographic records from the batch have been imported we modifying the status of the batch accordingly
     SetImportBatchStatus( $import_batch_id, 'imported' )
-        if    @{ GetImportRecordsRange( $import_batch_id, undef, undef, 'imported' )}
-           == @{ GetImportRecordsRange( $import_batch_id )};
+        if Koha::Import::Records->search({import_batch_id => $import_batch_id, status => 'imported' })->count
+           == Koha::Import::Records->search({import_batch_id => $import_batch_id})->count;
 
     # go to basket page
     if ( $imported ) {
