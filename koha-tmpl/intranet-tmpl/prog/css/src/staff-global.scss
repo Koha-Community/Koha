@@ -3173,6 +3173,7 @@ nav {
 
 .navbar {
     background-color: #352C2E;
+    border: 0;
 }
 
 .nav .open > a,
@@ -4301,12 +4302,26 @@ input.renew {
 
 /* ==== MODULE LINKS - End ==== */
 
-#catalog-search-link a {
-    padding-right: .2em;
+#catalog-search-link {
+    border-right: 1px solid $background-color-primary;
+    padding-right: .3em;
 }
 
-#catalog-search-dropdown a.dropdown-toggle {
-    padding-left: .2em;
+
+#catalog-search-dropdown {
+    padding: 0;
+
+    & > a {
+        border-left: 1px solid darken( $green-text-color, 5% );
+        margin-right: .6em;
+        padding: .4em .6em;
+
+        &:hover,
+        &.catalog-search-dropdown-hover {
+            background-color: darken( $background-color-primary, 5% );
+            border-left: 1px solid lighten( $green-text-color, 15% );
+        }
+    }
 }
 
 #tools_holidays {
