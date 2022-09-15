@@ -30,7 +30,7 @@ use Encode;
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::ImportBatch qw( GetImportRecordsRange GetImportRecordMarc GetImportRecordMatches SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
+use C4::ImportBatch qw( GetImportRecordMarc GetImportRecordMatches SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
 use C4::Matcher;
 use C4::Search qw( FindDuplicate );
 use C4::Biblio qw(
@@ -417,8 +417,11 @@ sub import_batches_list {
     foreach my $batch (@$batches) {
         if ( $batch->{'import_status'} =~ /^staged$|^reverted$/ && $batch->{'record_type'} eq 'biblio') {
             # check if there is at least 1 line still staged
-            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, 1, $batch->{import_status}, { order_by_direction => 'ASC' });
-            if (scalar @$stagedList) {
+            my $import_records_count = Koha::Import::Records->search({
+                import_batch_id => $batch->{'import_batch_id'},
+                status          => $batch->{import_status}
+            })->count;
+            if ( $import_records_count ) {
                 push @list, {
                         import_batch_id => $batch->{'import_batch_id'},
                         num_records => $batch->{'num_records'},
