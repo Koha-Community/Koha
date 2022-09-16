@@ -383,7 +383,7 @@ if ( $op eq 'do' ) {
             if ( grep { /debarred/ } @disabled ) {
                 eval {
                    my $debarrments = $patron->restrictions;
-                   foreach my $debarment (@$debarrments) {
+                   while( my $debarment = $debarrments->next ) {
                       DelDebarment( $debarment->borrower_debarment_id );
                    }
                 };
