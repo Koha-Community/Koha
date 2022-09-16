@@ -160,13 +160,6 @@ the IP address for your library or branch
 
 notes related to your library or branch
 
-=head2 opac_info
-
-  data_type: 'mediumtext'
-  is_nullable: 1
-
-HTML that displays in OPAC
-
 =head2 geolocation
 
   data_type: 'varchar'
@@ -240,8 +233,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 15 },
   "branchnotes",
   { data_type => "longtext", is_nullable => 1 },
-  "opac_info",
-  { data_type => "mediumtext", is_nullable => 1 },
   "geolocation",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "marcorgcode",
@@ -912,8 +903,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-27 11:58:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1m1v0sml/1gBHxAkQl8BaA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-16 13:09:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4nMDSKcOjnGsjUQkkyZtwg
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
