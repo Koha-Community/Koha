@@ -1841,17 +1841,21 @@ legend:hover {
                            let new_field = orig_li.clone();
                            new_field.children('label').each(function(){
                                 let child_input = $(this).children('input');
-                                child_input.attr("id",child_input.attr("id") + "_qa");
+                                child_input.attr("id",child_input.attr("id") + "_quick_add");
                             });
                            new_field.appendTo("#quick_add_list");
                        } else {
                            let orig_input_id = orig_li.children("input,textarea,select").attr("id");
-                           console.log( orig_input_id);
                            let new_field = orig_li.clone();
-                           new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_qa");
+                           new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_quick_add");
                            new_field.appendTo("#quick_add_list");
                            [% UNLESS mandatorypassword %]
-                                 if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                                 if( input_label == 'password' ){
+                                     let orig_p2 = $("#entryform label[for='password2']").parent();
+                                     let new_p2  = orig_p2.clone();
+                                     new_p2.find('input[id="password2"]').attr("id","password2_quick_add");
+                                     new_p2.appendTo("#quick_add_list");
+                                 }
                            [% END %]
                        }
                     }
