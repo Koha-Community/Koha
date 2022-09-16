@@ -1007,7 +1007,10 @@ this is a PSGI app or a CGI app, and implementing code as appropriate.
 
 =cut
 
-sub psgi_env { any { /(^psgi\.|^plack\.)/i } keys %ENV };
+sub psgi_env {
+    my ( $self ) = @_;
+    return any { /^(psgi|plack)[._]/i } keys %ENV;
+}
 
 =head3 is_internal_PSGI_request
 
@@ -1019,8 +1022,9 @@ app
 
 #NOTE: This is not a very robust method but it's the best we have so far
 sub is_internal_PSGI_request {
+    my ( $self ) = @_;
     my $is_internal = 0;
-    if ( (__PACKAGE__->psgi_env) && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ){
+    if( $self->psgi_env && ( $ENV{REQUEST_URI} !~ /^(\/intranet|\/opac)/ ) ) {
         $is_internal = 1;
     }
     return $is_internal;

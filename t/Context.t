@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;
@@ -145,3 +145,34 @@ is( C4::Context->interface( 'CRON' ), 'cron', 'interface cron uc' );
     $ENV{HTTPS} = 'ON';
     is( C4::Context->https_enabled, 1, "ON HTTPS env returns 1");
 }
+
+subtest 'psgi_env and is_internal_PSGI_request' => sub {
+    plan tests => 11;
+
+    local %ENV = ( no_plack => 1 );
+    is( C4::Context->psgi_env, q{}, 'no_plack' );
+    $ENV{plackishere} = 1;
+    is( C4::Context->psgi_env, q{}, 'plackishere is wrong' );
+    $ENV{'plack.ishere'} = 1;
+    is( C4::Context->psgi_env, 1, 'plack.ishere' );
+    delete $ENV{'plack.ishere'};
+    is( C4::Context->psgi_env, q{}, 'plack.ishere was here' );
+    $ENV{'plack_ishere'} = 1;
+    is( C4::Context->psgi_env, 1, 'plack_ishere' );
+    delete $ENV{'plack_ishere'};
+    $ENV{'psgi_whatever'} = 1;
+    is( C4::Context->psgi_env, 1, 'psgi_whatever' );
+    delete $ENV{'psgi_whatever'};
+    $ENV{'psgi.whatever'} = 1;
+    is( C4::Context->psgi_env, 1, 'psgi.whatever' );
+    delete $ENV{'psgi.whatever'};
+    $ENV{'PSGI.UPPERCASE'} = 1;
+    is( C4::Context->psgi_env, 1, 'PSGI uppercase' );
+
+    $ENV{'REQUEST_URI'} = '/intranet/whatever';
+    is( C4::Context->is_internal_PSGI_request, 0, 'intranet not considered internal in regex' );
+    $ENV{'REQUEST_URI'} = '/api/v1/tralala';
+    is( C4::Context->is_internal_PSGI_request, 1, 'api considered internal in regex' );
+    delete $ENV{'PSGI.UPPERCASE'};
+    is( C4::Context->is_internal_PSGI_request, 0, 'api but no longer PSGI' );
+};
