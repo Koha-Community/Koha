@@ -90,6 +90,23 @@ our $mapping = {
     'admin/oai_sets'                           => '/administration.html#oai-sets-configuration',
     'admin/patron-attr-types'                  => '/administration.html#patron-attribute-types',
     'admin/preferences'                        => '/globalpreferences.html',
+    'admin/preferences#accounting'             => '/accountspreferences.html',
+    'admin/preferences#acquisitions'           => '/acquisitionspreferences.html',
+    'admin/preferences#admin'                  => '/administrationpreferences.html',
+    'admin/preferences#authorities'            => '/authoritiespreferences.html',
+    'admin/preferences#cataloguing'            => '/catalogingpreferences.html',
+    'admin/preferences#circulation'            => '/circulationpreferences.html',
+    'admin/preferences#enhanced_content'       => '/enhancedcontentpreferences.html',
+    'admin/preferences#i18n_l10n'              => '/i18npreferences.html',
+    'admin/preferences#logs'                   => '/logspreferences.html',
+    'admin/preferences#opac'                   => '/opacpreferences.html',
+    'admin/preferences#patrons'                => '/patronspreferences.html',
+    'admin/preferences#searching'              => '/searchingpreferences.html',
+    'admin/preferences#serials'                => '/serialspreferences.html',
+    'admin/preferences#staff_interface'        => '/staffclientpreferences.html',
+    'admin/preferences#staff_interface'        => '/staffclientpreferences.html',
+    'admin/preferences#tools'                  => '/toolspreferences.html',
+    'admin/preferences#web_services'           => '/webservicespreferences.html',
     'admin/smart-rules'                        => '/administration.html#circulation-and-fine-rules',
     'admin/sms_providers'                      => '/administration.html#sms-cellular-providers',
     'admin/systempreferences'                  => '/localusepreferences.html',
@@ -242,8 +259,18 @@ sub get_url {
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
 
+    my $view;
+    if ($url =~ /(?:\?|\&)tab=(?<value>[\w+,.-]*)/) {
+        $view = $file . '#' . $+{value};
+    }
+
     my $base_url = _get_base_url( $preferred_language );
-    return $base_url . ( exists $mapping->{$file} ? $mapping->{$file} : $mapping->{mainpage} );
+    return $base_url
+      . (
+          exists $mapping->{$view} ? $mapping->{$view}
+        : exists $mapping->{$file} ? $mapping->{$file}
+        :                            $mapping->{mainpage}
+      );
 }
 
 1;
