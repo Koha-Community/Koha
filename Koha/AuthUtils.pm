@@ -208,7 +208,7 @@ outside this context.
 =cut
 
 sub get_script_name {
-    if ( ( C4::Context::psgi_env ) && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
+    if ( ( C4::Context->psgi_env ) && $ENV{SCRIPT_NAME} && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
         return '/cgi-bin/koha' . $2;
     } else {
         return $ENV{SCRIPT_NAME};

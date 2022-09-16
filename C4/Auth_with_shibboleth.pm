@@ -81,7 +81,7 @@ sub get_login_shib {
 
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
 
-    if ( C4::Context::psgi_env ) {
+    if ( C4::Context->psgi_env ) {
       return $ENV{"HTTP_".uc($matchAttribute)} || '';
     } else {
       return $ENV{$matchAttribute} || '';
@@ -126,7 +126,7 @@ sub _autocreate {
     my %borrower = ( $config->{matchpoint} => $match );
 
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
-        if ( C4::Context::psgi_env ) {
+        if ( C4::Context->psgi_env ) {
             $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
         } else {
             $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
@@ -144,7 +144,7 @@ sub _sync {
     my %borrower;
     $borrower{'borrowernumber'} = $borrowernumber;
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
-        if ( C4::Context::psgi_env ) {
+        if ( C4::Context->psgi_env ) {
             $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
         } else {
             $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';

@@ -125,7 +125,7 @@ if ($^O ne 'VMS') {
 my $zebraVersion = `zebraidx -V`;
 
 # Check running PSGI env
-if ( C4::Context::psgi_env ) {
+if ( C4::Context->psgi_env ) {
     $template->param(
         is_psgi => 1,
         psgi_server => ($ENV{ PLACK_ENV }) ? "Plack ($ENV{PLACK_ENV})" :
