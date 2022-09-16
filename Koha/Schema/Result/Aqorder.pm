@@ -406,6 +406,14 @@ Type of number above usually 'QLI'
 
 reports received from suppliers
 
+=head2 estimated_delivery_date
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+Estimated delivery date
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -517,6 +525,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "suppliers_report",
   { data_type => "mediumtext", is_nullable => 1 },
+  "estimated_delivery_date",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -754,8 +764,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:c1YBLkG64bdFakf4/cGjXA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-16 13:56:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M8HvWBKYFNGspSTakU6Qdg
 
 __PACKAGE__->belongs_to(
   "basket",
