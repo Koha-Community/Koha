@@ -162,7 +162,7 @@ sub generate_subfield_form {
             my $CNsubfields =
               substr( $pref_itemcallnumber_part, 3 );    # Any and all subfields
             $CNsubfields = undef if $CNsubfields eq '';
-            my $temp2 = $marc_record->field($CNtag);
+            my $temp2 = $marc_record ? $marc_record->field($CNtag) : undef;
 
             next unless $temp2;
             $value = $temp2->as_string( $CNsubfields, ' ' );
