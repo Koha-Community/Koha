@@ -601,7 +601,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 
                             if ( @pickup_locations ) {
                                 $num_items_available++;
-                                $item->{available} = 1;
+                                $item->{override} = 1;
 
                                 my $default_pickup_location;
 
