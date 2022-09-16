@@ -693,7 +693,7 @@ CREATE TABLE `aqorders` (
   `suppliers_reference_number` varchar(35) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Suppliers unique edifact quote ref',
   `suppliers_reference_qualifier` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Type of number above usually ''QLI''',
   `suppliers_report` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'reports received from suppliers',
-  `estimated_delivery_date` date default null,
+  `estimated_delivery_date` date DEFAULT NULL COMMENT 'Estimated delivery date',
   PRIMARY KEY (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
