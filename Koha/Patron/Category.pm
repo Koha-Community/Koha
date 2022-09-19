@@ -202,7 +202,7 @@ TODO: Remove on bug 22547
 sub override_hidden_items {
     my ($self) = @_;
     return any { $_ eq $self->categorycode }
-    split( /\|/, C4::Context->preference('OpacHiddenItemsExceptions') );
+    split( ',', C4::Context->preference('OpacHiddenItemsExceptions') );
 }
 
 =head3 can_make_suggestions

@@ -592,8 +592,10 @@ OPAC:
               class: code
             - Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href="http://wiki.koha-community.org/wiki/OpacHiddenItems" target="_blank">Koha wiki</a>.
         -
-            - 'List of patron categories, separated by |, that can see items otherwise hidden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems">OpacHiddenItems</a>:'
+            - 'List of patron categories, that can see items otherwise hidden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems">OpacHiddenItems</a>:'
             - pref: OpacHiddenItemsExceptions
+              choices: patron-categories
+              class: multiple
         -
             - pref: OpacHiddenItemsHidesRecord
               default: 1
