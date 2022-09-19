@@ -118,6 +118,7 @@ sub enqueue {
     $self->SUPER::enqueue({
         job_size => Koha::Import::Records->search({ import_batch_id => $args->{import_batch_id} })->count,
         job_args => $args,
+        queue    => 'long_tasks',
     });
 }
 

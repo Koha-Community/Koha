@@ -199,6 +199,7 @@ sub enqueue {
     $self->SUPER::enqueue({
         job_size => 0, # TODO Unknown for now?
         job_args => $args,
+        queue    => 'long_tasks',
     });
 }
 
