@@ -33,7 +33,7 @@ __PACKAGE__->table("borrower_relationships");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 guarantee_id
 
@@ -53,7 +53,7 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "guarantor_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "guarantee_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "relationship",
@@ -117,17 +117,12 @@ __PACKAGE__->belongs_to(
   "guarantor",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "guarantor_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-08-20 15:14:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZymvWAn9Nzfuh1lExUIhIg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-19 18:12:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3/qVK3qiXZPvE2y5D4WaRg
 
 sub koha_objects_class {
     'Koha::Patron::Relationships';
