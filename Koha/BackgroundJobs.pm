@@ -29,7 +29,7 @@ Koha::BackgroundJobs - Koha BackgroundJob Object set class
 
 =head2 Class methods
 
-=head2 search_limited
+=head3 search_limited
 
   my $background_jobs = Koha::BackgroundJobs->search_limited( $params, $attributes );
 
