@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE Price %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Items &rsaquo; [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
@@ -126,6 +127,8 @@
                     [% SET attribute = header.attribute %]
                     [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
                         <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
+                    [% ELSIF ( item.$attribute && ( attribute == 'price' || attribute == 'replacementprice' ) ) %]
+                        <td data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
                     [% ELSE %]
                         <td>[% item.$attribute | html %]</td>
                     [% END %]
