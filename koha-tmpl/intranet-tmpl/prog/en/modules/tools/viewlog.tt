@@ -376,6 +376,12 @@
                                             [% ELSE %]
                                                 Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
                                             [% END %]
+                                        [% ELSIF ( loopro.module == 'ACQUISITIONS' && loopro.action == 'ACQUISITION ORDER' && loopro.object ) %]
+                                            [% IF ( CAN_user_acquisition_order_manage ) %]
+                                                Basket <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loopro.object | uri %]">[% loopro.object | html %]</a>
+                                            [% ELSE %]
+                                                Basket [% loopro.object | html %]
+                                            [% END %]
                                         [% ELSE %]
                                             [% loopro.object | html %]
                                         [% END %]

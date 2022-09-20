@@ -516,11 +516,12 @@ sub SendAlerts {
         return { error => $error }
             unless $success;
 
+        my $log_object = $action eq 'ACQUISITION ORDER' ? $externalid : undef;
         my $module = $action eq 'ACQUISITION ORDER' ? 'ACQUISITIONS' : 'CLAIMS';
         logaction(
             $module,
             $action,
-            undef,
+            $log_object,
             "To="
                 . join( ',', @email )
                 . " Title="
