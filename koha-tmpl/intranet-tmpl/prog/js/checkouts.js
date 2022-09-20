@@ -437,19 +437,19 @@ $(document).ready(function() {
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.charge ) oObj.charge = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).toFixed(2) + '<span>';
+                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).format_price() + '<span>';
                     }
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.fine ) oObj.fine = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).toFixed(2)  + '<span>';
+                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).format_price()   + '<span>';
                     }
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.price ) oObj.price = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).toFixed(2) + '<span>';
+                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).format_price()  + '<span>';
                     }
                 },
                 {
@@ -645,9 +645,9 @@ $(document).ready(function() {
                     total_fine += aaData[i]['fine'] * 1;
                     total_price  += aaData[i]['price'] * 1;
                 }
-                $("#totaldue").html(total_charge.toFixed(2));
-                $("#totalfine").html(total_fine.toFixed(2));
-                $("#totalprice").html(total_price.toFixed(2));
+                $("#totaldue").html(total_charge.format_price() );
+                $("#totalfine").html(total_fine.format_price() );
+                $("#totalprice").html(total_price.format_price() );
             },
             "bPaginate": false,
             "bProcessing": true,
