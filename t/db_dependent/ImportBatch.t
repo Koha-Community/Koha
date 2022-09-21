@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -18,7 +18,7 @@ BEGIN {
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
-    use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin ));
+    use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin BatchCommitRecords ));
 }
 
 # Start transaction
@@ -327,6 +327,41 @@ subtest "_get_commit_action" => sub {
     }
 
 };
+
+subtest "BatchCommitRecords overlay into framework" => sub {
+    plan tests => 1;
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    my $mock_import = Test::MockModule->new("C4::ImportBatch");
+    my $biblio = $builder->build_sample_biblio;
+    $mock_import->mock( _get_commit_action => sub { return ('replace',undef,$biblio->biblionumber); } );
+
+    my $import_batch = {
+        matcher_id => 2,
+        template_id => 2,
+        branchcode => 'QRZ',
+        overlay_action => 'replace',
+        nomatch_action => 'ignore',
+        item_action => 'ignore',
+        import_status => 'staged',
+        batch_type => 'z3950',
+        file_name => 'test.mrc',
+        comments => 'test',
+        record_type => 'auth',
+    };
+    my $id_import_batch = C4::ImportBatch::AddImportBatch($import_batch);
+    my $import_record_id = AddBiblioToBatch( $id_import_batch, 0, $biblio->metadata->record, 'utf8', 0 );
+
+    BatchCommitRecords({
+        batch_id  => $id_import_batch,
+        framework => "",
+        overlay_framework => "QQ",
+    });
+    $biblio->discard_changes;
+    is( $biblio->frameworkcode, "QQ", "Framework set on overlay" );
+};
+
+
+
 
 sub get_import_record {
     my $id_import_batch = shift;
