@@ -173,20 +173,37 @@ subtest 'Manually pass a return date' => sub {
 };
 
 subtest 'AutoRemoveOverduesRestrictions' => sub {
-    plan tests => 2;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 1);
-
+    my $dbh = C4::Context->dbh;
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+    my $categorycode = $patron->categorycode;
+    my $branchcode = $patron->branchcode;
+
+    $dbh->do(qq{
+        INSERT INTO `overduerules` (
+            `categorycode`,
+            `delay1`,
+            `letter1`,
+            `debarred1`,
+            `delay2`,
+            `letter2`,
+            `debarred2`
+        )
+        VALUES ('$categorycode', 6, 'ODUE', 0, 10, 'ODUE2', 1)
+    });
+
+    t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 'when_no_overdue');
+
+    t::lib::Mocks::mock_userenv( { branchcode => $branchcode } );
     my $item_1 = $builder->build_sample_item;
     my $item_2 = $builder->build_sample_item;
     my $item_3 = $builder->build_sample_item;
     my $five_days_ago = dt_from_string->subtract( days => 5 );
-    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $five_days_ago ); # overdue
-    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $five_days_ago ); # overdue
+    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $five_days_ago ); # overdue, but would not trigger debarment
+    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $five_days_ago ); # overdue, but would not trigger debarment
     my $checkout_3 = AddIssue( $patron, $item_3->barcode ); # not overdue
 
     Koha::Patron::Debarments::AddUniqueDebarment(
@@ -207,6 +224,66 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     $restrictions = $patron->restrictions;
     is( $restrictions->count, 0, 'OVERDUES debarment is removed if patron does not have overdues' );
+
+    t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 'when_no_overdue_causing_debarment');
+
+    my $eleven_days_ago = dt_from_string->subtract( days => 11 );
+
+    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $eleven_days_ago ); # overdue and would trigger debarment
+    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $five_days_ago ); # overdue, but would not trigger debarment
+
+    Koha::Patron::Debarments::AddUniqueDebarment(
+        {
+            borrowernumber => $patron->borrowernumber,
+            type           => 'OVERDUES',
+            comment => "OVERDUES_PROCESS simulation",
+        }
+    );
+
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_1->itemnumber );
+
+    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
+    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaning items would not result in patron debarment' );
+
+    $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $eleven_days_ago ); # overdue and would trigger debarment
+
+    Koha::Patron::Debarments::AddUniqueDebarment(
+        {
+            borrowernumber => $patron->borrowernumber,
+            type           => 'OVERDUES',
+            comment => "OVERDUES_PROCESS simulation",
+        }
+    );
+
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
+
+    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
+    is( $debarments->[0]->{type}, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues that would trigger debarment' );
+
+    my $thirteen_days_ago = dt_from_string->subtract( days => 13 );
+
+    # overdue and would trigger debarment
+    $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $thirteen_days_ago );
+
+    # $chechout_1 should now not trigger debarment with this new rule for specific branchcode
+    $dbh->do(qq{
+        INSERT INTO `overduerules` (
+            `branchcode`,
+            `categorycode`,
+            `delay1`,
+            `letter1`,
+            `debarred1`,
+            `delay2`,
+            `letter2`,
+            `debarred2`
+        )
+        VALUES ('$branchcode', '$categorycode', 6, 'ODUE', 0, 12, 'ODUE2', 1)
+    });
+
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
+
+    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
+    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaning items would not result in patron debarment' );
 
     $schema->storage->txn_rollback;
 };

@@ -658,12 +658,6 @@ Circulation:
                   1: Store
                   0: "Don't store"
             - 'the last patron to return an item. This setting is independent of the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory">opacreadinghistory</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preferences.'
-        -
-            - pref: ODueDebarmentRemovalAllowUnrestricted
-              choices:
-                  yes: Allow
-                  no: Do not allow
-            - removal of Overdue debarments when patron has overdue items but none are old enough to have reached restricting delay. Used in combination with AutoRemoveOverduesRestrictions.
     Holds policy:
         -
             - In the staff interface, split the holds queue into separate tables by
@@ -990,11 +984,14 @@ Circulation:
                   0: "Don't cumulate"
             - the restriction periods.
         -
+            - When returning items
             - pref: AutoRemoveOverduesRestrictions
+              type: choice
               choices:
-                  1: "Do"
-                  0: "Don't"
-            - allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron.
+                  when_no_overdue: "if patron has no remaining overdue items"
+                  when_no_overdue_causing_debarment: "if patron has no remaining items that is cause for debarment"
+                  no: "don't"
+            - remove OVERDUES restriction triggered by sent notices. The difference between removing restriction when no remaining overdue items exists and doing so only when any of the items would result in debarment is that the latter option will respect possible grace periods of overdue rules also on returns and not only when generating overdue notices.
         -
             - If a patron is restricted,
             - pref: RestrictionBlockRenewing

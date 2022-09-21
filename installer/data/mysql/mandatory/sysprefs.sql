@@ -86,7 +86,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutoLinkBiblios','0',NULL,'If enabled, link biblio to authorities on creation and edit','YesNo'),
 ('AutomaticConfirmTransfer','0',NULL,'Defines whether transfers should be automatically confirmed at checkin if modal dismissed','YesNo'),
 ('autoMemberNum','0','','If ON, patron number is auto-calculated','YesNo'),
-('AutoRemoveOverduesRestrictions','0',NULL,'Defines whether an OVERDUES debarment should be lifted automatically if all overdue items are returned by the patron.','YesNo'),
+('AutoRemoveOverduesRestrictions','no','no|when_no_overdue|when_no_overdue_causing_debarment', 'Defines if and on what conditions OVERDUES debarments should automatically be lifted when overdue items are returned by the patron.','Choice'),
 ('AutoRenewalNotices','cron','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice'),
 ('AutoResumeSuspendedHolds','1',NULL,'Allow suspended holds to be automatically resumed by a set date.','YesNo'),
 ('AutoReturnCheckedOutItems', '0', '', 'If disabled, librarian must confirm return of checked out item when checking out to another.', 'YesNo'),

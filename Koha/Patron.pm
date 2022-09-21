@@ -1031,11 +1031,11 @@ sub _get_overdue_restrict_delay {
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? AND categorycode = ?";
 
-    my $rqoverduerules =  $dbh->prepare($query);
+    my $rqoverduerules = $dbh->prepare($query);
     $rqoverduerules->execute($branchcode, $categorycode);
 
     # We get default rules if there is no rule for this branch
-    if($rqoverduerules->rows == 0){
+    if($rqoverduerules->rows == 0) {
         $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' AND categorycode = ?";
 
         $rqoverduerules = $dbh->prepare($query);
