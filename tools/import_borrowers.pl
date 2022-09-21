@@ -52,10 +52,6 @@ my $Import = Koha::Patrons::Import->new();
 
 use Text::CSV;
 
-# Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
-# ė
-# č
-
 use CGI qw ( -utf8 );
 
 my $extended = C4::Context->preference('ExtendedPatronAttributes');

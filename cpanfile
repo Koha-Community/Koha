@@ -173,7 +173,6 @@ recommends 'Test::Strict', '0.14';
 recommends 'Test::WWW::Mechanize', '1.42';
 recommends 'Test::Warn', '0.21';
 recommends 'Test::YAML::Valid', '0.04';
-recommends 'Text::CSV::Unicode', '0.40';
 recommends 'Text::Unidecode', '0.04';
 recommends 'Time::Fake', '0.11';
 recommends 'UNIVERSAL::require', '0.13';

@@ -21,24 +21,12 @@
 #necessary to test your Koha installation.
 
 use Modern::Perl;
+use open OUT=>':encoding(UTF-8)', ':std';
+use utf8;
 
-use Test::More;
-use Test::Warn;
-
+use Test::More tests => 21;
 use Text::CSV;
 use Text::CSV_XS;
-
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Text::CSV::Unicode' ) ) {
-        plan tests => 29;
-    } else {
-        plan skip_all => "Need Text::CSV::Unicode"
-    }
-}
-
-use Text::CSV::Unicode;
 
 sub pretty_line {
 	my $max = 54;
@@ -50,7 +38,7 @@ sub pretty_line {
 
 my ($csv, $bin, %parsers);
 
-foreach(qw(Text::CSV Text::CSV_XS Text::CSV::Unicode)) {
+foreach( qw( Text::CSV Text::CSV_XS )) {
     ok($csv = $_->new(),            $_ . '->new()');
     ok($bin = $_->new({binary=>1}), $_ . '->new({binary=>1})');
     $csv and $parsers{$_} = $csv;
@@ -61,47 +49,36 @@ my $lines = [
     {description=>"010D: LATIN SMALL LETTER C WITH CARON",     character=>'č', line=>'field1,second field,field3,do_we_have_a_č_problem?, f!fth field ,lastfield'},
     {description=>"0117: LATIN SMALL LETTER E WITH DOT ABOVE", character=>'ė', line=>'field1,second field,field3,do_we_have_a_ė_problem?, f!fth field ,lastfield'},
 ];
-# 010D: č LATIN SMALL LETTER C WITH CARON
-# 0117: ė LATIN SMALL LETTER E WITH DOT ABOVE
+
 ok( scalar(keys %parsers)>0 && scalar(@$lines)>0,
     sprintf "Testing %d lines with  %d parsers.",
          scalar(@$lines), scalar(keys %parsers) );
+
 foreach my $key (sort keys %parsers) {
     my $parser = $parsers{$key};
     print "Testing parser $key version " . ($parser->version||'?') . "\n";
 }
+
 my $i = 0;
-LINE: foreach (@$lines) {
+foreach my $line (@$lines) {
     print pretty_line("Line " . ++$i);
-    print pretty_line($_->{description} . ': ' . $_->{character});
+    print pretty_line($line->{description} . ': ' . $line->{character});
     foreach my $key (sort keys %parsers) {
         my $parser = $parsers{$key};
-        my ($status,$count,@fields);
-        $status = $parser->parse($_->{line});
-        if ($status) {
+        my ($status, $count, @fields);
+        $status = $parser->parse( $line->{line} );
+        if( $status ) {
             ok($status, "parse ($key)");
             @fields = $parser->fields;
-            ok(($count = scalar(@fields)) == 6, "Number of fields ($count of 6)");
+            $count = scalar(@fields);
+            is( $count, 6, "Number of fields ($count of 6)");
             my $j = 0;
             foreach my $f (@fields) {
-                ++$j;
-                if ($j==4) {
-                    if ($key ne 'Text::CSV::Unicode (binary)') {
-                        warning_like {
-                            print "\t field " . $j . ": $f\n"
-                        } [ qr/Wide character in print/ ], 'Expected wide print';
-                    } else {
-                        print "\t field " . $j . ": $f\n"
-                    }
-                }
-                else {
-                    print "\t field " . $j . ": $f\n";
-                }
+                $j++;
+                print "\t field $j: $f\n";
             }
-        }
-        else {
-            ok(! $status, "parse ($key) fails as expected");
+        } else {
+            ok(! $status, "parse ($key) fails as expected"); #FIXME We never hit this line
         }
     }
 }
-done_testing();
