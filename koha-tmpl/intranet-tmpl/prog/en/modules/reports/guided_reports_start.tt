@@ -913,7 +913,7 @@
                             <span class="label">Total number of results:</span>
                             [% unlimited_total | html %]
                             [% IF unlimited_total >= limit %]
-                                ([% limit | html %] shown)
+                                ([% results.size | html %] shown)
                             [% END %]
                         </p>
                     [% END %]
