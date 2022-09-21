@@ -190,9 +190,17 @@ The C<$options> argument is a hashref with additional parameters:
 
 =over 4
 
-=item B<defer_marc_save>: used when ModBiblioMarc is handled by the caller
+=item B<defer_marc_save>
+Used when ModBiblioMarc is handled by the caller
 
-=item B<skip_record_index>: used when the indexing scheduling will be handled by the caller
+=item B<skip_record_index>
+Used when the indexing scheduling will be handled by the caller
+
+=item C<disable_autolink>
+
+Unless C<disable_autolink> is passed AddBiblio will link record headings
+to authorities based on settings in the system preferences. This flag allows
+us to not link records when the authority linker is saving modifications.
 
 =back
 
@@ -204,6 +212,7 @@ sub AddBiblio {
     $options //= {};
     my $skip_record_index = $options->{'skip_record_index'} // 0;
     my $defer_marc_save = $options->{defer_marc_save} // 0;
+    my $disable_autolink = $options->{disable_autolink} // 0;
 
     if (!$record) {
         carp('AddBiblio called with undefined record');
@@ -283,7 +292,7 @@ sub AddBiblio {
             # update MARC subfield that stores biblioitems.cn_sort
             _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
 
-            if (C4::Context->preference('AutoLinkBiblios')) {
+            if (!$disable_autolink && C4::Context->preference('BiblioAddsAuthorities')) {
                 BiblioAutoLink( $record, $frameworkcode );
             }
 
@@ -589,6 +598,7 @@ sub BiblioAutoLink {
     my $record        = shift;
     my $frameworkcode = shift;
     my $verbose = shift;
+
     if (!$record) {
         carp('Undefined record passed to BiblioAutoLink');
         return 0;

@@ -19,6 +19,7 @@ use C4::Biblio qw(
     ModBiblioMarc
     GetFrameworkCode
     GetMarcBiblio
+    BiblioAutoLink
 );
 use C4::Koha;
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
@@ -125,6 +126,7 @@ if ($all) {
 
 my $using_elastic_search = (C4::Context->preference('SearchEngine') eq 'Elasticsearch');
 my $modify_biblio_marc_options = {
+    disable_autolink => $using_elastic_search,
     defer_search_engine_indexing => $using_elastic_search,
     overlay_context => { source => 'bulkmarcimport' }
 };
@@ -541,7 +543,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 }
             }
             elsif ($insert) {
-                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, { defer_marc_save => 1 }) };
+                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, { disable_autolink => 1, defer_marc_save => 1 }) };
                 if ($@) {
                     warn "ERROR: Insert biblio $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
@@ -645,6 +647,11 @@ RECORD: foreach my $record (@{$marc_records}) {
             $schema->txn_begin;
             if ($indexer) {
                 $indexer->update_index(\@search_engine_record_ids, \@search_engine_records);
+                if (C4::Context->preference('BiblioAddsAuthorities')) {
+                    foreach my $record (@search_engine_records) {
+                        BiblioAutoLink($record, $framework);
+                    }
+                }
                 @search_engine_record_ids = ();
                 @search_engine_records = ();
             }
