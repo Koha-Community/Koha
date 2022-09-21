@@ -330,7 +330,7 @@ sub import_patrons {
                             }
                         }
                     }
-                    if ($extended) {
+                    if ($extended && @$patron_attributes) {
                         if ($ext_preserve) {
                             $patron_attributes = $patron->extended_attributes->merge_and_replace_with( $patron_attributes );
                         }
@@ -390,7 +390,7 @@ sub import_patrons {
                         );
                     }
 
-                    if ($extended) {
+                    if ($extended && @$patron_attributes) {
                         # FIXME Hum, we did not filter earlier and now we do?
                         $patron->extended_attributes->filter_by_branch_limitations->delete;
                         $patron->extended_attributes($patron_attributes);
