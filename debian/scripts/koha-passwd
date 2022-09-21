@@ -45,8 +45,10 @@ EOF
 for name in "$@"
 do
     if is_instance $name ; then
+        user=$(xmlstarlet sel -t -v 'yazgfs/config/user' /etc/koha/sites/$name/koha-conf.xml);
         passwd=$(xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml);
         if [ -t 1 ]; then
+            echo "Username for $name: $user"
             echo "Password for $name: $passwd"
             echo "Press enter to clear the screen..."
             read anykey
