@@ -114,18 +114,20 @@
                         [% END %]
                     [% ELSE %]
                         <table id="installed_plugins">
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Author</th>
-                                <th>Plugin version</th>
-                                <th>Minimum Koha version</th>
-                                <th>Maximum Koha version</th>
-                                <th>Last updated</th>
-                                [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
-                                    <th class="noExport">Actions</th>
-                                [% END %]
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Author</th>
+                                    <th>Plugin version</th>
+                                    <th>Minimum Koha version</th>
+                                    <th>Maximum Koha version</th>
+                                    <th>Last updated</th>
+                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                        <th class="noExport">Actions</th>
+                                    [% END %]
+                                </tr>
+                            </thead>
 
                             [% FOREACH plugin IN plugins %]
                                 [% IF plugin.error %]
@@ -226,6 +228,8 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function(){
             $(".uninstall_plugin").on("click", function(){
@@ -236,6 +240,10 @@
 
             $("#plugin-search-button").on("click", function(){
                 $("#plugin-search-form").submit();
+            });
+
+            KohaTable("installed_plugins", {
+                "bPaginate": false
             });
         });
     </script>
