@@ -306,8 +306,12 @@
                             [% IF suggestions_loop OR title_filter %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
                                     <div class="form-row">
-                                        <label for="title_filter">Search for:</label>
-                                        <input type="text" name="title_filter" id="title_filter" value="[% title_filter | html %]" />
+                                        <div class="col-auto my-1">
+                                            <label for="title_filter">Search for:</label>
+                                        </div>
+                                        <div class="col-auto my-1">
+                                            <input type="text" name="title_filter" id="title_filter" value="[% title_filter | html %]" size="30" class="form-control form-control-sm" />
+                                        </div>
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
                                                 <div class="col-auto my-1">
@@ -454,21 +458,21 @@
                             [% ELSE %]
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
                                     [% IF title_filter %]
-                                        <p>There are no pending purchase suggestions matching your search.</p>
+                                        <div class="alert alert-info" role="alert">There are no pending purchase suggestions matching your search.</div>
                                     [% ELSIF loggedinusername AND NOT suggested_by_anyone %]
-                                        <p>You have no pending purchase suggestions. <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">View all suggestions</a></p>
+                                        <div class="alert alert-info" role="alert">You have no pending purchase suggestions. <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">View all suggestions</a></div>
                                     [% ELSE %]
-                                        <p>There are no pending purchase suggestions.</p>
+                                        <div class="alert alert-info" role="alert">There are no pending purchase suggestions.</div>
                                     [% END %]
                                 [% ELSE %]
                                     [% IF ( loggedinusername ) %]
                                         [% IF title_filter %]
-                                            <p>There are no pending purchase suggestions matching your search.</p>
+                                            <div class="alert alert-info" role="alert">There are no pending purchase suggestions matching your search.</div>
                                         [% ELSE %]
-                                            <p>You have no pending purchase suggestions.</p>
+                                            <div class="alert alert-info" role="alert">You have no pending purchase suggestions.</div>
                                         [% END %]
                                     [% ELSE %]
-                                        <p>You are not authorized to see pending purchase suggestions.</p>
+                                        <div class="alert alert-warning" role="alert">You are not authorized to see pending purchase suggestions.</div>
                                     [% END %]
                                 [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
