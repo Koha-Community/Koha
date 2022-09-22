@@ -24,11 +24,13 @@
                 <li class="breadcrumb-item">
                     <a href="/cgi-bin/koha/opac-main.pl">Home</a>
                 </li>
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-                </li>
+                [% IF ( logged_in_user ) %]
+                    <li class="breadcrumb-item">
+                        <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+                    </li>
+                [% END %]
                 <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Your purchase suggestions</a>
+                    <a href="#" aria-current="page">Purchase suggestions</a>
                 </li>
             </ol>
         </nav> <!-- /#breadcrumbs -->
