@@ -102,9 +102,9 @@
         <option value="bc">Barcode</option>
     [% END %]
     [% IF ms_location %]
-        <option selected="selected" value="location">Shelving location</option>
+        <option selected="selected" value="location" title="Enter location code value for search">Shelving location (code)</option>
     [% ELSE %]
-        <option value="location">Shelving location</option>
+        <option value="location" title="Enter location code value for search">Shelving location (code)</option>
     [% END %]
     [% IF ( Koha.Preference('IntranetNumbersPreferPhrase') ) %]
         [% IF ms_identcommaphr %]
