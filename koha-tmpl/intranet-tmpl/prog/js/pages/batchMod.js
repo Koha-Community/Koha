@@ -127,6 +127,9 @@ $(document).ready(function () {
         ],
         "bPaginate": false,
     }));
+    // Highlight in yellow item rows that cannot be deleted
+    $(".error").parents('tr').find('td').css('background-color', '#ffff99');
+
     $("#selectallbutton").click(function (e) {
         e.preventDefault();
         $("#itemst input:checkbox").each(function () {

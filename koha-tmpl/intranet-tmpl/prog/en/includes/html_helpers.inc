@@ -268,7 +268,9 @@
                     <td>[% item.index + 1 | html %]</td>
                     [% IF checkboxes_edit %]
                         [% UNLESS can_be_edited%]
-                            <td class="error">Cannot edit</td>
+                            <td class="error">
+                                <i class="fa fa-times fa-lg" title="Cannot edit"></i>
+                            </td>
                         [% ELSE %]
                             <td>
                                 <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" data-is-onloan="[% item.is_checked_out | html %]" />
@@ -276,7 +278,9 @@
                         [% END %]
                     [% ELSIF checkboxes_delete %]
                         [% UNLESS can_be_edited %]
-                            <td class="error">Cannot delete</td>
+                            <td class="error">
+                                <i class="fa fa-times fa-lg" title="Cannot delete"></i>
+                            </td>
                         [% ELSE %]
                             [% IF item.safe_to_delete %]
                                 <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" checked="checked" /></td>
@@ -293,7 +297,9 @@
                                     [% END %]
                                 [% END %]
 
-                                <td><input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]" id="row[% item.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason | html %]"/></td>
+                                <td class="error">
+                                    <i class="fa fa-times fa-lg" title="[% cannot_delete_reason | html %]"></i>
+                                </td>
                             [% END %]
 
                         [% END %]
