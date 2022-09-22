@@ -5,10 +5,11 @@ use Modern::Perl;
 use C4::Context;
 use Koha::Database;
 use Koha::Patrons;
+use Koha::Account;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 34;
+use Test::More tests => 38;
 
 use_ok('Koha::Patron::Debarments');
 
@@ -221,3 +222,76 @@ is( Koha::Patrons->find($borrowernumber3)->debarred,
     $debarreddate2, 'Koha::Patron->merge_with() transfers well debarred' );
 is( Koha::Patrons->find($borrowernumber3)->debarredcomment,
     $debarredcomment2, 'Koha::Patron->merge_with() transfers well debarredcomment' );
+
+# Test removing debartments after payment
+$builder->build(
+    {
+        source => 'RestrictionType',
+        value  => {
+            code               => 'TEST',
+            display_text       => 'This is a test.',
+            is_system          => 0,
+            is_default         => 0,
+            lift_after_payment => 1,
+            fee_limit          => 5
+        }
+    }
+);
+
+$builder->build(
+    {
+        source => 'RestrictionType',
+        value  => {
+            code               => 'TEST2',
+            display_text       => 'This too is a test.',
+            is_system          => 0,
+            is_default         => 0,
+            lift_after_payment => 1,
+            fee_limit          => 0
+        }
+    }
+);
+
+my $borrowernumber4 = Koha::Patron->new(
+    {
+        firstname    => 'First',
+        surname      => 'Sur',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+    }
+)->store->borrowernumber;
+
+my $account = Koha::Account->new({ patron_id => $borrowernumber4 });
+my $line1 = $account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
+
+Koha::Patron::Debarments::AddDebarment(
+    {
+        borrowernumber => $borrowernumber4,
+        expiration     => '9999-06-10',
+        type           => 'TEST',
+        comment        => 'Test delete'
+    }
+);
+
+Koha::Patron::Debarments::AddDebarment(
+    {
+        borrowernumber => $borrowernumber4,
+        expiration     => '9999-10-10',
+        type           => 'TEST2',
+        comment        => 'Test delete again',
+    }
+);
+
+$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
+
+is( @$debarments, 2, "GetDebarments returns 2 debarments before payment" );
+
+$account->pay({amount => 5});
+
+$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
+is( @$debarments, 1, "GetDebarments returns 1 debarment after paying half of the fee" );
+is( @$debarments[0]->{type}, "TEST2", "Debarment left has type value 'TEST2'" );
+
+$account->pay({amount => 5});
+$debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $borrowernumber4 });
+is( @$debarments, 0, "GetDebarments returns 0 debarments after paying all fees" );

@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use C4::Context;
 
+use Koha::Patron::Restriction::Types;
+
 our ( @ISA, @EXPORT_OK );
 
 BEGIN {
@@ -268,6 +270,42 @@ sub UpdateBorrowerDebarmentFlags {
     }
 
     return $dbh->do( "UPDATE borrowers SET debarred = ?, debarredcomment = ? WHERE borrowernumber = ?", {}, ( $expiration, $comment, $borrowernumber ) );
+}
+
+=head2 del_restrictions_after_payment
+
+my $success = del_restrictions_after_payment({
+    borrowernumber => $borrowernumber,
+});
+
+Deletes any restrictions from patron by following the rules
+defined in "Patron restrictions".
+
+=cut
+
+sub del_restrictions_after_payment {
+    my ($params) = @_;
+
+    my $borrowernumber = $params->{'borrowernumber'};
+    return unless ( $borrowernumber );
+
+    my $patron_restrictions = GetDebarments( { borrowernumber => $borrowernumber } );
+    return unless ( $patron_restrictions );
+
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return unless ( $patron );
+
+    my $lines = Koha::Account::Lines->search({ borrowernumber  => $borrowernumber });
+    my $total_due = $lines->total_outstanding;
+
+    foreach my $patron_restriction (@{ $patron_restrictions }){
+        my $restriction = Koha::Patron::Restriction::Types->find({
+            code => $patron_restriction->{type}
+        });
+        if($restriction->lift_after_payment && $total_due <= $restriction->fee_limit){
+            DelDebarment($patron_restriction->{'borrower_debarment_id'});
+        }
+    }
 }
 
 =head2 _GetBorrowernumberByDebarmentId

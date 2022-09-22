@@ -113,6 +113,19 @@
                         <input type="text" value="[% restriction.display_text | html %]" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
                         <span class="required">Required</span>
                     </li>
+                    <li>
+                        <label for="lift_after_payment" class="required">Lift after payment: </label>
+                        <select type="text" name="lift_after_payment" id="lift_after_payment" class="required" required="required" />
+                            <option value="1" selected="selected">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="fee_limit" class="required">Fee limit: </label>
+                        <input type="text" value="[% restriction.fee_limit | html %]" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
                 [% ELSE %]
                     <li>
                         <label for="code" class="required">Code: </label>
@@ -122,6 +135,19 @@
                     <li>
                         <label for="display_text" class="required">Label: </label>
                         <input type="text" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="lift_after_payment" class="required">Lift after payment: </label>
+                        <select type="text" name="lift_after_payment" id="lift_after_payment" class="required" required="required" />
+                            <option value="1" selected="selected">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="fee_limit" class="required">Fee limit: </label>
+                        <input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" min="0" name="fee_limit" id="fee_limit" class="required" required="required" />
                         <span class="required">Required</span>
                     </li>
                 [% END %]
@@ -166,6 +192,8 @@
                         <th scope="col">Code</th>
                         <th scope="col">Label</th>
                         <th scope="col">Default</th>
+                        <th scope="col">Lift after payment?</th>
+                        <th scope="col">Fee limit</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -180,6 +208,12 @@
                             </td>
                             <td>
                                 [% IF restriction.is_default %]Yes[% END %]
+                            </td>
+                            <td>
+                                [% IF restriction.lift_after_payment %]Yes[% END %]
+                            </td>
+                            <td>
+                                [% IF restriction.fee_limit %][% restriction.fee_limit %][% END %]
                             </td>
                             <td class="actions">
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>

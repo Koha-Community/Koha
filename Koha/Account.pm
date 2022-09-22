@@ -39,6 +39,7 @@ use Koha::Account::DebitTypes;
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
 use Koha::Plugins;
+use Koha::Patron::Debarments;
 
 =head1 NAME
 
@@ -116,6 +117,8 @@ sub pay {
             debits        => $lines
         }
     );
+
+    Koha::Patron::Debarments::del_restrictions_after_payment({ borrowernumber => $self->{patron_id} });
 
     # NOTE: Pay historically always applied as much credit as it could to all
     # existing outstanding debits, whether passed specific debits or otherwise.
