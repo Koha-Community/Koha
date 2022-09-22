@@ -8,9 +8,10 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
 
         if( !column_exists( 'statistics', 'categorycode' ) ) {
-            $dbh->do(
-                "ALTER TABLE statistics ADD COLUMN categorycode varchar(10) AFTER ccode"
-            );
+            $dbh->do(q{
+                ALTER TABLE statistics
+                    ADD COLUMN categorycode varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'foreign key from the borrowers table, links transaction to a specific borrower category'
+            });
         }
     },
 };
