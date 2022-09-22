@@ -8,7 +8,6 @@
 [% Asset.css("css/humanmsg.css") | $raw %]
 
 <span style="display:none;" id="all_fund_dropdown">
-    <option value="">No fund</option>
     [% FOREACH budget IN budgets %]
         [% IF ( budget.b_active ) %]
             <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
@@ -36,14 +35,20 @@
             </div>
             <div class="modal-body">
                 <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
-                [% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]
-                </br>
-                <label for="sort1">Statistic 1</label>
-                <input type="text" name="sort1" />
-                </br>
-                <label for="sort2">Statistic 2</label>
-                <input type="text" name="sort2" />
-                <br><a id="update_fund" class="btn btn-default">Update fund</a>
+                <fieldset class="rows">
+                <ol>
+                    <li>[% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]</li>
+                    <li>
+                        <label for="sort1">Statistic 1: </label>
+                        <input type="text" name="sort1" />
+                    </li>
+                    <li>
+                        <label for="sort2">Statistic 2: </label>
+                        <input type="text" name="sort2" />
+                    </li>
+                </ol>
+                </fieldset>
+                <a id="update_fund" class="btn btn-default">Update fund</a>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
