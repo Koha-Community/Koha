@@ -175,11 +175,11 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
     isnt( -e $path, 1, 'File no longer found after delete' );
 
     # add another record with TestBuilder, so file does not exist
-    # catch warning
-    my $upload01 = $builder->build({ source => 'UploadedFile' });
+    # catch warning (which occurs when deleting permanent file)
+    my $upload01 = $builder->build({ source => 'UploadedFile', value => { permanent => 1 } });
     warning_like { $delete = Koha::UploadedFiles->find( $upload01->{id} )->delete; }
         qr/file was missing/,
-        'delete warns when file is missing';
+        'delete warns when permanent file is missing';
     ok( $delete, 'Deleting record was successful' );
     is( Koha::UploadedFiles->count, 4, 'Back to four uploads now' );
 
