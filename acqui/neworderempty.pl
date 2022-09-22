@@ -99,6 +99,7 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 use Koha::Subscriptions;
+use Koha::UI::Form::Builder::Biblio;
 
 our $input           = CGI->new;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -207,9 +208,11 @@ if ( not $ordernumber ) {    # create order
     }
 
     if ( not $biblionumber and Koha::BiblioFrameworks->find('ACQ') ) {
+        my $biblio_form_builder = Koha::UI::Form::Builder::Biblio->new();
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
             next if $tag eq $itemnumber_tag;    # skip items fields
+            my $index_tag = int(rand(1000000));
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 my $mss = $tagslib->{$tag}{$subfield};
                 next if IsMarcStructureInternal($mss);
@@ -241,32 +244,15 @@ if ( not $ordernumber ) {    # create order
                     }
                 }
 
-                if ( $value ) {
-
-                    # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
-                    my $today_dt = dt_from_string;
-                    my $year     = $today_dt->strftime('%Y');
-                    my $shortyear = $today_dt->strftime('%y');
-                    my $month    = $today_dt->strftime('%m');
-                    my $day      = $today_dt->strftime('%d');
-                    $value =~ s/<<YYYY>>/$year/g;
-                    $value =~ s/<<YY>>/$shortyear/g;
-                    $value =~ s/<<MM>>/$month/g;
-                    $value =~ s/<<DD>>/$day/g;
-
-                    # And <<USER>> with surname (?)
-                    my $username =
-                      (   C4::Context->userenv
-                        ? C4::Context->userenv->{'surname'}
-                        : "superlibrarian" );
-                    $value =~ s/<<USER>>/$username/g;
-                }
-                push @catalog_details, {
-                    tag      => $tag,
-                    subfield => $subfield,
-                    %$mss,    # Do we need plugins support (?)
-                    value => $value,
-                };
+                push @catalog_details, $biblio_form_builder->generate_subfield_form(
+                    {
+                        tag => $tag,
+                        subfield => $subfield,
+                        value => $value,
+                        index_tag => $index_tag,
+                        tagslib => $tagslib,
+                    }
+                );
             }
         }
     }
@@ -298,10 +284,16 @@ if ( not $ordernumber or $biblionumber ) {
     if ( C4::Context->preference('UseACQFrameworkForBiblioRecords') ) {
         my $biblio = Koha::Biblios->find($biblionumber);
         my $record = $biblio ? $biblio->metadata->record : undef;
+        my $biblio_form_builder = Koha::UI::Form::Builder::Biblio->new(
+            {
+                biblionumber => $biblionumber,
+            }
+        );
         foreach my $tag ( sort keys %{$tagslib} ) {
             next if $tag eq '';
             next if $tag eq $itemnumber_tag; # skip items fields
             my @fields = $biblionumber ? $record->field($tag) : ();
+            my $index_tag = int(rand(1000000));
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 my $mss = $tagslib->{$tag}{$subfield};
                 next if IsMarcStructureInternal($mss);
@@ -309,12 +301,16 @@ if ( not $ordernumber or $biblionumber ) {
                 # We only need to display the values
                 my $value = join '; ', map { $tag < 10 ? $_->data : $_->subfield( $subfield ) } @fields;
                 if ( $value ) {
-                    push @catalog_details, {
-                        tag => $tag,
-                        subfield => $subfield,
-                        %$mss,
-                        value => $value,
-                    };
+                    push @catalog_details, $biblio_form_builder->generate_subfield_form(
+                        {
+                            tag => $tag,
+                            subfield => $subfield,
+                            value => $value,
+                            index_tag => $index_tag,
+                            record => $record,
+                            tagslib => $tagslib,
+                        }
+                    );
                 }
             }
         }
