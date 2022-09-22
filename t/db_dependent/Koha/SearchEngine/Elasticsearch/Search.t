@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use t::lib::Mocks;
 
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
@@ -86,7 +86,7 @@ SKIP: {
 
     eval { $builder->get_elasticsearch_params; };
 
-    skip 'Elasticsearch configuration not available', 8
+    skip 'Elasticsearch configuration not available', 9
         if $@;
 
     Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'mydb' })->drop_index;
@@ -123,4 +123,33 @@ SKIP: {
         }
     );
     is ($searcher->max_result_window, 12000, 'max_result_window returns the correct value');
+
+    subtest "_convert_facets" => sub {
+        plan tests => 2;
+
+        my $es_facets = {
+            'ln' => {
+                    'sum_other_doc_count' => 0,
+                    'buckets' => [
+                        {
+                            'doc_count' => 2,
+                            'key' => 'eng'
+                        },
+                        {
+                            'doc_count' => 12,
+                            'key' => ''
+                        }
+                    ],
+                    'doc_count_error_upper_bound' => 0
+            }
+        };
+
+        my $koha_facets = $searcher->_convert_facets($es_facets);
+        is(@{$koha_facets->[0]->{facets}},1,"We only get one facet, blank is removed");
+
+        $es_facets->{ln}->{buckets}->[1]->{key} = '0';
+        $koha_facets = $searcher->_convert_facets($es_facets);
+        is(@{$koha_facets->[0]->{facets}},2,"We get two facets, '0' is not removed");
+
+    };
 }
