@@ -492,7 +492,7 @@ sub _convert_facets {
         $limit = @{ $data->{buckets} } if ( $limit > @{ $data->{buckets} } );
         foreach my $term ( @{ $data->{buckets} }[ 0 .. $limit - 1 ] ) {
             my $t = $term->{key};
-            next unless $t; # FIXME Currently we cannot search for an empty faceted field i.e. ln:"" to find records missing languages, though ES does count them correctly
+            next unless length($t); # FIXME Currently we cannot search for an empty faceted field i.e. ln:"" to find records missing languages, though ES does count them correctly
             my $c = $term->{doc_count};
             my $label;
             if ( exists( $special{$type} ) ) {
