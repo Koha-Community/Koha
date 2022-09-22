@@ -305,12 +305,12 @@
 
           $("#selectall").click();
 
+          //Show a red cross if a biblio cannot be deleted
           [% IF recordtype == 'biblio' %]
             $(".records input:checkbox[data-issues!='0']").each(function(){
-              $(this).attr('title', MSG_CANNOT_BE_DELETED)
-              $(this).prop('disabled', true);
-              $(this).prop('checked', false);
-              $(this).parents('tr').find('td').css('background-color', '#ffff99');
+              $(this).parents('tr').find('td').css('background-color', '#ffff99')
+              $(this).replaceWith("<span class='error'><i class='fa fa-times fa-lg'></i></span>")
+              $(".records i").attr('title', MSG_CANNOT_BE_DELETED)
             });
           [% END %]
 
