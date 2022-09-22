@@ -53,6 +53,8 @@ tables:
           lang: default
           content:
             - "[%- USE AuthorisedValues -%]"
+            - "[%- USE KohaDates -%]"
+            - "[%- USE Price -%]"
             - "[%- PROCESS \"accounts.inc\" -%]"
             - "<table>"
             - "    [% IF ( LibraryName ) %]"
@@ -172,6 +174,7 @@ tables:
           lang: default
           content:
             - "[% USE Price %]"
+            - "[% USE KohaDates %]"
             - "[% PROCESS \"accounts.inc\" %]"
             - "<table>"
             - "    [% IF ( LibraryName ) %]"

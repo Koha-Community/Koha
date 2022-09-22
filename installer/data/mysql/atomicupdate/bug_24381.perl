@@ -4,6 +4,7 @@ if ( CheckVersion($DBversion) ) {
     # ACCOUNT_CREDIT
     my $account_credit = q{
         [%- USE AuthorisedValues -%]
+        [%- USE KohaDates -%]
         [%- USE Price -%]
         [%- PROCESS "accounts.inc" -%]
         <table>
@@ -134,6 +135,8 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLAC
     # ACCOUNT_DEBIT
     my $account_debit = q{
         [% PROCESS "accounts.inc" %]
+        [%- USE Price -%]
+        [%- USE KohaDates -%]
         <table>
             [% IF ( LibraryName ) %]
             <tr>
@@ -237,6 +240,8 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_DEBIT' AND REPLACE(REPLACE
     # RECEIPT
     my $receipt = q{
         [% PROCESS "accounts.inc" %]
+        [%- USE KohaDates -%]
+        [%- USE Price -%]
         <table>
             [% IF ( LibraryName ) %]
             <tr>
