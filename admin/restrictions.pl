@@ -110,7 +110,7 @@ if ( $op eq 'add_form') {
                 push @messages, { type => 'error', code => 'delete_system' };
             }
         }
-    }
+    };
     $op = 'list';
 }
 
