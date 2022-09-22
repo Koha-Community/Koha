@@ -312,8 +312,8 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
@@ -333,8 +333,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-04-22 09:12:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/kFAnQQ7q1KaLJ9h7vk0vg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-22 11:31:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SoRKIMEqXE2+RkGq6zBejA
 
 __PACKAGE__->add_columns(
     '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
