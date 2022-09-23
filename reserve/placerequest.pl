@@ -50,6 +50,7 @@ my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
 my $non_priority   = $input->param('non_priority');
 my $op             = $input->param('op') || q{};
+my $multi_holds    = $input->param('multi_holds');
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 
@@ -110,7 +111,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                 }
             }
 
-        } elsif (@biblionumbers > 1) {
+        } elsif (@biblionumbers > 1 || $multi_holds) {
             my $bibinfo = $bibinfos{$biblionumber};
             if ( $can_override || CanBookBeReserved($patron->borrowernumber, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve(
