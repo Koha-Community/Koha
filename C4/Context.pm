@@ -567,6 +567,8 @@ sub _new_Zconn {
         $o->option(preferredRecordSyntax => $syntax);
         $o->option(elementSetName => $elementSetName) if $elementSetName;
         $o->option(databaseName => _common_config($server, 'config') || 'biblios');
+        my $timeout = C4::Context->config('zebra_connection_timeout') || 30;
+        $o->option(timeout => $timeout);
 
         # create a new connection object
         $Zconn= create ZOOM::Connection($o);
