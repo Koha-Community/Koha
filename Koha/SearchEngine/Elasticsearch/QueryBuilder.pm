@@ -790,7 +790,7 @@ will have to wait for a real query parser.
 
 sub _convert_index_strings_freeform {
     my ( $self, $search ) = @_;
-    # @TODO: Currenty will alter also fields contained within quotes:
+    # @TODO: Currently will alter also fields contained within quotes:
     # `searching for "stuff cn:123"` for example will become
     # `searching for "stuff local-number:123"
     #
@@ -1027,9 +1027,9 @@ sub _query_regex_escape_process {
             # Will escape unescaped slashes (/) while preserving
             # unescaped slashes within quotes
             # @TODO: assumes quotes are always balanced and will
-            # not handle escaped qoutes properly, should perhaps be
+            # not handle escaped quotes properly, should perhaps be
             # replaced with a more general parser solution
-            # so that this function is ever only provided with unqouted
+            # so that this function is ever only provided with unquoted
             # query parts
             $query =~ s@(?:(?<!\\)((?:[\\]{2})*)(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@\\$1@g;
         }
