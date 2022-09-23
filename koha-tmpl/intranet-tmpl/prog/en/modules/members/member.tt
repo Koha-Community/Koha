@@ -252,11 +252,19 @@
 
             $("#select_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").prop("checked", true).change();
+                $(".selection").each(function(){
+                    if( $(this).prop("checked") == false ){
+                        $(this).prop( "checked", true ).change();
+                    }
+                });
             });
             $("#clear_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").prop("checked", false).change();
+                $(".selection").each(function(){
+                    if( $(this).prop("checked") ){
+                        $(this).prop("checked", false ).change();
+                    }
+                });
             });
 
             [% IF searchmember %]
