@@ -1009,7 +1009,7 @@ this is a PSGI app or a CGI app, and implementing code as appropriate.
 
 sub psgi_env {
     my ( $self ) = @_;
-    return any { /^(psgi|plack)[._]/i } keys %ENV;
+    return any { /^(psgi\.|plack\.|PLACK_ENV$)/i } keys %ENV;
 }
 
 =head3 is_internal_PSGI_request

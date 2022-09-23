@@ -147,32 +147,33 @@ is( C4::Context->interface( 'CRON' ), 'cron', 'interface cron uc' );
 }
 
 subtest 'psgi_env and is_internal_PSGI_request' => sub {
+
     plan tests => 11;
 
     local %ENV = ( no_plack => 1 );
-    is( C4::Context->psgi_env, q{}, 'no_plack' );
+    ok( !C4::Context->psgi_env, 'no_plack' );
     $ENV{plackishere} = 1;
-    is( C4::Context->psgi_env, q{}, 'plackishere is wrong' );
+    ok( !C4::Context->psgi_env, 'plackishere is wrong' );
     $ENV{'plack.ishere'} = 1;
-    is( C4::Context->psgi_env, 1, 'plack.ishere' );
+    ok( C4::Context->psgi_env, 'plack.ishere' );
     delete $ENV{'plack.ishere'};
-    is( C4::Context->psgi_env, q{}, 'plack.ishere was here' );
-    $ENV{'plack_ishere'} = 1;
-    is( C4::Context->psgi_env, 1, 'plack_ishere' );
-    delete $ENV{'plack_ishere'};
+    ok( !C4::Context->psgi_env, 'plack.ishere was here' );
+    $ENV{'plack_env'} = 1;
+    ok( C4::Context->psgi_env, 'plack_env' );
+    delete $ENV{'plack_env'};
     $ENV{'psgi_whatever'} = 1;
-    is( C4::Context->psgi_env, 1, 'psgi_whatever' );
+    ok( !C4::Context->psgi_env, 'psgi_whatever' );
     delete $ENV{'psgi_whatever'};
     $ENV{'psgi.whatever'} = 1;
-    is( C4::Context->psgi_env, 1, 'psgi.whatever' );
+    ok( C4::Context->psgi_env, 'psgi.whatever' );
     delete $ENV{'psgi.whatever'};
     $ENV{'PSGI.UPPERCASE'} = 1;
-    is( C4::Context->psgi_env, 1, 'PSGI uppercase' );
+    ok( C4::Context->psgi_env, 'PSGI uppercase' );
 
     $ENV{'REQUEST_URI'} = '/intranet/whatever';
-    is( C4::Context->is_internal_PSGI_request, 0, 'intranet not considered internal in regex' );
+    ok( !C4::Context->is_internal_PSGI_request, 'intranet not considered internal in regex' );
     $ENV{'REQUEST_URI'} = '/api/v1/tralala';
-    is( C4::Context->is_internal_PSGI_request, 1, 'api considered internal in regex' );
+    ok( C4::Context->is_internal_PSGI_request, 'api considered internal in regex' );
     delete $ENV{'PSGI.UPPERCASE'};
-    is( C4::Context->is_internal_PSGI_request, 0, 'api but no longer PSGI' );
+    ok( !C4::Context->is_internal_PSGI_request, 'api but no longer PSGI' );
 };
