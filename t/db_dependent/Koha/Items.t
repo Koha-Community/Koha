@@ -1510,73 +1510,6 @@ subtest 'can_be_transferred' => sub {
        'We get the same result also if we pass the from-library parameter.');
 };
 
-subtest 'filter_by_for_hold' => sub {
-    plan tests => 12;
-
-    my $biblio = $builder->build_sample_biblio;
-    is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
-    is( $biblio->items->filter_by_for_hold->count, 0, 'no item for hold' );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 0 } );
-    is( $biblio->items->filter_by_for_hold->count, 1, '1 item for hold' );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
-    is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold' );
-
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 0 } );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1 } );
-    is( $biblio->items->filter_by_for_hold->count, 3, '3 items for hold - itemlost' );
-
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 0 } );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
-    is( $biblio->items->filter_by_for_hold->count, 4, '4 items for hold - withdrawn' );
-
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 0 } );
-    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 1 } );
-    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 0);
-    is( $biblio->items->filter_by_for_hold->count, 5, '5 items for hold - not damaged if not AllowHoldsOnDamagedItems' );
-    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 1);
-    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - damaged if AllowHoldsOnDamagedItems' );
-
-    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
-    my $not_holdable_itemtype = $itemtype->itemtype;
-    $builder->build_sample_item(
-        {
-            biblionumber => $biblio->biblionumber,
-            itype        => $not_holdable_itemtype,
-        }
-    );
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => undef,
-            itemtype     => $not_holdable_itemtype,
-            rule_name    => 'holdallowed',
-            rule_value   => 'not_allowed',
-        }
-    );
-    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - holdallowed=not_allowed' );
-
-    # Remove rule, test notforloan on itemtype
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => undef,
-            itemtype     => $not_holdable_itemtype,
-            rule_name    => 'holdallowed',
-            rule_value   => undef,
-        }
-    );
-    is( $biblio->items->filter_by_for_hold->count, 7, '7 items for hold - rule deleted' );
-    $itemtype->notforloan(1)->store;
-    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - notforloan' );
-
-    t::lib::Mocks::mock_preference('item-level_itypes', 0);
-    $biblio->biblioitem->itemtype($not_holdable_itemtype)->store;
-    is( $biblio->items->filter_by_for_hold->count, 0, '0 item-level_itypes=0' );
-
-    t::lib::Mocks::mock_preference('item-level_itypes', 1);
-
-    $biblio->delete;
-};
-
 # Reset nb_of_items prior to testing delete
 $nb_of_items = Koha::Items->search->count;
 
@@ -1936,4 +1869,85 @@ subtest 'search_ordered' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'filter_by_for_hold' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    my $biblio  = $builder->build_sample_biblio;
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+    t::lib::Mocks::mock_preference('IndependentBranches', 0); # more robust tests
+
+    is( $biblio->items->filter_by_for_hold->count, 0, 'no item yet' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
+    is( $biblio->items->filter_by_for_hold->count, 0, 'no item for hold' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 0 } );
+    is( $biblio->items->filter_by_for_hold->count, 1, '1 item for hold' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => -1 } );
+    is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 0, library => $library->id } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1, library => $library->id } );
+    is( $biblio->items->filter_by_for_hold->count, 3, '3 items for hold - itemlost' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 0, library => $library->id } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1, library => $library->id } );
+    is( $biblio->items->filter_by_for_hold->count, 4, '4 items for hold - withdrawn' );
+
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 0 } );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, damaged => 1 } );
+    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 0);
+    is( $biblio->items->filter_by_for_hold->count, 5, '5 items for hold - not damaged if not AllowHoldsOnDamagedItems' );
+    t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 1);
+    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - damaged if AllowHoldsOnDamagedItems' );
+
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $not_holdable_itemtype = $itemtype->itemtype;
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $not_holdable_itemtype,
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            itemtype     => $not_holdable_itemtype,
+            rule_name    => 'holdallowed',
+            rule_value   => 'not_allowed',
+        }
+    );
+    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - holdallowed=not_allowed' );
+
+    # Remove rule, test notforloan on itemtype
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            itemtype     => $not_holdable_itemtype,
+            rule_name    => 'holdallowed',
+            rule_value   => undef,
+        }
+    );
+    is( $biblio->items->filter_by_for_hold->count, 7, '7 items for hold - rule deleted' );
+    $itemtype->notforloan(1)->store;
+    is( $biblio->items->filter_by_for_hold->count, 6, '6 items for hold - notforloan' );
+
+    {
+        my $mock_context = Test::MockModule->new('C4::Context');
+        $mock_context->mock( 'only_my_library', 1 );
+        $mock_context->mock( 'mybranch',        $library->id );
+        is( $biblio->items->filter_by_for_hold->count, 2, '2 items for hold, filtered by IndependentBranches' );
+    }
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $biblio->biblioitem->itemtype($not_holdable_itemtype)->store;
+    is( $biblio->items->filter_by_for_hold->count, 0, '0 item-level_itypes=0' );
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+
+    $schema->storage->txn_rollback;
 };
