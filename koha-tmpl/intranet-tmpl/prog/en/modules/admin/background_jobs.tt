@@ -3,54 +3,6 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
-[% BLOCK show_job_status %]
-    [% SWITCH job.status %]
-        [% CASE "new" %]
-            <span>New</span>
-        [% CASE "cancelled" %]
-            <span>Cancelled</span>
-        [% CASE "finished" %]
-            <span>Finished</span>
-        [% CASE "started" %]
-            <span>Started</span>
-        [% CASE "running" %]
-            <span>Running</span>
-        [% CASE "failed" %]
-            <span>Failed</span>
-        [% CASE # Default case %]
-            [% job.status | html %]
-    [% END -%]
-[% END %]
-[% BLOCK show_job_type %]
-    [% SWITCH job_type %]
-    [% CASE 'batch_biblio_record_modification' %]
-        <span>Batch bibliographic record modification</span>
-    [% CASE 'batch_biblio_record_deletion' %]
-        <span>Batch bibliographic record record deletion</span>
-    [% CASE 'batch_authority_record_modification' %]
-        <span>Batch authority record modification</span>
-    [% CASE 'batch_authority_record_deletion' %]
-        <span>Batch authority record deletion</span>
-    [% CASE 'batch_item_record_modification' %]
-        <span>Batch item record modification</span>
-    [% CASE 'batch_item_record_deletion' %]
-        <span>Batch item record deletion</span>
-    [% CASE "batch_hold_cancel" %]
-        <span>Batch hold cancellation</span>
-    [% CASE 'update_elastic_index' %]
-        <span>Update Elasticsearch index</span>
-    [% CASE 'update_holds_queue_for_biblios' %]
-        <span>Holds queue update</span>
-    [% CASE 'stage_marc_for_import' %]
-        <span>Staged MARC records for import</span>
-    [% CASE 'marc_import_commit_batch' %]
-        <span>Import MARC records</span>
-    [% CASE 'marc_import_revert_batch' %]
-        <span>Revert import MARC records</span>
-    [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
-    [% END %]
-
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op == 'view' %]
@@ -118,17 +70,17 @@
 
     [% PROCESS "background_jobs/${job.type}.inc" %]
 
-    <fieldset class="rows">
+    <fieldset class="rows" style="display:none;">
         <ol>
             <li><span class="label">Job ID: </span>[% job.id | html %]</li>
             <li>
                 <label for="job_status">Status: </label>
-                [% PROCESS show_job_status %]
+                <span id="job_status_description"></span>
             </li>
             <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
             <li>
                 <label for="job_type">Type: </label>
-                [% PROCESS show_job_type job_type => job.type %]
+                <span id="job_type_description"></span>
             </li>
             <li>
                 <label for="job_enqueued_on">Queued: </label>
@@ -249,13 +201,25 @@
                 '_str': _("Batch hold cancellation")
             },
             {
-                '_id': 'update_elastic_index'
-                , '_str': _("Update Elasticsearch index")
+                '_id': 'update_elastic_index',
+                '_str': _("Update Elasticsearch index")
             },
             {
                 '_id': 'update_holds_queue_for_biblios',
                 '_str': _("Holds queue update")
-            }
+            },
+            {
+                '_id': 'stage_marc_for_import',
+                '_str': _("Staged MARC records for import")
+            },
+            {
+                '_id': 'marc_import_commit_batch',
+                '_str': _("Import MARC records")
+            },
+            {
+                '_id': 'marc_import_revert_batch',
+                '_str': _("Revert import MARC records")
+            },
         ];
 
         function get_job_type (job_type) {
@@ -267,6 +231,12 @@
         }
 
         $(document).ready(function() {
+            [% IF op == 'view' %]
+                $("#job_status_description").html( get_job_status("[% job.status | html %]") );
+                $("#job_type_description").html( get_job_type("[% job.type | html %]") );
+                $("fieldset.rows").show();
+            [% END %]
+
             let additional_filters = {
                 started_on: function(){
                     let now = new Date();
