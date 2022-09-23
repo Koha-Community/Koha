@@ -40,9 +40,7 @@ Returns all background jobs the logged in user should be allowed to see
 sub search_limited {
     my ( $self, $params, $attributes ) = @_;
 
-    # Assume permission if context has no user
-    my $can_manage_background_jobs = 1;
-
+    my $can_manage_background_jobs;
     my $logged_in_user;
     my $userenv = C4::Context->userenv;
     if ( $userenv and $userenv->{number} ) {
@@ -51,10 +49,9 @@ sub search_limited {
             { parameters => 'manage_background_jobs' } );
     }
 
-    return $can_manage_background_jobs
-      ? $self->search( $params, $attributes )
-      : $self->search( { borrowernumber => $logged_in_user->borrowernumber } )
-      ->search( $params, $attributes );
+    return $self->search( $params, $attributes ) if $can_manage_background_jobs;
+    my $id = $logged_in_user ? $logged_in_user->borrowernumber : undef;
+    return $self->search({ borrowernumber => $id  })->search( $params, $attributes );
 }
 
 =head3 filter_by_current

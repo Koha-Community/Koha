@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::MockModule;
 
 use List::MoreUtils qw(any);
@@ -119,6 +119,24 @@ subtest 'filter_by_current() tests' => sub {
 
     is( $rs->count, 1, 'Only 1 job in filtered resultset' );
     is( $rs->next->status, 'new', "The only job in resultset is 'new'"  );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'search_limited' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $job1 = $builder->build_object( { class => 'Koha::BackgroundJobs', value => { borrowernumber => $patron1->id } } );
+
+    C4::Context->set_userenv( undef, q{} );
+    is( Koha::BackgroundJobs->search_limited->count, 0, 'No jobs found without userenv' );
+    C4::Context->set_userenv( $patron1->id, $patron1->userid );
+    is( Koha::BackgroundJobs->search_limited->count, 1, 'My job found' );
+    C4::Context->set_userenv( $patron2->id, $patron2->userid );
+    is( Koha::BackgroundJobs->search_limited->count, 0, 'No jobs for me' );
 
     $schema->storage->txn_rollback;
 };
