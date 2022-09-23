@@ -18,7 +18,6 @@ use C4::Biblio qw(
     ModBiblio
     ModBiblioMarc
     GetFrameworkCode
-    GetMarcBiblio
     BiblioAutoLink
 );
 use C4::Koha;
@@ -634,10 +633,9 @@ RECORD: foreach my $record (@{$marc_records}) {
                     report_item_errors($record_id, $errors_ref);
                 }
                 C4::Biblio::_strip_item_fields($record, $framework);
-                if ($record_has_added_items || $matched_record_id) {
-                    # Replace with record from GetMarcBiblio with "$embeditems = 1"
-                    $record = GetMarcBiblio({biblionumber => $record_id, embed_items => 1});
-                }
+                my $biblio = Koha::Biblios->find($record_id);
+                $record = $biblio->metadata->record( { embed_items => 1 } );
+
                 push @search_engine_record_ids, $record_id;
                 push @search_engine_records, $record;
             }
