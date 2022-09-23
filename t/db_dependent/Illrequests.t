@@ -636,7 +636,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 19;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
