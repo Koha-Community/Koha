@@ -510,6 +510,7 @@
                                             [% END %]
                                             [% IF item.onloan %]
                                             <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Confirm checkin and mark missing items as lost</button>
+                                            <button type="submit" class="btn btn-default" name="do_not_verify_items_bundle_contents" value="1"><i class="fa fa-check"></i> Confirm checkin without verifying bundle contents</button>
                                             [% ELSE %]
                                             <button type="submit" class="btn btn-default"><i class="fa fa-check"></i> Confirm inventory check and mark items as lost</button>
                                             [% END %]
