@@ -668,7 +668,7 @@
         <script>
 
             $(document).ready(function(){
-                if( $("#tabs .tab-pane.active").length < 1 ){
+                if( $("#tabs").length > 0 && $("#tabs .tab-pane.active").length < 1 ){
                     /* Activate first tab and initialize its tinyMCE instance */
                     let firstTab = $("#tabs a:first");
                     firstTab.tab("show");
