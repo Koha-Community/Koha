@@ -47,7 +47,7 @@ my $job_id = Koha::BackgroundJob->enqueue(
 );
 
 Consumer:
-Koha::BackgrounJobs->find($job_id)->process;
+Koha::BackgroundJobs->find($job_id)->process;
 See also C<misc/background_jobs_worker.pl> for a full example
 
 =head1 API
@@ -386,7 +386,7 @@ sub _derived_class {
 
 =head3 type_to_class_mapping
 
-    my $mapping = Koha::BackgrounJob->new->type_to_class_mapping;
+    my $mapping = Koha::BackgroundJob->new->type_to_class_mapping;
 
 Returns the available types to class mappings.
 
@@ -404,7 +404,7 @@ sub type_to_class_mapping {
 
 =head3 core_types_to_classes
 
-    my $mappings = Koha::BackgrounJob->new->core_types_to_classes
+    my $mappings = Koha::BackgroundJob->new->core_types_to_classes
 
 Returns the core background jobs types to class mappings.
 

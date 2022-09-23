@@ -29,7 +29,7 @@ use Try::Tiny;
 
 =head3 list
 
-Controller function that handles listing Koha::BackgrounJob objects
+Controller function that handles listing Koha::BackgroundJob objects
 
 =cut
 
