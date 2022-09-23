@@ -1,0 +1,466 @@
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+    [% IF op == 'add_form' %]
+        New authentication provider &rsaquo; [% ELSIF op == 'edit_form' %]
+        Edit authentication provider &rsaquo; [% END %]
+
+    Authentication providers &rsaquo; Administration &rsaquo; Koha
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_auth_providers" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    New
+                </a>
+            </li>
+
+        [% ELSIF op == 'edit_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Edit
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Authentication providers
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+[% FOREACH m IN messages %]
+    <div class="dialog [% m.type | html %]" id="auth_provider_action_result_dialog">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            <span>An error occurred trying to open the authentication provider for editing. The passed id is invalid.</span>
+        [% CASE 'error_on_insert' %]
+            <span>An error occurred when adding a new authentication provider.</span>
+        [% CASE 'success_on_update' %]
+            <span>Authentication provider updated successfully.</span>
+        [% CASE 'success_on_insert' %]
+            <span>Authentication provider added successfully.</span>
+        [% CASE %]
+            <span>[% m.code | html %]</span>
+        [% END %]
+    </div>
+[% END %]
+
+    <div class="dialog message" id="auth_provider_delete_success" style="display: none;"></div>
+    <div class="dialog alert"   id="auth_provider_delete_error"   style="display: none;"></div>
+
+[% IF op == 'add_form' %]
+    <h1>New authentication provider</h1>
+    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="add" name="add" class="validated" method="post">
+        <input type="hidden" name="op" value="add" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="code" class="required">Code: </label>
+                    <input type="text" name="code" id="code" size="60" class="required" required="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="description" class="required">Description: </label>
+                    <input type="text" name="description" id="description" size="60" class="required" required="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="protocol">Protocol: </label>
+                    <select name="protocol" id="protocol">
+                        <option value="OAuth">OAuth</option>
+                        <option value="OIDC">OIDC</option>
+                        <!-- Not implemented yet
+                        <option value="LDAP">LDAP</option>
+                        <option value="CAS">CAS</option>
+                        -->
+                    </select>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <div>
+                        <label for="config" class="required json">Configuration: </label>
+                        <textarea name="config" id="config" class="required"></textarea>
+                        <span class="required">Required</span>
+                    </div>
+                    <div>
+                        <label></label>
+                        <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default OAuth configuration</button>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <label for="mapping" class="required json">Mapping: </label>
+                        <textarea name="mapping" id="mapping" class="required"></textarea>
+                        <span class="required">Required</span>
+                    </div>
+                    <div>
+                        <label></label>
+                        <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default OAuth mapping</button>
+                    </div>
+                </li>
+                <li>
+                    <label for="matchpoint" class="required">Matchpoint: </label>
+                    <select name="matchpoint" id="matchpoint" class="required">
+                        <option value="email">Email</option>
+                        <option value="userid">User id</option>
+                        <option value="cardnumber">Card number</option>
+                    </select>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="icon_url">Icon URL: </label>
+                    <input type="text" name="icon_url" id="icon_url" size="60" />
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'edit_form' %]
+    <h1>Edit authentication provider</h1>
+    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+        <input type="hidden" name="op" value="edit_save" />
+        <input type="hidden" name="auth_provider_id" value="[%- auth_provider.auth_provider_id | html -%]" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="code" class="required">Code: </label>
+                    <input type="text" name="code" id="code" size="60" class="required" required="required" value="[%- auth_provider.code | html -%]"/>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="description" class="required">Description: </label>
+                    <input type="text" name="description" id="description" size="60" class="required" required="required" value="[%- auth_provider.description | html -%]"/>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="protocol">Protocol: </label>
+                    <select name="protocol" id="protocol">
+                    [% IF auth_provider.protocol == 'OAuth' %]
+                        <option value="OAuth" selected="selected">OAuth</option>
+                        <option value="OIDC">OIDC</option>
+                        <!-- Not implemented yet
+                        <option value="LDAP">LDAP</option>
+                        <option value="CAS">CAS</option>
+                        -->
+                    [% ELSE %]
+                        <option value="OAuth">OAuth</option>
+                        <option value="OIDC" selected="selected">OIDC</option>
+                        <!-- Not implemented yet
+                        <option value="LDAP">LDAP</option>
+                        <option value="CAS">CAS</option>
+                        -->
+                    [% END %]
+                    </select>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <div>
+                        <label for="config" class="required json">Configuration: </label>
+                        <textarea name="config" id="config" class="required">[%- auth_provider.config | html -%]</textarea>
+                        <span class="required">Required</span>
+                    </div>
+                    <div>
+                        <label></label>
+                        <button class="btn btn-ligth defaults" data-default-target="config" id="default-config">Add default [%- auth_provider.protocol | html -%] configuration</button>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <label for="mapping" class="required json">Mapping: </label>
+                        <textarea name="mapping" id="mapping" class="required">[%- auth_provider.mapping | html -%]</textarea>
+                        <span class="required">Required</span>
+                    </div>
+                    <div>
+                        <label></label>
+                        <button class="btn btn-ligth defaults" data-default-target="mapping" id="default-mapping">Add default [%- auth_provider.protocol | html -%] mapping</button>
+                    </div>
+                </li>
+                <li>
+                    <label for="matchpoint" class="required">matchpoint: </label>
+                    <select name="matchpoint" id="matchpoint" class="required">
+                        [%- IF auth_provider.matchpoint == 'email'      -%]
+                            <option value="email" selected="selected">Email</option>
+                        [%- ELSE -%]
+                            <option value="email">Email</option>
+                        [%- END -%]
+                        [%- IF auth_provider.matchpoint == 'userid'     -%]
+                            <option value="userid" selected="selected">User id</option>
+                        [%- ELSE -%]
+                            <option value="userid">User id</option>
+                        [%- END -%]
+                        [%- IF auth_provider.matchpoint == 'cardnumber' -%]
+                            <option value="cardnumber" selected="selected">Card number</option>
+                        [%- ELSE -%]
+                            <option value="cardnumber">Card number</option>
+                        [%- END -%]
+                    </select>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="icon_url">Icon URL: </label>
+                    <input type="text" name="icon_url" id="icon_url" size="60"  value="[%- auth_provider.icon_url | html -%]"/>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="new_auth_provider" href="/cgi-bin/koha/admin/authentication_providers.pl?op=add_form"><i class="fa fa-plus"></i> New authentication provider</a>
+    </div>
+
+    <h1>Authentication providers</h1>
+
+    <table id="auth_providers">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Protocol</th>
+                <th data-class-name="actions noExport">Actions</th>
+            </tr>
+        </thead>
+    </table>
+[% END %]
+
+            <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="delete_confirm_modal_label">Delete authentication provider</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="delete_confirm_dialog"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-default" id="delete_confirm_modal_button" role="button" data-toggle="modal">Delete</a>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- #delete_confirm_modal -->
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+
+            var auth_providers_url = '/api/v1/auth/providers';
+            window.auth_providers = $("#auth_providers").kohaTable({
+                "ajax": {
+                    "url": auth_providers_url
+                },
+                'language': {
+                    'emptyTable': '<div class="dialog message">'+_("There are no authentication providers defined.")+'</div>'
+                },
+                "columnDefs": [ {
+                    "targets": [0,1,2],
+                    "render": function (data, type, row, meta) {
+                        if ( type == 'display' ) {
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            }
+                            else {
+                                return "Default";
+                            }
+                        }
+                        return data;
+                    }
+                } ],
+                "columns": [
+                    {
+                        "data": "code",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "description",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "protocol",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/authentication_providers.pl?op=edit_form&amp;auth_provider_id='+ encodeURIComponent(row.auth_provider_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_auth_provider" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-id="'+ encodeURIComponent(row.auth_provider_id) +'" data-auth-provider-code="'+ encodeURIComponent(row.code.escapeHtml()) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs edit_domains" role="button" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id='+ encodeURIComponent(row.auth_provider_id) +'"><i class="fa fa-cog" aria-hidden="true"></i> '+_("Manage Domains")+'</a>';
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if ( data.debug ) {
+                        $(row).addClass('debug');
+                    }
+                },
+            });
+
+            $('#auth_providers').on( "click", '.delete_auth_provider', function () {
+                var auth_provider_id   = $(this).data('auth-provider-id');
+                var auth_provider_code = decodeURIComponent($(this).data('auth-provider-code'));
+
+                $("#delete_confirm_dialog").html(
+                    _("You are about to delete the '%s' authentication provider.").format(auth_provider_code)
+                );
+                $("#delete_confirm_modal_button").data('auth-provider-id', auth_provider_id);
+                $("#delete_confirm_modal_button").data('auth-provider-code', auth_provider_code);
+            });
+
+            $("#delete_confirm_modal_button").on( "click", function () {
+
+                var auth_provider_id   = $(this).data('auth-provider-id');
+                var auth_provider_code = $(this).data('auth-provider-code');
+
+                $.ajax({
+                    method: "DELETE",
+                    url: auth_providers_url+"/"+auth_provider_id
+                }).success(function() {
+                    window.auth_providers.api().ajax.reload(function (data) {
+                        $("#auth_provider_action_result_dialog").hide();
+                        $("#auth_provider_delete_success").html(_("Server '%s' deleted successfully.").format(auth_provider_code)).show();
+                    });
+                }).fail(function () {
+                    $("#auth_provider_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(auth_provider_code)).show();
+                }).done(function () {
+                    $("#delete_confirm_modal").modal('hide');
+                });
+            });
+
+            $.validator.addMethod('json', function(value, element) {
+                if (this.optional(element)) return true;
+                try {
+                    JSON.parse(value)
+                } catch (error) {
+                    return false;
+                }
+                return true;
+            }, _('Not a valid JSON'));
+
+            $('#config, #mapping').each(function() {
+                $(this).rules('add', {
+                    required: true,
+                    json: true
+                });
+            });
+
+            var defaults = {
+                OIDC: {
+                    config: {
+                        key: "<enter client id>",
+                        secret: "<enter client secret>",
+                        well_known_url: "<enter openid configuration endpoint>",
+                        scope: "openid email"
+                    },
+                    mapping: {
+                        email: "email",
+                        given_name: "firstname",
+	                    family_name: "surname"
+                    }
+                },
+                OAuth: {
+                    config: {
+                        key: "<enter client id>",
+                        secret: "<enter client secret>",
+                        authorize_url: "<enter authorization endpoint>",
+                        token_url: "<enter token endpoint>",
+                        userinfo_url: "<enter user info endpoint (optional)>",
+                        scope: "email"
+                    },
+                    mapping: {
+                        email: "email",
+                        given_name: "firstname",
+	                    family_name: "surname"
+                    }
+                }
+            };
+
+            $('#protocol').on('change', function() {
+                var protocol = $(this).val();
+                $('#default-config').html(_('Add default %s configuration').format(protocol));
+                $('#default-mapping').html(_('Add default %s mapping').format(protocol));
+            });
+
+            $('button.defaults').on('click', function(event) {
+                event.preventDefault();
+                var target = $(this).data('defaultTarget');
+                if($('#'+target).html() !== '' && !confirm(_('Are you sure you want to replace current %s contents?').format(target))) {
+                    return;
+                }
+                var protocol = $('#protocol').val();
+                $('#'+target).html(JSON.stringify(defaults[protocol][target], null, 2));
+            })
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

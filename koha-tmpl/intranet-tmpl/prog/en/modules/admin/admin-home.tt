@@ -238,11 +238,15 @@
                 </dl>
             [% END %]
 
-            [% IF ( ( CAN_user_parameters_manage_smtp_servers || CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields || CAN_user_parameters_manage_mana || (Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts) ) %]
+            [% IF ( ( CAN_user_parameters_manage_authentication_providers || CAN_user_parameters_manage_smtp_servers || CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields || CAN_user_parameters_manage_mana || (Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts) ) %]
                 <h3>Additional parameters</h3>
                 <dl>
                         <!-- <dt><a href="/cgi-bin/koha/admin/printers.pl">Network Printers</a></dt>
                         <dd>Printers (UNIX paths).</dd> -->
+                    [% IF ( CAN_user_parameters_manage_authentication_providers) %]
+                        <dt><a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a></dt>
+                        <dd>Define which external authentication providers to use</dd>
+                    [% END %]
                     [% IF ( CAN_user_parameters_manage_search_targets ) %]
                         <dt><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></dt>
                         <dd>Define which external servers to query for MARC data</dd>

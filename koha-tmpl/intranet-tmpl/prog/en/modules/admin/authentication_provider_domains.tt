@@ -1,0 +1,476 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Branches %]
+[% USE Categories %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+    [% IF op == 'add_form' %]
+        New authentication provider domain &rsaquo; [% ELSIF op == 'edit_form' %]
+        Edit authentication provider domain &rsaquo; [% END %]
+
+    Authentication providers &rsaquo; Administration &rsaquo; Koha
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_auth_provider_domains" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        </li>
+
+        <li>
+            <a href="/cgi-bin/koha/admin/authentication_providers.pl">Authentication providers</a>
+        </li>
+
+        [% IF op == 'add_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | uri -%]">Domains for [%- auth_provider_name | html -%]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    New Domain
+                </a>
+            </li>
+
+        [% ELSIF op == 'edit_form' %]
+            <li>
+                <a href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | uri -%]">Domains for [%- auth_provider_name | html -%]</a>
+            </li>
+            <li>
+                <a href="#" aria-current="page">
+                    Edit Domain
+                </a>
+            </li>
+
+        [% ELSE %]
+            <li>
+                <a href="#" aria-current="page">
+                    Domains for [%- auth_provider_code | html -%]
+                </a>
+            </li>
+        [% END %]
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+[% FOREACH m IN messages %]
+    <div class="dialog [% m.type | html %]" id="auth_provider_domain_action_result_dialog">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            <span>An error occurred trying to open the authentication provider domain for editing. The passed id is invalid.</span>
+        [% CASE 'error_on_insert' %]
+            <span>An error occurred when adding a new authentication provider domain.</span>
+        [% CASE 'success_on_update' %]
+            <span>Authentication provider domain updated successfully.</span>
+        [% CASE 'success_on_insert' %]
+            <span>Authentication provider domain added successfully.</span>
+        [% CASE %]
+            <span>[% m.code | html %]</span>
+        [% END %]
+    </div>
+[% END %]
+
+    <div class="dialog message" id="auth_provider_domain_delete_success" style="display: none;"></div>
+    <div class="dialog alert"   id="auth_provider_domain_delete_error"   style="display: none;"></div>
+
+[% IF op == 'add_form' %]
+    <h1>New authentication provider domain</h1>
+    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="add" name="add" class="validated" method="post">
+        <input type="hidden" name="op" value="add" />
+        <input type="hidden" name="domain_ops" value="1" />
+        <input type="hidden" name="auth_provider_id" value="[%- auth_provider_id | html -%]" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="domain">Domain: </label>
+                    <input type="text" name="domain" id="domain" size="60" />
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="update_on_auth">Update on login: </label>
+                    <select name="update_on_auth" id="update_on_auth">
+                        <option value="1">Update</option>
+                        <option value="0" selected="selected">Don't update</option>
+                    </select>
+                    <span>user data on login</span>
+                </li>
+                <li>
+                    <label for="auto_register">Auto register: </label>
+                    <select name="auto_register" id="auto_register">
+                        <option value="1">Allow</option>
+                        <option value="0" selected="selected">Don't allow</option>
+                    </select>
+                    <span>users to auto register on login</span>
+                </li>
+                <li>
+                    <label for="default_library_id">Default library: </label>
+                    <select id="default_library_id" name="default_library_id">
+                        [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1, do_not_select_my_library => 1 ) %]
+                    </select>
+                </li>
+                <li>
+                    <label for="default_category_id">Default category: </label>
+                    [% SET categories = Categories.all() %]
+                    <select name="default_category_id" id="default_category_id">
+                        [% FOREACH category IN categories %]
+                            <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="allow_opac">Allow opac: </label>
+                    <select name="allow_opac" id="allow_opac">
+                        <option value="1" selected="selected">Allow</option>
+                        <option value="0">Don't allow</option>
+                    </select>
+                    <span>opac users of this domain to login with this authentication provider</span>
+                </li>
+                <li>
+                    <label for="allow_opac">Allow staff: </label>
+                    <select name="allow_staff" id="allow_staff">
+                        <option value="1" selected="selected">Allow</option>
+                        <option value="0">Don't allow</option>
+                    </select>
+                    <span>of this domain </span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'edit_form' %]
+    <h1>Edit authentication provider domain</h1>
+    <form action="/cgi-bin/koha/admin/authentication_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+        <input type="hidden" name="op" value="edit_save" />
+        <input type="hidden" name="domain_ops" value="1" />
+        <input type="hidden" name="auth_provider_id" value="[%- auth_provider_id | html -%]" />
+        <input type="hidden" name="auth_provider_domain_id" value="[%- auth_provider_domain.auth_provider_domain_id | html -%]" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="domain">Domain: </label>
+                    <input type="text" name="domain" id="domain" size="60" value="[%- auth_provider_domain.domain | html -%]"/>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="update_on_auth">Update on login: </label>
+                    <select name="update_on_auth" id="update_on_auth">
+                    [% IF auth_provider_domain.update_on_auth == "1" %]
+                        <option value="1" selected="selected">Update</option>
+                        <option value="0">Don't update</option>
+                    [% ELSE %]
+                        <option value="1">Update</option>
+                        <option value="0" selected="selected">Don't update</option>
+                    [% END %]
+                    </select>
+                    <span>user data on login</span>
+                </li>
+                <li>
+                    <label for="auto_register">Auto register: </label>
+                    <select name="auto_register" id="auto_register">
+                    [% IF auth_provider_domain.auto_register == "1" %]
+                        <option value="1" selected="selected">Allow</option>
+                        <option value="0">Don't allow</option>
+                    [% ELSE %]
+                        <option value="1">Allow</option>
+                        <option value="0" selected="selected">Don't allow</option>
+                    [% END %]
+                    </select>
+                    <span>users to auto register on login</span>
+                </li>
+                <li>
+                    <label for="default_library_id">Default library: </label>
+                    <select id="default_library_id" name="default_library_id">
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => auth_provider_domain.default_library_id, unfiltered => 1, do_not_select_my_library => 1 ) %]
+                    </select>
+                </li>
+                <li>
+                    <label for="default_category_id">Default category: </label>
+                    [% SET categories = Categories.all() %]
+                    <select name="default_category_id" id="default_category_id">
+                        [% FOREACH category IN categories %]
+                            [% IF category.categorycode == auth_provider_domain.default_category_id %]
+                                <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
+                            [% ELSE %]
+                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="allow_opac">Allow opac: </label>
+                    <select name="allow_opac" id="allow_opac">
+                    [% IF auth_provider_domain.allow_opac == "1" %]
+                        <option value="1" selected="selected">Allow</option>
+                        <option value="0">Don't allow</option>
+                    [% ELSE %]
+                        <option value="1">Allow</option>
+                        <option value="0" selected="selected">Don't allow</option>
+                    [% END %]
+                    </select>
+                    <span>opac users of this domain to login with this authentication provider</span>
+                </li>
+                <li>
+                    <label for="allow_opac">Allow staff: </label>
+                    <select name="allow_staff" id="allow_staff">
+                    [% IF auth_provider_domain.allow_staff == "1" %]
+                        <option value="1" selected="selected">Allow</option>
+                        <option value="0">Don't allow</option>
+                    [% ELSE %]
+                        <option value="1">Allow</option>
+                        <option value="0" selected="selected">Don't allow</option>
+                    [% END %]
+                    </select>
+                    <span>staff users of this domain to login with this authentication provider</span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="new_auth_provider_domain" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New authentication provider domain</a>
+    </div>
+
+    <h1>Authentication provider domains</h1>
+
+    <table id="auth_provider_domains">
+        <thead>
+            <tr>
+                <th>Domain</th>
+                <th>Update on login</th>
+                <th>Auto register</th>
+                <th>Default library</th>
+                <th>Default category</th>
+                <th>Allow opac</th>
+                <th>Allow staff</th>
+                <th data-class-name="actions noExport">Actions</th>
+            </tr>
+        </thead>
+    </table>
+[% END %]
+
+            <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="delete_confirm_modal_label">Delete authentication provider domain</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="delete_confirm_dialog"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-default" id="delete_confirm_modal_button" role="button" data-toggle="modal">Delete</a>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- #delete_confirm_modal -->
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+
+            var auth_provider_domains_url = '/api/v1/auth/providers/[%- auth_provider_id | html -%]/domains';
+            [% SET categories = Categories.all() %]
+            var categories = {
+            [% FOREACH category IN categories %]
+                "[% category.categorycode | html %]": "[% category.description | html %]",
+            [% END %]
+            };
+            [% SET libraries = Branches.all() %]
+            var libraries = {
+            [% FOREACH library IN libraries %]
+                "[% library.branchcode | html %]": "[% library.branchname | html %]",
+            [% END %]
+            };
+            window.auth_provider_domains = $("#auth_provider_domains").kohaTable({
+                "ajax": {
+                    "url": auth_provider_domains_url
+                },
+                'language': {
+                    'emptyTable': '<div class="dialog message">'+_("There are no authentication provider domains defined.")+'</div>'
+                },
+                "columnDefs": [ {
+                    "targets": [1],
+                    "render": function (data, type, row, meta) {
+                        if ( type == 'display' ) {
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                        return data;
+                    }
+                } ],
+                "columns": [
+                    {
+                        "data": "domain",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            }
+                            else {
+                                return "*";
+                            }
+                        }
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if (row.update_on_auth) {
+                                return _("Yes");
+                            } else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if (row.auto_register) {
+                                return _("Yes");
+                            } else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            return libraries[row.default_library_id] || "";
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            return categories[row.default_category_id] || "";
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if (row.allow_opac) {
+                                return _("Yes");
+                            } else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if (row.allow_staff) {
+                                return _("Yes");
+                            } else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/authentication_providers.pl?domain_ops=1&amp;auth_provider_id=[%- auth_provider_id | html -%]&amp;op=edit_form&amp;auth_provider_domain_id='+ encodeURIComponent(row.auth_provider_domain_id) +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_auth_provider_domain" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.auth_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if ( data.debug ) {
+                        $(row).addClass('debug');
+                    }
+                },
+            });
+
+            $('#auth_provider_domains').on( "click", '.delete_auth_provider_domain', function () {
+                var auth_provider_domain_id   = $(this).data('auth-provider-domain-id');
+                var auth_provider_domain = decodeURIComponent($(this).data('auth-provider-domain'));
+
+                $("#delete_confirm_dialog").html(
+                    _("You are about to delete the '%s' authentication provider domain.").format(auth_provider_domain)
+                );
+                $("#delete_confirm_modal_button").data('auth-provider-domain-id', auth_provider_domain_id);
+                $("#delete_confirm_modal_button").data('auth-provider-domain', auth_provider_domain);
+            });
+
+            $("#delete_confirm_modal_button").on( "click", function () {
+
+                var auth_provider_domain_id   = $(this).data('auth-provider-domain-id');
+                var auth_provider_domain = $(this).data('auth-provider-domain');
+
+                $.ajax({
+                    method: "DELETE",
+                    url: auth_provider_domains_url+"/"+auth_provider_domain_id
+                }).success(function() {
+                    window.auth_provider_domains.api().ajax.reload(function (data) {
+                        $("#smtp_action_result_dialog").hide();
+                        $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(auth_provider_domain)).show();
+                    });
+                }).fail(function () {
+                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(auth_provider_domain)).show();
+                }).done(function () {
+                    $("#delete_confirm_modal").modal('hide');
+                });
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
