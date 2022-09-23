@@ -232,6 +232,7 @@ sub columns {
             "branchcode"      => __("branchcode"),
             "patronreason"    => __("patronreason"),
             "note"            => __("note"),
+            "title"           => __("title"),
         }
     };
 }
