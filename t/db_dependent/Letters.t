@@ -781,7 +781,7 @@ subtest 'TranslateNotices' => sub {
 
 subtest 'Test SMS handling in SendQueuedMessages' => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
@@ -808,6 +808,7 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
         status => 'sent'
     })->next();
 
+    is( $message->letter_id, $messages->[0]->{id}, "Message letter_id is set correctly" );
     is( $message->to_address(), '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );
     is(
         $message->from_address(),

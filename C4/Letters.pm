@@ -922,13 +922,13 @@ sub EnqueueLetter {
     my $dbh       = C4::Context->dbh();
     my $statement = << 'ENDSQL';
 INSERT INTO message_queue
-( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type, failure_code )
-VALUES
-( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      CAST(NOW() AS DATETIME),       ?,          ?,            ?,           ?,              ? )
+( letter_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type, failure_code )
+VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, CAST(NOW() AS DATETIME), ?, ?, ?, ?, ? )
 ENDSQL
 
     my $sth    = $dbh->prepare($statement);
     my $result = $sth->execute(
+        $params->{letter}->{id} || undef,         # letter.id
         $params->{'borrowernumber'},              # borrowernumber
         $params->{'letter'}->{'title'},           # subject
         $params->{'letter'}->{'content'},         # content

@@ -3847,6 +3847,7 @@ DROP TABLE IF EXISTS `message_queue`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT,
+  `letter_id` int(11) DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
   `subject` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -3864,6 +3865,7 @@ CREATE TABLE `message_queue` (
   PRIMARY KEY (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `letter_fk` FOREIGN KEY (`letter_id`) REFERENCES `letter` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
