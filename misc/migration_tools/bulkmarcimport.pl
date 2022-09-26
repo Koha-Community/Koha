@@ -561,9 +561,9 @@ RECORD: foreach my $record (@{$marc_records}) {
             if ($record_id) {
                 $yamlhash->{$originalid} = $record_id if $yamlfile;
                 eval { ($itemnumbers_ref, $errors_ref) = AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, $framework); };
+                my $error_adding = $@;
                 $record_has_added_items = @{$itemnumbers_ref};
 
-                my $error_adding = $@;
                 # Work on a clone so that if there are real errors, we can maybe
                 # fix them up later.
                 my $clone_record = $record->clone();
@@ -632,7 +632,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 if (@{$errors_ref}) {
                     report_item_errors($record_id, $errors_ref);
                 }
-                C4::Biblio::_strip_item_fields($record, $framework);
+
                 my $biblio = Koha::Biblios->find($record_id);
                 $record = $biblio->metadata->record( { embed_items => 1 } );
 
