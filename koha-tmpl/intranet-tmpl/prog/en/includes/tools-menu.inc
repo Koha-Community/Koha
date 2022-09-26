@@ -39,7 +39,7 @@
                     <li><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_moderate_tags ) %]
-                    <li><a href="/cgi-bin/koha/tags/review.pl">Tag moderation</a></li>
+                    <li><a href="/cgi-bin/koha/tags/review.pl">Tags</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) %]
                     <li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
@@ -73,8 +73,8 @@
                 [% END %]
                 [% IF ( CAN_user_tools_label_creator ) %]
                     <li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
-                    <li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
                     <li><a href="/cgi-bin/koha/labels/barcode-print.pl">Barcode image generator</a></li>
+                    <li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_rotating_collections ) %]
                     <li><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></li>
@@ -83,7 +83,7 @@
                     <li><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_marc_modification_templates ) %]
-                    <li><a href="/cgi-bin/koha/tools/marc_modification_templates.pl">Manage MARC modification templates</a></li>
+                    <li><a href="/cgi-bin/koha/tools/marc_modification_templates.pl">MARC modification templates</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_stage_marc_import ) %]
                     <li><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC for import</a></li>
@@ -124,7 +124,7 @@
                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_upload_general_files ) %]
-                    <li><a href="/cgi-bin/koha/tools/upload.pl">Upload any file</a></li>
+                    <li><a href="/cgi-bin/koha/tools/upload.pl">Uploads</a></li>
                 [% END %]
                 [% IF ( CAN_user_tools_access_files ) %]
                     <li><a href="/cgi-bin/koha/tools/access_files.pl">Access files</a></li>
@@ -134,5 +134,13 @@
                 [% END %]
             </ul>
         [% END # /IF ( CAN_user_tools_edit_calendar... %]
+
+        [% IF ( Koha.Preference('UseCashRegisters') && ( CAN_user_cash_management_cashup || CAN_user_cash_management_anonymous_refund ) ) %]
+            <h5>Cash management</h5>
+            <ul>
+                <li><a href="/cgi-bin/koha/pos/registers.pl">Cash summary</a></li>
+                <li><a href="/cgi-bin/koha/pos/register.pl">Transaction history</a></li>
+            </ul>
+        [% END # /IF ( Koha.Preference('UseCashRegisters')... %]
     </div> <!-- /#navmenulist -->
 </div> <!-- /#navmenu -->
