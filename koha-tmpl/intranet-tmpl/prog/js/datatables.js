@@ -589,7 +589,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                             criteria = "exact";
                                         } else {
                                            // escape SQL LIKE special characters % and _
-                                           value = value.replace(/(\%|\_|\\)/g, "\\$1");
+                                           value = value.replace(/(\%|\\)/g, "\\$1");
                                         }
                                         part[!attr.includes('.')?'me.'+attr:attr] = criteria === 'exact'
                                             ? value
