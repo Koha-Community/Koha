@@ -578,9 +578,6 @@ RECORD: foreach my $record (@{$marc_records}) {
                     # the MARC columns in biblioitems were not set.
                     next RECORD;
                 }
-                else {
-                    printlog({ id => $record_id, op => "insert items", status => "ok" }) if ($logfile);
-                }
                 if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
                     # Find the record called 'barcode'
                     my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode');
@@ -611,8 +608,8 @@ RECORD: foreach my $record (@{$marc_records}) {
                     }
                     # Now re-add the record as before, adding errors to the prev list
                     my $more_errors;
-                    eval { ($itemnumbers_ref, $more_errors) = AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, ''); };
-                    $record_has_added_items ||= @{$itemnumbers_ref};
+                    eval { ($itemnumbers_ref, $more_errors) =
+                        AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, ''); };
                     if ($@) {
                         warn "ERROR: Adding items to bib $record_id failed: $@\n";
                         printlog({ id => $record_id, op => "insert items", status => "ERROR" }) if ($logfile);
@@ -624,11 +621,16 @@ RECORD: foreach my $record (@{$marc_records}) {
                         ModBiblioMarc($record, $record_id, $mod_biblio_options);
                         next RECORD;
                     }
-                    else {
-                        printlog({ id => $record_id, op => "insert", status => "ok" }) if ($logfile);
+                    $record_has_added_items ||= @{$itemnumbers_ref};
+                    if (@{$more_errors}) {
+                        push @$errors_ref, @{$more_errors};
                     }
-                    push @$errors_ref, @{$more_errors};
                 }
+
+                if ($record_has_added_items)  {
+                    printlog({ id => $record_id, op => "insert items", status => "ok" }) if ($logfile);
+                }
+
                 if (@{$errors_ref}) {
                     report_item_errors($record_id, $errors_ref);
                 }
