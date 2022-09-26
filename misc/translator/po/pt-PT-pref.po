@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2022-06-20 15:53+0000\n"
+"PO-Revision-Date: 2022-09-08 12:05+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1655740438.281732\n"
+"X-POOTLE-MTIME: 1662638731.015959\n"
 "X-Pootle-Path: /pt/21.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -138,6 +138,15 @@ msgid ""
 msgstr ""
 "as caixas registadoras com o sistema de contabilidade para efetuar os "
 "pagamentos."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -9699,16 +9708,14 @@ msgid ""
 msgstr "as sugestões de aquisição de outros leitores no OPAC."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para "
@@ -9727,16 +9734,14 @@ msgid ""
 msgstr "Mostrar os detalhes no OPAC usando a seguinte stylesheet XSLT: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para "
@@ -9892,27 +9897,24 @@ msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr "Subtipos"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
 "Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Valores suportados atualmente</em>: Tipos de documento "
-"(<strong>itemtypes</strong>), Códigos de coleção (<strong>ccode</strong>) e "
-"Localização na prateleira (<strong>loc</strong>)."
+"(<strong>itemtypes</strong>), Coleção (<strong>ccode</strong>) e Localização "
+"na prateleira (<strong>loc</strong>)."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
 msgstr ""
-"Mostrar separadores na pesquisa avançada dos interfaces OPAC e dos técnicos "
-"para limitar as pesquisas no"
+"Mostrar separadores na pesquisa avançada do OPAC para limitar as pesquisas "
+"nos campos"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
@@ -12225,6 +12227,9 @@ msgid ""
 "have deprecated support for this feature and it is not recommended for use "
 "unless you have a dedicated SMS to Email gateway."
 msgstr ""
+"<br><strong>NOTA:</strong> Muitos dos fornecedores deixaram de fornecer "
+"suporte para esta funcionalidade e não é recomendado para uso a não ser que "
+"tenham um gateway dedicado de SMS para Email."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -12537,15 +12542,14 @@ msgid ""
 msgstr "Limitar os idiomas apresentados na pesquisa avançada a"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
 "<em>Valores suportados atualmente</em>: Tipos de documento "
-"(<strong>itemtypes</strong>), Códigos de coleção (<strong>ccode</strong>) e "
-"Localização na prateleira (<strong>loc</strong>)."
+"(<strong>itemtypes</strong>), Coleção (<strong>ccode</strong>) e Localização "
+"na prateleira (<strong>loc</strong>)."
 
 # Searching > Search form
 msgid ""
@@ -12893,6 +12897,16 @@ msgid ""
 msgstr ""
 "a lista suspensa de resultados por página nos resultados de pesquisa do OPAC."
 
+# Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"os campos MARC relativos a exemplares nas folhas de estilo XSLT. Por omissão "
+"é \"Não disponibilizar\", pois os exemplares são mostrados usando outros "
+"métodos."
+
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr "Disponibilizar"
@@ -12902,9 +12916,11 @@ msgid "searching.pref#PassItemMarcToXSLT# Don't"
 msgstr "Não disponibilizar"
 
 # Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 "os campos MARC relativos a exemplares nas folhas de estilo XSLT. Por omissão "
 "é \"Não disponibilizar\", pois os exemplares são mostrados usando outros "
@@ -13657,17 +13673,15 @@ msgstr ""
 "o editor WYSIWYG quando editar determinadas preferências de sistema HTML."
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" para "
@@ -13687,16 +13701,14 @@ msgstr ""
 "Mostrar os detalhes no interface dos técnicos usando o stylesheet XSLT em: "
 
 # Staff interface > Appearance
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para usar "

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2022-08-19 10:24+0000\n"
-"Last-Translator: pknuuti <paivi.knuutinen@joensuu.fi>\n"
+"PO-Revision-Date: 2022-09-15 14:14+0000\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1660904659.651212\n"
+"X-POOTLE-MTIME: 1663251295.707104\n"
 "X-Pootle-Path: /fi/21.05/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -134,6 +134,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr "kassoja seurataksesi maksusuorituksia Kohan maksujärjestelmässä."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -555,11 +564,10 @@ msgid ""
 "\">KohaAdminEmailAddress</a>"
 msgstr ""
 "Jos tämä jätetään tyhjäksi, käytetään ensimmäistä määriteltyä osoitetta "
-"tästä listasta: Library ReplyTo, Library Email, <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault\""
-">ReplytoDefault</a> ja <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress\""
-">KohaAdminEmailAddress</a>"
+"tästä listasta: Library ReplyTo, Library Email, <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=ReplytoDefault\">ReplytoDefault</"
+"a> ja <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=KohaAdminEmailAddress\">KohaAdminEmailAddress</a>"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -749,12 +757,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"Käytettynä yhdessä <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a>:n kanssa "
-"mahdollistaa <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
-">GoogleOpenIDConnect</a>:n käytön."
+"Käytettynä yhdessä <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>:n kanssa mahdollistaa <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect</a>:n käytön."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientID# Google OAuth2 Client ID: "
@@ -768,11 +774,11 @@ msgid ""
 "preferences.pl?op=search&searchfield=GoogleOpenIDConnect"
 "\">GoogleOpenIDConnect.</a>"
 msgstr ""
-"Käytettynä yhdessä <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOAuth2ClientID\""
-">GoogleOAuth2ClientID</a>:n kanssa mahdollistaa <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GoogleOpenIDConnect\""
-">GoogleOpenIDConnect.</a>:n käytön."
+"Käytettynä yhdessä <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a>:n "
+"kanssa mahdollistaa <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOpenIDConnect\">GoogleOpenIDConnect.</a>:n "
+"käytön."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOAuth2ClientSecret# Google OAuth2 Client Secret: "
@@ -805,10 +811,11 @@ msgstr ""
 "Kun luodaan sovellusta Googlen pilven konsolissa, valitaan OAuth2, asetetaan "
 "verkkolähteeksi your_opac_url ja asetetaan uudelleenohjaus osoitteeseen "
 "your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect. Vaatii, että on "
-"asetettu <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> ja <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</a>."
+"asetettu <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientID\">GoogleOAuth2ClientID</a> ja <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=GoogleOAuth2ClientSecret\">GoogleOAuth2ClientSecret</"
+"a>."
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
@@ -1053,10 +1060,9 @@ msgid ""
 "a> system preferences have no effect if this system preference is set to \"No"
 "\" (don't share)."
 msgstr ""
-"<br><strong>HUOM:</strong> Muut <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> -järjestelmäasetukset eivät vaikuta mitenkään, jos tähän on "
-"asetettu “Ei” (älä jaa)."
+"<br><strong>HUOM:</strong> Muut <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> -järjestelmäasetukset "
+"eivät vaikuta mitenkään, jos tähän on asetettu “Ei” (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1064,9 +1070,9 @@ msgid ""
 "requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii "
-"<code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjobin. "
-"Pyydä kehittäjiä ajastamaan se."
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"share_usage_with_koha_community.pl</code> cronjobin. Pyydä kehittäjiä "
+"ajastamaan se."
 
 # Administration > Share anonymous usage statistics > UsageStats
 msgid ""
@@ -1074,9 +1080,9 @@ msgid ""
 "koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit "
 "the statistics you share."
 msgstr ""
-"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-"
-"bin/koha/admin/usage_statistics.pl\">käyttötilastot-asetussivua</a> "
-"muokataksesi jakamiasi tilastoja."
+"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-bin/koha/admin/"
+"usage_statistics.pl\">käyttötilastot-asetussivua</a> muokataksesi jakamiasi "
+"tilastoja."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1124,8 +1130,8 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "<br><strong>HUOM:</strong> Tällä arvolla ei ole mitään vaikutusta, jos <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetukseksi on valittu \"Ei\" (älä jaa)."
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats"
+"\">UsageStats</a> järjestelmäasetukseksi on valittu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1917,9 +1923,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1927,9 +1933,9 @@ msgid ""
 "the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated "
 "configuration page</a> to set and edit this system preference."
 msgstr ""
-"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-"
-"bin/koha/admin/usage_statistics.pl\">käyttötilastot-asetussivua</a> "
-"määritelläksesi ja muokataksesi järjestelmäasetusta."
+"<br><strong>HUOM:</strong> Käytä <a href=\"/cgi-bin/koha/admin/"
+"usage_statistics.pl\">käyttötilastot-asetussivua</a> määritelläksesi ja "
+"muokataksesi järjestelmäasetusta."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -1942,9 +1948,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Don't share"
@@ -1973,9 +1979,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -1995,9 +2001,9 @@ msgid ""
 "to \"No\" (don't share)."
 msgstr ""
 "admin.pref#UsageStatsLibraryType# <br><strong>HUOM:</strong> Arvolla ei ole "
-"vaikutusta, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
+"vaikutusta, jos <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UsageStats\">UsageStats</a> järjestelmäasetus on "
+"asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2052,9 +2058,9 @@ msgid ""
 "op=search&searchfield=UsageStats\">UsageStats</a> system preference is set "
 "to \"No\" (don't share)."
 msgstr ""
-"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats\""
-">UsageStats</a> järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
+"<br><strong>HUOM:</strong> Arvolla ei ole vaikutusta, jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=UsageStats\">UsageStats</a> "
+"järjestelmäasetus on asetettu \"Ei\" (älä jaa)."
 
 # Administration > Share anonymous usage statistics
 msgid ""
@@ -2194,8 +2200,8 @@ msgid ""
 "some_value).<br>"
 msgstr ""
 "Kommenttimerkillä # alkavat rivit jätetään huomiotta. Kunkin rivin tulee "
-"olla muotoa: (marc21|unimarc), tag, ind1:(auth1|auth2|some_value), "
-"ind2:(auth1|auth2|thesaurus|some_value).<br>"
+"olla muotoa: (marc21|unimarc), tag, ind1:(auth1|auth2|some_value), ind2:"
+"(auth1|auth2|thesaurus|some_value).<br>"
 
 # Authorities > General
 msgid ""
@@ -2221,9 +2227,8 @@ msgid ""
 "preference requires the <code>misc/cronjobs/merge_authorities.pl</code> "
 "cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii "
-"<code>misc/cronjobs/merge_authorities.pl</code> cronjobin. Pyydä kehittäjiä "
-"ajastamaan se."
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"merge_authorities.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # Authorities > General
 msgid ""
@@ -2245,8 +2250,8 @@ msgid ""
 "from an attached authority record (\"merging\"), handle subfields of "
 "relevant bibliographic record fields in"
 msgstr ""
-"Kun päivitetään nimeketietueita niihin liittyvistä auktoriteettitietueista ("
-"\"yhdistäminen\"), käsittele kyseisten nimeketietueiden osakenttiä"
+"Kun päivitetään nimeketietueita niihin liittyvistä auktoriteettitietueista "
+"(\"yhdistäminen\"), käsittele kyseisten nimeketietueiden osakenttiä"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# loose"
@@ -2396,8 +2401,8 @@ msgid ""
 "the contents of MARC21 authority control field 008 position 06-39 (fixed "
 "length data elements). Do NOT include the date (position 00-05):"
 msgstr ""
-"Käytä seuraavaa tekstiä MARC21 kontrollikentässä 008 merkkipaikoissa 06-39 ("
-"kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat 00-05):"
+"Käytä seuraavaa tekstiä MARC21 kontrollikentässä 008 merkkipaikoissa 06-39 "
+"(kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat 00-05):"
 
 # Authorities > General
 msgid ""
@@ -2405,8 +2410,9 @@ msgid ""
 "contents of UNIMARC authority field 100 position 08-35 (fixed length data "
 "elements). Do NOT include the date (position 00-07):"
 msgstr ""
-"Käytä seuraavaa tekstiä UNIMARC-auktoriteettikentässä 100 merkkipaikoissa 08-"
-"35 (kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat 00-07):"
+"Käytä seuraavaa tekstiä UNIMARC-auktoriteettikentässä 100 merkkipaikoissa "
+"08-35 (kiinteämittaiset kentät). ÄLÄ sisällytä päiväystä (merkkipaikat "
+"00-07):"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -2800,8 +2806,8 @@ msgid ""
 "cataloguing.pref#MarcFieldDocURL# For example <tt>http://fielddoc.example."
 "com/?marc={MARC}&field={FIELD}&language={LANG}</tt>"
 msgstr ""
-"Esimerkiksi <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&langua"
-"ge={LANG}</tt>"
+"Esimerkiksi <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}"
+"&language={LANG}</tt>"
 
 # Cataloging > Display
 msgid ""
@@ -2818,9 +2824,9 @@ msgid ""
 "number, eg. \"000\" or \"048\"), <tt>{LANG}</tt> (user language, eg. \"en\" "
 "or \"fi-FI\")."
 msgstr ""
-"Mahdolliset sijoitukset ovat <tt>{MARC}</tt>(marc-formaatti, esim. \"MARC21\""
-" or \"UNIMARC\"), <tt>{FIELD}</tt> (kentät, esim. \"000\" or \"048\"), "
-"<tt>{LANG}</tt> (käyttäjän kieli, esim. \"en\" or \"fi-FI\")."
+"Mahdolliset sijoitukset ovat <tt>{MARC}</tt>(marc-formaatti, esim. "
+"\"MARC21\" or \"UNIMARC\"), <tt>{FIELD}</tt> (kentät, esim. \"000\" or "
+"\"048\"), <tt>{LANG}</tt> (käyttäjän kieli, esim. \"en\" or \"fi-FI\")."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# Use"
@@ -4558,6 +4564,8 @@ msgid ""
 "This system preference requires the <code>misc/cronjobs/longoverdue.pl</"
 "code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"longoverdue.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4995,23 +5003,25 @@ msgstr "kotipalvelu-moduuli."
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLCheckAvailability# Check"
-msgstr ""
+msgstr "Tarkista"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLCheckAvailability# Don't check"
-msgstr ""
+msgstr "Älä tarkista"
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLCheckAvailability# external sources for availability "
 "during the request process."
-msgstr ""
+msgstr "ulkoisista lähteistä saatavuutta pyyntöprosessin aikana."
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
 msgid ""
 "circulation.pref#ILLDefaultStaffEmail# Fallback email address for staff ILL "
 "notices to be sent to in the absence of a library address:"
 msgstr ""
+"Sähköposti, johon kirjaston kaukolaina-viestit saapuvat, jos kirjaston "
+"sähköpostia ei ole:"
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
 msgid ""
@@ -5019,25 +5029,29 @@ msgid ""
 "empty, all ILL requests will be displayed. The request codes can be found in "
 "the ILLSTATUS authorized value category."
 msgstr ""
+"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaukolainapyynnöt "
+"näytetään. Pyyntökoodit löytyvät auktorisoidun arvon luokasta ILLSTATUS."
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLHiddenRequestStatuses# ILL statuses that are considered "
 "finished and should not be displayed in the ILL module: "
 msgstr ""
+"Kaukolainastatukset, joita pidetään valmiina, ja joita ei tulisi näyttää "
+"kaukolainamoduulissa: "
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModule# Disable"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModule# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr ""
+msgstr "kaukolaina-moduulin käyttö (\"master switch\")."
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -5045,14 +5059,16 @@ msgid ""
 "copyright clearance stage in request creation. The text you enter will be "
 "the text displayed."
 msgstr ""
+"Tekstin lisääminen mahdollistaa tekijänoikeus-ilmoituksen (copyright "
+"clearance stage) pyydetyille teoksille. Lisätty teksti näytetään."
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModuleUnmediated# Disable"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModuleUnmediated# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Interlibrary loans
 msgid ""
@@ -5060,18 +5076,22 @@ msgid ""
 "If enabled and the ILL backend supports it, the newly created requests are "
 "immediately requested by backend."
 msgstr ""
+"asiakkaiden lähettämät kaukolainapyynnöt. Jos sallittu ja kaukolainayhteydet "
+"tukevat ominaisuutta, uudet pyynnöt lähetetään suoraa eteenpäin."
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLOpacbackends# (separated with |). If left empty, all "
 "installed backends will be enabled."
 msgstr ""
+"(erotetaan | -merkillä). Jos jätetään tyhjäksi, kaikki kaikki määritetyt "
+"kaukolainayhteydet sallitaan."
 
 # Circulation > Interlibrary loans
 msgid ""
 "circulation.pref#ILLOpacbackends# Enabled ILL backends for OPAC initiated "
 "requests:"
-msgstr ""
+msgstr "Salli kaukolainayhteydet verkkokirjastossa tehdyille pyynnöille:"
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
 msgid ""
@@ -5079,12 +5099,14 @@ msgid ""
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
+"(erotetaan | -merkillä). Esim. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Jos "
+"jätetään tyhjäksi, kirjastolle ei lähetetä yhtään kaukolaina-viestiä."
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
 msgid ""
 "circulation.pref#ILLSendStaffNotices# Send these ILL notices to staff when "
 "appropriate:"
-msgstr ""
+msgstr "Lähetä nämä kaukolaina-viestit kirjastolle tarvittaessa:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#IssueLostItem# ."
@@ -5561,6 +5583,8 @@ msgid ""
 "'note', table 'accountlines' when the processing fee (defined for the item "
 "type) is applied:"
 msgstr ""
+"Teksti, joka syötetään sarakkeeseen 'note' taulussa 'accountlines', kun "
+"käsittelykuluja (nidetyypille määritetty) lisätään:"
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# Don't record"
@@ -5733,9 +5757,8 @@ msgstr ""
 "\">noissuescharge</a> järjestelmäasetuksen summaan."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#ReservesControlBranch# Check the rule from the"
-msgstr "Tarkista"
+msgstr "Tarkista sääntö"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesControlBranch# item's home library"
@@ -5967,7 +5990,7 @@ msgstr "käyttäjätunnuksella ja salasanalla"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
@@ -6102,15 +6125,15 @@ msgstr "kun ne ovat"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref#StockRotation# Disable"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref#StockRotation# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref#StockRotation# the stock rotation module."
-msgstr ""
+msgstr "kiertokokoelma-moduulin käyttö"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Don't store"
@@ -6484,7 +6507,7 @@ msgstr "Käytä"
 
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# course reserves."
-msgstr ""
+msgstr "kurssivarantoja."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -6567,7 +6590,7 @@ msgstr "Salli"
 msgid ""
 "circulation.pref#canreservefromotherbranches# Don't allow (with "
 "independentbranches)"
-msgstr ""
+msgstr "Älä salli (independentbranches asetuksen kanssa)"
 
 # Circulation > Holds policy
 msgid ""
@@ -6654,15 +6677,15 @@ msgstr "ylläpidon sähköpostiin ilmoitus(ta) aina, kun tehdään varaus."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Ignore the calendar"
-msgstr ""
+msgstr "Älä huomioi kalenteria"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Use the calendar"
-msgstr ""
+msgstr "Käytä kalenteria"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# when calculating the period for fines."
-msgstr ""
+msgstr "laskettaessa myöhästymismaksuja."
 
 # Circulation > Fines Policy > finesMode
 msgid ""
@@ -6742,7 +6765,7 @@ msgstr "Älä suodata"
 # Circulation > Interface
 msgid ""
 "circulation.pref#itemBarcodeInputFilter# EAN-13 or zero-padded UPC-A form"
-msgstr ""
+msgstr "EAN-13 tai zero-padded UPC-A -muodoissa"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Remove spaces from"
@@ -6770,15 +6793,16 @@ msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
 msgstr "[% local_currency %]."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#maxreserves# Patrons can have a maximum of"
-msgstr "Käyttäjällä voi olla korkeintaan"
+msgstr "Asiakkaalla voi olla korkeintaan"
 
 # Circulation > Holds policy > maxreserves
 msgid ""
 "circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
 "disable). Additional limits may apply based on circulation rules."
 msgstr ""
+"varausta kerrallaan (jätä tyhjäksi tai määritä 0 poistaaksesi asetus "
+"käytöstä). Lisärajoituksia voi määrittää laina- ja maksusäännöissä."
 
 # Circulation > Checkout policy
 msgid ""
@@ -6826,7 +6850,7 @@ msgstr "Lajittele kuluvan päivän lainaukset lainausnäytöllä"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
-msgstr ""
+msgstr "lainauspäivän mukaan."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -6902,7 +6926,7 @@ msgstr "Baker and Taylor"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref Coce cover images cache"
-msgstr ""
+msgstr "enhanced_content.pref Coce cover images cache"
 
 # Enhanced content > Google
 msgid "enhanced_content.pref Google"
@@ -6910,7 +6934,7 @@ msgstr "Google"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref HTML5 media"
-msgstr ""
+msgstr "enhanced_content.pref HTML5 media"
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref Library Thing"
@@ -6918,11 +6942,11 @@ msgstr "Library Thing"
 
 # Enhanced content > Local or remote cover images
 msgid "enhanced_content.pref Local or remote cover images"
-msgstr ""
+msgstr "enhanced_content.pref Local or remote cover images"
 
 # Enhanced content > Manual
 msgid "enhanced_content.pref Manual"
-msgstr ""
+msgstr "enhanced_content.pref Manual"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref Novelist Select"
@@ -6938,7 +6962,7 @@ msgstr "OverDrive"
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref RecordedBooks"
-msgstr ""
+msgstr "enhanced_content.pref RecordedBooks"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref Syndetics"
@@ -7021,7 +7045,7 @@ msgstr "saksalaiselta"
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# Indian"
-msgstr ""
+msgstr "intialaiselta"
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# Japanese"
@@ -7055,25 +7079,25 @@ msgstr ""
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# (e.g. http://www.babeltheque.com/"
 "bw_XX.js)."
-msgstr ""
+msgstr "(esim. http://www.babeltheque.com/bw_XX.js)."
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_js# Use this URL for the Babelthèque "
 "javascript file: "
-msgstr ""
+msgstr "Käytä tätä URL:ia Babelthèquen javascript-tiedostolle: "
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# (e.g. http://www.babeltheque."
 "com/.../file.csv.bz2)."
-msgstr ""
+msgstr "(esim. http://www.babeltheque.com/.../file.csv.bz2)."
 
 # Enhanced content > Babelthèque
 msgid ""
 "enhanced_content.pref#Babeltheque_url_update# Use this URL for the "
 "Babelthèque periodic update: "
-msgstr ""
+msgstr "Käytä tätä URL:ia Babelthèquen määräaikapäivityksille: "
 
 # Enhanced content > Baker and Taylor
 msgid ""
@@ -7105,6 +7129,9 @@ msgid ""
 "images to the OPAC and staff interface. This requires that you have entered "
 "in a username and password (which can be seen in image links)."
 msgstr ""
+"Baker and Taylor linkkejä ja kansikuvia verkkokirjastoon ja "
+"virkailijaliittymään. Vaatii toimiakseen käyttäjätunnuksen ja salasanan (ne "
+"näkyvät kuvalinkeissä)."
 
 # Enhanced content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorEnabled# Don't add"
@@ -7130,15 +7157,15 @@ msgstr "Coce-palvelimen URL"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceProviders# Amazon Web Services"
-msgstr ""
+msgstr "Amazon Web Services"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceProviders# Google Books"
-msgstr ""
+msgstr "Google Books"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#CoceProviders# Open Library"
-msgstr ""
+msgstr "Open Library"
 
 # Enhanced content > Coce cover images cache
 msgid ""
@@ -7238,7 +7265,7 @@ msgstr ""
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in OPAC and staff interface."
-msgstr ""
+msgstr "verkkokirjastossa ja virkailijaliittymässä."
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the OPAC."
@@ -7246,7 +7273,7 @@ msgstr "verkkokirjastossa"
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the staff interface."
-msgstr ""
+msgstr "virkailijaliittymässä."
 
 # Enhanced content > HTML5 media
 msgid "enhanced_content.pref#HTML5MediaEnabled# not at all."
@@ -7274,17 +7301,17 @@ msgstr "YouTube-linkkejä videoina."
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#IntranetCoce# Don't enable"
-msgstr ""
+msgstr "Älä käytä"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#IntranetCoce# Enable"
-msgstr ""
+msgstr "Käytä"
 
 # Enhanced content > Coce cover images cache
 msgid ""
 "enhanced_content.pref#IntranetCoce# a Coce image cache service in the staff "
 "interface."
-msgstr ""
+msgstr "Coce kuvavälimuistipalvelua virkailijaliittymässä."
 
 # Enhanced content > Manual > KohaManualBaseURL
 msgid ""
@@ -7375,6 +7402,8 @@ msgid ""
 "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"https://www."
 "librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
 msgstr ""
+"<a href=\"https://www.librarything.com/forlibraries/\">Rekisteröidy</a> ja "
+"lisää sitten alle asiakastunnuksesi."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# Don't show"
@@ -7455,13 +7484,13 @@ msgstr ""
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectPassword# ."
-msgstr ""
+msgstr "."
 
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectPassword# Access Novelist Select using "
 "password"
-msgstr ""
+msgstr "Salasana Novelist Select -palveluun:"
 
 # Enhanced content > Novelist Select
 msgid ""
@@ -7471,7 +7500,7 @@ msgstr "Käytä Novelist Select -palvelua käyttäjäprofiililla"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectProfile# on the opac"
-msgstr ""
+msgstr "verkkokirjastossa"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffEnabled# Add"
@@ -7487,17 +7516,20 @@ msgid ""
 "the staff interface (requires that you have entered in a user profile and "
 "password, which can be seen in image links)."
 msgstr ""
+"Novelist Select -palvelun sisältöjä virkailijaliittymään (vaatii "
+"käyttäjätunnuksen ja salasanan määrittämistä. Tunnus ja salasana näkyvät "
+"kuvalinkeissä)."
 
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# Access Novelist Select "
 "using user profile"
-msgstr ""
+msgstr "Käyttäjätunnus Novelist Select -palveluun:"
 
 # Enhanced content > Novelist Select
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffProfile# on the staff interface."
-msgstr ""
+msgstr "virkailijaliittymässä"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# ."
@@ -7507,7 +7539,7 @@ msgstr "."
 msgid ""
 "enhanced_content.pref#NovelistSelectStaffView# Display Novelist Select staff "
 "interface content"
-msgstr ""
+msgstr "Näytä Novelist Select -palvelun virkailijaliittymän sisältö"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectStaffView# above the holdings table"
@@ -7594,15 +7626,15 @@ msgstr ""
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#OpacCoce# Don't enable"
-msgstr ""
+msgstr "Älä käytä"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#OpacCoce# Enable"
-msgstr ""
+msgstr "Käytä"
 
 # Enhanced content > Coce cover images cache
 msgid "enhanced_content.pref#OpacCoce# a Coce image cache service in the OPAC."
-msgstr ""
+msgstr "Coce kuvavälimuistipalvelua verkkokirjastossa."
 
 # Enhanced content > Open Library
 msgid "enhanced_content.pref#OpenLibraryCovers# Add"
@@ -7639,12 +7671,15 @@ msgid ""
 "individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/"
 "overdrive.pl\">OverDrive library authnames table</a>)."
 msgstr ""
+"(käytetään varasuunnitelmana, jos yksittäisen kirjaston auktorisoitua nimeä "
+"ei ole määritetty <a href=\"/cgi-bin/koha/admin/overdrive.pl\">OverDrive "
+"kirjaston auktorisoitujen nimien kirjastoon</a>)."
 
 # Enhanced content > OverDrive
 msgid ""
 "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive "
 "Authname"
-msgstr ""
+msgstr "Tunnistautuminen käyttäen OverDriven auktorisoitua nimeä"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# A password is"
@@ -7732,37 +7767,37 @@ msgstr "Näytä nimekkeet OverDrive-luettelosta kirjastolle #"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveWebsiteID# ."
-msgstr ""
+msgstr "."
 
 # Enhanced content > OverDrive
 msgid ""
 "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive "
 "website id #"
-msgstr ""
+msgstr "Tunnistaudutaan käyttäen OverDrive-verkkosivun ID:tä #"
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
-msgstr ""
+msgstr "."
 
 # Enhanced content > RecordedBooks
 msgid ""
 "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
 "availability information with the client secret"
-msgstr ""
+msgstr "Sisällytä RecordedBooks-saatavuustieto asiakassalaukseen."
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
-msgstr ""
+msgstr "RecordedBooks toimialue"
 
 # Enhanced content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
-msgstr ""
+msgstr "."
 
 # Enhanced content > RecordedBooks
 msgid ""
 "enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
 "RecordedBooks catalog of library ID"
-msgstr ""
+msgstr "Näytä niteet kirjaston RecordedBooks-luettelosta"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -8060,7 +8095,7 @@ msgstr "i18n_l10n"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
-msgstr ""
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
@@ -8129,7 +8164,6 @@ msgid ""
 msgstr "kalenteriviikon ensimmäisenä päivänä."
 
 # I18N/L10N
-#, fuzzy
 msgid ""
 "i18n_l10n.pref#OPACLanguages# Enable the following languages on the OPAC:"
 msgstr "Verkkokirjastossa käytettävissä olevat kielet:"
@@ -8143,9 +8177,8 @@ msgstr ""
 "järjestystä."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#TimeFormat# ."
-msgstr "Näytä kellonaika"
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -8187,6 +8220,9 @@ msgid ""
 "the 'surname' column of the 'borrowers' table is helpful to make browsing by "
 "last name work in members-home.pl when using an alphabet outside of A-Z."
 msgstr ""
+"<br/> Vinkki: Muuttamalla tietokannan 'borrowers'-taulun järjestyksen "
+"'surname'-sarakkeen mukaiseksi, helpotat sukunimen mukaan selaamista members-"
+"home.pl -sivulla, kun käytetään aakkosia A-Z:n ulkopuolelta (esim. skandit)."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -8201,9 +8237,8 @@ msgstr ""
 "erotettuina."
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref#dateformat# ."
-msgstr "pp.kk.vvvv"
+msgstr "."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -8274,12 +8309,10 @@ msgid "logs.pref Logging"
 msgstr "Lokien kerääminen"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#AcquisitionLog# Don't log"
 msgstr "Älä kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#AcquisitionLog# Log"
 msgstr "Kerää loki"
 
@@ -8348,12 +8381,10 @@ msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
 msgstr "bibliografisiin ja nidetietueisiin tehdyistä muutoksista."
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#ClaimsLog# Don't log"
 msgstr "Älä kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#ClaimsLog# Log"
 msgstr "Kerää lokia"
 
@@ -8407,6 +8438,8 @@ msgid ""
 "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variables to a "
 "comment in the HTML source for the staff interface."
 msgstr ""
+"Template Toolkit -muuttujat kommentteina virkailijaliittymän HTML-"
+"lähdekoodissa."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsOpac# Do"
@@ -8421,6 +8454,7 @@ msgid ""
 "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variables to a "
 "comment in the HTML source for the OPAC."
 msgstr ""
+"Template Toolkit -muuttujat kommentteina verkkokirjaston HTML-lähdekoodissa."
 
 # Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
@@ -8483,12 +8517,10 @@ msgstr ""
 "muutoksista."
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NewsLog# Don't log"
 msgstr "Älä kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NewsLog# Log"
 msgstr "Kerää lokia"
 
@@ -8497,12 +8529,10 @@ msgid "logs.pref#NoticesLog#  changes to notice templates."
 msgstr "viestipohjiin tehdyistä muutoksista."
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NoticesLog# Don't log"
 msgstr "Älä kerää lokia"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#NoticesLog# Log"
 msgstr "Kerää lokia"
 
@@ -8560,16 +8590,15 @@ msgstr "Verkkokirjasto"
 
 # OPAC > Advanced search options
 msgid "opac.pref Advanced search options"
-msgstr ""
+msgstr "opac.pref Advanced search options"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
 msgstr "Ulkonäkö"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "opac.pref Authentication"
-msgstr "CAS-tunnistautuminen"
+msgstr "opac.pref Authentication"
 
 # OPAC > Features
 msgid "opac.pref Features"
@@ -8577,7 +8606,7 @@ msgstr "Ominaisuudet"
 
 # OPAC > OpenURL
 msgid "opac.pref OpenURL"
-msgstr ""
+msgstr "opac.pref OpenURL"
 
 # OPAC > Policy
 msgid "opac.pref Policy"
@@ -8593,11 +8622,11 @@ msgstr "Rajoitettu sivu"
 
 # OPAC > Self registration and modification
 msgid "opac.pref Self registration and modification"
-msgstr ""
+msgstr "opac.pref Self registration and modification"
 
 # OPAC > Shelf browser
 msgid "opac.pref Shelf browser"
-msgstr ""
+msgstr "opac.pref Shelf browser"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -8648,6 +8677,10 @@ msgid ""
 "preferences.pl?op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> "
 "system preference."
 msgstr ""
+"asiakkaiden tehdä hankintaehdotuksia ilman kirjautumista. Nimettömät "
+"hankintaehdotukset liittyvät<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>-"
+"järjestelmäasetukseen."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -8658,10 +8691,12 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr ""
+"anonymisoiduille asiakkaille (nimettömille hankintaehdotuksille ja "
+"lainahistorioille)."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bibliographic records"
-msgstr ""
+msgstr "Nimeketietueiden oletusnäyttötapa:"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# as specified in the ISBD template."
@@ -8689,6 +8724,9 @@ msgid ""
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
 msgstr ""
+"vanhentuneilta asiakkailta verkkokirjaston toiminnot kuten varaaminen tai "
+"uusinta. Huomaa, että asiakastyypin asetus menee tämän järjestelmäasetuksen "
+"edelle."
 
 # OPAC > Appearance > COinSinOPACResults
 msgid ""
@@ -8702,12 +8740,22 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a>"
 msgstr ""
+"<br/><a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLResolverURL\">OpenURLResolverURL</a>, <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACShowOpenURL"
+"\">OPACShowOpenURL</a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACOpenURLItemTypes\">OPACOpenURLItemTypes</a>, <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLText"
+"\">OpenURLText</a>, <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLImageLocation\">OpenURLImageLocation</a>"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#COinSinOPACResults# <br/>If you want to display a link to an "
 "OpenURL resolver, look at the following system preferences:"
 msgstr ""
+"<br/>Jos haluat näyttää OpenURL nimipalvelimen linkin, katso seuraavia "
+"järjestelmäasetuksia:"
 
 # OPAC > Appearance
 msgid ""
@@ -8771,18 +8819,20 @@ msgid ""
 "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. "
 "**Note: this setting does not affect anonymous suggestions."
 msgstr ""
+"avointa hankintaehdotusta. Jätä tyhjäksi, jos ei rajoiteta. **Huomaa: tämä "
+"asetus ei vaikuta nimettömiin hankintaehdotuksiin"
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# Number of total suggestions allowed"
-msgstr ""
+msgstr "Hankintaehdotusten kokonaismäärärajoitus"
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# days."
-msgstr ""
+msgstr "päivässä."
 
 # OPAC > Policy
 msgid "opac.pref#MaxTotalSuggestions# in"
-msgstr ""
+msgstr "hankintaehdotusta"
 
 # OPAC > Features
 msgid "opac.pref#OPACAcquisitionDetails# Display"
@@ -8815,33 +8865,32 @@ msgid "opac.pref#OPACBaseURL# The OPAC is located at "
 msgstr "Verkkokirjaston osoite"
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#OPACComments# Allow"
 msgstr "Salli"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACComments# Don't allow"
 msgstr "Älä salli"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACComments# patrons to make comments on items on the OPAC."
-msgstr "käyttäjien kirjoittaa kommentteja teoksiin verkkokirjastossa."
+msgstr "asiakkaiden kirjoittaa kommentteja verkkokirjastossa."
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Disable"
-msgstr ""
+msgstr "Estä"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Enable"
-msgstr ""
+msgstr "Salli"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACDetailQRCode# the option to show a QR Code on the OPAC "
 "bibliographic detail page."
 msgstr ""
+"mahdollisuus näyttää QR-koodi verkkokirjastossa nimekkeen perustiedot-"
+"näytöllä."
 
 # OPAC > Appearance
 msgid ""
@@ -8861,19 +8910,19 @@ msgstr "Kentän 856u antama URI esitetään kuvana: "
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# both detail and result pages"
-msgstr ""
+msgstr "sekä perustiedot-näytöllä että hakutulossivulla"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# detail page only"
-msgstr ""
+msgstr "vain perustiedot-näytöllä"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# neither detail or result pages"
-msgstr ""
+msgstr "ei perustiedot-näytöllä eikä hakutulossivulla"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# result page only"
-msgstr ""
+msgstr "vain hakutulossivulla"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACFallback# Use the"
@@ -8909,11 +8958,11 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Don't include"
-msgstr ""
+msgstr "Älä sisällytä"
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Include"
-msgstr ""
+msgstr "Sisällytä"
 
 # OPAC > Policy > OPACFineNoRenewalsIncludeCredits
 msgid ""
@@ -8922,6 +8971,9 @@ msgid ""
 "op=search&searchfield=OPACFineNoRenewals\">OPACFineNoRenewals</a> rule to "
 "patrons."
 msgstr ""
+"voimassa olevat krediitit, kun sovelletaan <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OPACFineNoRenewals"
+"\">OPACFineNoRenewals</a>-järjestelmäasetusta asiakkaille."
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -8936,19 +8988,17 @@ msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
 msgstr ""
+"asiakkaan päästä Maksut-välilehdelle verkkokirjaston Omat tiedot -sivulla."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldRequests# Allow"
 msgstr "Salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldRequests# Don't allow"
 msgstr "Älä salli"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
 msgstr "käyttäjien tehdä varauksia verkkokirjastossa."
@@ -8969,23 +9019,20 @@ msgstr "Kotikirjasto"
 msgid ""
 "opac.pref#OPACHoldingsDefaultSortField# is the default sort field for the "
 "holdings table."
-msgstr ""
+msgstr "on oletusjärjestyskenttä sijaintitiedoissa (holdings table)."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Allow"
 msgstr "Salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "Älä salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "käyttäjien nähdä lainahistoriaansa."
+msgstr "asiakkaiden nähdä varaushistoriansa."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -9006,6 +9053,9 @@ msgid ""
 "\" and \"my checkout history\" tabs when a patron is logged in to the OPAC, "
 "with the following HTML (leave blank to disable):"
 msgstr ""
+"Lisää \"Linkit\"-sarake \"Lainat ja varaukset\" ja \"Lainahistoria\" -"
+"välilehdille, kun asiakas on kirjautuneena verkkokirjastoon. Käytä seuraava "
+"HTML-koodia (jätä tyhjäksi, jos ei käytössä):"
 
 # OPAC > Appearance
 msgid ""
@@ -9032,13 +9082,15 @@ msgstr ""
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACOpenURLItemTypes# <br />"
-msgstr ""
+msgstr "<br />"
 
 # OPAC > OpenURL
 msgid ""
 "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by "
 "spaces) for those you want to show the OpenURL link:"
 msgstr ""
+"Nidetyyppikoodien lista (eroteltuna välilyönnillä) niistä koodeista, joille "
+"halutaan näkyvän OpenURL linkki:"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
@@ -9056,17 +9108,19 @@ msgstr "käyttäjän muuttaa yhteystietojaan verkkokirjaston kautta."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACPlayMusicalInscripts# Don't play"
-msgstr ""
+msgstr "Älä soita"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACPlayMusicalInscripts# MIDI representation of musical inscripts "
 "on the OPAC record details page."
 msgstr ""
+"MIDI-tiedostona musiikkinäytettä verkkokirjastossa nimekkeen perustiedot-"
+"sivulla."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACPlayMusicalInscripts# Play"
-msgstr ""
+msgstr "Soita"
 
 # OPAC > Features
 msgid "opac.pref#OPACPopupAuthorsSearch# Display"
@@ -9101,10 +9155,15 @@ msgid ""
 "op=search&searchfield=AnonymousPatron\">AnonymousPatron</a> system "
 "preferences."
 msgstr ""
+"asiakkaiden määrittää itse yksityisyysasetuksiaan lainahistorialle. Tämä "
+"vaatii <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> ja <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
+"\">AnonymousPatron</a>-järjestelmäasetuksien määrittämistä."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
-msgstr ""
+msgstr "<br/>"
 
 # OPAC > Features > OPACReportProblem
 msgid ""
@@ -9112,20 +9171,25 @@ msgid ""
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
 "\">KohaAdminEmailAddress</a> enabled."
 msgstr ""
+"<strong>HUOM:</strong> Tämä tarvitsee <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=KohaAdminEmailAddress"
+"\">KohaAdminEmailAddress</a>-järjestelmäasetuksen toimiakseen."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# Allow"
-msgstr ""
+msgstr "Salli"
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OPACReportProblem# patrons to submit problem reports for OPAC "
 "pages to the library or Koha administrator."
 msgstr ""
+"asiakkaiden tehdä vikailmoituksia verkkokirjastossa kirjastolle tai Kohan "
+"ylläpitäjälle."
 
 # OPAC > Appearance
 msgid ""
@@ -9142,7 +9206,7 @@ msgstr "Näytä verkkokirjastossa hakutuloksissa niteen"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current library"
-msgstr ""
+msgstr "sijaintikirjasto"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
@@ -9153,6 +9217,8 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# (available) individual items on the OPAC XSLT "
 "search results, and show no more than"
 msgstr ""
+"(saatavana olevaa) yksittäistä nidettä OPAC XSLT hakutuloksissa. Älä näytä "
+"enempää kuin"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
@@ -9160,32 +9226,33 @@ msgid ""
 "like Checked out, Damaged, On Hold, but only when you group them by branch."
 "<br>"
 msgstr ""
+"(ei saatavana olevaa) yksittäistä nidettä kategorioille Lainassa, "
+"Vahingoittunut, Varattu, mutta vain, jos ne ryhmitetään kirjaston mukaan.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by substatus, listing item counts only.)"
 msgstr ""
+"mukaan. HUOM: Suurille yhteenliittymille suosittelemme ei saatavana olevien "
+"niteiden ryhmittämistä osatilan (substatus) mukaan, jolloin näytetään vain "
+"niteiden määrä.)"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
-msgstr "kotikirjasto"
+msgstr "Ryhmitä ei saatavana olevat niteet"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
-msgstr "kotikirjasto"
+msgstr "Älä näytä enempää kuin"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# branch"
-msgstr "kotikirjasto"
+msgstr "kirjaston"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# substatus"
-msgstr "kotikirjasto"
+msgstr "osatilan (substatus)"
 
 # OPAC > Appearance
 msgid ""
@@ -9233,20 +9300,18 @@ msgstr ""
 "lähinnä pienten kirjastojen käyttöön."
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Allow"
 msgstr "Salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACShibOnly# Don't allow"
 msgstr "Älä salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACShibOnly# patrons to login by means other than Shibboleth."
-msgstr "käyttäjien nähdä lainahistoriaansa."
+msgstr ""
+"asiakkaiden kirjautua verkkokirjastoon muutoin kuin Shibbolethin kautta."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
@@ -9285,35 +9350,38 @@ msgstr "asiakkaille verkkokirjastossa."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowMusicalInscripts# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowMusicalInscripts# Show"
-msgstr ""
+msgstr "Näytä"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACShowMusicalInscripts# musical inscripts on the OPAC record "
 "details page."
 msgstr ""
+"musiikkinäytettä (teoksen ensimmäset tahdit) verkkokirjaston nimekkeen "
+"perustiedot-sivulla."
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACShowOpenURL# Disable"
-msgstr ""
+msgstr "Älä näytä"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACShowOpenURL# Enable"
-msgstr ""
+msgstr "Näytä"
 
 # OPAC > OpenURL
 msgid ""
 "opac.pref#OPACShowOpenURL# display of OpenURL link in OPAC search results "
 "and detail page."
 msgstr ""
+"OpenURL linkkiä verkkokirjaston hakutulossivulla ja perustiedot-sivulla."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Show"
@@ -9334,19 +9402,16 @@ msgstr ""
 "oletuksena pakollinen."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
-msgstr "Näytä"
+msgstr "Tekijä"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
-msgstr "Älä näytä"
+msgstr "Kokoelman nimi"
 
 # OPAC > Policy
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
-msgstr "Pakolliset kentät hankintaehdotuksissa:"
+msgstr "Copyright tai julkaisuaika"
 
 # OPAC > Policy
 msgid ""
@@ -9355,45 +9420,37 @@ msgid ""
 msgstr "Pakolliset kentät hankintaehdotuksissa:"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
-msgstr "Pakolliset kentät hankintaehdotuksissa:"
+msgstr "ISBN, ISSN tai muu standardinumero"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
-msgstr "Älä näytä"
+msgstr "Aineistotyyppi"
 
 # OPAC > Policy
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
-msgstr "Pakolliset kentät hankintaehdotuksissa:"
+msgstr "Kirjasto"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr "Näytä"
+msgstr "Huomautus"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr "Älä näytä"
+msgstr "Perustelu"
 
 # OPAC > Policy
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr "Pakolliset kentät hankintaehdotuksissa:"
+msgstr "Julkaisupaikka"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr "Näytä"
+msgstr "Julkaisijan nimi"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr "Näytä"
+msgstr "Nimeke"
 
 # OPAC > Policy > OPACSuggestionUnwantedFields
 msgid ""
@@ -9402,67 +9459,60 @@ msgid ""
 "op=search&searchfield=OPACSuggestionMandatoryFields"
 "\">OPACSuggestionMandatoryFields</a> unwanted fields "
 msgstr ""
+"<br />Huomaa: älä piilota <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACSuggestionMandatoryFields"
+"\">OPACSuggestionMandatoryFields</a> -kenttiä "
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Author"
-msgstr "Näytä"
+msgstr "Tekijä"
 
 # OPAC > Privacy
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
-msgstr "Salli"
+msgstr "Kokoelman nimi"
 
 # Searching > Results display
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr "julkaisuajan mukaan"
+msgstr "Copyright tai julkaisuaika"
 
 # OPAC > Policy
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# Fields that should be hidden for "
 "patron purchase suggestions:"
-msgstr ""
+msgstr "Kentät, jotka piilotetaan asiakkaan hankintaehdotuksista:"
 
 # OPAC > Policy > OPACSuggestionUnwantedFields
 msgid ""
 "opac.pref#OPACSuggestionUnwantedFields# ISBN, ISSN or other standard number"
-msgstr ""
+msgstr "ISBN, ISSN tai muu standardinumero"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Item type"
-msgstr "Älä näytä"
+msgstr "Aineistotyyppi"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Library or branch"
-msgstr "kotikirjasto"
+msgstr "Kirjasto"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Note"
-msgstr "Näytä"
+msgstr "Huomautus"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Patron reason"
-msgstr "Älä näytä"
+msgstr "Perustelu"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publication place"
-msgstr "Älä näytä"
+msgstr "Julkaisupaikka"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Publisher name"
-msgstr "Näytä"
+msgstr "Julkaisijan nimi"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Quantity"
-msgstr "Älä näytä"
+msgstr "Määrä"
 
 # OPAC > Appearance
 msgid ""
@@ -9497,17 +9547,19 @@ msgstr "Sisällytä seuraava JavaScript kaikille sivuille verkkokirjastossa:"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserSummary# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserSummary# Show"
-msgstr ""
+msgstr "Näytä"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+"yhteenveto sisäänkirjautuneen asiakkaan lainoista, erääntyneistä lainoista, "
+"varauksista ja maksuista verkkokirjaston etusivulla."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -9524,17 +9576,24 @@ msgid ""
 msgstr "toisten käyttäjien tekemiä hankintaehdotuksia verkkokirjastossa."
 
 # OPAC > Appearance > OPACXSLTDetailsDisplay
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" "
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on eri tyylitiedostot, paikanpitäjä {langcode} "
+"korvautuu käytössä olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -9544,17 +9603,24 @@ msgstr ""
 "Käytä verkkokirjaston perustiedot-näytöllä XSLT-tyylitiedostoa osoitteesta: "
 
 # OPAC > Appearance > OPACXSLTListsDisplay
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" "
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on eri tyylitiedostot, paikanpitäjä {langcode} "
+"korvautuu käytössä olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -9574,6 +9640,15 @@ msgid ""
 "ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
+"opac.pref#OPACXSLTResultsDisplay# <br />Vaihtoehdot:<ul><li>Lisää \"<a href="
+"\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-"
+"value=\"default\">default</a>\" oletustyylitiedostoon</li><li>Lisää XSLT-"
+"tiedoston hakemistopolku</li><li>Lisää ulkoisen tyylitiedoston URL.</"
+"li><li>HUOM: Järjestelmäasetuksen <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on eri tyylitiedostot, paikanpitäjä {langcode} "
+"korvautuu käytössä olevalla kielellä."
 
 # OPAC > Appearance
 msgid ""
@@ -9627,86 +9702,88 @@ msgid ""
 "language within the Koha templates directory. A full local path is expected "
 "to start from your HTTP document root."
 msgstr ""
+"ohittaaksesi tietyt asetukset oletustyylipohjassa (jätä tyhjäksi, jos ei "
+"käytössä). Syötä vain tiedostonimi, koko paikallinen polku tai täydellinen "
+"URL, joka alkaa merkkijonolla <code>http://</code> (jos tiedosto on "
+"etäpalvelimella). Huomaa, jos syötät vain tiedostonimen, tiedoston pitäisi "
+"olla css-alihakemistossa jokaista aktiivista teemaa ja kieltä varten Kohan "
+"pohjien hakemistossa. Kokonainen paikallinen polku alkaa HTTP-dokumentin "
+"juuresta."
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
-msgstr ""
+msgstr "Aineistotyypit"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Language"
-msgstr ""
+msgstr "Kieli"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Location and availability"
-msgstr ""
+msgstr "Hyllypaikka (sijainti) ja saatavuus"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Publication date"
-msgstr ""
+msgstr "Julkaisuaika"
 
 # OPAC > Advanced search options
 msgid ""
 "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded "
 "view:"
-msgstr ""
+msgstr "Näytä seuraavat hakuvaihtoehdot 'Enemmän vaihtoehtoja' -näkymässä:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
-msgstr ""
+msgstr "Lajittelu"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Subtypes"
-msgstr ""
+msgstr "Alatyypit"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Item types"
-msgstr ""
+msgstr "Aineistotyypit"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Language"
-msgstr ""
+msgstr "Kieli"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Location and availability"
-msgstr ""
+msgstr "Hyllypaikka (sijainti) ja saatavuus"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Publication date"
-msgstr ""
+msgstr "Julkaisuaika"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options:"
-msgstr ""
+msgstr "Näytä seuraavat hakuvaihtoehdot:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
-msgstr ""
+msgstr "Lajittelu"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
-msgstr ""
+msgstr "Alatyypit"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# <em>Currently supported values</em>: Item "
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
 "Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>Tuetut arvot</em>: Nidetyypit (<strong>itemtypes</strong>), "
+"<em>Tuetut arvot</em>: Aineistotyypit (<strong>itemtypes</strong>), "
 "Kokoelmakoodi (<strong>ccode</strong>) ja Hyllypaikka (<strong>loc</strong>)."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
-msgstr ""
-"Näytä tarkan haun välilehdet verkkokirjastossa ja virkailijaliittymässä "
-"hakujen rajaamiseksi"
+msgstr "Näytä tarkan haun välilehdet verkkokirjastossa hakujen rajaamiseksi"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# fields (separate values with |). Tabs "
 "appear in the order listed.<br/>"
@@ -9725,7 +9802,7 @@ msgstr "Älä salli"
 # OPAC > Policy
 msgid ""
 "opac.pref#OpacAllowPublicListCreation# OPAC users to create public lists."
-msgstr ""
+msgstr "asiakkaiden tehdä verkkokirjastossa omia julkisia listoja."
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
@@ -9740,6 +9817,7 @@ msgid ""
 "opac.pref#OpacAllowSharingPrivateLists# OPAC users to share private lists "
 "with other patrons."
 msgstr ""
+"asiakkaiden jakaa verkkokirjastossa yksityisiä listoja muille asiakkaille."
 
 # OPAC > Features
 msgid "opac.pref#OpacAuthorities# Allow"
@@ -9769,17 +9847,17 @@ msgstr "hakutulosten selailu ja sivutus verkkokirjaston perustiedot-näytöllä"
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseSearch# Disable"
-msgstr ""
+msgstr "Estä"
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseSearch# Enable"
-msgstr ""
+msgstr "Salli"
 
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "käyttöliittymä kaikkien kokoelmien selaamiseksi (vain Elasticsearch)."
 
 # OPAC > Features
 msgid ""
@@ -9787,6 +9865,8 @@ msgid ""
 "requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. "
 "Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"build_browser_and_cloud.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
@@ -9799,7 +9879,7 @@ msgstr "Älä salli"
 # OPAC > Features
 msgid ""
 "opac.pref#OpacBrowser# patrons to browse subject authorities on the OPAC."
-msgstr ""
+msgstr "asiakkaiden selata aiheauktoriteetteja verkkokirjastossa."
 
 # OPAC > Features
 msgid ""
@@ -9807,6 +9887,8 @@ msgid ""
 "requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. "
 "Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"build_browser_and_cloud.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# Don't show"
@@ -9818,35 +9900,35 @@ msgstr "Näytä"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# a subject cloud on the OPAC."
-msgstr ""
+msgstr "verkkokirjastossa."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
-msgstr ""
+msgstr "BibTeX"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Dublin Core"
-msgstr ""
+msgstr "Dublin Core"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# ISBD"
-msgstr ""
+msgstr "ISBD"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MARC-8 encoded MARC"
-msgstr ""
+msgstr "MARC-8 koodattu MARC"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MARCXML"
-msgstr ""
+msgstr "MARCXML"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MODS"
-msgstr ""
+msgstr "MODS"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# RIS"
-msgstr ""
+msgstr "RIS"
 
 # OPAC > Appearance
 msgid ""
@@ -9858,13 +9940,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC"
-msgstr ""
+msgstr "Unicode/UTF-8 koodattu MARC"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use "
 "-9xx, x9x, xx9- fields and subfields"
 msgstr ""
+"Unicode/UTF-8 koodattu MARC ilman paikallista käyttöä -9xx, x9x, xx9- "
+"kentille ja osakentille"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -9895,16 +9979,18 @@ msgid ""
 "|, that can see items otherwise hidden by <a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
+"Lista asiakastyypeistä, eroteltu merkkillä |, jotka voivat nähdä piilotetut "
+"niteet <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>-"
+"järjestelmäasetuksella:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
-msgstr "Älä korosta"
+msgstr "Älä piilota"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Hide"
-msgstr "Korosta"
+msgstr "Piilota"
 
 # OPAC > Appearance
 msgid ""
@@ -9918,7 +10004,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
-msgstr ""
+msgstr "(sarakkeet erotetaan | -merkillä)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -9934,6 +10020,9 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
+"hakutuloksissa ja perustiedot-näytöllä sanoja, joita asiakkaat hakivat. "
+"Estääksesi tiettyjen sanojen korostamisen kokonaan, anna niistä (stopwords) "
+"lista tähän:"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -9941,11 +10030,11 @@ msgstr "Salli"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr "asiakkaan lisätä huomautus, kun hän tekee varauksen."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9957,19 +10046,19 @@ msgstr "verkkokirjastossa hakutuloksen niteille."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library and call number"
-msgstr ""
+msgstr "kirjasto ja luokka"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, collection code, and call number"
-msgstr ""
+msgstr "kirjasto, kokoelma ja luokka"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# library, location, and call number"
-msgstr ""
+msgstr "kirjasto, hyllypaikka ja luokka"
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# only library"
-msgstr ""
+msgstr "vain kirjasto"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
@@ -9985,7 +10074,7 @@ msgstr "Näytä"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# ."
-msgstr ""
+msgstr "."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
@@ -10032,31 +10121,35 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"<br />Huomaa: Jos valittuna on 'erillisessä sarakkeessa', täytyy "
+"item_shelving_location valinnan olla päällä <a href='/cgi-bin/koha/admin/"
+"columns_settings.pl'>taulujen asetuksissa</a> (verkkokirjaston taulut) -"
+"ylläpiton sivulla."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
-msgstr ""
+msgstr "Näytä niteen hyllypaikka "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# below both home and holding libraries"
-msgstr ""
+msgstr "sekä koti- että sijaintikirjaston alapuolella"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# below the holding library"
-msgstr ""
+msgstr "sijaintikirjaston alapuolella"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# below the home library"
-msgstr ""
+msgstr "kotikirjaston alapuolella"
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacLocationOnDetail# for items on the OPAC record details page."
-msgstr ""
+msgstr "verkkokirjaston nimekkeen perustiedot-sivulla."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# on a separate column"
-msgstr ""
+msgstr "erillisessä sarakkeessa"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaintenance# Don't show"
@@ -10096,15 +10189,17 @@ msgid ""
 "page (if the bibliographic record has more items than this, a link is "
 "displayed instead that allows the patron to choose to display all items)."
 msgstr ""
+"nidettä nimekkeen perustiedot-näytöllä (jos nimeketietueella on tätä enemmän "
+"niteitä, näytetään linkki, josta asiakas voi klikkaamalla näyttää kaikki "
+"niteet)."
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OpacMetaDescription# This description will show in search engine "
 "results (160 characters)."
-msgstr ""
+msgstr "Tämä kuvaus näkyy hakutuloksissa (160 merkkiä)."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpacMoreSearches# Add additional elements to the \"More Searches\" "
 "bar on the OPAC, with the following HTML (leave blank to disable):"
@@ -10124,19 +10219,19 @@ msgstr "Älä näytä"
 msgid ""
 "opac.pref#OpacNewsLibrarySelect# a library selection list for news items in "
 "the OPAC."
-msgstr ""
+msgstr "uutisten kirjastovalikko(a) verkkokirjastossa."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# No"
-msgstr ""
+msgstr "Ei"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# Show itemtype icons in the OPAC: "
-msgstr ""
+msgstr "Näytä aineistotyyppien kuvakkeet verkkokirjaston hakutuloksissa: "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNoItemTypeImages# Yes"
-msgstr ""
+msgstr "Kyllä"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -10167,6 +10262,8 @@ msgid ""
 "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires "
 "authentication before accessing the OPAC. "
 msgstr ""
+"Kohan verkkokirjasto julkisena. Jos se asetetaan yksityiseksi, käyttäjien "
+"pitää kirjautua ennen kuin he voivat käyttää verkkokirjastoa. "
 
 # OPAC > Appearance > OpacPublic
 msgid ""
@@ -10260,6 +10357,8 @@ msgid ""
 "opac.pref#OpacSeparateHoldings# is the logged in patrons's library. The "
 "second tab will contain all other items."
 msgstr ""
+"on kirjautuneen asiakkaan kirjasto. Toinen välilehti sisältää kaikki muut "
+"niteet."
 
 # OPAC > Appearance
 msgid ""
@@ -10302,7 +10401,7 @@ msgstr "."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results, details, and patron"
-msgstr ""
+msgstr "hakutuloksissa, perustiedot-näytöllä ja asiakkaan sivulla"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSuggestionManagedBy# Don't show"
@@ -10340,37 +10439,41 @@ msgstr ""
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />- <code>/opac-tmpl/bootstrap/images/"
 "OpenURL.png</code>"
-msgstr ""
+msgstr "<br />- <code>/opac-tmpl/bootstrap/images/OpenURL.png</code>"
 
 # OPAC > OpenURL
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />- <code>http://www.example.com/img/"
 "openurl.png</code>"
-msgstr ""
+msgstr "<br />- <code>http://www.example.com/img/openurl.png</code>"
 
 # OPAC > OpenURL
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />Can be an absolute URL starting with "
 "<code>http://</code> or"
 msgstr ""
+"<br />Voi olla absoluuttinen URL, joka alkaa merkkijonolla <code>http://</"
+"code>, tai"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <br />Examples:"
-msgstr ""
+msgstr "<br />Esimerkkejä:"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <code>https://</code> or a relative URL"
-msgstr ""
+msgstr "<code>https://</code> tai vastaava URL"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# Location of image for OpenURL links:"
-msgstr ""
+msgstr "Kuvan sijainti OpenURL-linkeille:"
 
 # OPAC > OpenURL
 msgid ""
 "opac.pref#OpenURLResolverURL# Complete URL of OpenURL resolver (starting "
 "with <code>http://</code> or <code>https://</code>):"
 msgstr ""
+"Täydellinen URL-osoite OpenURL nimipalvelimelle (joka alkaa merkkijonolla "
+"<code>http://</code> tai <code>https://</code>):"
 
 # OPAC > OpenURL > OpenURLText
 msgid ""
@@ -10378,6 +10481,9 @@ msgid ""
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation"
 "\">OpenURLImageLocation</a> is defined):"
 msgstr ""
+"OpenURL-linkkien teksti (tai kuvan nimi, jos <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OpenURLImageLocation"
+"\">OpenURLImageLocation</a> on määritelty):"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10397,6 +10503,10 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä vaatii, että arvo <a href='/cgi-bin/koha/"
+"admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
+"a> on kelvollinen asiakastyyppikoodi."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -10410,7 +10520,7 @@ msgstr "Älä salli"
 msgid ""
 "opac.pref#PatronSelfRegistration# library patrons to register for an account "
 "via the OPAC."
-msgstr ""
+msgstr "asiakkaiden itserekisteröityä verkkokirjastossa."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10445,17 +10555,17 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Don't require"
-msgstr ""
+msgstr "Älä vaadi"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
-msgstr ""
+msgstr "Vaadi"
 
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationConfirmEmail# patrons to confirm their email "
 "address by entering it twice."
-msgstr ""
+msgstr "asiakasta vahvistamaan sähköpostiosoitteensa syöttämällä se kahdesti."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10475,9 +10585,15 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
+"<br>Jos <code>misc/cronjobs/cleanup_database.pl</code> cronjob on asetettu "
+"poistamaan vahvistamattomat ja keskeneräiset itserekisteröinnit, poistaa se "
+"pysyvästi (ei voida palauttaa) kaikki asiakkaat, jotka ovat rekisteröityneet "
+"yli <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
+"a> -järjestelmäasetuksessa määritettyä päivää sitten (ellei arvo ole nolla "
+"(0) tai tyhjä)."
 
 # OPAC > Self registration and modification
-#, fuzzy
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
 msgstr "Käytä asiakastyyppiä"
 
@@ -10494,7 +10610,7 @@ msgstr "Vaadi"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Don't consider"
-msgstr ""
+msgstr "Älä vaadi"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10514,6 +10630,9 @@ msgid ""
 "to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
 "make it empty."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus tarvitseep <code>misc/"
+"cronjobs/cleanup_database.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan "
+"se.<br>Asiakkaita ei poisteta ellei asetus ole 0 tai se on tyhjä."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -10522,12 +10641,16 @@ msgid ""
 "pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory"
 "\">PatronSelfRegistrationDefaultCategory</a>"
 msgstr ""
+"Poista asiakkaat, joiden tyyppi on edelleen järjestelmäasetuksessa <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory"
+"\">PatronSelfRegistrationDefaultCategory</a>määritetty oletusasiakastyyppi"
 
 # OPAC > Self registration and modification
 msgid ""
 "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after "
 "account creation."
-msgstr ""
+msgstr "päivää rekisteröitymisen jälkeen."
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10552,7 +10675,7 @@ msgstr "Näytä ja täytä automaattisesti"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't display and prefill"
-msgstr ""
+msgstr "Älä näytä ja täytä automaattisesti"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -10568,6 +10691,8 @@ msgid ""
 "This system preference requires the <code>misc/cronjobs/cleanup_database.pl</"
 "code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"cleanup_database.pl</code> -cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -10582,38 +10707,42 @@ msgid ""
 "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering "
 "patron verify themselves via email."
 msgstr ""
+"itserekisteröityneen asiakkaan vahvistavan rekisteröitymisensä sähköpostitse."
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# OPAC"
-msgstr ""
+msgstr "verkkokirjaston"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# Show quote of the day in the"
-msgstr ""
+msgstr "Näytä päivän sitaatti"
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# main page."
-msgstr ""
+msgstr "etusivulla."
 
 # OPAC > Features
 msgid "opac.pref#QuoteOfTheDay# staff interface"
-msgstr ""
+msgstr "virkailijaliittymän"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid "opac.pref#Reference_NFL_Statuses# (Use | as delimiter.)"
-msgstr ""
+msgstr "(Käytä erottimena | -merkkiä.)"
 
 # OPAC > Appearance > Reference_NFL_Statuses
 msgid ""
 "opac.pref#Reference_NFL_Statuses# List the following not for loan statuses "
 "as available for reference in OPAC search results:"
 msgstr ""
+"Listaa seuraavat ei lainattavissa -tilat saataville viitteeksi "
+"verkkokirjaston hakutuloksissa:"
 
 # OPAC > Restricted page
 msgid ""
 "opac.pref#RestrictedPageContent# HTML content of your restricted page "
 "(available at /cgi-bin/koha/opac-restrictedpage.pl)"
 msgstr ""
+"Rajoitetun sivun HTML sisältö (näkyy /cgi-bin/koha/opac-restrictedpage.pl)"
 
 # OPAC > Restricted page
 msgid ""
@@ -10624,7 +10753,7 @@ msgstr "Pääsyä IP-osoitteista, jotka alkavat"
 msgid ""
 "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma "
 "separated - ex: '127.0.0,127.0.1')."
-msgstr ""
+msgstr "ei tarvitse todentaa (pilkulla eroteltuna - esim: '127.0.0,127.0.1')."
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageTitle# Use"
@@ -10635,6 +10764,7 @@ msgid ""
 "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in "
 "the breadcrumb and on the top of the restricted page)."
 msgstr ""
+"rajoitetun sivun nimenä (näkyy murupolussa ja rajoitetun sivun yläreunassa)"
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
@@ -10747,28 +10877,29 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
-msgstr ""
+msgstr "Sähköposti"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Facebook"
-msgstr ""
+msgstr "Facebook"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# LinkedIn"
-msgstr ""
+msgstr "LinkedIn"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Show"
-msgstr ""
+msgstr "Näytä"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Twitter"
-msgstr ""
+msgstr "Twitter"
 
 # OPAC > Features
 msgid ""
 "opac.pref#SocialNetworks# social network links on the OPAC detail pages."
 msgstr ""
+"linkit sosiaalisen median palveluihin verkkokirjaston perustiedot-sivulla"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# Don't track"
@@ -10784,7 +10915,7 @@ msgstr "Jäljitä anonyymisti"
 
 # OPAC > Privacy
 msgid "opac.pref#TrackClicks# links that patrons click on."
-msgstr ""
+msgstr "asiakkaiden klikkaamia linkkejä"
 
 # OPAC > Appearance
 msgid "opac.pref#hidelostitems# Don't show"
@@ -10834,6 +10965,13 @@ msgid ""
 "and language within the Koha templates directory. A full local path is "
 "expected to start from your HTTP document root."
 msgstr ""
+"kaikilla verkkokirjaston sivuilla paitsi oletustyylipohjassa (jätä tyhjäksi, "
+"jos ei käytössä). Syötä vain tiedostonimi, koko paikallinen polku tai "
+"täydellinen URL, joka alkaa merkkijonolla <code>http://</code> (jos tiedosto "
+"on etäpalvelimella). Huomaa, jos syötät vain tiedostonimen, tiedoston "
+"pitäisi olla css-alihakemistossa jokaista aktiivista teemaa ja kieltä varten "
+"Kohan pohjien hakemistossa. Kokonainen paikallinen polku alkaa HTTP-"
+"dokumentin juuresta."
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# Allow"
@@ -10892,35 +11030,35 @@ msgstr "Yleinen"
 
 # Patrons > Membership expiry
 msgid "patrons.pref Membership expiry"
-msgstr ""
+msgstr "patrons.pref Membership expiry"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref Notices and notifications"
-msgstr ""
+msgstr "patrons.pref Notices and notifications"
 
 # Patrons > Patron forms
 msgid "patrons.pref Patron forms"
-msgstr ""
+msgstr "patrons.pref Patron forms"
 
 # Patrons > Patron relationships
 msgid "patrons.pref Patron relationships"
-msgstr ""
+msgstr "patrons.pref Patron relationships"
 
 # Patrons > Privacy
 msgid "patrons.pref Privacy"
-msgstr ""
+msgstr "patrons.pref Privacy"
 
 # Patrons > Security
 msgid "patrons.pref Security"
-msgstr ""
+msgstr "patrons.pref Security"
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# Allow only staff"
-msgstr ""
+msgstr "Salli vain henkilökunnan"
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# Allow patrons"
-msgstr ""
+msgstr "Salli asiakkaiden"
 
 # Patrons > General
 msgid ""
@@ -10928,6 +11066,8 @@ msgid ""
 "for account. If allowed a patron will be able to update their own account to "
 "allow/disallow auto-renewal."
 msgstr ""
+"laittaa päälle automaattinen uusinta. Jos sallittu asiakkaille, voi asiakas "
+"itse sallia/estää automaattiset uusinnat."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -10965,11 +11105,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
-msgstr ""
+msgstr "Estä"
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Patrons > General > AutoApprovePatronProfileSettings
 msgid ""
@@ -10977,12 +11117,14 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails"
 "\">OPACPatronDetails</a> to be activated."
 msgstr ""
+"Vaatii, että <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACPatronDetails\">OPACPatronDetails</a> on päällä."
 
 # Patrons > General
 msgid ""
 "patrons.pref#AutoApprovePatronProfileSettings# automatic approval of patron "
 "detail changes from the OPAC."
-msgstr ""
+msgstr "asiakastietojen muutospyyntöjen automaattista hyväksymistä."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -11032,7 +11174,7 @@ msgstr "työsähköpostiosoitetta"
 msgid ""
 "patrons.pref#AutoRenewalNotices# (Deprecated) according to --send-notices "
 "cron switch"
-msgstr ""
+msgstr "(Poistettu) Cronjobin --send-notices -asetuksen mukaisesti"
 
 # Patrons > Notices and notifications > AutoRenewalNotices
 msgid "patrons.pref#AutoRenewalNotices# Send automatic renewal notices: "
@@ -11056,6 +11198,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
+"<strong>HUOM:</strong> Jos <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=autoMemberNum\">autoMemberNum</a> on päällä, "
+"järjestelmäasetuksessa <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> ei "
+"saa olla kenttää <code>cardnumber</code>."
 
 # Patrons > Patron forms
 msgid ""
@@ -11121,6 +11268,10 @@ msgid ""
 "list, the minimum length, if not specified here, defaults to one. Maximum "
 "cannot be bigger than the database field size of 32."
 msgstr ""
+"Jos <code>kirjastokortin numero</code> sisältyy <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField"
+"\">BorrowerMandatoryField</a>-listaan, minimipituuden oletus on 1, ellei "
+"sitä ole erikseen tässä määritetty. Suurin sallittu pituus on 32."
 
 # Patrons > Patron forms
 msgid ""
@@ -11288,6 +11439,11 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferencesOPAC"
 "\">EnhancedMessagingPreferencesOPAC</a>."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä vaikuttaa vain huomautusviesteihin. Jos "
+"asiakkaat pääsevät muuttamaan näitä asetuksia, säädä asetukset täällä: <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EnhancedMessagingPreferencesOPAC"
+"\">EnhancedMessagingPreferencesOPAC</a>."
 
 # Patrons > Notices and notifications
 msgid ""
@@ -11321,6 +11477,9 @@ msgid ""
 "op=search&searchfield=EnhancedMessagingPreferences"
 "\">EnhancedMessagingPreferences</a> must be enabled."
 msgstr ""
+"<br><strong>HUOM:</strong> Järjestelmäasetuksen <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=EnhancedMessagingPreferences"
+"\">EnhancedMessagingPreferences</a>täytyy olla päällä."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -11334,7 +11493,7 @@ msgstr "Näytä"
 msgid ""
 "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on "
 "the OPAC."
-msgstr ""
+msgstr "asiakasviestien asetukset verkkokirjastossa."
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -11397,6 +11556,9 @@ msgid ""
 "Regulation. When you enforce, patrons need to give consent before using the "
 "OPAC. If you set to permissive, Koha will warn but not enforce."
 msgstr ""
+". GDPR on EU:n yleinen tietosuoja-asetus. Jos pakotat kuittauksen, "
+"asiakkaiden on kuitattava ilmoitus ennen verkkokirjaston käyttöä. Jos asetus "
+"on \"salliva\", Koha varoittaa, mutta ei vaadi kuittausta."
 
 # Patrons > Privacy > GDPR_Policy
 msgid ""
@@ -11405,22 +11567,25 @@ msgid ""
 "\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
 "\">PrivacyPolicyURL</a> setting."
 msgstr ""
+"<br><strong>HUOM:</strong> Jos tämä on päällä, täytyy myös määritellä "
+"julkisen tietosuojadokumentin URL <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>-asetuksella."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr ""
+msgstr "Aseta GDPR-käytäntö:"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr ""
+msgstr "estetty"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr ""
+msgstr "pakotettu"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr ""
+msgstr "salliva"
 
 # Patrons > General > LockExpiredDelay
 msgid ""
@@ -11463,6 +11628,8 @@ msgid ""
 "system preference requires the <code>misc/cronjobs/membership_expiry.pl</"
 "code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>HUOM:</strong> Tämä järjestelmäasetus vaatii <code>misc/cronjobs/"
+"membership_expiry.pl</code> cronjobin. Pyydä kehittäjiä ajastamaan se."
 
 # Patrons > Membership expiry
 msgid ""
@@ -11540,26 +11707,27 @@ msgid ""
 "op=search&searchfield=TalkingTechItivaPhoneNotification"
 "\">TalkingTechItivaPhoneNotification</a> should be disabled."
 msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a> on päällä, <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a>in pitäisi olla pois päältä."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Disable"
 msgstr "Estä"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PhoneNotification# Enable"
 msgstr "Salli"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid ""
 "patrons.pref#PhoneNotification# patron phone notifications generation. A "
 "plugin will be required to process the phone notifications."
 msgstr ""
-"puhelinmuistutukset asiakkaille käyttämällä Talking Tech i-tiva -palvelua "
-"(myöhästymisilmoitukset, ennakkoilmoitukset ja noutoilmoitukset tällä "
-"hetkellä tuettuja)."
+"puhelinmuistutukset asiakkaille. Puhelinmuistutuksia varten tarvitaan "
+"liitännäinen."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Address"
@@ -11598,9 +11766,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Vaihtoehtoinen osoite - Katuosoite"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
-msgstr "Vaihtoehtoinen osoite - Katuosoite"
+msgstr "Vaihtoehtoinen osoite - Katutyyppi"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
@@ -11691,9 +11858,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
 msgstr "Pääosoite - Kadun numero"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
-msgstr "Pääosoite - Kadun numero"
+msgstr "Pääosoite - Katutyyppi"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -11714,10 +11880,13 @@ msgid ""
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
 msgstr ""
+"<br><strong>HUOM:</strong> URL näytetään vain, jos <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> on "
+"asetettu."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
-msgstr ""
+msgstr "Käytä seuraavaa URLia"
 
 # Patrons > Privacy
 msgid ""
@@ -11725,6 +11894,9 @@ msgid ""
 "messages about privacy and data protection. (If you enforce GDPR policy, "
 "make sure that this page is not blocked.)"
 msgstr ""
+"viitataksesi paikalliseen tietosuojadokumentaatioon viesteissä, jotka "
+"koskevat yksityisyyttä ja tietosuojaa. (Jos pakotat tietosuojakäytänteiden "
+"kuittaamisen, varmista, että kaikki voivat avata dokumentaation.)"
 
 # Patrons > General
 msgid ""
@@ -11872,19 +12044,21 @@ msgid ""
 "patrons.pref#RequireStrongPassword# (must contain at least one digit, one "
 "lowercase and one uppercase)."
 msgstr ""
+"(salasanassa pitää olla vähintään yksi numero, yksi pieni kirjain ja yksi "
+"iso kirjain)."
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# Don't require"
-msgstr ""
+msgstr "Älä vaadi"
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# Require"
-msgstr ""
+msgstr "Vaadi"
 
 # Patrons > Security
 msgid ""
 "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
-msgstr ""
+msgstr "vahvaa salasanaa henkilökunnalta ja asiakkailta"
 
 # Patrons > Notices and notifications > SMSSendDriver
 msgid ""
@@ -11892,12 +12066,17 @@ msgid ""
 "have deprecated support for this feature and it is not recommended for use "
 "unless you have a dedicated SMS to Email gateway."
 msgstr ""
+"<br><strong>HUOM:</strong> Monet mobiilioperaattorit ovat luopuneet tämän "
+"ominaisuuden ylläpitämisestä ja sitä ei suositella käytettäväksi, ellei ole "
+"erillistä viestikäytävää tätä varten."
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, "
 "set SMSSendDriver to: Email"
 msgstr ""
+"<br>Jos haluat lähettää tekstiviestin sähköpostitse, aseta SMSSendDriver:n "
+"arvoksi: Email"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -11909,20 +12088,20 @@ msgstr "SMS-viestien lähettämiseen."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# . Override from address with"
-msgstr ""
+msgstr ". Korvaa lähettäjän osoite tällä:"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# Define a username/login"
-msgstr ""
+msgstr "Määrittele käyttäjätunnus/kirjautumistunnus"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendUsername# and a password"
-msgstr ""
+msgstr "ja salasana"
 
 # Patrons > Notices and notifications
 msgid ""
 "patrons.pref#SMSSendUsername# for emails sent using \"Email\" send driver."
-msgstr ""
+msgstr "sähköpostiviesteille, jotka on lähetetty \"Email\"-ajurilla."
 
 # Patrons > General
 msgid ""
@@ -11946,6 +12125,12 @@ msgid ""
 "admin/preferences.pl?op=search&searchfield=PhoneNotification"
 "\">PhoneNotification</a> should be disabled."
 msgstr ""
+"<br/><i class=\"fa fa-exclamation-triangle\"></i> Jos <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?"
+"op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a> on päällä, asetuksen <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification"
+"\">PhoneNotification</a> pitäisi olla pois päältä."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
@@ -11992,18 +12177,21 @@ msgid ""
 "patrons.pref#UnsubscribeReflectionDelay# Lock/expire patrons that submitted "
 "an unsubscribe request (refused consent) after"
 msgstr ""
+"Lukitse/merkitse vanhentuneiksi asiakkaat, jotka eivät ole antaneet "
+"suostumustaan, kun on kulunut"
 
 # Patrons > Privacy
 msgid ""
 "patrons.pref#UnsubscribeReflectionDelay# days and remove anonymized patron "
 "accounts after"
-msgstr ""
+msgstr "päivää, ja poista anonymisoidut käyttäjätilit, kun on kulunut"
 
 # Patrons > Privacy
 msgid ""
 "patrons.pref#UnsubscribeReflectionDelay# days, anonymize locked/expired "
 "accounts after"
 msgstr ""
+"päivää, anonymisoi lukitut/vanhentuneiksi merkityt tilit, kun on kulunut "
 
 # Patrons > Privacy
 msgid ""
@@ -12012,6 +12200,9 @@ msgid ""
 "interpreted as no delay (do it now)! The actions are performed by the "
 "cleanup database cron job."
 msgstr ""
+"päivää. <br>TÄRKEÄÄ: Toimintoja ei suoriteta, jos päiväasetukset ovat tyhjiä "
+"(ei mitään tekstiä). Jos arvo on 0 (nolla), toiminto suoritetaan "
+"välittömästi. Toiminnot suoritetaan osana cleanup database -cronjobia."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#UseEmailReceipts# Don't send"
@@ -12037,6 +12228,11 @@ msgid ""
 "\">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</"
 "code>."
 msgstr ""
+"<strong>HUOM:</strong> Jos <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=autoMemberNum\">autoMemberNum</a>-järjestelmäasetus on "
+"päällä, järjestelmäasetuksessa <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=BorrowerMandatoryField\">BorrowerMandatoryField</a> ei "
+"saa olla kenttää <code>cardnumber</code>."
 
 # Patrons > Patron forms
 msgid "patrons.pref#autoMemberNum# Do"
@@ -12147,7 +12343,7 @@ msgstr "Hakutoiminnot"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref Did you mean/spell checking"
-msgstr ""
+msgstr "searching.pref Did you mean/spell checking"
 
 # Searching > Features
 msgid "searching.pref Features"
@@ -12155,11 +12351,11 @@ msgstr "Ominaisuudet"
 
 # Searching > Results display
 msgid "searching.pref Results display"
-msgstr ""
+msgstr "searching.pref Results display"
 
 # Searching > Search form
 msgid "searching.pref Search form"
-msgstr ""
+msgstr "searching.pref Search form"
 
 # Searching > Search form
 msgid ""
@@ -12182,13 +12378,12 @@ msgid ""
 msgstr "Rajoita tarkan haun kielirajauksen alasvetovalikko"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>Tuetut arvot</em>: Nidetyypit (<strong>itemtypes</strong>), "
+"<em>Tuetut arvot</em>: Aineistotyypit (<strong>itemtypes</strong>), "
 "Kokoelmakoodi (<strong>ccode</strong>) ja Hyllypaikka (<strong>loc</strong>)."
 
 # Searching > Search form
@@ -12215,14 +12410,19 @@ msgid ""
 "op=search&searchfield=item-level_itypes\">item-level_itypes</a> system "
 "preference is set to bibliographic record."
 msgstr ""
+"  Kohan tietuetason aineistotyypin tietoja perustiedot-näytöllä ja "
+"hakutuloksissa verkkokirjastossa ja virkailijaliittymässä. Tieto näytetään "
+"myös, jos <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=item-level_itypes\">item-level_itypes</a> -"
+"järjestelmäasetus on asetettu kohtaan \"nimeketietueesta\"."
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Display"
-msgstr ""
+msgstr "Näytä"
 
 # Searching > Results display
 msgid "searching.pref#BiblioItemtypeInfo# Don't display"
-msgstr ""
+msgstr "Älä näytä"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
@@ -12313,9 +12513,8 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "fasettia kussakin kategoriassa."
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# Sort facets"
-msgstr "Näytä fasetit"
+msgstr "Lajittele fasetit"
 
 # Searching > Features
 msgid "searching.pref#FacetOrder# alphabetically"
@@ -12370,25 +12569,25 @@ msgstr "käytä"
 msgid ""
 "searching.pref#LibrisKey# Can be obtained at http://api.libris.kb.se/"
 "bibspell."
-msgstr ""
+msgstr "On saatavissa osoitteesta http://api.libris.kb.se/bibspell."
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref#LibrisKey# LIBRIS Spellchecking API key"
-msgstr ""
+msgstr "LIBRIS-oikolukijan API-avain"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref#LibrisKey# Swedish service for spellchecking.<br/>"
-msgstr ""
+msgstr "ruotsalainen oikolukupalvelu.<br/>"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref#LibrisURL# LIBRIS base URL"
-msgstr ""
+msgstr "LIBRIS: juuri-URL"
 
 # Searching > Did you mean/spell checking
 msgid ""
 "searching.pref#LibrisURL# Please only change this if you are sure it needs "
 "changing."
-msgstr ""
+msgstr "Muuta tätä vain, jos olet varma, että muutos on tarpeen."
 
 # Searching > Search form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Add"
@@ -12446,6 +12645,7 @@ msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
+"operaattoria \"phr\" luokissa ja standardinumeroissa verkkokirjaston hauissa."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
@@ -12515,17 +12715,27 @@ msgstr "hakutulosta sivua kohden verkkokirjastossa."
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# Show"
-msgstr ""
+msgstr "Näytä"
 
 # Searching > Results display
 msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
 msgstr ""
+"tuloksia sivulla -pudotusvalikko(a) virkailijaliittymän hakutulossivulla."
+
+# Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"niteen MARC-tietoja saatavaksi XSLT-tyylitiedostoille. Oletus on \"Älä tee"
+"\", jolloin niteet näytetään muilla keinoin."
 
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -12536,9 +12746,11 @@ msgid "searching.pref#PassItemMarcToXSLT# Don't"
 msgstr "Älä tee"
 
 # Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 "niteen MARC-tietoja saatavaksi XSLT-tyylitiedostoille. Oletus on \"Älä tee"
 "\", jolloin niteet näytetään muilla keinoin."
@@ -12578,7 +12790,6 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Yritä soveltaa"
 
 # Searching > Features
-#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
@@ -12587,19 +12798,20 @@ msgid ""
 msgstr ""
 "samankaltaisuuteen perustuvaa sumeaa hakua (jolloin esimerkiksi <cite>flang</"
 "cite> löytäisi muodot <cite>flange</cite> ja <cite>fang</cite>; vaatii ZEBRA-"
-"hakumoottorin käyttöä)."
+"hakumoottorin käyttöä). Mikä tahansa Elasticsearch-termi voidaan merkitä "
+"sumeaksi (fuzzy) lisäämällä ~ heti termin perään.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
-msgstr ""
+msgstr "Älä käytä escape-komentoa"
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Escape"
-msgstr ""
+msgstr "Käytä escape-komentoa"
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Unescape escaped"
-msgstr ""
+msgstr "Ohita escape-komento"
 
 # Searching > Features
 msgid ""
@@ -12610,6 +12822,12 @@ msgid ""
 "expressions \"\\/like this\\/\" while \"/this/\", \"or/this\" will be "
 "escaped and interpreted as regular strings. (Elasticsearch only.)"
 msgstr ""
+"säännöllisissä lausekkeissa hakumerkkijonoissa. Jos on valittu \"Käytä "
+"escape-komentoa\", kauttaviivoja \"/\" ei tulkita komennoiksi vaan "
+"säännölliset lausekkeet tulkitaan merkkijonoina. Jos on valittu \"Ohita "
+"escape-komento\", voidaan kirjoittaa säännölliset lausekkeet muotoon \"\\/"
+"lauseke\\/\". Tällöin \"/lauseke/\" tai \"/lauseke\" luetaan pelkkinä "
+"merkkijonoina. (Koskee vain Elasticsearchia.)"
 
 # Searching > Features
 msgid "searching.pref#QueryStemming# Don't try"
@@ -12694,6 +12912,8 @@ msgid ""
 "searching.pref#TraceCompleteSubfields# subject tracings in the OPAC and "
 "staff interface to search only for complete-subfield matches."
 msgstr ""
+"asiasanojen jäljitys(tä) hakemaan vain täsmällisiä alakenttäosumia "
+"verkkokirjastossa ja virkalijaliittymässä."
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
@@ -12717,20 +12937,20 @@ msgid ""
 msgstr "Käytä seuraavaa tekstiä UNIMARC-tekijäfasettien erottimena"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Don't use"
-msgstr "Ei ole käytössä"
+msgstr "Älä käytä"
 
 # Searching > Features > UseICUStyleQuotes
 msgid ""
 "searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
 "subjects. The default is to use standard quotes (\"\")."
 msgstr ""
+"ICU-tyylistä merkintää ({}) asiasanojen jälityksessä. Oletuksena "
+"lainausmerkit (\"\")."
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Use"
-msgstr "On käytössä"
+msgstr "Käytä"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ,"
@@ -12834,7 +13054,7 @@ msgstr "Näytä korkeintaan"
 msgid ""
 "searching.pref#maxItemsInSearchResults# items per bibliographic record in "
 "the search results"
-msgstr ""
+msgstr "nidettä nimeketietuetta kohti hakutuloksissa."
 
 # Searching > Results display
 msgid "searching.pref#maxRecordsForFacets# Build facets based on"
@@ -13014,35 +13234,36 @@ msgid ""
 "Please note that the serial collection tab is currently available only for "
 "UNIMARC."
 msgstr ""
+"oletusvälilehtenä verkkokirjastossa. Huomaa: Kausijulkaisujen "
+"kokoelmavälilehti on käytettävissä vain UNIMARC-formaattia käytettäessä."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# holdings tab"
-msgstr ""
+msgstr "kokoelmatiedot"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# serial collection tab"
-msgstr ""
+msgstr "kausijulkaisun kokoelmatiedot"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# subscriptions tab"
-msgstr ""
+msgstr "tilaustiedot"
 
 # Staff interface
 msgid "staff_interface.pref"
-msgstr ""
+msgstr "staff_interface.pref"
 
 # Staff interface > Appearance
 msgid "staff_interface.pref Appearance"
-msgstr ""
+msgstr "staff_interface.pref Appearance"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref Authentication"
-msgstr "CAS-tunnistautuminen"
+msgstr "staff_interface.pref Authentication"
 
 # Staff interface > Options
 msgid "staff_interface.pref Options"
-msgstr ""
+msgstr "staff_interface.pref Options"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Don't enable"
@@ -13272,43 +13493,59 @@ msgid ""
 msgstr "WYSIWYG-editori kun muokataan tiettyjä HTML-järjestelmäasetuksia."
 
 # Staff interface > Appearance > XSLTDetailsDisplay
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
+"<br />Valinnat:<ul><li>Syötä \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" "
+"oletusarvoksi tyylitiedostolle</li><li>Määritä polku xslt-tiedostolle</"
+"li><li>Määritä URL ulkoiselle tyylitiedostolle.</li><li>HUOM: Tämä "
+"järjestelmäasetus <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla käytössä, jos muokattu tyylitiedostosi käyttää niteiden kentistä</li></"
+"ul>Jos tyylitiedostoja on useita eri kieliä varten, paikanpitäjä {langcode} "
+"täytyy korvata kunkin käyttäjän kielellä."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# Display details in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"Näytä tarkat tiedot virkailijaliittymässä käyttäen XSLT-tyylitiedostoa "
+"osoitteesta: "
 
 # Staff interface > Appearance > XSLTListsDisplay
+#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
+"<br />Valinnat:<ul><li>Syötä \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" "
+"oletusarvoksi tyylitiedostolle</li><li>Määritä polku xslt-tiedostolle</"
+"li><li>Määritä URL ulkoiselle tyylitiedostolle.</li><li>HUOM: Tämä "
+"järjestelmäasetus <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla käytössä, jos muokattu tyylitiedostosi käyttää niteiden kentistä</li></"
+"ul>Jos tyylitiedostoja on useita eri kieliä varten, paikanpitäjä {langcode} "
+"täytyy korvata kunkin käyttäjän kielellä."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# Display lists in the staff interface "
 "using XSLT stylesheet at: "
-msgstr ""
+msgstr "Näytä listat virkailijaliittymässä käyttäen XSLT-tyylitiedostoa: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
 msgid ""
@@ -13323,12 +13560,23 @@ msgid ""
 "different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
+"<br />Vaihtoehdot:<ul><li>Lisää \"<a href=\"#\" class=\"set_syspref\" data-"
+"syspref=\"XSLTLResultsDisplay\" data-value=\"default\">default</a>\" "
+"oletustyylitiedostoon.</li><li>Lisää XSLT-tiedoston hakemistopolku</"
+"li><li>Lisää ulkoisen tyylitiedoston URL.</li><li>HUOM: Järjestelmäasetuksen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> täytyy "
+"olla päällä, jos räätälöity tyylitiedosto käyttää nidekentissä olevaa dataa</"
+"li></ul>Jos eri kieliä varten on eri tyylitiedostot, paikanpitäjä {langcode} "
+"korvautuu käytössä olevalla kielellä."
 
 # Staff interface > Appearance
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# Display results in the staff "
 "interface using XSLT stylesheet at: "
 msgstr ""
+"Näytä virkailijaliittymän hakutulokset käyttäen XSLT-tyylitiedostoa "
+"osoitteesta: "
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#intranet_includes# Use include files from the"
@@ -13434,10 +13682,9 @@ msgstr ""
 
 # Staff interface > Authentication > staffShibOnly
 msgid "staff_interface.pref#staffShibOnly# Allow"
-msgstr ""
+msgstr "Salli"
 
 # OPAC > Features
-#, fuzzy
 msgid "staff_interface.pref#staffShibOnly# Don't allow"
 msgstr "Älä salli"
 
@@ -13445,7 +13692,7 @@ msgstr "Älä salli"
 msgid ""
 "staff_interface.pref#staffShibOnly# staff to login by means other than "
 "shibboleth."
-msgstr ""
+msgstr "henkilökunnan kirjautua muutoin kuin Shibbolethin kautta."
 
 # Staff interface > Appearance
 msgid "staff_interface.pref#template# Use the"
@@ -13508,7 +13755,7 @@ msgstr "Työkalut"
 
 # Tools > Barcodes
 msgid "tools.pref Barcodes"
-msgstr ""
+msgstr "tools.pref Barcodes"
 
 # Tools > Batch item
 msgid "tools.pref Batch item"
@@ -13663,7 +13910,7 @@ msgstr "Verkkopalvelut"
 
 # Web services > General
 msgid "web_services.pref General"
-msgstr ""
+msgstr "web_services.pref General"
 
 # Web services > ILS-DI
 msgid "web_services.pref ILS-DI"
@@ -13675,7 +13922,7 @@ msgstr "IdRef"
 
 # Web services > Mana KB
 msgid "web_services.pref Mana KB"
-msgstr ""
+msgstr "web_services.pref Mana KB"
 
 # Web services > OAI-PMH
 msgid "web_services.pref OAI-PMH"
@@ -13683,7 +13930,7 @@ msgstr "OAI-PMH"
 
 # Web services > REST API
 msgid "web_services.pref REST API"
-msgstr ""
+msgstr "web_services.pref REST API"
 
 # Web services > Reporting
 msgid "web_services.pref Reporting"
@@ -13691,23 +13938,23 @@ msgstr "Raportointi"
 
 # Web services > General
 msgid "web_services.pref#AccessControlAllowOrigin# ."
-msgstr ""
+msgstr "."
 
 # Web services > General
 msgid ""
 "web_services.pref#AccessControlAllowOrigin# Set the Access-Control-Allow-"
 "Origin header to"
-msgstr ""
+msgstr "Aseta Access-Control-Allow-Origin-headeriksi"
 
 # Web services > Mana KB
 msgid ""
 "web_services.pref#AutoShareWithMana# Fields automatically shared with Mana "
 "KB:"
-msgstr ""
+msgstr "Kentät, jotka jaetaan automaattisesti Mana-tietämyskannalle:"
 
 # Web services > Mana KB
 msgid "web_services.pref#AutoShareWithMana# subscriptions"
-msgstr ""
+msgstr "kausijulkaisutilaustiedot"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI# Disable"
@@ -13757,18 +14004,20 @@ msgid ""
 "web_services.pref#IdRef# the IdRef web service from the OPAC detail page. "
 "IdRef allows requests for authorities from the Sudoc database."
 msgstr ""
+"idRef-palvelu verkkokirjaston perustiedot-näytöllä. IdRed sallii "
+"auktoriteettien pyytämisen Sudoc-tietokannasta."
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Disable"
-msgstr ""
+msgstr "Estä"
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Enable"
-msgstr ""
+msgstr "Käytä"
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# No, let me think about"
-msgstr ""
+msgstr "Älä ota käyttöön, harkitsen ensin"
 
 # Web services > Mana KB
 msgid ""
@@ -13779,23 +14028,32 @@ msgid ""
 "shared under the <a href=\"https://creativecommons.org/choose/zero/\">CC-0 "
 "license</a>"
 msgstr ""
+"huomautuksia Mana-tietämyskantaan. Mana keskittää informaation Koha-"
+"asennusten kesken fasilitoimaan uusien tilausten, toimittajien, raporttien "
+"ym. tekemiseen. Voit hakea, jakaa tuoda ja kommentoida Manan sisältöä. Manan "
+"jakama sisältö on jaettu lisenssin <a href=\"https://creativecommons.org/"
+"choose/zero/\">CC-0 license</a> alla."
 
 # Web services > Mana KB
 msgid ""
 "web_services.pref#ManaToken# Get a security token on the <a href=\"/cgi-bin/"
 "koha/admin/share_content.pl\">Mana KB administration page</a>."
 msgstr ""
+"Hae suojausavain <a href=\"/cgi-bin/koha/admin/share_content.pl\">Mana-"
+"tietämyskannan hallintasivulta</a>."
 
 # Web services > Mana KB
 msgid ""
 "web_services.pref#ManaToken# Security token used to authenticate on Mana KB:"
-msgstr ""
+msgstr "Mana-tietämyskantaan tunnistautumisessa käytettävä suojausavain:"
 
 # Web services > OAI-PMH
 msgid ""
 "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-"
 "PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)"
 msgstr ""
+"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH-palvelin</a>. "
+"(Saatavilla: /cgi-bin/koha/oai.pl?verb=Identify)"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# Disable"
@@ -13955,11 +14213,11 @@ msgstr "Salli"
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Disable"
-msgstr ""
+msgstr "Estä"
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Web services > REST API
 msgid ""
@@ -13967,6 +14225,8 @@ msgid ""
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. "
 "[EXPERIMENTAL]"
 msgstr ""
+"Oauth2-asiakkaan valtuutus REST API:ssa. Vaatii, että Net::OAuth2::"
+"AuthorizationServer on asennettu. [KOKEILUVAIHEESSA]"
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"

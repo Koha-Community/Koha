@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2022-05-30 10:26+0000\n"
+"PO-Revision-Date: 2022-09-15 09:02+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1653906381.436020\n"
+"X-POOTLE-MTIME: 1663232541.009371\n"
 "X-Pootle-Path: /cs/21.05/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -132,6 +132,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr "  pokladny s účtovacím systémem ke sledování plateb."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -2743,7 +2752,7 @@ msgid ""
 "cataloguing.pref#MarcFieldDocURL# If left empty, the format documentation on "
 "http://loc.gov (MARC21) or http://archive.ifla.org (UNIMARC) is used."
 msgstr ""
-"Pokud zanecháno prázdné, použije se formát dokumentace z http://loc.gov "
+"Pokud necháte prázdné, použije se formát dokumentace z http://loc.gov "
 "(MARC21) či http://archive.ifla.org (UNIMARC)"
 
 # Cataloging > Display
@@ -3017,49 +3026,41 @@ msgstr "jednotky do dvou záložek, kde první bude obsahovat jednotky jejichž"
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
-msgstr ""
+msgstr "<br/> formát UNIMARC není podporovaný."
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
-msgstr ""
+msgstr "Zobrazí se maximálně"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
-msgstr "NORMARC"
+msgstr "OPAC"
 
 # Cataloging > Display > ShowComponentRecords
 msgid ""
 "cataloguing.pref#ShowComponentRecords# Show a list of component records, as "
 "linked via field 773, in"
-msgstr ""
+msgstr "Zobrazit seznam dalších záznam propojených skrze pole 773 v"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
-msgstr ""
-"Jako šablonu pro zobrazení ISBD v rozhraní pro knihovníky použijte "
-"následující:"
+msgstr "rozhraní pro knihovníky i OPAC"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# no"
-msgstr "zobrazovat"
+msgstr "nezobrazovat"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# record detail pages."
-msgstr "Čárové kódy"
+msgstr "v detailním popisu záznamu."
 
 # Cataloging > Interface
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# records will be displayed."
-msgstr "Nezobrazovat"
+msgstr "záznamů."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# staff interface"
-msgstr "Struktura záznamu"
+msgstr "rozhraní pro knihovníky"
 
 # Cataloging > Spine labels
 msgid ""
@@ -4250,7 +4251,7 @@ msgstr "zeptat se zda, má být účtován poplatek za ztrátu"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# charge a lost fee"
-msgstr "naúčtovat poplatek za ztrátu"
+msgstr "účtovat poplatek za ztrátu"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
@@ -4271,8 +4272,8 @@ msgid ""
 "patron has excessive return claims if the patron has claimed the return of "
 "more than"
 msgstr ""
-"Upozornit knihovníky, že čtenář uplatnil několik reklamací vracácení, pokued "
-"jejich počet bude více než"
+"Upozornit knihovníky, že čtenář uplatnil již několik reklamací výpůjček, "
+"pokud jejich počet bude více než"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -6005,7 +6006,7 @@ msgid ""
 "circulation.pref#TransfersBlockCirc# staff from continuing to checkin items "
 "when a transfer is triggered."
 msgstr ""
-"obluze pokračovat ve vracení jednotek je-li spouštěn přesun. Přesun se "
+"obsluze pokračovat ve vracení jednotek je-li spouštěn přesun. Přesun se "
 "zahájí vždy, nastavení má vliv pouze na způsob zobrazení informačního okna."
 
 # Circulation > Checkout policy
@@ -8273,7 +8274,6 @@ msgstr "On-line katalog"
 msgid "opac.pref Advanced search options"
 msgstr "Možnosti pokročilého vyhledávání"
 
-# OPAC > Appearance
 msgid "opac.pref Appearance"
 msgstr "Vzhled"
 
@@ -9114,9 +9114,8 @@ msgid "opac.pref#OPACSuggestionUnwantedFields# Collection title"
 msgstr "Povolit"
 
 # Searching > Results display
-#, fuzzy
 msgid "opac.pref#OPACSuggestionUnwantedFields# Copyright or publication date"
-msgstr "datum vydání"
+msgstr "Datum copyrightu nebo vydání"
 
 # OPAC > Policy
 msgid ""
@@ -9230,11 +9229,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -9249,11 +9245,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 
 # OPAC > Appearance
@@ -10620,9 +10613,8 @@ msgid ""
 "the ability for a patron's checkouts to be viewed by linked patrons in the "
 "OPAC."
 msgstr ""
-"knihovníkům možnost nastavit zobrazování výpůjček čtenáře prknihovníkům "
-"možnost nastavit zobrazování výpůjček čtenáře propojeným čtenářům v OPAC."
-"opojeným čtenářům v OPAC."
+"knihovníkům, aby mohli pro OPAC zapínat garantům zobrazování výpůjček "
+"propojených účtů."
 
 # Patrons > Patron relationships
 msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Allow"
@@ -10637,6 +10629,8 @@ msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's fines to be viewed by linked patrons in the OPAC."
 msgstr ""
+"knihovníkům, aby mohli pro OPAC zapínat garantům zobrazování poplatků "
+"propojených účtů."
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
@@ -10888,7 +10882,7 @@ msgstr ""
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# OPAC/Staff interface login"
-msgstr ""
+msgstr "Přihlášení do rozhraní pro knihovníky"
 
 # Patrons > Patron forms
 msgid ""
@@ -12171,6 +12165,12 @@ msgid ""
 "OPAC search results."
 msgstr ""
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search form
 #, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -12183,8 +12183,9 @@ msgstr "Neuchovávat"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -12665,7 +12666,7 @@ msgstr ""
 
 # Staff interface > Appearance
 msgid "staff_interface.pref Appearance"
-msgstr ""
+msgstr "Vzhled"
 
 # Administration > CAS authentication
 #, fuzzy
@@ -12678,11 +12679,11 @@ msgstr ""
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Don't enable"
-msgstr ""
+msgstr "Zakázat"
 
 # Staff interface > Options
 msgid "staff_interface.pref#AudioAlerts# Enable"
-msgstr ""
+msgstr "Povolit"
 
 # Staff interface > Options > AudioAlerts
 msgid ""
@@ -12690,6 +12691,9 @@ msgid ""
 "href=\"/cgi-bin/koha/admin/audio_alerts.pl\">audio alerts</a> section of "
 "administration."
 msgstr ""
+"hlasová upozornění pro události nastavená stránce <a href=\"/cgi-bin/koha/"
+"admin/audio_alerts.pl\">zvuková upozornění</a> , která je součástí "
+"administrace."
 
 # Staff interface > Appearance
 msgid ""
@@ -12885,12 +12889,9 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 
 # Staff interface > Appearance
@@ -12905,11 +12906,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 
 # Staff interface > Appearance
