@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2022-08-18 12:28+0000\n"
+"PO-Revision-Date: 2022-09-21 18:25+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /es/22.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1660825706.210595\n"
+"X-POOTLE-MTIME: 1663784701.947791\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -189,6 +189,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr "cajas registradoras con el sistema contable para controlar pagos."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -3251,9 +3260,8 @@ msgstr ""
 "contiene items cuya"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# ,"
-msgstr "no"
+msgstr ","
 
 # Cataloging > Display > ShowComponentRecords
 msgid "cataloguing.pref#ShowComponentRecords# <br/> UNIMARC is not supported."
@@ -3264,13 +3272,12 @@ msgid "cataloguing.pref#ShowComponentRecords# A maximum of"
 msgstr "Un máximo de"
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "cataloguing.pref#ShowComponentRecords# By default, sort component results in "
 "the staff interface by"
 msgstr ""
-"De forma predeterminada, ordenar los resultados de búsqueda en el interfaz "
-"administrativo por"
+"De forma predeterminada, ordenar los resultados de búsqueda de componentes "
+"en la interfaz administrativa por"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#ShowComponentRecords# OPAC"
@@ -3284,48 +3291,40 @@ msgstr ""
 "Mostrar una lista de registros componentes, vinculados via el campo 773, en"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# ascending."
-msgstr "no"
+msgstr "descendiente."
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# author"
-msgstr "no"
+msgstr "autor"
 
 # Cataloging > Display
 msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr "la interfaz administrativa y el OPAC"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# call number"
-msgstr "no"
+msgstr "signatura"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# date added"
-msgstr "no"
+msgstr "fecha de incorporación"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# date of publication"
-msgstr "no"
+msgstr "fecha de publicación"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# descending."
-msgstr "no"
+msgstr "descendiente."
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# from A to Z."
-msgstr "no"
+msgstr "de A a Z."
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# from Z to A."
-msgstr "no"
+msgstr "de Z a A."
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#ShowComponentRecords# no"
@@ -3344,9 +3343,8 @@ msgid "cataloguing.pref#ShowComponentRecords# staff interface"
 msgstr "interfaz administrativa"
 
 # Cataloging > Spine Labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# title"
-msgstr "no"
+msgstr "título"
 
 # Cataloging > Spine Labels
 msgid ""
@@ -4783,12 +4781,10 @@ msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "años"
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# ."
-msgstr "biblioteca de sesión"
+msgstr "."
 
 # Circulation > Holds policy > DefaultHoldPickupLocation
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
 "staff interface default the pickup location to the"
@@ -4797,12 +4793,10 @@ msgstr ""
 "de retiro como"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
 msgstr "biblioteca depositaria del ítem"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
 msgstr "biblioteca de origen del ítem"
 
@@ -5768,18 +5762,18 @@ msgid ""
 "a> are enabled."
 msgstr ""
 "<br><strong>NOTA:</strong> La opción de fecha de inicio de reserva solo es "
-"efectiva y mostrada en el formulario de reserva cuando se habilitan <a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"AllowHoldDateInFuture\">AllowHoldDateInFuture</a> y <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a>."
+"efectiva y mostrada en el formulario de reserva cuando se habilitan <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> y <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
+"a>."
 
 # Circulation > Holds Policy
-#, fuzzy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
 "make"
-msgstr "En el formulario opac-reserve, hacer"
+msgstr "Al hacer una reserva en el OPAC, hacer"
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
@@ -5794,9 +5788,8 @@ msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
 msgstr "la fecha de inicio de reserva"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
-msgstr "la fecha de fin de reserva"
+msgstr "obligatoria."
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
@@ -10077,22 +10070,15 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />Opciones:<ul><li>Ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
+"<br />Opciones:<ul><li>ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" para "
-"la hoja de estilo predeterminada</li><li>Ingrese una ruta para definir un "
-"archivo xslt</li><li>Ingrese una URL para una hoja de estilo específica</"
-"li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
-"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
-"estilos para diferentes lenguajes, {langcode} será reemplazado con el idioma "
-"actual de la interfaz."
+"el valor predeterminado</li><li> ingrese una ruta para definir un archivo "
+"xslt</li><li>ingrese una URL para una hoja de estilo específica</li></ul>Si "
+"tiene múltiples hojas de estilos para diferentes lenguajes, {langcode} será "
+"reemplazado con el idioma actual de la interfaz."
 
 # OPAC > Appearance
 msgid ""
@@ -10106,22 +10092,15 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li>Ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">default</a>\" para "
-"la hoja de estilo predeterminada</li><li>Ingrese una ruta para definir un "
-"archivo xslt</li><li>Ingrese un URL para una hoja de estilo externa "
-"específica.</li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
-"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
-"estilos para diferentes lenguajes, {langcode} será reemplazado con el idioma "
-"actual de la interfaz."
+"el predeterminado</li><li> coloque una ruta para definir un archivo "
+"xslt</li><li>coloque un URL para una hoja de estilo externa en "
+"específico.</li></ul>Si tiene múltiples hojas de estilos para diferentes "
+"lenguajes, {langcode} será reemplazado con el idioma actual de la interfaz."
 
 # OPAC > Appearance
 msgid ""
@@ -13313,6 +13292,14 @@ msgid ""
 msgstr ""
 "resultados por página en el desplegable de resultados de búsqueda del OPAC."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"<br/>El valor predeterminado es \"No\", los items serán mostrados utilizando "
+"otros métodos."
+
 # Searching > Search form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr "Pasar"
@@ -13323,11 +13310,12 @@ msgstr "No pasar"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
-"los campos MARC de ítem a las hojas de estilo XSLT. Por defecto no se pasan "
-"ya que los ítems son mostrados usando otros métodos."
+"disponibles los campos MARC de ítem a las hojas de estilo XSLT. Por defecto "
+"no se pasan ya que los ítems son mostrados usando otros métodos."
 
 # Searching > Features
 msgid ""
@@ -14160,23 +14148,16 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "<br />Opciones:<ul><li>Ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" para el "
-"valor predeterminado</li><li>Ingrese una ruta para definir un archivo xslt</"
-"li><li>Ingrese una URL para una hoja de estilo externa en específico.</"
-"li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
-"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
-"estilos para diferentes lenguajes, {langcode} será reemplazado con el idioma "
-"actual de la interfaz."
+"valor predeterminado</li><li>Ingrese una ruta para definir un archivo "
+"xslt</li><li>Ingrese una URL para una hoja de estilo externa en "
+"específico.</li></ul>Si tiene múltiples hojas de estilos para diferentes "
+"lenguajes, {langcode} será reemplazado con el idioma actual de la interfaz."
 
 # Staff Client > Appearance
 msgid ""
@@ -14192,22 +14173,15 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Opciones:<ul><li>Ingrese \"<a href=\"#\" class=\"set_syspref\" data-"
-"syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para la "
-"hoja de estilo predeterminado</li><li>Ingrese una ruta para definir un "
-"archivo xslt</li><li>Ingrese un URL para una hoja de estilo externa "
-"específica.</li><li>NOTA: La preferencia de sistema <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> debe ser habilitada si su hoja de de estilos "
-"utiliza datos en los campos de ítems</li></ul>Si tiene múltiples hojas de "
-"estilos para diferentes lenguajes el comodín {langcode} será reemplazado con "
-"el idioma actual de la interfaz."
+"syspref=\"XSLTListsDisplay\" data-value=\"default\">default</a>\" para el "
+"predeterminado</li><li> coloque una ruta para definir un archivo "
+"xslt</li><li>coloque un URL para una hoja de estilo externa en "
+"específico.</li></ul>Si tiene múltiples hojas de estilos para diferentes "
+"lenguajes, {langcode} será reemplazado con el idioma actual de la interfaz."
 
 # Staff Client > Appearance
 msgid ""

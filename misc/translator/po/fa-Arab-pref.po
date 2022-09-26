@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2022-07-17 03:58+0000\n"
-"Last-Translator: shahab.bohlooli@gmail.com <shahab.bohlooli@gmail.com>\n"
+"PO-Revision-Date: 2022-09-06 09:37+0000\n"
+"Last-Translator: Hamideh Aliakbari <h.aliakbari2014@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/22.05/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1658030325.446570\n"
+"X-POOTLE-MTIME: 1662457048.135416\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -55,33 +55,35 @@ msgid ""
 msgstr ""
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form 1, 2, 3"
-msgstr "تولید شده در شکل 1, 2, 3."
+msgstr ""
+"accounting.pref#AutoCreditNumber# به صورت خودکار اعداد اعتباری را به شکل 1، "
+"2، 3 ایجاد کنید"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <branchcode>yyyymm0001"
 msgstr ""
-"فهرست کردن.pref#بارکد خودکار# تولید شده است در فرم <branchcode>yymm0001."
+"accounting.pref#AutoCreditNumber# به صورت خودکار اعداد اعتباری را ایجاد کنید "
+"به شکل <branchcode>yyyymm0001"
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid ""
 "accounting.pref#AutoCreditNumber# Automatically generate credit numbers in "
 "the form <year>-0001"
 msgstr ""
-"فهرست کردن.pref#بارکد خودکار# ایجاد شده در فرم <year>-0001, <year>-0002."
+"accounting.pref#AutoCreditNumber# به صورت خودکار اعداد اعتباری را ایجاد کنید "
+"به شکل <year>-0001"
 
 # Accounting > Features
 msgid ""
 "accounting.pref#AutoCreditNumber# Do not automatically generate credit "
 "numbers"
 msgstr ""
+"accounting.pref#AutoCreditNumber# به صورت خودکار اعداد اعتباری ایجاد نکنید"
 
 # Accounting > Features > EnablePointOfSale
 msgid ""
@@ -206,6 +208,15 @@ msgid ""
 msgstr ""
 "حسابداری.pref#از صندوق های ثبتی استفاده کنید#  صندوق های نقدی با سیستم "
 "حسابداری برای پیگیری پرداخت ها."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Policy
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -502,10 +513,10 @@ msgid ""
 "notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special "
 "fields: quantity and budget_code"
 msgstr ""
-"acquisitions.pref#فیلدهای آیتم را برای سفارش نشانه گذاری کنید# شما می توانید "
-"از فیلدهای زیر استفاده نمایید: شعبه اصلی, واحد رزرو, itype, "
-"غیرعمومی_یادداشت, عمومی_یادداشت, loc, ccode, notforloan, uri, copyno, هزینه, "
-"هزینه تعویض و شماره بازیابی آیتم . فیلدهای خاص: کمیت و بودجه_کد"
+"acquisitions.pref#MarcItemFieldsToOrder# شما می توانید از فیلدهای زیر "
+"استفاده نمایید: شعبه اصلی, واحد رزرو, itype, غیرعمومی_یادداشت, "
+"عمومی_یادداشت, loc, ccode, notforloan, uri, copyno, هزینه, هزینه تعویض و "
+"شماره بازیابی آیتم . فیلدهای خاص: کمیت و بودجه_کد"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -3443,9 +3454,8 @@ msgid "cataloguing.pref#ShowComponentRecords# both staff interface and OPAC"
 msgstr ""
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#ShowComponentRecords# call number"
-msgstr "انجام دادن"
+msgstr "cataloguing.pref#ShowComponentRecords# شماره بازیابی"
 
 # Cataloging > Spine labels
 #, fuzzy
@@ -3777,12 +3787,13 @@ msgid ""
 "LOC: 050ab,090ab; from the Koha record: 942hi. Examples for UNIMARC: Dewey: "
 "676a; LOC: 680ab."
 msgstr ""
+"cataloguing.pref#itemcallnumber# برای مثال مارک 21: دیویی: 082ab,092ab; LOC: "
+"050ab,090ab; از رکورد کوها: 942hi. برای مثال یونی مارک: دیویی: 676a; LOC: "
+"680ab."
 
 # Cataloging > Record Structure
-#, fuzzy
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfields"
-msgstr ""
-"فهرست نویسی.pref#شماره بازیابی منبع# زیرمجموعه مارک را نقشه برداری کنید"
+msgstr "cataloguing.pref#itemcallnumber# نقشه برداری فیلدهای فرعی مارک"
 
 # Cataloging > Record structure
 msgid ""
@@ -3792,6 +3803,10 @@ msgid ""
 "preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then "
 "the 092$a and 092$b."
 msgstr ""
+"cataloguing.pref#itemcallnumber# شماره بازیابی یک منبع. چندین فیلد جدا شده "
+"با کاما را فهرست نمایید تا آنها را بطور متوالی بررسی نمایید. هر فیلد می "
+"تواند شامل چندین زیر فیلد باشد. ترتیب زیرفیلدها در رکورد حفظ می شود. برای "
+"مثال: '082ab,092ab' مشاهده می شود 082$a و 082$b, سپس 092$a و 092$b."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -6650,6 +6665,8 @@ msgid ""
 "return sort bin 3 for an item with a callnumber less than 339.6 returned to "
 "CPL .<br/>"
 msgstr ""
+"circulation.pref#SIP2SortBinMapping# CPL:itemcallnumber:<:339.6:3 - مرتب "
+"سازی 3 را برای منبعی با شماره بازیابی کمتر از 339.6 بازگردانده شده CPL .<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -10477,11 +10494,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_client.pref#XSLTنمایش جزئیات# <br />گزینه ها:<ul><li>وارد کنید \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -10502,11 +10516,8 @@ msgid ""
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_client.pref#نمایش نتایج ایکس اس ال تی# <br />گزینه ها:<ul><li>وارد "
 "کنید \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay"
@@ -10949,19 +10960,16 @@ msgid "opac.pref#OpacItemLocation# for items on the OPAC search results."
 msgstr "موضوع در اپک."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpacItemLocation# library and call number"
-msgstr "خیر"
+msgstr "opac.pref#OpacItemLocation# کتابخانه و شماره تماس"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpacItemLocation# library, collection code, and call number"
-msgstr "خیر"
+msgstr "opac.pref#OpacItemLocation# کتابخانه, کد مجموعه, و شماره تماس"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpacItemLocation# library, location, and call number"
-msgstr "خیر"
+msgstr "opac.pref#OpacItemLocation# کتابخانه, محل, و شماره تماس"
 
 # OPAC > Features
 #, fuzzy
@@ -13026,7 +13034,7 @@ msgstr "opac.pref#گزینه های جستجوی پیشرفته اپک# نوع �
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item's callnumber"
-msgstr ""
+msgstr "patrons.pref#Pseudonymization# شماره بازیابی منابع"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Itemnumber"
@@ -13610,12 +13618,12 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# don't use"
 msgstr "به کار نبردن"
 
 # Searching > Search Form
-#, fuzzy
 msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
-"عملگر \"PHR\" در شماره بازیابی و شماره استاندارد جستجوهای کلاینت کارکنان"
+"searching.pref#IntranetNumbersPreferPhrase# عملگر \"phr\" در چستجوی شماره "
+"بازیابی و شماره استاندارد رابط کارکنان."
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -13715,11 +13723,12 @@ msgid "searching.pref#OPACNumbersPreferPhrase# don't use"
 msgstr "به کار نبردن"
 
 # Searching > Search Form
-#, fuzzy
 msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
-msgstr "عملگر \"phr\" در جستجوهای اپک در شماره بازیابی و شماره استاندارد"
+msgstr ""
+"searching.pref#OPACNumbersPreferPhrase# عملگر \"phr\" جستجو براساس شماره "
+"بازیابی و شماره استاندارد در اپک."
 
 # Searching > Search form
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
@@ -13745,7 +13754,7 @@ msgstr "پدیداور"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# call number"
-msgstr "شماره بازیابی"
+msgstr "searching.pref#OPACdefaultSortField# شماره بازیابی"
 
 # Searching > Results display
 msgid "searching.pref#OPACdefaultSortField# date added"
@@ -13804,6 +13813,12 @@ msgid ""
 "OPAC search results."
 msgstr "نتایج هر صفحه در اپک"
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search Form
 #, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Do"
@@ -13816,8 +13831,9 @@ msgstr "نگهداری نکردن"
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -13995,11 +14011,11 @@ msgstr ""
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
-msgstr "شامل نشدن"
+msgstr "جستجوکردن.pref#تقسیمات موضوعی اثر# شامل نشود"
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Include"
-msgstr "شامل شدن"
+msgstr "جستجوکردن.pref#تقسیمات موضوعی اثر# شامل شود"
 
 # Searching > Features
 msgid ""
@@ -14052,7 +14068,7 @@ msgstr "پدیدآور"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# call number"
-msgstr "شماره بازیابی"
+msgstr "searching.pref#defaultSortField# شماره بازیابی"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# date added"
@@ -14700,12 +14716,9 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "staff_client.pref#XSLTنمایش جزئیات# <br />گزینه ها:<ul><li>وارد کنید \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -14727,11 +14740,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "staff_client.pref#نمایش نتایج ایکس اس ال تی# <br />گزینه ها:<ul><li>وارد "
 "کنید \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay"

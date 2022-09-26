@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
-"POT-Creation-Date: 2022-08-15 21:26-0300\n"
+"POT-Creation-Date: 2022-09-15 10:24-0300\n"
 "PO-Revision-Date: 2022-05-01 10:40-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: lo\n"
@@ -156,7 +156,7 @@ msgstr "%s %s ຫາ %s %s "
 #. %4$s:  HTML5MediaSet.child | html 
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:932
 #, fuzzy, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
 msgstr "%s %s %s %s ບໍ່ມີ %s "
@@ -245,7 +245,7 @@ msgstr "%s %s %s %s ບໍ່ມີ %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, fuzzy, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
 msgstr "ຂະນະນີ້ທ່ານຍັງບໍ່ທັນໄດ້ຊຳລະຄ້່າປັບໃຫມ ແລະ ຄ່າລົງທະບຽນ ເຊິ່ງເປັນຈະນວນ:"
@@ -270,7 +270,7 @@ msgstr ""
 #. %3$s:  Koha.Preference('URLLinkText') | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1308
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1335
 #, fuzzy, c-format
 msgid "%s %s%s%sLink to resource%s "
 msgstr "%s %s %s %s ບໍ່ມີ %s "
@@ -331,7 +331,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:711
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:751
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s %s ຫາ %s %s "
@@ -432,7 +432,7 @@ msgid "%s Item waiting at "
 msgstr "%s %s %s ລາຍການທີ່ກຳລັງລໍຖ້າຢູ່ "
 
 #. %1$s:  issues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:243
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:282
 #, fuzzy, c-format
 msgid "%s Item(s) checked out"
 msgstr "ບໍ່ສະມາດຢືມລາຍການນີ້ອອກໄດ້."
@@ -484,9 +484,9 @@ msgid "%s No title %s %s%s,%s "
 msgstr "%s ປິດລະບົບການເຮັດວຽກ %s %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:763
 #, fuzzy, c-format
-msgid "%s Not allowed"
+msgid "%s Not allowed "
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
@@ -503,7 +503,7 @@ msgstr "%s ວິທີການແກ້ບັນຫາ: "
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:464
 #, fuzzy, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -599,14 +599,6 @@ msgid ""
 msgstr ""
 "%sລໍຖ້າ%sຢູ່ໃນການຈ່ອງ%s ສຳລັບອຸປະຖຳ %sat%sຄາດວ່າຈະໄດ້ທີ່%s %s ຕັ້ງແຕ່ %s%s%s%s%s%s%s. "
 
-#. %1$s:  IF ( OVERDUE.charges ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:735
-#, fuzzy, c-format
-msgid "%s Yes %s No %s "
-msgstr "%s %s ບໍ່ມີ %s"
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:71
@@ -616,21 +608,21 @@ msgstr "%s ທ່ານຍັງບໍ່ໄດ້ປ້ອນຂໍ້ມູນ
 
 #. %1$s:  IF READING_RECORD.size == 0 
 #. %2$s:  ELSE 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:49
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:50
 #, c-format
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s ທ່ານບໍ່ຄື່ຢື່ມຫຍັ່ງອອກຈາກຫໍສະໜຸດນີ້ເລີຍ. %s "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:377
 #, fuzzy, c-format
 msgid "%s holdings"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:537
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:566
 #, fuzzy, c-format
 msgid "%s items are on order."
 msgstr "%s ສັ່ງ"
@@ -643,13 +635,13 @@ msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:412
 #, c-format
 msgid "%s per day"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:415
 #, c-format
 msgid "%s per hour"
 msgstr ""
@@ -900,7 +892,7 @@ msgstr "%s%s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:924
 #, fuzzy, c-format
 msgid "%sYes%s "
 msgstr "%s ແມ່ນແລ້ວ%s, "
@@ -1544,12 +1536,12 @@ msgstr "%s&nbsp;%s %s"
 #. %4$s:  ISSUE.unseenleft | html 
 #. %5$s:  ISSUE.unseenallowed | html 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:377
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:395
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:403
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:419
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:417
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:435
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:451
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:758
 #, c-format
 msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
@@ -1564,8 +1556,8 @@ msgstr "(%s biblios)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:670
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1604,7 +1596,7 @@ msgstr ""
 msgid "(Cancelled)"
 msgstr "ຍົກເລີກ ການຈ່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:168
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:176
 #, c-format
 msgid "(Checked out)"
 msgstr "(ຢື່ມອອກແລ້ວ)"
@@ -1670,13 +1662,13 @@ msgstr "(ບໍ່ຕອບສະຫນອງໂດຍ ໂຄຫາ)"
 msgid "(Not supported yet)"
 msgstr "(ຍັງບໍ່ທັນຕອບສະຫນອງ)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:358
 #, fuzzy, c-format
 msgid "(On-site checkout)"
 msgstr "%s ຢື່ມອອກ(s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1287
 #, c-format
 msgid "(Opens below)"
 msgstr ""
@@ -1821,27 +1813,27 @@ msgstr ""
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #, fuzzy, c-format
 msgid "(on hold)"
 msgstr "ບໍ່ຢູ່ໃນການຈ່ອງ"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:897
 #, c-format
 msgid "(only %s)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:390
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:765
 #, fuzzy, c-format
 msgid "(overdue)"
 msgstr "%s (ກ່າຍກຳນົດ)"
 
 #. For the first occurrence,
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:521
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:547
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1353
 #, fuzzy, c-format
 msgid "(priority %s)"
 msgstr "ລຳດັບຄວາມສຳຄັນ"
@@ -1882,7 +1874,7 @@ msgstr "-- ເລືອກ --"
 msgid "-- Choose format --"
 msgstr "-- ເລືອກ --"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:244
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:246
 #, c-format
 msgid "-- none -- "
 msgstr "-- ບໍ່ມີຫັຍງ -- "
@@ -1935,12 +1927,12 @@ msgstr "000 "
 #. SPAN
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:826
 msgid "0000-00-00"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:509
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:538
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:535
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:564
 #, fuzzy, c-format
 msgid "1 item is on order."
 msgstr "%s ສັ່ງ"
@@ -2037,12 +2029,12 @@ msgstr ""
 msgid "A specific item"
 msgstr "ສະເພາະເຫລັ້ມທີ່ຕ້ອງການ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:435
 #, fuzzy, c-format
 msgid "About the author"
 msgstr "ກ່ຽວກັບຜູ້ແຕ່ງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:382
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:384
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "ບົດສັງເຂບ/ບົດສະຫລຸບ"
@@ -2135,8 +2127,8 @@ msgstr "ຕືມ %s ລາຍຕ່າງໆໃສ່ %s"
 msgid "Add another field"
 msgstr "ຕື່ມໃສ່ໃນຫ້ອງອື່ນ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:497
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy, c-format
 msgid "Add note"
 msgstr "ຕື່ມໃສ່ໃນຫ້ອງອື່ນ"
@@ -2208,7 +2200,7 @@ msgstr ""
 msgid "Added %s by you"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:379
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:381
 #, fuzzy, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "ການເພີ່ມປະເພດເນື້ອຫາຂອງປື້ມ/ເຄື່ອງມືການພິມ"
@@ -2232,12 +2224,12 @@ msgstr "%s ທີ່ຢູ່ 2:"
 msgid "Address:"
 msgstr "%s ທີ່ຢູ່:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:331
 #, fuzzy, c-format
 msgid "Adolescent"
 msgstr "ໄວລຸ້ນ; "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
 #, c-format
 msgid "Adult"
 msgstr "ຜູ້ອາວຸໂສ"
@@ -2264,7 +2256,7 @@ msgstr ""
 msgid "Advanced search &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #, c-format
 msgid "All"
@@ -2284,12 +2276,12 @@ msgid "All collections"
 msgstr "ສີ່ງທີ່ສະສົມທັງໜົດ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid "All holds will resume."
 msgstr ""
 
@@ -2298,7 +2290,7 @@ msgstr ""
 msgid "All item types"
 msgstr "ທຸກໆປະເພດຂອງລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:233
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:230
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:23
 #, c-format
@@ -2368,13 +2360,13 @@ msgid "Amazon cover image"
 msgstr "ບໍ່ມີຫນ້າປົກຮູບຫວ້າງ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 msgid "Amazon cover image (<a href='%s'>see the original image</a>)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:533
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:548
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:564
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:573
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:604
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:13
 #, c-format
 msgid "Amount"
@@ -2467,22 +2459,22 @@ msgid ""
 "assistance."
 msgstr "ບັດຂອງທ່ານຈະໜົດກຳໃນໃນ %s. ກະລຸນາຕິດຕໍຫາຫໍສະໜຸດ ຖ້າທ່ານຕ້ອງການທີ່ຈະຕໍ່ອາຍຸບັດຂອງທ່ານ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:381
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:383
 #, c-format
 msgid "Any"
 msgstr "ໃດໜື່ງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
 #, fuzzy, c-format
 msgid "Any audience"
 msgstr "ຜູ້ຊົມໃຊ້"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:344
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
 #, fuzzy, c-format
 msgid "Any content"
 msgstr "ເນື້ອຫາ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
 #, fuzzy, c-format
 msgid "Any format"
 msgstr "ຂໍ້ມູນ"
@@ -2509,14 +2501,14 @@ msgid "Apply field weights to search "
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 msgid "Are you sure you want to cancel this hold?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
@@ -2528,7 +2520,7 @@ msgid "Are you sure you want to check out this item?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:273
 #, fuzzy
 msgid "Are you sure you want to delete selected search history entries?"
 msgstr "ທ່ານແນ່ໃນບໍ່ທີ່ທ່ານຕ້ອງການຈະລົບປະຫວັດການຄົ້ນຫາ?"
@@ -2584,7 +2576,7 @@ msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງກ
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Are you sure you want to remove this recall?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
@@ -2596,7 +2588,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
@@ -2608,12 +2600,12 @@ msgid "Are you sure you want to return this item?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:764
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:169
 #, c-format
 msgid "Arrived"
@@ -2624,18 +2616,18 @@ msgstr ""
 msgid "Article request fee"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:969
 #, fuzzy, c-format
 msgid "Article requests"
 msgstr "ຫົວເລື່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:828
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:869
 #, c-format
 msgid "Article requests "
 msgstr ""
 
 #. %1$s:  current_article_requests.size || 0 | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:223
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:255
 #, c-format
 msgid "Article requests (%s)"
 msgstr ""
@@ -2664,13 +2656,13 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( subscription.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:679
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:682
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:705
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:708
 #, c-format
 msgid "At library: %s"
 msgstr "ທີ່ຫໍສະໝຸດ: %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Audience"
 msgstr "ຜູ້ຊົມໃຊ້"
@@ -2704,8 +2696,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:270
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:580
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:248
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:834
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:287
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:875
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:179
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:181
@@ -2730,7 +2722,7 @@ msgstr "ນັກປະພັນ (A-Z)"
 msgid "Author (Z-A)"
 msgstr "ນັກປະພັນ (Z-A)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:655
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
 #, fuzzy, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "ສະແດງຄືນໂດຍ Syndetics"
@@ -2770,7 +2762,7 @@ msgstr "%sໂດຍ %s%s [%s], %s%s %s%s%s %s%s%s, %s%s%s%s%s, "
 msgid "Author:"
 msgstr "ນັກປະພັນ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:59
 #, fuzzy, c-format
 msgid "Authority"
 msgstr "ນັກປະພັນ"
@@ -2825,17 +2817,17 @@ msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ�
 msgid "Auto-renewal"
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:418
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:458
 #, fuzzy, c-format
 msgid "Automatic renewal"
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:434
 #, fuzzy, c-format
 msgid "Automatic renewal failed, you have unpaid fines."
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:442
 #, fuzzy, c-format
 msgid "Automatic renewal failed, your account is expired."
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -2851,7 +2843,7 @@ msgstr "ຍັງຫວ້າງຢູ່:"
 msgid "Availability:"
 msgstr "ຍັງຫວ້າງຢູ່:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:218
 #, c-format
 msgid "Availability: "
 msgstr "ຍັງຫວ້າງຢູ່: "
@@ -2876,9 +2868,9 @@ msgstr "ຍັງຫວ້າງຢູ່ອອນລາຍ "
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, c-format
 msgid "Average rating: %s (%s votes)"
@@ -2910,13 +2902,13 @@ msgstr ""
 msgid "Back to lists"
 msgstr "ກັບຄືນຫາລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1007
 #, c-format
 msgid "Back to results"
 msgstr "ກັບຄືນຫາຜົນຂອງການຄົ້ນຫາ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1007
 msgid "Back to the results search list"
 msgstr "ກັບຄືນຫາລາຍການຜົນຂອງການຄົ້ນຫາ"
 
@@ -2926,22 +2918,22 @@ msgid "Backends"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:111
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1183
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:293
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:628
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:677
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:134
 #, c-format
 msgid "Barcode"
 msgstr "ບາໂຄດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:349
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:698
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:738
 #, fuzzy, c-format
 msgid "Barcode:"
 msgstr "ບາໂຄດ"
@@ -2967,12 +2959,12 @@ msgstr ""
 msgid "BibTeX"
 msgstr "ຂໍ້ຄວາມສະແດງລາຍການປື້ມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:383
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:385
 #, c-format
 msgid "Bibliographies"
 msgstr "ບັນນານຸກົມຕ່າງໆ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
 msgid "Biography"
 msgstr "ຊີວະປະຫວັດ"
@@ -2987,7 +2979,7 @@ msgstr ""
 msgid "Blocked record"
 msgstr "ການບັນທຶກກ່ຽວກັບຂໍ້ມູນປື້ມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
 #, c-format
 msgid "Braille"
 msgstr "ໜັງສືສຳລັບຄົນຕາບອດ"
@@ -3028,7 +3020,7 @@ msgstr "ໜັງສືສຳລັບຄົນຕາບອດ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:14
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:25
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:16
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:14
@@ -3098,8 +3090,8 @@ msgstr "ຄົ້ນຫາຕາມລາຍຊື່ປື້ມໃນຫໍສ
 msgid "Browse our catalog &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:992
 #, c-format
 msgid "Browse results"
 msgstr "ດຶງເອົາຜົນຂອງການຄົ້ນຫາ"
@@ -3113,8 +3105,8 @@ msgstr "ດຶງເອົາຜົນຂອງການຄົ້ນຫາ"
 msgid "Browse search"
 msgstr "ການຄົ້ນຫາ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1285
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1287
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "ດຶງເອົາຜົນຂອງການຄົ້ນຫາ"
@@ -3131,12 +3123,12 @@ msgstr "ດຶງເອົາຜົນຂອງການຄົ້ນຫາ"
 msgid "CAS login"
 msgstr "ເຂົ້າສູ່ລະບົບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:367
 #, c-format
 msgid "CD audio"
 msgstr "ຊີດີກ່ຽວກັບສຽງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:371
 #, c-format
 msgid "CD software"
 msgstr ""
@@ -3159,17 +3151,17 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:103
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:256
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:629
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:678
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:312
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:205
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:207
@@ -3204,15 +3196,15 @@ msgstr ""
 msgid "Call number (Z-A)"
 msgstr "ໝາຍເລກໂທລະສັບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:159
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:354
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:703
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:743
 #, fuzzy, c-format
 msgid "Call number:"
 msgstr "ໝາຍເລກໂທລະສັບ"
 
 #. %1$s:  subscription.callnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:692
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:718
 #, fuzzy, c-format
 msgid "Call number: %s"
 msgstr "ໝາຍເລກໂທລະສັບ"
@@ -3221,7 +3213,7 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:244
@@ -3238,9 +3230,9 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:631
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:512
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:552
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:854
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
@@ -3255,7 +3247,7 @@ msgid "Cancel"
 msgstr "ຍົກເລີກ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:728
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:162
 #, c-format
 msgid "Cancel email notification"
@@ -3291,7 +3283,7 @@ msgstr "ຍົກເລີກ ການຈ່ອງ"
 msgid "CancelRecall "
 msgstr "ຍົກເລີກການໂທຊຳ້ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
 #, fuzzy, c-format
 msgid "Canceled"
 msgstr "ຍົກເລີກ"
@@ -3364,17 +3356,17 @@ msgstr "%s ໜາຍເລກບັດ: "
 msgid "Cart"
 msgstr "ບ່ອນທີ່ເລືອກໄວ້"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:368
 #, c-format
 msgid "Cassette recording"
 msgstr "ການບັນທືກສຽງໂດຍກາແຊດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:55
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:56
 #, fuzzy, c-format
 msgid "Catalog"
 msgstr "ບັນຊີລາຍຊື່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:386
 #, c-format
 msgid "Catalogs"
 msgstr "ບັນຊີລາຍຊື່"
@@ -3412,7 +3404,7 @@ msgstr "ທ່ານບໍ່ສາມາດປ່ຽນລະຫັດຂອງ
 msgid "Change your password &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:840
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:881
 #, c-format
 msgid "Chapters"
 msgstr ""
@@ -3424,14 +3416,14 @@ msgid "Chapters:"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:48
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:532
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:572
 #, fuzzy, c-format
 msgid "Charges"
 msgstr "ຄ່າປັບໃຫມ ແລະ ຄ່າທຳນຽມ"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:208
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:220
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, fuzzy, c-format
 msgid "Charges (%s)"
@@ -3465,7 +3457,7 @@ msgstr "ລາຍການທີ່ຈະຢື່ມຕໍ່"
 msgid "Check out, return, or renew an item:"
 msgstr "ຢື່ມອອກ%s, ສົ່ງຄືນ%s ຫລື ຢື່ມຕໍ່: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:164
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:172
 #, fuzzy, c-format
 msgid "Check-in date:"
 msgstr "ລາຍການທີ່ຈະຢື່ມຕໍ່"
@@ -3480,14 +3472,14 @@ msgstr ""
 msgid "Checked in"
 msgstr "(ຢື່ມອອກແລ້ວ)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:528
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:39
 #, fuzzy, c-format
 msgid "Checked out"
 msgstr "(ຢື່ມອອກແລ້ວ)"
 
 #. %1$s:  issues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:205
 #, fuzzy, c-format
 msgid "Checked out (%s)"
 msgstr "ໄດ້ຢືມອອກ ("
@@ -3519,18 +3511,18 @@ msgstr "ໄດ້ຢືມອອກ ("
 msgid "Checkout"
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:49
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:88
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:96
 #, fuzzy, c-format
 msgid "Checkout history"
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:267
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:306
 #, fuzzy, c-format
 msgid "Checkout note"
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, c-format
@@ -3576,7 +3568,7 @@ msgstr "illustrations"
 msgid "City:"
 msgstr "%s ເມືອງ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:773
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:178
 #, c-format
 msgid "Claimed"
@@ -3606,7 +3598,7 @@ msgstr "ລົບລ້າງ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:217
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:262
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:343
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:504
 #, fuzzy, c-format
@@ -3619,7 +3611,7 @@ msgstr "ລົບລ້າງ"
 msgid "Clear date"
 msgstr "ລົບລ້າງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:962
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1004
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:177
 #, c-format
 msgid "Clear date to suspend indefinitely"
@@ -3638,7 +3630,7 @@ msgstr ""
 msgid "Click here if you're not %s"
 msgstr "ຖ້າເຈົ້າບໍ່ແມ່ນ %s %s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:947
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr ""
@@ -3663,18 +3655,18 @@ msgid "Click to open in new window"
 msgstr "ກົດ ເພື່ອເປີດໃນຫນ້າຕ່າງໃໝ່"
 
 #. DIV
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:286
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:326
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:703
 msgid "Click to view in Google Books"
 msgstr "ກົດ ເພື່ອສະແດງງຜົນໃນ Google Books"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:967
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1093
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1363
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1372
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:952
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:994
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1053
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:994
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:360
@@ -3711,7 +3703,7 @@ msgstr ""
 
 #. %1$s:  borrower_club_enrollments.count || 0 | html 
 #. %2$s:  borrower_enrollable_clubs.count || 0 | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:237
 #, c-format
 msgid "Clubs (%s/%s) "
 msgstr ""
@@ -3727,19 +3719,19 @@ msgid "Clubs you can enroll in"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy
 msgid "Coce image from Amazon.com"
 msgstr "ສະແດງທີ່ Amazon.com"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy
 msgid "Coce image from Google Books"
 msgstr "ກົດ ເພື່ອສະແດງງຜົນໃນ Google Books"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy
 msgid "Coce image from Open Library"
 msgstr "ຫໍສະໝຸດ : "
@@ -3752,7 +3744,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:165
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
@@ -3805,16 +3797,16 @@ msgstr "ການຕັ້ງຄ່າກ່ຽວກັບຂໍ້ຄວາມ
 
 #. For the first occurrence,
 #. %1$s:  review.patron.firstname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:817
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:819
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:823
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
 #, fuzzy, c-format
 msgid "Comment by %s"
 msgstr "ບັນດາຄຳຄິດເຫັນໃນ "
 
 #. %1$s:  review.patron.firstname | html 
 #. %2$s:  review.patron.surname|truncate(2,'.') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
 #, fuzzy, c-format
 msgid "Comment by %s %s"
 msgstr "ບັນດາຄຳຄິດເຫັນໃນ "
@@ -3822,7 +3814,7 @@ msgstr "ບັນດາຄຳຄິດເຫັນໃນ "
 #. %1$s:  review.patron.title | html 
 #. %2$s:  review.patron.firstname | html 
 #. %3$s:  review.patron.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
 #, fuzzy, c-format
 msgid "Comment by %s %s %s"
 msgstr "ຄຳຄິດເຫັນໃຫມ່ຈາກ %s %s, %s%s"
@@ -3855,18 +3847,18 @@ msgid "Comments on %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:445
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:458
 #, fuzzy, c-format
 msgid "Comments%s"
 msgstr "ຄຳຄິດຄຳເຫັນ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:908
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
 #, c-format
 msgid "Completed"
 msgstr ""
 
 #. %1$s:  ComponentParts.size | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:407
 #, fuzzy, c-format
 msgid "Components (%s)"
 msgstr "ສາລະບານ"
@@ -3934,7 +3926,7 @@ msgstr "%s ບັນທຶກການຕິດຕໍ່: "
 msgid "Contact note:"
 msgstr "%s ບັນທຶກການຕິດຕໍ່: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:344
 #, c-format
 msgid "Content"
 msgstr "ເນື້ອຫາ"
@@ -3964,14 +3956,14 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:940
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, fuzzy, c-format
 msgid "Copy"
 msgstr "ສະຫງວນລິຄະສິດ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:348
 #, fuzzy, c-format
@@ -4045,7 +4037,7 @@ msgstr "%s ໜາຍເລກບັດ: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:26
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:294
 #, fuzzy, c-format
 msgid "Course reserves"
@@ -4087,19 +4079,19 @@ msgstr ""
 msgid "Courses &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1148
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:472
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:304
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, fuzzy, c-format
 msgid "Cover image"
 msgstr "ໝ້າປົກທີ່ເປັນຮູບ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 msgid "Cover image source unknown"
 msgstr ""
 
@@ -4145,18 +4137,18 @@ msgstr ""
 msgid "Credit"
 msgstr "ບັດສິນເຊື່ອ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:547
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:587
 #, c-format
 msgid "Credits"
 msgstr "ບັດສິນເຊື່ອ"
 
 #. %1$s:  amountoutstanding * -1 | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:225
 #, fuzzy, c-format
 msgid "Credits (%s)"
 msgstr "ບັດສິນເຊື່ອ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, fuzzy, c-format
 msgid "Current library"
 msgstr "ທີ່ຫໍສະໝຸດ: %s"
@@ -4173,10 +4165,10 @@ msgstr ""
 msgid "Current password:"
 msgstr "ລະຫັດຜ່ານຂອງຜູ້ນຳໃຊ້"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:160
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:67
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:172
 #, c-format
 msgid "Current session"
 msgstr "ລະຫັດທີເປັນທີ່ຍອມຮັບທົ່ວໄປ"
@@ -4217,12 +4209,12 @@ msgstr "ຫລັກສູດ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:140
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy, c-format
 msgid "Custom cover image"
 msgstr "ບໍ່ມີຫນ້າປົກຮູບຫວ້າງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:368
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "ດີວີດີ ວີດີໂອ / ແຜ່ນວີດີໂອ"
@@ -4233,12 +4225,12 @@ msgid "Daily rental fee"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:96
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:118
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:170
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:207
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:104
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:78
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:123
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:215
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:878
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
 #, c-format
 msgid "Date"
@@ -4271,14 +4263,14 @@ msgid "Date added:"
 msgstr "ແທັກເພື່ອເພີ່ມເຕີ່ມ: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "ວັນທີ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:330
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:335
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:747
 #, fuzzy, c-format
 msgid "Date due:"
 msgstr "ວັນທີ:"
@@ -4344,9 +4336,9 @@ msgid ""
 "values: "
 msgstr "ກຳນົດຂໍ້ມູນ metadata schema ທີ່ຢູ່ໃນການບັນທຶກ ເພື່ອສົ່ງກັບ, ຄ່າທີ່ເປັນໄປໄດ້: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:772
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:177
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:256
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:266
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
 #, c-format
 msgid "Delete"
@@ -4474,7 +4466,7 @@ msgstr "Dewey"
 msgid "Dewey: %s "
 msgstr "Dewey: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:385
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:387
 #, c-format
 msgid "Dictionaries"
 msgstr "ບັນດາວັດຈະນານຸກົມ"
@@ -4494,7 +4486,7 @@ msgstr "ຈຳນວນທີ່ກຳນົດໄວ້ເທົ່ານັ້
 msgid "Digital scan"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:400
 #, c-format
 msgid "Directories"
 msgstr "ຄຳແນະນຳຕ່າງໆ"
@@ -4514,7 +4506,7 @@ msgstr "ຄ່າປັບໃຫມ ແລະ ຄ່າທຳນຽມ"
 msgid "Discharge &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:393
 #, c-format
 msgid "Discographies"
 msgstr "ລາຍຊື່ແຜ່ນສຽງ"
@@ -4529,7 +4521,7 @@ msgstr ""
 msgid "Displaying availability results"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:966
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1008
 #, fuzzy, c-format
 msgid "Do not suspend"
 msgstr "ບໍ່ພົບທະບຽນທີ່ຄົ້ນຫາ"
@@ -4609,9 +4601,9 @@ msgstr ""
 msgid "Dublin Core"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:249
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:587
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:639
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:627
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:679
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:313
 #, c-format
 msgid "Due"
@@ -4680,7 +4672,7 @@ msgstr "ຂໍ້ຜິດພາດ! ພາຣາມິດເຕີ ບໍ່ຖ
 msgid "Earlier heading"
 msgstr "ຫົວເລື່ອງທີ່ກຳນົດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:803
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:707
 #, c-format
 msgid "Edit"
@@ -4702,8 +4694,8 @@ msgstr "ສະບັບທີ່"
 msgid "Edit list &nbsp;"
 msgstr "%sການແກ້ໄຂ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:495
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy, c-format
 msgid "Edit note"
 msgstr "ແກ້ໄຂ"
@@ -4732,7 +4724,7 @@ msgstr ""
 msgid "Editing issue note for %s &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:455
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:472
 #, c-format
 msgid "Editions"
 msgstr "ສະບັບທີ່"
@@ -4771,7 +4763,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:386
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
 #, c-format
 msgid "Encyclopedias "
 msgstr "ບັນດາປື້ມຮວບຮວມຄວາມຮູ້ສາລະພັດ "
@@ -4797,7 +4789,7 @@ msgstr ""
 msgid "Enhanced content: "
 msgstr "ຂອບເຂດ ແລະ ເນື້ອຫາ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:594
 #, fuzzy, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr "ຄຳອະທິບາຍເພີ່ມເຕີ່ມຈາກ Syndetics:"
@@ -4824,7 +4816,7 @@ msgstr "ເພີ່ມລາຍການແນະນຳກ່ຽວກັບກ
 
 #. INPUT type=text name=q
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:115
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:285
 msgid "Enter search terms"
 msgstr "ກະລຸນາໃສ່ຂໍ້ມູນການຄົິນຫາ"
 
@@ -5010,17 +5002,17 @@ msgstr "ຕົວຢ່າງການໂທ"
 msgid "Example response"
 msgstr "ຕົວຢ່າງການຕອບຮັບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:417
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:419
 #, c-format
 msgid "Excerpt"
 msgstr "ຂໍ້ຄວາມຫຍໍ້"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:626
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:652
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr "ຂໍ້ຄວາມຫຍໍ້ທີ່ເປີດໃຫ້ບໍລິການໂດຍ Syndetics"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:763
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:168
 #, c-format
 msgid "Expected"
@@ -5044,8 +5036,8 @@ msgstr "%s ວັນລົງທະບຽນ: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:781
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:822
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:827
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #, fuzzy, c-format
@@ -5059,7 +5051,7 @@ msgid "Expired on %s"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:39
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:760
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:19
 #, c-format
 msgid "Expires on"
@@ -5103,7 +5095,7 @@ msgstr "%s Fax: "
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:409
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr ""
@@ -5113,12 +5105,12 @@ msgstr ""
 msgid "Female:"
 msgstr "ເພດຍີງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:442
 #, fuzzy, c-format
 msgid "Fewer options"
 msgstr "[ຕົວເລືອກທີ່ນ້ອຍກ່ວາ]"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:347
 #, c-format
 msgid "Fiction"
 msgstr "ນະວະນິຍາຍ"
@@ -5128,7 +5120,7 @@ msgstr "ນະວະນິຍາຍ"
 msgid "Fiction notes:"
 msgstr "%s ບັນທຶກການເຄື່ອນໄຫວ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:397
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:399
 #, c-format
 msgid "Filmographies"
 msgstr "Filmographies"
@@ -5148,20 +5140,20 @@ msgstr "ຄ່າປັບໃຫມ"
 msgid "Fine amount"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:261
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:644
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:684
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:316
 #, c-format
 msgid "Fines"
 msgstr "ຄ່າປັບໃຫມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:601
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "ຄ່າປັບໃຫມ ແລະ ຄ່າທຳນຽມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:432
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:735
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:775
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "ຄ່າປັບໃຫມ"
@@ -5192,7 +5184,7 @@ msgstr ""
 msgid "First name:"
 msgstr "%s ຊື້ແທ້:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:286
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -5260,8 +5252,8 @@ msgstr ""
 msgid "Forgotten password recovery &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:358
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:360
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:883
 #, fuzzy, c-format
 msgid "Format"
 msgstr "; ຮູບແບບ: "
@@ -5345,7 +5337,7 @@ msgstr ""
 msgid "GDPR consents"
 msgstr "ເນື້ອຫາໂດຍສັງເຂບ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
 #, fuzzy, c-format
 msgid "General"
 msgstr "ທົ່ວໆໄປ; "
@@ -5447,7 +5439,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:86
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:65
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:198
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:334
 #, c-format
@@ -5460,8 +5452,8 @@ msgid "Go to OPAC"
 msgstr ""
 
 #. LI
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1010
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1037
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1042
 #, fuzzy
 msgid "Go to detail"
 msgstr "ລາຍລະອຽດເພີ່ມເຕີ່ມ"
@@ -5531,7 +5523,7 @@ msgstr "ເຂົ້າສູ່ລະບົບພາຍໃນ"
 msgid "Groups"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:242
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:244
 #, fuzzy, c-format
 msgid "Groups of libraries"
 msgstr "ທຸກໆຫໍສະໜຸດ"
@@ -5550,7 +5542,7 @@ msgstr "ທຸກໆຫໍສະໜຸດ"
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
 msgstr "%s %s- %s%s %s ; %s%s %s - %s%s %s : %s%s %s ; %s%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:387
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:389
 #, c-format
 msgid "Handbooks"
 msgstr "ຄູ່ມື"
@@ -5705,13 +5697,13 @@ msgid "Holding libraries"
 msgstr "ທຸກໆຫໍສະໜຸດ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:144
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:382
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #, fuzzy, c-format
 msgid "Holdings"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:533
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:559
 #, c-format
 msgid "Holdings:"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
@@ -5728,7 +5720,7 @@ msgid "Holds "
 msgstr "ຈ່ອງ "
 
 #. %1$s:  RESERVES.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:245
 #, fuzzy, c-format
 msgid "Holds (%s)"
 msgstr "ຈ່ອງ "
@@ -5775,7 +5767,7 @@ msgstr "ປະຫວັດເຕັມ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:17
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:28
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:19
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:20
@@ -5810,7 +5802,7 @@ msgstr ""
 msgid "Home libraries"
 msgstr "ທຸກໆຫໍສະໜຸດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:185
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
@@ -6052,7 +6044,7 @@ msgid "Image from Amazon.com"
 msgstr "ສະແດງທີ່ Amazon.com"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy, c-format
 msgid "Image from Baker &amp; Taylor"
 msgstr "ເບິ່ງທີ່ Baker & Taylor"
@@ -6065,7 +6057,7 @@ msgid "Image from Coce"
 msgstr "ສະບັບຕ່າງໆສຳລັບ %s "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 msgid "Image from Google Books (<a href='%s'>see the original image</a>)"
 msgstr ""
 
@@ -6080,17 +6072,17 @@ msgid "Image from OpenLibrary"
 msgstr "ຂໍຄວາມມາຈາກຫໍສະໝຸດ:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 msgid "Image from OpenLibrary (<a href='%s'>see the original image</a>)"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, c-format
 msgid "Image from Syndetics"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:486
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:51
 #, c-format
 msgid "Images"
@@ -6171,7 +6163,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  RECALL.library.branchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:86
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:843
 #, fuzzy, c-format
 msgid "In transit to %s"
 msgstr "%s %s ລາຍການທີ່ນຳໄປຫາ "
@@ -6182,7 +6174,7 @@ msgstr "%s %s ລາຍການທີ່ນຳໄປຫາ "
 msgid "In your cart"
 msgstr "ກຳລັງສົ່ງກ່ອງລາຍການທີ່ທາ່ນເລືອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
 #, c-format
 msgid "Indexes"
 msgstr "ດັດສະນີ"
@@ -6240,12 +6232,12 @@ msgstr "%s ບໍ່ຫວ້າງ:"
 msgid "Invalid shelf number."
 msgstr "ໝາຍເລກໂທລະສັບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:877
 #, fuzzy, c-format
 msgid "Issue"
 msgstr "ສະບັບ #"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:723
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:749
 #, c-format
 msgid "Issue #"
 msgstr "ສະບັບ #"
@@ -6296,7 +6288,7 @@ msgstr "Realia"
 msgid "Item URI"
 msgstr "# ລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
 #, fuzzy, c-format
 msgid "Item call number"
 msgstr "ໝາຍເລກໂທລະສັບ"
@@ -6336,7 +6328,7 @@ msgstr "ບໍ່ສະມາດຢືມລາຍການນີ້ອອກໄ
 msgid "Item damaged"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:380
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "ລາຍລະອຽດເພີ່ມເຕີ່ມ"
@@ -6346,12 +6338,12 @@ msgstr "ລາຍລະອຽດເພີ່ມເຕີ່ມ"
 msgid "Item due"
 msgstr "ວັນທີ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1185
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "ທີ່ຈ່ອງ"
@@ -6378,7 +6370,7 @@ msgid "Item must be checked out at a circulation desk."
 msgstr "%sລາຍການທີ່ຢື່ມອອກແລ້ວ%sລາຍການທີ່ຢູ່ໃນການຈ່ອງ%s"
 
 #. %1$s:  ISSUE.renewsleft | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:428
 #, c-format
 msgid "Item must be renewed at the library. %s renewals remaining"
 msgstr ""
@@ -6400,7 +6392,7 @@ msgid "Item on hold: %s"
 msgstr "ບໍ່ຢູ່ໃນການຈ່ອງ"
 
 #. %1$s:  RECALL.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:770
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:811
 #, fuzzy, c-format
 msgid "Item recalled: %s"
 msgstr "ທີ່ຈ່ອງ"
@@ -6417,23 +6409,23 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:183
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:636
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:290
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:676
 #, c-format
 msgid "Item type"
 msgstr "ປະເພດລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:156
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:164
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:188
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:341
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, fuzzy, c-format
 msgid "Item type:"
 msgstr "ປະເພດລາຍການ: "
@@ -6482,7 +6474,7 @@ msgstr "ລຽງລຳດັບລາຍການນີ້ຕາມ: "
 msgid "Items: "
 msgstr "# ລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
 #, c-format
 msgid "Juvenile"
 msgstr "ເຍົາວະຊົນ"
@@ -6542,7 +6534,7 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:297
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:299
 #, c-format
 msgid "Language"
 msgstr "ພາສາ"
@@ -6558,7 +6550,7 @@ msgstr "ພາສາ"
 msgid "Languages:"
 msgstr "ພາສາ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:364
 #, c-format
 msgid "Large print"
 msgstr "ງານພິມຂະຫນາດໃຫຍ່"
@@ -6589,7 +6581,7 @@ msgstr "ປັບປຸງການຕັ້ງຕ່າສຳເລັດ"
 msgid "Last updated:"
 msgstr "ປັບປຸງການຕັ້ງຕ່າສຳເລັດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:765
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:170
 #, c-format
 msgid "Late"
@@ -6600,27 +6592,27 @@ msgstr ""
 msgid "Later heading"
 msgstr "ກຳລັງດຶ່ງຂໍ້ມູນອອກມາ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:746
 #, fuzzy, c-format
 msgid "Latest serials"
 msgstr "ສິ່ງທີ່ມີການພິມແບບຕໍ່ເນື່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:404
 #, c-format
 msgid "Law reports and digests"
 msgstr "ບົດລາຍງານກ່ຽວກັບກົດຫມາຍ ແລະປະມວນກົດຫມາຍ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format
 msgid "Legal articles"
 msgstr "ຫົວຂໍ້ກ່ຽວກັບກົດຫມາຍ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "ຂອບເຂດກ່ຽວກັບກົດຫມາຍ ແລະ ລາຍລະອຽດກ່ຽວກັບກົດຫມາຍ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:394
 #, c-format
 msgid "Legislation"
 msgstr "ປະມວນກົດຫມາຍ"
@@ -6654,7 +6646,7 @@ msgstr "ລະດັບທີ 4: ຈຸດປະສົງໃນການຄົ�
 msgid "Libraries"
 msgstr "ຫໍສະໝຸດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:480
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:506
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:135
@@ -6694,7 +6686,7 @@ msgstr "ຫໍສະໝຸດ"
 msgid "Library: "
 msgstr "ຫໍສະໝຸດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "ປະຕິບັດຕາມທີ່ໄດ້ກຳນົດໄວ້:"
@@ -6719,8 +6711,8 @@ msgstr "ຈຳກັດທີ່: "
 msgid "Link"
 msgstr "ເຊື່ອມຕໍ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:98
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:264
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:303
 #, c-format
 msgid "Links"
 msgstr "ເຊື່ອມຕໍ່"
@@ -6786,13 +6778,13 @@ msgstr "ກຳລັງດຶ່ງຂໍ້ມູນອອກມາ"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #, fuzzy
 msgid "Loading..."
 msgstr "ກຳລັງດຶ່ງຂໍ້ມູນອອກມາ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:522
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "ກຳລັງດຶ່ງຂໍ້ມູນອອກມາ"
@@ -6801,11 +6793,11 @@ msgstr "ກຳລັງດຶ່ງຂໍ້ມູນອອກມາ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1177
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:949
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
 #, fuzzy, c-format
 msgid "Local cover image"
 msgstr "ບໍ່ມີຫນ້າປົກຮູບຫວ້າງ"
@@ -6828,7 +6820,7 @@ msgstr "ທີ່ຕັ້ງ"
 msgid "Location (Status)"
 msgstr "ທີ່ຕັ້ງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
 #, fuzzy, c-format
 msgid "Location and availability:"
 msgstr "ທີ່ຕັ້ງ ແລະ ຍັງຫວ້າງ: "
@@ -6847,7 +6839,7 @@ msgstr "ທີ່ຕັ້ງ"
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html 
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:715
 #, fuzzy, c-format
 msgid "Location: %s %s %s "
 msgstr "%s ກຳລັງຄົ້ນຫາ: %s %s %s "
@@ -6896,7 +6888,7 @@ msgid "Log in to see your own saved tags."
 msgstr "ເຂົ້າສູ່ລະບົບ ເພື່ອເພີ່ມແທັກ."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:55
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:878
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:408
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:101
@@ -7148,7 +7140,7 @@ msgstr ""
 msgid "Match:"
 msgstr "ກົງກັບ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "ບໍ່ໄດ້ເລືອກລາຍການໃດໆ."
@@ -7174,38 +7166,38 @@ msgstr "ຂໍ້ຄວາມສຳລັບເຈົ້າ"
 msgid "Minimum amount needed by this service is %s"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:740
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:766
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:171
 #, c-format
 msgid "Missing"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:743
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:769
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:174
 #, c-format
 msgid "Missing (damaged)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:770
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:175
 #, fuzzy, c-format
 msgid "Missing (lost)"
 msgstr "ຂາດການຕິດຕໍ່ກັບລະບົບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:741
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:767
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:172
 #, c-format
 msgid "Missing (never received)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:742
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:768
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:173
 #, c-format
 msgid "Missing (sold out)"
 msgstr ""
 
 #. %1$s:  subscription.missinglist | html | html_line_break 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:712
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:738
 #, c-format
 msgid "Missing issues: %s "
 msgstr "ສິ່ງທີ່ຂາດຫາຍ: %s "
@@ -7216,12 +7208,12 @@ msgid "Modify"
 msgstr "ປັບປ່ຽນ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:758
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:784
 #, c-format
 msgid "More details"
 msgstr "ລາຍລະອຽດເພີ່ມເຕີ່ມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:442
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:444
 #, fuzzy, c-format
 msgid "More options"
 msgstr "ຕົວເລືອກຂອງທ່ານແມ່ນ: "
@@ -7256,7 +7248,7 @@ msgstr "%s%s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື
 msgid "Musical composition"
 msgstr "ການບັນທຶກກ່ຽວກັບດົນຕີ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:350
 #, c-format
 msgid "Musical recording"
 msgstr "ການບັນທຶກກ່ຽວກັບດົນຕີ"
@@ -7303,7 +7295,7 @@ msgid "Never"
 msgstr "ບໍ່ເຄີຍ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:786
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:827
 #, fuzzy, c-format
 msgid "Never expires "
 msgstr "%s%s%sບໍ່ມີວັນໜົດອາຍຸ%s "
@@ -7326,7 +7318,7 @@ msgstr ""
 "ສົ່ງກັບ."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
 #, c-format
 msgid "New"
 msgstr ""
@@ -7374,7 +7366,7 @@ msgstr "ລະຫັດຜ່ານ"
 msgid "New purchase suggestion"
 msgstr "ການແນະນຳການຊື່ໃຫມ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:448
 #, fuzzy, c-format
 msgid "New search"
 msgstr "ການຄົ້ນຫາ"
@@ -7406,7 +7398,7 @@ msgstr "ໜັງສືພີມ"
 msgid "News from %s%s%sthe library%s"
 msgstr "ຂໍຄວາມມາຈາກຫໍສະໝຸດ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:986
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1013
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -7416,7 +7408,7 @@ msgid "Next"
 msgstr "ຕໍ່ໄປ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1011
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
 #, fuzzy, c-format
@@ -7442,7 +7434,8 @@ msgstr "ຍັງຫວ້າງຢູ່ອອນລາຍ "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:438
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:478
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:779
 #, c-format
 msgid "No"
 msgstr "ບໍ່"
@@ -7485,10 +7478,10 @@ msgstr "ປະຫວັດການອ່ານຂອງທ່ານໄດ້ຮ
 msgid "No checkouts"
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:116
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:900
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:133
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:132
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
@@ -7505,12 +7498,12 @@ msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອ
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:280
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:288
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:657
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:665
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:674
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:320
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:328
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:697
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:129
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:229
@@ -7552,14 +7545,14 @@ msgstr "ບໍ່ຢູ່ໃນການຈ່ອງ"
 msgid "No items available."
 msgstr "ບໍ່ມີລາຍການໃດຫວ້າງ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:301
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:85
 #, c-format
 msgid "No limit"
 msgstr "ບໍ່ຈຳກັດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:432
 #, fuzzy, c-format
 msgid "No longer renewable"
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
@@ -7579,12 +7572,12 @@ msgstr ""
 msgid "No operation parameter has been passed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:583
 #, fuzzy, c-format
 msgid "No other items."
 msgstr "%s ປະຕິເສດບັນດາລາຍການ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #, c-format
 msgid "No physical items for this record"
 msgstr "ບໍ່ມີລາຍກ່ຽວກັບ ຟີຊິກ ໃນການບັນທຶກນີ້"
@@ -7615,7 +7608,7 @@ msgid "No record was removed."
 msgstr "%s ການວິເຄາະທະບຽນ"
 
 #. %1$s:  ISSUE.soonestrenewdate | $KohaDates  as_due_date => 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:450
 #, fuzzy, c-format
 msgid "No renewal before %s"
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -7625,7 +7618,7 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 msgid "No renewals allowed"
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:769
 #, fuzzy, c-format
 msgid "No renewals left"
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -7678,13 +7671,13 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "No, do not cancel hold"
 msgstr "ບໍ່ຢູ່ໃນການຈ່ອງ"
@@ -7714,7 +7707,7 @@ msgid "No, do not remove sharing"
 msgstr "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດຈ່ອງເກີນກວ່າ %s ລາຍການທີ່ໄດ້. "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "No, do not resume holds"
 msgstr "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດຈ່ອງເກີນກວ່າ %s ລາຍການທີ່ໄດ້. "
@@ -7724,12 +7717,12 @@ msgstr "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດຈ່ອງເ�
 msgid "Nobody"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:348
 #, fuzzy, c-format
 msgid "Non-fiction"
 msgstr "ນະວະນິຍາຍ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:351
 #, c-format
 msgid "Non-musical recording"
 msgstr "ເຄື່ອງບັນທຶກສຽງທົ່ວໄປ"
@@ -7761,7 +7754,7 @@ msgstr "ບໍ່ໄດ້ເລືອກລາຍການໃດໆ."
 msgid "Normal view"
 msgstr "ສະແດງແບບປົກກະຕິ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:430
 #, fuzzy, c-format
 msgid "Not allowed "
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -7798,7 +7791,7 @@ msgstr "ຢືມອອກບໍ່ໄດ້ (%s)"
 msgid "Not for loan (%s)"
 msgstr "ຢືມອອກບໍ່ໄດ້ (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:745
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:771
 #, fuzzy, c-format
 msgid "Not issued"
 msgstr "%s ສະບັບທີ "
@@ -7808,12 +7801,12 @@ msgstr "%s ສະບັບທີ "
 msgid "Not on hold"
 msgstr "ບໍ່ຢູ່ໃນການຈ່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:386
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
 #, fuzzy, c-format
 msgid "Not renewable"
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #, fuzzy, c-format
 msgid "Not renewable "
 msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
@@ -7823,7 +7816,7 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 msgid "Not what you expected? Check for "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:753
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:376
 #, c-format
 msgid "Note"
@@ -7910,14 +7903,14 @@ msgstr ""
 "ຂໍ້ຜິດພາດ! ແທັກຂອງທ່ານໄດ້ກ່າຍເປັນ markup code ຫມົດແລ້ວ. ມັນບໍສາມາດເພີ່ມເຂົ້າໄດ້. "
 "ກະລຸນນາລອງໃສ່ຂໍ້ມູນທີ່ຫວ້າງເປົ່າເຂົ້າອີກຄັ້ງ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:158
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:364
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, c-format
 msgid "Notes"
 msgstr "ສີ່ງທີ່ບັນທືກ"
@@ -7950,7 +7943,7 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7962,9 +7955,9 @@ msgstr ""
 msgid "Notice:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:450
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:934
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:465
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
 #, c-format
 msgid "Novelist Select"
 msgstr "ເລືອກນັກແຕ່ງນະວະນິຍາຍ"
@@ -8003,13 +7996,13 @@ msgstr ""
 msgid "OK"
 msgstr "ຕົກລົງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:241
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:243
 #, c-format
 msgid "OR"
 msgstr "ຫລື"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:443
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:767
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, fuzzy, c-format
@@ -8021,7 +8014,7 @@ msgstr "ຢູ່ໃນການຈ່ອງ ("
 msgid "On order"
 msgstr "ຢູ່ລາຍການສັ່ງ ("
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:89
 #, fuzzy, c-format
 msgid "On-site checkouts"
 msgstr "ການຢື່ມອອກພາຍໃນມື້ນີ້"
@@ -8045,7 +8038,7 @@ msgid "Online resources:"
 msgstr "ຊັບພະຍາກອນທີ່ຢູ່ຫໍສະຫມຸດແບບອອນລາຍ:"
 
 #. %1$s:  ComponentParts.size | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:629
 #, fuzzy, c-format
 msgid "Only %s results are shown: "
 msgstr "%s ພົບຜົນຂອງການຄົ້ນຫາ "
@@ -8062,26 +8055,26 @@ msgstr ""
 "ມັນອາດຈະແມ່ນັໝ້າທີ່ຂອງພະນັກງານຫໍສະຫມຸດທີ່ຈະຕ້ອງໄດ້ຊອກຫາລາຍການທີ່ເຈົ້າກຳລັງຮ້ອງຂໍ. \"ຫມາຍເຫດ\" "
 "ໄດ້ລະບຸໄວ້ວ່າຂໍ້ມູນດັ່ງກ່າວນີ້ສາມາດນຳໃຊ້ ເພື່ອເປີດກວ້າງໃຫ້ແກ່ການເພີ່ມຂໍ້ມູນຕ່າງໆ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:218
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:220
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "ມີພຽງແຕ່ລາຍການທີ່ຍັງມີຢູ່ໃນປະຈະບັນທີ່ສາມາດໃຫ້ຢື່ ຫລື ຢັ້ງຢື່ນໃຫ້"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #, fuzzy, c-format
 msgid "Order by author"
 msgstr "ສັ່ງເປັນວັນທີ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:82
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:60
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Order by date"
 msgstr "ສັ່ງເປັນວັນທີ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:83
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Order by title"
 msgstr "ສັ່ງເປັນລາຍການ"
@@ -8096,12 +8089,12 @@ msgstr "ສັ່ງໂດຍ: "
 msgid "Ordered by the library"
 msgstr "ທີ່ຫໍສະໝຸດ: %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:862
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:888
 #, fuzzy, c-format
 msgid "Other editions"
 msgstr "ສະບັບທີ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:860
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:886
 #, fuzzy, c-format
 msgid "Other editions of this work"
 msgstr "ສະບັບປັບປຸງຂອງງານນີ້"
@@ -8112,7 +8105,7 @@ msgid "Other forms:"
 msgstr "; ຮູບແບບການປະຊາສຳພັນ: "
 
 #. %1$s:  ' ( ' _ (otheritemloop.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:393
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:392
 #, fuzzy, c-format
 msgid "Other holdings %s"
 msgstr "ສິ່ງທີ່ຈ່ອງ ( %s )"
@@ -8148,7 +8141,7 @@ msgstr "OutputIntermediateFormat "
 msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:260
 #, fuzzy, c-format
 msgid "OverDrive account"
 msgstr "ການສະສົມແບບຕໍ່ເນື່ອງ"
@@ -8172,24 +8165,24 @@ msgid "OverDrive search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:523
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:549
 #, c-format
 msgid "Overall queue priority: %s"
 msgstr ""
 
 #. %1$s:  overdues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:214
 #, fuzzy, c-format
 msgid "Overdue (%s)"
 msgstr "ກາຍກຳນົດ "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:841
 #, c-format
 msgid "Overdue to be returned"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #, c-format
 msgid "Overdues "
 msgstr "ກາຍກຳນົດ "
@@ -8206,7 +8199,7 @@ msgid "Owner only"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:880
 #, c-format
 msgid "Pages"
 msgstr ""
@@ -8328,13 +8321,13 @@ msgstr "ປັບປຸງລະຫັດຜ່ານ"
 msgid "Passwords do not match. Please re-type your new password."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
 #, c-format
 msgid "Patent document"
 msgstr "ເອກະສານກ່ຽວກັບສິດທິ"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:854
 #, fuzzy, c-format
 msgid "Patron comment on %s"
 msgstr "ບັນດາຄຳຄິດເຫັນໃນ "
@@ -8365,7 +8358,7 @@ msgid "Payout"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:160
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:902
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:944
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:125
 #, fuzzy, c-format
 msgid "Pending"
@@ -8423,13 +8416,13 @@ msgstr "ເລືອກເອົາທີ່ຢູ່"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:792
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:84
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "ເລືອກເອົາທີ່ຢູ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:844
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:885
 #, fuzzy, c-format
 msgid "Pickup library"
 msgstr "ເລືອກທີ່ຕັ້ງ"
@@ -8440,7 +8433,7 @@ msgid "Pickup library:"
 msgstr "ທີ່ຫໍສະໝຸດ: %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:40
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:761
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:801
 #, fuzzy, c-format
 msgid "Pickup location"
 msgstr "ເລືອກເອົາທີ່ຢູ່"
@@ -8508,8 +8501,8 @@ msgid "Place request"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:38
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:759
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:832
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:799
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:873
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:17
 #, fuzzy, c-format
@@ -8536,9 +8529,9 @@ msgstr "ທີ່ຈ່ອງ"
 msgid "Placing a hold &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:492
 #, fuzzy, c-format
-msgid "Play media"
+msgid "Play media "
 msgstr "ເຄື່ອນມືການສື່ສານໃນຄອມພິວເຕີ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:75
@@ -8870,7 +8863,7 @@ msgstr ""
 msgid "Popularity (most to least)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:871
 #, fuzzy, c-format
 msgid "Post your comments on this title. "
 msgstr "ບໍ່ມີຄຳຄິດຄຳເຫັນໃດໆກ່ຽວກັບລາຍການນີ້."
@@ -8881,7 +8874,7 @@ msgstr "ບໍ່ມີຄຳຄິດຄຳເຫັນໃດໆກ່ຽວກ
 msgid "Powered by %s "
 msgstr "ຂັບເຄື່ອນໂດຍ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
 #, fuzzy, c-format
 msgid "Pre-adolescent"
 msgstr "ກຽມເຂົ້າສູ່ໄວລຸ້ນ "
@@ -8896,7 +8889,7 @@ msgstr "; ຮູບແບບການປະຊາສຳພັນ: "
 msgid "Preferred language for notices: "
 msgstr "; ຮູບແບບການປະຊາສຳພັນ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
 #, fuzzy, c-format
 msgid "Preschool"
 msgstr "ໂຮງຮຽນກຽມ; "
@@ -8908,8 +8901,8 @@ msgid ""
 "system clipboard.<br><br>To cancel, click this message or press escape."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:975
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1000
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1002
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -8924,15 +8917,15 @@ msgstr "ກ່ອນຫນ້າ"
 msgid "Previous "
 msgstr "ກ່ອນຫນ້າ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:197
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:112
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:119
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:211
 #, c-format
 msgid "Previous sessions"
 msgstr "ສະບັບກ່ອນຫນ້າ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
 #, fuzzy, c-format
 msgid "Primary"
 msgstr "ຕົວຫລັກ; "
@@ -9030,7 +9023,7 @@ msgstr ""
 msgid "Problem found on page: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:946
 #, c-format
 msgid "Processing"
 msgstr ""
@@ -9040,7 +9033,7 @@ msgstr ""
 msgid "Processing..."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:396
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
 #, c-format
 msgid "Programmed texts"
 msgstr "ຂໍ້ຄວາມທີ່ເປັນຊຸດຄຳສັ່ງ"
@@ -9077,12 +9070,12 @@ msgstr "ລາຍການສາທາລະນະ"
 msgid "Public lists:"
 msgstr "ລາຍການສາທາລະນະ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:724
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:750
 #, fuzzy, c-format
 msgid "Publication date"
 msgstr "ການພິມ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:282
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:284
 #, fuzzy, c-format
 msgid "Publication date range"
 msgstr "ການພິມ:"
@@ -9241,7 +9234,7 @@ msgid "Re-type new password:"
 msgstr "ພິມລະຫັດຂອງທ່ານຄືນໃຫມ່ອີກຄັ້ງ:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:88
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:845
 #, c-format
 msgid "Ready for pickup"
 msgstr ""
@@ -9277,7 +9270,7 @@ msgid "Recall a specific item"
 msgstr "ເລືອກສຳເນົາໃດຫນຶ່ງສະເພາະ:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:60
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:774
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:815
 #, fuzzy, c-format
 msgid "Recall date:"
 msgstr "RecallItem "
@@ -9297,13 +9290,13 @@ msgstr "ການຈ່ອງບໍ່ຕ້ອງການອີກຫລັງ
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:755
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:795
 #, fuzzy, c-format
 msgid "Recalls "
 msgstr "RecallItem "
 
 #. %1$s:  RECALLS.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:250
 #, fuzzy, c-format
 msgid "Recalls (%s)"
 msgstr "RecallItem "
@@ -9319,7 +9312,7 @@ msgstr "ເພື່ອທີ່ຈະປ່ຽນແປງທະບຽນຂອ
 msgid "Recalls history"
 msgstr "ປະຫວັດເຕັມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:725
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:751
 #, fuzzy, c-format
 msgid "Received date"
 msgstr "ສະແດງຄືນ"
@@ -9363,12 +9356,12 @@ msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊ�
 msgid "Record not found"
 msgstr "ບໍ່ພົບທະບຽນທີ່ຄົ້ນຫາ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:831
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:872
 #, fuzzy, c-format
 msgid "Record title"
 msgstr "ຊື່ເລື່ອງລວມ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:265
 #, fuzzy, c-format
 msgid "RecordedBooks account"
 msgstr "ໝ້າບັນຊີຂອງທ່ານ"
@@ -9437,7 +9430,7 @@ msgstr "%s ວັນລົງທະບຽນ: "
 msgid "Registration invalid!"
 msgstr "%s ວັນລົງທະບຽນ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:361
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:363
 #, c-format
 msgid "Regular print"
 msgstr "ງານພິມປົກກະຕິ"
@@ -9447,22 +9440,22 @@ msgstr "ງານພິມປົກກະຕິ"
 msgid "Related Term"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:590
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #, c-format
 msgid "Relative"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:623
 #, fuzzy, c-format
 msgid "Relative issues"
 msgstr "%sຍັງບໍ່ທັນຢື່ມອອກ%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:210
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:230
 #, fuzzy, c-format
 msgid "Relatives' charges"
 msgstr "%sຍັງບໍ່ທັນຢື່ມອອກ%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:205
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:209
 #, fuzzy, c-format
 msgid "Relatives' checkouts"
 msgstr "ການຢື່ມອອກພາຍໃນມື້ນີ້"
@@ -9506,10 +9499,10 @@ msgid "Remove selected items"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:100
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:147
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:192
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:229
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:105
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:237
 #, fuzzy
 msgid "Remove selected searches"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
@@ -9524,11 +9517,11 @@ msgstr "ຖອນອອກ"
 msgid "Remove share "
 msgstr "ຖອນອອກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:366
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:475
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:641
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:681
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:756
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:140
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:150
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:314
@@ -9536,9 +9529,9 @@ msgstr "ຖອນອອກ"
 msgid "Renew"
 msgstr "ຢື່ມຕໍ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:523
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, c-format
 msgid "Renew all"
 msgstr "ຢື່ມຕໍ່ທັງຫມົດ"
@@ -9551,9 +9544,9 @@ msgstr "ຢື່ມຕໍ່ທັງຫມົດ"
 msgid "Renew item"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:278
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:508
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, c-format
 msgid "Renew selected"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
@@ -9575,7 +9568,7 @@ msgstr ""
 msgid "Renewal of rental item"
 msgstr "ລາຍການທີ່ຈະຢື່ມຕໍ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:403
 #, fuzzy, c-format
 msgid "Renewed!"
 msgstr "ຢື່ມຕໍ່"
@@ -9588,8 +9581,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:37
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:58
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:499
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:307
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:29
 #, c-format
 msgid "Report a problem"
@@ -9673,7 +9666,7 @@ msgstr "ຫົວຂໍ້ກ່ຽວກັບກົດຫມາຍ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:440
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:798
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:839
 #, fuzzy, c-format
 msgid "Requested"
 msgstr "ຫົວຂໍ້ກ່ຽວກັບກົດຫມາຍ"
@@ -9805,10 +9798,10 @@ msgstr "ລາຍການເພີ່ມເຕີ່ມ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:58
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:295
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:120
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:80
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:178
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:217
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:78
 #, c-format
 msgid "Results"
@@ -9843,7 +9836,7 @@ msgstr "ຜົນຂອງການຄົ້ນຫາ"
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:948
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:990
 #, fuzzy, c-format
 msgid "Resume hold"
 msgstr "ທີ່ຈ່ອງ"
@@ -9933,8 +9926,8 @@ msgstr ""
 "ຫນ້າທີ່ນີ້ສາມາດເລືອກກັບຄືນໄປຫາຂໍ້ມູນການຕິດຕໍຂອງສະມາຊິກ, ຂໍ້ມູນທີ່ດີ, ຂໍ້ມູນການຮ້ອງຂໍກ່ຽວກັບການຈ່ອງ, "
 "ຂໍ້ມູນການຢື່ມ, ແລະ ຂໍ້ຄວາມຕ່າງໆ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:420
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:397
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:12
 #, c-format
 msgid "Reviews"
@@ -9945,7 +9938,7 @@ msgstr "ສະແດງຄືນ"
 msgid "Reviews from LibraryThing.com:"
 msgstr "ສະແດງຄືນຈາກສິ່ງຂອງທີ່ມີຢູ່ໃນຫໍສະມຸດ.com:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:635
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:661
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr "ສະແດງຄືນໂດຍ Syndetics"
@@ -10018,7 +10011,7 @@ msgstr "ກັບຄືນຫາລາຍການ"
 msgid "Save to your lists"
 msgstr "ບັນທຶກໄປຍັງລາຍການອື່ນໆ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:940
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:114
 #, fuzzy, c-format
 msgid "Scan"
@@ -10058,17 +10051,17 @@ msgid "Scan the item or enter its barcode:"
 msgstr "ສະແກນລາຍການໃຫມ່ ຫລື ໃສ່ລະຫັດບາໂຄດຂອງມັນເຂົ້າໄປ:"
 
 #. INPUT type=submit name=do
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:438
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:85
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:180
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:171
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:208
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:79
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:177
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:273
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Search"
@@ -10084,21 +10077,6 @@ msgstr "ຄົ້ນຫາ "
 #, fuzzy
 msgid "Search %s"
 msgstr "ຄົ້ນຫາ "
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:5
-#, c-format
-msgid "Search also for broader subjects"
-msgstr ""
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:3
-#, c-format
-msgid "Search also for narrower subjects"
-msgstr ""
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:7
-#, c-format
-msgid "Search also for related subjects"
-msgstr ""
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:123
@@ -10246,14 +10224,14 @@ msgstr "ພາກສ່ວນ "
 #. IMG
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:125
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:129
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:131
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:295
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:712
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
 msgid "See Baker & Taylor"
 msgstr "ເບິ່ງທີ່ Baker & Taylor"
@@ -10264,12 +10242,12 @@ msgid "See also:"
 msgstr "ເລືອກລາຍການຫນຶ່ງ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1011
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1000
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -10291,16 +10269,16 @@ msgid "Select a specific item:"
 msgstr "ເລືອກສຳເນົາໃດຫນຶ່ງສະເພາະ:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:214
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:251
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:261
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:340
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:504
 #, fuzzy, c-format
 msgid "Select all"
 msgstr "ຢື່ມຕໍ່ທັງຫມົດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "ອີເລັກໂທຼນິກ "
@@ -10313,8 +10291,8 @@ msgstr "ອີເລັກໂທຼນິກ "
 msgid "Select search result: %s"
 msgstr "ຜົນຂອງການຄົ້ນຫາຂໍ້ມູນດ້ວຍຄຳສັບທີ່ກຳນົດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:255
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:265
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:273
 #, fuzzy, c-format
 msgid "Select searches to: "
 msgstr "(ການຄົ້ນຫາທີ່ກ່ຽວພັນກັບ: %s%s%s)"
@@ -10325,7 +10303,7 @@ msgstr "(ການຄົ້ນຫາທີ່ກ່ຽວພັນກັບ: %s%
 msgid "Select suggestions to: "
 msgstr "%s ຄຳແນະນຳທີ່ລໍຖ້າ. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1119
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
 msgstr "ລາຍການທີ່ເລືອກແລ້ວ :"
@@ -10442,13 +10420,17 @@ msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊ�
 msgid "Serial"
 msgstr "ຕໍ່ເນື່ອງກັນ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:460
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:481
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:507
 #, c-format
 msgid "Serial collection"
 msgstr "ການສະສົມແບບຕໍ່ເນື່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:477
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:478
+#, fuzzy, c-format
+msgid "Serial collection "
+msgstr "ການສະສົມແບບຕໍ່ເນື່ອງ"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:503
 #, fuzzy, c-format
 msgid "Serial collections"
 msgstr "ການສະສົມແບບຕໍ່ເນື່ອງ"
@@ -10489,7 +10471,7 @@ msgstr "ຂາດການຕິດຕໍ່ກັບລະບົບ"
 msgid "Settings updated"
 msgstr "ປັບປຸງການຕັ້ງຕ່າສຳເລັດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1049
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:714
 #, fuzzy, c-format
 msgid "Share"
@@ -10515,7 +10497,7 @@ msgid "Share a list with another patron"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
 #, fuzzy
 msgid "Share by email"
 msgstr "ອີເມວທີສອງ ຫລື ສຳຮອງ:"
@@ -10527,17 +10509,17 @@ msgid "Share list"
 msgstr "ລາຍການເພີ່ມເຕີ່ມ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1054
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1083
 msgid "Share on LinkedIn"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1060
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "ເລືອກລາຍການຫນຶ່ງ"
@@ -10548,7 +10530,7 @@ msgid "Shared"
 msgstr "ບັນທຶກ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:166
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "ເລືອກທີ່ຕັ້ງ"
@@ -10583,9 +10565,9 @@ msgstr "ສະແດງລາຍການທັງຫມົດ"
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:531
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
 #, c-format
 msgid "Show all items"
@@ -10602,7 +10584,7 @@ msgstr "ສະແດງລາຍການທັງຫມົດ"
 msgid "Show all transactions"
 msgstr "ບໍ່ມີພາບປະກອບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
 #, fuzzy, c-format
 msgid "Show last 50 items"
 msgstr "ສະແດງລາຍການທັງຫມົດ"
@@ -10662,12 +10644,12 @@ msgid "Showing _START_ to _END_ of _TOTAL_"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:74
 #, fuzzy, c-format
 msgid "Showing all items. "
 msgstr "ສະແດງລາຍການທັງຫມົດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:69
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #, fuzzy, c-format
 msgid "Showing last 50 items. "
 msgstr "ສະແດງລາຍການທັງຫມົດ"
@@ -10682,7 +10664,7 @@ msgstr "ສະແດງລາຍການທັງຫມົດ"
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:434
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:442
 #, fuzzy, c-format
 msgid "Similar items"
 msgstr "ລາຍການທີ່ຄ້າຍຄືກັນ"
@@ -10719,7 +10701,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -10883,7 +10865,7 @@ msgstr "ຂໍອະໄພ, ເວລາຂອງທ່ານໄດ້ຫມົ�
 msgid "Sort"
 msgstr "%s ປະເພດ 1:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:268
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:174
 #, fuzzy, c-format
 msgid "Sort by:"
@@ -10909,7 +10891,7 @@ msgstr ""
 msgid "Spanish"
 msgstr "ສຳເລັດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:331
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
 #, fuzzy, c-format
 msgid "Specialized"
 msgstr "ສິ່ງທີ່ຄວນເອົາໃຈໃສ່ເປັນພິເສດ; "
@@ -10944,21 +10926,21 @@ msgstr "ລາຍການຂອງທ່ານ : %s "
 msgid "State:"
 msgstr "%s ລັດ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:401
 #, c-format
 msgid "Statistics"
 msgstr "ສະຖິຕິ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:726
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:752
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:41
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:379
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:762
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:843
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:884
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
 #, c-format
@@ -10968,7 +10950,7 @@ msgstr "ສະຖານະ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:201
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:439
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:796
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:95
 #, fuzzy, c-format
 msgid "Status:"
@@ -10991,7 +10973,7 @@ msgstr "ຂັ້ນຕອນທີ 3: ກົດໃສ່ປຸ່ມ 'Finish'"
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "ຂັ້ນຕອນທີ 2: ສະແກນ ບາໂຄດສຳລັບແຕ່ລະລາຍການ, ອັນຫນຶ່ງຕໍ່ຫນຶ່ງຄັ້ງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:748
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:774
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:179
 #, c-format
 msgid "Stopped"
@@ -11075,7 +11057,7 @@ msgstr "ສົ່ງຂໍ້ມູນ ແລະ ປິດຫນ້າຕ່າ�
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:239
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Submit changes"
 msgstr "ສົ່ງຂໍ້ມູນ"
@@ -11088,8 +11070,8 @@ msgstr "ບັນທຶກການປ່ຽນແປງຕ່າງໆ"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:551
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "ສົ່ງຂໍ້ມູນ"
@@ -11114,7 +11096,7 @@ msgid "Subscribe to a subscription alert"
 msgstr "ສະບັບສຳລັບການລົງນາມ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:704
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:730
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:166
 #, c-format
 msgid "Subscribe to email notification on new issues"
@@ -11143,10 +11125,10 @@ msgstr "ຕອບຮັບການຄົ້ນຫານີ້"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:114
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:135
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:136
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:96
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:140
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:141
 msgid "Subscribe to this search"
 msgstr "ຕອບຮັບການຄົ້ນຫານີ້"
 
@@ -11165,7 +11147,7 @@ msgstr "ການສະມັກສະມາຊິກ"
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:697
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:723
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "ສະມັກເປັນສະມາຊິກເລີ່ມແຕ່: %s ເຖິງ:%s %s %s ປະຈຸບັນ (current)%s"
@@ -11192,7 +11174,7 @@ msgid "Subscriptions"
 msgstr "ການສະມັກສະມາຊິກ"
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:440
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:451
 #, fuzzy, c-format
 msgid "Subscriptions ( %s )"
 msgstr "ການສະມັກສະມາຊິກ"
@@ -11261,12 +11243,12 @@ msgstr "ສະຫລຸບ"
 msgid "Surname:"
 msgstr "%s ນາມສະກຸນ:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:396
 #, c-format
 msgid "Surveys"
 msgstr "ແບບສຳຫລວດ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:965
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1007
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:140
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:144
@@ -11279,12 +11261,12 @@ msgstr ""
 msgid "Suspend all holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:992
 #, fuzzy, c-format
 msgid "Suspend hold"
 msgstr "ທີ່ຈ່ອງ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:959
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1001
 #, c-format
 msgid "Suspend until:"
 msgstr ""
@@ -11318,18 +11300,18 @@ msgid "System-wide only"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:413
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:838
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:879
 #, c-format
 msgid "TOC"
 msgstr "TOC"
 
 #. TH
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:838
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:879
 #, fuzzy
 msgid "Table of contents"
 msgstr "; ຫົວຂໍ້ກ່ຽວກັບທຳມະຊາດ: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:639
 #, fuzzy, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "ສະແດງຄືນໂດຍ Syndetics"
@@ -11346,7 +11328,7 @@ msgstr "; ຫົວຂໍ້ກ່ຽວກັບທຳມະຊາດ: "
 msgid "Tag"
 msgstr "ແທັກ \"Tag\""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:435
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:445
 #, fuzzy, c-format
 msgid "Tag browser"
 msgstr "ແທັກ ໂປຣແກຣມອ່ານຂໍ້ມູນທາງອິນເຕີແນັດ \"Tag Browser\""
@@ -11416,7 +11398,7 @@ msgstr ""
 msgid "Tags:"
 msgstr "Tags:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:402
 #, c-format
 msgid "Technical reports"
 msgstr "ການລາຍງານດ້ານເທັກນິກ"
@@ -11457,7 +11439,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  subscription.opacdisplaycount | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:744
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "ສະບັບຫລ້າສຸດທີ່ໄດ້ຮັບການຕອບຮັບ %s ໃນການສະຫມັກນີ້:"
@@ -11700,12 +11682,12 @@ msgid "The userid "
 msgstr "ຂໍ້ມູນທະບຽນຜູ້ໃຊ້ "
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:675
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:701
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "ມີລາຍການທີ່ຕອບຮັບ %s ກັບລາຍການທີ່ສຳພັນກັບເລື່ອງນີ້."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:865
 #, fuzzy, c-format
 msgid "There are no comments on this title."
 msgstr "ບໍ່ມີຄຳຄິດຄຳເຫັນໃດໆກ່ຽວກັບລາຍການນີ້."
@@ -11765,7 +11747,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:393
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
 #, c-format
 msgid "Theses"
 msgstr "ເຫລົ່ານີ້"
@@ -11813,7 +11795,7 @@ msgstr ""
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr "ບໍ່ສາມາດຮ້ອງຂໍໃນຫົວຂໍ້ນີ້."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:674
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:700
 #, c-format
 msgid "This is a serial"
 msgstr "ນີ້ເປັນການຕໍ່ເນື່ອງ"
@@ -11828,7 +11810,7 @@ msgstr "%sລາຍການນີ້ຖືກຢື່ມອອກໃຫ້ເ�
 msgid "This item does not exist."
 msgstr "ບໍ່ສາມາດຮ້ອງຂໍໃນຫົວຂໍ້ນີ້."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:324
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:364
 #, c-format
 msgid "This item has been recalled. Please return by the new due date."
 msgstr ""
@@ -11920,8 +11902,8 @@ msgstr ""
 msgid "This news item does not exist. "
 msgstr "ລາຍການນີ້ຫ້າມຢື່ມອອກ. %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1098
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11931,12 +11913,12 @@ msgstr ""
 "ການກົດປຸດເສຍກ່ອນ "
 
 #. %1$s:  items_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:527
 #, fuzzy, c-format
 msgid "This record has many physical items (%s). "
 msgstr "ທະບຽນນີ້ມີຫລາຍລາຍການກ່ຽວກັບຟີຊິກ. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:686
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:712
 #, fuzzy, c-format
 msgid "This subscription is closed."
 msgstr "%s ອອກຈາກການລົງລາຍຊື່"
@@ -11963,18 +11945,18 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:138
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:37
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:282
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:577
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:247
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:586
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:635
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:758
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:286
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:626
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:675
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:798
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:874
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:311
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
@@ -12002,7 +11984,7 @@ msgid "Title (Z-A)"
 msgstr "ຊໍື່ເລື່ອງແຕ່ (Z-A)"
 
 #. %1$s:  title_notes_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
 #, fuzzy, c-format
 msgid "Title notes ( %s )"
 msgstr "ບັນທຶກຊື່ເລື່ອງ"
@@ -12051,10 +12033,10 @@ msgstr "ເພື່ອທີ່ຈະປ່ຽນແປງທະບຽນຂອ
 msgid "To reset your password, enter your login or your email address."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:109
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:199
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:69
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:114
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:168
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:207
 #, c-format
 msgid "Toolbar control"
 msgstr ""
@@ -12081,17 +12063,17 @@ msgid "Total due if credit(s) applied:"
 msgstr ""
 
 #. %1$s:  holds_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:517
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
 #, c-format
 msgid "Total holds: %s"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:405
 #, c-format
 msgid "Treaties "
 msgstr "ສົນທິສັນຍາ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:683
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:11
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
@@ -12115,7 +12097,7 @@ msgstr "ປະເພດ"
 msgid "UF"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1173
 #, c-format
 msgid "URL"
 msgstr ""
@@ -12253,7 +12235,7 @@ msgid "Updates to your record"
 msgstr "ປ່ຽນລະຫັດຜ່ານຂອງເຈົ້າ"
 
 #. TH
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:268
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:307
 msgid "Use this to report any problems with your currently checked out items"
 msgstr ""
 
@@ -12305,7 +12287,7 @@ msgstr ""
 "ໂດຍປົກກະຕິແລ້ວ ເຫດຜົນທີ່ງົດບັນຊີ່ຜູ້ໃຊ້ຄື ການມີປື້ມຫລາຍຫົວທີ່ຍັງບໍ່ທັນໄດ້ສົ່ງຄືນ ຫລື "
 "ຍັງບໍ່ທັນໄດ້ຊຳລະຄ່າເສຍຫາຍທີ່ເກີດຂື້ນກັບປື້. ຖ້າ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:369
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "ເທັບ VHS / ວີດີໂອ ກາແຊັດ"
@@ -12342,7 +12324,7 @@ msgstr "ຢື່ມຕໍ່ທັງຫມົດ"
 msgid "View all suggestions"
 msgstr "ການແນະນຳການຊື່ໃຫມ່"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:527
 #, fuzzy, c-format
 msgid "View all the physical items."
 msgstr "ທະບຽນນີ້ມີຫລາຍລາຍການກ່ຽວກັບຟີຊິກ. "
@@ -12359,14 +12341,14 @@ msgid "View interlibrary loan request"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:278
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:655
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:318
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:695
 #, fuzzy
 msgid "View on Amazon.com"
 msgstr "ສະແດງທີ່ Amazon.com"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1001
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1028
 #, fuzzy
 msgid "View record \"%s\""
 msgstr "ສາຍທີ່ໃຊ້ໃນການບັນທຶກ "
@@ -12382,19 +12364,19 @@ msgstr "ເລືອກສຳເນົາໃດຫນຶ່ງສະເພາະ
 msgid "View your search history"
 msgstr "ສະແດງປະຫວັດການຄົ້ນຫາຂອງທ່ານ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1371
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 #, fuzzy, c-format
 msgid "Visit web site"
 msgstr "ເວບໄຊ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "ຂໍ້ມູນກ່ຽວກັບລະດັບ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:835
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:876
 #, fuzzy, c-format
 msgid "Volume"
 msgstr "Volumes: "
@@ -12442,7 +12424,7 @@ msgstr ""
 "ພວກເຮົາໃຫ້ຄວາມສຳຄັນໃນການປົກປ້ອງສະຖານະສ່ວນຕົວຂອງທ່ານ. ໃນຫນ້ານີ້, "
 "ທ່ານສາມາດກຳນົດເວລາວ່າດົນປານໃດທີ່ຈະໃຫ້ພວກເຮົາກັບຮັກສາປະຫວັດການອ່ານຂອງທ່່ານ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:372
 #, c-format
 msgid "Website"
 msgstr "Website"
@@ -12474,7 +12456,7 @@ msgid "Where:"
 msgstr "ທີ່ນີ້"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:273
 #, fuzzy
 msgid "With selected searches: "
 msgstr "(ການຄົ້ນຫາທີ່ກ່ຽວພັນກັບ: %s%s%s)"
@@ -12535,6 +12517,7 @@ msgstr "ປີ"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:131
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:777
 #, c-format
 msgid "Yes"
 msgstr "ຕົກລົງ"
@@ -12545,12 +12528,12 @@ msgstr "ຕົກລົງ"
 msgid "Yes "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:474
 #, c-format
 msgid "Yes (Item overdue or lost)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:436
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:476
 #, c-format
 msgid "Yes (Rental fees)"
 msgstr ""
@@ -12561,13 +12544,13 @@ msgid "Yes, I agree."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "ຍົກເລີກ ການຈ່ອງ"
@@ -12597,12 +12580,12 @@ msgid "Yes, remove sharing"
 msgstr "ລະຫັດຂອງງານ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid "Yes, resume all holds"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
@@ -12782,7 +12765,7 @@ msgstr "ປະຈຸບັນທ່ານຍັງບໍ່ທັນໄດ້ຢ
 msgid "You currently have nothing checked out."
 msgstr "ປະຈຸບັນທ່ານຍັງບໍ່ທັນໄດ້ຢື່ມຫຍັງອອກ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:576
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "ຂະນະນີ້ທ່ານຍັງບໍ່ທັນໄດ້ຊຳລະຄ້່າປັບໃຫມ ແລະ ຄ່າລົງທະບຽນ ເຊິ່ງເປັນຈະນວນ:"
@@ -12845,7 +12828,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:551
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #, c-format
 msgid "You have a credit of:"
 msgstr "ທ່ານມີບັນຊີຂອງ:"
@@ -12870,7 +12853,7 @@ msgstr "ທ່ານໄດ້ທຳການຮ້ອງຂໍກ່ຽວກັ
 msgid "You have checked out too many items and can't check out any more."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:970
 #, fuzzy, c-format
 msgid "You have no article requests currently."
 msgstr "ທ່ານໄດ້ທຳການຮ້ອງຂໍກ່ຽວກັບຊື່ເລື່ອງນີ້ແລ້ວ."
@@ -12897,7 +12880,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #, c-format
 msgid "You have nothing checked out"
 msgstr "ທ່ານບໍ່ມີຫຍັງທີ່ຈະຢື່ມອອກ"
@@ -12941,7 +12924,7 @@ msgstr ""
 msgid "You have renewed this item the maximum number of times allowed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:728
 #, fuzzy, c-format
 msgid "You have subscribed to email notification on new issues. "
 msgstr "ແຈ້ງເຕືອນທາງອີເມວໃນເມື່ອງມີລາຍການໃຫມ່ເຂົ້າມາ "
@@ -13019,7 +13002,7 @@ msgstr "ບັດຂອງທ່ານຈະໜົດກຳໃນໃນ %s. ກ�
 msgid "You must have an email address to enroll"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:707
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:733
 #, fuzzy, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
@@ -13175,7 +13158,7 @@ msgid ""
 "confirmation email."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:243
 #, fuzzy, c-format
 msgid "Your authority search history is empty."
 msgstr "ກ່ອງລາຍການທີ່ທ່ານເລືອກຍັງເປົ່າຫວ້າງຢູ່."
@@ -13204,7 +13187,7 @@ msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊ�
 msgid "Your cart is empty."
 msgstr "ກ່ອງລາຍການທີ່ທ່ານເລືອກຍັງເປົ່າຫວ້າງຢູ່."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:153
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:158
 #, fuzzy, c-format
 msgid "Your catalog search history is empty."
 msgstr "ກ່ອງລາຍການທີ່ທ່ານເລືອກຍັງເປົ່າຫວ້າງຢູ່."
@@ -13224,7 +13207,7 @@ msgstr "ແທັກ/ປ້າຍຂອງຂ້ອງ"
 msgid "Your charges &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:35
 #, fuzzy, c-format
 msgid "Your checkout history"
 msgstr "ຄົ້ນຫາປະຫວັດ"
@@ -13233,7 +13216,7 @@ msgstr "ຄົ້ນຫາປະຫວັດ"
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:9
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:10
 #, fuzzy, c-format
 msgid "Your checkout history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
@@ -13243,12 +13226,12 @@ msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊ�
 msgid "Your checkout history has been deleted."
 msgstr "ປະຫວັດການອ່ານຂອງທ່ານໄດ້ຮັບການລົບເປັນທີ່ຮຽບຮ້ອຍແລ້ວ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:794
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:820
 #, fuzzy, c-format
 msgid "Your comment"
 msgstr "ເພື່ອທີ່ຈະລົງຄຳຄິດຄຳເຫັນ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:796
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:822
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr ""
@@ -13416,23 +13399,23 @@ msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s %s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື່ %s "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "ການເຂົ້າຫາບັນຊີລາຍຊື່ບໍ່ປະສົບຜົນສຳເລັດ ເນື່ອງຈາກຖືກປິດໂດຍຫໍສະຫມຸດ."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "ຜິດພາດ: ບໍ່ໄດ້ຮັບໜາຍເລກຂອງບັນນານຸກົມ."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:508
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:548
 #, c-format
 msgid "Your note will be shown to the librarian when the item is checked in."
 msgstr ""
@@ -13540,9 +13523,9 @@ msgstr "ຄຳແນະນຳໃນການຊື້"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1403
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:194
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1430
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "ລາຍການຂອງທ່ານ : %s "
@@ -13694,7 +13677,7 @@ msgid "[ New list ]"
 msgstr "ລາຍການ "
 
 #. %1$s:  HTML5MediaParent | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:911
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:937
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr ""
@@ -13771,15 +13754,15 @@ msgstr "ຕົວເລກຂອງຜູ້ຢືມ"
 msgid "breadcrumb"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1039
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1044
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:135
 #, fuzzy, c-format
 msgid "by"
 msgstr "ໂດຍ "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:884
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:910
 #, c-format
 msgid "by "
 msgstr "ໂດຍ "
@@ -13943,8 +13926,8 @@ msgstr "ຂໍ້ມູນເພີ່ມເຕີ່ມໃນສິ່ງທີ
 msgid "for patron"
 msgstr "ຄົ້ນຫາສະມາຊິກ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
 #, c-format
 msgid "here"
 msgstr "ທີ່ນີ້"
@@ -14287,7 +14270,7 @@ msgstr "ອີເມວທີສອງ ຫລື ສຳຮອງ:"
 msgid "see also:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:629
 #, c-format
 msgid "show all component parts"
 msgstr ""
@@ -14442,7 +14425,7 @@ msgstr "ມີບັນຫາກ່ຽວກັບການສົ່ງຂໍ້
 msgid "three times per week"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:878
 #, fuzzy, c-format
 msgid "to post a comment. "
 msgstr "ເພື່ອທີ່ຈະລົງຄຳຄິດຄຳເຫັນ."
@@ -14761,6 +14744,10 @@ msgstr ""
 #~ "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s "
 #~ "%s %s %s %s %s %s. "
 #~ msgstr "%s %sທີ່%sລົງເລີກໄປທີ່%s %s ຕັ້ງແຕ່ %s%s%s%s%s%s%s. "
+
+#, fuzzy
+#~ msgid "%s Yes %s No %s "
+#~ msgstr "%s %s ບໍ່ມີ %s"
 
 #, fuzzy
 #~ msgid ""

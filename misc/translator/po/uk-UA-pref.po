@@ -3,19 +3,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-08-18 14:50+0000\n"
+"PO-Revision-Date: 2022-09-15 10:37+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /uk/22.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1660834223.499187\n"
+"X-POOTLE-MTIME: 1663238273.157214\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -190,6 +190,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr " касові апарати в системі обліку для відстеження платежів."
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -3210,16 +3219,14 @@ msgid "cataloguing.pref#SeparateHoldings# home library"
 msgstr "джерельна бібліотека/підрозділ"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "cataloguing.pref#SeparateHoldings# is the logged in user's library. The "
 "second tab will contain all other items."
 msgstr ""
-", котра є бібліотекою/підрозділом реєстрації користувачів, які увійшли в "
+", котра є бібліотекою/підрозділом реєстрації користувача, який увійшов в "
 "систему. На другій вкладці будуть усі інші примірники."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "cataloguing.pref#SeparateHoldings# items display into two tabs, where the "
 "first tab contains items whose"
@@ -5480,11 +5487,11 @@ msgstr ", а потім список значень у дужках, розді�
 
 # Circulation > Interface
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
-msgstr "Не давати"
+msgstr "Не надавати"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Give"
-msgstr "Давати"
+msgstr "Надавати"
 
 # Circulation > Holds policy
 msgid "circulation.pref#LocalHoldsPriority# holding library"
@@ -5738,7 +5745,6 @@ msgstr ""
 "\">OPACHoldsIfAvailableAtPickup</a>“:"
 
 # Circulation > Checkin policy > StoreLastBorrower
-#, fuzzy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# <br><strong>NOTE:</strong> The hold "
 "start date option is only effective and shown on the hold form when <a href="
@@ -5748,11 +5754,6 @@ msgid ""
 "op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
 "a> are enabled."
 msgstr ""
-"останнього користувача, який повернув примірник. Цей параметр не залежить "
-"від системних параметрів „<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a>“ та „<a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AnonymousPatron\">AnonymousPatron</a>“."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -7308,7 +7309,7 @@ msgid ""
 "circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
 "disable). Additional limits may apply based on circulation rules."
 msgstr ""
-"утримується водночас (залиште поле порожнім або встановіть значення 0, щоб "
+"замовлень водночас (залиште поле порожнім або встановіть значення 0, щоб "
 "вимкнути). На основі правил обігу можуть застосовуватися додаткові обмеження."
 
 # Circulation > Checkout Policy
@@ -8084,31 +8085,27 @@ msgid "enhanced_content.pref#NovelistSelectView# ."
 msgstr "."
 
 # Enhanced content > HTML5 media
-#, fuzzy
 msgid ""
 "enhanced_content.pref#NovelistSelectView# Display Novelist Select content"
-msgstr "Відображати вміст Novelist Select у бібліотечному інтерфейсі"
+msgstr "Відображати вміст „Novelist Select“"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid "enhanced_content.pref#NovelistSelectView# above the holdings table"
-msgstr "над таблицею даних про наявність"
+msgstr "над таблицею наявності примірників"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid "enhanced_content.pref#NovelistSelectView# below the holdings table"
-msgstr "нижче таблиці даних про наявність"
+msgstr "під таблицею наявності примірників"
 
 # Enhanced Content > Novelist Select
 msgid "enhanced_content.pref#NovelistSelectView# in an OPAC tab"
 msgstr "у вкладці електронного каталогу"
 
 # Enhanced Content > Novelist Select
-#, fuzzy
 msgid ""
 "enhanced_content.pref#NovelistSelectView# under the Save Record dropdown, on "
 "the right"
-msgstr "у вкладці електронного каталогу"
+msgstr "нижче спадного меню „Зберегти запис“, праворуч"
 
 # Enhanced content > Amazon
 msgid "enhanced_content.pref#OPACAmazonCoverImages# Don't show"
@@ -8296,11 +8293,10 @@ msgid "enhanced_content.pref#OverDriveLibraryID# ."
 msgstr "."
 
 # Enhanced Content > Open Library
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive "
 "catalog of library #"
-msgstr "."
+msgstr ""
 
 # Enhanced Content > Open Library
 msgid "enhanced_content.pref#OverDriveWebsiteID# ."
@@ -9628,6 +9624,8 @@ msgid ""
 "opac.pref#OPACNoResultsFound# <br />Note: You can insert placeholders "
 "{QUERY_KW} that will be replaced with the keywords of the query."
 msgstr ""
+"<br />Примітка: Ви можете вставити заповнювачі {QUERY_KW}, які буде замінено "
+"ключовими словами запиту."
 
 # OPAC > Appearance
 msgid ""
@@ -10042,6 +10040,8 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+"для зареєстрованого користувача зведення щодо видач, прострочень, замовлень "
+"та стягнень на початковій сторінці електронного каталогу."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -10065,11 +10065,8 @@ msgid ""
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
@@ -10090,16 +10087,14 @@ msgstr ""
 "стилів відповідно: "
 
 # Staff interface > Appearance > XSLTResultsDisplay
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"OPACXSLTListsDisplay\" data-value=\"default\">\" для виводу за "
@@ -10360,7 +10355,7 @@ msgstr "Увімкнути"
 msgid ""
 "opac.pref#OpacBrowseSearch# interface for browsing all holdings "
 "(Elasticsearch only)."
-msgstr ""
+msgstr "інтерфейс для перегляду усіх фондів (лише для Elasticsearch)."
 
 # OPAC > Features
 msgid ""
@@ -13146,8 +13141,8 @@ msgid ""
 "searching.pref#IntranetNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number staff interface searches."
 msgstr ""
-"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання "
-"стандартним номером в інтерфейсі бібліотекаря."
+"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання та будь-"
+"яким стандартним номером в інтерфейсі бібліотекаря."
 
 # Searching > Search form
 msgid "searching.pref#IntranetNumbersPreferPhrase# use"
@@ -13220,26 +13215,22 @@ msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
 msgstr ""
 
 # Searching > Search Form
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# By default,"
 msgstr "За умовчанням, "
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# don't use"
 msgstr "не використовувати"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#OPACNumbersPreferPhrase# the operator \"phr\" in the "
 "callnumber and standard number OPAC searches."
 msgstr ""
-"оператор \"phr\" (пошук за фразою) при пошуках за шифром зберігання "
-"стандартним номером в інтерфейсі бібліотекаря."
+"оператор „phr“ (пошук за фразою) при пошуках за шифром зберігання та будь-"
+"яким стандартним номером в електронному каталозі."
 
 # Searching > Search form
-#, fuzzy
 msgid "searching.pref#OPACNumbersPreferPhrase# use"
 msgstr "використовувати"
 
@@ -13322,6 +13313,12 @@ msgid ""
 "OPAC search results."
 msgstr " записів з результатів пошуку."
 
+# Searching > Results display > PassItemMarcToXSLT
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+
 # Searching > Search Form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
 msgstr ""
@@ -13332,8 +13329,9 @@ msgstr ""
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
 
 # Searching > Features
@@ -14189,12 +14187,9 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
 "<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" для "
@@ -14221,11 +14216,8 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
 "<br />Варіанти:<ul><li>ввести \"<a href=\"#\" class=\"set_syspref\" data-"
 "syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" для "

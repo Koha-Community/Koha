@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2022-08-22 05:40+0000\n"
+"PO-Revision-Date: 2022-08-24 07:29+0000\n"
 "Last-Translator: chinnn <tina31124@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /zh_TW/22.05/zh-Hant-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1661146825.735804\n"
+"X-POOTLE-MTIME: 1661326140.978803\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -182,6 +182,15 @@ msgid ""
 "accounting.pref#UseCashRegisters#  cash registers with the accounting system "
 "to track payments."
 msgstr "結合帳號系統的現金支付可追踪付款流程。"
+
+# Accounting > Features > UseCashRegisters
+msgid ""
+"accounting.pref#UseCashRegisters# <p class='text-danger'><strong>Warning:</"
+"strong> Enabling this setting will make the register a required field for "
+"all CASH type transactions; This includes SIP00 transactions, so please "
+"ensure your SIP configurations are updated to map a register to your SIP "
+"device.</p>"
+msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -9286,13 +9295,17 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# (unavailable) individual items for categories "
 "like Checked out, Damaged, On Hold, but only when you group them by branch."
 "<br>"
-msgstr "(不可用)借出、損壞、預約等類別的單一館藏，但僅當您按分館對它們進行分組時。<br>"
+msgstr ""
+"(不可用)借出、損壞、預約等類別的單一館藏，但僅當您按分館對它們進行分組時。"
+"<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by substatus, listing item counts only.)"
-msgstr ". (注意：對於大型聯盟，我們建議按子狀態對不可用館藏進行分組，僅列出館藏計數。)"
+msgstr ""
+". (注意：對於大型聯盟，我們建議按子狀態對不可用館藏進行分組，僅列出館藏計"
+"數。)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
@@ -9541,24 +9554,22 @@ msgid ""
 msgstr "OPAC 其他讀者的採購建議。"
 
 # Staff Client > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#"
 "\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"default\">預設</a>\" "
-"針對預設樣式表</li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>放置一個URL針對一個外部指定的樣式表 "
-".</li><li>注意: 系統偏好 <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a> 如果您客製的樣式表利用資料在館藏欄位裡，則必須啟用</li></ul>樣式表針對多個語系,佔位符 "
-"{langcode} 將會取代現有介面語言."
+"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
+"li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>放置一個URL針對一個外部指"
+"定的樣式表 .</li><li>注意: 系統偏好 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a> 如果您客製的樣式表利用資料在館藏欄位裡，則必須啟用"
+"</li></ul>樣式表針對多個語系,佔位符 {langcode} 將會取代現有介面語言."
 
 # OPAC > Appearance
 msgid ""
@@ -9567,24 +9578,22 @@ msgid ""
 msgstr "使用 XSLT 樣式表顯示 OPAC 的詳情："
 
 # Staff Client > Appearance
+#, fuzzy
 msgid ""
 "opac.pref#OPACXSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" "
 "class=\"set_syspref\" data-syspref=\"OPACXSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTListsDisplay\" data-value=\"default\">預設</a>\" "
-"針對預設樣式表</li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>放置一個URL針對一個外部指定的樣式表 "
-".</li><li>注意: 系統偏好 <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a>如果您客製的樣式表利用資料在館藏欄位裡，則必須啟用</li></ul>樣式表針對多個語系,佔位符 "
-"{langcode} 將會取代現有介面語言."
+"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTListsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
+"li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>放置一個URL針對一個外部指"
+"定的樣式表 .</li><li>注意: 系統偏好 <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
+"\">PassItemMarcToXSLT</a>如果您客製的樣式表利用資料在館藏欄位裡，則必須啟用</"
+"li></ul>樣式表針對多個語系,佔位符 {langcode} 將會取代現有介面語言."
 
 # OPAC > Appearance
 msgid ""
@@ -9604,13 +9613,14 @@ msgid ""
 "ul>If you have multiple stylesheets for different languages the placeholder "
 "{langcode} will be replaced with current interface language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"default\">預設</a>\" "
-"針對預設樣式表</li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>針對外部指定的樣式表, "
-"放置一個URL放置一個URL針對一個外部指定的樣式表 .</li><li>註注意: 系統偏好 <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a> 必需啟用, 如果您的客製的樣式表利用資料在館藏欄位裡，則必須啟用</li></ul>"
-"如果您有多種樣式表針對不同的多個語系, 佔位符 {langcode} ,將會取代現有介面的語言."
+"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
+"li><li>放置一個路徑去來定義一個xslt檔案文件</li><li>針對外部指定的樣式表, 放"
+"置一個URL放置一個URL針對一個外部指定的樣式表 .</li><li>註注意: 系統偏好 <a "
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必需啟用, "
+"如果您的客製的樣式表利用資料在館藏欄位裡，則必須啟用</li></ul>如果您有多種樣"
+"式表針對不同的多個語系, 佔位符 {langcode} ,將會取代現有介面的語言."
 
 # OPAC > Appearance
 msgid ""
@@ -9730,8 +9740,8 @@ msgid ""
 "types (<strong>itemtypes</strong>), Collection, (<strong>ccode</strong>) and "
 "Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>目前支援的值</em>：館藏類型(<strong>itemtypes</strong>), "
-"合集,(<strong>ccode</strong>)與書架位置(<strong>loc</strong>)。"
+"<em>目前支援的值</em>：館藏類型(<strong>itemtypes</strong>), 合集,"
+"(<strong>ccode</strong>)與書架位置(<strong>loc</strong>)。"
 
 # Searching > Search form
 msgid ""
@@ -10426,8 +10436,8 @@ msgid ""
 "target='blank'>database columns</a> must be filled in on the patron "
 "modification screen:"
 msgstr ""
-"以下 <a href='http://schema.koha-community.org/__VERSION__/tables/"
-"borrowers.html' target='blank'>資料庫欄位</a> 必須在讀者修改屏幕上填寫:"
+"以下 <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers."
+"html' target='blank'>資料庫欄位</a> 必須在讀者修改屏幕上填寫:"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11318,8 +11328,8 @@ msgid ""
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
-"若是空值， Koha 將預設為 \"firstname,surname,othernames,cardnumber,userid\""
-"。其他欄位加入至此偏好會被作為搜尋選項在讀者搜尋頁的下拉選單中。"
+"若是空值， Koha 將預設為 \"firstname,surname,othernames,cardnumber,userid\"。"
+"其他欄位加入至此偏好會被作為搜尋選項在讀者搜尋頁的下拉選單中。"
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -11772,9 +11782,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
 msgstr "主要地址 - 街道號碼"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
-msgstr "主要地址 - 街道號碼"
+msgstr "主要地址 - 街道類型"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
@@ -11872,14 +11881,12 @@ msgid "patrons.pref#Pseudonymization# Enable"
 msgstr "啟用"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Holding library"
-msgstr "預約分館"
+msgstr "預約圖書館"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Home library"
-msgstr "所屬分館"
+msgstr "所屬圖書館"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Item type"
@@ -12057,12 +12064,13 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "不做"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#TrackLastPatronActivity# The first time each day that a patron "
 "logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item "
 "out the borrowers.lastseen will update with the current date and time."
-msgstr "每當讀者連結或借出館藏時，borrowers.lastseen 會更新為當前時間。"
+msgstr ""
+"讀者登入 OPAC 的第一時間，透過 SIP 或 ILS-DI連結 Koha ，或外借館藏給借閱人。 "
+"borrowers.lastseen 須更新至目前的日期和時間。"
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -12260,21 +12268,19 @@ msgid ""
 msgstr "限制列在進階搜尋下拉選單裡的語系"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: "
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>支援的值</em>：館藏類型(<strong>itemtypes</strong>), 合集代碼"
-"(<strong>ccode</strong>)與書架位置(<strong>loc</strong>)。"
+"<em>目前支援的值</em>： 館藏類型(<strong>itemtypes</strong>)， 館藏， "
+"(<strong>ccode</strong>) 和書架位置(<strong>loc</strong>)。"
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the staff interface "
 "advanced search for limiting searches on the"
-msgstr "在 OPAC 顯示標籤，以及在館員的進階檢索裡限制檢索"
+msgstr "顯示標籤在館員介面的進階搜尋裡限制搜尋"
 
 # Searching > Search form
 msgid ""
@@ -12392,24 +12398,20 @@ msgid "searching.pref#FacetMaxCount# facets for each category."
 msgstr "每個類型的分面。"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# Sort facets"
-msgstr "顯示分面"
+msgstr "排序分面"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#FacetOrder# alphabetically"
-msgstr "自動。"
+msgstr "按字母順序地"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# by usage count"
-msgstr "最多顯示"
+msgstr "藉由使用數據計次"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#FacetOrder# for each category."
-msgstr "每個類型的分面。"
+msgstr "為每個類型。"
 
 # Searching > Features
 msgid ""
@@ -12603,21 +12605,32 @@ msgid ""
 "OPAC search results."
 msgstr "下拉每頁OPAC搜索結果上的結果列表."
 
-# Searching > Search Form
+# Searching > Results display > PassItemMarcToXSLT
 #, fuzzy
+msgid ""
+"searching.pref#PassItemMarcToXSLT# <br/>Default is \"Don't\", items are "
+"displayed using other methods."
+msgstr ""
+"製作 MARC 館藏的標籤使其應用於 XSLT 的表單。預設為“不”，則館藏將用其他方式排"
+"列。 "
+
+# Searching > Search Form
 msgid "searching.pref#PassItemMarcToXSLT# Do"
-msgstr "檢索表格"
+msgstr "做"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#PassItemMarcToXSLT# Don't"
-msgstr "不保留"
+msgstr "不做"
 
 # Searching > Results display > PassItemMarcToXSLT
+#, fuzzy
 msgid ""
-"searching.pref#PassItemMarcToXSLT# make item MARC tags available to XSLT "
-"stylesheets. Default is \"Don't\", items are displayed using other methods."
+"searching.pref#PassItemMarcToXSLT# make item MARC fields (MARC21 952, "
+"UNIMARC 995) available to XSLT stylesheets for OPAC and staff interface "
+"results pages."
 msgstr ""
+"製作 MARC 館藏的標籤使其應用於 XSLT 的表單。預設為“不”，則館藏將用其他方式排"
+"列。 "
 
 # Searching > Features
 msgid ""
@@ -12723,22 +12736,19 @@ msgstr "依相關性排序檢索結果(需啟動 ZEBRA)。"
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
 "library or library group, limit by the item's"
-msgstr ""
+msgstr "使用圖書館或圖書館群限制搜索結果時，限制藉由館藏的"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# holding library."
-msgstr "館藏圖書館"
+msgstr "館藏圖書館。"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library and holding library."
-msgstr "所屬圖書館與館藏圖書館"
+msgstr "所屬圖書館與館藏圖書館。"
 
 # Searching > Results display
-#, fuzzy
 msgid "searching.pref#SearchLimitLibrary# home library."
-msgstr "所屬圖書館"
+msgstr "所屬圖書館。"
 
 # Searching > Results display
 msgid ""
@@ -12771,6 +12781,8 @@ msgid ""
 "established heading that conforms to descriptive cataloguing rules, and can "
 "therefore be used as a main/added entry, or subject, or series title."
 msgstr ""
+"無論權威記錄包含已建立的標題用以遵從記述性編目規則，可作為主要／附加條目，或"
+"主題，或期刊標題。"
 
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
@@ -12807,15 +12819,14 @@ msgid ""
 msgstr "以下列字元做為UNIMARC著者層面區隔字元"
 
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#UseICUStyleQuotes# Don't use"
-msgstr "停用"
+msgstr "不使用"
 
 # Searching > Features > UseICUStyleQuotes
 msgid ""
 "searching.pref#UseICUStyleQuotes# ICU style quotes ({}) when tracing "
 "subjects. The default is to use standard quotes (\"\")."
-msgstr ""
+msgstr "跟踪主題時的 ICU 樣式引號 ({})。預設使用標準引號 (\"\")。"
 
 # Searching > Features
 msgid "searching.pref#UseICUStyleQuotes# Use"
@@ -13151,11 +13162,10 @@ msgstr ""
 "由權威類型碼取代"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#AuthorityXSLTResultsDisplay# Display authority results "
 "in the staff interface using XSLT stylesheet at: "
-msgstr "使用 XSLT 樣式表在館員介面中顯示結果： "
+msgstr "使用 XSLT 樣式表在館員介面中顯示權威結果： "
 
 # Staff interface > Appearance
 msgid ""
@@ -13322,11 +13332,10 @@ msgid "staff_interface.pref#StaffHighlightedWords# Highlight"
 msgstr "強調"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
-msgstr "在館員登入頁面顯示以下的HTML"
+msgstr "在館員介面搜尋結果頁被搜尋的字詞。"
 
 # Staff interface > Appearance
 msgid ""
@@ -13356,16 +13365,14 @@ msgid "staff_interface.pref#TwoFactorAuthentication# Don't enable"
 msgstr "不啟用"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
-msgstr "認證"
+msgstr "啟用"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA)."
-msgstr "登入認證採用 CAS："
+msgstr "雙重認證(2FA)。"
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -13388,18 +13395,15 @@ msgid ""
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
 "value=\"default\">default</a>\" for the default stylesheet</li><li>Put a "
 "path to define an xslt file</li><li>Put a URL for an external specific "
-"stylesheet.</li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT"
-"\">PassItemMarcToXSLT</a> must be enabled if your custom stylesheet utilizes "
-"data in the item fields</li></ul>If you have multiple stylesheets for "
-"different languages the placeholder {langcode} will be replaced with current "
-"interface language."
+"stylesheet.</li></ul>If you have multiple stylesheets for different "
+"languages the placeholder {langcode} will be replaced with current interface "
+"language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"<br />選項：<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
 "li><li>放一路徑以定義一個xslt檔案</li><li>放置一URL, 針對外部指定樣式表.</"
-"li><li>註: 系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須敫用, "
+"li><li>註： 系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須啟用, "
 "如果您的客製樣式表使用館藏欄位裡的資料</li></ul>如果您有多個樣式表針對不同語"
 "言, 佔位符 {langcode} 將會被現有語文介面取代."
 
@@ -13416,19 +13420,16 @@ msgid ""
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
 "\"default\">default</a>\" for the default stylesheet</li><li>Put a path to "
 "define an xslt file</li><li>Put a URL for an external specific stylesheet.</"
-"li><li>NOTE: The system preference <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> must be "
-"enabled if your custom stylesheet utilizes data in the item fields</li></"
-"ul>If you have multiple stylesheets for different languages the placeholder "
-"{langcode} will be replaced with current interface language."
+"li></ul>If you have multiple stylesheets for different languages the "
+"placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"<br />選項：<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTListsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
-"li><li>放置一路徑定義一個xslt檔案</li><li>放置一URL針對外部指定樣式表.</"
-"li><li>註: 系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須啟用, "
-"如果您的客製樣式表使用館藏欄位裡的資料</li></ul>如果您有多個樣式表給不同的語"
-"言使用, 佔位符 {langcode} 將會被現有語言介面取代."
+"li><li>放置路徑定義 xslt 檔案</li><li>放置 URL 針對外部特定樣式表.</li><li>注"
+"意：系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須啟用，"
+"如果您的客製樣式表使用館藏欄位裡的資料</li></ul>如果您有多個樣式表針對不同的"
+"語言占位符 {langcode} 將會被現在的介面語系所取代."
 
 # Staff interface > Appearance
 msgid ""
@@ -13437,7 +13438,6 @@ msgid ""
 msgstr "使用 XSLT 樣式表在館員介面中顯示清單： "
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -13450,13 +13450,13 @@ msgid ""
 "different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"<br />選項:<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"<br />選項：<ul><li>進入 \"<a href=\"#\" class=\"set_syspref\" data-syspref="
 "\"XSLTResultsDisplay\" data-value=\"default\">預設</a>\" 針對預設樣式表</"
-"li><li>放置一路徑定義一個xslt檔案</li><li>放置一URL針對外部指定樣式表.</"
-"li><li>註: 系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須啟用, "
-"如果您的客製樣式表使用館藏欄位裡的資料</li></ul>如果您有多個語系樣式表,佔位"
-"符 {langcode} 將會被現有語言取代"
+"li><li>放置路徑定義 xslt 檔案</li><li>放置 URL 針對外部特定樣式表.</li><li>注"
+"意：系統偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> 必須啟用，"
+"如果您的客製樣式表使用館藏欄位裡的資料</li></ul>如果您有多個樣式表針對不同的"
+"語言占位符 {langcode} 將會被現在的介面語系所取代."
 
 # Staff interface > Appearance
 msgid ""
@@ -13646,16 +13646,14 @@ msgid "tools.pref Upload"
 msgstr "上傳"
 
 # Tools > News
-#, fuzzy
 msgid "tools.pref#AdditionalContentsEditor# ."
-msgstr "新聞工具編輯器"
+msgstr "."
 
 # Tools > News
-#, fuzzy
 msgid ""
 "tools.pref#AdditionalContentsEditor# By default edit additional contents and "
 "news items with"
-msgstr "預設編輯新聞館藏用"
+msgstr "藉由預設編輯附加內容和新增館藏"
 
 # Tools > News
 msgid "tools.pref#AdditionalContentsEditor# a WYSIWYG editor (TinyMCE)"
