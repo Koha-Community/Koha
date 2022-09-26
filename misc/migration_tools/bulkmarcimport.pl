@@ -124,7 +124,7 @@ if ($all) {
 }
 
 my $using_elastic_search = (C4::Context->preference('SearchEngine') eq 'Elasticsearch');
-my $modify_biblio_marc_options = {
+my $mod_biblio_options = {
     disable_autolink => $using_elastic_search,
     defer_search_engine_indexing => $using_elastic_search,
     overlay_context => { source => 'bulkmarcimport' }
@@ -520,7 +520,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 };
                 if ($update) {
                     my $success;
-                    eval { $success = ModBiblio($record, $matched_record_id, GetFrameworkCode($matched_record_id), $modify_biblio_marc_options) };
+                    eval { $success = ModBiblio($record, $matched_record_id, GetFrameworkCode($matched_record_id), $mod_biblio_options) };
                     if ($@) {
                         warn "ERROR: Update biblio $matched_record_id failed: $@\n";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
@@ -570,7 +570,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 C4::Biblio::_strip_item_fields($clone_record, $framework);
                 # This sets the marc fields if there was an error, and also calls
                 # defer_marc_save.
-                ModBiblioMarc($clone_record, $record_id, $modify_biblio_marc_options);
+                ModBiblioMarc($clone_record, $record_id, $mod_biblio_options);
                 if ($error_adding) {
                     warn "ERROR: Adding items to bib $record_id failed: $error_adding";
                     printlog({ id => $record_id, op => "insert items", status => "ERROR"}) if ($logfile);
@@ -621,7 +621,7 @@ RECORD: foreach my $record (@{$marc_records}) {
 
                         # @FIXME: Why do we save here without stripping items? Besides,
                         # save with stripped items has already been performed
-                        ModBiblioMarc($record, $record_id, $modify_biblio_marc_options);
+                        ModBiblioMarc($record, $record_id, $mod_biblio_options);
                         next RECORD;
                     }
                     else {
