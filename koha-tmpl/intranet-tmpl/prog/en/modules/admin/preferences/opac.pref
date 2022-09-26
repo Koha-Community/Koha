@@ -298,7 +298,6 @@ OPAC:
                   homebranch: Home library
                   holdingbranch: Holding library
             - "is the default sort field for the holdings table."
-
         -
             - Display up to
             - pref: OpacMaxItemsToDisplay
@@ -417,7 +416,6 @@ OPAC:
                   1: Allow
                   0: "Don't allow"
             - patrons to access a list of the most checked out items on the OPAC. Note that this is somewhat experimental, and should be avoided if your collection has a large number of items.
-
         -
             - pref: OPACComments
               choices:
@@ -504,7 +502,6 @@ OPAC:
                   1: Show
                   0: Don't show
             - a library selection list for news items in the OPAC.
-
         -
             - "Use the following as the OPAC ISBD template:"
             - pref: OPACISBD
@@ -589,8 +586,6 @@ OPAC:
                   0: "Don't include"
             - outstanding/unapplied credits when applying the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a> rule to patrons.
         -
-
-        -
             - pref: OpacHiddenItems
               type: textarea
               syntax: text/x-yaml
@@ -628,8 +623,6 @@ OPAC:
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
 
     Privacy:
-        -
-
         -
             - pref: opacreadinghistory
               choices:
@@ -853,6 +846,7 @@ OPAC:
             - pref: NumberOfSuggestionDays
               class: integer
             - "days."
+        -
             - pref: OPACViewOthersSuggestions
               choices:
                   1: Show
@@ -878,7 +872,7 @@ OPAC:
                   1: Allow
                   0: "Don't allow"
             - patrons to make purchase suggestions on the OPAC.
-                    -
+        -
             - pref: OPACSuggestionAutoFill
               default: 0
               choices:
