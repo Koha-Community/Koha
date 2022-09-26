@@ -45,7 +45,7 @@
                     <li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
                 [% END %]
             </ul>
-        [% END %]
+        [% END # /IF ( CAN_user_tools_manage_patron_lists... %]
 
         [% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel  || CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || CAN_user_tools_inventory  || CAN_user_tools_label_creator || CAN_user_tools_rotating_collections  || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') )  || CAN_user_tools_marc_modification_templates || CAN_user_tools_stage_marc_import  || CAN_user_tools_manage_staged_marc || CAN_user_tools_upload_local_cover_images ) %]
             <h5>Catalog</h5>
@@ -95,7 +95,7 @@
                     <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a></li>
                 [% END %]
             </ul>
-        [% END %]
+        [% END # /IF ( CAN_user_tools_items_batchdel... %]
 
         [% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_additional_contents  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( plugins_enabled && CAN_user_plugins_tool )  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
             <h5>Additional tools</h5>
@@ -133,6 +133,6 @@
                     <li><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></li>
                 [% END %]
             </ul>
-        [% END %]
-    </div>
-</div>
+        [% END # /IF ( CAN_user_tools_edit_calendar... %]
+    </div> <!-- /#navmenulist -->
+</div> <!-- /#navmenu -->
