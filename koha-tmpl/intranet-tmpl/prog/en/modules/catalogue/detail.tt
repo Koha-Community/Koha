@@ -202,9 +202,10 @@
             [% END %]
             </span>
         [% END %]
+        </div> [%# .page-section %]
+        </div>
 
         [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-            </div>
             <div class="col-xs-3 bookcoverimg">
                 <div id="biblio-cover-slider" class="cover-slider">
                     [% IF ( LocalCoverImages ) %]
@@ -268,7 +269,6 @@
                 </div> <!-- /.cover-slider -->
             </div> <!-- /.bookcoverimg.col-xs-3 -->
         [% ELSE %]
-        </div> [%# .page-block %]
         </div> <!-- /.col-xs-* -->
         [% END # /IF ( AmazonCoverImages, etc ) %]
 </div>
