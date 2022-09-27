@@ -76,9 +76,9 @@ $template->{VARS}->{frameworks} = $frameworks;
 # Z39.50 servers
 my $dbh = C4::Context->dbh;
 $template->{VARS}->{z3950_servers} = $dbh->selectall_arrayref( q{
-    SELECT * FROM z3950servers
-    WHERE recordtype != 'authority' AND servertype = 'zed'
-    ORDER BY rank,servername
+    SELECT * FROM `z3950servers`
+    WHERE `recordtype` != 'authority' AND `servertype` = 'zed'
+    ORDER BY `rank`,`servername`
 }, { Slice => {} } );
 
 output_html_with_http_headers $input, $cookie, $template->output;
