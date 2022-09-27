@@ -1045,7 +1045,7 @@
                                                 [% ELSE %]
                                                     <li class="li_pag_[% loop.count | html %]">
                                                 [% END %]
-                                                    <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[% listitem.title | html %]&quot;" class="a_pag" id="a_pag_[% loop.count | html %]">[% loop.count + offset | html %]</a>
+                                                    <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[% listitem.title | html %] [% listitem.part_number | html %] [% listitem.part_name | html %]&quot;" class="a_pag" id="a_pag_[% loop.count | html %]">[% loop.count + offset | html %]</a>
                                                 </li>
                                             [% END # /FOREACH listitem %]
                                         </ul> <!-- /#listResults -->
@@ -1056,12 +1056,12 @@
                                                 [% IF ( listitem.biblionumber == biblionumber ) %]
                                                     <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail">
                                                         <span class="li_pag_index"><i class="fa fa-arrow-left" aria-hidden="true"></i> [% loop.count  + offset | html %]</span>
-                                                        <a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]<span>by</span> [% author | html %][% END %]
+                                                        <a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %] [% part_number | html %] [% part_name | html %]</a><br> [% IF ( author ) %]<span>by</span> [% author | html %][% END %]
                                                     </li>
                                                 [% ELSE %]
                                                     <li id="li_pag_[% loop.count | html %]" title="Go to detail">
                                                         <span class="li_pag_index">[% loop.count + offset | html %]</span>
-                                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]<span>by</span> [% listitem.author | html %][% END %]
+                                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %] [% listitem.part_number | html %] [% listitem.part_name | html %]</a><br> [% IF ( listitem.author ) %]<span>by</span> [% listitem.author | html %][% END %]
                                                     </li>
                                                 [% END # /IF listitem.biblionumber %]
                                             [% END # /FOREACH listitem %]
