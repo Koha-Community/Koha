@@ -511,6 +511,7 @@ subtest 'Renewal related tests' => sub {
             class => 'Koha::Checkouts',
             value => {
                 itemnumber      => $item->itemnumber,
+                borrowernumber  => $patron->borrowernumber,
                 onsite_checkout => 0,
                 renewals_count  => 99,
                 auto_renew      => 0

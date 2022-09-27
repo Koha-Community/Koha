@@ -193,7 +193,13 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-my $pending_checkouts = $patron->pending_checkouts->search({}, { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] });
+my $pending_checkouts = $patron->pending_checkouts->search(
+    {},
+    {
+        order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ],
+        prefetch => 'item'
+    }
+);
 my $are_renewable_items = 0;
 if ( $pending_checkouts->count ) { # Useless test
     while ( my $c = $pending_checkouts->next ) {
@@ -226,7 +232,7 @@ if ( $pending_checkouts->count ) { # Useless test
         $issue->{rentalfines} = $rental_fines->total_outstanding;
 
         # check if item is renewable
-        my ($status,$renewerror,$info) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
+        my ($status, $renewerror, $info) = CanBookBeRenewed( $patron, $c );
         (
             $issue->{'renewcount'},
             $issue->{'renewsallowed'},
@@ -236,7 +242,7 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{'unseenleft'}
         ) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
         ( $issue->{'renewalfee'}, $issue->{'renewalitemtype'} ) = GetIssuingCharges( $issue->{'itemnumber'}, $borrowernumber );
-        $issue->{itemtype_object} = Koha::ItemTypes->find( Koha::Items->find( $issue->{itemnumber} )->effective_itemtype );
+        $issue->{itemtype_object} = Koha::ItemTypes->find( $c->item->effective_itemtype );
         if($status && C4::Context->preference("OpacRenewalAllowed")){
             $are_renewable_items = 1;
             $issue->{'status'} = $status;
@@ -254,6 +260,7 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{'auto_too_late'}  = 1 if $renewerror eq 'auto_too_late';
             $issue->{'auto_too_much_oweing'}  = 1 if $renewerror eq 'auto_too_much_oweing';
             $issue->{'item_denied_renewal'}  = 1 if $renewerror eq 'item_denied_renewal';
+            $issue->{'item_issued_to_other_patron'} = 1 if $renewerror eq 'item_issued_to_other_patron';
 
             if ( $renewerror eq 'too_soon' ) {
                 $issue->{'too_soon'}         = 1;

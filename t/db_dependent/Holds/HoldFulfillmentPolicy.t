@@ -67,9 +67,7 @@ $dbh->do("
     VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_B', 0, 0, 0, 0, NULL, '$itemtype')
 ");
 
-my $itemnumber =
-  $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber")
-  or BAIL_OUT("Cannot find newly created item");
+my $item = Koha::Items->find({ biblionumber => $biblionumber });
 
 # With hold_fulfillment_policy = homebranch, hold should only be picked up if pickup branch = homebranch
 $dbh->do("DELETE FROM circulation_rules");
@@ -93,7 +91,7 @@ my $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-my ( $status ) = CheckReserves($itemnumber);
+my ( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where pickup branch matches home branch targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -106,7 +104,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is($status, q{}, "Hold where pickup ne home, pickup eq home not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -119,7 +117,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -145,7 +143,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, q{}, "Hold where pickup eq home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -158,7 +156,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -171,7 +169,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -197,7 +195,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where pickup eq home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -210,7 +208,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -223,7 +221,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -231,7 +229,6 @@ Koha::Holds->find( $reserve_id )->cancel;
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
 t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 Koha::Holds->search()->delete();
-my ($item) = Koha::Biblios->find($biblionumber)->items->as_list;
 my $limit = Koha::Item::Transfer::Limit->new(
     {
         toBranch   => $library_C,
@@ -247,6 +244,6 @@ $reserve_id = AddReserve(
         priority       => 1
     }
 );
-($status) = CheckReserves($itemnumber);
+($status) = CheckReserves($item);
 is( $status, '',  "No hold where branch transfer is not allowed" );
 Koha::Holds->find($reserve_id)->cancel;

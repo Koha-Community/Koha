@@ -20,7 +20,6 @@ use Modern::Perl;
 use Data::Dumper qw( Dumper );
 
 use C4::Log qw( logaction );
-use C4::Overdues qw( UpdateFine );
 
 use Koha::Account::CreditType;
 use Koha::Account::DebitType;
@@ -1022,12 +1021,12 @@ sub renew_item {
     }
 
     my $itemnumber = $self->item->itemnumber;
-    my $borrowernumber = $self->patron->borrowernumber;
     my ( $can_renew, $error ) = C4::Circulation::CanBookBeRenewed(
-        $borrowernumber,
-        $itemnumber
+        $self->patron,
+        $self->item->checkout
     );
     if ( $can_renew ) {
+        my $borrowernumber = $self->patron->borrowernumber;
         my $due_date = C4::Circulation::AddRenewal(
             $borrowernumber,
             $itemnumber,

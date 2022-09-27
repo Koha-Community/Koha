@@ -82,9 +82,7 @@ $dbh->do("
     VALUES ($biblionumber, $biblioitemnumber, '$branchcode', '$branchcode', 0, 0, 0, 0, NULL, '$right_itemtype')
 ");
 
-my $itemnumber =
-  $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber")
-  or BAIL_OUT("Cannot find newly created item");
+my $item = Koha::Items->find({ biblionumber => $biblionumber });
 
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
@@ -108,7 +106,7 @@ my $reserve_id = AddReserve(
         itemtype       => $right_itemtype,
     }
 );
-my ( $status ) = CheckReserves($itemnumber);
+my ( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Hold where itemtype matches item's itemtype targed" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -123,7 +121,7 @@ $reserve_id = AddReserve(
     }
 );
 
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is($status, q{}, "Hold where itemtype does not match item's itemtype not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
@@ -136,7 +134,7 @@ $reserve_id = AddReserve(
         priority       => 1,
     }
 );
-( $status ) = CheckReserves($itemnumber);
+( $status ) = CheckReserves($item);
 is( $status, 'Reserved', "Item targeted with no hold itemtype set" );
 Koha::Holds->find( $reserve_id )->cancel;
 

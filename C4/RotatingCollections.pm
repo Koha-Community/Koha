@@ -25,7 +25,6 @@ package C4::RotatingCollections;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Reserves qw(CheckReserves);
 use Koha::Database;
 
 use Try::Tiny qw( catch try );

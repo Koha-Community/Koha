@@ -116,9 +116,11 @@ subtest 'transfer already at destination' => sub {
         }
     );
 
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->store->itemtype;
     my $item = $builder->build_sample_item(
         {
             library => $library->branchcode,
+            itype => $itemtype
         }
     );
 
@@ -169,7 +171,8 @@ subtest 'transfer already at destination' => sub {
     is( $dotransfer, 0, 'Do not transfer recalled item, it has already arrived' );
     is( $messages->{RecallPlacedAtHoldingBranch}, 1, "We found the recall");
 
-    my $item2 = $builder->build_object({ class => 'Koha::Items' }); # this item will have a different holding branch to the pickup branch
+    $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->store->itemtype;
+    my $item2 = $builder->build_object({ class => 'Koha::Items', value => { itype => $itemtype } }); # this item will have a different holding branch to the pickup branch
     $recall = Koha::Recall->new(
         {   biblio_id         => $item2->biblionumber,
             item_id           => $item2->itemnumber,
@@ -196,9 +199,11 @@ subtest 'transfer an issued item' => sub {
         }
     );
 
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->store->itemtype;
     my $item = $builder->build_sample_item(
         {
             library => $library->branchcode,
+            itype => $itemtype
         }
     );
 

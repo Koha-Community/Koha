@@ -31,8 +31,9 @@ sub new {
 
 sub do_renew_for  {
     my $self = shift;
-    my $borrower = shift;
-    my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
+    my $patron = shift;
+    my $checkout = Koha::Checkouts->find({ itemnumber => $self->{item}->{itemnumber} });
+    my ($renewokay,$renewerror) = CanBookBeRenewed($patron, $checkout);
     if ($renewokay) { # ok so far check charges
         my ($fee, undef) = GetIssuingCharges($self->{item}->{itemnumber}, $self->{patron}->{borrowernumber});
         if ($fee > 0) {
@@ -45,7 +46,7 @@ sub do_renew_for  {
 
     }
     if ($renewokay){
-        my $issue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
+        my $issue = AddIssue( $patron, $self->{item}->id, undef, 0 );
         $self->{due} = $self->duedatefromissue($issue, $self->{item}->{itemnumber});
         $self->renewal_ok(1);
     } else {
@@ -53,6 +54,7 @@ sub do_renew_for  {
         $renewerror=~s/too_many/Item has reached maximum renewals/;
         $renewerror=~s/too_unseen/Item has reached maximum consecutive renewals without being seen/;
         $renewerror=~s/item_denied_renewal/Item renewal is not allowed/;
+        $renewerror=~s/item_issued_to_other_patron/Item already issued to other borrower/;
         $self->screen_msg($renewerror);
         $self->renewal_ok(0);
     }
@@ -64,7 +66,7 @@ sub do_renew {
     my $self = shift;
     my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     $patron or return; # FIXME we should log that
-    return $self->do_renew_for($patron->unblessed);
+    return $self->do_renew_for($patron);
 }
 
 1;

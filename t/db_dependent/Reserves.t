@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 78;
+use Test::More tests => 77;
 use Test::MockModule;
 use Test::Warn;
 
@@ -94,6 +94,7 @@ my $biblio_with_no_item = $builder->build_sample_biblio;
 my $testbarcode = '97531';
 $item->barcode($testbarcode)->store; # FIXME We should not hardcode a barcode! Also, what's the purpose of this?
 
+
 # Create a borrower
 my %data = (
     firstname =>  'my firstname',
@@ -106,7 +107,6 @@ my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $borrower = $patron->unblessed;
 my $biblionumber   = $bibnum;
-my $barcode        = $testbarcode;
 
 my $branchcode = Koha::Libraries->search->next->branchcode;
 
@@ -119,17 +119,14 @@ AddReserve(
     }
 );
 
-my ($status, $reserve, $all_reserves) = CheckReserves($item->itemnumber, $barcode);
+my ($status, $reserve, $all_reserves) = CheckReserves( $item );
 
 is($status, "Reserved", "CheckReserves Test 1");
 
 ok(exists($reserve->{reserve_id}), 'CheckReserves() include reserve_id in its response');
 
-($status, $reserve, $all_reserves) = CheckReserves($item->itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves( $item );
 is($status, "Reserved", "CheckReserves Test 2");
-
-($status, $reserve, $all_reserves) = CheckReserves(undef, $barcode);
-is($status, "Reserved", "CheckReserves Test 3");
 
 my $ReservesControlBranch = C4::Context->preference('ReservesControlBranch');
 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
@@ -345,9 +342,9 @@ AddReserve(
         priority       => 1,
     }
 );
-($status)=CheckReserves($item->itemnumber,undef,undef);
+($status)=CheckReserves( $item );
 is( $status, 'Reserved', 'CheckReserves returns reserve without lookahead');
-($status)=CheckReserves($item->itemnumber,undef,7);
+($status)=CheckReserves( $item, 7 );
 is( $status, 'Reserved', 'CheckReserves also returns reserve with lookahead');
 
 # Test 9761b: Add a reserve with future date, CheckReserve should not return it
@@ -364,26 +361,26 @@ my $reserve_id = AddReserve(
         reservation_date => $resdate,
     }
 );
-($status)=CheckReserves($item->itemnumber,undef,undef);
+($status)=CheckReserves( $item );
 is( $status, '', 'CheckReserves returns no future reserve without lookahead');
 
 # Test 9761c: Add a reserve with future date, CheckReserve should return it if lookahead is high enough
-($status)=CheckReserves($item->itemnumber,undef,3);
+($status)=CheckReserves( $item, 3 );
 is( $status, '', 'CheckReserves returns no future reserve with insufficient lookahead');
-($status)=CheckReserves($item->itemnumber,undef,4);
+($status)=CheckReserves( $item, 4 );
 is( $status, 'Reserved', 'CheckReserves returns future reserve with sufficient lookahead');
 
 # Test 9761d: Check ResFound message of AddReturn for future hold
 # Note that AddReturn is in Circulation.pm, but this test really pertains to reserves; AddReturn uses the ConfirmFutureHolds pref when calling CheckReserves
 # In this test we do not need an issued item; it is just a 'checkin'
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 0);
-(my $doreturn, $messages)= AddReturn('97531',$branch_1);
+(my $doreturn, $messages)= AddReturn($testbarcode,$branch_1);
 is($messages->{ResFound}//'', '', 'AddReturn does not care about future reserve when ConfirmFutureHolds is off');
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 3);
-($doreturn, $messages)= AddReturn('97531',$branch_1);
+($doreturn, $messages)= AddReturn($testbarcode,$branch_1);
 is(exists $messages->{ResFound}?1:0, 0, 'AddReturn ignores future reserve beyond ConfirmFutureHolds days');
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 7);
-($doreturn, $messages)= AddReturn('97531',$branch_1);
+($doreturn, $messages)= AddReturn($testbarcode,$branch_1);
 is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve within ConfirmFutureHolds days');
 
 my $now_holder = $builder->build_object({ class => 'Koha::Patrons', value => {
@@ -399,9 +396,9 @@ my $now_reserve_id = AddReserve(
     }
 );
 my $which_highest;
-($status,$which_highest)=CheckReserves($item->itemnumber,undef,3);
+($status,$which_highest)=CheckReserves( $item, 3 );
 is( $which_highest->{reserve_id}, $now_reserve_id, 'CheckReserves returns lower priority current reserve with insufficient lookahead');
-($status, $which_highest)=CheckReserves($item->itemnumber,undef,4);
+($status, $which_highest)=CheckReserves( $item, 4 );
 is( $which_highest->{reserve_id}, $reserve_id, 'CheckReserves returns higher priority future reserve with sufficient lookahead');
 ModReserve({ reserve_id => $now_reserve_id, rank => 'del', cancellation_reason => 'test reserve' });
 
@@ -586,7 +583,7 @@ AddReserve(
         priority       => 1,
     }
 );
-my (undef, $canres, undef) = CheckReserves($item->itemnumber);
+my (undef, $canres, undef) = CheckReserves( $item );
 
 is( CanReserveBeCanceledFromOpac(), undef,
     'CanReserveBeCanceledFromOpac should return undef if called without any parameter'
@@ -624,7 +621,7 @@ AddReserve(
         priority       => 1,
     }
 );
-(undef, $canres, undef) = CheckReserves($item->itemnumber);
+(undef, $canres, undef) = CheckReserves( $item );
 
 ModReserveAffect($item->itemnumber, $requesters{$branch_1}, 0);
 $cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$branch_1});
@@ -708,7 +705,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber );
+($status)=CheckReserves( $item );
 is( $status, '', 'MoveReserve filled hold');
 #   hold from A waiting, today, no fut holds: MoveReserve should fill it
 AddReserve(
@@ -721,7 +718,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber );
+($status)=CheckReserves( $item );
 is( $status, '', 'MoveReserve filled waiting hold');
 #   hold from A pos 1, tomorrow, no fut holds: not filled
 $resdate= dt_from_string();
@@ -736,7 +733,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber, undef, 1 );
+($status)=CheckReserves( $item, 1 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 #   hold from A pos 1, tomorrow, fut holds=2: MoveReserve should fill it
@@ -751,7 +748,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber, undef, 2 );
+($status)=CheckReserves( $item, undef, 2 );
 is( $status, '', 'MoveReserve filled future hold now');
 #   hold from A waiting, tomorrow, fut holds=2: MoveReserve should fill it
 AddReserve(
@@ -764,7 +761,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber, undef, 2 );
+($status)=CheckReserves( $item, undef, 2 );
 is( $status, '', 'MoveReserve filled future waiting hold now');
 #   hold from A pos 1, today+3, fut holds=2: MoveReserve should not fill it
 $resdate= dt_from_string();
@@ -779,7 +776,7 @@ AddReserve(
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
-($status)=CheckReserves( $item->itemnumber, undef, 3 );
+($status)=CheckReserves( $item, 3 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 
@@ -1241,7 +1238,7 @@ subtest 'CheckReserves additional tests' => sub {
     ModReserveAffect( $item->itemnumber, $reserve1->borrowernumber, 1,
         $reserve1->reserve_id );
     my ( $status, $matched_reserve, $possible_reserves ) =
-      CheckReserves( $item->itemnumber );
+      CheckReserves( $item );
 
     is( $status, 'Transferred', "We found a reserve" );
     is( $matched_reserve->{reserve_id},
@@ -1284,7 +1281,7 @@ subtest 'CheckReserves additional tests' => sub {
 
     ok( $reserve_id, "We can place a record level hold because one item is owned by patron's home library");
     t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
-    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
+    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A );
     is( $status, "", "We do not fill the hold with item A because it is not from the patron's homebranch");
     Koha::CirculationRules->set_rule({
         branchcode => $item_A->homebranch,
@@ -1292,13 +1289,13 @@ subtest 'CheckReserves additional tests' => sub {
         rule_name  => 'holdallowed',
         rule_value => 'from_any_library'
     });
-    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
+    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A );
     is( $status, "Reserved", "We fill the hold with item A because item's branch rule says allow any");
 
 
     # Changing the control branch should change only the rule we get
     t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
-    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
+    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A );
     is( $status, "", "We do not fill the hold with item A because it is not from the patron's homebranch");
     Koha::CirculationRules->set_rule({
         branchcode   => $patron_B->branchcode,
@@ -1306,7 +1303,7 @@ subtest 'CheckReserves additional tests' => sub {
         rule_name  => 'holdallowed',
         rule_value => 'from_any_library'
     });
-    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A->itemnumber );
+    ( $status, $matched_reserve, $possible_reserves ) = CheckReserves( $item_A );
     is( $status, "Reserved", "We fill the hold with item A because patron's branch rule says allow any");
 
 };

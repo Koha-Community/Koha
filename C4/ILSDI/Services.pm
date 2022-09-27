@@ -637,7 +637,7 @@ sub GetServices {
     }
 
     # Renewal management
-    my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
+    my @renewal = CanBookBeRenewed( $patron, $item->checkout ); # TODO: Error if issue not found?
     if ( $renewal[0] ) {
         push @availablefor, 'loan renewal';
     }
@@ -681,16 +681,18 @@ sub RenewLoan {
     return { code => 'PatronNotFound' } unless $patron;
 
     # Get the item, or return an error code
-    my $itemnumber = $cgi->param('item_id');
+    my $itemnumber = $cgi->param('item_id'); # TODO: Refactor and send issue_id instead?
     my $item = Koha::Items->find($itemnumber);
-    return { code => 'RecordNotFound' } unless $item;
 
-    # Add renewal if possible
-    my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
-    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber, undef, undef, undef, undef, 0 ); }
+    return { code => 'RecordNotFound' } unless $item;
 
     my $issue = $item->checkout;
     return unless $issue; # FIXME should be handled
+
+    # Add renewal if possible
+    my @renewal = CanBookBeRenewed( $patron, $issue );
+    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber, undef, undef, undef, undef, 0 ); }
+
 
     # Hashref building
     my $out;

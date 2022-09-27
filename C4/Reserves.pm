@@ -676,9 +676,9 @@ sub GetOtherReserves {
     my ($itemnumber) = @_;
     my $messages;
     my $nextreservinfo;
-    my ( undef, $checkreserves, undef ) = CheckReserves($itemnumber);
+    my $item = Koha::Items->find($itemnumber);
+    my ( undef, $checkreserves, undef ) = CheckReserves($item);
     if ($checkreserves) {
-        my $item = Koha::Items->find($itemnumber);
         if ( $item->holdingbranch ne $checkreserves->{'branchcode'} ) {
             $messages->{'transfert'} = $checkreserves->{'branchcode'};
             #minus priorities of others reservs
@@ -823,13 +823,12 @@ sub GetReserveStatus {
 
 =head2 CheckReserves
 
-  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($itemnumber);
-  ($status, $matched_reserve, $possible_reserves) = &CheckReserves(undef, $barcode);
-  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($itemnumber,undef,$lookahead);
+  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($item);
+  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($item, $lookahead);
 
 Find a book in the reserves.
 
-C<$itemnumber> is the book's item number.
+C<$item> is the book's item.
 C<$lookahead> is the number of days to look in advance for future reserves.
 
 As I understand it, C<&CheckReserves> looks for the given item in the
@@ -851,65 +850,32 @@ table in the Koha database.
 =cut
 
 sub CheckReserves {
-    my ( $item, $barcode, $lookahead_days, $ignore_borrowers) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    my $select;
-    if (C4::Context->preference('item-level_itypes')){
-	$select = "
-           SELECT items.biblionumber,
-           items.biblioitemnumber,
-           itemtypes.notforloan,
-           items.notforloan AS itemnotforloan,
-           items.itemnumber,
-           items.damaged,
-           items.homebranch,
-           items.holdingbranch
-           FROM   items
-           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-           LEFT JOIN itemtypes   ON items.itype   = itemtypes.itemtype
-        ";
-    }
-    else {
-	$select = "
-           SELECT items.biblionumber,
-           items.biblioitemnumber,
-           itemtypes.notforloan,
-           items.notforloan AS itemnotforloan,
-           items.itemnumber,
-           items.damaged,
-           items.homebranch,
-           items.holdingbranch
-           FROM   items
-           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-           LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
-        ";
-    }
-
-    if ($item) {
-        $sth = $dbh->prepare("$select WHERE itemnumber = ?");
-        $sth->execute($item);
-    }
-    else {
-        $sth = $dbh->prepare("$select WHERE barcode = ?");
-        $sth->execute($barcode);
-    }
+    my ( $item, $lookahead_days, $ignore_borrowers ) = @_;
     # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
-    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber, $damaged, $item_homebranch, $item_holdingbranch ) = $sth->fetchrow_array;
-    return if ( $damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
-    return unless $itemnumber; # bail if we got nothing.
+    return unless $item; # bail if we got nothing.
+
+    return if ( $item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') );
+
     # if item is not for loan it cannot be reserved either.....
     # except where items.notforloan < 0 :  This indicates the item is holdable.
 
     my @SkipHoldTrapOnNotForLoanValue = split( '\|', C4::Context->preference('SkipHoldTrapOnNotForLoanValue') );
-    return if grep { $_ eq $notforloan_per_item } @SkipHoldTrapOnNotForLoanValue;
+    return if grep { $_ eq $item->notforloan } @SkipHoldTrapOnNotForLoanValue;
 
-    my $dont_trap = C4::Context->preference('TrapHoldsOnOrder') ? ($notforloan_per_item > 0) : ($notforloan_per_item && 1 );
-    return if $dont_trap or $notforloan_per_itemtype;
+    my $dont_trap = C4::Context->preference('TrapHoldsOnOrder') ? $item->notforloan > 0 : $item->notforloan;
+    if ( !$dont_trap ) {
+        my $item_type = $item->effective_itemtype;
+        if ( $item_type ) {
+            return if Koha::ItemTypes->find( $item_type )->notforloan;
+        }
+    }
+    else {
+        return;
+    }
 
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $ignore_borrowers);
+    my @reserves = _Findgroupreserve( $item->biblionumber, $item->itemnumber, $lookahead_days, $ignore_borrowers);
 
     # $priority and $highest are used to find the most important item
     # in the list returned by &_Findgroupreserve. (The lower $priority,
@@ -921,8 +887,8 @@ sub CheckReserves {
         my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
         my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
         my $LocalHoldsPriorityItemControl = C4::Context->preference('LocalHoldsPriorityItemControl');
-
         my $priority = 10000000;
+
         foreach my $res (@reserves) {
             if ($res->{'found'} && $res->{'found'} eq 'W') {
                 return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
@@ -932,12 +898,10 @@ sub CheckReserves {
                 return ( "Transferred", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
             } else {
                 my $patron;
-                my $item;
                 my $local_hold_match;
 
                 if ($LocalHoldsPriority) {
                     $patron = Koha::Patrons->find( $res->{borrowernumber} );
-                    $item = Koha::Items->find($itemnumber);
 
                     unless ($item->exclude_from_local_holds_priority || $patron->category->exclude_from_local_holds_priority) {
                         my $local_holds_priority_item_branchcode =
@@ -956,10 +920,9 @@ sub CheckReserves {
 
                 # See if this item is more important than what we've got so far
                 if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
-                    $item ||= Koha::Items->find($itemnumber);
                     next if $res->{item_group_id} && ( !$item->item_group || $item->item_group->id != $res->{item_group_id} );
                     next if $res->{itemtype} && $res->{itemtype} ne $item->effective_itemtype;
-                    $patron ||= Koha::Patrons->find( $res->{borrowernumber} );
+                    $patron //= Koha::Patrons->find( $res->{borrowernumber} );
                     my $branch = GetReservesControlBranch( $item->unblessed, $patron->unblessed );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} eq 'not_allowed');
@@ -982,7 +945,7 @@ sub CheckReserves {
     # If we get this far, then no exact match was found.
     # We return the most important (i.e. next) reservation.
     if ($highest) {
-        $highest->{'itemnumber'} = $item;
+        $highest->{'itemnumber'} = $item->itemnumber;
         return ( "Reserved", $highest, \@reserves );
     }
 
@@ -1710,7 +1673,7 @@ sub _FixPriority {
 
 =head2 _Findgroupreserve
 
-  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead, $ignore_borrowers);
+  @results = &_Findgroupreserve($biblionumber, $itemnumber, $lookahead, $ignore_borrowers);
 
 Looks for a holds-queue based item-specific match first, then for a holds-queue title-level match, returning the
 first match found.  If neither, then we look for non-holds-queue based holds.
@@ -1731,7 +1694,7 @@ All return values will respect any borrowernumbers passed as arrayref in $ignore
 =cut
 
 sub _Findgroupreserve {
-    my ( $bibitem, $biblio, $itemnumber, $lookahead, $ignore_borrowers) = @_;
+    my ( $biblionumber, $itemnumber, $lookahead, $ignore_borrowers) = @_;
     my $dbh   = C4::Context->dbh;
 
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
@@ -1835,7 +1798,7 @@ sub _Findgroupreserve {
           ORDER BY priority
     };
     $sth = $dbh->prepare($query);
-    $sth->execute( $biblio, $itemnumber, $lookahead||0);
+    $sth->execute( $biblionumber, $itemnumber, $lookahead||0);
     @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data )
@@ -2051,7 +2014,8 @@ sub MoveReserve {
     $cancelreserve //= 0;
 
     my $lookahead = C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
-    my ( $restype, $res, undef ) = CheckReserves( $itemnumber, undef, $lookahead );
+    my $item = Koha::Items->find($itemnumber);
+    my ( $restype, $res, undef ) = CheckReserves( $item, $lookahead );
     return unless $res;
 
     my $biblionumber = $res->{biblionumber};

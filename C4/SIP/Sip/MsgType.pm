@@ -1167,7 +1167,8 @@ sub handle_fee_paid {
         "on_reserve" => "On hold for another patron",
         "patron_restricted" => "Patron is currently restricted",
         "item_denied_renewal" => "Item is not allowed renewal",
-        "onsite_checkout" => "Item is an onsite checkout"
+        "onsite_checkout" => "Item is an onsite checkout",
+        "item_issued_to_other_patron" => "Item already issued to other borrower"
     };
     my @success = ();
     my @fail = ();

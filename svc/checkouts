@@ -67,6 +67,7 @@ print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 my @parameters;
 my $sql = '
     SELECT
+        issues.issue_id,
         issues.issuedate,
         issues.date_due,
         issues.date_due < now() as date_due_overdue,
@@ -154,8 +155,9 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ($charge) = GetIssuingCharges( $c->{itemnumber}, $c->{borrowernumber} );
     my $fine = GetFine( $c->{itemnumber}, $c->{borrowernumber} );
 
+    my $checkout_obj = Koha::Checkouts->find( $c->{issue_id} );
     my ( $can_renew, $can_renew_error, $info ) =
-      CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
+      CanBookBeRenewed( $checkout_obj->patron, $checkout_obj );
     my $can_renew_date =
       $can_renew_error && $can_renew_error eq 'too_soon'
       ? output_pref(

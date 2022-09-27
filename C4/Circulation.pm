@@ -65,7 +65,7 @@ use Koha::Plugins;
 use Koha::Recalls;
 use Carp qw( carp );
 use List::MoreUtils qw( any );
-use Scalar::Util qw( looks_like_number );
+use Scalar::Util qw( looks_like_number blessed );
 use Date::Calc qw( Date_to_Days );
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -369,7 +369,7 @@ sub transferbook {
     }
 
     # check if it is still issued to someone, return it...
-    my $issue = Koha::Checkouts->find({ itemnumber => $itemnumber });
+    my $issue = $item->checkout;
     if ( $issue ) {
         AddReturn( $barcode, $fbr );
         $messages->{'WasReturned'} = $issue->borrowernumber;
@@ -378,7 +378,7 @@ sub transferbook {
     # find reserves.....
     # That'll save a database query.
     my ( $resfound, $resrec, undef ) =
-      CheckReserves( $itemnumber );
+      CheckReserves( $item );
     if ( $resfound ) {
         $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
@@ -959,10 +959,7 @@ sub CanBookBeIssued {
                 and C4::Context->preference('SwitchOnSiteCheckouts') ) {
             $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
         } else {
-            my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
-                $patron->borrowernumber,
-                $item_object->itemnumber,
-            );
+            my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed($patron, $issue);
             if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
                 if ( $renewerror eq 'onsite_checkout' ) {
                     $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
@@ -984,18 +981,19 @@ sub CanBookBeIssued {
 
         my ( $can_be_returned, $message ) = CanBookBeReturned( $item_unblessed, C4::Context->userenv->{branch} );
 
-        unless ( $can_be_returned ) {
+        if ( !$can_be_returned ) {
             $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
             $issuingimpossible{branch_to_return} = $message;
         } else {
             if ( C4::Context->preference('AutoReturnCheckedOutItems') ) {
                 $alerts{RETURNED_FROM_ANOTHER} = { patron => $patron };
-            } else {
-            $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
-            $needsconfirmation{issued_firstname} = $patron->firstname;
-            $needsconfirmation{issued_surname} = $patron->surname;
-            $needsconfirmation{issued_cardnumber} = $patron->cardnumber;
-            $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
+            }
+            else {
+                $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+                $needsconfirmation{issued_firstname} = $patron->firstname;
+                $needsconfirmation{issued_surname} = $patron->surname;
+                $needsconfirmation{issued_cardnumber} = $patron->cardnumber;
+                $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
             }
         }
     }
@@ -1028,9 +1026,9 @@ sub CanBookBeIssued {
     # CHECKPREVCHECKOUT: CHECK IF ITEM HAS EVER BEEN LENT TO PATRON
     #
     $patron = Koha::Patrons->find( $patron->borrowernumber ); # FIXME Refetch just in case, to avoid regressions. But must not be needed
-    my $wants_check = $patron->wants_check_for_previous_checkout;
-    $needsconfirmation{PREVISSUE} = 1
-        if ($wants_check and $patron->do_check_for_previous_checkout($item_unblessed));
+    if ( $patron->wants_check_for_previous_checkout && $patron->do_check_for_previous_checkout($item_unblessed) ) {
+        $needsconfirmation{PREVISSUE} = 1;
+    }
 
     #
     # ITEM CHECKING
@@ -1168,7 +1166,7 @@ sub CanBookBeIssued {
 
     unless ( $ignore_reserves and defined $recall ) {
         # See if the item is on reserve.
-        my ( $restype, $res ) = C4::Reserves::CheckReserves( $item_object->itemnumber );
+        my ( $restype, $res ) = CheckReserves( $item_object );
         if ($restype) {
             my $resbor = $res->{'borrowernumber'};
             if ( $resbor ne $patron->borrowernumber ) {
@@ -2386,7 +2384,7 @@ sub AddReturn {
     # launch the Checkreserves routine to find any holds
     my ($resfound, $resrec);
     my $lookahead= C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
-    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->itemnumber, undef, $lookahead ) unless ( $item->withdrawn );
+    ($resfound, $resrec, undef) = CheckReserves( $item, $lookahead ) unless ( $item->withdrawn );
     # if a hold is found and is waiting at another branch, change the priority back to 1 and trigger the hold (this will trigger a transfer and update the hold status properly)
     if ( $resfound and $resfound eq "Waiting" and $branch ne $resrec->{branchcode} ) {
         my $hold = C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
@@ -2883,14 +2881,13 @@ sub GetUpcomingDueIssues {
 
 =head2 CanBookBeRenewed
 
-  ($ok,$error,$info) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
+  ($ok,$error,$info) = &CanBookBeRenewed($patron, $issue, $override_limit);
 
 Find out whether a borrowed item may be renewed.
 
-C<$borrowernumber> is the borrower number of the patron who currently
-has the item on loan.
+C<$patron> is the patron who currently has the issue.
 
-C<$itemnumber> is the number of the item to renew.
+C<$issue> is the checkout to renew.
 
 C<$override_limit>, if supplied with a true value, causes
 the limit on the number of times that the loan can be renewed
@@ -2909,19 +2906,19 @@ already renewed the loan.
 =cut
 
 sub CanBookBeRenewed {
-    my ( $borrowernumber, $itemnumber, $override_limit, $cron ) = @_;
+    my ( $patron, $issue, $override_limit, $cron ) = @_;
 
     my $auto_renew = "no";
     my $soonest;
+    my $item = $issue->item;
 
-    my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
-    my $issue = $item->checkout or return ( 0, 'no_checkout' );
+    return ( 0, 'no_item' ) unless $item;
+    return ( 0, 'no_checkout' ) unless $issue;
     return ( 0, 'onsite_checkout' ) if $issue->onsite_checkout;
+    return ( 0, 'item_issued_to_other_patron') if $issue->borrowernumber != $patron->borrowernumber;
     return ( 0, 'item_denied_renewal') if $item->is_denied_renewal;
 
-    my $patron = $issue->patron or return;
-
-    # override_limit will override anything else except on_reserve
+       # override_limit will override anything else except on_reserve
     unless ( $override_limit ){
         my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
         my $issuing_rule = Koha::CirculationRules->get_effective_rules(
@@ -2947,7 +2944,6 @@ sub CanBookBeRenewed {
 
         my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
         my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
-        $patron         = Koha::Patrons->find($borrowernumber); # FIXME Is this really useful?
         my $restricted  = $patron->is_debarred;
         my $hasoverdues = $patron->has_overdues;
 
@@ -2995,9 +2991,8 @@ sub CanBookBeRenewed {
             non_priority => 0,
             found        => undef,
             reservedate  => { '<=' => \'NOW()' },
-            suspend      => 0,
-        },
-        { prefetch => 'patron' }
+            suspend      => 0
+        }
     );
     if ( $fillable_holds->count ) {
         if ( C4::Context->preference('AllowRenewalIfOtherItemsAvailable') ) {
@@ -3009,7 +3004,7 @@ sub CanBookBeRenewed {
                 biblionumber => $item->biblionumber,
                 onloan       => undef,
                 notforloan   => 0,
-                -not         => { itemnumber => $itemnumber } })->as_list;
+                -not         => { itemnumber => $item->itemnumber } })->as_list;
 
             return ( 0, "on_reserve" ) if @possible_holds && (scalar @other_items < scalar @possible_holds);
 
@@ -3017,7 +3012,10 @@ sub CanBookBeRenewed {
             foreach my $possible_hold (@possible_holds) {
                 my $fillable = 0;
                 my $patron_with_reserve = Koha::Patrons->find($possible_hold->borrowernumber);
-                my $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron_with_reserve });
+                my $items_any_available = ItemsAnyAvailableAndNotRestricted({
+                    biblionumber => $item->biblionumber,
+                    patron => $patron_with_reserve
+                });
 
                 # FIXME: We are not checking whether the item we are renewing can fill the hold
 
@@ -3035,15 +3033,15 @@ sub CanBookBeRenewed {
                 }
                 return ( 0, "on_reserve" ) unless $fillable;
             }
-
-        } else {
-            my ($status, $matched_reserve, $possible_reserves) = CheckReserves($itemnumber);
+        }
+        else {
+            my ($status, $matched_reserve, $possible_reserves) = CheckReserves($item);
             return ( 0, "on_reserve" ) if $status;
         }
     }
 
     return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
-    $soonest = GetSoonestRenewDate($issue);
+    $soonest = GetSoonestRenewDate($patron, $issue);
     if ( $soonest > dt_from_string() ){
         return (0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
     }
@@ -3294,7 +3292,8 @@ sub AddRenewal {
 
 sub GetRenewCount {
     # check renewal status
-    my ( $bornum, $itemno ) = @_;
+    my ( $borrowernumber_or_patron, $itemnumber_or_item ) = @_;
+
     my $dbh           = C4::Context->dbh;
     my $renewcount    = 0;
     my $unseencount    = 0;
@@ -3302,9 +3301,10 @@ sub GetRenewCount {
     my $unseenallowed = 0;
     my $renewsleft    = 0;
     my $unseenleft    = 0;
-
-    my $patron = Koha::Patrons->find( $bornum );
-    my $item   = Koha::Items->find($itemno);
+    my $patron = blessed $borrowernumber_or_patron ?
+        $borrowernumber_or_patron : Koha::Patrons->find($borrowernumber_or_patron);
+    my $item = blessed $itemnumber_or_item ?
+        $itemnumber_or_item : Koha::Items->find($itemnumber_or_item);
 
     return (0, 0, 0, 0, 0, 0) unless $patron or $item; # Wrong call, no renewal allowed
 
@@ -3312,12 +3312,11 @@ sub GetRenewCount {
     # and not yet returned.
 
     # FIXME - I think this function could be redone to use only one SQL call.
-    my $sth = $dbh->prepare(
-        "select * from issues
-                                where (borrowernumber = ?)
-                                and (itemnumber = ?)"
-    );
-    $sth->execute( $bornum, $itemno );
+    my $sth = $dbh->prepare(q{
+        SELECT * FROM issues
+        WHERE  (borrowernumber = ?) AND (itemnumber = ?)
+    });
+    $sth->execute( $patron->borrowernumber, $item->itemnumber );
     my $data = $sth->fetchrow_hashref;
     $renewcount = $data->{'renewals_count'} if $data->{'renewals_count'};
     $unseencount = $data->{'unseen_renewals'} if $data->{'unseen_renewals'};
@@ -3352,11 +3351,13 @@ sub GetRenewCount {
 
 =head2 GetSoonestRenewDate
 
-  $NoRenewalBeforeThisDate = &GetSoonestRenewDate($checkout);
+  $NoRenewalBeforeThisDate = &GetSoonestRenewDate($patron, $issue);
 
 Find out the soonest possible renew date of a borrowed item.
 
-C<$checkout> is the checkout object to renew.
+C<$patron> is the patron who currently has the item on loan.
+
+C<$issue> is the the item issue.
 
 C<$GetSoonestRenewDate> returns the DateTime of the soonest possible
 renew date, based on the value "No renewal before" of the applicable
@@ -3367,10 +3368,14 @@ cannot be found.
 =cut
 
 sub GetSoonestRenewDate {
-    my ( $checkout ) = @_;
+    my ( $patron, $issue ) = @_;
+    return unless $issue;
+    return unless $patron;
 
-    my $item   = $checkout->item or return;
-    my $patron = $checkout->patron or return;
+    my $item = $issue->item;
+    return unless $item;
+
+    my $dbh = C4::Context->dbh;
 
     my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
     my $issuing_rule = Koha::CirculationRules->get_effective_rules(
@@ -3390,7 +3395,7 @@ sub GetSoonestRenewDate {
         and $issuing_rule->{norenewalbefore} ne "" )
     {
         my $soonestrenewal =
-          dt_from_string( $checkout->date_due )->subtract(
+          dt_from_string( $issue->date_due )->subtract(
             $issuing_rule->{lengthunit} => $issuing_rule->{norenewalbefore} );
 
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
@@ -3399,9 +3404,9 @@ sub GetSoonestRenewDate {
             $soonestrenewal->truncate( to => 'day' );
         }
         return $soonestrenewal if $now < $soonestrenewal;
-    } elsif ( $checkout->auto_renew && $patron->autorenew_checkouts ) {
+    } elsif ( $issue->auto_renew && $patron->autorenew_checkouts ) {
         # Checkouts with auto-renewing fall back to due date
-        my $soonestrenewal = dt_from_string( $checkout->date_due );
+        my $soonestrenewal = dt_from_string( $issue->date_due );
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
             and $issuing_rule->{lengthunit} eq 'days' )
         {
@@ -3414,14 +3419,13 @@ sub GetSoonestRenewDate {
 
 =head2 GetLatestAutoRenewDate
 
-  $NoAutoRenewalAfterThisDate = &GetLatestAutoRenewDate($borrowernumber, $itemnumber);
+  $NoAutoRenewalAfterThisDate = &GetLatestAutoRenewDate($patron, $issue);
 
 Find out the latest possible auto renew date of a borrowed item.
 
-C<$borrowernumber> is the borrower number of the patron who currently
-has the item on loan.
+C<$patron> is the patron who currently has the item on loan.
 
-C<$itemnumber> is the number of the item to renew.
+C<$issue> is the item issue.
 
 C<$GetLatestAutoRenewDate> returns the DateTime of the latest possible
 auto renew date, based on the value "No auto renewal after" and the "No auto
@@ -3432,16 +3436,14 @@ or item cannot be found.
 =cut
 
 sub GetLatestAutoRenewDate {
-    my ( $borrowernumber, $itemnumber ) = @_;
+    my ( $patron, $issue ) = @_;
+    return unless $issue;
+    return unless $patron;
+
+    my $item = $issue->item;
+    return unless $item;
 
     my $dbh = C4::Context->dbh;
-
-    my $item      = Koha::Items->find($itemnumber)  or return;
-    my $itemissue = $item->checkout                 or return;
-
-    $borrowernumber ||= $itemissue->borrowernumber;
-    my $patron = Koha::Patrons->find( $borrowernumber )
-      or return;
 
     my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
     my $circulation_rules = Koha::CirculationRules->get_effective_rules(
@@ -3466,7 +3468,7 @@ sub GetLatestAutoRenewDate {
 
     my $maximum_renewal_date;
     if ( $circulation_rules->{no_auto_renewal_after} ) {
-        $maximum_renewal_date = dt_from_string($itemissue->issuedate);
+        $maximum_renewal_date = dt_from_string($issue->issuedate);
         $maximum_renewal_date->add(
             $circulation_rules->{lengthunit} => $circulation_rules->{no_auto_renewal_after}
         );
@@ -3516,13 +3518,14 @@ sub GetIssuingCharges {
 
     my $sth = $dbh->prepare($charge_query);
     $sth->execute($itemnumber);
+    my $patron;
     if ( my $item_data = $sth->fetchrow_hashref ) {
         $item_type = $item_data->{itemtype};
         $charge    = $item_data->{rentalcharge};
         if ($charge) {
             # FIXME This should follow CircControl
             my $branch = C4::Context::mybranch();
-            my $patron = Koha::Patrons->find( $borrowernumber );
+            $patron //= Koha::Patrons->find( $borrowernumber );
             my $discount = Koha::CirculationRules->get_effective_rule({
                 categorycode => $patron->categorycode,
                 branchcode   => $branch,
@@ -4460,7 +4463,7 @@ sub _CanBookBeAutoRenewed {
         }
     );
 
-    if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
+    if ( $patron->is_expired && $patron->category->effective_BlockExpiredPatronOpacActions ) {
         return 'auto_account_expired';
     }
 
@@ -4496,7 +4499,7 @@ sub _CanBookBeAutoRenewed {
         }
     }
 
-    my $soonest = GetSoonestRenewDate($issue);
+    my $soonest = GetSoonestRenewDate($patron, $issue);
     if ( $soonest > dt_from_string() )
     {
         return ( "auto_too_soon", $soonest );

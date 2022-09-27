@@ -42,7 +42,7 @@ my $itemtype = $builder->build(
 my $borrowers_count = 5;
 
 my $biblio = $builder->build_sample_biblio();
-my $itemnumber = Koha::Item->new(
+my $item = Koha::Item->new(
     {
         biblionumber  => $biblio->biblionumber,
         homebranch    => $library4->{branchcode},
@@ -50,7 +50,7 @@ my $itemnumber = Koha::Item->new(
         itype         => $itemtype,
         exclude_from_local_holds_priority => 0,
     },
-)->store->itemnumber;
+)->store;
 
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library3->{branchcode}, $library4->{branchcode} );
 my $patron_category = $builder->build({ source => 'Category', value => {exclude_from_local_holds_priority => 0} });
@@ -84,29 +84,29 @@ foreach my $borrowernumber (@borrowernumbers) {
 my ($status, $reserve, $all_reserves);
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
-($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($item);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[0], "Received expected results with LocalHoldsPriority disabled" );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
-($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($item);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[2], "Received expected results with PickupLibrary/homebranch" );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'holdingbranch' );
-($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($item);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[1], "Received expected results with PickupLibrary/holdingbranch" );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary' );
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'holdingbranch' );
-($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($item);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[2], "Received expected results with HomeLibrary/holdingbranch" );
 
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary' );
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
-($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($item);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[3], "Received expected results with HomeLibrary/homebranch" );
 
 $schema->storage->txn_rollback;
@@ -160,7 +160,7 @@ subtest "exclude from local holds" => sub {
     );
 
     my ($status, $reserve, $all_reserves);
-    ($status, $reserve, $all_reserves) = CheckReserves($item1->itemnumber);
+    ($status, $reserve, $all_reserves) = CheckReserves($item1);
     is($reserve->{borrowernumber}, $patron_nex_l1->borrowernumber, "Patron not excluded with local holds priorities is next checkout");
 
     Koha::Holds->delete;
@@ -182,7 +182,7 @@ subtest "exclude from local holds" => sub {
         }
     );
 
-    ($status, $reserve, $all_reserves) = CheckReserves($item1->itemnumber);
+    ($status, $reserve, $all_reserves) = CheckReserves($item1);
     is($reserve->{borrowernumber}, $patron_nex_l2->borrowernumber, "Local patron is excluded from priority");
 
     Koha::Holds->delete;
@@ -204,7 +204,7 @@ subtest "exclude from local holds" => sub {
         }
     );
 
-    ($status, $reserve, $all_reserves) = CheckReserves($item2->itemnumber);
+    ($status, $reserve, $all_reserves) = CheckReserves($item2);
     is($reserve->{borrowernumber}, $patron_nex_l2->borrowernumber, "Patron from other library is next checkout because item is excluded");
 
     $schema->storage->txn_rollback;

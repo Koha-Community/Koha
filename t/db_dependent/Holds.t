@@ -64,7 +64,8 @@ $insert_sth->execute('ONLY1');
 my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 
 # Create item instance for testing.
-my $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber })->itemnumber;
+my $item = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber });
+my $itemnumber = $item->itemnumber;
 
 # Create some borrowers
 my @borrowernumbers;
@@ -101,7 +102,6 @@ is( $holds->next->priority, 3, "Reserve 3 has a priority of 3" );
 is( $holds->next->priority, 4, "Reserve 4 has a priority of 4" );
 is( $holds->next->priority, 5, "Reserve 5 has a priority of 5" );
 
-my $item = Koha::Items->find( $itemnumber );
 $holds = $item->current_holds;
 my $first_hold = $holds->next;
 my $reservedate = $first_hold->reservedate;
@@ -342,7 +342,7 @@ ok(
 my $damaged_item = Koha::Items->find($itemnumber)->damaged(1)->store; # FIXME The $itemnumber is a bit confusing here
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
 is( CanItemBeReserved( $patrons[0], $damaged_item)->{status}, 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
-ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
+ok( defined( ( CheckReserves($damaged_item) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
 
 $hold = Koha::Hold->new(
     {
@@ -359,7 +359,7 @@ $hold->delete();
 
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( CanItemBeReserved( $patrons[0], $damaged_item)->{status} eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
-ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
+ok( !defined( ( CheckReserves($damaged_item) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 # Items that are not for loan, but holdable should not be trapped until they are available for loan
 t::lib::Mocks::mock_preference( 'TrapHoldsOnOrder', 0 );
@@ -377,19 +377,19 @@ $hold = Koha::Hold->new(
         branchcode     => $branch_1,
     }
 )->store();
-ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item that is not for loan but holdable ( notforloan < 0 )" );
+ok( !defined( ( CheckReserves($nfl_item) )[1] ), "Hold cannot be trapped for item that is not for loan but holdable ( notforloan < 0 )" );
 t::lib::Mocks::mock_preference( 'TrapHoldsOnOrder', 1 );
-ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold is trapped for item that is not for loan but holdable ( notforloan < 0 )" );
+ok( defined( ( CheckReserves($nfl_item) )[1] ), "Hold is trapped for item that is not for loan but holdable ( notforloan < 0 )" );
 t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1' );
-ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
+ok( !defined( ( CheckReserves($nfl_item) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
 t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1|1' );
-ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
+ok( !defined( ( CheckReserves($nfl_item) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
 t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '' );
 my $item_group_1 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
 my $item_group_2 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
 $item_group_1->add_item({ item_id => $itemnumber });
 $hold->item_group_id( $item_group_2->id )->update;
-ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with non-matching item group" );
+ok( !defined( ( CheckReserves($nfl_item) )[1] ), "Hold cannot be trapped for item with non-matching item group" );
 is(
     CanItemBeReserved( $patrons[0], $nfl_item)->{status}, 'itemAlreadyOnHold',
     "cannot request item that you have already reservedd"
@@ -1501,7 +1501,7 @@ subtest 'non priority holds' => sub {
         }
     );
 
-    Koha::Checkout->new(
+    my $issue = Koha::Checkout->new(
         {
             borrowernumber => $patron1->borrowernumber,
             itemnumber     => $item->itemnumber,
@@ -1520,7 +1520,7 @@ subtest 'non priority holds' => sub {
     );
 
     my ( $ok, $err ) =
-      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+      CanBookBeRenewed( $patron1, $issue );
 
     ok( !$ok, 'Cannot renew' );
     is( $err, 'on_reserve', 'Item is on hold' );
@@ -1529,7 +1529,7 @@ subtest 'non priority holds' => sub {
     $hold->non_priority(1)->store;
 
     ( $ok, $err ) =
-      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+      CanBookBeRenewed( $patron1, $issue );
 
     ok( $ok, 'Can renew' );
     is( $err, undef, 'Item is on non priority hold' );
@@ -1553,7 +1553,7 @@ subtest 'non priority holds' => sub {
     );
 
     ( $ok, $err ) =
-      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+      CanBookBeRenewed( $patron1, $issue );
 
     ok( !$ok, 'Cannot renew' );
     is( $err, 'on_reserve', 'Item is on hold' );

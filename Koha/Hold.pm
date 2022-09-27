@@ -762,7 +762,7 @@ sub cancel {
     );
 
     if ($autofill_next) {
-        my ( undef, $next_hold ) = C4::Reserves::CheckReserves( $self->itemnumber );
+        my ( undef, $next_hold ) = C4::Reserves::CheckReserves( $self->item );
         if ($next_hold) {
             my $is_transfer = $self->branchcode ne $next_hold->{branchcode};
 

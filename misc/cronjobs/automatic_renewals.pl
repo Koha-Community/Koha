@@ -172,7 +172,7 @@ while ( my $auto_renew = $auto_renews->next ) {
     }
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
-    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
+    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->patron, $auto_renew, undef, 1 );
     my $updated;
     if ( $error eq 'auto_renew' ) {
         $updated = 1;
@@ -187,16 +187,19 @@ while ( my $auto_renew = $auto_renews->next ) {
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
             if ( $wants_messages ) && !$wants_digest;
-    } elsif ( $error eq 'too_many'
-        or $error eq 'on_reserve'
-        or $error eq 'restriction'
-        or $error eq 'overdue'
-        or $error eq 'too_unseen'
-        or $error eq 'auto_account_expired'
-        or $error eq 'auto_too_late'
-        or $error eq 'auto_too_much_oweing'
-        or $error eq 'auto_too_soon'
-        or $error eq 'item_denied_renewal' ) {
+    } elsif (
+        $error eq 'too_many' ||
+        $error eq 'on_reserve' ||
+        $error eq 'restriction' ||
+        $error eq 'overdue' ||
+        $error eq 'too_unseen' ||
+        $error eq 'auto_account_expired' ||
+        $error eq 'auto_too_late' ||
+        $error eq 'auto_too_much_oweing' ||
+        $error eq 'auto_too_soon' ||
+        $error eq 'item_denied_renewal' ||
+        $error eq 'item_issued_to_other_patron'
+    ) {
         if ( $verbose ) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s not be renewed. (%s)",
               $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would', $error;

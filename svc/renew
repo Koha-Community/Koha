@@ -58,8 +58,11 @@ $data->{itemnumber} = $itemnumber;
 $data->{borrowernumber} = $borrowernumber;
 $data->{branchcode} = $branchcode;
 
+my $patron = Koha::Patrons->find($borrowernumber);
+my $item = Koha::Items->find($itemnumber);
+
 ( $data->{renew_okay}, $data->{error} ) =
-  CanBookBeRenewed( $borrowernumber, $itemnumber, $override_limit );
+    CanBookBeRenewed( $patron, $item->checkout, $override_limit );
 
 # If we're allowing reserved items to be renewed...
 if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference('AllowRenewalOnHoldOverride')) {

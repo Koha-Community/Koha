@@ -90,7 +90,7 @@ sub do_checkin {
 
     my $reserved;
     my $lookahead = C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
-    my ($resfound) = $item->withdrawn ? q{} : C4::Reserves::CheckReserves( $item->itemnumber, undef, $lookahead );
+    my ($resfound) = $item->withdrawn ? q{} : CheckReserves( $item, $lookahead );
     if ( $resfound eq "Reserved") {
         $reserved = 1;
     }

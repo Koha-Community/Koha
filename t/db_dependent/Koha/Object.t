@@ -973,6 +973,8 @@ subtest 'unblessed_all_relateds' => sub {
     my $patron = Koha::Patron->new($patron_data)->store;
     my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
     my $biblio = Koha::Biblios->find( $biblionumber );
+    my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
+
     my $item = $builder->build_object(
         {
             class => 'Koha::Items',
@@ -982,6 +984,7 @@ subtest 'unblessed_all_relateds' => sub {
                 biblionumber  => $biblio->biblionumber,
                 itemlost      => 0,
                 withdrawn     => 0,
+                itype => $itemtype
             }
         }
     );

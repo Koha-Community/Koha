@@ -311,12 +311,13 @@ subtest 'regression tests' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->store->itemtype;
+
     my $item1 = $builder->build_sample_item(
         {
             barcode        => 'a_t_barcode',
             library        => $library->{branchcode},
-            itype          => 'BK',
+            itype          => $itemtype,
             itemcallnumber => 'itemcallnumber1',
         }
     );
@@ -326,7 +327,7 @@ subtest 'regression tests' => sub {
         {
             barcode        => 'another_t_barcode',
             library        => $library->{branchcode},
-            itype          => 'BK',
+            itype          => $itemtype,
             itemcallnumber => 'itemcallnumber2',
         }
     );
@@ -336,7 +337,7 @@ subtest 'regression tests' => sub {
         {
             barcode        => 'another_t_barcode_3',
             library        => $library->{branchcode},
-            itype          => 'BK',
+            itype          => $itemtype,
             itemcallnumber => 'itemcallnumber3',
         }
     );
