@@ -5,6 +5,7 @@
 [% USE Desks %]
 [% USE Categories %]
 [% USE Registers %]
+[% USE AuthClient %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -15,7 +16,8 @@
     [% ELSIF invalid_username_or_password %]Invalid username or password[% END %]
     [% IF ( different_ip ) %]IP address change[% END %]
     [% IF ( timed_out ) %]Session timed out[% END %]
-    [% IF ( nopermission ) %]Access denied[% END %] &rsaquo; Koha
+    [% IF ( nopermission ) %]Access denied[% END %]
+    [% IF ( auth_error ) %]Error authenticating in external provider[% END %] &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% PROCESS 'auth-two-factor.inc' %]
@@ -65,6 +67,13 @@
 <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
 [% END %]
 
+[% IF auth_error %]
+    <div id="login_error" class="alert alert-danger">
+        <p>There was an error authenticating to external identity provider</p>
+        <p>[% auth_error | html %]</p>
+    </div>
+[% END %]
+
 [% IF (shibbolethAuthentication) %]
 <!-- This is what is displayed if shib login has failed -->
 [% IF (invalidShibLogin ) %]
@@ -75,6 +84,24 @@
 
 [% IF !TwoFA_prompt && !TwoFA_setup && !Koha.Preference('staffShibOnly') %]
     <!-- login prompt time-->
+    [% SET auth_providers = AuthClient.get_providers('staff') %]
+    [% IF ( ! auth_providers.empty ) %]
+        [% FOREACH provider IN auth_providers %]
+            <p class="clearfix">
+                <a href="[% provider.url | url %]" class="btn btn-light col-xs-12" id="provider_[% provider.code | html %]">
+                    [% IF provider.icon_url %]
+                    <img src="[% provider.icon_url | url %]"  style="max-height: 20px; max-width: 20px;"/>
+                    [% ELSE %]
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    [% END %]
+                    Log in with [% provider.description | html %]
+                </a>
+            </p>
+        [% END %]
+        <hr/>
+        <p>If you do not have an external account, but do have a local account, you can still log in: </p>
+    [% END # /IF  auth_providers.size %]
+
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
         <input type="hidden" name="koha_login_context" value="intranet" />
     [% FOREACH INPUT IN INPUTS %]
