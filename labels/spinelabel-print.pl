@@ -82,6 +82,10 @@ while ( my ( $key, $value ) = each(%$data) ) {
 
 $body = $scheme;
 
+$template->param(
+        'itemhomebranch' => $item->{homebranch},
+        'itemholdingbranch' => $item->{holdingbranch}
+);
 $template->param( autoprint => C4::Context->preference("SpineLabelAutoPrint") );
 $template->param( content   => $body );
 

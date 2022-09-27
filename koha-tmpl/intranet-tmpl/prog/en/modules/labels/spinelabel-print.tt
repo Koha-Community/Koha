@@ -22,7 +22,7 @@
             </div>
 	[% ELSE %]
             <body id="labels_spinelabel-print" class="tools labels">
-            <div id="spinelabel" class="[% Branches.GetLoggedInBranchcode | html %]">
+            <div id="spinelabel" class="[% Branches.GetLoggedInBranchcode | html %]" data-homebranch="[% itemhomebranch | html %]" data-holdingbranch="[% itemholdingbranch | html %]">
 				[% content | $raw %]
             </div>
             <div id="print_button" class="noprint">
