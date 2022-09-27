@@ -79,6 +79,7 @@ BEGIN {
       CloneBudgetPeriod
       CloneBudgetHierarchy
       MoveOrders
+      FieldsForCalculatingFundValues
     );
 }
 
@@ -341,15 +342,17 @@ sub ModBudgetPlan {
 sub GetBudgetSpent {
     my ($budget_id) = @_;
     my $dbh = C4::Context->dbh;
-    # unitprice_tax_included should always been set here
-    # we should not need to retrieve ecost_tax_included
+
+    # Choose correct unitprice and ecost fields
+    my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
+
     my $sth = $dbh->prepare(qq|
-        SELECT SUM( | . C4::Acquisition::get_rounding_sql("COALESCE(unitprice_tax_included, ecost_tax_included)") . qq| * quantity ) AS sum FROM aqorders
+        SELECT SUM( | . C4::Acquisition::get_rounding_sql("COALESCE($unitprice_field, $ecost_field)") . qq| * quantity ) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived > 0 AND
             datecancellationprinted IS NULL
     |);
-	$sth->execute($budget_id);
+    $sth->execute($budget_id);
     my $sum = ( $sth->fetchrow_array || 0 ) + 0;
 
     $sth = $dbh->prepare(qq|
@@ -367,20 +370,24 @@ sub GetBudgetSpent {
         $sum += $adj->adjustment;
     }
 
-	return $sum;
+    return $sum;
 }
 
 # -------------------------------------------------------------------
 sub GetBudgetOrdered {
-	my ($budget_id) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(qq|
-        SELECT SUM(| . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . qq| *  quantity) AS sum FROM aqorders
+    my ($budget_id) = @_;
+    my $dbh = C4::Context->dbh;
+
+    # Get correct unitprice and ecost prices as possible
+    my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
+
+    my $sth = $dbh->prepare(qq|
+        SELECT SUM(| . C4::Acquisition::get_rounding_sql(qq|$ecost_field|) . qq| *  quantity) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived = 0 AND
             datecancellationprinted IS NULL
     |);
-	$sth->execute($budget_id);
+    $sth->execute($budget_id);
     my $sum =  ( $sth->fetchrow_array || 0 ) + 0;
 
     my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $budget_id, encumber_open => 1, closedate => undef},{ join => 'invoiceid' });
@@ -388,7 +395,7 @@ sub GetBudgetOrdered {
         $sum += $adj->adjustment;
     }
 
-	return $sum;
+    return $sum;
 }
 
 =head2 GetBudgetName
@@ -550,18 +557,22 @@ sub GetBudgetHierarchy {
     foreach my $first_parent (@first_parents) {
         _add_budget_children(\@sort, $first_parent, 0);
     }
+
+    # Get correct unitprice and ecost prices as possible
+    my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
+
     if (!$skiptotals) {
         # Get all the budgets totals in as few queries as possible
         my $hr_budget_spent = $dbh->selectall_hashref(q|
             SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-                SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE(unitprice_tax_included, ecost_tax_included)|) . q| * quantity ) AS budget_spent
+                SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE($unitprice_field, $ecost_field)|) . q| * quantity ) AS budget_spent
             FROM aqorders JOIN aqbudgets USING (budget_id)
             WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
             GROUP BY budget_id, budget_parent_id
             |, 'budget_id');
         my $hr_budget_ordered = $dbh->selectall_hashref(q|
             SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-                SUM( | . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . q| *  quantity) AS budget_ordered
+                SUM( | . C4::Acquisition::get_rounding_sql(qq|$ecost_field|) . q| *  quantity) AS budget_ordered
             FROM aqorders JOIN aqbudgets USING (budget_id)
             WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
             GROUP BY budget_id, budget_parent_id
@@ -1397,6 +1408,29 @@ sub MoveOrders {
           };
     }
     return \@report;
+}
+
+=head2 FieldsForCalculatingFundValues
+
+    my ( $unitprice_field, $ecost_field ) = FieldsForCalculatingFundValues();
+
+Fetch the tax inclusive or tax exclusive database fields for calculating fund values based
+on the value of the CalculateFundValuesIncludingTax system preference.
+
+=cut
+
+sub FieldsForCalculatingFundValues {
+
+    # Choose correct unitprice and ecost fields
+    my $unitprice_field = 'unitprice_tax_included';
+    my $ecost_field     = 'ecost_tax_included';
+
+    if ( !C4::Context->preference('CalculateFundValuesIncludingTax') ) {
+       $unitprice_field = 'unitprice_tax_excluded';
+       $ecost_field     = 'ecost_tax_excluded';
+    }
+
+    return ( $unitprice_field, $ecost_field);
 }
 
 END { }    # module clean-up code here (global destructor)

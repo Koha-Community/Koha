@@ -21,7 +21,7 @@
 
 =head1 NAME
 
- spent.pl
+ acqui/spent.pl
 
 =head1 DESCRIPTION
 
@@ -51,6 +51,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+# Get correct unitprice field
+my ( $unitprice_field ) = C4::Budgets->FieldsForCalculatingFundValues();
+
 my $query = <<EOQ;
 SELECT
     aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
@@ -62,7 +65,7 @@ SELECT
     aqorders.invoiceid,
     aqinvoices.invoicenumber,
     quantityreceived,
-    unitprice_tax_included,
+    $unitprice_field,
     datereceived,
     aqbooksellers.name as vendorname
 FROM (aqorders, aqbasket)
@@ -89,7 +92,7 @@ WHERE
              aqorders.invoiceid,
              aqinvoices.invoicenumber,
              quantityreceived,
-             unitprice_tax_included,
+             $unitprice_field,
              datereceived,
              aqbooksellers.name
 
@@ -105,9 +108,9 @@ while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
     $data->{'itemtypes'} = [split('\|', $data->{itypes})];
     if ( $recv > 0 ) {
-        my $rowtotal = $recv * get_rounded_price($data->{'unitprice_tax_included'});
+        my $rowtotal = $recv * get_rounded_price($data->{$unitprice_field});
         $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
-        $data->{'unitprice_tax_included'} = sprintf( "%.2f", $data->{'unitprice_tax_included'} );
+        $data->{'unitprice_tax_included'} = sprintf( "%.2f", $data->{$unitprice_field} );
         $subtotal += $rowtotal;
         push @spent, $data;
     }

@@ -79,7 +79,11 @@
                             [% order.left | html %]
                         </td>
                         <td class="data cell">
-                            [% order.ecost_tax_included | $Price %]
+                            [% IF Koha.Preference('CalculateFundValuesIncludingTax') %]
+                                [% order.ecost_tax_included | $Price %]
+                            [% ELSE %]
+                                [% order.ecost_tax_excluded | $Price %]
+                            [% END %]
                         </td>
                         <td class="cell" data-order="[% order.entrydate | html %]">
                             [% order.entrydate | $KohaDates %]

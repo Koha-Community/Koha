@@ -49,11 +49,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+# Choose correct ecost field
+my ( $unitprice_field, $ecost_field ) = C4::Budgets->FieldsForCalculatingFundValues();
+
 my $query = <<EOQ;
 SELECT
     aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
     quantity-quantityreceived AS tleft,
-    ecost_tax_included, budgetdate, entrydate,
+    $ecost_field, budgetdate, entrydate,
     aqbasket.booksellerid,
     aqbooksellers.name as vendorname,
     GROUP_CONCAT(DISTINCT itype SEPARATOR '|') AS itypes,
@@ -74,7 +77,7 @@ WHERE
     (quantity > quantityreceived OR quantityreceived IS NULL)
     GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
              tleft,
-             ecost_tax_included, budgetdate, entrydate,
+             $ecost_field, budgetdate, entrydate,
              aqbasket.booksellerid,
              aqbooksellers.name,
              title
@@ -96,7 +99,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $left = $data->{'quantity'};
     }
     if ( $left && $left > 0 ) {
-        my $subtotal = $left * get_rounded_price( $data->{'ecost_tax_included'} );
+        my $subtotal = $left * get_rounded_price( $data->{$ecost_field} );
         $data->{subtotal} = sprintf( "%.2f", $subtotal );
         $data->{'left'} = $left;
         push @ordered, $data;
