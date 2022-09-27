@@ -123,6 +123,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BundleNotLoanValue','3',NULL,'Sets the NOT_LOAN AV value that represents "Added to bundle" as a not for loan value','Free'),
 ('CalculateFinesOnReturn','1','','Switch to control if overdue fines are calculated on return or not','YesNo'),
 ('CalculateFinesOnBackdate','1','','Switch to control if overdue fines are calculated on return when backdating','YesNo'),
+('CalculateFundValuesIncludingTax', '1', NULL, 'Include tax in the calculated fund values (spent, ordered) for all supplier configurations', 'YesNo'),
 ('CalendarFirstDayOfWeek','0','0|1|2|3|4|5|6','Select the first day of week to use in the calendar.','Choice'),
 ('CanMarkHoldsToPullAsLost','do_not_allow','do_not_allow|allow|allow_and_notify','Add a button to the "Holds to pull" screen to mark an item as lost and notify the patron.','Choice'),
 ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library place a hold on an item from another library','YesNo'),

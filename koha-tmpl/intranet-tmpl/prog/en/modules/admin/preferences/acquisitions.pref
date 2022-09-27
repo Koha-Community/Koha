@@ -41,6 +41,12 @@ Acquisitions:
             - "<br/><strong>NOTE:</strong> The database will only accept values up to 4 decimals precision, further values will be rounded."
             - "<br/><strong>NOTE:</strong> Vendor tax rate information may need updating if tax rate values are removed."
         -
+            - pref: CalculateFundValuesIncludingTax
+              choices:
+                  1: Include
+                  0: Exclude
+            - "tax in the calculated fund values (spent, ordered). Note this rule applies to all vendors regardless of their configuration"
+        -
             - pref: AcqWarnOnDuplicateInvoice
               choices:
                   1: Warn
