@@ -2065,8 +2065,7 @@ li {
 
 .searchheader {
     background-color: #f3f4f4;
-    border: 1px solid #696969;
-    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px 1px rgba(0,0,0,.2);
     font-size: 80%;
     margin-top: .5em;
     margin-bottom: .5em;
@@ -2077,7 +2076,10 @@ li {
 
     &.floating {
         border-radius: 0;
+        box-shadow: 0 0 2px 1px rgba(0,0,0,.4);
         margin-top: 0;
+        margin-bottom: 0;
+        z-index: 100;
     }
 
     .btn-group {
