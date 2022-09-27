@@ -119,6 +119,7 @@
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
     [% END %]
+        <div class="page-section">
 
         [% XSLTBloc | $raw %]
 
@@ -267,6 +268,7 @@
                 </div> <!-- /.cover-slider -->
             </div> <!-- /.bookcoverimg.col-xs-3 -->
         [% ELSE %]
+        </div> [%# .page-block %]
         </div> <!-- /.col-xs-* -->
         [% END # /IF ( AmazonCoverImages, etc ) %]
 </div>
