@@ -4,6 +4,7 @@
 <input type="hidden" name="modify" value="yes" />
 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
   <table>
+    <thead>
     <tr><th></th>
         <th>Days in advance</th>
         [% IF Koha.Preference('SMSSendDriver') %]<th>SMS</th>[% END %]
@@ -12,6 +13,8 @@
         <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
         <!-- <th>RSS</th> -->
     </tr>
+    </thead>
+    <tbody>
     [% FOREACH messaging_preference IN messaging_preferences %]
     [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
     [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
@@ -236,4 +239,5 @@
 
     </tr>
     [% END %]
+    </tbody>
   </table>

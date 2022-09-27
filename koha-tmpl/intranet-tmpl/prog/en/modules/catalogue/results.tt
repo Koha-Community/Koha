@@ -440,6 +440,7 @@
 
                                 <!-- TABLE RESULTS START -->
                                 <table>
+                                    <thead>
                                     <tr>
                                         [% IF ( AmazonCoverImages  || LocalCoverImages || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
                                             <th>&nbsp;</th>
@@ -447,8 +448,10 @@
                                         <th colspan="2">Results</th>
                                         <th>Location</th>
                                     </tr>
+                                    </thead>
                                     <!-- Actual Search Results -->
                                     [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
+                                    <tbody>
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr id="row[% SEARCH_RESULT.biblionumber | html %]">
                                             [% IF ( AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
@@ -681,6 +684,7 @@
                                             </td>
                                         </tr>
                                     [% END # /FOREACH SEARCH_RESULT %]
+                                    </tbody>
                                 </table>
                             </form>
                         </div> <!-- /#bookbag_form -->
