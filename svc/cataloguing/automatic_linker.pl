@@ -29,7 +29,10 @@ print $input->header('application/json');
 
 # Check the user's permissions
 my ( $auth_status ) =
-  C4::Auth::check_cookie_auth( $input->cookie('CGISESSID'), { editauthorities => 1, editcatalogue => 1 } );
+  C4::Auth::check_cookie_auth( $input->cookie('CGISESSID'), {
+    editauthorities => 1,
+    editcatalogue => 'edit_catalogue'
+  });
 if ( $auth_status ne "ok" ) {
     print to_json( { status => 'UNAUTHORIZED' } );
     exit 0;
