@@ -2788,7 +2788,7 @@ td.bundle {
     .ui-tabs-panel {
         background: #FFF none;
         border-radius: 4px;
-        border: 3px solid $background-color-primary;
+        border: 2px solid $background-color-primary;
 
         fieldset {
             box-shadow: none;
@@ -2801,15 +2801,15 @@ td.bundle {
             margin-right: .4em;
             border-radius: 4px 4px 0 0;
 
+            a {
+                color: #111;
+            }
+
             &.ui-tabs-active, &.ui-state-hover {
                 background-color: $background-color-primary;
-                border-radius: 4px 4px 0 0;
-                border: 0;
-                border-bottom-width: 0;
-                padding-bottom: 0;
 
                 a {
-                    color: #000;
+                    color: #fff;
                 }
             }
         }
@@ -2820,16 +2820,6 @@ td.bundle {
         border: 0;
     }
 
-    .ui-state-default {
-        a {
-            color: #FFFFFF;
-
-            &:link,
-            &:visited {
-                color: #FFFFFF;
-            }
-        }
-    }
 
     .ui-state-hover {
         a {
@@ -2906,80 +2896,41 @@ td.bundle {
 
 
     > ul {
-        background: none repeat scroll 0 0 transparent;
-        border: 0 none;
-        color: #222222;
-        font-size: 100%;
-        font-weight: bold;
         line-height: 1.3;
-        list-style: none outside none;
         margin: 0;
         outline: 0 none;
         padding: .2em .2em 0;
         text-decoration: none;
-
-        &::after {
-            clear: both;
-        }
-
-        &::before,
-        &::after {
-            content: "";
-            display: table;
-        }
+        display: flex;
 
         li {
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            float: left;
-            font-weight: normal;
-            list-style: none outside none;
-            margin-bottom: 0;
+            list-style-type: none;
             margin-right: .4em;
-            padding: 0;
-            position: relative;
-            top: 1px;
-            white-space: nowrap;
-            background: $background-color-secondary;
-
-            &.active, &:hover {
-                font-weight: normal;
-                padding-bottom: 1px;
-
-                background-color: $background-color-primary;
-                border: 0;
-                border-bottom-width: 0;
-
-                a {
-                    background: none repeat scroll 0 0 transparent;
-                    color: #FFFFFF;
-                    outline: 0 none;
-                    top: 1px;
-                }
-            }
 
             a {
-                color: #FFFFFF;
-                cursor: pointer;
-                float: left;
+                background-color: $background-color-secondary;
+                border-radius: 4px 4px 0 0;
+                color: #111;
+                display: inline-block;
                 padding: .5em 1em;
                 text-decoration: none;
+                white-space: nowrap;
+            }
 
-                &:hover {
-                    border-top-left-radius: 4px;
-                    border-top-right-radius: 4px;
+            &.active,
+            &:hover {
+                a {
+                    background-color: $background-color-primary;
+                    color: #fff;
                 }
             }
+
         }
     }
 
     .tabs-container {
-        background: none repeat scroll 0 0 transparent;
-        border: 3px solid $background-color-primary;
+        border: 2px solid $background-color-primary;
         border-radius: 4px;
-        color: #222222;
         display: block;
         padding: 1em 1.4em;
     }
@@ -2987,15 +2938,11 @@ td.bundle {
 
 .toptabs {
     margin-top: 5px;
-        .ui-tabs-panel {
-            background: #FFF none;
-            border-radius: 4px;
-            border: 3px solid $background-color-primary;
-
-            fieldset {
-                box-shadow: none;
-            }
+    .ui-tabs-panel {
+        fieldset {
+            box-shadow: none;
         }
+    }
 }
 
 .authref {
@@ -3548,7 +3495,7 @@ code {
 
 .tab-content {
     background-color: #fff;
-    border: 3px solid $background-color-primary;
+    border: 2px solid $background-color-primary;
     border-radius: 4px;
     padding: 1em;
 }
@@ -3557,15 +3504,16 @@ code {
     > li {
         > a {
             background-color: $background-color-secondary;
+            border-radius: 4px 4px 0 0;
+            border-color: $background-color-secondary;
             color: #111;
-            line-height: 1.42857143;
+            line-height: 1.3;
             margin-right: .4em;
             padding: .5em 1em;
 
             &:hover, &:focus, &:active {
                 background-color: $background-color-primary;
-                border-radius: 4px 4px 0 0;
-                border: 1px solid $background-color-primary;
+                border-color: $background-color-primary;
                 padding: .5em 1em;
                 text-decoration: none;
                 color: #FFFFFF;
@@ -3577,10 +3525,8 @@ code {
             a:hover,
             a:focus {
                 background-color: $background-color-primary;
-                border-radius: 4px 4px 0 0;
                 color: #FFFFFF;
                 cursor: default;
-                font-weight: bold;
             }
         }
     }
