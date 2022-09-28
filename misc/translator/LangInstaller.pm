@@ -147,7 +147,7 @@ sub get_trans_text {
     my ($self, $msgid, $default) = @_;
 
     my $po = $self->{po}->{Locale::PO->quote($msgid)};
-    if ($po) {
+    if ( $po and not defined( $po->fuzzy() ) ) {
         my $msgstr = Locale::PO->dequote($po->msgstr);
         if ($msgstr and length($msgstr) > 0) {
             return $msgstr;
@@ -173,6 +173,18 @@ sub get_translated_tab_content {
             $self->get_trans_text($msgid, $section) => $self->get_translated_prefs($file, $sysprefs);
         } keys %$tab_content
     };
+
+    if ( keys %$translated_tab_content != keys %$tab_content ) {
+        my %duplicates;
+        for my $section (keys %$tab_content) {
+            push @{$duplicates{$self->get_trans_text("$file $section", $section)}}, $section;
+        }
+        for my $translation (keys %duplicates) {
+            if (@{$duplicates{$translation}} > 1) {
+                warn qq(In file "$file", "$translation" is a translation for sections ") . join('", "', @{$duplicates{$translation}}) . '"';
+            }
+        }
+    }
 
     return $translated_tab_content;
 }
@@ -251,6 +263,17 @@ sub install_prefs {
             } keys %$pref
         };
 
+        if ( keys %$translated_pref != keys %$pref ) {
+            my %duplicates;
+            for my $tab (keys %$pref) {
+                push @{$duplicates{$self->get_trans_text($file, $tab)}}, $tab;
+            }
+            for my $translation (keys %duplicates) {
+                if (@{$duplicates{$translation}} > 1) {
+                    warn qq(In file "$file", "$translation" is a translation for tabs ") . join('", "', @{$duplicates{$translation}}) . '"';
+                }
+            }
+        }
 
         my $file_trans = $self->{po_path_lang} . "/$file";
         print "Write $file\n" if $self->{verbose};
