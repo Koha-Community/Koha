@@ -92,9 +92,9 @@ sub copy_field {
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
 
-    if (   not $fromSubfieldName
+    if (   not defined $fromSubfieldName
         or $fromSubfieldName eq ''
-        or not $toSubfieldName
+        or not defined $toSubfieldName
         or $toSubfieldName eq '' ) {
         _copy_move_field(
             {   record        => $record,
