@@ -502,60 +502,6 @@ tbody {
         }
     }
 
-    button,
-    div,
-    a {
-        &.dt-button {
-            background: transparent none;
-            border: 0;
-            color: #696969;
-            font-size: 1em;
-            line-height: 1.7em;
-            margin: 0 3px 0 0;
-            padding: 0 .5em;
-            position: relative;
-
-            &::before {
-                content: '';
-            }
-
-            &.disabled {
-                color: #999;
-                cursor: default;
-
-                span {
-                    background-color: transparent;
-                }
-            }
-
-            &:active,
-            &:focus {
-                background: transparent none;
-                border: 0;
-                box-shadow: none;
-                text-shadow: none;
-
-                &:not(.disabled):hover:not(.disabled) {
-                    background: transparent none;
-                    box-shadow: none;
-                }
-            }
-
-            &:hover {
-                background: transparent none;
-                border: 0;
-
-                &:not(.disabled) {
-                    background: transparent none;
-                }
-            }
-
-            &.active:not(.disabled):hover:not(.disabled) {
-                background: transparent none;
-                box-shadow: none;
-            }
-        }
-    }
 
     input {
         &[type="search"] {
@@ -568,6 +514,61 @@ tbody {
         padding: 0;
     }
 } /* /.pager */
+
+button,
+div,
+a {
+    &.dt-button {
+        background: transparent none;
+        border: 0;
+        color: #696969;
+        font-size: 1em;
+        line-height: 1.7em;
+        margin: 0 3px 0 0;
+        padding: 0 .5em;
+        position: relative;
+
+        &::before {
+            content: '';
+        }
+
+        &.disabled {
+            color: #999;
+            cursor: default;
+
+            span {
+                background-color: transparent;
+            }
+        }
+
+        &:active,
+        &:focus {
+            background: transparent none;
+            border: 0;
+            box-shadow: none;
+            text-shadow: none;
+
+            &:not(.disabled):hover:not(.disabled) {
+                background: transparent none;
+                box-shadow: none;
+            }
+        }
+
+        &:hover {
+            background: transparent none;
+
+            &:not(.disabled) {
+                border: none;
+                background: transparent none;
+            }
+        }
+
+        &.active:not(.disabled):hover:not(.disabled) {
+            background: transparent none;
+            box-shadow: none;
+        }
+    }
+}
 
 .toptabs {
     .pager {
