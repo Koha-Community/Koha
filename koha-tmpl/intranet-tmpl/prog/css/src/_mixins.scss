@@ -8,11 +8,10 @@ $table-odd-row: #f3f4f4;
 $nav-menu-bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5' viewBox='0 0 25 25'%3E%3Cpath fill='%23999' d='M9.66.95h4.56l9.21 11.85-9.21 10.53H9.66l5.08-10.53z'/%3E%3C/svg%3E");
 
 @mixin default-button {
-    background-color: transparent;
-    border-color: #ADADAD #ADADAD #949494;
+    background-color: #fff;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    border: 1px solid #696969;
-    color: #000;
+    color: #333;
     display: inline-block;
     font-size: inherit;
     line-height: 1.42857143;
@@ -21,8 +20,17 @@ $nav-menu-bullet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     vertical-align: middle;
     white-space: nowrap;
 
+    &:hover {
+        background-color: #e0e0e0;
+    }
+
     &:active {
-        box-shadow: inset 0 0 2px #2222227F;
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
+    }
+
+    &:active:hover {
+        background-color: #d4d4d4;
+        border-color: #8c8c8c;
     }
 }
 

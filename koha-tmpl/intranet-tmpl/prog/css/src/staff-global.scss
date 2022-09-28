@@ -451,11 +451,6 @@ div {
 button {
     @include default-button;
 
-    &:active,
-    &:hover {
-        border: 1px inset #999999;
-    }
-
     &:disabled {
         @include disabled-button;
     }
@@ -1959,24 +1954,6 @@ li {
     }
 
     td {
-        button, a {
-            &.btn-default {
-                color: $green-text-color;
-                padding: .3em;
-                border: 0;
-                background-color: transparent;
-                border: 0;
-                box-shadow: none;
-                font-size: 100%;
-
-                &:hover, &:active, &:focus, &:active:hover, &:active:focus {
-                    background-color: transparent;
-                    color: $green-text-color;
-                    text-decoration: underline;
-                }
-            }
-        }
-
         ul {
             li {
                 clear: left;
