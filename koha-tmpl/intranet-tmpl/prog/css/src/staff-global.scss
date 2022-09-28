@@ -394,16 +394,29 @@ aside {
             list-style: none;
 
             a {
+                border-left: 5px solid #E6E6E6;
                 color: #000;
                 display: block;
                 text-decoration: none;
                 padding: .7em .3em .7em 1.2em;
             }
 
-            &.active > a, a:hover, a.current {
+            &.active > a,
+            a:hover,
+            a.current {
                 background-color: #F3F4F4;
                 text-decoration: none;
                 color: $green-text-color;
+                border-left: solid 5px $background-color-primary;
+                font-weight: bold;
+            }
+
+            a:hover {
+                border-left: solid 5px $background-color-secondary;
+                font-weight: normal;
+            }
+
+            &.active > a:hover {
                 border-left: solid 5px $background-color-primary;
                 font-weight: bold;
             }
