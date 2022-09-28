@@ -137,7 +137,7 @@ Your list : [% shelfname | $raw %]
             [% END %]
 
             [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                    <span>Host item entry:
+                    <span>In:
                         [% IF BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber %]
                         <a href="[% OPACBaseURL | $raw %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.HOSTITEMENTRIES.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT.HOSTITEMENTRIES %]</a> [% BIBLIO_RESULT.RELATEDPARTS | $raw %]
                         [% ELSE %]

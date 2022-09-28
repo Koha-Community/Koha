@@ -624,7 +624,7 @@
                     <span class="results_summary in"><span class="label">
                     <xsl:choose>
                         <xsl:when test="@ind2=' '">
-                            Host item entry:
+                            In:
                         </xsl:when>
                         <xsl:when test="@ind2=8">
                             <xsl:if test="marc:subfield[@code='i']">
