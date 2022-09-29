@@ -162,6 +162,44 @@
     [% ELSE %]
         <h2 id="edititem">Edit item #[% itemnumber | html %][% IF ( barcode ) %] / Barcode [% barcode | html %][% END %]</h2>
     [% END %]
+
+    <div id="item-template-toolbar" class="btn-toolbar">
+        <select name="template_id" id="template_id" class="select2" style="width: 20em">
+            <option value="0" selected="selected">Do not use template</option>
+            <optgroup label="My templates">
+                [% FOREACH t IN item_templates.owned %]
+                    [% IF t.id == template_id %]
+                        <option data-owner="1" value="[% t.id | html %]" selected="selected">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                    [% ELSE %]
+                        <option data-owner="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                    [% END %]
+                [% END %]
+            </optgroup>
+            <optgroup label="Shared templates">
+                [% FOREACH t IN item_templates.shared %]
+                    [% IF t.id == template_id %]
+                        <option data-owner="0" value="[% t.id | html %]" selected="selected">[% t.name | html %]</option>
+                    [% ELSE %]
+                        <option data-owner="0" value="[% t.id | html %]">[% t.name | html %]</option>
+                    [% END %]
+                [% END %]
+            </optgroup>
+        </select>
+        <button type="submit" id="load_template_submit" name="load_template_submit" value="1"><i class="fa fa-wpforms"></i> Apply template</button>
+        <label for="use_template_for_session">
+            [% IF use_template_for_session %]
+                <input type="checkbox" id="use_template_for_session" name="use_template_for_session" checked="checked">
+            [% ELSE %]
+                <input type="checkbox" id="use_template_for_session" name="use_template_for_session">
+            [% END %]
+        For session</label>
+
+        <button type="submit" id="unload_template_submit" name="unload_template_submit" value="1"><i class="fa fa-eraser"></i> Clear template</button>
+
+        <button type="submit" id="delete_template_submit" name="delete_template_submit" value="1" disabled><i class="fa fa-trash"></i> Delete template</button>
+
+    </div>
+
 	<fieldset class="rows">
         [% PROCESS subfields_for_item subfields => subfields %]
     </fieldset>
@@ -216,6 +254,35 @@
         <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
         <input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) && CheckMultipleAdd(this.form.number_of_copies.value);" /> <a href="#" id="cancel_add_multiple" class="cancel">Cancel</a>
         <div class="hint"><p>The barcode you enter will be incremented for each additional item.</p></div>
+    </fieldset>
+
+    <span id="savetemplate">
+        <input type="button" name="save_as_template" id="save_as_template" value="Save as template" />
+    </span>
+    <fieldset id="save_as_template_span">
+        <legend>Save template</legend>
+        <select name="replace_template_id" id="replace_template_id" class="select2" style="width: 20em">
+            <option value="0" selected="selected">Save as new</option>
+            <optgroup label="Update existing">
+                [% FOREACH t IN item_templates.owned %]
+                    <option data-owner="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                [% END %]
+            </optgroup>
+        </select>
+
+        <span id="template_name_block">
+            <label for="template_name" class="required">Template name: </label>
+            <input type="text" id="template_name" name="template_name" class="required"/>
+            <span class="required">Required</span>
+        </span>
+
+        <label for="template_is_shared">
+            <input type="checkbox" id="template_is_shared" name="template_is_shared"/>
+            Share template
+        </label>
+
+        <input type="submit" id="save_as_template_submit" name="save_as_template_submit" value="Save" onclick="javascript:return CheckTemplateForm(this.form);" />
+        <a href="#" id="cancel_save_as_template" class="cancel">Cancel</a>
     </fieldset>
 
     [% ELSE %]

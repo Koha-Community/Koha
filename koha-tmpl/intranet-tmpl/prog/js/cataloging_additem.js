@@ -69,6 +69,37 @@ $(document).ready(function(){
         multiCopyControl.toggle();
     });
 
+    var saveAsTemplateControl = $("#save_as_template_span");
+    var saveTemplateBlock = $("#savetemplate");
+    saveAsTemplateControl.hide();
+    $("#save_as_template").on("click",function(e){
+        e.preventDefault;
+        saveTemplateBlock.toggle();
+        saveAsTemplateControl.toggle();
+        $('#template_name').focus();
+    });
+    $("#cancel_save_as_template").on("click",function(e){
+        e.preventDefault();
+        saveTemplateBlock.toggle();
+        saveAsTemplateControl.toggle();
+    });
+
+    $("#template_id").on("change", function() {
+        if ( $(this).find(":selected").data("owner") ) {
+            $("#delete_template_submit").removeAttr("disabled");
+        } else {
+            $("#delete_template_submit").attr("disabled", "disabled");
+        }
+    });
+    $("#template_id").change(); // Trigger to enable delete button if patron's template is in use
+    $("#replace_template_id").on("change", function() {
+        if ( $(this).find(":selected").val() > 0 ) {
+            $("#template_name_block").hide();
+        } else {
+            $("#template_name_block").show();
+        }
+    });
+
     // Add new item to an item group
     if ( has_item_groups ) {
         $('#item-group-add-or-create-form-description-block').hide();
@@ -97,6 +128,15 @@ $(document).ready(function(){
         }
     });
 });
+
+function CheckTemplateForm(f) {
+    if ( $('#replace_template_id').val() == "0" &&  $('#template_name').val() == "" ) {
+        alert(MSG_TEMPLATE_NAME_REQUIRED);
+        return false;
+    } else {
+        return true;
+    }
+}
 
 function Check(f) {
     var total_mandatory = CheckMandatorySubfields(f);

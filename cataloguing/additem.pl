@@ -22,39 +22,35 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+
 use C4::Auth qw( get_template_and_user haspermission );
-use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use C4::Biblio qw(
-    GetFrameworkCode
-    GetMarcFromKohaField
-    GetMarcStructure
-    IsMarcStructureInternal
-    ModBiblio
-);
-use C4::Context;
-use C4::Circulation qw( barcodedecode LostItem );
-use C4::Barcodes;
 use C4::Barcodes::ValueBuilder;
+use C4::Barcodes;
+use C4::Biblio qw( GetFrameworkCode GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal ModBiblio );
+use C4::Circulation qw( barcodedecode LostItem );
+use C4::Context;
+use C4::Members;
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
+use C4::Search qw( enabled_staff_search_views );
 use Koha::Biblios;
-use Koha::Items;
+use Koha::Item::Templates;
 use Koha::ItemTypes;
+use Koha::Items;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::SearchEngine::Indexer;
-use C4::Search qw( enabled_staff_search_views );
-use Storable qw( freeze thaw );
-use URI::Escape qw( uri_escape_utf8 );
-use C4::Members;
 use Koha::UI::Form::Builder::Item;
 use Koha::Result::Boolean;
 
-use MARC::File::XML;
-use URI::Escape qw( uri_escape_utf8 );
 use Encode qw( encode_utf8 );
-use MIME::Base64 qw( decode_base64url encode_base64url );
-use List::Util qw( first );
 use List::MoreUtils qw( any uniq );
+use List::Util qw( first );
+use MARC::File::XML;
+use MIME::Base64 qw( decode_base64url encode_base64url );
+use Storable qw( freeze thaw );
+use URI::Escape qw( uri_escape_utf8 );
+use URI::Escape qw( uri_escape_utf8 );
 
 our $dbh = C4::Context->dbh;
 
@@ -84,6 +80,14 @@ sub add_item_to_item_group {
             item_group_id  => $item_group_id,
         }
     )->store();
+}
+
+sub get_item_from_template {
+    my ( $template_id ) = @_;
+
+    my $template = Koha::Item::Templates->find($template_id);
+
+    return $template->decoded_contents if $template;
 }
 
 sub get_item_from_cookie {
@@ -175,12 +179,51 @@ my @errors; # store errors found while checking data BEFORE saving item.
 # Getting last created item cookie
 my $prefillitem = C4::Context->preference('PrefillItem');
 
+my $load_template_submit = $input->param('load_template_submit');
+my $delete_template_submit = $input->param('delete_template_submit');
+my $unload_template_submit = $input->param('unload_template_submit');
+my $use_template_for_session = $input->param('use_template_for_session') || $input->cookie('ItemEditorSessionTemplateId');
+my $template_id = $input->param('template_id') || $input->cookie('ItemEditorSessionTemplateId');
+if ( $delete_template_submit ) {
+    my $t = Koha::Item::Templates->find($template_id);
+    $t->delete if $t && $t->borrowernumber eq $loggedinuser;
+    $template_id = undef;
+    $use_template_for_session = undef;
+}
+if ($load_template_submit || $unload_template_submit) {
+    $op = q{} if $template_id;
+
+    $template_id = undef if !$input->param('template_id');
+    $template_id = undef if $unload_template_submit;
+
+    # Unset the cookie if either no template id as submitted, or "use for session" checkbox as unchecked
+    my $cookie_value = $input->param('use_template_for_session') && $template_id ? $template_id : q{};
+    $use_template_for_session = $cookie_value;
+
+    # Update the cookie
+    my $template_cookie = $input->cookie(
+        -name     => 'ItemEditorSessionTemplateId',
+        -value    => $cookie_value,
+        -HttpOnly => 1,
+        -expires  => '',
+        -sameSite => 'Lax'
+    );
+
+    $cookie = [ $cookie, $template_cookie ];
+}
+$template->param(
+    template_id    => $template_id,
+    item_templates => Koha::Item::Templates->get_available($loggedinuser),
+    use_template_for_session => $use_template_for_session,
+);
+
 #-------------------------------------------------------------------------------
 if ($op eq "additem") {
 
     my $add_submit                 = $input->param('add_submit');
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
+    my $save_as_template_submit    = $input->param('save_as_template_submit');
     my $number_of_copies           = $input->param('number_of_copies');
 
     my @columns = Koha::Items->columns;
@@ -226,8 +269,36 @@ if ($op eq "additem") {
 
     $item->barcode(barcodedecode($item->barcode));
 
+    if ($save_as_template_submit) {
+        my $template_name       = $input->param('template_name');
+        my $template_is_shared  = $input->param('template_is_shared');
+        my $replace_template_id = $input->param('replace_template_id');
+
+        if ($replace_template_id) {
+            my $template = Koha::Item::Templates->find($replace_template_id);
+            if ($template) {
+                $template->update(
+                    {
+                        id             => $replace_template_id,
+                        is_shared      => $template_is_shared ? 1 : 0,
+                        contents       => $item->unblessed,
+                    }
+                );
+            }
+        }
+        else {
+            my $template = Koha::Item::Template->new(
+                {
+                    name           => $template_name,
+                    borrowernumber => $loggedinuser,
+                    is_shared      => $template_is_shared ? 1 : 0,
+                    contents       => $item->unblessed,
+                }
+            )->store();
+        }
+    }
     # If we have to add or add & duplicate, we add the item
-    if ( $add_submit || $add_duplicate_submit || $prefillitem) {
+    elsif ( $add_submit || $add_duplicate_submit || $prefillitem) {
 
         # check for item barcode # being unique
         if ( defined $item->barcode
@@ -591,13 +662,19 @@ my @header_value_loop = map {
 } sort keys %$subfieldcode_attribute_mappings;
 
 # Using last created item if it exists
-if (   $prefillitem
-    && $op ne "additem"
+if (
+    $op ne "additem"
     && $op ne "edititem"
     && $op ne "dupeitem" )
 {
-    my $item_from_cookie = get_item_from_cookie($input);
-    $current_item = $item_from_cookie if $item_from_cookie;
+    if ( $template_id ) {
+        my $item_from_template = get_item_from_template($template_id);
+        $current_item = $item_from_template if $item_from_template;
+    }
+    elsif ( $prefillitem ) {
+        my $item_from_cookie = get_item_from_cookie($input);
+        $current_item = $item_from_cookie if $item_from_cookie;
+    }
 }
 
 if ( $current_item->{more_subfields_xml} ) {
