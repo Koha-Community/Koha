@@ -2137,7 +2137,7 @@ sub AddReturn {
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
-    my $update_loc_rules = Koha::Config::SysPrefs->find('UpdateItemLocationOnCheckin')->get_yaml_pref_hash();
+    my $update_loc_rules = C4::Context->yaml_preference('UpdateItemLocationOnCheckin');
     map { $update_loc_rules->{$_} = $update_loc_rules->{$_}[0] } keys %$update_loc_rules; #We can only move to one location so we flatten the arrays
     if ($update_loc_rules) {
         if (defined $update_loc_rules->{_ALL_}) {

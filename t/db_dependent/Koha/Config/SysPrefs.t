@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 3;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -42,26 +42,5 @@ is( $retrieved_pref->value, $new_pref->value, 'Find a pref by variable should re
 
 $retrieved_pref->delete;
 is( Koha::Config::SysPrefs->search->count, $nb_of_prefs, 'Delete should have deleted the pref' );
-
-subtest 'get_yaml_pref_hash' => sub {
-
-    plan tests => 1;
-
-    my $the_pref = Koha::Config::SysPrefs->find({variable=>'ItemsDeniedRenewal'});
-    t::lib::Mocks::mock_preference('ItemsDeniedRenewal', q{
-        nulled: [NULL,'']
-        this: [just_that]
-        multi_this: [that,another]
-    });
-
-    my $expected_hash = {
-        nulled => [undef,""],
-        this     => ['just_that'],
-        multi_this => ['that','another'],
-    };
-    my $got_hash = $the_pref->get_yaml_pref_hash();
-    is_deeply($got_hash,$expected_hash,"Pref fetched and converted correctly");
-
-};
 
 $schema->storage->txn_rollback;
