@@ -4,13 +4,14 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Acquisition qw( NewBasket GetBasket GetBasketAsCSV );
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::CsvProfiles;
 use Koha::Acquisition::Orders;
+use Koha::Biblios;
 
 use t::lib::Mocks;
 use Try::Tiny;
@@ -91,5 +92,12 @@ try {
 } catch {
     ok($_->isa("Koha::Exceptions::ObjectNotFound"), "Using non-existant profile should throw ObjectNotFound exception");
 };
+
+Koha::Biblios->find($biblionumber)->delete;
+my $basket_csv4 = C4::Acquisition::GetBasketAsCSV($basketno, $query);
+is($basket_csv4, 'Contract name,Order number,Entry date,ISBN,Author,Title,Publication year,Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,Billing place
+"",' . $order->ordernumber . ',2016-01-02,,"","",,"","","",3,,"",""
+', 'CSV should not fail if biblio does not exist');
+
 
 $schema->storage->txn_rollback();
