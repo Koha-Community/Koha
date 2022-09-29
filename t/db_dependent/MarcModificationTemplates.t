@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 127;
+use Test::More tests => 129;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -744,6 +744,12 @@ sub expected_record_0 {
         MARC::Field->new(
             690, ' ', ' ',
             0 => 'Zeroth',
+            a => 'Appolo',
+        ),
+        MARC::Field->new(
+            690, ' ', '0',
+            0 => 'Zeroth',
+            a => 'Appolo',
         ),
     );
     $record->append_fields(@fields);
@@ -766,6 +772,7 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 1: Delete subfield 100$0');
 
 # Add new subfield 100$0 with value "Test"
+# This adds a new 100 field to the record
 is( AddModificationTemplateAction(
     $template_id, 'add_field', 0,
     '100', '0', 'Test', '', '',
@@ -775,6 +782,7 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 2: Add new subfield 100$0');
 
 # Update existing or add new subfield 100$0 with value "TestUpdated"
+# This updates the new 100 create above, and adds a new 100$0 to the original 100 field
 is( AddModificationTemplateAction(
     $template_id, 'update_field', 0,
     '100', '0', 'TestUpdated', '', '',
@@ -784,6 +792,8 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 3: Update existing or add new subfield 100$0 with value "TestUpdated"');
 
 # Move subfield 100$0 to 600$0
+# This removes the newly created 100, and removes the 100$0 from the original 100 field
+# Two 600 fields with a single 0 subfield are created
 is( AddModificationTemplateAction(
     $template_id, 'move_field', 0,
     '100', '0', '', '600', '0',
@@ -793,6 +803,7 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 4: Move subfield 100$0 to 600$0');
 
 # Copy subfield 600$0 to 100$0
+# Copy subfield adds to existing fields if found, so we get two 100$0 on the original field
 is( AddModificationTemplateAction(
     $template_id, 'copy_field', 0,
     '600', '0', '', '100', '0',
@@ -802,6 +813,7 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 5: Copy subfield 600$0 to 100$0');
 
 # Copy and replace subfield 245$0 to 700$0
+# Copy and replace in this case makes a new 700$0 as it wasn't there
 is( AddModificationTemplateAction(
     $template_id, 'copy_and_replace_field', 0,
     '245', '0', '', '700', '0',
@@ -811,6 +823,7 @@ is( AddModificationTemplateAction(
 ), 1, 'Action 6: Copy and replace subfield 245$0 to 700$0');
 
 # Copy subfield 590$0 to 690$0
+# Copies the single subfield from 590 to a new 690
 is( AddModificationTemplateAction(
     $template_id, 'copy_field', 0,
     '590', '0', '', '690', '0',
@@ -819,8 +832,29 @@ is( AddModificationTemplateAction(
     'Action 7: Copy subfield 590$0 to 690$0'
 ), 1, 'Action 7: Copy subfield 590$0 to 690$0');
 
+# Copy subfield 590$a to 690$a
+# Copy subfield adds to existing 690 a new subfield a
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 0,
+    '590', 'a', '', '690', 'a',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 8: Copy subfield 690$a to 690$a'
+), 1, 'Action 8: Copy subfield 690$a to 690$a');
+
+
+# Copy field 590 to 690
+# Copy field copies existing to a new 690, does not add to existing
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 0,
+    '590', '', '', '690', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 9: Copy subfield 590 to 690'
+), 1, 'Action 9: Copy subfield 590 to 690');
+
 my @actions_0 = GetModificationTemplateActions( $template_id );
-is( @actions_0, 7, "7 actions are inserted");
+is( @actions_0, 9, "9 actions are inserted");
 
 ModifyRecordWithTemplate( $template_id, $record );
 my $expected_record_0 = expected_record_0();
