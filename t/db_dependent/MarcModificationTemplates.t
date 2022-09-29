@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 126;
+use Test::More tests => 127;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -691,6 +691,11 @@ sub new_record_0 {
             a => 'Computer programming.',
             9 => '462',
         ),
+        MARC::Field->new(
+            590, ' ', '0',
+            0 => 'Zeroth',
+            a => 'Appolo',
+        ),
     );
     $record->append_fields(@fields);
     return $record;
@@ -704,6 +709,8 @@ sub expected_record_0 {
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
             d => '1938',
+            0 => 'TestUpdated',
+            0 => 'TestUpdated',
         ),
         MARC::Field->new(
             245, '1', '4',
@@ -718,24 +725,25 @@ sub expected_record_0 {
             9 => '462',
         ),
         MARC::Field->new(
-            600, ' ', ' ',
-            0 => 'TestUpdated',
+            590, ' ', '0',
+            0 => 'Zeroth',
+            a => 'Appolo',
         ),
         MARC::Field->new(
             600, ' ', ' ',
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
-            100, ' ', ' ',
-            0 => 'TestUpdated',
-        ),
-        MARC::Field->new(
-            100, ' ', ' ',
+            600, ' ', ' ',
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
             700, ' ', ' ',
             0 => '12345',
+        ),
+        MARC::Field->new(
+            690, ' ', ' ',
+            0 => 'Zeroth',
         ),
     );
     $record->append_fields(@fields);
@@ -802,8 +810,17 @@ is( AddModificationTemplateAction(
     'Action 6: Copy and replace subfield 245$0 to 700$0'
 ), 1, 'Action 6: Copy and replace subfield 245$0 to 700$0');
 
+# Copy subfield 590$0 to 690$0
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 0,
+    '590', '0', '', '690', '0',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 7: Copy subfield 590$0 to 690$0'
+), 1, 'Action 7: Copy subfield 590$0 to 690$0');
+
 my @actions_0 = GetModificationTemplateActions( $template_id );
-is( @actions_0, 6, "6 actions are inserted");
+is( @actions_0, 7, "7 actions are inserted");
 
 ModifyRecordWithTemplate( $template_id, $record );
 my $expected_record_0 = expected_record_0();
