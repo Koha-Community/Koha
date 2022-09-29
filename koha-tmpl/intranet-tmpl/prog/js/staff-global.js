@@ -110,7 +110,7 @@ $(document).ready(function() {
         $("a[href$=\"/" + path + params + "\"]", navmenulist).addClass("current");
     }
 
-    $("#catalog-search-link a").on("hover", function(){
+    $("#catalog-search-link a").on("mouseenter mouseleave", function(){
         $("#catalog-search-dropdown a").toggleClass("catalog-search-dropdown-hover");
     });
 
