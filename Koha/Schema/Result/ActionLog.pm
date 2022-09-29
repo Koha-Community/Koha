@@ -84,6 +84,14 @@ information about the action (usually includes SQL statement)
 
 the context this action was taken in
 
+=head2 script
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+the name of the cron script that caused this change
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -108,6 +116,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "interface",
   { data_type => "varchar", is_nullable => 1, size => 30 },
+  "script",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -123,8 +133,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("action_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uwUz/TduCEGKtT1UR2x84A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-29 15:38:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/YcpyOy+LXM7Ll3+/XyILQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
