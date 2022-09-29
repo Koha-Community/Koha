@@ -395,30 +395,33 @@ sub GetBasketGroupAsCSV {
 
         foreach my $order (@orders) {
             my $biblio = Koha::Biblios->find( $order->{biblionumber} );
-            my $biblioitem = $biblio->biblioitem;
+            my $biblioitem;
+            if ($biblio) {
+                $biblioitem = $biblio->biblioitem;
+            }
             my $row = {
-                clientnumber => $bookseller->accountnumber,
-                basketname => $basket->{basketname},
-                ordernumber => $order->{ordernumber},
-                author => $biblio->author,
-                title => $biblio->title,
-                publishercode => $biblioitem->publishercode,
-                publicationyear => $biblioitem->publicationyear,
-                collectiontitle => $biblioitem->collectiontitle,
-                isbn => $order->{isbn},
-                quantity => $order->{quantity},
-                rrp_tax_included => $order->{rrp_tax_included},
-                rrp_tax_excluded => $order->{rrp_tax_excluded},
-                discount => $bookseller->discount,
+                clientnumber       => $bookseller->accountnumber,
+                basketname         => $basket->{basketname},
+                ordernumber        => $order->{ordernumber},
+                author             => $biblio     ? $biblio->author              : q{},
+                title              => $biblio     ? $biblio->title               : q{},
+                publishercode      => $biblioitem ? $biblioitem->publishercode   : q{},
+                publicationyear    => $biblioitem ? $biblioitem->publicationyear : q{},
+                collectiontitle    => $biblioitem ? $biblioitem->collectiontitle : q{},
+                isbn               => $order->{isbn},
+                quantity           => $order->{quantity},
+                rrp_tax_included   => $order->{rrp_tax_included},
+                rrp_tax_excluded   => $order->{rrp_tax_excluded},
+                discount           => $bookseller->discount,
                 ecost_tax_included => $order->{ecost_tax_included},
                 ecost_tax_excluded => $order->{ecost_tax_excluded},
-                notes => $order->{order_vendornote},
-                entrydate => $order->{entrydate},
-                booksellername => $bookseller->name,
-                bookselleraddress => $bookseller->address1,
-                booksellerpostal => $bookseller->postal,
-                contractnumber => $contract->{contractnumber},
-                contractname => $contract->{contractname},
+                notes              => $order->{order_vendornote},
+                entrydate          => $order->{entrydate},
+                booksellername     => $bookseller->name,
+                bookselleraddress  => $bookseller->address1,
+                booksellerpostal   => $bookseller->postal,
+                contractnumber     => $contract->{contractnumber},
+                contractname       => $contract->{contractname},
             };
             my $temp = {
                 basketgroupdeliveryplace => $basketgroup->{deliveryplace},
