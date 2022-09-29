@@ -399,7 +399,7 @@ if (@$barcodes) {
                 );
                 $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
             }
-            my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
+            my $issue = AddIssue( $patron, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');
             $inprocess = 1;

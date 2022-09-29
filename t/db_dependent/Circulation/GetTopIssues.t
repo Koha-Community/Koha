@@ -68,7 +68,7 @@ my $borrowernumber = Koha::Patron->new({
     categorycode => $category,
     branchcode => $branch_1->{ branchcode }
 })->store->borrowernumber;
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+my $borrower = Koha::Patrons->find( $borrowernumber );
 
 AddIssue($borrower, 'GTI_BARCODE_001');
 AddIssue($borrower, 'GTI_BARCODE_002');

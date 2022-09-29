@@ -113,7 +113,7 @@ is( $is, 1, "Items availability: both of 2 items are available" );
 $is = IsAvailableForItemLevelRequest( $item1, $patron1 );
 is( $is, 0, "Item cannot be held, 2 items available" );
 
-my $issue1 = AddIssue( $patron2->unblessed, $item1->barcode );
+my $issue1 = AddIssue( $patron2, $item1->barcode );
 
 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );
 is( $is, 1, "Items availability: one item is available" );
@@ -121,7 +121,7 @@ is( $is, 1, "Items availability: one item is available" );
 $is = IsAvailableForItemLevelRequest( $item1, $patron1 );
 is( $is, 0, "Item cannot be held, 1 item available" );
 
-AddIssue( $patron2->unblessed, $item2->barcode );
+AddIssue( $patron2, $item2->barcode );
 $cache->flush();
 
 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );
@@ -464,7 +464,7 @@ subtest 'Check holds availability with different item types' => sub {
     $is = IsAvailableForItemLevelRequest( $item5, $patron1 );
     is( $is, 0, "Item5 cannot be requested to hold: 2 items, Item4 available, Item5 restricted" );
 
-    AddIssue( $patron2->unblessed, $item4->barcode );
+    AddIssue( $patron2, $item4->barcode );
     $cache->flush();
 
     $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );

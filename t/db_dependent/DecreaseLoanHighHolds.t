@@ -118,7 +118,7 @@ my $orig_due = C4::Circulation::CalcDateDue(
     dt_from_string(),
     $item->effective_itemtype,
     $patron->branchcode,
-    $patron->unblessed
+    $patron
 );
 
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHolds',               1 );

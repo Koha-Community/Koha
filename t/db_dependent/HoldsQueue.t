@@ -1840,7 +1840,7 @@ subtest 'Remove holds on check-in match' => sub {
 
     t::lib::Mocks::mock_userenv( { branchcode => $lib->branchcode } );
 
-    AddIssue( $patron1->unblessed, $item->barcode, dt_from_string );
+    AddIssue( $patron1, $item->barcode, dt_from_string );
 
     my $hold_id = AddReserve(
         {

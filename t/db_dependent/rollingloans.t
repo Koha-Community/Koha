@@ -62,16 +62,16 @@ SKIP: {
 }
 
 sub try_issue {
-    my ($cardnumber, $item ) = @_;
+    my ($cardnumber, $item_barcode ) = @_;
     my $issuedate = '2011-05-16';
     my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
-    my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $patron, $item );
-    my $issue = AddIssue($patron->unblessed, $item, undef, 0, $issuedate);
+    my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $patron, $item_barcode );
+    my $issue = AddIssue($patron, $item_barcode, undef, 0, $issuedate);
     return dt_from_string( $issue->date_due );
 }
 
 sub try_return {
-    my $barcode = shift;
-    my ($ret, $messages, $iteminformation, $borrower) = AddReturn($barcode);
+    my $item_barcode = shift;
+    my ($ret, $messages, $iteminformation, $borrower) = AddReturn($item_barcode);
     return $ret;
 }

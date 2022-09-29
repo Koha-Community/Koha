@@ -74,7 +74,7 @@ my $item = $builder->build_sample_item(
     }
 );
 
-my $issue = AddIssue( $patron->unblessed, $item->barcode );
+my $issue = AddIssue( $patron, $item->barcode );
 
 my $rules = $plugin->Renewals( $patron->id, $item->id );
 

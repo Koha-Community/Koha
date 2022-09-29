@@ -258,7 +258,7 @@ sub calc_expirationdate {
 
     my $branchcode = $self->patron->branchcode;
     if ( $item ) {
-        $branchcode = C4::Circulation::_GetCircControlBranch( $item->unblessed, $self->patron->unblessed );
+        $branchcode = C4::Circulation::_GetCircControlBranch( $item, $self->patron );
     }
 
     my $rule = Koha::CirculationRules->get_effective_rule({

@@ -686,8 +686,8 @@ subtest 'get_checkouts() tests' => sub {
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
-    AddIssue( $patron->unblessed, $item_1->barcode );
-    AddIssue( $patron->unblessed, $item_2->barcode );
+    AddIssue( $patron, $item_1->barcode );
+    AddIssue( $patron, $item_2->barcode );
 
     my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
       ->status_is(200)

@@ -57,26 +57,24 @@ my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $itemnumber3 = Koha::Item->new({ barcode => '0203', %item_infos, biblionumber => $biblionumber2})->store->itemnumber;
 
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
-my $borrowernumber = $builder->build(
-    {   source => 'Borrower',
+my $patron = $builder->build_object(
+    {   class => 'Koha::Patrons',
         value  => { categorycode => $categorycode, branchcode => $branchcode }
     }
-)->{borrowernumber};
-
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+);
 
 # Need to mock userenv for AddIssue
 my $module = Test::MockModule->new('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
-AddIssue($borrower, '0101');
-AddIssue($borrower, '0203');
+AddIssue($patron, '0101');
+AddIssue($patron, '0203');
 
 # Begin tests...
 my $onsite_checkouts = GetPendingOnSiteCheckouts;
 is( scalar @$onsite_checkouts, 0, "No pending on-site checkouts" );
 
 my $itemnumber4 = Koha::Item->new({ barcode => '0104', %item_infos, biblionumber => $biblionumber1})->store->itemnumber;
-AddIssue( $borrower, '0104', undef, undef, undef, undef, { onsite_checkout => 1 } );
+AddIssue( $patron, '0104', undef, undef, undef, undef, { onsite_checkout => 1 } );
 $onsite_checkouts = GetPendingOnSiteCheckouts;
 is( scalar @$onsite_checkouts, 1, "There is 1 pending on-site checkout" );
 

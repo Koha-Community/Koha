@@ -1610,7 +1610,7 @@ subtest 'Checking in hook' => sub {
     t::lib::Mocks::mock_preference('CirculateILL', 1);
 
     # Add an issue
-    AddIssue( $patron->unblessed, $item->barcode );
+    AddIssue( $patron, $item->barcode );
     # Make the item withdrawn so checking-in is rejected
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
     $item->set({ withdrawn => 1 })->store;

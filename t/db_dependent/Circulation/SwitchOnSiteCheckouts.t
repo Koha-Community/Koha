@@ -55,7 +55,6 @@ my $patron = $builder->build_object({
         categorycode => $patron_category->{categorycode},
     },
 });
-my $patron_unblessed = $patron->unblessed;
 
 my $item = $builder->build_sample_item(
     {
@@ -85,7 +84,7 @@ t::lib::Mocks::mock_userenv({ patron => $patron });
 t::lib::Mocks::mock_preference('AllowTooManyOverride', 0);
 
 # Add onsite checkout
-C4::Circulation::AddIssue( $patron_unblessed, $item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
+C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
 
 my ( $impossible, $messages );
 t::lib::Mocks::mock_preference('SwitchOnSiteCheckouts', 0);
@@ -96,7 +95,7 @@ t::lib::Mocks::mock_preference('SwitchOnSiteCheckouts', 1);
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
 is( exists $impossible->{TOO_MANY}, '', 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
-C4::Circulation::AddIssue( $patron_unblessed, $item->barcode, undef, undef, undef, undef, { switch_onsite_checkout => 1 } );
+C4::Circulation::AddIssue( $patron, $item->barcode, undef, undef, undef, undef, { switch_onsite_checkout => 1 } );
 my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
 is( $issue->onsite_checkout, 0, 'The issue should have been switched to a regular checkout' );
 my $five_days_after = dt_from_string->add( days => 5 )->set( hour => 23, minute => 59, second => 0 );
@@ -111,7 +110,7 @@ my $another_item = $builder->build_sample_item(
     }
 );
 
-C4::Circulation::AddIssue( $patron_unblessed, $another_item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
+C4::Circulation::AddIssue( $patron, $another_item->barcode, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->barcode );
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'Specific case 1 - Switch is allowed' );
 is( exists $impossible->{TOO_MANY}, '', 'Specific case 1 - Switch is allowed' );

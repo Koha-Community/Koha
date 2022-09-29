@@ -476,8 +476,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 }
 
                 if ( $patron ) {
-                    my $patron_unblessed = $patron->unblessed;
-                    my $branch = C4::Circulation::_GetCircControlBranch($item, $patron_unblessed);
+                    my $branch = _GetCircControlBranch($item_object, $patron);
 
                     my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
 

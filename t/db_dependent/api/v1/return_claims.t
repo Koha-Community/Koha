@@ -62,7 +62,7 @@ subtest 'claim_returned() tests' => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $librarian->branchcode });
 
     my $item  = $builder->build_sample_item;
-    my $issue = AddIssue( $patron->unblessed, $item->barcode, dt_from_string->add( weeks => 2 ) );
+    my $issue = AddIssue( $patron, $item->barcode, dt_from_string->add( weeks => 2 ) );
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedChargeFee', 'ask' );
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', '99' );
@@ -131,7 +131,7 @@ subtest 'update_notes() tests' => sub {
     t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } )
       ;    # needed by AddIssue
 
-    my $issue = AddIssue( $librarian->unblessed, $item->barcode,
+    my $issue = AddIssue( $librarian, $item->barcode,
         dt_from_string->add( weeks => 2 ) );
 
     my $claim = $issue->claim_returned(
@@ -197,7 +197,7 @@ subtest 'resolve_claim() tests' => sub {
     my $ClaimReturnedLostValue = 1;
     t::lib::Mocks::mock_preference('ClaimReturnedLostValue', $ClaimReturnedLostValue);
 
-    my $issue = AddIssue( $librarian->unblessed, $item->barcode, dt_from_string->add( weeks => 2 ) );
+    my $issue = AddIssue( $librarian, $item->barcode, dt_from_string->add( weeks => 2 ) );
 
     my $claim = $issue->claim_returned(
         {
@@ -278,7 +278,7 @@ subtest 'delete() tests' => sub {
 
     t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
 
-    my $issue = C4::Circulation::AddIssue( $librarian->unblessed,
+    my $issue = C4::Circulation::AddIssue( $librarian,
         $item->barcode, dt_from_string->add( weeks => 2 ) );
 
     my $claim = $issue->claim_returned(

@@ -42,14 +42,14 @@ my $patron_category = $builder->build({ source => 'Category' });
 
 t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
-my $borrowernumber = Koha::Patron->new({
+my $borrower = Koha::Patron->new({
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
-})->store->borrowernumber;
+})->store;
 
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+
 my $record = MARC::Record->new();
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 

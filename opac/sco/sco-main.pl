@@ -245,7 +245,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 )->count;
             }
 
-            AddIssue( $patron->unblessed, $barcode );
+            AddIssue( $patron, $barcode );
             $template->param( issued => 1 );
             push @newissueslist, $barcode;
 

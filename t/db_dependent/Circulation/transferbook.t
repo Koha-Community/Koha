@@ -208,7 +208,7 @@ subtest 'transfer an issued item' => sub {
     );
 
     my $dt_to = dt_from_string();
-    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to );
+    my $issue = AddIssue( $patron, $item->barcode, $dt_to );
 
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * WasReturned does not seem like a variable that should contain a borrowernumber
@@ -222,7 +222,7 @@ subtest 'transfer an issued item' => sub {
     is( $messages->{WasReturned}, $patron->borrowernumber, 'transferbook should have return a WasReturned flag is the item was issued before the transferbook call');
 
     # Reset issue
-    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to );
+    $issue = AddIssue( $patron, $item->barcode, $dt_to );
 
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * Contrary to the POD, if ignore_reserves is not passed (or is false), any item reserve

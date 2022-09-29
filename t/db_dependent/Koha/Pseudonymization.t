@@ -84,7 +84,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     t::lib::Mocks::mock_preference( 'Pseudonymization', 0 );
     my $item = $builder->build_sample_item;
     t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
-    AddIssue( $patron->unblessed, $item->barcode, dt_from_string );
+    AddIssue( $patron, $item->barcode, dt_from_string );
     AddReturn( $item->barcode, $item->homebranch, undef, dt_from_string );
     my $pseudonymized= Koha::PseudonymizedTransactions->search(
         { itemnumber => $item->itemnumber } )->next;
@@ -96,7 +96,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     );
     $item = $builder->build_sample_item;
     t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
-    AddIssue( $patron->unblessed, $item->barcode, dt_from_string );
+    AddIssue( $patron, $item->barcode, dt_from_string );
     AddReturn( $item->barcode, $item->homebranch, undef, dt_from_string );
     my $statistic = Koha::Statistics->search( { itemnumber => $item->itemnumber } )->next;
     $pseudonymized = Koha::PseudonymizedTransactions->search( { itemnumber => $item->itemnumber } )->next;

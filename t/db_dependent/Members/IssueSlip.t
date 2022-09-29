@@ -118,7 +118,7 @@ my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber2, 
 
 my $borrowernumber =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+my $borrower = Koha::Patrons->find( $borrowernumber );
 
 my $module = Test::MockModule->new('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );
@@ -164,7 +164,7 @@ EOS
 
         # Set timestamps to the same value to avoid a different order
         Koha::Checkouts->search(
-            { borrowernumber => $borrower->{borrowernumber} }
+            { borrowernumber => $borrower->borrowernumber }
         )->update( { timestamp => dt_from_string } );
 
         $expected_slip = <<EOS;
@@ -237,7 +237,7 @@ EOS
 
         # Set timestamps to the same value to avoid a different order
         Koha::Checkouts->search(
-            { borrowernumber => $borrower->{borrowernumber} }
+            { borrowernumber => $borrower->borrowernumber }
         )->update( { timestamp => dt_from_string } );
 
         $expected_slip = <<EOS;

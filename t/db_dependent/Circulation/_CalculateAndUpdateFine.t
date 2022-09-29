@@ -48,8 +48,8 @@ my $category = $builder->build({
     source => 'Category',
 });
 
-my $patron = $builder->build({
-    source => 'Borrower',
+my $patron = $builder->build_object({
+    class => 'Koha::Patrons',
     value => {
         categorycode => $category->{categorycode},
         branchcode => $branch->{branchcode},
@@ -110,26 +110,26 @@ subtest 'HomeOrHoldingBranch is used' => sub {
     my $return_date = dt_from_string()->add( days => 1 )->set( hour => 23, minute => 59, second => 0 );
     C4::Circulation::_CalculateAndUpdateFine(
        {
-            borrower => $patron,
+            borrower => $patron->unblessed,
             issue => $issue,
             item => $item->unblessed,
             return_date => $return_date,
         }
     );
 
-    my $fines = Koha::Account::Lines->search({ borrowernumber => $patron->{borrowernumber} });
+    my $fines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
     is($fines->total_outstanding, 0, "Fine is not accrued for holdingbranch");
 
     t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
     C4::Circulation::_CalculateAndUpdateFine(
         {
-            borrower => $patron,
+            borrower => $patron->unblessed,
             issue => $issue,
             item => $item->unblessed,
             return_date => $return_date,
         }
     );
-    $fines = Koha::Account::Lines->search({ borrowernumber => $patron->{borrowernumber} });
+    $fines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
     is($fines->total_outstanding, 1, "Fine is accrued for homebranch");
 
 };

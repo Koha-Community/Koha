@@ -297,7 +297,7 @@ my $cpvmappings = [
 test_it($cpvmappings, "PreIssue");
 
 # Issue item_1 to $patron:
-my $patron_get_mem = Koha::Patrons->find( $patron->{borrowernumber} )->unblessed;
+my $patron_get_mem = Koha::Patrons->find( $patron->{borrowernumber} );
 BAIL_OUT("Issue failed")
     unless AddIssue($patron_get_mem, $item_1->{barcode});
 
@@ -382,7 +382,7 @@ my $new_item = $builder->build_sample_item->unblessed;
 my $prev_item = $builder->build_sample_item->unblessed;
 # Second is Checked Out
 BAIL_OUT("CanBookBeIssued Issue failed")
-    unless AddIssue($patron->unblessed, $prev_item->{barcode});
+    unless AddIssue($patron, $prev_item->{barcode});
 
 # Mappings
 my $CBBI_mappings = [
@@ -445,7 +445,7 @@ subtest 'Check previous checkouts for serial' => sub {
     my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
-    AddIssue($patron->unblessed, $item1->barcode);
+    AddIssue($patron, $item1->barcode);
 
     is($patron->do_check_for_previous_checkout($item1->unblessed), 1, 'Check only one item if bibliographic record is serial');
     is($patron->do_check_for_previous_checkout($item2->unblessed), 0, 'Check only one item if bibliographic record is serial');

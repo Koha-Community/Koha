@@ -250,7 +250,7 @@ sub mark_as_delivered {
 
             unless ( keys %$issuingimpossible ) {
                 my $issue =
-                  C4::Circulation::AddIssue( $patron->unblessed, $hold->item->barcode );
+                  C4::Circulation::AddIssue( $patron, $hold->item->barcode );
                 if ($issue) {
                     Koha::CurbsidePickupIssue->new(
                         {

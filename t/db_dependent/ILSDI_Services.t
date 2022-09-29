@@ -325,9 +325,7 @@ subtest 'Holds test' => sub {
 
     t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 
-    my $patron = $builder->build({
-        source => 'Borrower',
-    });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $item = $builder->build_sample_item(
         {
@@ -336,7 +334,7 @@ subtest 'Holds test' => sub {
     );
 
     my $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item->biblionumber);
 
     my $reply = C4::ILSDI::Services::HoldTitle( $query );
@@ -347,7 +345,7 @@ subtest 'Holds test' => sub {
     my $hold = $builder->build({
         source => 'Reserve',
         value => {
-            borrowernumber => $patron->{borrowernumber},
+            borrowernumber => $patron->borrowernumber,
             biblionumber => $item->biblionumber,
             itemnumber => $item->itemnumber
         }
@@ -359,7 +357,7 @@ subtest 'Holds test' => sub {
     my $biblio_with_no_item = $builder->build_sample_biblio;
 
     $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $biblio_with_no_item->biblionumber);
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
@@ -374,16 +372,16 @@ subtest 'Holds test' => sub {
     t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
     Koha::CirculationRules->set_rule(
         {
-            categorycode => $patron->{categorycode},
+            categorycode => $patron->categorycode,
             itemtype     => $item2->{itype},
-            branchcode   => $patron->{branchcode},
+            branchcode   => $patron->branchcode,
             rule_name    => 'reservesallowed',
             rule_value   => 1,
         }
     );
 
     $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item2->biblionumber);
     $query->param( 'item_id', $item2->itemnumber);
 
@@ -392,16 +390,16 @@ subtest 'Holds test' => sub {
 
     Koha::CirculationRules->set_rule(
         {
-            categorycode => $patron->{categorycode},
+            categorycode => $patron->categorycode,
             itemtype     => $item2->{itype},
-            branchcode   => $patron->{branchcode},
+            branchcode   => $patron->branchcode,
             rule_name    => 'reservesallowed',
             rule_value   => 0,
         }
     );
 
     $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item2->biblionumber);
     $query->param( 'item_id', $item2->itemnumber);
 
@@ -433,16 +431,16 @@ subtest 'Holds test' => sub {
 
     Koha::CirculationRules->set_rule(
         {
-            categorycode => $patron->{categorycode},
+            categorycode => $patron->categorycode,
             itemtype     => $item3->{itype},
-            branchcode   => $patron->{branchcode},
+            branchcode   => $patron->branchcode,
             rule_name    => 'reservesallowed',
             rule_value   => 10,
         }
     );
 
     $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item4->biblionumber);
     $query->param( 'item_id', $item4->itemnumber);
 
@@ -450,12 +448,12 @@ subtest 'Holds test' => sub {
     is( $reply->{code}, 'damaged', "Item is damaged" );
 
     my $module = Test::MockModule->new('C4::Context');
-    $module->mock('userenv', sub { { patron => $patron } });
+    $module->mock('userenv', sub { { patron => $patron->unblessed } });
     my $issue = C4::Circulation::AddIssue($patron, $item3->barcode);
     t::lib::Mocks::mock_preference( 'AllowHoldsOnPatronsPossessions', '0' );
 
     $query = CGI->new;
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item3->biblionumber);
     $query->param( 'item_id', $item3->itemnumber);
     $query->param( 'pickup_location', $origin_branch->{branchcode});
@@ -511,8 +509,8 @@ subtest 'Holds test for branch transfer limits' => sub {
     t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
     t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 
-    my $patron = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
     });
 
     my $origin_branch = $builder->build(
@@ -556,7 +554,7 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     my $query = CGI->new;
     $query->param( 'pickup_location', $pickup_branch->{branchcode} );
-    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item->biblionumber);
     $query->param( 'item_id', $item->itemnumber);
 
@@ -570,14 +568,14 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, undef, "Item hold, Item can be transferred" );
-    my $hold = Koha::Holds->search({ itemnumber => $item->itemnumber, borrowernumber => $patron->{borrowernumber} })->next;
+    my $hold = Koha::Holds->search({ itemnumber => $item->itemnumber, borrowernumber => $patron->borrowernumber })->next;
     is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     Koha::Holds->search()->delete();
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, undef, "Record hold, Item con be transferred" );
-    $hold = Koha::Holds->search({ biblionumber => $item->biblionumber, borrowernumber => $patron->{borrowernumber} })->next;
+    $hold = Koha::Holds->search({ biblionumber => $item->biblionumber, borrowernumber => $patron->borrowernumber })->next;
     is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     $schema->storage->txn_rollback;
@@ -723,7 +721,7 @@ subtest 'RenewHold' => sub {
     $cgi->param( item_id   => $item->itemnumber );
 
     t::lib::Mocks::mock_userenv( { patron => $patron } );    # For AddIssue
-    my $checkout = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = C4::Circulation::AddIssue( $patron, $item->barcode );
 
     # Everything is ok
     my $reply = C4::ILSDI::Services::RenewLoan($cgi);
@@ -826,11 +824,11 @@ subtest 'GetPatronInfo paginated loans' => sub {
     my $module = Test::MockModule->new('C4::Context');
     $module->mock('userenv', sub { { branch => $library->branchcode } });
     my $date_due = Koha::DateUtils::dt_from_string()->add(weeks => 2);
-    my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
+    my $issue1 = C4::Circulation::AddIssue($patron, $item1->barcode, $date_due);
     my $date_due1 = Koha::DateUtils::dt_from_string( $issue1->date_due );
-    my $issue2 = C4::Circulation::AddIssue($patron->unblessed, $item2->barcode, $date_due);
+    my $issue2 = C4::Circulation::AddIssue($patron, $item2->barcode, $date_due);
     my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
-    my $issue3 = C4::Circulation::AddIssue($patron->unblessed, $item3->barcode, $date_due);
+    my $issue3 = C4::Circulation::AddIssue($patron, $item3->barcode, $date_due);
     my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 
     my $cgi = CGI->new;

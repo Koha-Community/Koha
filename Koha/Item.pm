@@ -1877,7 +1877,7 @@ sub can_be_recalled {
 
     my $branchcode = C4::Context->userenv->{'branch'};
     if ( $patron ) {
-        $branchcode = C4::Circulation::_GetCircControlBranch( $self->unblessed, $patron->unblessed );
+        $branchcode = C4::Circulation::_GetCircControlBranch( $self, $patron );
     }
 
     # Check the circulation rule for each relevant itemtype for this item

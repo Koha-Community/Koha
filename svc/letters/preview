@@ -151,9 +151,7 @@ if ( $code eq 'CHECKIN' ) {
     my $checkout = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     if ($checkout) {
         my $patron = Koha::Patrons->find( $checkout->borrowernumber );
-        my $branchcode =
-          C4::Circulation::_GetCircControlBranch( $item->unblessed,
-            $patron->unblessed );
+        my $branchcode = C4::Circulation::_GetCircControlBranch( $item, $patron );
         $letter_params = {
             tables => {
                 issues      => $item->itemnumber,
@@ -177,8 +175,7 @@ elsif ( $code eq 'CHECKOUT' ) {
     my $patron = Koha::Patrons->find( $borrowernumber );
     if ($item and $patron) {
         my $branchcode =
-          C4::Circulation::_GetCircControlBranch( $item->unblessed,
-            $patron->unblessed );
+          C4::Circulation::_GetCircControlBranch( $item, $patron );
         $letter_params = {
             tables => {
                 issues      => $item->itemnumber,

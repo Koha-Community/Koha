@@ -66,11 +66,27 @@ my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $barcode2 = '0202';
 Koha::Item->new({ barcode => $barcode2, %item_info, biblionumber => $biblionumber2 })->store;
 
-my $borrowernumber1 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
-my $borrowernumber2 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
-# FIXME following code must be simplified to use the Koha::Patron objects
-my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
-my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
+my $patron1 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $categorycode,
+            branchcode => $branchcode
+        }
+    }
+);
+my $patron2 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $categorycode,
+            branchcode => $branchcode
+        }
+    }
+);
+
+my $borrowernumber1 = $patron1->borrowernumber;
+my $borrowernumber2 = $patron2->borrowernumber;
 
 my $module = Test::MockModule->new('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
@@ -91,7 +107,7 @@ is( $check_if_issued, undef, 'CheckIfIssuedToPatron returns undef' );
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron($borrowernumber2, $biblionumber2);
 is( $check_if_issued, undef, 'CheckIfIssuedToPatron returns undef' );
 
-AddIssue($borrower1, '0101');
+AddIssue($patron1, '0101');
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron();
 is( $check_if_issued, undef, 'CheckIfIssuedToPatron without argument returns undef' );
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron(undef, $biblionumber1);
@@ -107,7 +123,7 @@ is( $check_if_issued, undef, 'CheckIfIssuedToPatron returns undef' );
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron($borrowernumber2, $biblionumber2);
 is( $check_if_issued, undef, 'CheckIfIssuedToPatron returns undef' );
 
-AddIssue($borrower2, '0202');
+AddIssue($patron2, '0202');
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron();
 is( $check_if_issued, undef, 'CheckIfIssuedToPatron without argument returns undef' );
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron(undef, $biblionumber1);

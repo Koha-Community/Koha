@@ -65,8 +65,8 @@ Koha::CirculationRules->set_rules({
     }
 });
 
-C4::Circulation::AddIssue( $patron3->unblessed, $item1->barcode );
-C4::Circulation::AddIssue( $patron3->unblessed, $item2->barcode );
+C4::Circulation::AddIssue( $patron3, $item1->barcode );
+C4::Circulation::AddIssue( $patron3, $item2->barcode );
 
 my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
     patron => undef,

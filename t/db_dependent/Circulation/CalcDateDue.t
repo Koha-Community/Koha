@@ -18,9 +18,21 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-my $categorycode = 'B';
-my $itemtype = 'MX';
-my $branchcode = 'FPL';
+
+my $library = $builder->build_object({ class => 'Koha::Libraries' })->store;
+my $dateexpiry = '2013-01-01';
+my $patron_category = $builder->build_object({ class => 'Koha::Patron::Categories', value => { category_type => 'B' } })->store;
+my $borrower = $builder->build_object(
+    {
+        class  => 'Koha::Patrons',
+        value  => {
+            categorycode => $patron_category->categorycode,
+            dateexpiry => $dateexpiry,
+        }
+    }
+)->store;
+
+my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' })->store->itemtype;
 my $issuelength = 10;
 my $renewalperiod = 5;
 my $lengthunit = 'days';
@@ -28,9 +40,9 @@ my $lengthunit = 'days';
 Koha::CirculationRules->search()->delete();
 Koha::CirculationRules->set_rules(
     {
-        categorycode => $categorycode,
+        categorycode => $patron_category->categorycode,
         itemtype     => $itemtype,
-        branchcode   => $branchcode,
+        branchcode   => $library->branchcode,
         rules        => {
             issuelength   => $issuelength,
             renewalperiod => $renewalperiod,
@@ -43,13 +55,12 @@ Koha::CirculationRules->set_rules(
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
 t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
+my $branchcode = $library->branchcode;
+
 my $cache = Koha::Caches->get_instance();
 my $key   = $branchcode . "_holidays";
 $cache->clear_from_cache($key);
 
-my $dateexpiry = '2013-01-01';
-
-my $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 my $start_date = DateTime->new({year => 2013, month => 2, day => 9});
 my $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
 is($date, $dateexpiry . 'T23:59:00', 'date expiry');
@@ -60,7 +71,6 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
 t::lib::Mocks::mock_preference('useDaysMode', 'noDays');
 
-$borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
 $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
 is($date, $dateexpiry . 'T23:59:00', 'date expiry with useDaysMode to noDays');
@@ -95,7 +105,6 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 0);
 t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
-$borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
 $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
 is($date, '2013-02-' . (9 + $issuelength) . 'T23:59:00', "date expiry ( 9 + $issuelength )");
@@ -158,18 +167,17 @@ $calendar->delete_holiday(
 
 # Now we test it does the right thing if the loan and renewal periods
 # are a multiple of 7 days
-my $dayweek_categorycode = 'K';
-my $dayweek_itemtype = 'MX';
-my $dayweek_branchcode = 'FPL';
 my $dayweek_issuelength = 14;
 my $dayweek_renewalperiod = 7;
 my $dayweek_lengthunit = 'days';
 
+$patron_category = $builder->build_object({ class => 'Koha::Patron::Categories', value => { category_type => 'K' } })->store;
+
 Koha::CirculationRules->set_rules(
     {
-        categorycode => $dayweek_categorycode,
-        itemtype     => $dayweek_itemtype,
-        branchcode   => $dayweek_branchcode,
+        categorycode => $patron_category->categorycode,
+        itemtype     => $itemtype,
+        branchcode   => $branchcode,
         rules        => {
             issuelength   => $dayweek_issuelength,
             renewalperiod => $dayweek_renewalperiod,
@@ -178,7 +186,15 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $dayweek_borrower = {categorycode => 'K', dateexpiry => $dateexpiry};
+my $dayweek_borrower = $builder->build_object(
+    {
+        class  => 'Koha::Patrons',
+        value  => {
+            categorycode => $patron_category->categorycode,
+            dateexpiry => $dateexpiry,
+        }
+    }
+);
 
 # For issues...
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});

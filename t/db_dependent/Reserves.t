@@ -1156,7 +1156,7 @@ subtest 'RevertWaitingStatus' => sub {
     my $hold_4 = place_item_hold( $patron_4, $item_1, $library, $priority );
 
     $hold_1->set_waiting;
-    AddIssue( $patron_3->unblessed, $item_1->barcode, undef, 'revert' );
+    AddIssue( $patron_3, $item_1->barcode, undef, 'revert' );
 
     my $holds = $biblio->holds;
     is( $holds->count, 3, 'One hold has been deleted' );
@@ -1320,7 +1320,7 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
     my $patron = $builder->build_object({ class => "Koha::Patrons",
                                           value => { branchcode => $item->homebranch }});
 
-    C4::Circulation::AddIssue($patron->unblessed,
+    C4::Circulation::AddIssue($patron,
                               $item->barcode);
     t::lib::Mocks::mock_preference('AllowHoldsOnPatronsPossessions', 0);
 

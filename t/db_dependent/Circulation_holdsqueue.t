@@ -58,7 +58,7 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
     } );
 
     $action = 'AddIssue';
-    AddIssue( $patron->unblessed, $item->barcode, );
+    AddIssue( $patron, $item->barcode, );
 
     $action = 'AddReturn';
     AddReturn( $item->barcode );
@@ -66,7 +66,7 @@ subtest 'AddIssue() and AddReturn() real-time holds queue tests' => sub {
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
     $action = 'AddIssue';
-    AddIssue( $patron->unblessed, $item->barcode, );
+    AddIssue( $patron, $item->barcode, );
 
     $action = 'AddReturn';
     AddReturn( $item->barcode );

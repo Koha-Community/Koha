@@ -904,8 +904,8 @@ subtest 'current_checkouts() and old_checkouts() tests' => sub {
 
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
 
-    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
-    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
+    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
 
     my $item_1 = $builder->build_sample_item;
     my $item_2 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
@@ -1044,7 +1044,7 @@ subtest 'Recalls tests' => sub {
     is( $biblio->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if patron has more existing recall(s) than recalls_per_record" );
 
     $recall1->set_cancelled;
-    C4::Circulation::AddIssue( $patron1->unblessed, $item2->barcode );
+    C4::Circulation::AddIssue( $patron1, $item2->barcode );
     is( $biblio->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if patron has already checked out an item attached to this biblio" );
 
     is( $biblio->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if on_shelf_recalls = all and items are still available" );
@@ -1063,8 +1063,8 @@ subtest 'Recalls tests' => sub {
     is( $biblio->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if no items are checked out" );
 
     $recall2->set_cancelled;
-    C4::Circulation::AddIssue( $patron2->unblessed, $item2->barcode );
-    C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
+    C4::Circulation::AddIssue( $patron2, $item2->barcode );
+    C4::Circulation::AddIssue( $patron2, $item1->barcode );
     is( $biblio->can_be_recalled({ patron => $patron1 }), 2, "Can recall two items" );
 
     $item1->update({ withdrawn => 1 });

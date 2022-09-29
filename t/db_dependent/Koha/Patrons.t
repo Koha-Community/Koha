@@ -658,16 +658,12 @@ subtest 'checkouts + pending_checkouts + overdues + old_checkouts' => sub {
     is( $old_checkouts->count, 0, 'old_checkouts should not return any issues for that patron' );
     is( ref($old_checkouts), 'Koha::Old::Checkouts', 'old_checkouts should return a Koha::Old::Checkouts object' );
 
-    # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
-    $patron = Koha::Patrons->find( $patron->borrowernumber )->unblessed;
-
     t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
     AddIssue( $patron, $item_1->barcode, DateTime->now->subtract( days => 1 ) );
     AddIssue( $patron, $item_2->barcode, DateTime->now->subtract( days => 5 ) );
     AddIssue( $patron, $item_3->barcode );
 
-    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $checkouts = $patron->checkouts;
     is( $checkouts->count, 3, 'checkouts should return 3 issues for that patron' );
     is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
@@ -1495,11 +1491,12 @@ subtest 'overdues' => sub {
 
     t::lib::Mocks::mock_preference({ branchcode => $library->{branchcode} });
 
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+
     AddIssue( $patron, $item_1->barcode, DateTime->now->subtract( days => 1 ) );
     AddIssue( $patron, $item_2->barcode, DateTime->now->subtract( days => 5 ) );
     AddIssue( $patron, $item_3->barcode );
 
-    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     my $overdues = $patron->overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
     is( $overdues->next->itemnumber, $item_1->itemnumber, 'The issue should be returned in the same order as they have been done, first is correct' );

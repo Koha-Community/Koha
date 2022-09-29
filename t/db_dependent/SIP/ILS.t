@@ -199,7 +199,7 @@ subtest cancel_waiting_hold => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
 
     my $item = $builder->build_sample_item({
-        library       => $library->branchcode,
+        library => $library->branchcode,
     });
 
     Koha::CirculationRules->set_rules(
@@ -260,7 +260,7 @@ subtest checkout => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
 
     my $item = $builder->build_sample_item({
-        library       => $library->branchcode,
+        library => $library->branchcode,
     });
 
     Koha::CirculationRules->set_rules(
@@ -279,16 +279,16 @@ subtest checkout => sub {
         }
     );
 
-    AddIssue( $patron->unblessed, $item->barcode, undef, 0 );
+    AddIssue( $patron, $item->barcode, undef, 0 );
     my $checkout = $item->checkout;
     ok( defined($checkout), "Checkout added");
     is( $checkout->renewals_count, 0, "Correct renewals");
 
     my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $transaction = $ils->checkout($patron->cardnumber,$item->barcode,undef,undef);
+    my $transaction = $ils->checkout($patron->cardnumber, $item->barcode);
 
-    is( $transaction->{screen_msg},"Item already checked out to you: renewing item.","We get a success message when issue is renewed");
+    is( $transaction->{screen_msg},"Item already checked out to you: renewing item.", "We get a success message when issue is renewed");
 
     $checkout->discard_changes();
     is( $checkout->renewals_count, 1, "Renewals has been reduced");

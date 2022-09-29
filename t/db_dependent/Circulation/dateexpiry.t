@@ -91,25 +91,27 @@ sub calc_date_due {
 
     # this triggers the compare between expiry and due date
 
-    my $patron = $builder->build({
-        source => 'Borrower',
-        value  => {
-            categorycode => $patron_category->{categorycode},
+    my $patron = $builder->build_object(
+        {
+            class  => 'Koha::Patrons',
+            value  => {
+                categorycode => $patron_category->{categorycode},
+            }
         }
-    });
+    );
     my $item   = $builder->build_sample_item;
     my $branch = $builder->build( { source => 'Branch' } );
     my $today  = dt_from_string();
 
     # first test with empty expiry date
     # note that this expiry date will never lead to an issue btw !!
-    $patron->{dateexpiry} = undef;
+    $patron->dateexpiry(undef)->store;
     my $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry undef" );
 
     # second test expiry date==today
     my $d2 = output_pref( { dt => $today, dateonly => 1, dateformat => 'sql' } );
-    $patron->{dateexpiry} = $d2;
+    $patron->dateexpiry($d2)->store;
     $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && DateTime->compare( $d->truncate( to => 'day' ), $today->truncate( to => 'day' ) ) == 0, 1, "CalcDateDue with expiry today" );
 
@@ -117,12 +119,12 @@ sub calc_date_due {
     my $dur = DateTime::Duration->new( days => 1 );
     my $tomorrow = $today->clone->add_duration($dur);
     $d2 = output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } );
-    $patron->{dateexpiry} = $d2;
+    $patron->dateexpiry($d2)->store;
     $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry tomorrow" );
 
     # fourth test far future
-    $patron->{dateexpiry} = '9876-12-31';
+    $patron->dateexpiry('9876-12-31')->store;
     my $t1 = time;
     $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     my $t2 = time;

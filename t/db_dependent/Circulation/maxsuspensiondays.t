@@ -42,14 +42,12 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $borrowernumber = Koha::Patron->new({
+my $patron = Koha::Patron->new({
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => $branchcode,
-})->store->borrowernumber;
-my $patron_object = Koha::Patrons->find( $borrowernumber );
-my $borrower = $patron_object->unblessed;
+})->store;
 
 my $record = MARC::Record->new();
 $record->append_fields(
@@ -75,9 +73,9 @@ $dbh->do('DELETE FROM repeatable_holidays');
 my $daysago20 = dt_from_string->add_duration(DateTime::Duration->new(days => -20));
 my $daysafter40 = dt_from_string->add_duration(DateTime::Duration->new(days => 40));
 
-AddIssue( $borrower, $barcode, $daysago20 );
+AddIssue( $patron, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );
-my $debarments = $patron_object->restrictions;
+my $debarments = $patron->restrictions;
 my $THE_debarment = $debarments->next;
 is(
     $THE_debarment->expiration,
@@ -99,9 +97,9 @@ Koha::CirculationRules->set_rules(
 );
 
 my $daysafter10 = dt_from_string->add_duration(DateTime::Duration->new(days => 10));
-AddIssue( $borrower, $barcode, $daysago20 );
+AddIssue( $patron, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );
-$debarments = $patron_object->restrictions;
+$debarments = $patron->restrictions;
 $THE_debarment = $debarments->next;
 is(
     $THE_debarment->expiration,
@@ -130,7 +128,7 @@ subtest "suspension_chargeperiod" => sub {
 
     my $last_year = dt_from_string->clone->subtract( years => 1 );
     my $today = dt_from_string;
-    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron->unblessed, $item->unblessed, $last_year, $today );
+    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron, $item, $last_year, $today );
     is( $new_debar_dt->truncate( to => 'day' ),
         $today->clone->add( days => 365 / 15 * 7 )->truncate( to => 'day' ) );
 
@@ -156,7 +154,7 @@ subtest "maxsuspensiondays" => sub {
 
     my $last_year = dt_from_string->clone->subtract( years => 1 );
     my $today = dt_from_string;
-    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron->unblessed, $item->unblessed, $last_year, $today );
+    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron, $item, $last_year, $today );
     is( $new_debar_dt->truncate( to => 'day' ),
         $today->clone->add( days => 333 )->truncate( to => 'day' ) );
 };

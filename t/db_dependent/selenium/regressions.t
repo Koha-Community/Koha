@@ -176,7 +176,7 @@ subtest 'Display circulation table correctly' => sub {
         }
     );
 
-    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    C4::Circulation::AddIssue( $patron, $item->barcode );
 
     my $mainpage = $s->base_url . q|mainpage.pl|;
     $driver->get($mainpage . q|?logout.x=1|);

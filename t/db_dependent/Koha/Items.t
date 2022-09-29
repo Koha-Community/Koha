@@ -298,7 +298,7 @@ subtest 'store' => sub {
                 }
             );
 
-            C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+            C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(3)->store;
@@ -382,7 +382,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -497,7 +497,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(3)->store;
@@ -603,7 +603,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -810,7 +810,7 @@ subtest 'store' => sub {
             )->store;
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $barcode );
+              C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -934,7 +934,7 @@ subtest 'store' => sub {
             )->store;
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $barcode );
+              C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -984,7 +984,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1075,7 +1075,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1185,7 +1185,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1309,7 +1309,7 @@ subtest 'store' => sub {
             );
 
             my $issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $barcode );
+              C4::Circulation::AddIssue( $patron, $barcode );
 
             # Simulate item marked as lost
             $item->itemlost(1)->store;
@@ -1485,12 +1485,12 @@ subtest 'checkout' => sub {
     is( $checkout, undef, 'Koha::Item->checkout should return undef if there is no current checkout on this item' );
 
     # Add a checkout
-    my $patron = $builder->build({ source => 'Borrower' });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     C4::Circulation::AddIssue( $patron, $item->barcode );
     $checkout = $retrieved_item_1->checkout;
     is( ref( $checkout ), 'Koha::Checkout', 'Koha::Item->checkout should return a Koha::Checkout' );
     is( $checkout->itemnumber, $item->itemnumber, 'Koha::Item->checkout should return the correct checkout' );
-    is( $checkout->borrowernumber, $patron->{borrowernumber}, 'Koha::Item->checkout should return the correct checkout' );
+    is( $checkout->borrowernumber, $patron->borrowernumber, 'Koha::Item->checkout should return the correct checkout' );
 
     # Do the return
     C4::Circulation::AddReturn( $item->barcode );

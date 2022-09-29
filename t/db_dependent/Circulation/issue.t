@@ -160,7 +160,6 @@ my $borrower_id1 = Koha::Patron->new({
     branchcode   => $branchcode_1
 })->store->borrowernumber;
 my $patron_1 = Koha::Patrons->find( $borrower_id1 );
-my $borrower_1 = $patron_1->unblessed;
 my $borrower_id2 = Koha::Patron->new({
     firstname    => 'firstname2',
     surname      => 'surname2 ',
@@ -168,7 +167,6 @@ my $borrower_id2 = Koha::Patron->new({
     branchcode   => $branchcode_2,
 })->store->borrowernumber;
 my $patron_2 = Koha::Patrons->find( $borrower_id2 );
-my $borrower_2 = $patron_2->unblessed;
 
 t::lib::Mocks::mock_userenv({ patron => $patron_1 });
 
@@ -178,9 +176,9 @@ t::lib::Mocks::mock_userenv({ patron => $patron_1 });
 my $query = " SELECT count(*) FROM issues";
 my $sth = $dbh->prepare($query);
 $sth->execute;
-my $countissue = $sth -> fetchrow_array;
+my $countissue = $sth->fetchrow_array;
 is ($countissue ,0, "there is no issue");
-my $issue1 = C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10,0, $today, '' );
+my $issue1 = C4::Circulation::AddIssue( $patron_1, $barcode_1, $daysago10, 0, $today, '' );
 is( ref $issue1, 'Koha::Checkout',
        'AddIssue returns a Koha::Checkout object' );
 my $datedue1 = dt_from_string( $issue1->date_due() );
@@ -191,11 +189,11 @@ like(
 );
 my $issue_id1 = $issue1->issue_id;
 
-my $issue2 = C4::Circulation::AddIssue( $borrower_1, 'nonexistent_barcode' );
+my $issue2 = C4::Circulation::AddIssue( $patron_1, 'nonexistent_barcode' );
 is( $issue2, undef, "AddIssue returns undef if no datedue is specified" );
 
 $sth->execute;
-$countissue = $sth -> fetchrow_array;
+$countissue = $sth->fetchrow_array;
 is ($countissue,1,"1 issues have been added");
 
 #Test AddIssuingCharge
@@ -271,7 +269,7 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
             my $item = $builder->build_sample_item(
                 { library => $item_library->branchcode, itype => $itemtype } );
             my $opac_renew_issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             AddRenewal(
                 {
@@ -296,7 +294,7 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
             my $item = $builder->build_sample_item(
                 { library => $item_library->branchcode, itype => $itemtype } );
             my $opac_renew_issue =
-              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+              C4::Circulation::AddIssue( $patron, $item->barcode );
 
             AddRenewal(
                 {
@@ -320,7 +318,7 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
 
 my @renewcount;
 #Test GetRenewCount
-my $issue3 = C4::Circulation::AddIssue( $borrower_1, $barcode_1 );
+my $issue3 = C4::Circulation::AddIssue( $patron_1, $barcode_1 );
 #Without anything in DB
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
@@ -401,7 +399,7 @@ my $return = $dbh->selectrow_hashref("SELECT DATE(returndate) AS return_date, CU
 ok( $return->{return_date} eq $return->{today}, "Item returned with no return date specified has todays date" );
 
 $dbh->do("DELETE FROM old_issues");
-C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10, 0, $today );
+C4::Circulation::AddIssue( $patron_1, $barcode_1, $daysago10, 0, $today );
 AddReturn($barcode_1, undef, undef, dt_from_string('2014-04-01 23:42'));
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
@@ -487,7 +485,7 @@ $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART" when transfer filled} );
 
 ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin does not update permanent_location value from 'GEN' with setting "_ALL_: CART"} );
-AddIssue( $borrower_1, 'barcode_4', $daysago10,0, $today, '' );
+AddIssue( $patron_1, 'barcode_4', $daysago10,0, $today, '' );
 $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'GEN', q{Location updates from 'CART' to permanent location on issue} );
 
@@ -536,7 +534,7 @@ my $reserve_id = AddReserve(
     }
 );
 ok( $reserve_id, 'The reserve should have been inserted' );
-AddIssue( $borrower_2, $barcode_1, dt_from_string, 'cancel' );
+AddIssue( $patron_2, $barcode_1, dt_from_string, 'cancel' );
 my $hold = Koha::Holds->find( $reserve_id );
 is( $hold, undef, 'The reserve should have been correctly cancelled' );
 
@@ -559,7 +557,7 @@ my $unseen_library = $builder->build_object( { class => 'Koha::Libraries' } );
 my $unseen_patron  = $builder->build_object( { class => 'Koha::Patrons' } );
 my $unseen_item = $builder->build_sample_item(
     { library => $unseen_library->branchcode, itype => $itemtype } );
-my $unseen_issue = C4::Circulation::AddIssue( $unseen_patron->unblessed, $unseen_item->barcode );
+my $unseen_issue = C4::Circulation::AddIssue( $unseen_patron, $unseen_item->barcode );
 
 # Does an unseen renewal increment the issue's count
 my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];

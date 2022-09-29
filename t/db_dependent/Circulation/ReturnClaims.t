@@ -65,7 +65,7 @@ subtest 'Test Koha::Checkout::claim_returned, do not mark as returned' => sub {
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{} );
     my $item   = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
 
     my $claim = $checkout->claim_returned(
         {
@@ -91,7 +91,7 @@ subtest 'Test Koha::Patronn::return_claims' => sub {
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
     my $item   = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
 
     $checkout->claim_returned(
         {
@@ -121,7 +121,7 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{claim_returned} );
     my $item     = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
 
     my $claim = $checkout->claim_returned(
         {

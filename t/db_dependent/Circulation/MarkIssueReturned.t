@@ -63,7 +63,7 @@ subtest 'Failure tests' => sub {
     is( $issue_id, undef, 'No issue_id returned' );
 
     # In the next call we return the item and try it another time
-    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
     is( $issue_id, $issue->issue_id, "Item has been returned (issue $issue_id)" );
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
@@ -98,7 +98,7 @@ subtest 'Anonymous patron tests' => sub {
     # Anonymous patron not set
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
 
-    my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
     throws_ok
         { C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 2 ); }
@@ -117,7 +117,7 @@ subtest 'Anonymous patron tests' => sub {
         }
     });
     t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous->borrowernumber);
-    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
     eval { C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 2 ) };
     is ( $@, q||, 'AnonymousPatron is set correctly - no error expected');
@@ -148,14 +148,14 @@ subtest 'Manually pass a return date' => sub {
 
     my ( $issue, $issue_id );
 
-    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
     $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, '2018-12-25', 0 );
 
     is( $issue_id, $issue->issue_id, "Item has been returned" );
     my $old_checkout = Koha::Old::Checkouts->find( $issue_id );
     is( $old_checkout->returndate, '2018-12-25 00:00:00', 'Manually passed date stored correctly' );
 
-    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
 
     {
         # Hiding the expected warning displayed by DBI
@@ -185,9 +185,9 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     my $item_2 = $builder->build_sample_item;
     my $item_3 = $builder->build_sample_item;
     my $five_days_ago = dt_from_string->subtract( days => 5 );
-    my $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $five_days_ago ); # overdue
-    my $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $five_days_ago ); # overdue
-    my $checkout_3 = AddIssue( $patron->unblessed, $item_3->barcode ); # not overdue
+    my $checkout_1 = AddIssue( $patron, $item_1->barcode, $five_days_ago ); # overdue
+    my $checkout_2 = AddIssue( $patron, $item_2->barcode, $five_days_ago ); # overdue
+    my $checkout_3 = AddIssue( $patron, $item_3->barcode ); # not overdue
 
     Koha::Patron::Debarments::AddUniqueDebarment(
         {

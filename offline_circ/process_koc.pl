@@ -190,7 +190,6 @@ sub kocIssueItem {
 
     my $branchcode = C4::Context->userenv->{branch};
     my $patron = Koha::Patrons->find( { cardnumber => $circ->{cardnumber} } );
-    my $borrower = $patron->unblessed;
     my $item = Koha::Items->find({ barcode => $circ->{barcode} });
     my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     my $biblio = $item->biblio;
@@ -198,7 +197,7 @@ sub kocIssueItem {
     if ( $issue ) { ## Item is currently checked out to another person.
         #warn "Item Currently Issued.";
 
-        if ( $issue->borrowernumber eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
+        if ( $issue->borrowernumber eq $patron->borrowernumber ) { ## Issued to this person already, renew it.
             #warn "Item issued to this member already, renewing.";
 
             C4::Circulation::AddRenewal(
@@ -214,11 +213,11 @@ sub kocIssueItem {
                 title => $biblio->title,
                 biblionumber => $biblio->biblionumber,
                 barcode => $item->barcode,
-                firstname => $borrower->{ 'firstname' },
-                surname => $borrower->{ 'surname' },
-                borrowernumber => $borrower->{'borrowernumber'},
-                cardnumber => $borrower->{'cardnumber'},
-                datetime => $circ->{ 'datetime' }
+                firstname => $patron->firstname,
+                surname => $patron->surname,
+                borrowernumber => $patron->borrowernumber,
+                cardnumber => $patron->cardnumber,
+                datetime => $circ->datetime
             };
 
         } else {
@@ -229,17 +228,17 @@ sub kocIssueItem {
             my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
 
             if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-                C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+                C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
                 push @output, {
                     issue => 1,
                     title => $biblio->title,
                     biblionumber => $biblio->biblionumber,
                     barcode => $item->barcode,
-                    firstname => $borrower->{ 'firstname' },
-                    surname => $borrower->{ 'surname' },
-                    borrowernumber => $borrower->{'borrowernumber'},
-                    cardnumber => $borrower->{'cardnumber'},
-                    datetime => $circ->{ 'datetime' }
+                    firstname => $patron->firstname,
+                    surname => $patron->surname,
+                    borrowernumber => $patron->borrowernumber,
+                    cardnumber => $patron->cardnumber,
+                    datetime => $circ->datetime
                 };
 
             } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
@@ -249,17 +248,17 @@ sub kocIssueItem {
             }
         }
     } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+        C4::Circulation::AddIssue( $patron, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
         push @output, {
             issue => 1,
             title => $biblio->title,
             biblionumber => $biblio->biblionumber,
             barcode => $item->barcode,
-            firstname => $borrower->{ 'firstname' },
-            surname => $borrower->{ 'surname' },
-            borrowernumber => $borrower->{'borrowernumber'},
-            cardnumber => $borrower->{'cardnumber'},
-            datetime =>$circ->{ 'datetime' }
+            firstname => $patron->firstname,
+            surname => $patron->surname,
+            borrowernumber => $patron->borrowernumber,
+            cardnumber => $patron->cardnumber,
+            datetime =>$circ->datetime
         };
     }
 }

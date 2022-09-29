@@ -141,7 +141,7 @@ sub do_checkout {
         });
     } else {
         # can issue
-        my $issue = AddIssue( $patron->unblessed, $barcode, $overridden_duedate, 0 );
+        my $issue = AddIssue( $patron, $barcode, $overridden_duedate, 0 );
         $self->{due} = $self->duedatefromissue($issue, $itemnumber);
     }
 

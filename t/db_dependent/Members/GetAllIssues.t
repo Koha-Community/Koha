@@ -66,8 +66,8 @@ my $borrowernumber1 =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
 my $borrowernumber2 =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
-my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
-my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
+my $borrower1 = Koha::Patrons->find( $borrowernumber1 );
+my $borrower2 = Koha::Patrons->find( $borrowernumber2 );
 
 my $module = Test::MockModule->new('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );

@@ -86,10 +86,10 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
     # Create a branch
     $branch = $builder->build({ source => 'Branch' })->{ branchcode };
     # Create a borrower
-    my $borrowernumber = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
         value => { branchcode => $branch }
-    })->{ borrowernumber };
+    });
     # Look for the defined MARC field for biblio-level itemtype
     my $rs = $schema->resultset('MarcSubfieldStructure')->search({
         frameworkcode => '',
@@ -118,8 +118,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
         }
     )->_result->update({ itype => undef });
 
-    my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    AddIssue( $borrower, $item_with_itemtype->barcode );
+    AddIssue( $patron, $item_with_itemtype->barcode );
     AddReturn( $item_with_itemtype->barcode, $branch );
     # Test item-level itemtype was recorded on the 'statistics' table
     my $stat = $schema->resultset('Statistic')->search({
@@ -130,7 +129,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
     is( $stat->itemtype, $ilevel_itemtype,
         "item-level itype recorded on statistics for return");
-    warning_like { AddIssue( $borrower, $item_without_itemtype->barcode ) }
+    warning_like { AddIssue( $patron, $item_without_itemtype->barcode ) }
                  [qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/],
@@ -166,8 +165,8 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
     # Create a branch
     $branch = $builder->build({ source => 'Branch' })->{ branchcode };
     # Create a borrower
-    my $borrowernumber = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
         value => { branchcode => $branch }
     })->{ borrowernumber };
     # Look for the defined MARC field for biblio-level itemtype
@@ -199,9 +198,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
         }
     );
 
-    my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-
-    AddIssue( $borrower, $item_with_itemtype->barcode );
+    AddIssue( $patron, $item_with_itemtype->barcode );
     AddReturn( $item_with_itemtype->barcode, $branch );
     # Test item-level itemtype was recorded on the 'statistics' table
     my $stat = $schema->resultset('Statistic')->search({
@@ -213,7 +210,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
     is( $stat->itemtype, $blevel_itemtype,
         "biblio-level itype recorded on statistics for return");
 
-    AddIssue( $borrower, $item_without_itemtype->barcode );
+    AddIssue( $patron, $item_without_itemtype->barcode );
     AddReturn( $item_without_itemtype->barcode, $branch );
     # Test biblio-level itemtype was recorded on the 'statistics' table
     $stat = $schema->resultset('Statistic')->search({
@@ -251,10 +248,11 @@ subtest 'Handle ids duplication' => sub {
             itype => $itemtype->{itemtype},
         }
     );
-    my $patron = $builder->build({source => 'Borrower'});
-    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons'}
+    );
 
-    my $original_checkout = AddIssue( $patron->unblessed, $item->barcode, dt_from_string->subtract( days => 50 ) );
+    my $original_checkout = AddIssue( $patron, $item->barcode, dt_from_string->subtract( days => 50 ) );
     my $issue_id = $original_checkout->issue_id;
     my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
     is( $account_lines->count, 1, '1 account line should exist for this issue_id' );
@@ -281,7 +279,7 @@ subtest 'Handle ids duplication' => sub {
     is( $messages->{WasReturned}, 0, 'messages should have the WasReturned flag set to 0' );
     is( $messages->{DataCorrupted}, 1, 'messages should have the DataCorrupted flag set to 1' );
 
-    $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
+    $account_lines = Koha::Account::Lines->search({ borrowernumber => $borrower->{borrowernumber}, issue_id => $issue_id });
     is( $account_lines->count, 0, 'No account lines should exist for this issue_id, patron should not have been charged' );
 
     is( Koha::Checkouts->find( $issue_id )->issue_id, $issue_id, 'The issues entry should not have been removed' );
@@ -290,8 +288,8 @@ subtest 'Handle ids duplication' => sub {
 subtest 'BlockReturnOfLostItems' => sub {
     plan tests => 4;
     my $item = $builder->build_sample_item;
-    my $patron = $builder->build_object({class => 'Koha::Patrons'});
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $checkout = AddIssue( $patron, $item->barcode );
 
     # Mark the item as lost
     $item->itemlost(1)->store;
@@ -315,7 +313,7 @@ subtest 'Checkin of an item claimed as returned should generate a message' => su
     t::lib::Mocks::mock_preference('ClaimReturnedLostValue', 1);
     my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
 
     $checkout->claim_returned({ created_by => $patron->id });
 
@@ -332,12 +330,12 @@ subtest 'BranchTransferLimitsType' => sub {
 
     my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 1, 'AddReturn should have checkin the item if BranchTransferLimitsType=ccode');
 
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
-    $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    $checkout = AddIssue( $patron, $item->barcode );
     ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 1, 'AddReturn should have checkin the item if BranchTransferLimitsType=itemtype');
 };
@@ -351,7 +349,7 @@ subtest 'Backdated returns should reduce fine if needed' => sub {
     my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
     my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
-    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $checkout = AddIssue( $patron, $item->barcode );
     my $fine = Koha::Account::Line->new({
         issue_id => $checkout->id,
         borrowernumber => $patron->id,

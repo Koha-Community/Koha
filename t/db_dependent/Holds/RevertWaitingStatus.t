@@ -82,9 +82,8 @@ foreach my $borrowernumber (@borrowernumbers) {
 }
 
 ModReserveAffect( $itemnumber, $borrowernumbers[0] );
-my $patron = Koha::Patrons->find( $borrowernumbers[1] )->unblessed;
-C4::Circulation::AddIssue( $patron,
-    $item_barcode, my $datedue, my $cancelreserve = 'revert' );
+my $patron = Koha::Patrons->find( $borrowernumbers[1] );
+C4::Circulation::AddIssue( $patron, $item_barcode, undef, 'revert' );
 
 my $priorities = $dbh->selectall_arrayref(
     "SELECT priority FROM reserves ORDER BY priority ASC");

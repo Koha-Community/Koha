@@ -974,7 +974,6 @@ subtest 'unblessed_all_relateds' => sub {
     my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
-
     my $item = $builder->build_object(
         {
             class => 'Koha::Items',
@@ -984,12 +983,12 @@ subtest 'unblessed_all_relateds' => sub {
                 biblionumber  => $biblio->biblionumber,
                 itemlost      => 0,
                 withdrawn     => 0,
-                itype => $itemtype
+                itype         => $itemtype
             }
         }
     );
 
-    my $issue = AddIssue( $patron->unblessed, $item->barcode, DateTime->now->subtract( days => 1 ) );
+    my $issue = AddIssue( $patron, $item->barcode, DateTime->now->subtract( days => 1 ) );
     my $overdues = Koha::Patrons->find( $patron->id )->overdues; # Koha::Patron->overdues prefetches
     my $overdue = $overdues->next->unblessed_all_relateds;
     is( $overdue->{issue_id}, $issue->issue_id, 'unblessed_all_relateds has field from the original table (issues)' );
