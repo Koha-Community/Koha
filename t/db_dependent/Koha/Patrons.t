@@ -1925,14 +1925,17 @@ subtest '->store' => sub {
 
 subtest '->set_password' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { login_attempts => 3 } } );
 
-    # Disable logging password changes for this tests
+    # Disable logging password changes for these tests
     t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
+
+    # Disable notifying patrons of password changes for these tests
+    t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 0 );
 
     # Password-length tests
     t::lib::Mocks::mock_preference( 'minPasswordLength', undef );
@@ -1997,6 +2000,14 @@ subtest '->set_password' => sub {
 
     $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->set_password does log password changes' );
+
+    # Enable notifying patrons of password changes
+    t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
+    $patron->set_password({ password => 'abcd   c' });
+    my $queued_notices = Koha::Notice::Messages->search({ borrowernumber => $patron->borrowernumber });
+    is( $queued_notices->count, 1, "One notice queued when NotifyPassowrdChange enabled" );
+    my $THE_notice = $queued_notices->next;
+    is( $THE_notice->status, 'failed', "The notice was sent immediately");
 
     $schema->storage->txn_rollback;
 };
