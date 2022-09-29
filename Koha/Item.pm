@@ -2062,8 +2062,7 @@ rules set in the ItemsDeniedRenewal system preference.
 
 sub is_denied_renewal {
     my ( $self ) = @_;
-
-    my $denyingrules = Koha::Config::SysPrefs->find('ItemsDeniedRenewal')->get_yaml_pref_hash();
+    my $denyingrules = C4::Context->yaml_preference('ItemsDeniedRenewal');
     return 0 unless $denyingrules;
     foreach my $field (keys %$denyingrules) {
         my $val = $self->$field;
