@@ -321,20 +321,23 @@ sub GetBasketAsCSV {
     else {
         foreach my $order (@orders) {
             my $biblio = Koha::Biblios->find( $order->{biblionumber} );
-            my $biblioitem = $biblio->biblioitem;
+            my $biblioitem;
+            if ($biblio) {
+                $biblioitem = $biblio->biblioitem;
+            }
             my $row = {
-                contractname => $contract->{'contractname'},
-                ordernumber => $order->{'ordernumber'},
-                entrydate => $order->{'entrydate'},
-                isbn => $order->{'isbn'},
-                author => $biblio->author,
-                title => $biblio->title,
-                publicationyear => $biblioitem->publicationyear,
-                publishercode => $biblioitem->publishercode,
-                collectiontitle => $biblioitem->collectiontitle,
-                notes => $order->{'order_vendornote'},
-                quantity => $order->{'quantity'},
-                rrp => $order->{'rrp'},
+                contractname    => $contract->{'contractname'},
+                ordernumber     => $order->{'ordernumber'},
+                entrydate       => $order->{'entrydate'},
+                isbn            => $order->{'isbn'},
+                author          => $biblio     ? $biblio->author              : q{},
+                title           => $biblio     ? $biblio->title               : q{},
+                publicationyear => $biblioitem ? $biblioitem->publicationyear : q{},
+                publishercode   => $biblioitem ? $biblioitem->publishercode   : q{},
+                collectiontitle => $biblioitem ? $biblioitem->collectiontitle : q{},
+                notes           => $order->{'order_vendornote'},
+                quantity        => $order->{'quantity'},
+                rrp             => $order->{'rrp'},
             };
             for my $place ( qw( deliveryplace billingplace ) ) {
                 if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
