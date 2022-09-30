@@ -103,7 +103,7 @@
     [% END %]
 [% END %]
 
-[% IF Koha.Preference('OPACAcquisitionDetails') AND ( item.isa('Koha::Item') ) AND ( item.orders.filter_by_active.count ) %][%# on_order is only set from opac-detail.pl %]
+[% IF Koha.Preference('OPACAcquisitionDetails') AND ( item.isa('Koha::Item') ) AND ( item.orders.filter_by_active.count ) %]
     [% SET itemavailable = 0 %]
     <span class="item-status onorder">On order</span>
 [% END %]
