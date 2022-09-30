@@ -475,8 +475,13 @@ Note that permanent location is a code, and location may be an authval.
                                 [% END %]
                                 : due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]
                             </span>
-                        [% ELSIF ( item.transfertwhen ) %]
-                            <span class="intransit">In transit from [% Branches.GetName( item.transfertfrom ) | html %] to [% Branches.GetName( item.transfertto ) | html %] since [% item.transfertwhen | $KohaDates %]</span>
+                        [% ELSIF ( item.transfer ) %]
+                            [% IF (item.transfer.datesent) %]
+                                <span class="intransit">In transit from [% Branches.GetName( item.transfer.frombranch ) | html %] to [% Branches.GetName( item.transfer.tobranch ) | html %] since [% item.transfer.datesent | $KohaDates %]</span>
+                            [% ELSE %]
+                                <span class="transitrequested">Transit pending from [% Branches.GetName( item.transfer.frombranch ) | html %] to [% Branches.GetName( item.transfer.tobranch ) | html %] since [% item.transfer.daterequested | $KohaDates %]</span>
+
+                            [% END %]
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
@@ -547,7 +552,7 @@ Note that permanent location is a code, and location may be an authval.
                             [% END %]
                         [% END %]
 
-                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || ( Koha.Preference('UseRecalls') && recall ) ) %]
+                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfer || hold || ( Koha.Preference('UseRecalls') && recall ) ) %]
                             <span>Available</span>
                         [% END %]
 
