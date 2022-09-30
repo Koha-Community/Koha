@@ -174,7 +174,6 @@ sub XSLTParse4Display {
     my $biblionumber = $params->{biblionumber};
     my $record       = $params->{record};
     my $xslsyspref   = $params->{xsl_syspref};
-    my $interface    = ( $xslsyspref =~ /OPAC/ ) ? 'opac' : 'intranet' ;
     my $fixamps      = $params->{fix_amps};
     my $hidden_items = $params->{hidden_items} || [];
     my $variables    = $params->{xslt_variables};
