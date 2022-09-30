@@ -403,10 +403,10 @@ foreach my $item (@items) {
     # Check the transit status
     my $transfer = $item->get_transfer;
     if ( $transfer && $transfer->in_transit ) {
-        $item->{transfertwhen} = $transfer->datesent;
-        $item->{transfertfrom} = $transfer->frombranch;
-        $item->{transfertto} = $transfer->tobranch;
-        $item->{nocancel} = 1;
+        $item_info->{transfertwhen} = $transfer->datesent;
+        $item_info->{transfertfrom} = $transfer->frombranch;
+        $item_info->{transfertto} = $transfer->tobranch;
+        $item_info->{nocancel} = 1;
     }
 
     foreach my $f (qw( itemnotes )) {
