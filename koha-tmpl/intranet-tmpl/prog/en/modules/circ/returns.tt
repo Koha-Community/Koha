@@ -1168,6 +1168,16 @@
                 window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=checkinslip", "printwindow");
             });
 
+            [% IF ( !(Koha.Preference('TransfersBlockCirc')) && Koha.Preference('AutomaticConfirmTransfer') ) %]
+                $("#wrong-transfer-modal").on('hidden.bs.modal',function(){
+                    $("#wrongtransferform").submit();
+                });
+                [% IF (transfer) %]
+                    $("#item-transfer-modal").on('hidden.bs.modal',function(){
+                        $("#mainform").submit();
+                    });
+                [% END %]
+            [% END %]
         });
     </script>
 [% END %]

@@ -79,6 +79,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutoShareWithMana','subscription','','defines datas automatically shared with mana','multiple'),
 ('AutoLocation','0',NULL,'If ON, IP authentication is enabled, blocking access to the staff interface from unauthorized IP addresses','YesNo'),
 ('AutomaticItemReturn','1',NULL,'If ON, Koha will automatically set up a transfer of this item to its homebranch','YesNo'),
+('AutomaticWrongTransfer','0',NULL,'Defines whether transfers should be automatically confirmed at checkin if modal dismissed','YesNo'),
 ('autoMemberNum','0','','If ON, patron number is auto-calculated','YesNo'),
 ('AutoRemoveOverduesRestrictions','0',NULL,'Defines whether an OVERDUES debarment should be lifted automatically if all overdue items are returned by the patron.','YesNo'),
 ('AutoRenewalNotices','cron','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice'),
