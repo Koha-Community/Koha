@@ -6,6 +6,9 @@ $(document).ready(function(){
         $.get("/cgi-bin/koha/authorities/detail.pl", { authid : authid }, function( data ){
             var auth_detail = $(data).find("#authoritiestabs");
             auth_detail.find("ul").remove();
+            auth_detail.removeClass("toptabs");
+            auth_detail.find("> div").removeClass("tab-content");
+            auth_detail.find("> div > div").removeClass("tab-pane").removeAttr("role");
             $("#authorityDetail .modal-title").html(__("Authority") + " " + authid );
             $("#authorityDetail .modal-body").html( auth_detail );
         });
