@@ -70,7 +70,7 @@
                             <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
                             <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-                            <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value=""/> Example: 5.00</li>
+                            <li><label for="amount" class="required">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value=""/> Example: 5.00</li>
                             [% INCLUDE 'transaction_types.inc' type="credit" %]
                             [% IF Koha.Preference('UseCashRegisters') %]
                             <li>
@@ -83,7 +83,7 @@
                                 </label>
 
                                 [% IF Koha.Preference('RequireCashRegister') %]
-                                    <select name="cash_register" id="cash_register" required>
+                                    <select name="cash_register" id="cash_register" required="required">
                                 [% ELSE %]
                                     <select name="cash_register" id="cash_register">
                                 [% END %]
@@ -122,6 +122,18 @@
         $(document).ready(function(){
             $('#mancredit').preventDoubleFormSubmit();
             $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
+            [% UNLESS Koha.Preference('RequireCashRegister') %]
+            $('#credit_type').on('change', function() {
+               let val = $(this).val();
+               if ( val == 'CASH' ) {
+                  $("label[for='cash_register']").addClass('required');
+                  $('#cash_register').attr('required','required').after( '<span class="required">Required</span>' );
+               } else {
+                  $("label[for='cash_register']").removeClass('required');
+                  $('#cash_register').removeAttr('required').next("span").remove();
+               }
+            });
+            [% END %]
         });
     </script>
 [% END %]
