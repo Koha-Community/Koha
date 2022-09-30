@@ -47,7 +47,8 @@ use Test::DBIx::Class {
 # Mock Variables
 my $matchpoint = 'userid';
 my $autocreate = 0;
-my $sync = 0;
+my $welcome    = 0;
+my $sync       = 0;
 my %mapping    = (
     'userid'       => { 'is' => 'uid' },
     'surname'      => { 'is' => 'sn' },
@@ -55,13 +56,15 @@ my %mapping    = (
     'categorycode' => { 'is' => 'cat' },
     'address'      => { 'is' => 'add' },
     'city'         => { 'is' => 'city' },
+    'emailpro'     => { 'is' => 'emailpro' },
 );
-$ENV{'uid'}  = "test1234";
-$ENV{'sn'}   = undef;
-$ENV{'exp'}  = undef;
-$ENV{'cat'}  = undef;
-$ENV{'add'}  = undef;
-$ENV{'city'} = undef;
+$ENV{'uid'}      = "test1234";
+$ENV{'sn'}       = undef;
+$ENV{'exp'}      = undef;
+$ENV{'cat'}      = undef;
+$ENV{'add'}      = undef;
+$ENV{'city'}     = undef;
+$ENV{'emailpro'} = undef;
 
 # Setup Mocks
 ## Mock Context
@@ -87,6 +90,26 @@ my $database = Test::MockModule->new('Koha::Database');
 
 ### Mock ->schema
 $database->mock( 'schema', \&mockedSchema );
+
+### Mock Letters
+my $mocked_letters = Test::MockModule->new('C4::Letters');
+# we want to test the params
+$mocked_letters->mock( 'GetPreparedLetter', sub {
+    warn "GetPreparedLetter called";
+    return 1;
+});
+# we don't care about EnqueueLetter for now
+$mocked_letters->mock( 'EnqueueLetter', sub {
+    warn "EnqueueLetter called";
+    # return a 'message_id'
+    return 42;
+});
+# we don't care about EnqueueLetter for now
+$mocked_letters->mock( 'SendQueuedMessages', sub {
+    my $params = shift;
+    warn "SendQueuedMessages called with message_id: $params->{message_id}";
+    return 1;
+});
 
 # Tests
 ##############################################################
@@ -192,7 +215,7 @@ subtest "get_login_shib tests" => sub {
 ## checkpw_shib
 subtest "checkpw_shib tests" => sub {
 
-    plan tests => 33;
+    plan tests => 34;
 
     my $shib_login;
     my ( $retval, $retcard, $retuserid );
@@ -247,17 +270,27 @@ subtest "checkpw_shib tests" => sub {
 
     reset_config();
 
-    # autocreate user
-    $autocreate  = 1;
-    $shib_login  = 'test4321';
-    $ENV{'uid'}  = 'test4321';
-    $ENV{'sn'}   = "pika";
-    $ENV{'exp'}  = "2017";
-    $ENV{'cat'}  = "S";
-    $ENV{'add'}  = 'Address';
-    $ENV{'city'} = 'City';
+    # autocreate user (welcome)
+    $autocreate      = 1;
+    $welcome         = 1;
+    $shib_login      = 'test4321';
+    $ENV{'uid'}      = 'test4321';
+    $ENV{'sn'}       = "pika";
+    $ENV{'exp'}      = "2017";
+    $ENV{'cat'}      = "S";
+    $ENV{'add'}      = 'Address';
+    $ENV{'city'}     = 'City';
+    $ENV{'emailpro'} = 'me@myemail.com';
 
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    warnings_are {
+        ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    }
+    [
+        'GetPreparedLetter called',
+        'EnqueueLetter called',
+        'SendQueuedMessages called with message_id: 42'
+    ],
+      "WELCOME notice Prepared, Enqueued and Send";
     is( $retval,    "1",        "user authenticated" );
     is( $retuserid, "test4321", "expected userid returned" );
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
@@ -270,6 +303,7 @@ subtest "checkpw_shib tests" => sub {
       [qw/pika 2017 Address City/],
       'Found $new_users surname';
     $autocreate = 0;
+    $welcome    = 0;
 
     # sync user
     $sync = 1;
@@ -364,6 +398,7 @@ sub mockedConfig {
 
     my %shibboleth = (
         'autocreate' => $autocreate,
+        'welcome'    => $welcome,
         'sync'       => $sync,
         'matchpoint' => $matchpoint,
         'mapping'    => \%mapping
@@ -384,6 +419,10 @@ sub mockedPref {
         $return = $staffClientBaseURL;
     }
 
+    if ( $param eq 'AutoEmailPrimaryAddress' ) {
+        $return = 'OFF';
+    }
+
     return $return;
 }
 
@@ -399,21 +438,24 @@ sub mockedSchema {
 sub reset_config {
     $matchpoint = 'userid';
     $autocreate = 0;
+    $welcome = 0;
     $sync = 0;
-    %mapping    = (
+    %mapping = (
         'userid'       => { 'is' => 'uid' },
         'surname'      => { 'is' => 'sn' },
         'dateexpiry'   => { 'is' => 'exp' },
         'categorycode' => { 'is' => 'cat' },
         'address'      => { 'is' => 'add' },
         'city'         => { 'is' => 'city' },
+        'emailpro'     => { 'is' => 'emailpro' },
     );
-    $ENV{'uid'}  = "test1234";
-    $ENV{'sn'}   = undef;
-    $ENV{'exp'}  = undef;
-    $ENV{'cat'}  = undef;
-    $ENV{'add'}  = undef;
-    $ENV{'city'} = undef;
+    $ENV{'uid'}      = "test1234";
+    $ENV{'sn'}       = undef;
+    $ENV{'exp'}      = undef;
+    $ENV{'cat'}      = undef;
+    $ENV{'add'}      = undef;
+    $ENV{'city'}     = undef;
+    $ENV{'emailpro'} = undef;
 
     return 1;
 }
