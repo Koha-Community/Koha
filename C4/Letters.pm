@@ -971,7 +971,7 @@ sub SendQueuedMessages {
         'limit'          => $params->{'limit'} // 0,
         'borrowernumber' => $params->{'borrowernumber'} // q{},
         'letter_code'    => $params->{'letter_code'} // q{},
-        'type'           => $params->{'type'} // q{},
+        'message_transport_type'           => $params->{'type'} // q{},
     };
     my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
     MESSAGE: foreach my $message ( @$unsent_messages ) {
@@ -1251,10 +1251,6 @@ sub _get_unsent_messages {
 
     my @query_params = ('pending');
     if ( ref $params ) {
-        if ( $params->{'message_transport_type'} ) {
-            $statement .= ' AND mq.message_transport_type = ? ';
-            push @query_params, $params->{'message_transport_type'};
-        }
         if ( $params->{'borrowernumber'} ) {
             $statement .= ' AND mq.borrowernumber = ? ';
             push @query_params, $params->{'borrowernumber'};
@@ -1267,8 +1263,8 @@ sub _get_unsent_messages {
                 push @query_params, @letter_codes;
             }
         }
-        if ( $params->{'type'} ) {
-            my @types = ref $params->{'type'} eq "ARRAY" ? @{$params->{'type'}} : $params->{'type'};
+        if ( $params->{'message_transport_type'} ) {
+            my @types = ref $params->{'message_transport_type'} eq "ARRAY" ? @{$params->{'message_transport_type'}} : $params->{'message_transport_type'};
             if ( @types ) {
                 my $q = join( ",", ("?") x @types );
                 $statement .= " AND message_transport_type IN ( $q ) ";
