@@ -2005,10 +2005,9 @@ subtest '->set_password' => sub {
     t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
     $patron->set_password({ password => 'abcd   c' });
     my $queued_notices = Koha::Notice::Messages->search({ borrowernumber => $patron->borrowernumber });
-    is( $queued_notices->count, 1, "One notice queued when NotifyPassowrdChange enabled" );
+    is( $queued_notices->count, 1, "One notice queued when NotifyPasswordChange enabled" );
     my $THE_notice = $queued_notices->next;
-    is( $THE_notice->status, 'failed', "The notice was sent immediately");
-
+    is( $THE_notice->status, 'failed', "The notice was handled immediately and failed on wrong email address."); #FIXME Mock sending mail
     $schema->storage->txn_rollback;
 };
 
