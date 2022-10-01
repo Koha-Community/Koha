@@ -138,6 +138,12 @@
                                 [% ELSE %]
                                     <input type="hidden" name="weight_search" value="1" />
                                 [% END %]
+                                [% IF Koha.Preference('IncludeSeeFromInSearches') %]
+                                    <div class="hint included-see-from-headings-info">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        See from (non-preferred form) headings are included
+                                    </div>
+                                [% END %]
                             </div> <!-- /.search-terms -->
                         </fieldset>
                     </div> <!-- /#booleansearch -->
