@@ -279,7 +279,7 @@ $(document).ready(function() {
                             }
 
                             if ( oObj.item_group_id ) {
-                                data += _("Next available item group <strong>%s</strong> item").format( oObj.item_group_description );
+                                data += __("Next available item group <strong>%s</strong> item").format( oObj.item_group_description );
                             }
 
                             if ( oObj.barcode ) {

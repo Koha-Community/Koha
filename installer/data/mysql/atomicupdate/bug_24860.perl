@@ -18,7 +18,7 @@ if ( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-        ('EnableItemGroupHolds','0','','Enable volume level holds feature','YesNo')
+        ('EnableItemGroupHolds','0','','Enable item group holds feature','YesNo')
     });
 
     SetVersion( $DBversion );
