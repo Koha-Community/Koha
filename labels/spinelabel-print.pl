@@ -45,10 +45,10 @@ $sth = $dbh->prepare($sql);
 $sth->execute($barcode);
 $item = $sth->fetchrow_hashref;
 
-unless (defined $item) {
-  $template->param( 'Barcode' => $barcode );
-  $template->param( 'BarcodeNotFound' => 1 );
-}
+$template->param(
+    Barcode         => $barcode,
+    BarcodeNotFound => 1,
+) unless defined $item;
 
 my $body;
 
@@ -83,10 +83,10 @@ while ( my ( $key, $value ) = each(%$data) ) {
 $body = $scheme;
 
 $template->param(
-        'itemhomebranch' => $item->{homebranch},
-        'itemholdingbranch' => $item->{holdingbranch}
+    autoprint         => C4::Context->preference("SpineLabelAutoPrint"),
+    content           => $body,
+    itemholdingbranch => $item->{holdingbranch},
+    itemhomebranch    => $item->{homebranch},
 );
-$template->param( autoprint => C4::Context->preference("SpineLabelAutoPrint") );
-$template->param( content   => $body );
 
 output_html_with_http_headers $query, $cookie, $template->output;
