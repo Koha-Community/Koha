@@ -479,9 +479,9 @@ sub clone {
   my $returnbranch = Koha::CirculationRules->get_return_branch_policy($item);
 
 Returns the branch to use for returning the item based on the
-item type, and a branch selected via CircControlReturnsBrnch.
+item type, and a branch selected via CircControlReturnsBranch.
 
-The return value is the branch to which to return item.  Possible values:
+The return value is the branch to which to return the item. Possible values:
   noreturn: do not return, let item remain where checked in (floating collections)
   homebranch: return to item's home branch
   holdingbranch: return to issuer branch
@@ -490,7 +490,7 @@ This searches branchitemrules in the following order:
   * Same branchcode and itemtype
   * Same branchcode, itemtype '*'
   * branchcode '*', same itemtype
-  * branchcode and itemtype '*'
+  * branchcode '*' and itemtype '*'
 
 =cut
 
