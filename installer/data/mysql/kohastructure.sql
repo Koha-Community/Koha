@@ -5563,7 +5563,7 @@ CREATE TABLE `z3950servers` (
   `servername` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'name given to the target by the library',
   `checked` smallint(6) DEFAULT NULL COMMENT 'whether this target is checked by default  (1 for yes, 0 for no)',
   `rank` int(11) DEFAULT NULL COMMENT 'where this target appears in the list of targets',
-  `syntax` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'marc format provided by this target',
+  `syntax` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'MARC format provided by this target',
   `timeout` int(11) NOT NULL DEFAULT 0 COMMENT 'number of seconds before Koha stops trying to access this server',
   `servertype` enum('zed','sru') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'zed' COMMENT 'zed means z39.50 server',
   `encoding` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'characters encoding provided by this target',
