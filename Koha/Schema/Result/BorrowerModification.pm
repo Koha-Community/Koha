@@ -86,6 +86,11 @@ patron/borrower's middle name
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 pronouns
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 streetnumber
 
   data_type: 'varchar'
@@ -468,6 +473,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "initials",
   { data_type => "mediumtext", is_nullable => 1 },
+  "pronouns",
+  { data_type => "longtext", is_nullable => 1 },
   "streetnumber",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "streettype",
@@ -631,8 +638,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-24 15:30:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:96XB32KyG+3JgVOLbnH32Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 18:03:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NsjvIPMgGDCa0LZQc157Ww
 
 sub koha_object_class {
     'Koha::Patron::Modification';

@@ -81,6 +81,13 @@ any other names associated with the patron/borrower
 
 initials for your patron/borrower
 
+=head2 pronouns
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+patron/borrower pronouns
+
 =head2 streetnumber
 
   data_type: 'tinytext'
@@ -659,6 +666,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "initials",
   { data_type => "mediumtext", is_nullable => 1 },
+  "pronouns",
+  { data_type => "longtext", is_nullable => 1 },
   "streetnumber",
   { data_type => "tinytext", is_nullable => 1 },
   "streettype",
@@ -2019,8 +2028,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-07-07 12:48:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iffysIl9TxAnXVzpWiUJuw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 18:03:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jqvQns/EYDe6ao4z32XKyg
 
 __PACKAGE__->has_many(
   "extended_attributes",

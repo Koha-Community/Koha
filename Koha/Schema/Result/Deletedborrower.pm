@@ -81,6 +81,13 @@ any other names associated with the patron/borrower
 
 initials for your patron/borrower
 
+=head2 pronouns
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+patron/borrower pronouns
+
 =head2 streetnumber
 
   data_type: 'tinytext'
@@ -656,6 +663,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "initials",
   { data_type => "mediumtext", is_nullable => 1 },
+  "pronouns",
+  { data_type => "longtext", is_nullable => 1 },
   "streetnumber",
   { data_type => "tinytext", is_nullable => 1 },
   "streettype",
@@ -829,8 +838,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-24 15:30:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1a3+JPG3eNWHWIZVM2SNfQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 18:03:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OKIbF7K2KWpEJGbFbetD0w
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
