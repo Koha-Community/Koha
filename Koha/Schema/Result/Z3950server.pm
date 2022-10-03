@@ -34,7 +34,7 @@ unique identifier assigned by Koha
 =head2 host
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 255
 
 target's host name
@@ -94,10 +94,10 @@ where this target appears in the list of targets
 =head2 syntax
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 80
 
-marc format provided by this target
+MARC format provided by this target
 
 =head2 timeout
 
@@ -119,7 +119,7 @@ zed means z39.50 server
 =head2 encoding
 
   data_type: 'mediumtext'
-  is_nullable: 1
+  is_nullable: 0
 
 characters encoding provided by this target
 
@@ -168,7 +168,7 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "host",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "port",
   { data_type => "integer", is_nullable => 1 },
   "db",
@@ -184,7 +184,7 @@ __PACKAGE__->add_columns(
   "rank",
   { data_type => "integer", is_nullable => 1 },
   "syntax",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "varchar", is_nullable => 0, size => 80 },
   "timeout",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "servertype",
@@ -195,7 +195,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "encoding",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "recordtype",
   {
     data_type => "enum",
@@ -226,8 +226,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6X1cn33CRBtk/lMZF8QY2Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-03 11:30:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1uIZOogM1tV2M7fbpPRDwg
 
 sub koha_object_class {
     'Koha::Z3950Server';
