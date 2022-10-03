@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
@@ -77,6 +77,30 @@ subtest 'anonymize() tests' => sub {
     $checkout_2->discard_changes;
     is( $checkout_2->borrowernumber, $anonymous_patron->id,
         'Anonymized hold linked to anonymouspatron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'deleteitem() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $checkout_3 = $builder->build_object(
+        {
+            class => 'Koha::Old::Checkouts',
+            value => { borrowernumber => $patron->id }
+        }
+    );
+
+    # delete first checkout
+    my $item_to_del = $checkout_3->item;
+    $item_to_del->delete;
+    $checkout_3->discard_changes();
+    is( $checkout_3->item, undef, "Item is deleted");
 
     $schema->storage->txn_rollback;
 };
