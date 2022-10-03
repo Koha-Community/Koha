@@ -31,6 +31,7 @@ my @ignored = qw(
     .perlcriticrc
     .proverc
     .proverc.dist
+    .stylelintrc.json
     LICENSE
     README.md
     README.robots
