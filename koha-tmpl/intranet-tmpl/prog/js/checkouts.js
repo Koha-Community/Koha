@@ -438,19 +438,22 @@ $(document).ready(function() {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.charge ) oObj.charge = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).format_price() + '<span>';
-                    }
+                    },
+                    "sClass": "nowrap"
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.fine ) oObj.fine = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).format_price()   + '<span>';
-                    }
+                    },
+                    "sClass": "nowrap"
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.price ) oObj.price = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).format_price()  + '<span>';
-                    }
+                    },
+                    "sClass": "nowrap"
                 },
                 {
                     "bSortable": false,
