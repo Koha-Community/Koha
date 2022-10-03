@@ -1340,6 +1340,7 @@ subtest 'notify_library_of_registration()' => sub {
 
     # Test when EmailPatronRegistrations equals KohaAdminEmailAddress
     t::lib::Mocks::mock_preference( 'EmailPatronRegistrations', 'KohaAdminEmailAddress' );
+    t::lib::Mocks::mock_preference( 'ReplyToDefault', 'root@localhost' ); # FIXME Remove localhost
     is( $patron->notify_library_of_registration(C4::Context->preference('EmailPatronRegistrations')), 1, 'OPAC_REG email is queued if EmailPatronRegistration syspref equals KohaAdminEmailAddress');
     $sth->execute( $patron->borrowernumber );
     $to_address = $sth->fetchrow_array;
