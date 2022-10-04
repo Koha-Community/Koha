@@ -272,7 +272,7 @@
     </li>
 
     <li>
-    <label style="white-space: nowrap;" for="budget_amount" class="required">Amount: </label>
+    <label for="budget_amount" class="required">Amount: </label>
     <input type="text" name="budget_amount" id="budget_amount" value="[% budget_amount | $Price on_editing => 1 %]" size="8" />
     </li>
 
@@ -382,14 +382,14 @@
     </li>
 
     <li>
-    <label  style="white-space: nowrap;" for="authorised_value_category1">Statistic 1 done on: </label>
+    <label  for="authorised_value_category1">Statistic 1 done on: </label>
         <select name="sort1_authcat" id="authorised_value_category1">
             <option value=""></option>
             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort1_authcat ) %]
         </select>
     </li>
     <li>
-    <label  style="white-space: nowrap;" for="authorised_value_category2">Statistic 2 done on: </label>
+    <label  for="authorised_value_category2">Statistic 2 done on: </label>
         <select name="sort2_authcat" id="authorised_value_category2">
             <option value=""></option>
             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort2_authcat ) %]
