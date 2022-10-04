@@ -1865,7 +1865,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 7;
+    plan tests => 8;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1919,6 +1919,40 @@ subtest '->store' => sub {
         $patron->updated_on(dt_from_string($patron->updated_on)->add( seconds => 1 ))->store;
         my $logs = Koha::ActionLogs->search({ module =>'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber });
         is($logs->count, 0, '->store should not have generated a log for updated_on') or diag 'Log generated:'.Dumper($logs->unblessed);
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'create user usage' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $patron_category = $builder->build_object(
+            {
+                class => 'Koha::Patron::Categories',
+                value => { category_type => 'P', enrolmentfee => 0 }
+            }
+        );
+        my %data = (
+            cardnumber   => "123456789",
+            firstname    => "Tômàsító",
+            surname      => "Ñoné",
+            password     => 'Funk3y',
+            categorycode => $patron_category->categorycode,
+            branchcode   => $library->branchcode,
+        );
+
+        # Enable notifying patrons of password changes for these tests
+        t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
+        my $new_patron     = Koha::Patron->new( \%data )->store();
+        my $queued_notices = Koha::Notice::Messages->search(
+            { borrowernumber => $new_patron->borrowernumber }
+        );
+        is(
+            $queued_notices->count, 0,
+            "No notice queued when NotifyPasswordChange enabled and this is a new patron"
+        );
+
         $schema->storage->txn_rollback;
     };
 };
