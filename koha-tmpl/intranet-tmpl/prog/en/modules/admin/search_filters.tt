@@ -66,30 +66,29 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
-    <div id="edit_search_filter_modal" class="modal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="search_filters_label">Edit filter: <span id="filter_edit_modal_name"></span</h3>
+    <div id="edit_search_filter_modal" class="modal fase" role="dialog" aria-hidden="true" aria-labelledby="edit_search_filter_modal_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="edit_search_filter_modal_label">Edit filter</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" id="filter_edit_id" name="filter_edit_id">
+                        <label for="filter_edit_name">Name:</label>
+                        <input id="filter_edit_name" name="filter_edit_name" type="text">
+                        <label for="filter_edit_opac">Show in OPAC?</label>
+                        <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac">
+                        <label for="filter_edit_staff_client">Show in Staff client?</label>
+                        <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="replace_existing_filter" type="button" class="btn btn-primary">Save</button>
+                    <button class="btn btn-default cancel" href="#" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <input type="hidden" id="filter_edit_id" name="filter_edit_id">
-                <label for="filter_edit_name">Name:</label>
-                <input id="filter_edit_name" name="filter_edit_name" type="text">
-                <hr>
-                <h6>Visibility:<h6>
-                <label for="filter_edit_opac">Show in OPAC?</label>
-                <input type="checkbox" id="filter_edit_opac" name="filter_edit_opac">
-                <label for="filter_edit_staff_client">Show in Staff client?</label>
-                <input type="checkbox" id="filter_edit_staff_client" name="filter_edit_staff_client">
-                <hr>
-                <a id="replace_existing_filter" class="btn btn-default btn-xs" href="#">Update</a>
-            </div>
-            <div class="modal-footer">
-                <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
-            </div>
-        </div>
         </div>
     </div>
 
