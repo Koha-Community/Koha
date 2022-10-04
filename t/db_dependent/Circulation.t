@@ -420,7 +420,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 105;
+    plan tests => 104;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -719,6 +719,27 @@ subtest "CanBookBeRenewed tests" => sub {
     my $passeddatedue1 = AddIssue($renewing_borrower, $item_7->barcode, $five_weeks_ago);
     is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: " . $passeddatedue1->date_due);
 
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','allow');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is overdue but not pref does not block');
+
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','block');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is not overdue but patron has overdues');
+    is( $error, 'overdue', "Correct error returned");
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue so patron has overdues');
+    is( $error, 'overdue', "Correct error returned");
+
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
+    is( $error, 'overdue', "Correct error returned");
+
     my ( $fine ) = CalcFine( $item_7->unblessed, $renewing_borrower->{categorycode}, $branch, $five_weeks_ago, $now );
     C4::Overdues::UpdateFine(
         {
@@ -732,6 +753,10 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Make sure fine calculation isn't skipped when adding renewal
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
+
+    # Calculate new due-date based on the present date not to incur
+    # multiple fees
+    t::lib::Mocks::mock_preference('RenewalPeriodBase', 'now');
 
     my $staff = $builder->build_object({ class => "Koha::Patrons" });
     t::lib::Mocks::mock_userenv({ patron => $staff });
@@ -765,32 +790,9 @@ subtest "CanBookBeRenewed tests" => sub {
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
     my $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
-    is( $fines->count, 2, 'AddRenewal left both fines' );
-    isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
-    isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
+    is( $fines->count, 1, 'AddRenewal left fine' );
+    is( $fines->next->status, 'RENEWED', 'Fine on renewed item is closed out properly' );
     $fines->delete();
-
-    t::lib::Mocks::mock_preference('OverduesBlockRenewing','allow');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
-    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
-    is( $renewokay, 1, '(Bug 8236), Can renew, this item is overdue but not pref does not block');
-
-    t::lib::Mocks::mock_preference('OverduesBlockRenewing','block');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is not overdue but patron has overdues');
-    is( $error, 'overdue', "Correct error returned");
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue so patron has overdues');
-    is( $error, 'overdue', "Correct error returned");
-
-    t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
-    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
-    is( $error, 'overdue', "Correct error returned");
-
 
     my $old_issue_log_size = Koha::ActionLogs->count( \%params_issue );
     my $old_renew_log_size = Koha::ActionLogs->count( \%params_renewal );
@@ -799,9 +801,6 @@ subtest "CanBookBeRenewed tests" => sub {
     is ($new_log_size, $old_renew_log_size + 1, 'renew log successfully added when renewed via issuing');
     $new_log_size = Koha::ActionLogs->count( \%params_issue );
     is ($new_log_size, $old_issue_log_size, 'renew not logged as issue when renewed via issuing');
-
-    $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
-    $fines->delete();
 
     $hold = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $reserving_borrowernumber })->next;
     $hold->cancel;
@@ -4102,7 +4101,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     my $issue = AddIssue( $patron->unblessed, $item->barcode, $five_days_go ); # date due was 10d ago
     my $actualissue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     is( output_pref({ str => $actualissue->date_due, dateonly => 1}), output_pref({ str => $five_days_go, dateonly => 1}), "First issue works");
-    my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron,$item->barcode,$ten_days_go, undef, undef, undef);
+    my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron, $item->barcode, $ten_days_go, undef, undef, undef);
     is( $needsconfirmation->{RENEW_ISSUE}, 1, "This is a renewal");
     is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");
 };
@@ -4623,8 +4622,7 @@ subtest 'Incremented fee tests' => sub {
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
-    my $library =
-      $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
 
     $module->mock( 'userenv', sub { { branch => $library->id } } );
 
@@ -4649,15 +4647,13 @@ subtest 'Incremented fee tests' => sub {
 
     my $item = $builder->build_sample_item(
         {
-            library  => $library->{branchcode},
+            library  => $library->id,
             itype    => $itemtype->id,
         }
     );
 
-    is( $itemtype->rentalcharge_daily+0,
-        1, 'Daily rental charge stored and retreived correctly' );
-    is( $item->effective_itemtype, $itemtype->id,
-        "Itemtype set correctly for item" );
+    is( $itemtype->rentalcharge_daily + 0,1, 'Daily rental charge stored and retreived correctly' );
+    is( $item->effective_itemtype, $itemtype->id, "Itemtype set correctly for item" );
 
     my $now         = dt_from_string;
     my $dt_from     = $now->clone;
@@ -4668,14 +4664,18 @@ subtest 'Incremented fee tests' => sub {
     my $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     my $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 7,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 0"
+    is(
+        $accountline->amount + 0,
+        7,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 0"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 6,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 0, for renewal"
+    is(
+        $accountline->amount + 0,
+        6,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 0, for renewal"
     );
     $accountline->delete();
     $issue->delete();
@@ -4685,14 +4685,18 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 7,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1"
+    is(
+        $accountline->amount + 0,
+        7,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 6,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1, for renewal"
+    is(
+        $accountline->amount + 0,
+        6,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1, for renewal"
     );
     $accountline->delete();
     $issue->delete();
@@ -4712,37 +4716,37 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 6,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1 and closed $closed_day_name"
+    is(
+        $accountline->amount + 0,
+        6,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1 and closed $closed_day_name"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount+0, 5,
-"Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1 and closed $closed_day_name, for renewal"
+    is(
+        $accountline->amount + 0,
+        5,
+        "Daily rental charge calculated correctly with rentalcharge_daily_calendar = 1 and closed $closed_day_name, for renewal"
     );
     $accountline->delete();
     $issue->delete();
 
     $itemtype->rentalcharge(2)->store;
-    is( $itemtype->rentalcharge+0, 2,
-        'Rental charge updated and retreived correctly' );
+    is( $itemtype->rentalcharge + 0, 2, 'Rental charge updated and retreived correctly' );
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     my $accountlines =
       Koha::Account::Lines->search( { itemnumber => $item->id } );
-    is( $accountlines->count, '2',
-        "Fixed charge and accrued charge recorded distinctly" );
+    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly" );
     $accountlines->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountlines = Koha::Account::Lines->search( { itemnumber => $item->id } );
-    is( $accountlines->count, '2',
-        "Fixed charge and accrued charge recorded distinctly, for renewal" );
+    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly, for renewal" );
     $accountlines->delete();
     $issue->delete();
     $itemtype->rentalcharge(0)->store;
-    is( $itemtype->rentalcharge+0, 0,
-        'Rental charge reset and retreived correctly' );
+    is( $itemtype->rentalcharge + 0, 0, 'Rental charge reset and retreived correctly' );
 
     # Hourly
     Koha::CirculationRules->set_rule(
@@ -4756,8 +4760,7 @@ subtest 'Incremented fee tests' => sub {
     );
 
     $itemtype->rentalcharge_hourly('0.25')->store();
-    is( $itemtype->rentalcharge_hourly,
-        '0.25', 'Hourly rental charge stored and retreived correctly' );
+    is( $itemtype->rentalcharge_hourly, '0.25', 'Hourly rental charge stored and retreived correctly' );
 
     $dt_to       = $now->clone->add( hours => 168 );
     $dt_to_renew = $now->clone->add( hours => 312 );
@@ -4766,13 +4769,19 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 42,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 0 (168h * 0.25u)" );
+    is(
+        $accountline->amount + 0,
+        42,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 0 (168h * 0.25u)"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 36,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 0, for renewal (312h - 168h * 0.25u)" );
+    is(
+        $accountline->amount + 0,
+        36,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 0, for renewal (312h - 168h * 0.25u)"
+    );
     $accountline->delete();
     $issue->delete();
 
@@ -4780,13 +4789,19 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 36,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 and closed $closed_day_name (168h - 24h * 0.25u)" );
+    is(
+        $accountline->amount + 0,
+        36,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 and closed $closed_day_name (168h - 24h * 0.25u)"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 30,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 and closed $closed_day_name, for renewal (312h - 168h - 24h * 0.25u" );
+    is(
+        $accountline->amount + 0,
+        30,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 and closed $closed_day_name, for renewal (312h - 168h - 24h * 0.25u"
+    );
     $accountline->delete();
     $issue->delete();
 
@@ -4794,13 +4809,19 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 42,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 (168h - 0h * 0.25u" );
+    is(
+        $accountline->amount + 0,
+        42,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1 (168h - 0h * 0.25u"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount + 0, 36,
-        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1, for renewal (312h - 168h - 0h * 0.25u)" );
+    is(
+        $accountline->amount + 0,
+        36,
+        "Hourly rental charge calculated correctly with rentalcharge_hourly_calendar = 1, for renewal (312h - 168h - 0h * 0.25u)"
+    );
     $accountline->delete();
     $issue->delete();
     Time::Fake->reset;
@@ -5447,27 +5468,33 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
             value => { categorycode => $patron_category->{categorycode} }
         }
     );
-    my $item = $builder->build_sample_item(
+    my $item_1 = $builder->build_sample_item(
         {
             library  => $library->{branchcode}
         }
     );
 
-    $module->mock( 'userenv', sub { { branch => $library->id, number => $issuer->{borrowernumber} } } );
+    my $item_2 = $builder->build_sample_item(
+        {
+            library  => $library->branchcode
+        }
+    );
+
+    $module->mock( 'userenv', sub { { branch => $library->id, number => $issuer->borrowernumber } } );
 
     my $dt_from = dt_from_string();
     my $dt_to   = dt_from_string()->add( days => 7 );
 
-    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $issue_1 = AddIssue( $patron->unblessed, $item_1->barcode, $dt_to, undef, $dt_from );
 
-    is( $issue->issuer, undef, "Staff who checked out the item not recorded when RecordStaffUserOnCheckout turned off" );
+    is( $issue_1->issuer, undef, "Staff who checked out the item not recorded when RecordStaffUserOnCheckout turned off" );
 
     t::lib::Mocks::mock_preference('RecordStaffUserOnCheckout', 1);
 
-    my $issue2 =
-      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $issue_2 =
+      AddIssue( $patron->unblessed, $item_2->barcode, $dt_to, undef, $dt_from );
 
-    is( $issue->issuer, $issuer->{borrowernumber}, "Staff who checked out the item recorded when RecordStaffUserOnCheckout turned on" );
+    is( $issue_2->issuer->borrowernumber, $issuer->borrowernumber, "Staff who checked out the item recorded when RecordStaffUserOnCheckout turned on" );
 };
 
 subtest "Item's onloan value should be set if checked out item is checked out to a different patron" => sub {
