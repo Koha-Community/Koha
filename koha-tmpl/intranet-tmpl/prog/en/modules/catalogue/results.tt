@@ -72,7 +72,11 @@
                         [% total | html %] result(s) found [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc | html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span class="results_limit_desc">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
                     </h3>
                     <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
-                                                                                                                                      <div id="search_within_results">
+                    [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
+                        | <a href="#" id="save_search_filter">Save search as filter</a>
+                    [% END %]
+
+                    <div id="search_within_results">
                         <form id="refine_search">
                             <label for="limit">Search within results</label>
                             [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
@@ -82,9 +86,6 @@
                             <input type="submit" id="refine" value="Search">
                         </form>
                     </div>
-                    [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
-                        | <a href="#" id="save_search_filter">Save search as filter</a>
-                    [% END %]
 
                     <div class="searchheader" id="searchheader">
                         <div id="selection_ops">
@@ -348,7 +349,7 @@
                                 <p><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% searchtoorder_basketno | uri %]">View basket<a></p>
                             [% END %]
                             <a href="/cgi-bin/koha/catalogue/search.pl?advsearch=1&edit_search=1&[% query_cgi | $raw %]&[% limit_cgi | $raw %]&sort_by=[% sort_by | $raw %]">Edit this search</a>
-                            [% IF ( Koha.Preference('SavedSearchFilters') &&CAN_user_parameters_manage_search_filters ) %]
+                            [% IF ( Koha.Preference('SavedSearchFilters') && CAN_user_parameters_manage_search_filters ) %]
                                 | <a href="#" id="save_search_filter">Save search as filter</a>
                             [% END %]
                         [% ELSE %]
