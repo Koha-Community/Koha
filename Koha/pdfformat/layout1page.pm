@@ -57,7 +57,7 @@ sub printorders {
 
     my $abaskets;
     my $arrbasket;
-    my @keys = ('Document', 'Qty', 'RRP tax inc.', 'Discount', 'Tax', 'Total tax exc.', 'Total tax inc.');
+    my @keys = ('Qty', 'Document', 'RRP tax inc.', 'Discount', 'Tax', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
@@ -87,8 +87,8 @@ sub printorders {
                     ( $line->{copyrightdate} ? ' '. $line->{copyrightdate} : '');
             }
             push( @$arrbasket,
-                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 Koha::Number::Price->new( $line->{rrp_tax_included} )->format,
                 Koha::Number::Price->new( $line->{discount} )->format . '%',
                 Koha::Number::Price->new( $line->{tax_rate} * 100 )->format . '%',
@@ -183,7 +183,7 @@ sub printhead {
             $start += 4;
         }
     }
-    $text->translate(20/mm, ($height-50)/mm);
+    $text->translate(20/mm, ($height-57)/mm);
     $text->text($bookseller->accountnumber);
 
     # print delivery infos
