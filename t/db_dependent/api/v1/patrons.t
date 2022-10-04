@@ -311,6 +311,9 @@ subtest 'add() tests' => sub {
         my $code = 'ho';
         my $attr = "Let's go";
 
+        # Disable trigger to notify patrons of password changes for these tests
+        t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 0 );
+
         # Mock early, so existing mandatory attributes don't break all the tests
         my $mocked_patron = Test::MockModule->new('Koha::Patron');
         $mocked_patron->mock(
