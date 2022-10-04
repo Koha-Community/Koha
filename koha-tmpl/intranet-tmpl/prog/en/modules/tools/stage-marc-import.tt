@@ -426,7 +426,7 @@
                 })
             });
             [% IF job_enqueued %]
-                updateProgress([% job_id %]);
+                updateProgress([% job_id | html %]);
             [% END %]
         });
 
