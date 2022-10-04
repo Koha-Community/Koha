@@ -51,7 +51,7 @@ my $record = TransformHtmlToMarc($input,1);
 
 my ( $headings_changed, $results ) = BiblioAutoLink (
     $record,
-    $input->param('frameworkcode'),
+    scalar $input->param('frameworkcode'),
     1
 );
 
