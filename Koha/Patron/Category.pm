@@ -220,14 +220,13 @@ sub can_make_suggestions {
     my ( $self ) = @_;
 
     if ( C4::Context->preference('suggestion') ) {
-        my @patron_categories = split ',', C4::Context->preference('suggestionPatronCategoryExceptions');
-        if ( @patron_categories ) {
-            my $categorycode = $self->categorycode;
-            return if grep {$_ eq $categorycode } @patron_categories;
-        }
-        return 1;
+
+        my @patron_categories = split ',', C4::Context->preference('suggestionPatronCategoryExceptions') // q{};
+
+        return !any {$_ eq $self->categorycode } @patron_categories;
     }
-    return;
+
+    return 0;
 }
 
 =head2 Internal methods
