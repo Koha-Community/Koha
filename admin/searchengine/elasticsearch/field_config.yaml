@@ -38,6 +38,9 @@ search:
         search_analyzer: analyzer_phrase
       raw:
         type: keyword
+      ci_raw:
+        type: keyword
+        normalizer: icu_folding_normalizer
   default:
     type: text
     analyzer: analyzer_standard
