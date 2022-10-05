@@ -579,6 +579,13 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
         $template->param( always_show_holds => $always_show_holds );
         my $show_holds_now = $input->param('show_holds_now');
         unless( (defined $always_show_holds && $always_show_holds eq 'DONT') && !$show_holds_now ){
+            my $holds_count_per_patron = { map { $_->{borrowernumber} => $_->{hold_count} }
+                @{ Koha::Holds->search( { biblionumber=> $biblionumber }, {
+                    select => [ "borrowernumber", { count => { distinct => "reserve_id" } } ],
+                    as => [ qw( borrowernumber hold_count ) ],
+                    group_by => [ qw( borrowernumber ) ] }
+                )->unblessed
+            } };
             my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } )->as_list;
             foreach my $res (
                 sort {
@@ -629,6 +636,10 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                 $reserve{branchcode}       = $res->branchcode();
                 $reserve{non_priority}     = $res->non_priority();
                 $reserve{object}           = $res;
+
+                if ( $holds_count_per_patron->{ $reserve{'borrowernumber'} } == 1 ) {
+                    $reserve{'change_hold_type_allowed'} = 1;
+                }
 
                 push( @reserveloop, \%reserve );
             }
