@@ -103,11 +103,11 @@
                                 <th>
                                     <select name="preset">
                                         <option value="" selected>Custom</option>
-                                        <option value="Protect">Protect</option>
-                                        <option value="Overwrite">Overwrite</option>
-                                        <option value="Add new">Add new</option>
-                                        <option value="Add and append">Add and append</option>
-                                        <option value="Protect from deletion">Protect from deletion</option>
+                                        <option value="protect">Protect</option>
+                                        <option value="overwrite">Overwrite</option>
+                                        <option value="add">Add new</option>
+                                        <option value="addappend">Add and append</option>
+                                        <option value="protectfromdeletion">Protect from deletion</option>
                                     </select>
                                 </th>
                                 <th class="rule-operation-action-edit">
@@ -168,11 +168,11 @@
                                     <th>
                                         <select name="preset">
                                             <option value="" selected>Custom</option>
-                                            <option value="Protect">Protect</option>
-                                            <option value="Overwrite">Overwrite</option>
-                                            <option value="Add new">Add new</option>
-                                            <option value="Add and append">Add and append</option>
-                                            <option value="Protect from deletion">Protect from deletion</option>
+                                            <option value="protect">Protect</option>
+                                            <option value="overwrite">Overwrite</option>
+                                            <option value="add">Add new</option>
+                                            <option value="addappend">Add and append</option>
+                                            <option value="protectfromdeletion">Protect from deletion</option>
                                         </select>
                                     </th>
                                     <td class="rule-operation-action-edit">
@@ -366,31 +366,31 @@
         }));
 
         var overlay_rules_presets = {};
-        overlay_rules_presets[_("Protect")] = {
+        overlay_rules_presets[_("protect")] = {
           'add': 0,
           'append': 0,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("Overwrite")] = {
+        overlay_rules_presets[_("overwrite")] = {
           'add': 1,
           'append': 1,
           'remove': 1,
           'delete': 1
         };
-        overlay_rules_presets[_("Add new")] = {
+        overlay_rules_presets[_("add")] = {
           'add': 1,
           'append': 0,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("Add and append")] = {
+        overlay_rules_presets[_("addappend")] = {
           'add': 1,
           'append': 1,
           'remove': 0,
           'delete': 0
         };
-        overlay_rules_presets[_("Protect from deletion")] = {
+        overlay_rules_presets[_("protectfromdeletion")] = {
           'add': 1,
           'append': 1,
           'remove': 1,
