@@ -31,10 +31,18 @@ return {
             UPDATE reserves SET branchcode = ( SELECT branchcode FROM branches LIMIT 1) WHERE branchcode IS NULL;
         });
 
+        # Remove FOREIGN KEY CONSTRAINT
+        $dbh->do(q{
+            ALTER TABLE reserves DROP FOREIGN KEY reserves_ibfk_4;
+        });
         # Set the NOT NULL configuration
         $dbh->do(q{
             ALTER TABLE reserves
             MODIFY COLUMN `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'foreign key from the branches table defining which branch the patron wishes to pick this hold up at'
+        });
+        # Replace the constraint
+        $dbh->do(q{
+            ALTER TABLE reserves ADD CONSTRAINT reserves_ibfk_4 FOREIGN KEY (branchcode) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
         });
 
         # Print useful stuff here
