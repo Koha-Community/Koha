@@ -852,6 +852,39 @@ sub fill {
     return $self;
 }
 
+=head3 sub change_type
+
+    $hold->change_type                # to record level
+    $hold->change_type( $itemnumber ) # to item level
+
+Changes hold type between record and item level holds, only if record has
+exactly one hold for a patron. This is because Koha expects all holds for
+a patron on a record to be alike.
+
+=cut
+
+sub change_type {
+    my ( $self, $itemnumber ) = @_;
+
+    my $record_holds_per_patron = Koha::Holds->search( {
+        borrowernumber => $self->borrowernumber,
+        biblionumber => $self->biblionumber,
+    } );
+
+    if ( $itemnumber && $self->itemnumber ) {
+        $self->itemnumber( $itemnumber )->store;
+        return $self;
+    }
+
+    if ( $record_holds_per_patron->count == 1 ) {
+        $self->set({ itemnumber => $itemnumber ? $itemnumber : undef })->store;
+    } else {
+        Koha::Exceptions::Hold::CannotChangeHoldType->throw();
+    }
+
+    return $self;
+}
+
 =head3 store
 
 Override base store method to set default

@@ -23,6 +23,10 @@ use Exception::Class (
     'Koha::Exceptions::Hold' => {
         isa => 'Koha::Exception',
     },
+    'Koha::Exceptions::Hold::CannotChangeHoldType' => {
+        isa         => 'Koha::Exceptions::Hold',
+        description => "Record cannot have both record and item level holds at the same time",
+    },
     'Koha::Exceptions::Hold::CannotSuspendFound' => {
         isa         => 'Koha::Exceptions::Hold',
         description => "Found holds cannot be suspended",
