@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -218,4 +218,54 @@ subtest 'get_password_expiry_date() tests' => sub {
     $category->password_expiry_days( 32 )->store;
     is( $category->get_password_expiry_date(), dt_from_string()->add( days => 32 )->ymd, "Date correctly calculated from password_expiry_days when set");
 
+};
+
+subtest 'can_make_suggestions' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'suggestion', 0 );
+    t::lib::Mocks::mock_preference( 'suggestionPatronCategoryExceptions', undef );
+
+    my $category_1 = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    my $category_2 = $builder->build_object({ class => 'Koha::Patron::Categories' });
+
+    ok(
+        !$category_1->can_make_suggestions && !$category_2->can_make_suggestions,
+        'suggestions globally disabled, categories not in exceptions'
+    );
+
+    t::lib::Mocks::mock_preference( 'suggestion', 1 );
+    ok(
+        $category_1->can_make_suggestions && $category_2->can_make_suggestions,
+        'suggestions globally enabled'
+    );
+
+    t::lib::Mocks::mock_preference( 'suggestionPatronCategoryExceptions', $category_2->categorycode );
+    ok(
+        $category_1->can_make_suggestions && !$category_2->can_make_suggestions,
+        'suggestions enabled, suggestionPatronCategoryExceptions set, so present categories not allowed'
+    );
+
+    t::lib::Mocks::mock_preference( 'suggestionPatronCategoryExceptions', $category_1->categorycode );
+    ok(
+        !$category_1->can_make_suggestions && $category_2->can_make_suggestions,
+        'suggestions enabled, suggestionPatronCategoryExceptions set, so present categories not allowed'
+    );
+
+    t::lib::Mocks::mock_preference( 'suggestionPatronCategoryExceptions', join( ',', $category_1->categorycode, $category_2->categorycode) );
+    ok(
+        !$category_1->can_make_suggestions && !$category_2->can_make_suggestions,
+        'suggestions enabled, suggestionPatronCategoryExceptions set to both categories, both denied'
+    );
+
+    t::lib::Mocks::mock_preference( 'suggestion', 0 );
+    ok(
+        !$category_1->can_make_suggestions && !$category_2->can_make_suggestions,
+        'suggestions disabled, no matter what the value of suggestionPatronCategoryExceptions is'
+    );
+
+    $schema->storage->txn_rollback;
 };
