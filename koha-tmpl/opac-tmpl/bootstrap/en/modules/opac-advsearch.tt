@@ -232,6 +232,7 @@
                                     <select name="limit" id="branchloop">
                                     <option value="">All libraries</option>
                                     [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
+                                        [% NEXT UNLESS BranchesLoo.public %]
                                         [% IF BranchesLoo.selected %]
                                             <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
                                         [% ELSE %]

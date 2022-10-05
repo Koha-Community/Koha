@@ -232,6 +232,7 @@
                                                         [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
 
                                                         [% FOREACH library IN Branches.all( selected => opac_name ) %]
+                                                            [% NEXT UNLESS library.public %]
                                                             [% IF library.selected %]
                                                                 <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                                             [% ELSE %]
