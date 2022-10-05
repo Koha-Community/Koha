@@ -11,7 +11,7 @@ use Mojo::JSON qw( decode_json );
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
-our $VERSION = 1.01;
+our $VERSION = "v1.01";
 our $metadata = {
     name            => 'Test Plugin',
     author          => 'Kyle M Hall',
