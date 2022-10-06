@@ -225,6 +225,11 @@ $(document).ready(function(){
 
     $(".loginModal-trigger").on("click",function(e){
         e.preventDefault();
+        var button = $(this);
+        var context = button.data('return');
+        if ( context ) {
+            $('#modalAuth').append('<input type="hidden" name="return" value="'+window.location+'" />');
+        }
         $("#loginModal").modal("show");
     });
     $("#loginModal").on("shown.bs.modal", function(){
