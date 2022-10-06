@@ -424,4 +424,14 @@ if ($search_query) {
     );
 }
 
+# if not an empty string this indicates to return
+# back to the page we triggered the login from
+my $return = $query->param('return');
+if ( $return ) {
+    print $query->redirect(
+        -uri    => $return,
+        -cookie => $cookie,
+    );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
