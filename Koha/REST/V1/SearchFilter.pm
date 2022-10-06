@@ -59,9 +59,7 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 
 sub get {
     my $c = shift->openapi->valid_input or return;
-    my $filter = Koha::SearchFilters->find({
-        id => $c->validation->param('search_filter_id'),
-    });
+    my $filter = Koha::SearchFilters->find( $c->validation->param('search_filter_id') );
     unless ($filter) {
         return $c->render( status  => 404,
                            openapi => { error => "Search filter not found" } );

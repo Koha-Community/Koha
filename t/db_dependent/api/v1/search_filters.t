@@ -33,10 +33,11 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 my $t = Test::Mojo->new('Koha::REST::V1');
 
-$schema->storage->txn_begin;
-
 subtest 'list() tests' => sub {
-    plan tests => 10;
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
 
     Koha::SearchFilters->search()->delete();
 
@@ -94,33 +95,14 @@ subtest 'list() tests' => sub {
       ->json_has('/2/search_filter_id')
       ->json_has('/3/search_filter_id');
 
-    subtest 'query parameters' => sub {
-
-        plan tests => 12;
-        $t->get_ok("//$userid:$password@/api/v1/search_filters?name=" . $search_filter_2->name)
-          ->status_is(200)
-          ->json_is( [ $search_filter_2->to_api ] );
-        $t->get_ok("//$userid:$password@/api/v1/search_filters?name=NotAName")
-          ->status_is(200)
-          ->json_is( [ ] );
-        $t->get_ok("//$userid:$password@/api/v1/search_filters?filter_query=kw:any")
-          ->status_is(200)
-          ->json_is( [ $search_filter_3->to_api ] );
-        $t->get_ok("//$userid:$password@/api/v1/search_filters?filter_limits=mc-itype,phr:BK")
-          ->status_is(200)
-          ->json_is( [ $search_filter_1->to_api, $search_filter_2->to_api ] );
-    };
-
-    # Warn on unsupported query parameter
-    $t->get_ok( "//$userid:$password@/api/v1/search_filters?filter_blah=blah" )
-      ->status_is(400)
-      ->json_is( [{ path => '/query/filter_blah', message => 'Malformed query string'}] );
-
+    $schema->storage->txn_rollback;
 };
 
 subtest 'get() tests' => sub {
 
     plan tests => 9;
+
+    $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
@@ -150,11 +132,14 @@ subtest 'get() tests' => sub {
       ->status_is( 401, 'Cannot search filters without permission' )
       ->json_is( '/error' => 'Authentication failure.' );
 
+    $schema->storage->txn_rollback;
 };
 
 subtest 'add() tests' => sub {
 
     plan tests => 17;
+
+    $schema->storage->txn_begin;
 
     my $authorized_patron = $builder->build_object({
         class => 'Koha::Patrons',
@@ -231,10 +216,14 @@ subtest 'add() tests' => sub {
         ]
     );
 
+    $schema->storage->txn_rollback;
 };
 
 subtest 'update() tests' => sub {
+
     plan tests => 15;
+
+    $schema->storage->txn_begin;
 
     my $authorized_patron = $builder->build_object({
         class => 'Koha::Patrons',
@@ -271,18 +260,18 @@ subtest 'update() tests' => sub {
       ->status_is(403);
 
     my $search_filter_update = {
-        name => "Filter update",
-        filter_query => "ti:The hobbit",
-        filter_limits => "mc-ccode:fantasy",
+        name   => "Filter update",
+        query  => "ti:The hobbit",
+        limits => "mc-ccode:fantasy",
     };
 
     my $test = $t->put_ok( "//$auth_userid:$password@/api/v1/search_filters/$search_filter_id" => json => $search_filter_update )
       ->status_is(200, 'Authorized user can update a macro')
       ->json_is( '/search_filter_id' => $search_filter_id, 'We get back the id' )
-      ->json_is( '/name' => $search_filter_update->{name}, 'We get back the name' )
-      ->json_is( '/filter_query' => $search_filter_update->{filter_query}, 'We get back our query' )
-      ->json_is( '/filter_limits' => $search_filter_update->{filter_limits}, 'We get back our limits' )
-      ->json_is( '/opac' => 1, 'We get back our opac visibility unchanged' )
+      ->json_is( '/name'   => $search_filter_update->{name}, 'We get back the name' )
+      ->json_is( '/query'  => $search_filter_update->{query}, 'We get back our query' )
+      ->json_is( '/limits' => $search_filter_update->{limits}, 'We get back our limits' )
+      ->json_is( '/opac'   => 1, 'We get back our opac visibility unchanged' )
       ->json_is( '/staff_client' => 1, 'We get back our staff client visibility unchanged' );
 
     # Authorized attempt to write invalid data
@@ -307,10 +296,14 @@ subtest 'update() tests' => sub {
     $t->put_ok("//$auth_userid:$password@/api/v1/search_filters/$non_existent_code" => json => $search_filter_update)
       ->status_is(404);
 
+    $schema->storage->txn_rollback;
 };
 
 subtest 'delete() tests' => sub {
+
     plan tests => 4;
+
+    $schema->storage->txn_begin;
 
     my $authorized_patron = $builder->build_object({
         class => 'Koha::Patrons',
@@ -348,6 +341,5 @@ subtest 'delete() tests' => sub {
     $t->delete_ok( "//$auth_userid:$password@/api/v1/search_filters/$search_filter_id")
       ->status_is( 204, 'Can delete search filter with permission');
 
+    $schema->storage->txn_rollback;
 };
-
-$schema->storage->txn_rollback;

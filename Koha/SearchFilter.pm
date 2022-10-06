@@ -29,18 +29,6 @@ Koha::SearchFilter - Koha Search filter object class
 
 =head2 Class methods
 
-=head3 to_api_mapping
-
-=cut
-
-sub to_api_mapping {
-    return {
-        id                  => 'search_filter_id',
-        query               => 'filter_query',
-        limits              => 'filter_limits',
-    };
-}
-
 =head3 expand_filter
 
     my ($expanded_limit, $query_limit) = $filter->expand_filter;
