@@ -25,7 +25,7 @@ use Koha::Patron::Categories;
 
 sub all {
     my ( $self, $params ) = @_;
-    return Koha::Patron::Categories->search_with_library_limits($params);
+    return Koha::Patron::Categories->search($params);
 }
 
 sub GetName {
