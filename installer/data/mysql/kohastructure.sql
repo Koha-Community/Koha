@@ -4731,13 +4731,13 @@ DROP TABLE IF EXISTS `search_filters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_filters` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `query` mediumtext COLLATE utf8mb4_unicode_ci,
-  `limits` mediumtext COLLATE utf8mb4_unicode_ci,
+  `search_filter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT 'filter name',
+  `query` mediumtext NULL DEFAULT NULL COMMENT 'filter query part',
+  `limits` mediumtext NULL DEFAULT NULL COMMENT 'filter limits part',
   `opac` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether this filter is shown on OPAC',
   `staff_client` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether this filter is shown in staff client',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`search_filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

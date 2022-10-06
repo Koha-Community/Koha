@@ -23,7 +23,7 @@ __PACKAGE__->table("search_filters");
 
 =head1 ACCESSORS
 
-=head2 id
+=head2 search_filter_id
 
   data_type: 'integer'
   is_auto_increment: 1
@@ -35,15 +35,21 @@ __PACKAGE__->table("search_filters");
   is_nullable: 0
   size: 255
 
+filter name
+
 =head2 query
 
   data_type: 'mediumtext'
   is_nullable: 1
 
+filter query part
+
 =head2 limits
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+filter limits part
 
 =head2 opac
 
@@ -64,7 +70,7 @@ whether this filter is shown in staff client
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
+  "search_filter_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
@@ -82,17 +88,17 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</id>
+=item * L</search_filter_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("search_filter_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-06 12:05:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8QjxOudinfXOrLj/KkZc5Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-06 12:25:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:De9VF9DBMhzsbPIbyFGXlQ
 
 __PACKAGE__->add_columns(
     '+opac'         => { is_boolean => 1 },

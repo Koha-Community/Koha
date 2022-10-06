@@ -14,14 +14,14 @@ return {
         unless( TableExists( 'search_filters' ) ){
             $dbh->do(q{
                 CREATE TABLE `search_filters` (
-                  id int(11) NOT NULL auto_increment, -- unique identifier for each search filter
-                  name varchar(255) NOT NULL, -- display name for this filter
-                  query mediumtext DEFAULT NULL, -- query part of the filter, can be blank
-                  limits mediumtext DEFAULT NULL, -- limits part of the filter, can be blank
-                  opac tinyint(1) NOT NULL DEFAULT 0, -- whether this filter is shown on OPAC
-                  staff_client tinyint(1) NOT NULL DEFAULT 0, -- whether this filter is shown in staff client
-                  PRIMARY KEY (id)
-                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+                `search_filter_id` int(11) NOT NULL AUTO_INCREMENT,
+                `name` varchar(255) NOT NULL COMMENT 'filter name',
+                `query` mediumtext NULL DEFAULT NULL COMMENT 'filter query part',
+                `limits` mediumtext NULL DEFAULT NULL COMMENT 'filter limits part',
+                `opac` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether this filter is shown on OPAC',
+                `staff_client` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether this filter is shown in staff client',
+                PRIMARY KEY (`search_filter_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
             say $out "Added search_filters table";
         } else {
