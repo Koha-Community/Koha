@@ -95,12 +95,8 @@ __PACKAGE__->set_primary_key("id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8QjxOudinfXOrLj/KkZc5Q
 
 __PACKAGE__->add_columns(
-            '+opac' => { is_boolean => 1 },
-        );
+    '+opac'         => { is_boolean => 1 },
+    '+staff_client' => { is_boolean => 1 },
+);
 
-__PACKAGE__->add_columns(
-            '+staff_client' => { is_boolean => 1 },
-        );
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

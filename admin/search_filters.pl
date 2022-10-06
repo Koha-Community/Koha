@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-# Copyright 2013 BibLibre
+
+# Copyright 2022 ByWater Solutions
 #
 # This file is part of Koha
 #
