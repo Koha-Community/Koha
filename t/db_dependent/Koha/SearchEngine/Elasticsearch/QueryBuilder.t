@@ -803,9 +803,9 @@ subtest "Handle search filters" => sub {
 
     my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
 
-    is( $limit,q{(onloan:false) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit correctly formed");
+    is( $limit,q{(available:true) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit correctly formed");
     is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
-    is( $limit_desc,q{(onloan:false) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit description is correctly expanded");
+    is( $limit_desc,q{(available:true) AND ((cat) AND title:(bat) OR author:(rat)) AND itype:(("BK") OR ("MU"))},"Limit description is correctly expanded");
 
     $filter = Koha::SearchFilter->new({
         name => "test",
