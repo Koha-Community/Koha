@@ -19,6 +19,11 @@ return {
                   CONSTRAINT `bn` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });
+
+            $dbh->do(q{
+                INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+                ( 9, 'manage_item_editor_templates', 'Update and delete item editor template owned by others');
+            });
         }
     },
 };

@@ -361,6 +361,11 @@
             Create, update and delete item groups, add or remove items from an item group
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_item_editor_templates' -%]
+        <span class="sub_permission manage_item_editor_templates_subpermission">
+            Create, update and delete item editor templates owned by others
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'remaining_permissions' -%]
         <span class="sub_permission remaining_permissions_subpermission">
             Remaining permissions for managing fines and fees

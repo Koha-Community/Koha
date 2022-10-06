@@ -169,18 +169,26 @@
             <optgroup label="My templates">
                 [% FOREACH t IN item_templates.owned %]
                     [% IF t.id == template_id %]
-                        <option data-owner="1" value="[% t.id | html %]" selected="selected">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                        <option data-editor="1" value="[% t.id | html %]" selected="selected">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
                     [% ELSE %]
-                        <option data-owner="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                        <option data-editor="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
                     [% END %]
                 [% END %]
             </optgroup>
             <optgroup label="Shared templates">
                 [% FOREACH t IN item_templates.shared %]
                     [% IF t.id == template_id %]
-                        <option data-owner="0" value="[% t.id | html %]" selected="selected">[% t.name | html %]</option>
+                        [% IF CAN_user_editcatalogue_manage_item_editor_templates %]
+                            <option data-editor="1" value="[% t.id | html %]" selected="selected">[% t.name | html %]</option>
+                        [% ELSE %]
+                            <option data-editor="0" value="[% t.id | html %]" selected="selected">[% t.name | html %]</option>
+                        [% END %]
                     [% ELSE %]
-                        <option data-owner="0" value="[% t.id | html %]">[% t.name | html %]</option>
+                        [% IF CAN_user_editcatalogue_manage_item_editor_templates %]
+                            <option data-editor="1" value="[% t.id | html %]">[% t.name | html %]</option>
+                        [% ELSE %]
+                            <option data-editor="0" value="[% t.id | html %]">[% t.name | html %]</option>
+                        [% END %]
                     [% END %]
                 [% END %]
             </optgroup>
@@ -262,10 +270,17 @@
     <fieldset id="save_as_template_span">
         <legend>Save template</legend>
         <select name="replace_template_id" id="replace_template_id" class="select2" style="width: 20em">
-            <option value="0" selected="selected">Save as new</option>
-            <optgroup label="Update existing">
+            <option value="0" selected="selected">Save as new template</option>
+            <optgroup label="Update existing template">
                 [% FOREACH t IN item_templates.owned %]
-                    <option data-owner="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                    <option data-editor="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                [% END %]
+                [% IF CAN_user_editcatalogue_manage_item_editor_templates && item_templates.shared.count %]
+                    <optgroup label="Update shared template">
+                        [% FOREACH t IN item_templates.shared %]
+                            <option data-editor="1" value="[% t.id | html %]">[% t.name | html %][% IF t.is_shared %] (shared)[% END %]</option>
+                        [% END %]
+                    </optgroup>
                 [% END %]
             </optgroup>
         </select>

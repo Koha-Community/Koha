@@ -85,7 +85,7 @@ $(document).ready(function(){
     });
 
     $("#template_id").on("change", function() {
-        if ( $(this).find(":selected").data("owner") ) {
+        if ( $(this).find(":selected").data("editor") ) {
             $("#delete_template_submit").removeAttr("disabled");
         } else {
             $("#delete_template_submit").attr("disabled", "disabled");
