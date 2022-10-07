@@ -906,6 +906,26 @@ sub to_api_mapping {
     };
 }
 
+=head3 can_change_branch_opac
+
+returns if a hold can change pickup location from opac
+
+my $can_change_branch_opac = $hold->can_change_branch_opac;
+
+=cut
+
+sub can_change_branch_opac {
+    my ($self) = @_;
+
+    my @statuses = split /,/, C4::Context->preference("OPACAllowUserToChangeBranch");
+    foreach my $status ( @statuses ){
+        return 1 if ($status eq 'pending' && !$self->is_found && !$self->is_suspended );
+        return 1 if ($status eq 'intransit' && $self->is_in_transit);
+        return 1 if ($status eq 'suspended' && $self->is_suspended);
+    }
+    return 0;
+}
+
 =head2 Internal methods
 
 =head3 _type

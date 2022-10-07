@@ -696,12 +696,6 @@ Circulation:
                   0: "Don't allow"
             - a patron to renew an item with unfilled holds if other available items can fill that hold.
         -
-            - pref: OPACInTransitHoldPickupLocationChange
-              choices:
-                  1: Allow
-                  0: "Don't allow"
-            - patrons to change their in transit holds pickup location.
-        -
             - pref: AllowHoldPolicyOverride
               choices:
                   1: Allow
@@ -801,6 +795,13 @@ Circulation:
                   1: Allow
                   0: "Don't allow"
             - a user to choose the library to pick up a hold from.
+        -
+            - 'Allow users to change the library to pick up a hold for these statuses:'
+            - pref: OPACAllowUserToChangeBranch
+              multiple:
+                pending: Pending
+                intransit: In transit
+                suspended: Suspended
         -
             - pref: ReservesNeedReturns
               choices:

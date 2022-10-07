@@ -82,16 +82,17 @@
                         [% UNLESS( singleBranchMode) %]
                             <td class="branch">
                                 <span class="tdlabel">Pick up location:</span>
-                                [% IF Koha.Preference('OPACInTransitHoldPickupLocationChange') && HOLD.is_in_transit %]
-                                    <form class="form-inline" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
-                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                        <select name="new_pickup_location" class="new_pickup_location" onchange="this.form.submit()">
-                                            [% PROCESS options_for_libraries libraries => Branches.pickup_locations({ search_params => { item => HOLD.itemnumber, patron => logged_in_user }, selected => HOLD.branchcode }) %]
-                                        </select>
+                                [% IF ( HOLD.can_change_branch_opac ) %]
+                                    <form class="change_branch" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                        <select name="new_branch" >
+                                            [% PROCESS options_for_libraries libraries = Branches.pickup_locations({    search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
+                                       </select>
+                                       <input type="hidden" name="new_branch_reserveid" value="[% HOLD.reserve_id | html %]" />
+                                       <button class="btn btn-primary" type="submit" name="change_branch" value="1">Change</button>
                                     </form>
                                 [% ELSE %]
                                     [% HOLD.branch.branchname | html %]
-                                [% END %]
+                                [% END  %]
                             </td>
                         [% END %]
                         [% IF ( showpriority ) %]
