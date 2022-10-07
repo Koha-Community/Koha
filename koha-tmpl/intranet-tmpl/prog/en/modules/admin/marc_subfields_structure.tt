@@ -55,10 +55,10 @@
             <li>
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode | uri %]&amp;searchfield=[% tagfield | uri %]">
                     [% IF ( frameworkcode ) %]
-                        [% frameworkcode | html %]
+                        <span>[% frameworkcode | html %] framework structure</span>
                     [% ELSE %]
-                        <span>Default</span>
-                    [% END %] <span>framework structure</span>
+                        <span>Default framework structure</span>
+                    [% END %]
                 </a>
             </li>
 
