@@ -1385,15 +1385,18 @@ sub merge {
     # Search authtypes and reporting tags
     my $authfrom = Koha::Authorities->find($mergefrom);
     my $authto = Koha::Authorities->find($mergeto);
-    my $authtypefrom = $authfrom ? Koha::Authority::Types->find($authfrom->authtypecode) : undef;
-    # If it is a mod ($authfrom == $authto) and there was a change of a heading tag $authtypefrom read from the database is of the current version of the auth rec., which is misleading, so we ignore it
-    if ($mergeto && $mergefrom == $mergeto && $MARCfrom && $MARCto &&
-        $MARCfrom->field('1..', '2..') && $MARCto->field('1..', '2..') && ($MARCfrom->field('1..', '2..'))[0]->tag ne ($MARCto->field('1..', '2..'))[0]->tag) {
-    undef $authtypefrom;
-    undef $authfrom;
-    }
-
+    my $authtypefrom;
     my $authtypeto   = $authto ? Koha::Authority::Types->find($authto->authtypecode) : undef;
+    if( $mergeto && $mergefrom == $mergeto && $MARCfrom ) {
+        # bulkmarcimport may have changed the authtype; see BZ 19693
+        my $old_type = $MARCfrom->subfield( get_auth_type_location() ); # going via default
+        if( $old_type && $authto && $old_type ne $authto->authtypecode ) {
+            # Type change: handled by simulating a postponed merge where the auth record has been deleted already
+            # This triggers a walk through all auth controlled tags
+            undef $authfrom;
+        }
+    }
+    $authtypefrom = Koha::Authority::Types->find($authfrom->authtypecode) if $authfrom;
     my $auth_tag_to_report_from = $authtypefrom ? $authtypefrom->auth_tag_to_report : '';
     my $auth_tag_to_report_to   = $authtypeto ? $authtypeto->auth_tag_to_report : '';
 
