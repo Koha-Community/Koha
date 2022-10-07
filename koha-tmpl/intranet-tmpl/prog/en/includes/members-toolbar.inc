@@ -24,6 +24,9 @@
                 <li><a id="printsummary" href="#">Print summary</a></li>
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
+                [% IF patron.account_balance > 0 %]
+                <li><a id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=FEE_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print fines slip</a></li>
+                [% END %]
                 [% IF patron.has_overdues %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
