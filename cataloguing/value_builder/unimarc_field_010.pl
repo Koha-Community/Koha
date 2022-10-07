@@ -35,6 +35,13 @@ sub plugin_javascript {
                         var elems = document.getElementsByTagName('input');
                         for( i = 0 ; elems[i] ; i++ )
                         {
+                            if(elems[i].id.match(/^tag_214_subfield_c/)) {
+                                elems[i].value = resp;
+                                return 1;
+                            }
+                        }
+                        for( i = 0 ; elems[i] ; i++ )
+                        {
                             if(elems[i].id.match(/^tag_210_subfield_c/)) {
                                 elems[i].value = resp;
                                 return 1;
